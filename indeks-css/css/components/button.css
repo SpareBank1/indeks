@@ -1,0 +1,125 @@
+.ix-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ix-spacing-sm);
+    padding: var(--ix-spacing-xs) var(--ix-spacing-md);
+    border: none;
+    border-radius: var(--ix-border-radius-button);
+    height: fit-content;
+    width: auto;
+    cursor: pointer;
+    font-weight: var(--ix-font-weight-button);
+    transition: var(--ix-transition-all);
+}
+
+/* Størrelser */
+.ix-button--sm {
+    font-size: var(--ix-font-size-sm);
+    padding: var(--ix-spacing-2xs) var(--ix-spacing-sm);
+    gap: var(--ix-spacing-xs);
+}
+
+.ix-button--lg {
+    font-size: var(--ix-font-size-lg);
+    padding: var(--ix-spacing-sm) var(--ix-spacing-lg);
+}
+
+/* Primary button */
+.ix-button--primary {
+    background-color: var(--ix-color-component-button-primary-fill-default);
+    color: var(--ix-color-component-button-primary-foreground-default);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-primary-border-default);
+}
+
+.ix-button--primary:hover {
+    background-color: var(--ix-color-component-button-primary-fill-default-hover);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-primary-border-default-hover);
+}
+
+.ix-button--primary:active {
+    background-color: var(--ix-color-component-button-primary-fill-default-active);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-primary-border-default-active);
+}
+
+/* Secondary button */
+.ix-button--secondary {
+    background-color: transparent;
+    color: var(--ix-color-component-button-secondary-foreground-default);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-secondary-border-default);
+}
+
+.ix-button--secondary:hover {
+    background-color: var(--ix-color-component-button-secondary-fill-default-hover);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-secondary-border-default-hover);
+}
+
+.ix-button--secondary:active {
+    background-color: var(--ix-color-component-button-secondary-fill-default-active);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-secondary-border-default-active);
+}
+
+/* Tertiary button */
+.ix-button--tertiary {
+    background-color: transparent;
+    color: var(--ix-color-component-button-tertiary-foreground-default);
+    border: var(--ix-border-width-bold) solid transparent;
+}
+
+.ix-button--tertiary:hover {
+    background-color: var(--ix-color-component-button-tertiary-fill-default-hover);
+}
+
+.ix-button--tertiary:active {
+    background-color: var(--ix-color-component-button-tertiary-fill-default-active);
+}
+
+/* Danger-varianter */
+/** primary */
+.ix-button--primary-danger {
+    background-color: var(--ix-color-component-button-primary-fill-danger);
+    color: var(--ix-color-component-button-primary-foreground-danger);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-primary-border-danger);
+}
+
+.ix-button--primary-danger:hover {
+    background-color: var(--ix-color-component-button-primary-fill-danger-hover);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-primary-border-danger-hover);
+}
+
+.ix-button--primary-danger:active {
+    background-color: var(--ix-color-component-button-primary-fill-danger-active);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-primary-border-danger-active);
+}
+
+/** secondary */
+.ix-button--secondary-danger {
+    background-color: var(--ix-color-component-button-secondary-fill-danger);
+    color: var(--ix-color-component-button-secondary-foreground-danger);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-secondary-border-danger);
+}
+
+.ix-button--secondary-danger:hover {
+    background-color: var(--ix-color-component-button-secondary-fill-danger-hover);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-secondary-border-danger-hover);
+}
+
+.ix-button--secondary-danger:active {
+    background-color: var(--ix-color-component-button-secondary-fill-danger-active);
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-secondary-border-danger-active);
+}
+
+/** tertiary */
+.ix-button--tertiary-danger {
+    background-color: var(--ix-color-component-button-tertiary-fill-danger);
+    color: var(--ix-color-component-button-tertiary-foreground-danger);
+    border: var(--ix-border-width-bold) solid transparent;
+}
+
+.ix-button--tertiary-danger:hover {
+    background-color: var(--ix-color-component-button-tertiary-fill-danger-hover);
+}
+
+.ix-button--tertiary-danger:active {
+    background-color: var(--ix-color-component-button-tertiary-fill-danger-active);
+}

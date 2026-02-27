@@ -1,0 +1,47 @@
+<div class="controls-container">
+    <div class="font-control">
+        <label for="fontSlider">Font Size:</label>
+        <input type="range" id="fontSlider" class="font-slider" min="8" max="80" value="16" step="1" />
+        <span id="fontSizeDisplay" class="font-size-display">16px</span>
+    </div>
+
+    <div class="size-control">
+        <label for="sizeDropdown">Density:</label>
+        <select id="sizeDropdown" class="size-dropdown">
+            <option value="ix-density--compact">Compact</option>
+            <option selected value="ix-density--default">Default</option>
+            <option value="ix-density--comfortable">Comfortable</option>
+        </select>
+    </div>
+</div>
+
+<script>
+    const slider = document.getElementById('fontSlider');
+    const display = document.getElementById('fontSizeDisplay');
+
+    slider.addEventListener('input', function () {
+        console.log('Slider value:', this.value);
+        const fontSize = this.value + 'px';
+
+        document.documentElement.style.fontSize = fontSize;
+
+        display.textContent = fontSize;
+    });
+</script>
+<script>
+    window.onload = function () {
+        document.body.classList.add('ix-body');
+        const sizeDropdown = document.getElementById('sizeDropdown');
+
+        sizeDropdown.addEventListener('change', function () {
+
+            // Remove existing ix-density classes
+            document.body.classList.remove('ix-density--compact', 'ix-density--default', 'ix-density--comfortable');
+
+            // Add the selected class if not default
+            if (this.value) {
+                document.body.classList.add(this.value);
+            }
+        });
+    };
+</script>

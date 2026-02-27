@@ -1,0 +1,38 @@
+:root {
+    --ix-border-default: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    --ix-border-dashed: var(--ix-border-width-default) dashed var(--ix-color-border-main-default);
+    --ix-border-none: none;
+    --ix-outline-default: var(--ix-outline-width-default) solid var(--ix-color-border-focus-default);
+}
+
+.ix-border-default {
+    border: var(--ix-border-default);
+}
+
+.ix-border-bottom-default {
+    border-bottom: var(--ix-border-default);
+}
+
+.ix-border-top-default {
+    border-top: var(--ix-border-default);
+}
+
+.ix-border-left-default {
+    border-left: var(--ix-border-default);
+}
+
+.ix-border-right-default {
+    border-right: var(--ix-border-default);
+}
+
+.ix-border-dashed {
+    border: var(--ix-border-dashed);
+}
+
+.ix-border-none {
+    border: none;
+}
+
+.ix-outline-default {
+    outline: var(--ix-outline-default);
+}

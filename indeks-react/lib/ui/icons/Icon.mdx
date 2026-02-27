@@ -1,0 +1,17 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Icon } from './Icon';
+import * as IconsStories from './Icon.stories';
+
+<Meta title="Icons/Icon" />
+
+# Icon
+
+<Canvas of={IconsStories.Standard} />
+<Controls of={IconsStories.Standard} />
+
+<div className="ix-body">
+  <Icon size="sm" name="sparing" />
+  <Icon size="md" name="sparing" />
+  <Icon size="lg" name="sparing" />
+</div>

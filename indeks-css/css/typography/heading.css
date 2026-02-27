@@ -1,0 +1,40 @@
+:where(.ix-heading) {
+    color: var(--ix-color-foreground-main-emphasis);
+    line-height: 1.2;
+}
+
+:where(.ix-heading--xl, .ix-heading--lg) {
+    font-family: var(--ix-font-family-heading);
+    font-weight: var(--ii-font-weight-bold);
+}
+
+:where(.ix-heading--md, .ix-heading--sm, .ix-heading--xs) {
+    font-family: var(--ix-font-family-normal);
+    font-weight: var(--ix-font-weight-medium);
+}
+
+:where(.ix-heading--2xl) {
+    font-family: var(--ix-font-family-heading);
+    font-size: var(--ix-font-size-5xl);
+    font-weight: var(--ix-font-weight-regular);
+}
+
+:where(.ix-heading--xl) {
+    font-size: var(--ix-font-size-3xl);
+}
+
+:where(.ix-heading--lg) {
+    font-size: var(--ix-font-size-2xl);
+}
+
+:where(.ix-heading--md) {
+    font-size: var(--ix-font-size-xl);
+}
+
+:where(.ix-heading--sm) {
+    font-size: var(--ix-font-size-lg);
+}
+
+:where(.ix-heading--xs) {
+    font-size: var(--ix-font-size-md);
+}

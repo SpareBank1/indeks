@@ -1,0 +1,41 @@
+.ix-dropdown {
+    /* Reset all default select styling */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+
+    /* Remove default dropdown arrow */
+    background-image: none;
+
+    /* Remove focus outline */
+    box-shadow: none;
+
+    /* Ensure consistent box-sizing */
+    box-sizing: border-box;
+
+    background-color: var(--ix-color-surface-main-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-sm);
+    padding: var(--ix-spacing-sm);
+    flex-wrap: wrap;
+}
+
+/* Remove focus ring on Firefox */
+.ix-dropdown::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/* Style option elements if needed */
+.ix-dropdown option {
+    background: inherit;
+    color: inherit;
+}

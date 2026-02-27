@@ -1,0 +1,33 @@
+import borderTokens from '../../../../indeks-tokens/tokens/border.json';
+import outlineTokens from '../../../../indeks-tokens/tokens/outline.json';
+import CssPropertyTable from '../../../src/components/cssPropertyTable';
+
+# Border
+
+Komponentene vi tilbyr har riktig border-radius og border-width som standard. Hvis du skal lage noe eget, kan du bruke border-variablene vi tilbyr.
+
+Bruk util-klassen `.ix-border-default` for å få standard border-stil, oftest brukt på kort. Klassen setter `--ix-border-width-default` og farge `--ix-color-border-main-default`.
+
+## Border width
+Vi har 2 forskjellige border-tykkelser. For fokus på skjemaelementer skal du bruke [outline](#outline).
+
+
+<CssPropertyTable tokens={borderTokens['border']['width']} prefix="border-width" />
+
+## Border radius
+Vi har border radius i størrelsene xs, sm, md, lg og xl. Det er egne border radius for pilleformede elementer hvis man trenger det, 
+samt checkbox, input og knapp. Bruk `ix-border-radius-circle` for helt runde elementer.
+
+<CssPropertyTable tokens={borderTokens['border']['radius']} prefix="border-radius" />
+
+## Outline
+Outline brukes ved fokus på skjemaelementer. Outline burde være satt til transparent når elementet ikke er i fokus for å unngå hopping i layouten.  
+Bruk `--ix-outline-default` for standard outline-stil, og legg til outline-offset med `--ix-outline-offset-default`.
+
+<CssPropertyTable tokens={outlineTokens.outline.width} prefix="outline-width" />
+
+<CssPropertyTable tokens={outlineTokens.outline.offset} prefix="outline-offset" />
+
+## Farger
+Se [farger](../../retningslinjer/farger/#border) for å finne riktige farger til border og outline.
+

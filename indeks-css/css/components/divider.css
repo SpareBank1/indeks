@@ -1,0 +1,4 @@
+.ix-divider {
+    border-bottom: var(--ix-border-default);
+    width: 100%;
+}

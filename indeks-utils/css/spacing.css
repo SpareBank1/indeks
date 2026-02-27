@@ -1,0 +1,35 @@
+:where(.ix-body, .ix-density--default) {
+    --ix-spacing-2xs: var(--ii-spacing-size--10);
+    --ix-spacing-xs: var(--ii-spacing-size--7);
+    --ix-spacing-sm: var(--ii-spacing-size--3);
+    --ix-spacing-md: var(--ii-spacing-size-0);
+    --ix-spacing-lg: var(--ii-spacing-size-3);
+    --ix-spacing-xl: var(--ii-spacing-size-6);
+    --ix-spacing-2xl: var(--ii-spacing-size-9);
+    --ix-spacing-3xl: var(--ii-spacing-size-12);
+    --ix-spacing-4xl: var(--ii-spacing-size-16);
+}
+
+:where(.ix-density--compact) {
+    --ix-spacing-2xs: var(--ii-spacing-size--12);
+    --ix-spacing-xs: var(--ii-spacing-size--9);
+    --ix-spacing-sm: var(--ii-spacing-size--5);
+    --ix-spacing-md: var(--ii-spacing-size--2);
+    --ix-spacing-lg: var(--ii-spacing-size-1);
+    --ix-spacing-xl: var(--ii-spacing-size-4);
+    --ix-spacing-2xl: var(--ii-spacing-size-7);
+    --ix-spacing-3xl: var(--ii-spacing-size-10);
+    --ix-spacing-4xl: var(--ii-spacing-size-14);
+}
+
+:where(.ix-density--comfortable) {
+    --ix-spacing-2xs: var(--ii-spacing-size--8);
+    --ix-spacing-xs: var(--ii-spacing-size--5);
+    --ix-spacing-sm: var(--ii-spacing-size--1);
+    --ix-spacing-md: var(--ii-spacing-size-2);
+    --ix-spacing-lg: var(--ii-spacing-size-5);
+    --ix-spacing-xl: var(--ii-spacing-size-8);
+    --ix-spacing-2xl: var(--ii-spacing-size-11);
+    --ix-spacing-3xl: var(--ii-spacing-size-14);
+    --ix-spacing-4xl: var(--ii-spacing-size-18);
+}

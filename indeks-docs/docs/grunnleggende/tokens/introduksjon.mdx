@@ -1,0 +1,26 @@
+# Introduksjon
+
+Design tokens er de minste byggesteinene i designsystemet. De representerer visuelle verdier som farger, typografi, spacing, radius og skygger osv. definert som navngitte variabler i stedet for faste verdier. 
+
+Ved å bruke tokens samler vi visuelle verdier på ett sted. Når en verdi endres, oppdateres den automatisk der tokenet er i bruk, uten behov for manuelle justeringer i hver enkelt komponent eller flate. Dette gjør designsystemet enklere å vedlikeholde, mindre sårbart for feil og mer robust over tid.
+
+I stedet for å bruke konkrete verdier som 16px eller #002776, bruker vi tokens som for eksempel `ix-spacing-sm` eller `ix-color-foreground-main-default`. Dette gjør det mulig å skape konsistens på tvers av design og kode, og gjør endringer enklere å håndtere over tid. 
+
+## Hvorfor bruke tokens?
+
+### Konsistens
+Samme verdier brukes på tvers av komponenter, flater og team.
+
+### Skalerbarhet
+Endringer kan gjøres ett sted og slår gjennom overalt.
+
+### Felles språk
+Tokens fungerer som et felles språk mellom designere og utviklere.
+
+### Tilpasning
+Gjør det mulig å støtte flere temaer, moduser eller merkevarer (f.eks. light/dark eller accent).
+
+## Tokens i praksis
+- I Figma brukes tokens for å sikre at design følger systemets regler
+- I kode eksponeres de som variabler (CSS, JSON, etc.)
+- I komponenter brukes kun semantiske eller kontekstuelle tokens – aldri rå verdier

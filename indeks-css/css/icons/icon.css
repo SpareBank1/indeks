@@ -1,0 +1,24 @@
+:where(.ix-icon) {
+    background-color: currentColor;
+    /* setter fargen til ikonet */
+    color: inherit;
+    width: var(--ix-font-size-xl);
+    height: var(--ix-font-size-xl);
+    display: inline-block;
+    mask-size: cover;
+}
+
+:where(.ix-icon--sm) {
+    width: var(--ix-font-size-lg);
+    height: var(--ix-font-size-lg);
+}
+
+:where(.ix-icon--lg) {
+    width: var(--ix-font-size-2xl);
+    height: var(--ix-font-size-2xl);
+}
+
+:where(.ix-icon--xl) {
+    width: var(--ix-font-size-3xl);
+    height: var(--ix-font-size-3xl);
+}

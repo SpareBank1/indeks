@@ -1,0 +1,21 @@
+{
+    "breakpoint": {
+        "_property": "width",
+        "sm": {
+            "value": "768px",
+            "description": "Breakpoint for små skjermer (mobil)."
+        },
+        "md": {
+            "value": "1024px",
+            "description": "Breakpoint for mellomstore skjermer (nettbrett)."
+        },
+        "lg": {
+            "value": "1280px",
+            "description": "Breakpoint for store skjermer (desktop)."
+        },
+        "xl": {
+            "value": "1600px",
+            "description": "Breakpoint for ekstra store skjermer (stor desktop)."
+        }
+    }
+}

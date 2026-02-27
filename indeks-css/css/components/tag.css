@@ -1,0 +1,83 @@
+:where(.ix-tag) {
+    --background-color: var(--ix-color-fill-neutral-default);
+    --text-color: var(--ix-color-foreground-main-default);
+    --border-color: var(--ix-color-border-main-default);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--ix-spacing-2xs) var(--ix-spacing-sm);
+    gap: var(--ix-spacing-2xs);
+    border-radius: var(--ix-border-radius-sm);
+    font-size: var(--ix-font-size-md);
+    width: fit-content;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    height: fit-content;
+    border: var(--ix-border-width-default) solid var(--border-color);
+}
+
+:where(.ix-tag--sm) {
+    font-size: var(--ix-font-size-sm);
+}
+
+:where(.ix-tag--lg) {
+    font-size: var(--ix-font-size-lg);
+}
+
+:where(.ix-tag .ix-icon) {
+    color: var(--text-color);
+}
+
+:where(.ix-tag--info-emphasis) {
+    --background-color: var(--ix-color-fill-info-default);
+    --text-color: var(--ix-color-foreground-inverse-default);
+    --border-color: var(--ix-color-border-info-default);
+}
+
+:where(.ix-tag--info-subtle) {
+    --background-color: var(--ix-color-fill-info-subtle);
+    --border-color: var(--ix-color-border-info-default);
+}
+
+:where(.ix-tag--success-emphasis) {
+    --background-color: var(--ix-color-fill-success-default);
+    --text-color: var(--ix-color-foreground-inverse-default);
+    --border-color: var(--ix-color-border-success-default);
+}
+
+:where(.ix-tag--success-subtle) {
+    --background-color: var(--ix-color-fill-success-subtle);
+    --border-color: var(--ix-color-border-success-default);
+}
+
+:where(.ix-tag--warning-emphasis) {
+    --background-color: var(--ix-color-fill-warning-default);
+    --text-color: var(--ix-color-foreground-inverse-default);
+    --border-color: var(--ix-color-border-warning-default);
+}
+
+:where(.ix-tag--warning-subtle) {
+    --background-color: var(--ix-color-fill-warning-subtle);
+    --border-color: var(--ix-color-border-warning-default);
+}
+
+:where(.ix-tag--danger-emphasis) {
+    --background-color: var(--ix-color-fill-danger-default);
+    --text-color: var(--ix-color-foreground-inverse-default);
+    --border-color: var(--ix-color-border-danger-default);
+}
+
+:where(.ix-tag--danger-subtle) {
+    --background-color: var(--ix-color-fill-danger-subtle);
+    --border-color: var(--ix-color-border-danger-default);
+}
+
+:where(.ix-tag--neutral-emphasis) {
+    --background-color: var(--ix-color-fill-neutral-default);
+    --text-color: var(--ix-color-foreground-inverse-default);
+}
+
+:where(.ix-tag--neutral-subtle) {
+    --background-color: var(--ix-color-fill-neutral-subtle);
+}

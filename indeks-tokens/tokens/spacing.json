@@ -1,0 +1,184 @@
+{
+    "spacing": {
+        "base": {
+            "size": {
+                "value": "clamp(16px, 16px + (100vw - 375px) * (18 - 16) / (1024 - 375), 18px)", 
+                "description": "Grunnverdi for spacing.",
+                "internal": true
+            },
+            "scale": {
+                "value": "1.125",
+                "description": "Skaleringsfaktor for spacing.",
+                "internal": true
+            },
+            "stretch-multiplier": {
+                "value": "1.5",
+                "description": "Multiplier for stretch spacing.",
+                "internal": true
+            }
+        },
+        "size": {
+            "-13": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -22))",
+                "description": "Ekstremt liten spacing, -13.",
+                "internal": true
+            },
+            "-12": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -17))",
+                "description": "Ekstra liten spacing, -12.",
+                "internal": true
+            },
+            "-11": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -15))",
+                "description": "Ekstra liten spacing, -11.",
+                "internal": true
+            },
+            "-10": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -12))",
+                "description": "Ekstra liten spacing, -10.",
+                "internal": true
+            },
+            "-9": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -11))",
+                "description": "Ekstra liten spacing, -9.",
+                "internal": true
+            },
+            "-8": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -9))",
+                "description": "Ekstra liten spacing, -8.",
+                "internal": true
+            },
+            "-7": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -7))",
+                "description": "Ekstra liten spacing, -7.",
+                "internal": true
+            },
+            "-6": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -6))",
+                "description": "Ekstra liten spacing, -6.",
+                "internal": true
+            },
+            "-5": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -5))",
+                "description": "Ekstra liten spacing, -5.",
+                "internal": true
+            },
+            "-4": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -4))",
+                "description": "Ekstra liten spacing, -4.",
+                "internal": true
+            },
+            "-3": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -3))",
+                "description": "Ekstra liten spacing, -3.",
+                "internal": true
+            },
+            "-2": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -2))",
+                "description": "Ekstra liten spacing, -2.",
+                "internal": true
+            },
+            "-1": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), -1))",
+                "description": "Ekstra liten spacing, -1.",
+                "internal": true
+            },
+            "0": { "value": "var(--ii-spacing-base-size)", "description": "Base spacing, 0.", "internal": true },
+            "1": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 1))",
+                "description": "Liten spacing, 1.",
+                "internal": true
+            },
+            "2": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 2))",
+                "description": "Liten spacing, 2.",
+                "internal": true
+            },
+            "3": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 3))",
+                "description": "Liten spacing, 3.",
+                "internal": true
+            },
+            "4": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 4))",
+                "description": "Liten spacing, 4.",
+                "internal": true
+            },
+            "5": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 5))",
+                "description": "Liten spacing, 5.",
+                "internal": true
+            },
+            "6": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 6))",
+                "description": "Liten spacing, 6.",
+                "internal": true
+            },
+            "7": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 7))",
+                "description": "Liten spacing, 7.",
+                "internal": true
+            },
+            "8": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 8))",
+                "description": "Liten spacing, 8.",
+                "internal": true
+            },
+            "9": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 9))",
+                "description": "Liten spacing, 9.",
+                "internal": true
+            },
+            "10": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 10))",
+                "description": "Liten spacing, 10.",
+                "internal": true
+            },
+            "11": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 11))",
+                "description": "Liten spacing, 11.",
+                "internal": true
+            },
+            "12": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 12))",
+                "description": "Liten spacing, 12.",
+                "internal": true
+            },
+            "13": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 13))",
+                "description": "Liten spacing, 13.",
+                "internal": true
+            },
+            "14": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 14))",
+                "description": "Liten spacing, 14.",
+                "internal": true
+            },
+            "15": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 15))",
+                "description": "Liten spacing, 15.",
+                "internal": true
+            },
+            "16": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 16))",
+                "description": "Liten spacing, 16.",
+                "internal": true
+            },
+            "17": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 17))",
+                "description": "Liten spacing, 17.",
+                "internal": true
+            },
+            "18": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 18))",
+                "description": "Liten spacing, 18.",
+                "internal": true
+            },
+            "19": {
+                "value": "calc(var(--ii-spacing-base-size) * pow(var(--ii-spacing-base-scale), 19))",
+                "description": "Liten spacing, 19.",
+                "internal": true
+            }
+        }
+    }
+}

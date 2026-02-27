@@ -1,0 +1,122 @@
+/* Fill */
+
+.fill-hover {
+    transition: var(--ix-transition);
+}
+
+.fill-hover-default--main {
+    &:hover {
+        background-color: var(--ix-color-fill-main-default-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-main-default-active);
+    }
+}
+
+.fill-hover-default--neutral {
+    &:hover {
+        background-color: var(--ix-color-fill-neutral-default-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-neutral-default-active);
+    }
+}
+
+.fill-hover--interactive {
+    &:hover {
+        background-color: var(--ix-color-fill-interactive-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-interactive-active);
+    }
+}
+
+.fill-hover-default--success {
+    &:hover {
+        background-color: var(--ix-color-fill-success-default-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-success-default-active);
+    }
+}
+
+.fill-hover-default--warning {
+    &:hover {
+        background-color: var(--ix-color-fill-warning-default-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-warning-default-active);
+    }
+}
+
+.fill-hover-default--danger {
+    &:hover {
+        background-color: var(--ix-color-fill-danger-default-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-danger-default-active);
+    }
+}
+
+.fill-hover-default--info {
+    &:hover {
+        background-color: var(--ix-color-fill-info-default-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-info-default-active);
+    }
+}
+
+.fill-hover-subtle--main {
+    &:hover {
+        background-color: var(--ix-color-fill-main-subtle-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-main-subtle-active);
+    }
+}
+
+.fill-hover-subtle--neutral {
+    &:hover {
+        background-color: var(--ix-color-fill-neutral-subtle-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-neutral-subtle-active);
+    }
+}
+
+.fill-hover-subtle--success {
+    &:hover {
+        background-color: var(--ix-color-fill-success-subtle-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-success-subtle-active);
+    }
+}
+
+.fill-hover-subtle--warning {
+    &:hover {
+        background-color: var(--ix-color-fill-warning-subtle-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-warning-subtle-active);
+    }
+}
+
+.fill-hover-subtle--danger {
+    &:hover {
+        background-color: var(--ix-color-fill-danger-subtle-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-danger-subtle-active);
+    }
+}
+
+.fill-hover-subtle--info {
+    &:hover {
+        background-color: var(--ix-color-fill-info-subtle-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-fill-info-subtle-active);
+    }
+}

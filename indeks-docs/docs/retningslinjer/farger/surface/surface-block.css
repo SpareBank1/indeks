@@ -1,0 +1,49 @@
+/* Surface */
+.surface-hover {
+    transition: var(--ix-transition);
+}
+
+.surface-hover--main {
+    &:hover {
+        background-color: var(--ix-color-surface-main-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-surface-main-active);
+    }
+}
+
+.surface-hover--success {
+    &:hover {
+        background-color: var(--ix-color-surface-success-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-surface-success-active);
+    }
+}
+
+.surface-hover--warning {
+    &:hover {
+        background-color: var(--ix-color-surface-warning-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-surface-warning-active);
+    }
+}
+
+.surface-hover--danger {
+    &:hover {
+        background-color: var(--ix-color-surface-danger-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-surface-danger-active);
+    }
+}
+
+.surface-hover--info {
+    &:hover {
+        background-color: var(--ix-color-surface-info-hover);
+    }
+    &:active {
+        background-color: var(--ix-color-surface-info-active);
+    }
+}

@@ -1,0 +1,16 @@
+.ix-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ix-spacing-2xs);
+}
+
+.ix-input-wrapper label {
+    font-weight: var(--ix-font-weight-medium);
+    font-size: var(--ix-font-size-md);
+    color: var(--ix-color-foreground-main-emphasis);
+}
+
+.ix-input-description {
+    font-size: var(--ix-font-size-sm);
+    color: var(--ix-color-foreground-main-subtle);
+}

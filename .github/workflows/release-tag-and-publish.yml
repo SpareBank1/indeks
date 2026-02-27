@@ -1,0 +1,137 @@
+name: Release - Opprett tag og GitHub-release
+
+on:
+    push:
+        branches:
+            - main
+
+concurrency:
+    group: create-release
+    cancel-in-progress: false
+
+jobs:
+    create-release:
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        # Kjør bare på commits fra release branches
+        if: startsWith(github.event.head_commit.message, 'Release ')
+        permissions:
+            contents: write
+        outputs:
+            tag_name: ${{ steps.release.outputs.tag_name }}
+            packages: ${{ steps.packages.outputs.packages }}
+        steps:
+            - name: Checkout code
+              # zizmor: ignore[artipacked] - persist-credentials trengs for git push av tags
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  fetch-depth: 0
+
+            - name: Get changed packages
+              id: packages
+              env:
+                  COMMIT_MSG: ${{ github.event.head_commit.message }}
+              run: |
+                  # Parse commit message for package versions
+                  # Format: "Release indeks-tokens@1.0.0 indeks-css@2.0.0"
+
+                  # Extract package@version pairs
+                  PACKAGES=$(echo "$COMMIT_MSG" | grep -oE '[a-z-]+@[0-9]+\.[0-9]+\.[0-9]+' || true)
+
+                  if [ -z "$PACKAGES" ]; then
+                      echo "No packages found in commit message"
+                      echo "has_packages=false" >> $GITHUB_OUTPUT
+                      exit 0
+                  fi
+
+                  echo "has_packages=true" >> $GITHUB_OUTPUT
+
+                  # Output as JSON array for matrix
+                  JSON_ARRAY=$(echo "$PACKAGES" | jq -R -s -c 'split("\n") | map(select(length > 0))')
+                  echo "packages=$JSON_ARRAY" >> $GITHUB_OUTPUT
+                  echo "packages_list=$PACKAGES" >> $GITHUB_OUTPUT
+
+            - name: Create GitHub release
+              id: release
+              if: steps.packages.outputs.has_packages == 'true'
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  PACKAGES: ${{ steps.packages.outputs.packages_list }}
+                  RUN_NUMBER: ${{ github.run_number }}
+                  REPO: ${{ github.repository }}
+              run: |
+                  DATE=$(date +%Y-%m-%d)
+                  TAG="release-${DATE}-${RUN_NUMBER}"
+
+                  echo "tag_name=$TAG" >> $GITHUB_OUTPUT
+
+                  # Sorter pakker: indeks-css og indeks-react først, deretter resten
+                  PRIORITY_PKGS=""
+                  OTHER_PKGS=""
+
+                  for pkg in $PACKAGES; do
+                      NAME=$(echo "$pkg" | cut -d@ -f1)
+                      if [ "$NAME" = "indeks-css" ] || [ "$NAME" = "indeks-react" ]; then
+                          PRIORITY_PKGS="$PRIORITY_PKGS $pkg"
+                      else
+                          OTHER_PKGS="$OTHER_PKGS $pkg"
+                      fi
+                  done
+
+                  # Sorter priority: indeks-css først, så indeks-react
+                  SORTED_PRIORITY=""
+                  for pkg in $PRIORITY_PKGS; do
+                      NAME=$(echo "$pkg" | cut -d@ -f1)
+                      if [ "$NAME" = "indeks-css" ]; then
+                          SORTED_PRIORITY="$pkg $SORTED_PRIORITY"
+                      fi
+                  done
+                  for pkg in $PRIORITY_PKGS; do
+                      NAME=$(echo "$pkg" | cut -d@ -f1)
+                      if [ "$NAME" = "indeks-react" ]; then
+                          SORTED_PRIORITY="$SORTED_PRIORITY $pkg"
+                      fi
+                  done
+
+                  SORTED_PACKAGES="$SORTED_PRIORITY $OTHER_PKGS"
+
+                  # Bygg release notes med tags
+                  TABLE_ROWS=""
+                  ALL_TAGS=""
+
+                  # Git config for tagging
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+
+                  for pkg in $SORTED_PACKAGES; do
+                      [ -z "$pkg" ] && continue
+
+                      NAME=$(echo "$pkg" | cut -d@ -f1)
+                      VERSION=$(echo "$pkg" | cut -d@ -f2)
+                      PACKAGE_TAG="${NAME}@${VERSION}"
+
+                      # Opprett tag for pakken
+                      if ! git rev-parse "$PACKAGE_TAG" >/dev/null 2>&1; then
+                          git tag "$PACKAGE_TAG"
+                          git push origin "$PACKAGE_TAG"
+                          echo "Created tag: $PACKAGE_TAG"
+                      fi
+
+                      # Legg til i release notes med link til tag
+                      TAG_URL="https://github.com/${REPO}/tree/${PACKAGE_TAG}"
+                      TABLE_ROWS="${TABLE_ROWS}| [\`${PACKAGE_TAG}\`](${TAG_URL}) | @sb1/${NAME} v${VERSION} |\n"
+                      ALL_TAGS="$ALL_TAGS $PACKAGE_TAG"
+                  done
+
+                  NOTES="## Pakker i denne releasen\n\n| Tag | Pakke |\n|-----|-------|\n${TABLE_ROWS}\n---\n"
+
+                  # Opprett hovedtag
+                  git tag "$TAG"
+                  git push origin "$TAG"
+
+                  # Opprett GitHub release
+                  echo -e "$NOTES" | gh release create "$TAG" \
+                      --title "Release ${DATE}" \
+                      --notes-file -
+
+                  echo "✅ Created release $TAG with tags:$ALL_TAGS"

@@ -1,0 +1,18 @@
+packages:
+    - 'indeks-tokens'
+    - 'indeks-utils'
+    - 'indeks-css'
+    - 'indeks-react'
+    - 'indeks-docs'
+    - 'indeks-eksempel'
+    - 'shared'
+
+# Sikkerhet: Ikke installer pakker publisert for mindre enn 3 dager siden.
+# Beskytter mot supply chain-angrep der ondsinnede versjoner oppdages og fjernes kort tid etter publisering.
+# Krever pnpm >= 10.16.0
+minimumReleaseAge: 4320
+minimumReleaseAgeExclude:
+    - '@sb1/*'
+trustPolicy: no-downgrad
+#trustPolicyExclude:
+#trustPolicyIgnoreAfter:

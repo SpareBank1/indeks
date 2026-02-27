@@ -1,0 +1,30 @@
+{
+    "z-index": {
+        "_property": "z-index",
+        "_key": "z",
+        "background": {
+            "value": -1,
+            "description": "Bakgrunnselementer som alltid skal ligge bak alt annet."
+        },
+        "default": {
+            "value": 0,
+            "description": "Standard z-index for vanlige komponenter og innhold."
+        },
+        "elevated": {
+            "value": 1,
+            "description": "Brukes for elementer som skal ligge over standard innhold."
+        },
+        "overlay": {
+            "value": 20,
+            "description": "Overlay som skal ligge over innholdet på siden."
+        },
+        "dialog": {
+            "value": 60,
+            "description": "Dialoger som skal ligge over alt annet."
+        },
+        "max": {
+            "value": 100,
+            "description": "For når du har noe som må ligge øverst uansett hva. Vi annbefaler å bruke denne like mye som !important. Dvs. aldri."
+        }
+    }
+}

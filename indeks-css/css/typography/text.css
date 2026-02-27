@@ -1,0 +1,37 @@
+:where(.ix-text) {
+    line-height: 1.2;
+}
+
+:where(.ix-text--long) {
+    line-height: 1.4;
+}
+
+:where(.ix-text--xs) {
+    font-size: var(--ix-font-size-xs);
+    color: var(--ix-color-foreground-main-default);
+}
+
+:where(.ix-text--sm) {
+    font-size: var(--ix-font-size-sm);
+    color: var(--ix-color-foreground-main-default);
+}
+
+:where(.ix-text--md) {
+    font-size: var(--ix-font-size-md);
+    color: var(--ix-color-foreground-main-default);
+}
+
+:where(.ix-text--lg) {
+    font-size: var(--ix-font-size-lg);
+    color: var(--ix-color-foreground-main-default);
+}
+
+:where(.ix-text--xl) {
+    font-size: var(--ix-font-size-xl);
+    color: var(--ix-color-foreground-main-default);
+}
+
+:where(.ix-text--2xl) {
+    font-size: var(--ix-font-size-2xl);
+    color: var(--ix-color-foreground-main-default);
+}

@@ -1,0 +1,58 @@
+{
+    "name": "@sb1/indeks-css",
+    "version": "0.2.4",
+    "description": "CSS library for Indeks design system",
+    "main": "dist/npm/index.css",
+    "type": "module",
+    "homepage": "https://design.sparebank1.no",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sparebank1utvikling/indeks",
+        "directory": "indeks-css"
+    },
+    "bugs": {
+        "url": "https://github.com/sparebank1utvikling/indeks/issues"
+    },
+    "keywords": [
+        "indeks",
+        "design-system",
+        "css",
+        "styles",
+        "components",
+        "sparebank1"
+    ],
+    "exports": {
+        ".": "./dist/npm/index.css"
+    },
+    "files": [
+        "dist/npm",
+        "CHANGELOG.md",
+        "README.md"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "dev": "echo not implemented",
+        "build": "rm -rf ./dist && pnpm run build:npm",
+        "build:npm": "rm -rf ./dist/npm && postcss ./index.css -o ./dist/npm/index.css",
+        "build:cdn": "rm -rf ./dist/cdn && CDN_BUILD=true postcss ./index.css -o ./dist/cdn/index.css",
+        "prepublishOnly": "pnpm run build",
+        "update-packages": "echo not implemented",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@sb1/indeks-tokens": "workspace:*",
+        "@sb1/indeks-utils": "workspace:*"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.23",
+        "cssnano": "^7.1.2",
+        "postcss": "^8.5.6",
+        "postcss-cli": "^11.0.1",
+        "postcss-import": "^16.1.1",
+        "postcss-preset-env": "^10.6.1"
+    }
+}

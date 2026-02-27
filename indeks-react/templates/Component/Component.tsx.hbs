@@ -1,0 +1,43 @@
+import type {
+  ElementType,
+  JSX,
+  ReactNode,
+} from "react";
+import clsx from "clsx";
+import {
+  extractComponentSizeClassname,
+  type ComponentSize,
+} from "../../../types/types";
+
+export type {{componentName}}Props<As extends ElementType> = {
+  as?: As;
+  children?: ReactNode;
+  className?: string;
+  size?: ComponentSize;
+};
+
+export function {{componentName}}<As extends ElementType = "div">(
+  props: {{componentName}}Props<As>
+): JSX.Element {
+  const {
+    as: Component = "div",
+    size,
+    className,
+    ...restProps
+  } = {
+    ...props,
+  };
+
+  const { componentSizeClassName } = extractComponentSizeClassname(size);
+
+  return (
+    <Component
+      {...restProps}
+      className={clsx(
+        "ix-{{dashCase componentName}}",
+        componentSizeClassName,
+        className
+      )}
+    />
+  );
+}

@@ -1,0 +1,73 @@
+# Deaktiverte tilstander
+
+I Indeks **anbefaler vi som hovedregel å unngå bruk av deaktiverte tilstander som `disabled`.** Deaktiverte komponenter kan virke som en enkel løsning, men fører ofte til dårligere brukeropplevelse, lavere tilgjengelighet og mer frustrasjon enn nødvendig. Når en kontroll er deaktivert, fjernes den i praksis fra samspillet mellom bruker og grensesnitt – uten at det nødvendigvis blir tydelig hvorfor.
+
+For brukeren kan et deaktivert felt eller en knapp oppleves som «låst», uten forklaring på hva som mangler eller hva som skal til for å komme videre. Dette rammer særlig brukere som navigerer med tastatur eller skjermleser, men skaper også usikkerhet for mange andre. Av den grunn bør `disabled` alltid være **siste utvei**, ikke standardvalg.
+
+## Når `disabled` skaper problemer
+
+En `disabled` komponent kan ikke få fokus, kan ikke brukes med tastatur, og innholdet kan ofte ikke leses eller kopieres. Verdier blir heller ikke sendt med i skjema. Resultatet er at viktig informasjon kan bli utilgjengelig, samtidig som brukeren mister muligheten til å forstå eller rette opp i problemet selv.
+
+Dette er grunnen til at vi **fraråder å bruke** `disabled` til:
+
+* skjemavalidering, som for eksempel å deaktivere «Send»-knappen
+* felt som inneholder informasjon brukeren trenger å lese eller kopiere
+* midlertidige tilstander som heller kan forklares med tekst eller validering
+
+Hvis du vurderer å bruke `disabled`, bør du stoppe opp og spørre deg selv om det finnes en løsning som **hjelper brukeren videre i stedet for å blokkere dem.**
+
+## Finn en annen løsning først
+
+I de fleste tilfeller finnes det bedre alternativer enn å deaktivere komponenter. Ofte handler det om å gjøre årsak og neste steg tydeligere, fremfor å fjerne muligheten for handling.
+
+Det kan for eksempel være bedre å:
+
+* la en knapp være aktiv, men gi tydelige valideringsfeil og forklaringer når noe mangler
+* fjerne valg som ikke er relevante, i stedet for å vise dem som inaktive
+* vise informasjon som ren tekst når den ikke er ment å redigeres
+
+Disse løsningene gjør grensesnittet mer forståelig og gir brukeren bedre kontroll over situasjonen.
+
+## `readonly` – foretrukket når noe ikke kan endres
+
+Når brukeren skal se informasjon, men ikke endre den, er `readonly` som regel det riktige valget. Et `readonly`-felt kan få fokus, leses av skjermlesere og innholdet kan kopieres. Verdien blir også sendt med videre i skjemaet. For brukeren oppleves dette som et felt som er låst, men fortsatt relevant og tilgjengelig.
+
+`readonly` egner seg særlig godt for verdier som:
+
+* er generert av systemet
+* er hentet fra brukerens profil
+* er viktige for videre steg i prosessen
+
+Eksempler kan være kontonummer, referansenummer eller forhåndsutfylte personopplysninger.
+
+## Et overordnet prinsipp
+
+I stedet for å deaktivere brukeren, bør grensesnittet **forklare, veilede og gi tydelige tilbakemeldinger.** Deaktiverte tilstander skjuler ofte problemer som heller burde løses med bedre struktur eller kommunikasjon.
+
+Derfor gjelder følgende prinsipp i dette designsystemet:
+
+> Bruk `disabled` kun når det ikke finnes et bedre alternativ. I alle andre tilfeller: forklar, vis og hjelp brukeren videre.
+
+## Hva opplever brukeren?
+
+Valget mellom `disabled` og `readonly` har stor betydning for hvordan grensesnittet oppleves i praksis.
+
+Når en komponent er `disabled`, mister brukeren muligheten til å samhandle med den. Feltet kan ikke få fokus, innholdet kan ikke kopieres, og det er ofte uklart hvorfor komponenten er deaktivert eller hva som skal til for å komme videre. For mange brukere – særlig de som bruker tastatur eller skjermleser – kan dette oppleves som en blindvei.
+
+En `readonly` komponent gir en helt annen opplevelse. Brukeren kan fokusere på feltet, lese verdien, kopiere innholdet og forstå at dette er informasjon som er relevant, men ikke mulig å endre. Feltet oppleves som låst, men fortsatt som en aktiv del av flyten.
+
+Forskjellen kan oppsummeres slik:
+
+| Brukeropplevelse                                   | `disabled`       | `readonly`      |
+| -------------------------------------------- | ----------------- | ---------------- |
+| Kan få fokus                                    | ❌                | ✅               |
+| Kan lese med hjelpemidler               | ❌          | ✅               |
+| Kan kopiere innhold                        | ❌                | ✅               |
+| Forstår hvorfor komponenten er låst         | ❌                | ✅               |
+
+### Kort sagt:
+
+* **`disabled` stopper brukeren**
+* **`readonly` informerer brukeren**
+
+Derfor anbefaler vi som hovedregel å bruke `readonly` når informasjonen er viktig, og kun bruke `disabled` når det ikke finnes et bedre alternativ.

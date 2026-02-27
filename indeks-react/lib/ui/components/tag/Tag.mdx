@@ -1,0 +1,88 @@
+import { Canvas, Controls, Meta } from "@storybook/addon-docs/blocks";
+import { HStack } from "../../layout/h-stack/HStack";
+import { VStack } from "../../layout/v-stack/VStack";
+import { Tag } from "./Tag";
+
+import * as TagStories from './Tag.stories';
+
+<Meta title="Components/Tag" />
+
+# Tag
+
+Eksempel på tag med forskjellige størrelser og moduser.
+
+<div className="ix-body sb-unstyled">
+  <HStack>
+    <VStack>
+      <Tag
+        size="sm"
+        className="ix-density--compact"
+        variant="info"
+        type="subtle"
+        children="Compact / sm"
+      />
+
+      <Tag
+        size="md"
+        className="ix-density--compact"
+        variant="info"
+        type="subtle"
+        children="Compact / md"
+      />
+      <Tag
+        size="lg"
+        className="ix-density--compact"
+        variant="info"
+        type="subtle"
+        children="Compact / lg"
+      />
+    </VStack>
+    <VStack>
+      <Tag
+        size="sm"
+        className="ix-density--default"
+        variant="info"
+        type="subtle"
+        children="Default / sm"
+      />
+      <Tag
+        size="md"
+        className="ix-density--default"
+        variant="info"
+        type="subtle"
+        children="Default / md"
+      />
+      <Tag
+        size="lg"
+        className="ix-density--default"
+        variant="info"
+        type="subtle"
+        children="Default / lg"
+      />
+    </VStack>
+    <VStack>
+      <Tag
+        size="sm"
+        className="ix-density--comfortable"
+        variant="info"
+        type="subtle"
+        children="Comfortable / sm"
+      />
+      <Tag
+        size="md"
+        className="ix-density--comfortable"
+        variant="info"
+        type="subtle"
+        children="Comfortable / md"
+      />
+      <Tag
+        size="lg"
+        className="ix-density--comfortable"
+        variant="info"
+        type="subtle"
+        children="Comfortable / lg"
+      />
+    </VStack>
+
+  </HStack>
+</div>

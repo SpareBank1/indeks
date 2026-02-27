@@ -1,0 +1,21 @@
+{
+    "transition": {
+        "animation": {
+            "_property": "transition-timing-function",
+            "value": "cubic-bezier(.25, .1, .25, 1)",
+            "description": "Standard overgangsanimasjon."
+        },
+        "property": {
+            "_property": "transition-property",
+            "all": {
+                "value": "all",
+                "description": "Setter transition animation på alle properties"
+            }
+        },
+        "duration": {
+            "_property": "transition-duration",
+            "value": "0.2s",
+            "description": "Standard overgangsvarighet."
+        }
+    }
+}

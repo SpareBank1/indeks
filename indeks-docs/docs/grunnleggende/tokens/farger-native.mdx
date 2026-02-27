@@ -1,0 +1,161 @@
+# Farger for Native
+
+Pakken `@sb1/indeks-tokens` inneholder fargetokens som kan bygges til forskjellige plattformer, inkludert native (iOS og Android).
+
+For å bruke fargene i native-apper er det enkleste å bygge dem til den relevante plattformen ved hjelp av scripts som følger med pakken.
+
+## Hvordan bygge fargene
+
+Scriptene som brukes for å bygge fargene til native ligger i `@sb1/indeks-tokens`-pakken under `scripts/build-colors/mobile`.
+
+For å bruke scriptet kan du bruke `npx` som lar deg kjøre scripts fra pakker uten å installere dem. Du kan enten kjøre det i root og legge til riktig path, eller kjøre det i riktig mappe med path `.`
+
+:::tip Versjonering
+Vi anbefaler at dere commiter scriptet dere bruker for å bygge fargene, slik at dere har kontroll på når fargene endrer seg. Ved å ha dette committet blir det enklere å spore når fargene endrer seg og å vite hvilken versjon en er på.
+:::
+
+## Android
+
+For å bygge farger til Android (Kotlin):
+
+```bash
+npx @sb1/indeks-tokens build-colors platform=android path=./android/colors
+```
+
+Dette genererer en `Colors.kt`-fil med semantiske farger for både light og dark mode.
+
+### Output-eksempel
+
+```kotlin
+object Colors {
+    object LightDefault {
+        val backgroundDefault = Color(0xFFFFFFFF)
+        val backgroundNeutral = Color(0xFFF4F5F6)
+        // ... flere farger
+    }
+
+    object DarkDefault {
+        val backgroundDefault = Color(0xFF1E2632)
+        val backgroundNeutral = Color(0xFF323B49)
+        // ... flere farger
+    }
+}
+```
+
+### Parametere
+
+-   `platform=android` - Spesifiserer at du vil bygge for Android
+-   `path=<sti>` - Hvor filene skal lagres (f.eks. `./android/colors`)
+-   `theme=<sti>` - (Valgfri) Sti til egen theme-fil (default: `sb1`)
+
+## iOS
+
+For å bygge farger til iOS (Xcode Color Assets):
+
+```bash
+npx @sb1/indeks-tokens build-colors platform=ios path=./ios/colors
+```
+
+Dette genererer en `.xcassets`-mappe med semantiske farger for både light og dark mode.
+
+### Output-struktur
+
+```
+SemanticColors.xcassets/
+├── Contents.json
+├── README.md
+└── default/
+    ├── Contents.json
+    ├── background.default.colorset/
+    │   └── Contents.json
+    ├── background.neutral.colorset/
+    │   └── Contents.json
+    └── ... flere farger
+```
+
+### Parametere
+
+-   `platform=ios` - Spesifiserer at du vil bygge for iOS
+-   `path=<sti>` - Hvor filene skal lagres (f.eks. `./ios/colors`)
+-   `theme=<sti>` - (Valgfri) Sti til egen theme-fil (default: `sb1`)
+
+## Egne themes
+
+Du kan lage ditt eget theme ved å opprette en TypeScript-fil som eksporterer et theme-objekt. Scriptet vil da bruke dette themet i stedet for det innebygde sb1-themet.
+
+### Eksempel på egen theme-fil
+
+Lag en fil `my-theme.ts`:
+
+```typescript
+import type { Theme } from '@sb1/indeks-tokens/themes/types';
+
+export const myTheme: Theme = {
+    name: 'my-custom-theme',
+    identityColor: '#005aa4',
+    colors: {
+        brand: '#0078D8',
+        success: '#00885B',
+        info: '#467CA4',
+        danger: '#C94E4F',
+        warning: '#AF6500',
+        gray: '#6D7888',
+        neutral: '#AF6516',
+    },
+    themeable: {
+        'font-family': {
+            normal: 'System',
+            heading: 'System',
+        },
+        'font-weight': {
+            normal: 400,
+            bold: 600,
+            heading: 700,
+        },
+        border: {
+            radius: {
+                button: 25,
+                checkbox: 4,
+                input: 8,
+            },
+        },
+    },
+};
+```
+
+### Bruke eget theme
+
+```bash
+npx @sb1/indeks-tokens build-colors platform=android path=./android/colors theme=./my-theme.ts
+```
+
+Eller for iOS:
+
+```bash
+npx @sb1/indeks-tokens build-colors platform=ios path=./ios/colors theme=./my-theme.ts
+```
+
+## Fargeskalaer
+
+Alle farger bygges fra fargeskalaer med 20 steg (0-950) for hver basisfarge:
+
+-   **brand** - Merkevarefarge
+-   **success** - Suksess/positiv
+-   **info** - Informasjon
+-   **warning** - Advarsel
+-   **danger** - Feil/negativ
+-   **gray** - Nøytral grå
+-   **neutral** - Nøytral brun/beige
+
+De semantiske fargene (f.eks. `background.default`, `foreground.main`) er mappet til disse fargeskalaene og justeres automatisk for light og dark mode.
+
+## Oppdatere farger
+
+For å oppdatere fargene i native-appen din:
+
+1. Oppdater versjonen av `@sb1/indeks-tokens` i kommandoen
+2. Kjør build-scriptet på nytt
+3. Commit de nye filene til versjonskontroll
+4. De nye fargene vil være tilgjengelige i appen
+
+Dette sikrer at fargeendringer er sporbare og at teamet har kontroll over når oppdateringer skjer.
