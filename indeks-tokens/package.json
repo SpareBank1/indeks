@@ -57,7 +57,7 @@
         "@figma/rest-api-spec": "^0.31.0",
         "@types/node": "^24.10.1",
         "autoprefixer": "^10.4.23",
-        "axios": "^1.13.2",
+        "axios": "^1.13.5",
         "colorjs.io": "^0.5.2",
         "cssnano": "^7.1.2",
         "dotenv": "^17.2.3",
