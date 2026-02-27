@@ -153,3 +153,4 @@ Versjonsbumping og npm-publisering gjøres manuelt lokalt for kontroll.
 -   **indeks-tokens** og **indeks-utils**: Independent versioning (kan ha ulike versjoner)
 -   **indeks-css** og **indeks-react**: Fixed versioning (alltid samme versjon)
 -   Linked dependencies: Når tokens/utils oppdateres, bumpes også css automatisk
+
