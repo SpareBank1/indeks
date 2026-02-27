@@ -1,0 +1,5 @@
+rules:
+    cache-poisoning:
+        ignore:
+            # Docker image lastes kun lokalt med load: true, pushes ikke til registry
+            - pr-playwright.yml

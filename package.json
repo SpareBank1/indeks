@@ -1,0 +1,29 @@
+{
+    "name": "@sb1/indeks",
+    "version": "1.0.0",
+    "private": true,
+    "license": "MIT",
+    "type": "module",
+    "packageManager": "pnpm@10.30.2",
+    "scripts": {
+        "build": "turbo run build",
+        "build-storybook": "turbo run build-storybook",
+        "dev": "turbo run dev",
+        "update-packages": "pnpm -r update",
+        "changeset": "changeset",
+        "version": "changeset version",
+        "release": "changeset version && pnpm build && changeset publish",
+        "check-licenses": "scripts/check-licenses.sh"
+    },
+    "devDependencies": {
+        "@changesets/cli": "^2.29.8",
+        "autoprefixer": "^10.4.23",
+        "eslint-plugin-compat": "^6.0.2",
+        "cssnano": "^7.1.2",
+        "postcss": "^8.5.6",
+        "postcss-cli": "^11.0.1",
+        "postcss-import": "^16.1.1",
+        "postcss-preset-env": "^10.6.1",
+        "turbo": "^2.7.4"
+    }
+}

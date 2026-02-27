@@ -1,0 +1,11 @@
+.eksempel-oversikt-row {
+    grid-template-columns: repeat(auto-fit, minmax(auto, 500px));
+}
+
+.eksempel-icon-bubble {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--ix-color-fill-main-subtle);
+}

@@ -1,0 +1,96 @@
+# Layout
+
+Indeks tilbyr et sett med layout-utilities for å hjelpe med oppsett av elementer på siden ved bruk av Flex og CSS Grid. Disse klassene kan brukes direkte i HTML for raskt å justere layout uten behov for egendefinert CSS.
+
+## Flex eller Grid?
+
+Som tommelfingeregel anbefales det å bruke Flex for enklere layoutbehov som justering og fordeling av elementer i én dimensjon (rad eller kolonne), mens Grid er bedre egnet for mer komplekse, todimensjonale layouter.
+
+## Grid
+
+Utility-klassene for Grid i Indeks gjør det enkelt å definere rader, kolonner og gap mellom elementer. For en fullstendig oversikt over tilgjengelige Grid-klasser, se [Grid-dokumentasjonen](../grunnleggende/tokens/utilities#grid).
+
+### Bruk Grid når:
+
+* Du trenger å plassere elementer i både rader og kolonner
+* Du ønsker presis kontroll over plassering av elementer i et rutenett
+* Layouten bestemmer størrelsen på innholdet
+
+#### Eksempel
+
+```html
+<div class="ix-grid ix-grid-cols-3 ix-gap-lg">
+    <div>Element 1</div>
+    <div>Element 2</div>
+    <div>Element 3</div>
+</div>
+```
+
+
+## Flex
+
+Utility-klassene for Flex i Indeks gir mulighet for fleksibel justering og fordeling av elementer i en rad eller kolonne. For en fullstendig oversikt over tilgjengelige Flex-klasser, se [Flex-dokumentasjonen](../grunnleggende/tokens/utilities#flex).
+
+### Bruk Flex når:
+
+* Layouten har én dimensjon - enten rad eller kolonne
+* Innholdet selv bestemmer størrelsen på elementene
+* Du trenger fleksibel wrapping av elementer
+
+#### Eksempel
+
+```html
+<div class="ix-flex ix-gap-md ix-justify-between">
+    <div>Element 1</div>
+    <div>Element 2</div>
+    <div class="ix-self-end">Element 3</div>
+</div>
+```
+
+## Stack-komponenter
+
+`VStack` og `HStack` er komponenter som forenkler henholdsvis vertikal og horisontal layout. Komponentene bruker Flex under panseret og har `gap: var(--ix-spacing-md)` som standard.
+
+```html
+<!-- Vertikal stack med standard gap (md) -->
+<VStack>
+    <div>Element 1</div>
+    <div>Element 2</div>
+    <div>Element 3</div>
+</VStack>
+
+<!-- Horisontal stack med standard gap (md) -->
+<HStack>
+    <button>Avbryt</button>
+    <button>Lagre</button>
+</HStack>
+```
+
+## Density
+
+Spacing-systemet i Indeks er basert på en density-modus som settes som en klasse på container-elementer. Denne klassen påvirker alle spacing-verdier og bestemmer tettheten i layouten. Standard density er `ix-density--default`. For å endre tetthet, kan du bruke en av modifierne nedenfor:
+
+- `ix-density--comfortable`: Gir en mer romslig layout med større avstander mellom og inni elementer
+- `ix-density--compact`: Gir en tettere layout med mindre avstander mellom og inni elementer
+
+[Mer informasjon om density](../grunnleggende/tokens/spacing#density-moduser)
+
+## Mobile first
+
+Alle responsive utility-klasser i Indeks er bygget etter "mobile first"-prinsippet. Dette betyr at standard-klassene gjelder for alle skjermstørrelser, men kan overstyres av responsive varianter som gjelder fra en gitt skjermstørrelse (breakpoint) og oppover. For eksempel vil klassen `ix-md-flex` gjøre et element til en flex-container på medium skjermstørrelse (`md`) og større, mens det på mindre skjermer vil følge standard oppførsel.
+
+```html
+<div class="ix-md-flex ix-lg-grid">
+    Denne containeren er en flex-container på medium skjermer og oppover,
+    og en grid-container på store skjermer og oppover.
+</div>
+```
+
+## Breakpoints
+
+Indeks bruker følgende breakpoints for å håndtere responsiv design:
+
+- `sm`: 768px og oppover
+- `md`: 1024px og oppover
+- `lg`: 1280px og oppover
+- `xl`: 1600px og oppover

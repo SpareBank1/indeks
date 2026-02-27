@@ -1,0 +1,64 @@
+:where(.ix-body) {
+    font-size: var(--ii-font-size-0);
+    color: var(--ix-color-foreground-default);
+    font-family: var(--ix-font-family-normal);
+    line-height: 1.2;
+
+    --ix-font-size-xs: var(--ii-font-size--2);
+    --ix-font-size-sm: var(--ii-font-size--1);
+    --ix-font-size-md: var(--ii-font-size-0);
+    --ix-font-size-lg: var(--ii-font-size-1);
+    --ix-font-size-xl: var(--ii-font-size-2);
+    --ix-font-size-2xl: var(--ii-font-size-3);
+    --ix-font-size-3xl: var(--ii-font-size-5);
+    --ix-font-size-4xl: var(--ii-font-size-7);
+    --ix-font-size-5xl: var(--ii-font-size-9);
+}
+
+.ix-text-bold,
+strong,
+b {
+    font-weight: var(--ix-font-weight-medium);
+}
+
+.ix-text-italic,
+em,
+i {
+    font-style: italic;
+}
+
+.ix-font-size-xs {
+    font-size: var(--ix-font-size-xs);
+}
+
+.ix-font-size-sm {
+    font-size: var(--ix-font-size-sm);
+}
+
+.ix-font-size-md {
+    font-size: var(--ix-font-size-md);
+}
+
+.ix-font-size-lg {
+    font-size: var(--ix-font-size-lg);
+}
+
+.ix-font-size-xl {
+    font-size: var(--ix-font-size-xl);
+}
+
+.ix-font-size-2xl {
+    font-size: var(--ix-font-size-2xl);
+}
+
+.ix-font-size-3xl {
+    font-size: var(--ix-font-size-3xl);
+}
+
+.ix-font-size-4xl {
+    font-size: var(--ix-font-size-4xl);
+}
+
+.ix-font-size-5xl {
+    font-size: var(--ix-font-size-5xl);
+}

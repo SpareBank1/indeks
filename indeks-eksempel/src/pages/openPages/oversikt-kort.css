@@ -1,0 +1,50 @@
+.ikon-sirkel {
+    height: 50px;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--ix-border-radius-circle);
+}
+
+.eksempel-kort--main {
+    background-color: var(--ix-color-surface-main-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    &:hover {
+        background-color: var(--ix-color-surface-main-hover);
+    }
+}
+
+.eksempel-kort--info {
+    background-color: var(--ix-color-surface-info-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-info-default);
+    &:hover {
+        background-color: var(--ix-color-surface-info-hover);
+    }
+}
+
+.eksempel-kort--success {
+    background-color: var(--ix-color-surface-success-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-success-default);
+    &:hover {
+        background-color: var(--ix-color-surface-success-hover);
+    }
+}
+
+.eksempel-kort--warning {
+    background-color: var(--ix-color-surface-warning-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-warning-default);
+    &:hover {
+        background-color: var(--ix-color-surface-warning-hover);
+    }
+}
+
+.eksempel-kort--danger {
+    background-color: var(--ix-color-surface-danger-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-danger-default);
+
+    color: var(--ix-color-foreground-danger-default);
+    &:hover {
+        background-color: var(--ix-color-surface-danger-hover);
+    }
+}

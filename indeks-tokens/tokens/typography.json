@@ -1,0 +1,185 @@
+{
+    "font": {
+        "base": {
+            "scale": {
+                "value": "1.125",
+                "description": "Skaleringsfaktor for typografi.",
+                "internal": true
+            },
+            "size": {
+                "value": "clamp(1rem, 1rem + (100vw - 375px) * (18 - 16) / (1024 - 375), 1.125rem)",
+                "description": "Grunnleggende fontstørrelse.",
+                "internal": true
+            }
+        },
+        "size": {
+            "-13": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -22))",
+                "description": "Ekstremt liten fontstørrelse, -13.",
+                "internal": true
+            },
+            "-12": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -17))",
+                "description": "Ekstra liten fontstørrelse, -12.",
+                "internal": true
+            },
+            "-11": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -15))",
+                "description": "Ekstra liten fontstørrelse, -11.",
+                "internal": true
+            },
+            "-10": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -12))",
+                "description": "Ekstra liten fontstørrelse, -10.",
+                "internal": true
+            },
+            "-9": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -11))",
+                "description": "Ekstra liten fontstørrelse, -9.",
+                "internal": true
+            },
+            "-8": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -9))",
+                "description": "Ekstra liten fontstørrelse, -8.",
+                "internal": true
+            },
+            "-7": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -7))",
+                "description": "Ekstra liten fontstørrelse, -7.",
+                "internal": true
+            },
+            "-6": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -6))",
+                "description": "Ekstra liten fontstørrelse, -6.",
+                "internal": true
+            },
+            "-5": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -5))",
+                "description": "Ekstra liten fontstørrelse, -5.",
+                "internal": true
+            },
+            "-4": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -4))",
+                "description": "Ekstra liten fontstørrelse, -4.",
+                "internal": true
+            },
+            "-3": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -3))",
+                "description": "Ekstra liten fontstørrelse, -3.",
+                "internal": true
+            },
+            "-2": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -2))",
+                "description": "Ekstra liten fontstørrelse, -2.",
+                "internal": true
+            },
+            "-1": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), -1))",
+                "description": "Ekstra liten fontstørrelse, -1.",
+                "internal": true
+            },
+            "0": {
+                "value": "var(--ii-font-base-size)",
+                "description": "Base fontstørrelse, 0.",
+                "internal": true
+            },
+            "1": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 1))",
+                "description": "Liten fontstørrelse, 1.",
+                "internal": true
+            },
+            "2": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 2))",
+                "description": "Liten fontstørrelse, 2.",
+                "internal": true
+            },
+            "3": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 3))",
+                "description": "Liten fontstørrelse, 3.",
+                "internal": true
+            },
+            "4": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 4))",
+                "description": "Liten fontstørrelse, 4.",
+                "internal": true
+            },
+            "5": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 5))",
+                "description": "Liten fontstørrelse, 5.",
+                "internal": true
+            },
+            "6": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 6))",
+                "description": "Liten fontstørrelse, 6.",
+                "internal": true
+            },
+            "7": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 7))",
+                "description": "Liten fontstørrelse, 7.",
+                "internal": true
+            },
+            "8": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 8))",
+                "description": "Liten fontstørrelse, 8.",
+                "internal": true
+            },
+            "9": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 9))",
+                "description": "Liten fontstørrelse, 9.",
+                "internal": true
+            },
+            "10": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 10))",
+                "description": "Liten fontstørrelse, 10.",
+                "internal": true
+            },
+            "11": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 11))",
+                "description": "Liten fontstørrelse, 11.",
+                "internal": true
+            },
+            "12": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 12))",
+                "description": "Liten fontstørrelse, 12.",
+                "internal": true
+            },
+            "13": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 13))",
+                "description": "Liten fontstørrelse, 13.",
+                "internal": true
+            },
+            "14": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 14))",
+                "description": "Liten fontstørrelse, 14.",
+                "internal": true
+            },
+            "15": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 15))",
+                "description": "Liten fontstørrelse, 15.",
+                "internal": true
+            },
+            "16": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 16))",
+                "description": "Liten fontstørrelse, 16.",
+                "internal": true
+            },
+            "17": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 17))",
+                "description": "Liten fontstørrelse, 17.",
+                "internal": true
+            },
+            "18": {
+                "value": "calc(var(--ii-font-base-size) * pow(var(--ii-font-base-scale), 18))",
+                "description": "Liten fontstørrelse, 18.",
+                "internal": true
+            }
+        },
+        "weight": {
+            "_property": "font-weight",
+            "light": { "value": "300", "description": "Lett fontvekt.", "internal": true },
+            "regular": { "value": "400", "description": "Normal fontvekt." },
+            "medium": { "value": "500", "description": "Medium fontvekt." },
+            "bold": { "value": "700", "description": "Fet fontvekt.", "internal": true }
+        }
+    }
+}

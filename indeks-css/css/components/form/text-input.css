@@ -1,0 +1,27 @@
+:where(.ix-text-input) {
+    background-color: var(--ix-color-fill-interactive-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-sm);
+    display: flex;
+    gap: var(--ix-spacing-sm);
+    padding: var(--ix-spacing-sm);
+    flex-wrap: wrap;
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
+
+    &:active,
+    &:focus-within {
+        outline: var(--ix-outline-default);
+    }
+}
+
+:where(.ix-text-input input) {
+    box-sizing: border-box;
+    all: unset;
+    min-width: 50px;
+    width: 100%;
+}
+
+:where(.ix-text-input::placeholder) {
+    color: var(--ix-color-foreground-main-subtle);
+}

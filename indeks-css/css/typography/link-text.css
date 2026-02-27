@@ -1,0 +1,12 @@
+.ix-link-text {
+    color: var(--ix-color-foreground-interactive-link);
+    text-decoration: none;
+}
+
+.ix-link-text--active {
+    color: var(--ix-color-foreground-interactive-link-active);
+}
+
+.ix-link-text--underline {
+    text-decoration: underline;
+}

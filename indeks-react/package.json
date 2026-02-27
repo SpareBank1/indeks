@@ -1,0 +1,93 @@
+{
+    "name": "@sb1/indeks-react",
+    "version": "0.2.4",
+    "type": "module",
+    "description": "React components for Indeks design system",
+    "homepage": "https://design.sparebank1.no",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sparebank1utvikling/indeks",
+        "directory": "indeks-react"
+    },
+    "bugs": {
+        "url": "https://github.com/sparebank1utvikling/indeks/issues"
+    },
+    "keywords": [
+        "indeks",
+        "design-system",
+        "react",
+        "components",
+        "sparebank1",
+        "ui"
+    ],
+    "main": "dist/main.js",
+    "types": "dist/main.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/main.d.ts",
+            "import": "./dist/main.js"
+        }
+    },
+    "files": [
+        "dist",
+        "CHANGELOG.md",
+        "README.md"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "tsc -b ./tsconfig.json && vite build",
+        "prepublishOnly": "pnpm run build",
+        "lint": "eslint .",
+        "preview": "vite preview",
+        "dev": "storybook dev -p 6006",
+        "build-storybook": "storybook build",
+        "update-packages": "npx npm-check-updates -i --format group",
+        "create-component": "plop component",
+        "test": "vitest",
+        "test:storybook": "storybook dev -p 9009 --no-open",
+        "test:playwright": "docker compose run --rm playwright",
+        "test:playwright:ci": "docker-compose run playwright",
+        "test:playwright:update-screenshots": "docker compose -v run --rm update-screenshots"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "clsx": "^2.1.1"
+    },
+    "peerDependencies": {
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0"
+    },
+    "devDependencies": {
+        "@axe-core/playwright": "^4.11.0",
+        "@eslint/js": "^9.39.1",
+        "@playwright/test": "^1.56.1",
+        "@storybook/addon-a11y": "^9.1.10",
+        "@storybook/addon-docs": "^9.1.10",
+        "@storybook/react-vite": "^9.1.10",
+        "@testing-library/dom": "^10.4.1",
+        "@testing-library/react": "^16.3.0",
+        "@types/node": "^24.10.1",
+        "@types/react": "^19.2.6",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^5.1.1",
+        "@vitest/browser": "^3.2.4",
+        "eslint": "^9.39.1",
+        "eslint-plugin-react-hooks": "^5.2.0",
+        "eslint-plugin-react-refresh": "^0.4.20",
+        "eslint-plugin-storybook": "^9.1.10",
+        "globals": "^16.5.0",
+        "jsdom": "^27.2.0",
+        "playwright": "^1.56.1",
+        "plop": "^4.0.4",
+        "storybook": "^9.1.10",
+        "typescript": "~5.9.3",
+        "typescript-eslint": "^8.47.0",
+        "vite": "npm:rolldown-vite@^7.3.1",
+        "vite-plugin-dts": "^4.5.4",
+        "vitest": "^3.2.4",
+        "vitest-browser-react": "^1.0.1"
+    }
+}

@@ -1,0 +1,52 @@
+name: PR - Sperr ved ventende release
+
+on:
+    pull_request:
+        branches: [main]
+
+jobs:
+    check-release-pr:
+        name: Release gate
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        permissions:
+            contents: read
+            pull-requests: read
+        steps:
+            - name: Check for open release PR
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  HEAD_REF: ${{ github.head_ref }}
+                  REPO: ${{ github.repository }}
+              run: |
+                  # Sjekk om denne PR-en er en release PR
+                  if [[ "$HEAD_REF" == release/* ]]; then
+                      echo "✅ Dette er release PR-en. Godkjent."
+                      exit 0
+                  fi
+
+                  # Sjekk om det finnes en åpen release PR
+                  RELEASE_PR=$(gh pr list \
+                      --repo "$REPO" \
+                      --head "release/" \
+                      --state open \
+                      --json number,title,url \
+                      --jq '.[0]')
+
+                  if [ -n "$RELEASE_PR" ] && [ "$RELEASE_PR" != "null" ]; then
+                      RELEASE_URL=$(echo "$RELEASE_PR" | jq -r '.url')
+                      RELEASE_TITLE=$(echo "$RELEASE_PR" | jq -r '.title')
+
+                      echo "::error::Det finnes en åpen release PR som må merges først: $RELEASE_TITLE ($RELEASE_URL)"
+                      echo ""
+                      echo "❌ Merge blokkert!"
+                      echo ""
+                      echo "En release PR venter på å bli merget:"
+                      echo "  $RELEASE_TITLE"
+                      echo "  $RELEASE_URL"
+                      echo ""
+                      echo "Merge release PR-en før du merger denne PR-en."
+                      exit 1
+                  fi
+
+                  echo "✅ Ingen release PR venter. Denne PR-en kan merges."

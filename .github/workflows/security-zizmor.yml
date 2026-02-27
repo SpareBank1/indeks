@@ -1,0 +1,34 @@
+name: Sikkerhet - Zizmor workflow-skanning
+
+on:
+    pull_request:
+        paths:
+            - '.github/workflows/**'
+            - '.github/zizmor.yml'
+    push:
+        branches:
+            - main
+        paths:
+            - '.github/workflows/**'
+            - '.github/zizmor.yml'
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    scan:
+        name: Scan workflows
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
+
+            - name: Run zizmor security scan
+              run: |
+                  docker run --rm --network none \
+                    -v "${PWD}/.github:/repo/.github" \
+                    ghcr.io/zizmorcore/zizmor:1.18.0 \
+                    --offline --config /repo/.github/zizmor.yml /repo

@@ -1,0 +1,29 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+
+import { fn } from "storybook/test";
+
+import { {{componentName}} } from "./{{componentName}}";
+
+const meta = {
+  title: "{{componentFolder}}/{{componentName}}",
+  component: {{componentName}},
+ tags: ["autodocs"],
+  args: { onClick: fn(), children: "Tekst" },
+} satisfies Meta<typeof {{componentName}}>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
+export const Standard: Story = {};
+
+export const EgendefinertBarn: Story = {
+  args: {},
+  render: (args) => {
+    return (
+      <{{componentName}} {...args}>
+        <p>Jeg er et egedefinert barn</p>
+      </{{componentName}}>
+    );
+  },
+};

@@ -1,0 +1,44 @@
+.ix-loading-spinner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--ix-color-foreground-main-default);
+}
+
+.ix-loading-spinner {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.ix-loading-spinner::before {
+    content: ' ';
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border: 3px solid var(--ix-color-border-info-default);
+    border-top-color: var(--ix-color-border-info-hover);
+    border-radius: var(--ix-border-radius-circle);
+    animation: spin 1s linear infinite;
+    visibility: hidden;
+}
+
+.ix-loading-spinner--sm::before {
+    height: 45px;
+    width: 45px;
+}
+
+.ix-loading-spinner--lg::before {
+    height: 150px;
+    width: 150px;
+}
+
+@keyframes spin {
+    0% {
+        visibility: visible;
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

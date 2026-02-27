@@ -1,0 +1,8 @@
+.documentation-link-button {
+    display: flex;
+    border: var(--ix-border-default);
+    border-radius: var(--ix-border-radius-md);
+    padding: var(--ix-spacing-md);
+    justify-content: space-between;
+    align-items: center;
+}

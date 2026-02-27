@@ -1,0 +1,60 @@
+{
+    "name": "@sb1/indeks-utils",
+    "version": "0.1.8",
+    "description": "CSS utility classes for Indeks design system",
+    "main": "dist/index.css",
+    "type": "module",
+    "homepage": "https://design.sparebank1.no",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sparebank1utvikling/indeks",
+        "directory": "indeks-utils"
+    },
+    "bugs": {
+        "url": "https://github.com/sparebank1utvikling/indeks/issues"
+    },
+    "keywords": [
+        "indeks",
+        "design-system",
+        "css",
+        "utilities",
+        "utility-classes",
+        "sparebank1"
+    ],
+    "exports": {
+        ".": "./dist/index.css"
+    },
+    "files": [
+        "dist",
+        "CHANGELOG.md",
+        "README.md"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "dev": "echo not implemented",
+        "build": "rm -rf ./dist ./.build && pnpm run build:utils && pnpm run build:color-utils && pnpm run build:bundle",
+        "prepublishOnly": "pnpm run build",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "update-packages": "ncu -i --format group",
+        "build:utils": "npm run build:utils:css",
+        "build:utils:css": "tsx scripts/build-utils/index.ts platform=css path=./.build/css",
+        "build:color-utils": "node scripts/build-colors/index.js",
+        "build:bundle": "postcss ./index.css -o ./dist/index.css"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@sb1/indeks-tokens": "workspace:*"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.23",
+        "cssnano": "^7.1.2",
+        "postcss": "^8.5.6",
+        "postcss-cli": "^11.0.1",
+        "postcss-import": "^16.1.1",
+        "postcss-preset-env": "^10.6.1",
+        "tsx": "^4.20.6"
+    }
+}

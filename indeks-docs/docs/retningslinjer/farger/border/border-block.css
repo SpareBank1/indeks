@@ -1,0 +1,67 @@
+/* Border til dokumentasjonen */
+
+.border-hover {
+    transition: var(--ix-transition);
+}
+
+.border-bold-width {
+    border-width: var(--ix-border-width-bold);
+}
+
+.border-hover--main {
+    border: var(--ix-border-width-bold) solid var(--ix-color-border-main-default);
+    &:hover {
+        border-color: var(--ix-color-border-main-hover);
+    }
+    &:active {
+        border-color: var(--ix-color-border-main-active);
+    }
+}
+
+.border-hover--success {
+    border: var(--ix-border-width-bold) solid var(--ix-color-border-success-default);
+    &:hover {
+        border-color: var(--ix-color-border-success-hover);
+    }
+    &:active {
+        border-color: var(--ix-color-border-success-active);
+    }
+}
+
+.border-hover--warning {
+    border: var(--ix-border-width-bold) solid var(--ix-color-border-warning-default);
+    &:hover {
+        border-color: var(--ix-color-border-warning-hover);
+    }
+    &:active {
+        border-color: var(--ix-color-border-warning-active);
+    }
+}
+
+.border-hover--danger {
+    border: var(--ix-border-width-bold) solid var(--ix-color-border-danger-default);
+    &:hover {
+        border-color: var(--ix-color-border-danger-hover);
+    }
+    &:active {
+        border-color: var(--ix-color-border-danger-active);
+    }
+}
+
+.border-hover--info {
+    border: var(--ix-border-width-bold) solid var(--ix-color-border-info-default);
+    &:hover {
+        border-color: var(--ix-color-border-info-hover);
+    }
+    &:active {
+        border-color: var(--ix-color-border-info-active);
+    }
+}
+
+.border-single--main {
+    border: var(--ix-border-width-bold) solid var(--ix-color-border-main-emphasis);
+}
+
+.border-single--focus {
+    border: var(--ix-border-width-bold) solid var(--ix-color-border-focus-default);
+}

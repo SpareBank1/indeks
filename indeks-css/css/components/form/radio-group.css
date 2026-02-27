@@ -1,0 +1,68 @@
+/*Tilbakestil fieldset styling*/
+.ix-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ix-spacing-md);
+    padding: 0;
+    border: 0;
+    position: relative;
+}
+
+/*skul inputelement*/
+.ix-radio__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ix-radio__label {
+    --outer-circle-color: var(--ix-color-border-main-default);
+    --inner-circle-color: var(--ix-color-fill-main-default);
+    --circle-background: var(--ix-color-surface-main-default);
+    color: var(--ix-color-foreground-main-default);
+    position: relative;
+    cursor: pointer;
+    padding-left: calc(var(--ix-font-size-md) + var(--ix-spacing-xl));
+    padding-top: 1px;
+}
+
+.ix-radio__label::before,
+.ix-radio__label::after {
+    content: '';
+    border-radius: 50%;
+    pointer-events: none;
+    position: absolute;
+    transition: var(--ix-transition-all);
+}
+
+.ix-radio__label::before {
+    background-color: var(--inner-circle-color);
+    width: calc(var(--ix-font-size-lg) / 2);
+    height: calc(var(--ix-font-size-lg) / 2);
+    z-index: 1;
+    left: calc(var(--ix-font-size-lg) / 4);
+    top: calc(var(--ix-font-size-lg) / 4);
+    transform: scale(0);
+}
+
+.ix-radio__label::after {
+    background-color: var(--circle-background);
+    border: var(--ix-border-width-default) solid var(--outer-circle-color);
+    width: var(--ix-font-size-lg);
+    height: var(--ix-font-size-lg);
+    left: 0;
+}
+
+.ix-radio__input:checked + .ix-radio__label {
+    --outer-circle-color: var(--ix-color-fill-main-default);
+    --inner-circle-color: var(--ix-color-fill-main-default);
+}
+
+.ix-radio__input:checked + .ix-radio__label::before {
+    transform: scale(1);
+}
+
+.ix-radio__input:checked[aria-invalid='true'] + .ix-radio__label::before {
+    --inner-circle-color: var(--ix-color-fill-danger-default);
+}

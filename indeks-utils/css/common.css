@@ -1,0 +1,133 @@
+/* Display */
+
+.ix-block {
+    display: block;
+}
+
+.ix-inline {
+    display: inline;
+}
+
+.ix-inline-block {
+    display: inline-block;
+}
+
+.ix-hidden {
+    display: none;
+}
+
+/* Positioning */
+
+.ix-relative {
+    position: relative;
+}
+
+.ix-absolute {
+    position: absolute;
+}
+
+.ix-fixed {
+    position: fixed;
+}
+
+.ix-sticky {
+    position: sticky;
+}
+
+.ix-top-0 {
+    top: 0;
+}
+
+.ix-right-0 {
+    right: 0;
+}
+
+.ix-bottom-0 {
+    bottom: 0;
+}
+
+.ix-left-0 {
+    left: 0;
+}
+
+/* Text alignment */
+
+.ix-text-left {
+    text-align: left;
+}
+
+.ix-text-center {
+    text-align: center;
+}
+
+.ix-text-right {
+    text-align: right;
+}
+
+.ix-text-justify {
+    text-align: justify;
+}
+
+.ix-text-inherit {
+    color: inherit;
+}
+
+/* Overflow */
+
+.ix-whitespace-nowrap {
+    white-space: nowrap;
+}
+
+.ix-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ix-overflow-hidden {
+    overflow: hidden;
+}
+
+.ix-overflow-auto {
+    overflow: auto;
+}
+
+.ix-overflow-visible {
+    overflow: visible;
+}
+
+.ix-overflow-scroll {
+    overflow: scroll;
+}
+
+/* Text Decoration */
+
+.ix-underline {
+    text-decoration: underline;
+}
+
+.ix-no-underline {
+    text-decoration: none;
+}
+
+.ix-line-through {
+    text-decoration: line-through;
+}
+
+/* Lists */
+
+.ix-list-none {
+    list-style: none;
+}
+
+.ix-list-disc {
+    list-style: disc;
+}
+
+.ix-list-inside {
+    list-style-position: inside;
+}
+
+.ix-list-decimal {
+    list-style-type: decimal;
+}

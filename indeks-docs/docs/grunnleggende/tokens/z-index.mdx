@@ -1,0 +1,12 @@
+import zIndexTokens from '../../../../indeks-tokens/tokens/z-index.json';
+import CssPropertyTable from '../../../src/components/cssPropertyTable';
+
+# Z Index
+
+Z-index er en CSS-egenskap som styrer stablingsrekkefølgen til elementer på en nettside. Med z-index kan du bestemme hvilke elementer som skal ligge over eller under andre, spesielt når de overlapper hverandre. For å sikre konsistens og forutsigbarhet i designet, har vi definert en rekke z-index tokens som dekker vanlige brukstilfeller i SpareBank 1 sitt designsystem.
+
+Hver token representerer en CSS custom property, som gjør det enkelt å bruke og vedlikeholde z-index-verdier på tvers av prosjekter. Tokenene er navngitt etter formålet de skal dekke, og verdiene er nøye valgt for å unngå konflikter mellom ulike komponenter og overlays.
+
+Ved å bruke disse tokenene sikrer du at grensesnittet oppfører seg konsistent, og at viktige elementer alltid vises i riktig rekkefølge.
+
+<CssPropertyTable tokens={zIndexTokens['z-index']} prefix="z" />

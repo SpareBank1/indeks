@@ -1,0 +1,70 @@
+{
+    "name": "@sb1/indeks-tokens",
+    "version": "0.4.4",
+    "description": "Design tokens for Indeks design system",
+    "type": "module",
+    "homepage": "https://design.sparebank1.no",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sparebank1utvikling/indeks",
+        "directory": "indeks-tokens"
+    },
+    "bugs": {
+        "url": "https://github.com/sparebank1utvikling/indeks/issues"
+    },
+    "keywords": [
+        "indeks",
+        "design-system",
+        "tokens",
+        "design-tokens",
+        "css",
+        "sparebank1"
+    ],
+    "main": "dist/index.css",
+    "exports": {
+        ".": "./dist/index.css"
+    },
+    "files": [
+        "dist",
+        "CHANGELOG.md",
+        "README.md"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "directories": {
+        "lib": "lib"
+    },
+    "scripts": {
+        "dev": "echo not implemented",
+        "build": "rm -rf ./dist ./.build && pnpm run build:tokens:css && pnpm run build:colors:web && pnpm run build:colors:figma && pnpm run build:bundle",
+        "prepublishOnly": "pnpm run build",
+        "build:spacing": "node ./scripts/build-spacing-tokens.cjs",
+        "sync-tokens": "tsx scripts/figma-api/sync_figma_to_tokens.ts",
+        "test": "vitest buildThemeColors.test.ts",
+        "build:colors:web": "tsx ./scripts/build-colors/index platform=web path=./.build/css",
+        "build:colors:figma": "tsx ./scripts/build-colors/index platform=figma path=./tokens/colors/from-code",
+        "build:colors:ios": "tsx ./scripts/build-colors/index platform=ios path=./dist/ios",
+        "build:colors:android": "tsx ./scripts/build-colors/index platform=android path=./dist/android",
+        "sync": "sh scripts/figma-api/sync.sh",
+        "update-packages": "ncu -i --format group",
+        "build:tokens:css": "tsx scripts/build-tokens/index.ts platform=css path=./.build/css",
+        "build:bundle": "postcss ./.build/css/index.css -o ./dist/index.css"
+    },
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@figma/rest-api-spec": "^0.31.0",
+        "@types/node": "^24.10.1",
+        "autoprefixer": "^10.4.23",
+        "axios": "^1.13.2",
+        "colorjs.io": "^0.5.2",
+        "cssnano": "^7.1.2",
+        "dotenv": "^17.2.3",
+        "postcss": "^8.5.6",
+        "postcss-cli": "^11.0.1",
+        "postcss-import": "^16.1.1",
+        "postcss-preset-env": "^10.6.1",
+        "tsx": "^4.20.6"
+    }
+}

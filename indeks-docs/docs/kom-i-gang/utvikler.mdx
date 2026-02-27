@@ -1,0 +1,161 @@
+import { CssVersion } from './CSSVersion';
+
+# Utvikler
+
+## Quick Start
+
+Kom raskt i gang med Indeks:
+
+1. **Importer styling** i CSS-filen din:
+
+    <pre> @import url('https://cdn.test.sparebank1.no/indeks/css/<CssVersion />/index.css')</pre>
+
+2. **Legg til `ix-body`-klassen** på øverste nivå i applikasjonen din:
+
+    ```html
+    <body class="ix-body">
+    ```
+
+3. Så er du klar til å bruke grunnleggende styling og designtokens! Det du kan gjøre nå er: 
+    - Se migreringsguiden for spacing [fra FFE](/docs/grunnleggende/tokens/spacing#migrere-fra-ffe) eller [fra Tailwind](/docs/grunnleggende/tokens/spacing#migrere-fra-tailwind) for å gå over til Indeks sine [spacing-tokens](/docs/grunnleggende/tokens/spacing). 
+    - Se [migreringsguiden for farger](/docs/retningslinjer/farger/#migrere-fra-ffe) for å gå over til Indeks sine [farge-tokens](/docs/retningslinjer/farger/).
+    - Ta i bruk [utility-klasser](/docs/grunnleggende/tokens/utilities) for rask styling av margin, padding, layout og mer.
+4. **Installer React-komponenter** (kun i test):
+        ```bash
+        npm install @sb1/indeks-react
+        ```
+
+:::info Fonter
+Hvis du ikke bruker monorepo-generatoren, må du også legge til fonter. Se [detaljert installasjon](#1-fonter) nedenfor.
+:::
+
+:::info CSS Reset
+Indeks bruker en avart av reset.css for å sikre et konsistent utgangspunkt for styling på tvers av nettlesere, i motsetning til FFE, som bruker normalize.css. Det betyr at det kan være noen forskjeller i grunnleggende styling mellom FFE og Indeks, blant annet har ikke listeelementer bullet points som standard.
+:::
+
+## Detaljert installasjon
+
+For å komme i gang med Indeks er det 3 deler du trenger å sette opp i prosjektet ditt:
+
+1. Fonter
+2. Styling (tokens, utils og komponentstyling)
+3. Komponenter (React-pakken)
+
+### 1. Fonter
+
+For å sette opp prosjektet ditt med SB1-fonter må du sørge for at fontene lastes inn.
+Dette legges til automatisk ved bruk av generatoren i monorepo. Hvis appen ikke er generert opp, legg til følgende i `<head>` i HTML-dokumentet ditt:
+
+```html
+<link rel="stylesheet" href="https://cdn.sparebank1.no/fonts/v1.css" />
+```
+
+:::info
+Uten fontene vil tekst vises i nettleserens standardfont i stedet for SB1s designprofil.
+:::
+
+### 2. CSS
+
+Installer styling ved å importere CSS-filen fra vår CDN inn i hoved-CSS-filen din:
+
+
+    <pre> @import url('https://cdn.test.sparebank1.no/indeks/css/<CssVersion />/index.css')</pre>
+
+:::info
+Siste versjon er <CssVersion />. Se [releases](https://github.com/sparebank1utvikling/indeks/releases) for alle versjoner.
+:::
+
+> Indeks tilbyr også styling via npm-pakken `@sb1/indeks-css`, men vi anbefaler å bruke vår CDN for enklest mulig oppsett og bedre caching for brukerne.
+
+**Hva får du med CSS-pakken?**
+
+-   **Komponentstyling** - styling for hele komponenter. Brukes automatisk av React-komponentene, eller kan brukes direkte på HTML-elementer.
+-   **[Utility-klasser](/docs/grunnleggende/tokens/utilities)** - nyttige hjelpeklasser for små justeringer som margin, padding og layout. Inspirert av TailwindCSS.
+-   **[Tokens](/docs/grunnleggende/tokens/introduksjon)** - designtokens for farger, spacing og border mm. Se alle tokens. Brukes når du skal lage egne komponenter.
+
+### 3. Komponenter (React)
+
+For å bruke komponentbiblioteket i React, installer pakken:
+
+```bash
+npm install @sb1/indeks-react
+```
+
+Importer komponentene der du skal bruke dem:
+
+```javascript
+import { Button, Text } from '@sb1/indeks-react';
+```
+
+Nå kan du begynne å bruke Indeks-komponenter i React-prosjektene dine:
+
+```jsx
+function App() {
+    return (
+        <div>
+            <Text>Innhold</Text>
+            <Button>Klikk meg</Button>
+        </div>
+    );
+}
+```
+
+## Hva nå?
+
+Nå som du har satt opp Indeks kan du:
+
+{/* -   Utforsk [komponenter](/docs/komponenter/byggeklosser) og se hva som er tilgjengelig */}
+-   Lær om [designtokens](/docs/grunnleggende/tokens/introduksjon) for å lage egne komponenter
+-   Bruk [util-klasser](/docs/grunnleggende/tokens/utilities) for rask styling
+-   Se [mønstre og maler](/docs/monstre-og-maler/layout) for vanlige bruksområder
+
+{/* ### MBC Provider (Preview) 🚧
+
+:::info Preview
+Denne funksjonaliteten er under utvikling og ikke tilgjengelig ennå.
+:::
+
+Hvis du bruker designsystemet med MBC (Mobilbank Communication), kan du bruke `MBCProvider` for å gi komponentene tilgang til native funksjonalitet. `MBCProvider` er en komponent som wrapper appen din og gir context til komponentene, slik at de kan interagere med native funksjonalitet gjennom MBC.
+
+```jsx
+import { MBCProvider } from '@sb1/indeks-react';
+
+function App() {
+    return (
+        <MBCProvider>
+            <YourApp />
+        </MBCProvider>
+    );
+}
+```
+
+### Bruk uten React (Preview) 🚧
+
+:::info Preview
+Denne funksjonaliteten er under utvikling. Du kan allerede bruke CSS-klassene direkte, men dokumentasjonen er ikke komplett.
+:::
+
+Hvis du ikke bruker React, kan du bruke CSS-klassene for komponentene direkte på HTML-elementer. Se kildekoden til eksemplene i dokumentasjonen for å finne ut hvordan bruke komponentene uten React.
+
+For eksempel, for en knapp:
+
+```html
+<button class="ix-button ix-button--primary">Klikk meg</button>
+``` */}
+
+## Teknisk struktur
+
+De fleste trenger ikke å forholde seg til dette, men du kan lese videre hvis du er spesielt interessert.
+
+Indeks er bygget opp av 4 pakker:
+
+<ul className="ix-list-disc ix-pl-md">
+    <li className="ix-py-2xs">indeks-tokens</li>
+    <li className="ix-py-2xs">indeks-utils</li>
+    <li className="ix-py-2xs">indeks-css</li>
+    <li className="ix-py-2xs">indeks-react</li>
+</ul>
+
+Vi har også en mappe med dokumentasjonen og en eksempel-app vi bruker til å teste.
+
+<img src="/img/kom-i-gang/teknisk-struktur.png" />

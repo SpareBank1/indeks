@@ -1,0 +1,78 @@
+name: Sikkerhet - Deprecate npm-pakke
+
+on:
+    workflow_dispatch:
+        inputs:
+            package:
+                description: 'Pakke (f.eks. @sb1/indeks-react)'
+                required: true
+                type: choice
+                options:
+                    - '@sb1/indeks-tokens'
+                    - '@sb1/indeks-utils'
+                    - '@sb1/indeks-css'
+                    - '@sb1/indeks-components'
+                    - '@sb1/indeks-react'
+            version:
+                description: 'Versjon som skal deprecates (f.eks. 1.2.3)'
+                required: true
+                type: string
+            message:
+                description: 'Melding til konsumenter (f.eks. "Sikkerhetsproblem - oppgrader til 1.2.4")'
+                required: true
+                type: string
+            action:
+                description: 'Handling'
+                required: true
+                type: choice
+                options:
+                    - deprecate
+                    - unpublish
+                default: deprecate
+
+jobs:
+    npm-deprecate:
+        name: Deprecate/unpublish pakke
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        permissions:
+            contents: read
+        steps:
+            - name: Bekreft handling
+              run: |
+                  echo "## npm $ACTION" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "- **Pakke:** $PACKAGE" >> $GITHUB_STEP_SUMMARY
+                  echo "- **Versjon:** $VERSION" >> $GITHUB_STEP_SUMMARY
+                  echo "- **Melding:** $MESSAGE" >> $GITHUB_STEP_SUMMARY
+                  echo "- **Utført av:** $ACTOR" >> $GITHUB_STEP_SUMMARY
+              env:
+                  PACKAGE: ${{ inputs.package }}
+                  VERSION: ${{ inputs.version }}
+                  MESSAGE: ${{ inputs.message }}
+                  ACTION: ${{ inputs.action }}
+                  ACTOR: ${{ github.actor }}
+
+            - name: Setup Node.js
+              uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+              with:
+                  node-version: '24'
+                  registry-url: 'https://registry.npmjs.org'
+
+            - name: Kjør npm ${{ inputs.action }}
+              run: |
+                  if [ "$ACTION" = "deprecate" ]; then
+                      echo "Deprecating ${PACKAGE}@${VERSION}..."
+                      npm deprecate "${PACKAGE}@${VERSION}" "$MESSAGE"
+                      echo "Pakken er deprecatet." >> $GITHUB_STEP_SUMMARY
+                  elif [ "$ACTION" = "unpublish" ]; then
+                      echo "Unpublishing ${PACKAGE}@${VERSION}..."
+                      npm unpublish "${PACKAGE}@${VERSION}"
+                      echo "Pakken er fjernet fra npm." >> $GITHUB_STEP_SUMMARY
+                  fi
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+                  ACTION: ${{ inputs.action }}
+                  PACKAGE: ${{ inputs.package }}
+                  VERSION: ${{ inputs.version }}
+                  MESSAGE: ${{ inputs.message }}

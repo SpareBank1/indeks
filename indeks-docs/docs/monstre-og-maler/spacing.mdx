@@ -1,0 +1,110 @@
+# Spacing
+
+For å sikre konsistente og forutsigbare layouter i applikasjoner bygget med Indeks følger vi et sett med retningslinjer for distribusjon av spacing. Klare mønstre for avstand mellom elementer hjelper oss med å skape en harmonisk og brukervennlig visuell struktur på tvers av applikasjoner. Oppsummert dreier det seg om disse prinsippene:
+
+1. [Komponenter har ingen ytre margin](#ingen-ytre-margin-på-komponenter)
+2. [Seksjoner med flere elementer defineres som egne containere med `gap` for spacing mellom elementer](#gap-inni-seksjoner)
+3. [Bruk margin mellom seksjoner](#margin-mellom-seksjoner)
+4. [Margin i én retning](#margin-i-én-retning)
+
+En sidelayout kan for eksempel fordeles på denne måten:
+
+![Eksempel på spacing i sidelayout](/img/monstre-og-maler/spacing-layout.png)
+
+## Ingen ytre margin på komponenter
+
+Alle komponenter fra designsystemet kommer **uten ytre margin**. Dette gir deg full kontroll over spacing i din layout, enten du bruker Grid, Flex eller block-layout.
+
+```html
+<!-- Komponentene har ingen margin -->
+<Button>Klikk her</Button>
+
+<!-- Du styrer spacing i containeren -->
+<div class="ix-flex ix-gap-md">
+    <Button>Avbryt</Button>
+    <Button>Lagre</Button>
+</div>
+```
+
+## Gap inni seksjoner
+
+Når du har flere elementer innenfor samme seksjon, bruk Grid eller Flex med `gap` for å skille elementene. Gap fordeler luft *mellom* elementer, men påvirker ikke ytre margin.
+
+```css
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ix-spacing-md);
+}
+```
+
+## Margin mellom seksjoner
+
+Når du skal skille mellom ulike seksjoner, bruk block-layout med margin:
+
+```css
+.section {
+    margin-bottom: var(--ix-spacing-xl);
+}
+```
+
+## Margin i én retning
+
+For å skape konsistente mellomrom, bruker vi primært **margin-bottom** mellom block-elementer/seksjoner. Dette gjør det enklere å forutsi hvordan layouter vil oppføre seg og hvordan seksjoner plasserer seg i forhold til hverandre.
+
+```css
+.block-element {
+    margin-bottom: var(--ix-spacing-lg);
+}
+```
+
+```html
+<div class="ix-mb-sm">Liten (sm) margin i bunn</div>
+```
+
+### Hvorfor akkurat margin-bottom?
+
+* Enklere å forutsi hvordan elementer stables vertikalt
+* Margin-collapse oppfører seg mer forutsigbart
+* Lettere å gjøre overstyringer når det trengs
+* Det siste elementet i en container trenger ikke spesiell håndtering
+
+
+## Praktisk eksempel - Skjema med spacing
+
+```html
+<form>
+    <!-- Seksjon 1: Personlig info -->
+    <section class="form-section ix-mb-md">
+        <h2>Personlig informasjon</h2>
+        <div class="ix-v-stack">
+            <Input label="Fornavn"></Input>
+            <Input label="Etternavn"></Input>
+            <Input label="E-post"></Input>
+        </div>
+    </section>
+
+    <!-- Seksjon 2: Adresse -->
+    <section class="form-section ix-mb-md">
+        <h2>Adresse</h2>
+        <div class="ix-v-stack">
+            <Input label="Gateadresse"></Input>
+            <Input label="Postnummer"></Input>
+        </div>
+    </section>
+
+    <!-- Knapper -->
+    <div class="ix-h-stack ix-mb-md">
+        <Button variant="secondary">Avbryt</Button>
+        <Button>Lagre</Button>
+    </div>
+</form>
+```
+
+## Oppsummering
+
+* **Internt i seksjoner**: Bruk Grid/Flex med `gap`
+* **Mellom seksjoner**: Bruk block med `margin-bottom`
+* **Stack-komponenter** (`ix-v-stack` / `ix-h-stack`): Har gap md som standard
+* **Komponenter**: Kommer uten ytre margin
+* **Konsistens**: Bruk spacing-tokens/utility-klasser fra designsystemet

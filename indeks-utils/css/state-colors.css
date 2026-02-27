@@ -1,0 +1,55 @@
+:root,
+:host,
+.ix-status-default,
+.ix-dark-mode,
+.ix-light-mode,
+.regard-color-scheme-preference {
+    --ix-color-surface: var(--ix-color-surface-main-default);
+    --ix-color-border: var(--ix-color-border-main-default);
+    --ix-color-fill: var(--ix-color-fill-main-default);
+    --ix-color-fill-subtle: var(--ix-color-fill-main-subtle);
+}
+
+.ix-color-surface {
+    background-color: var(--ix-color-surface);
+}
+
+.ix-color-border {
+    border-color: var(--ix-color-border);
+}
+
+.ix-color-fill {
+    background-color: var(--ix-color-fill);
+}
+
+.ix-color-fill-subtle {
+    background-color: var(--ix-color-fill-subtle);
+}
+
+.ix-status-info {
+    --ix-color-surface: var(--ix-color-surface-info-default);
+    --ix-color-border: var(--ix-color-border-info-default);
+    --ix-color-fill: var(--ix-color-fill-info-default);
+    --ix-color-fill-subtle: var(--ix-color-fill-info-subtle);
+}
+
+.ix-status-success {
+    --ix-color-surface: var(--ix-color-surface-success-default);
+    --ix-color-border: var(--ix-color-border-success-default);
+    --ix-color-fill: var(--ix-color-fill-success-default);
+    --ix-color-fill-subtle: var(--ix-color-fill-success-subtle);
+}
+
+.ix-status-warning {
+    --ix-color-surface: var(--ix-color-surface-warning-default);
+    --ix-color-border: var(--ix-color-border-warning-default);
+    --ix-color-fill: var(--ix-color-fill-warning-default);
+    --ix-color-fill-subtle: var(--ix-color-fill-warning-subtle);
+}
+
+.ix-status-danger {
+    --ix-color-surface: var(--ix-color-surface-danger-default);
+    --ix-color-border: var(--ix-color-border-danger-default);
+    --ix-color-fill: var(--ix-color-fill-danger-default);
+    --ix-color-fill-subtle: var(--ix-color-fill-danger-subtle);
+}

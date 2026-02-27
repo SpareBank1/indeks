@@ -1,0 +1,4 @@
+.ix-list-element {
+    color: inherit;
+    /* bare for å unngå tom fil-feil*/
+}

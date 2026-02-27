@@ -1,0 +1,7 @@
+:root {
+    --ix-transition-all: all var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+.ix-transition-all {
+    transition: var(--ix-transition-all);
+}

@@ -1,0 +1,58 @@
+{
+    "border": {
+        "width": {
+            "_property": "border-width",
+            "default": {
+                "value": "1px",
+                "description": "Standard border-width."
+            },
+            "bold": {
+                "value": "2px",
+                "description": "Border-width for buttons."
+            }
+        },
+        "radius": {
+            "_property": "border-radius",
+            "circle": {
+                "value": "50%",
+                "description": "Fullt avrundet border-radius."
+            },
+            "pill": {
+                "value": "9999px",
+                "description": "Border-radius for pille-formede elementer. Feks. knapper."
+            },
+            "checkbox": {
+                "value": "4px",
+                "description": "Border-radius for avkrysningsbokser."
+            },
+            "input": {
+                "value": "8px",
+                "description": "Border-radius for input-felt."
+            },
+            "button": {
+                "value": "var(--ix-border-radius-pill)",
+                "description": "Border-radius for knapper."
+            },
+            "xs": {
+                "value": "4px",
+                "description": "Liten border-radius."
+            },
+            "sm": {
+                "value": "8px",
+                "description": "Medium border-radius. Brukes til input-felt."
+            },
+            "md": {
+                "value": "16px",
+                "description": "Stor border-radius. Brukes til kort."
+            },
+            "lg": {
+                "value": "24px",
+                "description": "Ekstra stor border-radius. Brukes til modaler."
+            },
+            "xl": {
+                "value": "40px",
+                "description": "Ekstra stor border-radius."
+            }
+        }
+    }
+}

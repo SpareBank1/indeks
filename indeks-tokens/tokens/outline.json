@@ -1,0 +1,18 @@
+{
+    "outline": {
+        "width": {
+            "_property": "outline-width",
+            "default": {
+                "value": "2px",
+                "description": "Standard outline-bredde."
+            }
+        },
+        "offset": {
+            "_property": "outline-offset",
+            "default": {
+                "value": "3px",
+                "description": "Standard outline-offset."
+            }
+        }
+    }
+}

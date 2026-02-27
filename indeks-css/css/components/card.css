@@ -1,0 +1,27 @@
+:where(.ix-card) {
+    border: var(--ix-border-default);
+    border-radius: var(--ix-border-radius-md);
+    display: flex;
+    flex-direction: column;
+}
+
+:where(.ix-card--clickable:hover) {
+    cursor: pointer;
+    box-shadow: 0 0 2px black;
+}
+
+:where(.ix-card--success) {
+    border: var(--ix-border-width-default) solid var(--ix-color-border-success-default);
+}
+
+:where(.ix-card--warning) {
+    border: var(--ix-border-width-default) solid var(--ix-color-border-warning-default);
+}
+
+:where(.ix-card--info) {
+    border: var(--ix-border-width-default) solid var(--ix-color-border-info-default);
+}
+
+:where(.ix-card--danger) {
+    border: var(--ix-border-width-default) solid var(--ix-color-border-danger-default);
+}

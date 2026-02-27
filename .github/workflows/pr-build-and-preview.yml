@@ -1,0 +1,93 @@
+name: PR - Bygg, test og forhåndsvisning
+
+on:
+    pull_request:
+        branches: [main]
+
+concurrency:
+    group: pr-${{ github.head_ref || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    build:
+        if: ${{ !github.event.pull_request.head.repo.fork }}
+        name: Bygg, test og deploy
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        permissions:
+            contents: read
+            pull-requests: write
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@c5ba7f7862a0f64c1b1a05fbac13e0b8e86ba08c # v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+              with:
+                  node-version: '24'
+                  cache: 'pnpm'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile --ignore-scripts
+
+            - name: Build all packages
+              run: pnpm build
+
+            - name: Lint
+              run: pnpm turbo run lint
+
+            - name: Test
+              run: pnpm turbo run test -- --run
+
+            - name: Lisenssjekk
+              if: always()
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  PR_NUMBER: ${{ github.event.pull_request.number }}
+              run: ./scripts/check-licenses.sh
+
+            - name: Sikkerhetssjekk (audit)
+              if: always()
+              run: |
+                  echo "## Sikkerhetssjekk av avhengigheter" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  if pnpm audit --prod 2>&1 | tee /tmp/audit.txt; then
+                      echo "Ingen kjente sårbarheter i produksjonsavhengigheter." >> $GITHUB_STEP_SUMMARY
+                  else
+                      echo '```' >> $GITHUB_STEP_SUMMARY
+                      cat /tmp/audit.txt >> $GITHUB_STEP_SUMMARY
+                      echo '```' >> $GITHUB_STEP_SUMMARY
+                      echo "" >> $GITHUB_STEP_SUMMARY
+                      echo "> **Informativt** – Dependabot håndterer oppfølging." >> $GITHUB_STEP_SUMMARY
+                  fi
+
+            - name: Build Storybook
+              run: pnpm build-storybook
+
+            - name: Move to dist
+              if: ${{ !startsWith(github.head_ref, 'release/') }}
+              run: |
+                  mkdir -p ./dist
+                  mkdir -p ./dist/storybook
+                  mkdir -p ./dist/eksempel
+                  mv ./indeks-react/storybook-static/* ./dist/storybook
+                  mv ./indeks-eksempel/dist/* ./dist/eksempel
+                  cp -r ./indeks-docs/build/* ./dist/
+
+            - name: Deploy preview
+              if: ${{ !github.event.pull_request.head.repo.fork && !startsWith(github.head_ref, 'release/') }}
+              uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9 # v1
+              with:
+                  azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_WATER_0D2FD1F03 }}
+                  repo_token: ${{ secrets.GITHUB_TOKEN }}
+                  action: 'upload'
+                  app_location: './dist'
+                  api_location: ''
+                  output_location: ''
+                  skip_app_build: true
