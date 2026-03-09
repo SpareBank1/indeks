@@ -10,6 +10,11 @@ set -euo pipefail
 
 ALLOWED="0BSD MIT MIT-0 ISC BSD-2-Clause BSD-3-Clause Apache-2.0 CC0-1.0 CC-BY-3.0 CC-BY-4.0 BlueOak-1.0.0 Unlicense WTFPL Python-2.0 AFL-2.1"
 
+# Pakker som ignoreres i lisenssjekken.
+# Format: IGNORED_PACKAGES+=("pakkenavn")  # Kommentar som forklarer hvorfor
+IGNORED_PACKAGES=()
+IGNORED_PACKAGES+=("require-like")  # Ingen lisens i package.json; ubrukt transitiv avhengighet via Storybook. Har MIT lisens på github
+
 LICENSE_JSON=$(pnpm licenses list --json --prod 2>/dev/null || true)
 
 if [ -z "$LICENSE_JSON" ]; then
@@ -17,14 +22,20 @@ if [ -z "$LICENSE_JSON" ]; then
     exit 1
 fi
 
-# Bruk jq til å gjøre hele sjekken: finn lisenser der ingen del av OR-uttrykket er godkjent
-PROBLEMS=$(echo "$LICENSE_JSON" | jq -r --arg allowed "$ALLOWED" '
+# Bygg space-separert streng av ignorerte pakker til jq
+IGNORED="${IGNORED_PACKAGES[*]:-}"
+
+# Bruk jq til å gjøre hele sjekken: finn lisenser der ingen del av OR-uttrykket er godkjent,
+# og filtrer ut pakker i ignoreringslisten
+PROBLEMS=$(echo "$LICENSE_JSON" | jq -r --arg allowed "$ALLOWED" --arg ignored "$IGNORED" '
     ($allowed | split(" ")) as $allow |
+    ($ignored | split(" ")) as $ignore |
     to_entries[] |
     .key as $license |
     ($license | gsub("[()]"; "") | split(" OR ")) as $parts |
     select([$parts[] | . as $p | $allow | any(. == $p)] | any | not) |
     .value[] |
+    select(.name as $n | $ignore | any(. == $n) | not) |
     "| \(.name) | \(.versions | join(", ")) | \($license) |"
 ')
 
