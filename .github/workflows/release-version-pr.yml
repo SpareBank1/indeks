@@ -25,7 +25,7 @@ jobs:
         outputs:
             should_run: ${{ steps.result.outputs.should_run }}
         steps:
-            - name: Check for existing release PR
+            - name: Sjekk for eksisterende release-PR
               id: check_pr
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -45,7 +45,7 @@ jobs:
               with:
                   persist-credentials: false
 
-            - name: Check for changesets
+            - name: Sjekk for changesets
               id: check_changesets
               if: steps.check_pr.outputs.exists != 'true'
               run: |
@@ -58,7 +58,7 @@ jobs:
                       echo "has_changesets=false" >> $GITHUB_OUTPUT
                   fi
 
-            - name: Set result
+            - name: Sett resultat
               id: result
               env:
                   PR_EXISTS: ${{ steps.check_pr.outputs.exists }}
@@ -87,10 +87,10 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Setup pnpm
+            - name: Install pnpm
               uses: pnpm/action-setup@c5ba7f7862a0f64c1b1a05fbac13e0b8e86ba08c # v4
 
-            - name: Setup Node.js
+            - name: Set up Node.js
               uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
                   node-version: '24'
@@ -99,7 +99,7 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile --ignore-scripts
 
-            - name: Version packages
+            - name: Versjonér pakker
               id: version
               run: |
                   echo "📝 Updating version numbers..."
@@ -113,7 +113,7 @@ jobs:
                       echo "✅ Version changes detected"
                   fi
 
-            - name: Create release branch
+            - name: Opprett release-branch
               id: branch
               if: steps.version.outputs.has_changes == 'true'
               run: |
@@ -144,7 +144,7 @@ jobs:
                   git commit -m "Release $UPDATED"
                   git push origin "$BRANCH_NAME"
 
-            - name: Create Pull Request
+            - name: Opprett pull request
               if: steps.version.outputs.has_changes == 'true'
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

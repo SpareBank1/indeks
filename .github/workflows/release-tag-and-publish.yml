@@ -27,7 +27,7 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Get changed packages
+            - name: Hent endrede pakker
               id: packages
               env:
                   COMMIT_MSG: ${{ github.event.head_commit.message }}
@@ -51,7 +51,7 @@ jobs:
                   echo "packages=$JSON_ARRAY" >> $GITHUB_OUTPUT
                   echo "packages_list=$PACKAGES" >> $GITHUB_OUTPUT
 
-            - name: Create GitHub release
+            - name: Opprett GitHub-release
               id: release
               if: steps.packages.outputs.has_packages == 'true'
               env:

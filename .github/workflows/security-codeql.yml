@@ -1,0 +1,45 @@
+name: Sikkerhet - CodeQL-skanning
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches: [main]
+    schedule:
+        - cron: '25 6 * * 2'
+    workflow_dispatch:
+
+concurrency:
+    group: codeql-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    analyze:
+        name: Analyser kode
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        permissions:
+            contents: read
+            security-events: write
+
+        strategy:
+            fail-fast: false
+            matrix:
+                language: ['javascript']
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
+
+            - name: Initialiser CodeQL
+              uses: github/codeql-action/init@0c0c5dc2f136b98cb0537075ccfa21f94cd9a63e # codeql-bundle-v2.24.3
+              with:
+                  languages: ${{ matrix.language }}
+
+            - name: Utfør CodeQL-analyse
+              uses: github/codeql-action/analyze@0c0c5dc2f136b98cb0537075ccfa21f94cd9a63e # codeql-bundle-v2.24.3
+              with:
+                  category: '/language:${{ matrix.language }}'
