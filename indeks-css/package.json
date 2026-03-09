@@ -39,7 +39,7 @@
         "build:cdn": "rm -rf ./dist/cdn && CDN_BUILD=true postcss ./index.css -o ./dist/cdn/index.css",
         "prepublishOnly": "pnpm run build",
         "update-packages": "echo not implemented",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Ingen tester\""
     },
     "author": "",
     "license": "MIT",

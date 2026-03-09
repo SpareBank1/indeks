@@ -36,7 +36,7 @@
         "dev": "echo not implemented",
         "build": "rm -rf ./dist ./.build && pnpm run build:utils && pnpm run build:color-utils && pnpm run build:bundle",
         "prepublishOnly": "pnpm run build",
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "echo \"Ingen tester\"",
         "update-packages": "ncu -i --format group",
         "build:utils": "npm run build:utils:css",
         "build:utils:css": "tsx scripts/build-utils/index.ts platform=css path=./.build/css",
