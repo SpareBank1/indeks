@@ -36,7 +36,7 @@
         "dev": "echo not implemented",
         "build": "rm -rf ./dist ./.build && pnpm run build:utils && pnpm run build:color-utils && pnpm run build:bundle",
         "prepublishOnly": "pnpm run build",
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "echo \"Ingen tester\"",
         "update-packages": "ncu -i --format group",
         "build:utils": "npm run build:utils:css",
         "build:utils:css": "tsx scripts/build-utils/index.ts platform=css path=./.build/css",
@@ -49,12 +49,12 @@
         "@sb1/indeks-tokens": "workspace:*"
     },
     "devDependencies": {
-        "autoprefixer": "^10.4.23",
+        "autoprefixer": "^10.4.27",
         "cssnano": "^7.1.2",
-        "postcss": "^8.5.6",
+        "postcss": "^8.5.8",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^16.1.1",
         "postcss-preset-env": "^10.6.1",
-        "tsx": "^4.20.6"
+        "tsx": "^4.21.0"
     }
 }

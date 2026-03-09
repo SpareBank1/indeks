@@ -5,6 +5,10 @@ updates:
       schedule:
           interval: 'weekly'
           day: 'monday'
+          time: '06:00'
+      cooldown:
+          default-days: 7
+          semver-major-days: 30
       open-pull-requests-limit: 10
       groups:
           minor-and-patch:
@@ -17,3 +21,6 @@ updates:
       schedule:
           interval: 'weekly'
           day: 'monday'
+          time: '06:00'
+      cooldown:
+          default-days: 7

@@ -13,7 +13,7 @@ jobs:
             contents: read
             pull-requests: read
         steps:
-            - name: Check for open release PR
+            - name: Sjekk for åpen release-PR
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   HEAD_REF: ${{ github.head_ref }}

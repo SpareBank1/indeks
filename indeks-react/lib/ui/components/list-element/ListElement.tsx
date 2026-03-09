@@ -20,7 +20,7 @@ export function ListElement<As extends ElementType = "div">(
 ): JSX.Element {
   const {
     as: Component = "div",
-    size,
+    size: _size,
     className,
     ...restProps
   } = {

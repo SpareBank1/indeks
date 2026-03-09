@@ -8,7 +8,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { compatConfig } from '../eslint.shared.js'
 
-export default tseslint.config({ ignores: ['dist'] }, {
+export default tseslint.config({ ignores: ['dist', 'storybook-static', 'sb1-indeks-react-*'] }, {
   extends: [js.configs.recommended, ...tseslint.configs.recommended],
   files: ['**/*.{ts,tsx}'],
   languageOptions: {
@@ -25,5 +25,9 @@ export default tseslint.config({ ignores: ['dist'] }, {
       'warn',
       { allowConstantExport: true },
     ],
+    '@typescript-eslint/no-unused-vars': ['error', {
+      varsIgnorePattern: '^_',
+      argsIgnorePattern: '^_',
+    }],
   },
 }, compatConfig, storybook.configs["flat/recommended"]);

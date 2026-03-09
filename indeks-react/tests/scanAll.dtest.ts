@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 // const context = await browser.newContext();
 // const page = await context.newPage();
@@ -26,7 +26,7 @@ type StoryEntry = {
   name: string;
   title: string;
   type: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 const componentStories = Object.values(stories.entries)
@@ -44,7 +44,6 @@ const componentStories = Object.values(stories.entries)
 
 // console.log("Component Stories:", componentStories);
 
-const goToLandingPage = async (page: Page) => await page.goto('http://localhost:9009/', { timeout: 10000 });
 
 test.describe('Test all components', () => {
   //   test.beforeAll(async ({ page }) => {

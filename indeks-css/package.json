@@ -39,7 +39,7 @@
         "build:cdn": "rm -rf ./dist/cdn && CDN_BUILD=true postcss ./index.css -o ./dist/cdn/index.css",
         "prepublishOnly": "pnpm run build",
         "update-packages": "echo not implemented",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Ingen tester\""
     },
     "author": "",
     "license": "MIT",
@@ -48,9 +48,9 @@
         "@sb1/indeks-utils": "workspace:*"
     },
     "devDependencies": {
-        "autoprefixer": "^10.4.23",
+        "autoprefixer": "^10.4.27",
         "cssnano": "^7.1.2",
-        "postcss": "^8.5.6",
+        "postcss": "^8.5.8",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^16.1.1",
         "postcss-preset-env": "^10.6.1"

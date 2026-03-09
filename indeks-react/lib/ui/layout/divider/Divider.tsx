@@ -12,7 +12,7 @@ export type DividerProps<As extends ElementType> = {
 export function Divider<As extends ElementType = 'div'>(props: DividerProps<As>): JSX.Element {
     const {
         as: Component = 'div',
-        size,
+        size: _size,
         className,
         ...restProps
     } = {

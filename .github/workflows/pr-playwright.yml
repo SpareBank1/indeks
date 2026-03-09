@@ -52,7 +52,7 @@ jobs:
             # Cache Docker build layers to speed up future builds.
             # The 'key' is now based only on pnpm-lock.yaml, so the image is rebuilt only when dependencies change.
             # This works because other files are mounted at runtime and do not require a rebuild.
-            - name: Cache Docker layers
+            - name: Mellomlagre Docker-lag
               uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
               with:
                   path: ${{ env.DOCKER_CACHE_DIR }}
@@ -65,7 +65,7 @@ jobs:
             # 'context' points to the folder containing the Dockerfile.
             # 'tags' names the built image for later use.
             # 'cache-from' and 'cache-to' configure Docker to use the cached layers from the previous step.
-            - name: Build Docker image
+            - name: Bygg Docker-image
               # zizmor: ignore[cache-poisoning] - docker image lastes kun lokalt med load: true, pushes ikke til registry
               uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
               with:
@@ -75,7 +75,7 @@ jobs:
                   cache-to: type=local,dest=${{ env.DOCKER_CACHE_DIR }},mode=max
                   load: true
 
-            - name: Start Storybook in Docker (background)
+            - name: Start Storybook i Docker (bakgrunn)
               working-directory: ./indeks-react
               run: |
                   docker run -d \
@@ -93,7 +93,7 @@ jobs:
 
             # Run Playwright tests using the Docker Compose setup.
             # This command uses the freshly built (or cached) Docker image to run your Playwright tests in a consistent environment.
-            - name: Run Playwright tests in Docker (no compose)
+            - name: Kjør Playwright-tester i Docker
               working-directory: ./indeks-react
               run: |
                   docker run --rm \
@@ -123,7 +123,7 @@ jobs:
                       echo 'Storybook is ready! Starting Playwright tests...'; \
                       npx playwright test --config=tests/playwright.config.ts"
 
-            - name: Upload Playwright report
+            - name: Last opp Playwright-rapport
               uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               if: always()
               with:
@@ -131,7 +131,7 @@ jobs:
                   path: indeks-react/playwright-report/
                   retention-days: 30
 
-            - name: Upload test results
+            - name: Last opp testresultater
               uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               if: always()
               with:
@@ -139,7 +139,7 @@ jobs:
                   path: indeks-react/test-results/
                   retention-days: 30
 
-            - name: Cleanup Storybook container
+            - name: Rydd opp Storybook-container
               if: always()
               run: |
                   docker stop storybook || true
