@@ -48,7 +48,7 @@ export default function TypografiEksempler() {
                 </Heading>
                 <Text addRecommendedSpacing long>
                     I en verden hvor digitale produkter brukes på alt fra smartklokker til 4K-skjermer, må typografi
-                    være fleksibel. Skalerbar typografi (f.eks. bruk av relative enheter som rem eller em) og responsive
+                    være fleksibel. Skalerbar typografi (f.eks. bruk av relative enheter som rem eller em) og responsive
                     typografiske skalaer gjør det mulig å tilpasse tekstens utseende til ulike skjermstørrelser uten at
                     det går på bekostning av lesbarheten.
                 </Text>
