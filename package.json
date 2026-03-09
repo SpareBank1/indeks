@@ -16,11 +16,11 @@
         "check-licenses": "scripts/check-licenses.sh"
     },
     "devDependencies": {
-        "@changesets/cli": "^2.29.8",
-        "autoprefixer": "^10.4.23",
+        "@changesets/cli": "^2.30.0",
+        "autoprefixer": "^10.4.27",
         "eslint-plugin-compat": "^6.0.2",
         "cssnano": "^7.1.2",
-        "postcss": "^8.5.6",
+        "postcss": "^8.5.8",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^16.1.1",
         "postcss-preset-env": "^10.6.1",
