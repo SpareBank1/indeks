@@ -10,6 +10,7 @@
         "build-storybook": "turbo run build-storybook",
         "dev": "turbo run dev",
         "lint": "pnpm turbo run lint",
+        "test": "pnpm turbo run test -- --run",
         "update-packages": "pnpm -r update",
         "changeset": "changeset",
         "version": "changeset version",
