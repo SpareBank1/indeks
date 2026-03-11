@@ -1,0 +1,17 @@
+# Migrering fra FFE til Indeks
+
+## Atomic design
+
+Atomic design er en metodikk for å bygge brukergrensesnitt ved å dele dem opp i små, gjenbrukbare deler. Metoden ble introdusert av Brad Frost og tar inspirasjon fra hvordan ting bygges opp i naturen. I atomic design organiseres komponenter i ulike nivåer:
+* **Atoms** er de minste byggesteinene i et grensesnitt, som for eksempel knapper, input-felt, labels eller ikoner.
+* **Molecules** er kombinasjoner av flere atoms, for eksempel et søkefelt som består av et input-felt og en knapp.
+* **Organisms** er større og mer sammensatte komponenter, som for eksempel et navigasjonsfelt eller et kort med flere elementer.
+Tanken er at små, enkle deler kan kombineres til mer komplekse komponenter og til slutt komplette brukergrensesnitt.
+
+I Indeks bygger vi komponenter etter prinsippene i atomic design. Atomic design er en metode for å strukturere komponenter der små, enkle byggeklosser settes sammen til større og mer komplekse løsninger
+
+I praksis betyr dette at Indeks primært tilbyr grunnleggende basekomponenter. Disse kan settes sammen til mer avanserte komponenter etter behov. Designsystemet tar ansvar for å utvikle og vedlikeholde disse basekomponentene, mens produktteamene selv har ansvar for å bygge og forvalte større og mer komplekse komponenter.
+
+En viktig grunn til denne tilnærmingen er å gi teamene større fleksibilitet og kreativ frihet. Samtidig bidrar det til å hindre at designsystemet blir en flaskehals i produktutviklingen. Dersom designsystemteamet også skulle vedlikeholde alle komplekse komponenter som ulike team trenger, ville det raskt kunne skape avhengigheter og redusere tempoet i utviklingen for produktteamene.
+
+Ved å holde designsystemet fokusert på stabile og gjenbrukbare byggeklosser, kan produktteamene jobbe mer selvstendig og utvikle løsninger raskere.
