@@ -47,9 +47,11 @@ Utility-klassene for Flex i Indeks gir mulighet for fleksibel justering og forde
 </div>
 ```
 
-## Stack-komponenter
+## VStack og HStack
 
-`VStack` og `HStack` er komponenter som forenkler henholdsvis vertikal og horisontal layout. Komponentene bruker Flex under panseret og har `gap: var(--ix-spacing-md)` som standard.
+`VStack` og `HStack` er enkle layout-komponenter som hjelper deg å stable innhold og elementer i én dimensjon, henholdsvis vertikalt og horisontalt.
+
+Komponentene bruker Flex under panseret og wrapper `display: flex` og `flex-direction: <row/column>`. `VStack` etablerer en vertikal layout, mens `HStack` etablerer en horisontal layout. Begge komponentene kan kombineres med Flex-utilities for ytterligere tilpasning.
 
 ```html
 <!-- Vertikal stack med standard gap (md) -->
