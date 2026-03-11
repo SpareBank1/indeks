@@ -37,6 +37,11 @@
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
+/* 100% høyde sånn rundt regna */
+.main-wrapper {
+    min-height: calc(100vh - (var(--ifm-navbar-height) + 240px));
+}
+
 /* Restore list styling for markdown content */
 .markdown ul,
 .markdown ol {
@@ -53,4 +58,8 @@
 
 .markdown li {
     margin: 0.5rem 0;
+}
+
+.footer svg, .navbar__link svg {
+    display: inline-block;
 }
