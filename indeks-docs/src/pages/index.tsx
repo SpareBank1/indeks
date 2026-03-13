@@ -17,25 +17,25 @@ function HomepageHeader() {
         : './eksempel/#/eksempelsider/oversikt';
     const docsHref = isLocalhost ? 'http://localhost:3000/docs/hjem/' : './docs/hjem';
     return (
-        <header className={clsx('hero hero--primary', styles.heroBanner)}>
+        <main className={clsx('hero hero--primary ix-flex ix-flex-grow ix-justify-center ix-items-center', styles.heroBanner)}>
             <div className="container">
                 <Heading as="h1" className="hero__title">
                     {siteConfig.title}
                 </Heading>
                 <p className="hero__subtitle">{siteConfig.tagline}</p>
                 <div className={styles.buttons}>
-                    <Button as="a" className="button button--secondary button--lg" href={docsHref}>
+                    <Button as="a" size="lg" variant="primary" href={docsHref}>
                         Dokumentasjon
                     </Button>
-                    <a className="button button--outline button--lg" href={storybookHref}>
+                    <Button as="a" size="lg" variant="primary" href={storybookHref}>
                         Storybook
-                    </a>
-                    <a className="button button--outline button--lg" href={eksempelHref}>
+                    </Button>
+                    <Button as="a" size="lg" variant="primary" href={eksempelHref}>
                         Eksempel App
-                    </a>
+                    </Button>
                 </div>
             </div>
-        </header>
+        </main>
     );
 }
 
@@ -48,18 +48,6 @@ export default function Home(): ReactNode {
             wrapperClassName="ix-body"
         >
             <HomepageHeader />
-            <main>
-                <h2>Mer enn bare et komponentbibliotek</h2>
-                Indeks er en helhetlig tilnærming til design og utvikling som:
-                <ul className="ix-list-disc ix-pl-md">
-                    <li className="ix-py-2xs">**Sikrer konsistens** på tvers av alle våre digitale tjenester</li>
-                    <li className="ix-py-2xs">**Øker hastigheten** på design- og utviklingsprosessen</li>
-                    <li className="ix-py-2xs">**Forbedrer tilgjengeligheten** for alle brukere</li>
-                    <li className="ix-py-2xs">**Reduserer vedlikeholdskostnader** gjennom gjenbruk av komponenter</li>
-                </ul>
-                Det er utviklet for designere, utviklere og andre som har interesse av å lage gode brukeropplevelser på
-                tvers av SpareBank 1 sine digitale flater.{' '}
-            </main>
         </Layout>
     );
 }
