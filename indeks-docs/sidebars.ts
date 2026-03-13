@@ -23,6 +23,7 @@ const sidebars: SidebarsConfig = {
             items: [
                 'kom-i-gang/designer',
                 'kom-i-gang/utvikler',
+                'kom-i-gang/migrering',
                 'kom-i-gang/kontakt',
                 'kom-i-gang/bidra',
             ],

@@ -1,11 +1,15 @@
 # Migrering fra FFE til Indeks
 
+Indeks er et helt nytt designsystem, bygget opp fra grunnen med en annen arkitektur og struktur enn FFE. For deg som skal migrere fra FFE betyr dette at enkelte ting må gjøres litt annerledes enn før. 
+
 ## Atomic design
 
 Atomic design er en metodikk for å bygge brukergrensesnitt ved å dele dem opp i små, gjenbrukbare deler. Metoden ble introdusert av Brad Frost og tar inspirasjon fra hvordan ting bygges opp i naturen. I atomic design organiseres komponenter i ulike nivåer:
+
 * **Atoms** er de minste byggesteinene i et grensesnitt, som for eksempel knapper, input-felt, labels eller ikoner.
 * **Molecules** er kombinasjoner av flere atoms, for eksempel et søkefelt som består av et input-felt og en knapp.
 * **Organisms** er større og mer sammensatte komponenter, som for eksempel et navigasjonsfelt eller et kort med flere elementer.
+
 Tanken er at små, enkle deler kan kombineres til mer komplekse komponenter og til slutt komplette brukergrensesnitt.
 
 I Indeks bygger vi komponenter etter prinsippene i atomic design. Atomic design er en metode for å strukturere komponenter der små, enkle byggeklosser settes sammen til større og mer komplekse løsninger
@@ -15,3 +19,30 @@ I praksis betyr dette at Indeks primært tilbyr grunnleggende basekomponenter. D
 En viktig grunn til denne tilnærmingen er å gi teamene større fleksibilitet og kreativ frihet. Samtidig bidrar det til å hindre at designsystemet blir en flaskehals i produktutviklingen. Dersom designsystemteamet også skulle vedlikeholde alle komplekse komponenter som ulike team trenger, ville det raskt kunne skape avhengigheter og redusere tempoet i utviklingen for produktteamene.
 
 Ved å holde designsystemet fokusert på stabile og gjenbrukbare byggeklosser, kan produktteamene jobbe mer selvstendig og utvikle løsninger raskere.
+
+## Webstandarder fremfor rammeverk
+
+Indeks er bygget på webstandarder i stedet for å baseres på et spesifikt rammeverk som React eller Vue. Dette betyr at du kan bruke Indeks-komponenter i hvilken som helst frontend-teknologi du foretrekker, uten å måtte bekymre deg for kompatibilitet eller avhengigheter.
+
+Komponentene er i utgangspunktet skrevet som ren HTML og CSS, og utvidet i form av web components der det er nødvendig. Likevel tilbyr Indeks også React-komponenter for de som ønsker å bruke det, men det er ikke et krav for å kunne bruke designsystemet. React-komponentene er i praksis tynne wrapper-komponenter som gjør det enklere å bruke Indeks i React-prosjekter.
+
+## Utility-klasser
+
+Indeks tilbyr et omfattende sett med utility-klasser i Tailwind-stil for å hjelpe deg med å bygge og tilpasse komponenter raskt og effektivt. Disse klassene dekker alt fra layout og spacing til farger og typografi, og kan brukes direkte i HTML for å justere utseendet og oppførselen til elementene dine uten behov for egendefinert CSS. For en fullstendig oversikt over tilgjengelige utility-klasser, se [Utility-dokumentasjonen](../grunnleggende/tokens/utilities).
+
+## CDN og NPM-pakker
+
+Indeks tilbyr både CDN og NPM-pakker for å gjøre det enkelt å integrere designsystemet i dine prosjekter. CDN-alternativet lar deg raskt inkludere styling, fonter og ikoner i prosjektet ditt med en enkel `<link>`-tag, mens NPM-pakkene gir deg mer kontroll og fleksibilitet ved å la deg installere og administrere Indeks som en avhengighet i prosjektet ditt på samme måte som i FFE.
+
+Styling, utilities, komponenter og tokens er samlet i hver sin NPM-pakke, i motsetning til i FFE der alle komponenter ble distribuert i egne pakker. I Indeks trenger du for eksempel kun å installere én pakke for å bruke alle React-komponentene. Dette forenkler installasjon og bruk av designsystemet, og gjør det mindre sårbart for endringer som påvirker avhengigheter frem og tilbake mellom pakkene og eksternt.
+
+Disse pakkene er tilgjengelige i Indeks:
+
+* [Indeks-CSS](https://www.npmjs.com/package/@sb1/indeks-css)
+* [Indeks-Utils](https://www.npmjs.com/package/@sb1/indeks-utils)
+* [Indeks-React](https://www.npmjs.com/package/@sb1/indeks-react)
+* [Indeks-Tokens](https://www.npmjs.com/package/@sb1/indeks-tokens)
+
+## Farger
+
+Indeks har en mer begrenset og konsistent fargepalett enn FFE. Dette er gjort for å sikre en mer helhetlig og gjenkjennelig visuell identitet på tvers av alle produkter som bruker Indeks. Ved å bruke et standardisert sett med farger, kan vi skape en sterkere merkevare og forbedre brukeropplevelsen ved å gi en mer sammenhengende og profesjonell visuell stil. For mer informasjon om tilgjengelige farger i Indeks, se [Farge-dokumentasjonen](../retningslinjer/farger).
