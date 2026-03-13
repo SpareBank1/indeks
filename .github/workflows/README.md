@@ -10,8 +10,13 @@ Oversikt over alle workflows i Indeks designsystem.
 └─────────────────────┬───────────────────────────────────────────┘
                       ▼
 ┌─────────────────────────────────────────────────────────────────┐
+│  ⚠️  Manuell kjøring: Actions → Release - Opprett versjons-PR  │
+│  → Run workflow                                                 │
+└─────────────────────┬───────────────────────────────────────────┘
+                      ▼
+┌─────────────────────────────────────────────────────────────────┐
 │  release-version-pr.yml                                         │
-│  Lager release PR automatisk                                    │
+│  Lager release PR                                               │
 └─────────────────────┬───────────────────────────────────────────┘
                       ▼
 ┌─────────────────────────────────────────────────────────────────┐
@@ -37,9 +42,9 @@ Oversikt over alle workflows i Indeks designsystem.
 
 | Workflow                        | Fil                   | Trigger             | Beskrivelse                                                      |
 | ------------------------------- | --------------------- | ------------------- | ---------------------------------------------------------------- |
-| **Release - Create Version PR** | `release-version-pr.yml`      | Push til main       | Kjører `changeset version`, lager release-branch og PR           |
+| **Release - Create Version PR** | `release-version-pr.yml`      | Manuell kjøring     | Kjører `changeset version`, lager release-branch og PR           |
 | **Release Gate**                | `pr-release-gate.yml`         | PR til main         | Blokkerer merge av andre PR-er når det finnes en åpen release PR |
-| **Create GitHub Release**       | `release-tag-and-publish.yml` | Merge av release PR | Oppretter én GitHub release + individuelle tags per pakke        |
+| **Create GitHub Release**       | `release-tag-and-publish.yml` | Manuell kjøring     | Oppretter én GitHub release + individuelle tags per pakke        |
 | **Publish to npm**              | `release-npm-publish.yml`     | Release published   | Bygger og publiserer alle oppdaterte pakker til npm              |
 
 ### PR & Testing
