@@ -1,7 +1,8 @@
 name: Release - Opprett tag og GitHub-release
 
 on:
-    push:
+    pull_request:
+        types: [closed]
         branches:
             - main
 
@@ -13,8 +14,8 @@ jobs:
     create-release:
         runs-on: ubuntu-latest
         timeout-minutes: 10
-        # Kjør bare på commits fra release branches
-        if: startsWith(github.event.head_commit.message, 'Release ')
+        # Kjør bare når en release-branch merges til main
+        if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
         permissions:
             contents: write
         outputs:
@@ -30,10 +31,11 @@ jobs:
             - name: Hent endrede pakker
               id: packages
               env:
-                  COMMIT_MSG: ${{ github.event.head_commit.message }}
+                  PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
               run: |
-                  # Parse commit message for package versions
+                  # Les commit-melding fra release-branchens HEAD-commit
                   # Format: "Release indeks-tokens@1.0.0 indeks-css@2.0.0"
+                  COMMIT_MSG=$(git log --format="%s" -1 "$PR_HEAD_SHA")
 
                   # Extract package@version pairs
                   PACKAGES=$(echo "$COMMIT_MSG" | grep -oE '[a-z-]+@[0-9]+\.[0-9]+\.[0-9]+' || true)

@@ -4,6 +4,12 @@ on:
     push:
         branches:
             - main
+        paths:
+            - 'indeks-docs/**'
+            - 'indeks-react/**'
+            - 'indeks-eksempel/**'
+            - 'shared/**'
+            - '.github/workflows/deploy-docs.yml'
     workflow_dispatch:
         inputs:
             commit:
@@ -17,7 +23,6 @@ concurrency:
 
 jobs:
     build-and-deploy:
-        if: ${{ !startsWith(github.event.head_commit.message, 'Release ') }}
         runs-on: ubuntu-latest
         timeout-minutes: 30
         permissions:
