@@ -140,3 +140,47 @@ jobs:
                       --notes-file -
 
                   echo "✅ Created release $TAG with tags:$ALL_TAGS"
+
+    publish-npm:
+        needs: create-release
+        if: needs.create-release.outputs.tag_name != ''
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        permissions:
+            contents: read
+            id-token: write
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  ref: ${{ needs.create-release.outputs.tag_name }}
+                  persist-credentials: false
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+
+            - name: Set up Node.js
+              uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+              with:
+                  node-version: '24'
+                  cache: 'pnpm'
+                  registry-url: 'https://registry.npmjs.org'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile --ignore-scripts
+
+            - name: Build all packages
+              run: |
+                  pnpm turbo run build --filter=@sb1/indeks-tokens --filter=@sb1/indeks-utils --filter=@sb1/indeks-css --filter=@sb1/indeks-react
+
+            - name: Publiser til npm
+              run: pnpm changeset publish
+              env:
+                  NPM_CONFIG_PROVENANCE: true
+
+            - name: Oppsummering
+              env:
+                  TAG_NAME: ${{ needs.create-release.outputs.tag_name }}
+              run: |
+                  echo "## 📦 Published to npm" >> $GITHUB_STEP_SUMMARY
+                  echo "Release: ${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
