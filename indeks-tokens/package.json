@@ -1,6 +1,6 @@
 {
     "name": "@sb1/indeks-tokens",
-    "version": "0.4.5",
+    "version": "0.4.6",
     "description": "Design tokens for Indeks design system",
     "type": "module",
     "homepage": "https://design.sparebank1.no",

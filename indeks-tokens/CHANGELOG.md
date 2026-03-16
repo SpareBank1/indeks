@@ -1,5 +1,11 @@
 # @sb1/indeks-tokens
 
+## 0.4.6
+
+### Patch Changes
+
+-   52af259: trigg build
+
 ## 0.4.5
 
 ### Patch Changes
