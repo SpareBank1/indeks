@@ -1,5 +1,11 @@
 # @sb1/indeks-css
 
+## 0.2.6
+
+### Patch Changes
+
+-   880bf55: trigger build
+
 ## 0.2.5
 
 ### Patch Changes
