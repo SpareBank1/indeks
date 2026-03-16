@@ -1,5 +1,11 @@
 # @sb1/indeks-tokens
 
+## 0.4.9
+
+### Patch Changes
+
+-   f695cb3: trigg bygg
+
 ## 0.4.8
 
 ### Patch Changes
