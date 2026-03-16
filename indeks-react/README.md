@@ -4,7 +4,7 @@ React-komponenter for Indeks designsystemet. Denne pakken inneholder ferdigbygde
 
 ## 📦 Del av Indeks
 
-Denne pakken er en del av [Indeks designsystemet](https://github.com/sparebank1utvikling/indeks) og må brukes sammen med CSS-styling:
+Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks) og må brukes sammen med CSS-styling:
 
 - **CDN (anbefalt)** - Last inn CSS fra `cdn.sparebank1.no/indeks/css/<versjon>.css`
 - eller importer via **@sb1/indeks-css** og installer via npm

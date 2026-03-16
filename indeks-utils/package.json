@@ -7,11 +7,11 @@
     "homepage": "https://design.sparebank1.no",
     "repository": {
         "type": "git",
-        "url": "https://github.com/sparebank1utvikling/indeks",
+        "url": "https://github.com/SpareBank1/indeks",
         "directory": "indeks-utils"
     },
     "bugs": {
-        "url": "https://github.com/sparebank1utvikling/indeks/issues"
+        "url": "https://github.com/SpareBank1/indeks/issues"
     },
     "keywords": [
         "indeks",

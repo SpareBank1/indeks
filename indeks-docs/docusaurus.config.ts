@@ -30,7 +30,7 @@ const config: Config = {
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
-    organizationName: 'sparebank1utvikling', // Usually your GitHub org/user name.
+    organizationName: 'SpareBank1', // Usually your GitHub org/user name.
     projectName: 'indeks', // Usually your repo name.
 
     onBrokenLinks: 'throw',
@@ -56,7 +56,7 @@ const config: Config = {
                     sidebarPath: './sidebars.ts',
                     // Please change this to your repo.
                     // Remove this to remove the "edit this page" links.
-                    editUrl: 'https://github.com/sparebank1utvikling/indeks/tree/main/indeks-docs/',
+                    editUrl: 'https://github.com/SpareBank1/indeks/tree/main/indeks-docs/',
                 },
                 theme: {
                     customCss: './src/css/custom.css',
@@ -82,7 +82,7 @@ const config: Config = {
                     label: 'Dokumentasjon',
                 },
                 {
-                    href: 'https://github.com/sparebank1utvikling/indeks',
+                    href: 'https://github.com/SpareBank1/indeks',
                     label: 'GitHub',
                     position: 'right',
                 },
@@ -96,7 +96,7 @@ const config: Config = {
                     items: [
                         {
                             label: 'GitHub Issues',
-                            href: 'https://github.com/sparebank1utvikling/indeks/issues',
+                            href: 'https://github.com/SpareBank1/indeks/issues',
                         },
                         {
                             label: 'Slack (#ext-designsystem)',
@@ -113,7 +113,7 @@ const config: Config = {
                     items: [
                         {
                             label: 'GitHub',
-                            href: 'https://github.com/sparebank1utvikling/indeks',
+                            href: 'https://github.com/SpareBank1/indeks',
                         },
                     ],
                 },
