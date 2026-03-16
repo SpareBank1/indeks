@@ -1,5 +1,11 @@
 # @sb1/indeks-tokens
 
+## 0.4.11
+
+### Patch Changes
+
+-   f869f4e: trigge bygg
+
 ## 0.4.10
 
 ### Patch Changes
