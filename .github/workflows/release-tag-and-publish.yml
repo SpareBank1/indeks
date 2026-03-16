@@ -164,7 +164,9 @@ jobs:
               with:
                   node-version: '24'
                   cache: 'pnpm'
-                  registry-url: 'https://registry.npmjs.org'
+
+            - name: Konfigurer npm for OIDC-publisering
+              run: npm config delete //registry.npmjs.org/:_authToken
 
             - name: Install dependencies
               run: pnpm install --frozen-lockfile --ignore-scripts
