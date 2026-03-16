@@ -1,5 +1,13 @@
 # @sb1/indeks-css
 
+## 0.2.12
+
+### Patch Changes
+
+-   Updated dependencies [aaab805]
+    -   @sb1/indeks-tokens@0.4.10
+    -   @sb1/indeks-utils@0.1.14
+
 ## 0.2.11
 
 ### Patch Changes
