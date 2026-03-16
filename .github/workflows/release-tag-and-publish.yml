@@ -51,7 +51,10 @@ jobs:
                   # Output as JSON array for matrix
                   JSON_ARRAY=$(echo "$PACKAGES" | jq -R -s -c 'split("\n") | map(select(length > 0))')
                   echo "packages=$JSON_ARRAY" >> $GITHUB_OUTPUT
-                  echo "packages_list=$PACKAGES" >> $GITHUB_OUTPUT
+
+                  # Konverter til space-separert enkeltlinje (GITHUB_OUTPUT støtter ikke multi-linje med key=value)
+                  PACKAGES_SINGLE=$(echo "$PACKAGES" | tr '\n' ' ' | xargs)
+                  echo "packages_list=$PACKAGES_SINGLE" >> $GITHUB_OUTPUT
 
             - name: Opprett GitHub-release
               id: release
