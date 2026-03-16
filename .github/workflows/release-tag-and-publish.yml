@@ -177,7 +177,6 @@ jobs:
               run: pnpm changeset publish
               env:
                   NPM_CONFIG_PROVENANCE: true
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
             - name: Oppsummering
               env:
