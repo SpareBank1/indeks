@@ -1,5 +1,11 @@
 # @sb1/indeks-css
 
+## 0.2.7
+
+### Patch Changes
+
+-   eef074e: trigge bygg
+
 ## 0.2.6
 
 ### Patch Changes
