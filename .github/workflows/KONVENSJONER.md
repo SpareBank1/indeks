@@ -131,7 +131,7 @@ Alle actions er pinnet til en spesifikk commit-SHA for sikkerhet, med versjonsta
 |-----------------------------------------|----------------------------------------------|---------|-----------------------------------|
 | `actions/checkout`                      | `de0fac2e4500dabe0009e67214ff5f5447ce83dd`   | v6      | Checkout av kode                  |
 | `actions/setup-node`                    | `6044e13b5dc448c55e2357c09f80417699197238`   | v6      | Node.js-oppsett                   |
-| `pnpm/action-setup`                     | `c5ba7f7862a0f64c1b1a05fbac13e0b8e86ba08c`   | v4      | pnpm-installasjon                 |
+| `pnpm/action-setup`                     | `fc06bc1257f339d1d5d8b3a19a8cae5388b55320`   | v4.4.0  | pnpm-installasjon                 |
 | `actions/cache`                         | `cdf6c1fa76f9f475f3d7449005a359c84ca0f306`   | v5      | Caching (Docker-lag)              |
 | `actions/upload-artifact`               | `b7c566a772e6b6bfb58ed0dc250532a479d7789f`   | v6      | Last opp testartefakter           |
 | `Azure/static-web-apps-deploy`          | `1a947af9992250f3bc2e68ad0754c0b0c11566c9`   | v1      | Deploy til Azure Static Web Apps  |
@@ -221,7 +221,7 @@ Standard trifecta som brukes i alle bygg-workflows:
 
 ```yaml
 - name: Install pnpm
-  uses: pnpm/action-setup@c5ba7f7862a0f64c1b1a05fbac13e0b8e86ba08c # v4
+  uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
 
 - name: Set up Node.js
   uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
