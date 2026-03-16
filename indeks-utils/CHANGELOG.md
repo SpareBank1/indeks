@@ -1,5 +1,12 @@
 # @sb1/indeks-utils
 
+## 0.1.16
+
+### Patch Changes
+
+-   Updated dependencies [c4da976]
+    -   @sb1/indeks-tokens@0.4.12
+
 ## 0.1.15
 
 ### Patch Changes
