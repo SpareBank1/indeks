@@ -1,6 +1,6 @@
 {
     "name": "@sb1/indeks-css",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "description": "CSS library for Indeks design system",
     "main": "dist/npm/index.css",
     "type": "module",
