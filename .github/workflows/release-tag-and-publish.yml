@@ -36,21 +36,11 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile --ignore-scripts
 
-            - name: Sjekk for changesets
-              id: check
-              run: |
-                  COUNT=$(find .changeset -name "*.md" ! -name "README.md" 2>/dev/null | wc -l)
-                  echo "has_changesets=$([ "$COUNT" -gt 0 ] && echo true || echo false)" >> $GITHUB_OUTPUT
-
-            - name: Build all packages
-              if: steps.check.outputs.has_changesets == 'false'
-              run: pnpm turbo run build --filter=@sb1/indeks-tokens --filter=@sb1/indeks-utils --filter=@sb1/indeks-css --filter=@sb1/indeks-react
-
             - name: Opprett versjons-PR eller publiser
               uses: changesets/action@6a0a831ff30acef54f2c6aa1cbbc1096b066edaf # v1.7.0
               with:
                   version: pnpm changeset version
-                  publish: pnpm changeset publish
+                  publish: pnpm ci:publish
                   commit: 'chore: version packages'
                   title: 'chore: version packages'
               env:
