@@ -16,3 +16,12 @@ minimumReleaseAgeExclude:
 trustPolicy: no-downgrad
 #trustPolicyExclude:
 #trustPolicyIgnoreAfter:
+
+enablePrePostScripts: false
+autoInstallPeers: false
+strictPeerDependencies: true
+preferFrozenLockfile: true
+shamefullyHoist: false
+#Workspace
+link-workspace-packages: true
+shared-workspace-lockfile: true
