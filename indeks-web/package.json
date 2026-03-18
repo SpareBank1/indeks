@@ -1,0 +1,58 @@
+{
+    "name": "@sb1/indeks-web",
+    "version": "0.2.20",
+    "type": "module",
+    "description": "Web components for Indeks design system",
+    "homepage": "https://design.sparebank1.no",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SpareBank1/indeks",
+        "directory": "indeks-web"
+    },
+    "bugs": {
+        "url": "https://github.com/SpareBank1/indeks/issues"
+    },
+    "keywords": [
+        "indeks",
+        "design-system",
+        "web-components",
+        "custom-elements",
+        "sparebank1",
+        "ui"
+    ],
+    "main": "dist/npm/index.js",
+    "module": "dist/npm/index.js",
+    "types": "dist/npm/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/npm/index.js",
+            "types": "./dist/npm/index.d.ts"
+        }
+    },
+    "files": [
+        "dist/npm",
+        "CHANGELOG.md",
+        "README.md"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "rm -rf ./dist && pnpm run build:npm",
+        "build:npm": "rm -rf ./dist/npm && vite build --mode npm",
+        "build:cdn": "rm -rf ./dist/cdn && vite build --mode cdn",
+        "prepublishOnly": "pnpm run build",
+        "test": "echo \"Ingen tester\""
+    },
+    "author": "",
+    "license": "MIT",
+    "peerDependencies": {
+        "@sb1/indeks-css": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/node": "^24.12.0",
+        "typescript": "~5.9.3",
+        "vite": "npm:rolldown-vite@^7.3.1",
+        "vite-plugin-dts": "^4.5.4"
+    }
+}
