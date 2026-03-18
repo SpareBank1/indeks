@@ -1,13 +1,14 @@
-import { defineConfig } from 'vite';
+import { mergeConfig } from 'vite';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { resolve } from 'path';
 import react from '@vitejs/plugin-react';
+import { sharedConfig } from '../vite.shared.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://vite.dev/config/
-export default defineConfig(() => ({
+export default mergeConfig(sharedConfig, {
     plugins: [react()],
     base: '/eksempel/',
     server: {
@@ -29,4 +30,4 @@ export default defineConfig(() => ({
             'react/jsx-runtime': resolve(__dirname, 'node_modules/react/jsx-runtime'),
         },
     },
-}));
+});

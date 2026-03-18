@@ -1,17 +1,13 @@
+import js from '@eslint/js';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 import compat from 'eslint-plugin-compat';
 import { browserslist } from './browserslist.config.js';
 
 /**
  * Delt ESLint-konfigurasjon for browser-kompatibilitet.
- * Importeres i pakke-spesifikke eslint.config.js.
- *
- * @example
- * import { compatConfig } from '../eslint.shared.js';
- *
- * export default [
- *     compatConfig,
- *     // ... andre configs
- * ];
+ * Del av baseConfig — eksporteres separat for bruk i pakker som ikke
+ * bruker baseConfig men trenger compat-sjekk.
  */
 export const compatConfig = {
     plugins: { compat },
@@ -27,3 +23,33 @@ export const compatConfig = {
         ]
     }
 };
+
+/**
+ * Delt ESLint-basiskonfigurasjon for alle TypeScript-pakker i monorepoet.
+ * Inkluderer JS/TS recommended-regler, browser-globals og compat-sjekk.
+ *
+ * Spread inn i pakke-spesifikke eslint.config.js og legg til egne regler:
+ *
+ * @example
+ * import { baseConfig } from '../eslint.shared.js';
+ *
+ * export default tseslint.config(
+ *     { ignores: ['dist'] },
+ *     ...baseConfig,
+ *     // pakke-spesifikke regler her
+ * );
+ */
+// Plain array — ingen tseslint.config()-wrapper nødvendig.
+// extends-nøkkelen i config-objekter er en tseslint.config()-spesifikk
+// forkortelse; her sprer vi configs eksplisitt i stedet.
+export const baseConfig = [
+    js.configs.recommended,
+    ...tseslint.configs.recommended,
+    {
+        languageOptions: {
+            ecmaVersion: 2020,
+            globals: globals.browser,
+        },
+    },
+    compatConfig,
+];

@@ -1,17 +1,10 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
-import { compatConfig } from '../eslint.shared.js';
+import { baseConfig } from '../eslint.shared.js';
 
-export default tseslint.config(
+export default [
     { ignores: ['build', '.docusaurus'] },
+    ...baseConfig,
     {
-        extends: [js.configs.recommended, ...tseslint.configs.recommended],
+        // Docusaurus-prosjektet har både TS og JS/JSX-filer (MDX, config, osv.)
         files: ['**/*.{ts,tsx,js,jsx}'],
-        languageOptions: {
-            ecmaVersion: 2020,
-            globals: globals.browser,
-        },
     },
-    compatConfig,
-);
+];

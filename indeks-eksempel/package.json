@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "dev": "npm run cp:themes && vite --open",
-        "build": "tsc -b && npm run cp:themes && vite build",
+        "build": "tsc --noEmit && npm run cp:themes && vite build",
         "cp:themes": "mkdir -p ./public/themes && cp -r ../indeks-tokens/.build/css/themes/* ./public/themes",
         "lint": "eslint .",
         "update-packages": "npx npm-check-updates -i --format group",
@@ -20,7 +20,6 @@
         "react-router-dom": "^7.13.1"
     },
     "devDependencies": {
-        "@eslint/js": "^9.39.3",
         "@types/node": "^24.12.0",
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
@@ -30,9 +29,7 @@
         "eslint": "^9.39.3",
         "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-react-refresh": "^0.5.2",
-        "globals": "^16.5.0",
         "typescript": "~5.9.3",
-        "typescript-eslint": "^8.56.1",
         "vite": "^7.3.1"
     }
 }

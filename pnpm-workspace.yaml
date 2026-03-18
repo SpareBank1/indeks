@@ -3,6 +3,7 @@ packages:
     - 'indeks-utils'
     - 'indeks-css'
     - 'indeks-react'
+    - 'indeks-web'
     - 'indeks-docs'
     - 'indeks-eksempel'
     - 'shared'

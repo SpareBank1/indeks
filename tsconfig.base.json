@@ -1,0 +1,25 @@
+{
+    "$comment": "Delt TypeScript-basis for alle library-pakker i monorepoet (indeks-react, indeks-web, osv.). Extend denne og legg til pakke-spesifikke innstillinger. tsBuildInfoFile og include settes per pakke.",
+    "compilerOptions": {
+        "target": "ES2022",
+        "useDefineForClassFields": true,
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "module": "ESNext",
+        "skipLibCheck": true,
+
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "moduleDetection": "force",
+        "noEmit": true,
+
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "erasableSyntaxOnly": false,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedSideEffectImports": true
+    }
+}
