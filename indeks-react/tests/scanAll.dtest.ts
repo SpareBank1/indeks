@@ -18,7 +18,7 @@ try {
   const response = await fetch('http://localhost:9009/index.json');
   stories = await response.json();
 } catch (error) {
-  throw new Error('Failed to fetch stories: ' + (error instanceof Error ? error.message : String(error)));
+  throw new Error('Failed to fetch stories: ' + (error instanceof Error ? error.message : String(error)), { cause: error });
 }
 
 type StoryEntry = {
