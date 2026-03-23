@@ -18,9 +18,9 @@
         "lint": "eslint src/"
     },
     "dependencies": {
-        "@docusaurus/core": "3.9.2",
+        "@docusaurus/core": "^3.9.2",
         "@docusaurus/plugin-content-pages": "^3.9.2",
-        "@docusaurus/preset-classic": "3.9.2",
+        "@docusaurus/preset-classic": "^3.9.2",
         "@mdx-js/react": "^3.1.1",
         "@sb1/indeks-css": "workspace:*",
         "@sb1/indeks-react": "workspace:*",
@@ -30,14 +30,14 @@
         "react-dom": "^19.2.4"
     },
     "devDependencies": {
-        "@docusaurus/module-type-aliases": "3.9.2",
-        "@docusaurus/tsconfig": "3.9.2",
-        "@docusaurus/types": "3.9.2",
-        "eslint": "^9.39.3",
+        "@docusaurus/module-type-aliases": "^3.9.2",
+        "@docusaurus/tsconfig": "^3.9.2",
+        "@docusaurus/types": "^3.9.2",
+        "eslint": "^10.0.0",
         "search-insights": "^2.17.3",
         "typescript": "~5.9.3"
     },
     "engines": {
-        "node": ">=18.0"
+        "node": ">=24.0"
     }
 }
