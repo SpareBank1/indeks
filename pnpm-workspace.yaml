@@ -14,16 +14,13 @@ packages:
 minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
     - '@sb1/*'
-    - 'storybook'
-    - '@storybook/*'
-    - 'eslint-plugin-storybook'
 trustPolicy: no-downgrad
 #trustPolicyExclude:
 #trustPolicyIgnoreAfter:
 
 enablePrePostScripts: false
 autoInstallPeers: false
-strictPeerDependencies: true
+strictPeerDependencies: false
 preferFrozenLockfile: true
 shamefullyHoist: false
 #Workspace
