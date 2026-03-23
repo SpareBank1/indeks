@@ -36,14 +36,14 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile --ignore-scripts
 
-            - name: Build all packages
-              run: pnpm build
-
             - name: Lint
               run: pnpm turbo run lint
 
             - name: Test
               run: pnpm turbo run test -- --run
+
+            - name: Build all packages
+              run: pnpm build
 
             - name: Lisenssjekk
               if: always()
