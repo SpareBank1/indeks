@@ -40,7 +40,6 @@ jobs:
               run: pnpm build
 
             - name: Lint
-              continue-on-error: true
               run: pnpm turbo run lint
 
             - name: Test
