@@ -42,6 +42,7 @@
         "build:npm": "rm -rf ./dist/npm && vite build --mode npm",
         "build:cdn": "rm -rf ./dist/cdn && vite build --mode cdn",
         "prepublishOnly": "pnpm run build",
+        "lint": "eslint .",
         "test": "echo \"Ingen tester\""
     },
     "author": "",

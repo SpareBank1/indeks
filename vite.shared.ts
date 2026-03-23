@@ -1,9 +1,10 @@
 import type { UserConfig } from 'vite';
-import { esbuildTargets } from './browserslist.config.js';
 
 /**
  * Delt Vite-konfigurasjon for alle pakker i monorepoet.
  * Importer og bruk med mergeConfig() i pakke-spesifikke vite.config.ts.
+ *
+ * build.target holdes synkronisert med .browserslistrc (since 2022-03).
  *
  * @example
  * import { mergeConfig } from 'vite';
@@ -15,6 +16,6 @@ import { esbuildTargets } from './browserslist.config.js';
  */
 export const sharedConfig: UserConfig = {
     build: {
-        target: esbuildTargets
+        target: ['edge99', 'firefox98', 'chrome99', 'safari15.4']
     }
 };

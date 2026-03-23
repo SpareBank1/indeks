@@ -2,12 +2,13 @@ import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import compat from 'eslint-plugin-compat';
-import { browserslist } from './browserslist.config.js';
 
 /**
  * Delt ESLint-konfigurasjon for browser-kompatibilitet.
  * Del av baseConfig — eksporteres separat for bruk i pakker som ikke
  * bruker baseConfig men trenger compat-sjekk.
+ *
+ * Leser browsertargets automatisk fra .browserslistrc i roten.
  */
 export const compatConfig = {
     plugins: { compat },
@@ -15,7 +16,6 @@ export const compatConfig = {
         'compat/compat': 'error'
     },
     settings: {
-        browsers: browserslist,
         polyfills: [
             // Legg til polyfills her hvis dere bruker noen
             // 'Promise',
