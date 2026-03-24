@@ -1,6 +1,7 @@
-@import './text-input.css';
+@import './field.css';
+@import './text-field.css';
 @import './checkbox.css';
 @import './form.css';
+@import './label.css';
 @import './radio-group.css';
 @import './dropdown.css';
-@import './input-wrapper.css';

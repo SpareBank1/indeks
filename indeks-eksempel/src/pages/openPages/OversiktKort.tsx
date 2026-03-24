@@ -1,4 +1,4 @@
-import { Button, Heading, HStack, Icon, Text, TextInput, VStack } from '@sb1/indeks-react';
+import { Button, Heading, HStack, Icon, Text, TextField, VStack } from '@sb1/indeks-react';
 import React from 'react';
 import './oversikt-kort.css';
 
@@ -38,7 +38,7 @@ const OversiktKort: React.FC<OversiktKortProps> = ({ title, variant = 'default' 
                     {randomFacts[Math.floor(Math.random() * randomFacts.length)]}
                 </Text>
             </div>
-            <TextInput label="Fødselsdato" placeholder="Her er en placeholder" />
+            <TextField label="Fødselsdato" placeholder="Her er en placeholder" />
             <Button>
                 <Icon materialDesignName="check" />
                 Primary

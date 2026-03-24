@@ -19,6 +19,7 @@ const config: StorybookConfig = {
             config.resolve.alias = {
                 ...config.resolve.alias,
                 '@sb1/indeks-css': resolve(__dirname, '../../indeks-css/css/index.css'),
+                '@sb1/indeks-web': resolve(__dirname, '../../indeks-web/index.ts'),
             };
         }
         return config;

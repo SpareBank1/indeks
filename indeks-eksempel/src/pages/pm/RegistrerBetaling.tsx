@@ -1,4 +1,4 @@
-import { Button, Card, Dropdown, Form, Heading, HStack, TextInput } from '@sb1/indeks-react';
+import { Button, Card, Dropdown, Form, Heading, HStack, TextField } from '@sb1/indeks-react';
 
 export default function PMRegistrerBetaling() {
     return (
@@ -11,16 +11,16 @@ export default function PMRegistrerBetaling() {
                     <Dropdown label="Fra konto" placeholder="Velg konto" />
                     <Dropdown label="Til konto" placeholder="Ve konto" />
                     <div className="ix-grid ix-grid-cols-3 ">
-                        <TextInput label="Kroner" className="ix-col-span-2 " />
-                        <TextInput label="Øre" />
+                        <TextField label="Kroner" className="ix-col-span-2 " />
+                        <TextField label="Øre" />
                     </div>
                     <HStack className="ix-align-flex-end">
-                        <TextInput label="Dato" className="ix-flex-grow ix-p" />
+                        <TextField label="Dato" className="ix-flex-grow ix-p" />
                         <Button variant="secondary" size="lg">
                             I dag
                         </Button>
                     </HStack>
-                    <TextInput label="KID eller Beskrivelse" placeholder="Vises hos mottaker. Opptil 140 tegn." />
+                    <TextField label="KID eller Beskrivelse" placeholder="Vises hos mottaker. Opptil 140 tegn." />
                     <div className="ix-grid ix-grid-cols-2 ix-mt-lg">
                         <Button variant="secondary" size="lg">
                             Legg til godkjenning

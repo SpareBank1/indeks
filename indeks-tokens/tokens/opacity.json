@@ -1,0 +1,9 @@
+{
+    "opacity": {
+        "disabled": {
+            "_property": "opacity",
+            "value": "0.4",
+            "description": "Standard opacity for disabled elements."
+        }
+    }
+}

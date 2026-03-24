@@ -61,6 +61,7 @@
         "react-dom": "^18.0.0 || ^19.0.0"
     },
     "devDependencies": {
+        "@sb1/indeks-web": "workspace:*",
         "@axe-core/playwright": "^4.11.1",
         "@playwright/test": "^1.58.2",
         "@storybook/addon-a11y": "^10.3.0",
