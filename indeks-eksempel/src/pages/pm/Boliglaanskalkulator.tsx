@@ -1,4 +1,4 @@
-import { Button, Form, TextInput } from '@sb1/indeks-react';
+import { Button, Form, TextField } from '@sb1/indeks-react';
 
 export default function PMBoliglaanskalkulator() {
     return (
@@ -7,9 +7,9 @@ export default function PMBoliglaanskalkulator() {
             <p>Kalkuler månedlige boliglånsbetalinger.</p>
 
             <Form>
-                <TextInput label="Lånebeløp (NOK)" />
-                <TextInput label="Rente (%)" />
-                <TextInput label="Antall år" />
+                <TextField label="Lånebeløp (NOK)" />
+                <TextField label="Rente (%)" />
+                <TextField label="Antall år" />
                 <Button
                     onClick={() => {
                         console.log('klikk');

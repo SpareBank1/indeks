@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { type JSX, useId } from 'react';
-import { InputWrapper } from '../text-input/TextInput';
+import { InputWrapper } from '../text-field/TextField';
 
 export type DropdownProps = {
     className?: string;
