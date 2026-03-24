@@ -183,6 +183,9 @@ importers:
       '@playwright/test':
         specifier: ^1.58.2
         version: 1.58.2
+      '@sb1/indeks-web':
+        specifier: workspace:*
+        version: link:../indeks-web
       '@storybook/addon-a11y':
         specifier: ^10.3.0
         version: 10.3.1(storybook@10.3.1(@testing-library/dom@10.4.1)(prettier@2.8.8)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))

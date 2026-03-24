@@ -55,10 +55,10 @@ export const InputWrapper = ({
 }): JSX.Element => {
     return (
         <div {...restProps} className={clsx('ix-field', { 'ix-field--disabled' : disabled, 'ix-field--read-only' : readOnly }, className)}>
-            <label htmlFor={inputId} className='ix-text-field__label'>{label}</label>
-            {description && <span className="ix-text-field__description">{description}</span>}
+            <label htmlFor={inputId} className='ix-label'>{label}</label>
+            {description && <span data-field="description">{description}</span>}
             {children}
-            {errorMessage && <span className="ix-text-field__error-message">{errorMessage}</span>}
+            <span data-field="error">{errorMessage}</span>
         </div>
     );
 };

@@ -59,7 +59,7 @@
     box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
 }
 
-:where(.ix-text-field__description) {
+.ix-field [data-field="description"] {
     font-size: var(--ix-font-size-sm);
     color: var(--ix-color-foreground-main-subtle);
 }
@@ -91,7 +91,7 @@
     border-left-width: 0;
 }
 
-:where(.ix-text-field__error-message) {
+.ix-field [data-field="error"] {
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-danger-default);
 }

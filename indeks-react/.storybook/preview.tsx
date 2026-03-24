@@ -1,4 +1,5 @@
 import '@sb1/indeks-css';
+import '@sb1/indeks-web';
 import type { Preview } from '@storybook/react-vite';
 import './preview.css'; // Import the main CSS file for styling
 

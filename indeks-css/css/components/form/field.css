@@ -8,10 +8,10 @@
     opacity: var(--ix-opacity-disabled);
 }
 
-:where(.ix-field--disabled) .ix-text-field__label {
+:where(.ix-field--disabled) .ix-label {
     color: var(--ix-color-foreground-main-default);
 }
 
-:where(.ix-field--read-only) .ix-text-field__label {
+:where(.ix-field--read-only) .ix-label {
     color: var(--ix-color-foreground-main-read-only);
 }

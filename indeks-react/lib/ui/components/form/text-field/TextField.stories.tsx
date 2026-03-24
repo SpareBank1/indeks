@@ -51,13 +51,19 @@ export const ReadOnly: Story = {
 };
 
 export const HTML: Story = {
-  args: { },
+  args: {
+    errorMessage: "Feilmelding",
+    description: "Dette er en beskrivelse av feltet"
+
+  },
   render: (args) => {
-    return <div className='ix-field'>
-      <label htmlFor="testhtml" className='ix-text-field__label'>Test</label>
+    return <ix-field className="ix-field">
+      <label className='ix-label'>Test</label>
+      <span className="ix-text-field__description" data-field="description">{args.description}</span>
       <div className='ix-text-field'> 
-        <input className="ix-text-field__input" placeholder="Placeholder" id="testhtml" {...args.inputProps} />
+        <input className="ix-text-field__input" placeholder="Placeholder" {...args.inputProps} />
       </div>
-    </div>;
+      <span className="ix-text-field__error-message" data-field="error">{args.errorMessage}</span>
+    </ix-field>;
   },
 };
