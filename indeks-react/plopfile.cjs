@@ -36,11 +36,6 @@ export { {{componentName}} } from "./{{componentName}}/{{componentName}}.tsx";`,
             },
             {
                 type: 'add',
-                path: 'lib/ui/components/{{componentFolder}}/{{componentName}}/{{componentName}}.stories.tsx',
-                templateFile: 'templates/Component/Component.stories.tsx.hbs',
-            },
-            {
-                type: 'add',
                 path: 'lib/ui/components/{{componentFolder}}/{{componentName}}/{{componentName}}.test.ts',
                 templateFile: 'templates/Component/Component.test.ts.hbs',
             },
