@@ -36,8 +36,9 @@
         "dev": "echo not implemented",
         "build": "rm -rf ./dist && pnpm run build:npm",
         "build:npm": "rm -rf ./dist/npm && postcss ./index.css -o ./dist/npm/index.css",
-        "build:cdn": "rm -rf ./dist/cdn && CDN_BUILD=true postcss ./index.css -o ./dist/cdn/index.css",
+        "build:cdn": "rm -rf ./dist/cdn && postcss ./index.css -o ./dist/cdn/index.css --env cdn",
         "prepublishOnly": "pnpm run build",
+        "lint": "echo not implemented",
         "update-packages": "echo not implemented",
         "test": "echo \"Ingen tester\""
     },
