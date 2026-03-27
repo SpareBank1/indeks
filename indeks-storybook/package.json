@@ -13,6 +13,7 @@
     "devDependencies": {
         "@axe-core/playwright": "^4.11.1",
         "@playwright/test": "^1.58.2",
+        "@sb1/indeks-css": "workspace:*",
         "@sb1/indeks-react": "workspace:*",
         "@sb1/indeks-web": "workspace:*",
         "@storybook/addon-a11y": "^10.3.0",
