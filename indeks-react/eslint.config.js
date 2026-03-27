@@ -1,4 +1,3 @@
-import storybook from 'eslint-plugin-storybook';
 // TODO: legg til eslint-plugin-react-hooks igjen når den støtter ESLint 10
 // import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
@@ -20,5 +19,4 @@ export default [
             }],
         },
     },
-    ...storybook.configs['flat/recommended'],
 ];

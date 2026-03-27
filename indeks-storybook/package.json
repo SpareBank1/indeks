@@ -1,0 +1,32 @@
+{
+    "name": "@sb1/indeks-storybook",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "storybook dev -p 6006",
+        "build-storybook": "storybook build",
+        "test:playwright": "docker compose run --rm playwright",
+        "update-screenshots": "docker run --rm -v ./tests:/tests alpine rm -rf /tests/scanAll.dtest.ts-snapshots && docker compose run --name pw-update playwright --update-snapshots; docker cp -a pw-update:/repo/indeks-storybook/tests/scanAll.dtest.ts-snapshots tests/ 2>/dev/null; docker rm pw-update",
+        "lint": "eslint ."
+    },
+    "devDependencies": {
+        "@axe-core/playwright": "^4.11.1",
+        "@playwright/test": "^1.58.2",
+        "@sb1/indeks-css": "workspace:*",
+        "@sb1/indeks-react": "workspace:*",
+        "@sb1/indeks-web": "workspace:*",
+        "@storybook/addon-a11y": "^10.3.0",
+        "@storybook/addon-docs": "^10.3.0",
+        "@storybook/react-vite": "^10.3.0",
+        "@vitejs/plugin-react": "^6.0.0",
+        "eslint-plugin-react-refresh": "^0.5.2",
+        "eslint-plugin-storybook": "^10.3.1",
+        "playwright": "^1.58.2",
+        "react": "^19.2.4",
+        "react-dom": "^19.2.4",
+        "storybook": "^10.3.0",
+        "typescript": "~5.9.3",
+        "vite": "^8.0.0"
+    }
+}

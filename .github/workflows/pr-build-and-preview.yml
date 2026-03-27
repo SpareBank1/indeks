@@ -76,7 +76,7 @@ jobs:
                   mkdir -p ./dist
                   mkdir -p ./dist/storybook
                   mkdir -p ./dist/eksempel
-                  mv ./indeks-react/storybook-static/* ./dist/storybook
+                  mv ./indeks-storybook/storybook-static/* ./dist/storybook
                   mv ./indeks-eksempel/dist/* ./dist/eksempel
                   cp -r ./indeks-docs/build/* ./dist/
 
