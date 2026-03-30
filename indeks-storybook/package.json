@@ -6,8 +6,13 @@
     "scripts": {
         "dev": "storybook dev -p 6006",
         "build-storybook": "storybook build",
-        "test:playwright": "docker compose run --rm playwright",
-        "update-screenshots": "docker run --rm -v ./tests:/tests alpine rm -rf /tests/scanAll.dtest.ts-snapshots && docker compose run --name pw-update playwright --update-snapshots; docker cp -a pw-update:/repo/indeks-storybook/tests/scanAll.dtest.ts-snapshots tests/ 2>/dev/null; docker rm pw-update",
+        "docker:fix-ownership": "docker run --rm -v .:/target alpine chown -R $(id -u) /target/playwright-report /target/test-results 2>/dev/null; true",
+        "docker:run-tests": "docker compose run --name pw-test playwright; docker cp pw-test:/repo/indeks-storybook/playwright-report playwright-report 2>/dev/null; docker cp pw-test:/repo/indeks-storybook/test-results test-results 2>/dev/null; docker rm pw-test",
+        "test:playwright": "pnpm -w build && pnpm run build-storybook && pnpm run docker:run-tests; pnpm run docker:fix-ownership",
+        "docker:clear-snapshots": "docker run --rm -v ./tests:/tests alpine rm -rf /tests/scanAll.dtest.ts-snapshots",
+        "docker:run-update-snapshots": "docker compose run --name pw-update playwright --update-snapshots; docker cp pw-update:/repo/indeks-storybook/tests/scanAll.dtest.ts-snapshots tests/ 2>/dev/null; docker rm pw-update",
+        "docker:fix-snapshot-ownership": "docker run --rm -v ./tests:/tests alpine chown -R $(id -u) /tests/scanAll.dtest.ts-snapshots",
+        "update-snapshots": "pnpm -w build && pnpm run build-storybook && pnpm run docker:clear-snapshots && pnpm run docker:run-update-snapshots; pnpm run docker:fix-snapshot-ownership",
         "lint": "eslint ."
     },
     "devDependencies": {
