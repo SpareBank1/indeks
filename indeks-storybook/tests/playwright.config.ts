@@ -24,7 +24,7 @@ export default defineConfig({
         // Mobil
         {
             name: 'mobile-chromium',
-            use: { ...devices['Galaxy S24'] },
+            use: { ...devices['Galaxy S24'], viewport: { width: 320, height: 780 } },
         },
         {
             name: 'mobile-webkit',
