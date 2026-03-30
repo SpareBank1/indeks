@@ -4,6 +4,7 @@ packages:
     - 'indeks-css'
     - 'indeks-react'
     - 'indeks-web'
+    - 'indeks-storybook'
     - 'indeks-docs'
     - 'indeks-eksempel'
     - 'shared'

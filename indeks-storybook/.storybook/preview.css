@@ -1,0 +1,19 @@
+@import '../../indeks-css/index.css';
+@import 'https://cdn.sparebank1.no/fonts/v1.css';
+
+.storybook-docs-content-container {
+    padding: 10px;
+    background-color: var(--ix-color-background-default);
+    color: var(--ix-color-foreground-main-default);
+}
+
+.storybook-docs-content-container:first-child {
+    margin-top: -40px;
+}
+.storybook-docs-content-container:last-child {
+    margin-bottom: -15px;
+}
+
+.sb-show-main.sb-main-padded {
+    padding: 0 !important;
+}

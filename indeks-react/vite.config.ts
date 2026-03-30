@@ -10,7 +10,7 @@ export default mergeConfig(sharedConfig, {
         react(),
         dts({
             include: ['lib'],
-            exclude: ['**/*.test.ts', '**/*.test.tsx', '**/*.stories.ts', '**/*.stories.tsx'],
+            exclude: ['**/*.test.ts', '**/*.test.tsx'],
             compilerOptions: {
                 allowImportingTsExtensions: false,
             },

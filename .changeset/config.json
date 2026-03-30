@@ -7,5 +7,5 @@
     "access": "public",
     "baseBranch": "main",
     "updateInternalDependencies": "patch",
-    "ignore": ["@sb1/indeks-docs", "@sb1/indeks-eksempel"]
+    "ignore": ["@sb1/indeks-docs", "@sb1/indeks-eksempel", "@sb1/indeks-storybook"]
 }

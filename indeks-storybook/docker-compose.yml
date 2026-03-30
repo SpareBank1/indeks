@@ -1,0 +1,10 @@
+services:
+  playwright:
+    build: .
+    volumes:
+      - ..:/repo
+      - ./storybook-static:/repo/indeks-storybook/storybook-static:ro
+    working_dir: /repo/indeks-storybook
+    environment:
+      - CI=1
+    entrypoint: ["npx", "playwright", "test", "--config=tests/playwright.config.ts"]
