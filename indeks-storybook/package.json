@@ -13,7 +13,8 @@
         "docker:run-update-snapshots": "docker compose run --name pw-update playwright --update-snapshots; docker cp pw-update:/repo/indeks-storybook/tests/scanAll.dtest.ts-snapshots tests/ 2>/dev/null; docker rm pw-update",
         "docker:fix-snapshot-ownership": "docker run --rm -v ./tests:/tests alpine chown -R $(id -u) /tests/scanAll.dtest.ts-snapshots",
         "update-snapshots": "pnpm -w build && pnpm run build-storybook && pnpm run docker:clear-snapshots && pnpm run docker:run-update-snapshots; pnpm run docker:fix-snapshot-ownership",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "update-packages": "npx npm-check-updates --groupBy major && pnpm install"
     },
     "devDependencies": {
         "@axe-core/playwright": "^4.11.1",
@@ -21,17 +22,17 @@
         "@sb1/indeks-css": "workspace:*",
         "@sb1/indeks-react": "workspace:*",
         "@sb1/indeks-web": "workspace:*",
-        "@storybook/addon-a11y": "^10.3.0",
-        "@storybook/addon-docs": "^10.3.0",
-        "@storybook/react-vite": "^10.3.0",
-        "@vitejs/plugin-react": "^6.0.0",
+        "@storybook/addon-a11y": "^10.3.3",
+        "@storybook/addon-docs": "^10.3.3",
+        "@storybook/react-vite": "^10.3.3",
+        "@vitejs/plugin-react": "^6.0.1",
         "eslint-plugin-react-refresh": "^0.5.2",
-        "eslint-plugin-storybook": "^10.3.1",
+        "eslint-plugin-storybook": "^10.3.3",
         "playwright": "^1.58.2",
         "react": "^19.2.4",
         "react-dom": "^19.2.4",
-        "storybook": "^10.3.0",
+        "storybook": "^10.3.3",
         "typescript": "~5.9.3",
-        "vite": "^8.0.0"
+        "vite": "^8.0.3"
     }
 }
