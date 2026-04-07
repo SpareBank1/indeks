@@ -100,8 +100,15 @@ export class IxField extends HTMLElement {
         const description = this.querySelector<HTMLElement>('[data-field="description"]');
         const error = this.querySelector<HTMLElement>('[data-field="error"]');
 
-        // Uten en native kontroll er det ingenting å koble — avslutt stille.
-        if (!control) return;
+        // Uten en native kontroll er det ingenting å koble.
+        if (!control) {
+            console.info('[ix-field] Fant ingen <input>, <select> eller <textarea>. ARIA-koblinger ble ikke satt opp.');
+            return;
+        }
+
+        if (control instanceof HTMLInputElement && control.type === 'number') {
+            console.warn('[ix-field] Unngå type="number" — bruk inputMode="numeric" i stedet.');
+        }
 
         // Gi input en stabil ID hvis den mangler en. ID-en er grunnlaget for
         // alle de øvrige koblingene (label[for], aria-describedby).

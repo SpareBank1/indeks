@@ -14,26 +14,24 @@ TextField kan brukes som React-komponent eller som HTML med `<ix-field>` web com
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
-```tsx
-import { TextField } from '@sb1/indeks-react';
-
+```tsx live
 <TextField
   label="Kontonummer"
   description="11 siffer uten mellomrom"
 />
 ```
 
-Dette gir deg et felt med label og hjelpetekst, ferdig koblet med `for`/`id` og `aria-describedby`.
+Prøv å endre label eller description direkte i editoren. Komponenten kobler `for`/`id` og `aria-describedby` automatisk.
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
-```html
+```jsx live
 <ix-field>
   <label>Kontonummer</label>
   <span data-field="description">11 siffer uten mellomrom</span>
-  <div class="ix-text-field">
-    <input class="ix-text-field__input" type="text" inputmode="numeric" name="accountNumber" />
+  <div className="ix-text-field">
+    <input className="ix-text-field__input" type="text" inputMode="numeric" name="accountNumber" />
   </div>
   <span data-field="error"></span>
 </ix-field>
@@ -73,7 +71,7 @@ Når valideringen feiler, vis en feilmelding som sier hva som er galt og hva bru
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
-```tsx
+```tsx live
 <TextField
   label="Kontonummer"
   description="11 siffer uten mellomrom"
@@ -82,17 +80,17 @@ Når valideringen feiler, vis en feilmelding som sier hva som er galt og hva bru
 />
 ```
 
-Komponenten setter `aria-invalid="true"` på input automatisk når `errorMessage` har innhold.
+Prøv å tømme `errorMessage` — `aria-invalid` fjernes automatisk.
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
-```html
+```jsx live
 <ix-field>
   <label>Kontonummer</label>
   <span data-field="description">11 siffer uten mellomrom</span>
-  <div class="ix-text-field">
-    <input class="ix-text-field__input" inputmode="numeric" />
+  <div className="ix-text-field">
+    <input className="ix-text-field__input" inputMode="numeric" />
   </div>
   <span data-field="error">Kontonummer må ha 11 siffer</span>
 </ix-field>
@@ -119,41 +117,43 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn:
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
-```tsx
-<TextField
-  label="Beløp i kroner"
-  prefix="kr"
-  inputProps={{ inputMode: 'numeric' }}
-/>
-
-<TextField
-  label="Rente"
-  suffix="%"
-  inputProps={{ inputMode: 'decimal' }}
-/>
+```tsx live
+<>
+  <TextField
+    label="Beløp i kroner"
+    prefix="kr"
+    inputProps={{ inputMode: 'numeric' }}
+  />
+  <TextField
+    label="Rente"
+    suffix="%"
+    inputProps={{ inputMode: 'decimal' }}
+  />
+</>
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
-```html
-<ix-field>
-  <label>Beløp i kroner</label>
-  <div class="ix-text-field">
-    <div class="ix-text-field__prefix">kr</div>
-    <input class="ix-text-field__input" inputmode="numeric" />
-  </div>
-  <span data-field="error"></span>
-</ix-field>
-
-<ix-field>
-  <label>Rente</label>
-  <div class="ix-text-field">
-    <input class="ix-text-field__input" inputmode="decimal" />
-    <div class="ix-text-field__suffix">%</div>
-  </div>
-  <span data-field="error"></span>
-</ix-field>
+```jsx live
+<>
+  <ix-field>
+    <label>Beløp i kroner</label>
+    <div className="ix-text-field">
+      <div className="ix-text-field__prefix">kr</div>
+      <input className="ix-text-field__input" inputMode="numeric" />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field>
+    <label>Rente</label>
+    <div className="ix-text-field">
+      <input className="ix-text-field__input" inputMode="decimal" />
+      <div className="ix-text-field__suffix">%</div>
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
 ```
 
 </TabItem>
@@ -168,39 +168,41 @@ Skjermlesere leser trolig ikke prefix og suffix. Sørg for at label inneholder s
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
-```tsx
-<TextField
-  label="Kontonummer"
-  disabled
-  inputProps={{ value: '1234 56 78903' }}
-/>
-
-<TextField
-  label="Kontonummer"
-  readOnly
-  inputProps={{ value: '1234 56 78903' }}
-/>
+```tsx live
+<>
+  <TextField
+    label="Kontonummer"
+    disabled
+    inputProps={{ value: '1234 56 78903' }}
+  />
+  <TextField
+    label="Kontonummer"
+    readOnly
+    inputProps={{ value: '1234 56 78903' }}
+  />
+</>
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
-```html
-<ix-field class="ix-field--disabled">
-  <label>Kontonummer</label>
-  <div class="ix-text-field">
-    <input class="ix-text-field__input" value="1234 56 78903" disabled />
-  </div>
-  <span data-field="error"></span>
-</ix-field>
-
-<ix-field class="ix-field--read-only">
-  <label>Kontonummer</label>
-  <div class="ix-text-field">
-    <input class="ix-text-field__input" value="1234 56 78903" readonly />
-  </div>
-  <span data-field="error"></span>
-</ix-field>
+```jsx live
+<>
+  <ix-field class="ix-field--disabled">
+    <label>Kontonummer</label>
+    <div className="ix-text-field">
+      <input className="ix-text-field__input" defaultValue="1234 56 78903" disabled />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field class="ix-field--read-only">
+    <label>Kontonummer</label>
+    <div className="ix-text-field">
+      <input className="ix-text-field__input" defaultValue="1234 56 78903" readOnly />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
 ```
 
 </TabItem>

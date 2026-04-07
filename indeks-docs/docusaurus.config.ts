@@ -48,6 +48,8 @@ const config: Config = {
         cssVersion: cssVersion,
     },
 
+    themes: ['@docusaurus/theme-live-codeblock'],
+
     presets: [
         [
             'classic',
@@ -137,6 +139,10 @@ const config: Config = {
                                 '@sb1/indeks-css': path.resolve(__dirname, '../indeks-css/index.css'),
                                 '@sb1/indeks-utils': path.resolve(__dirname, '../indeks-utils/index.css'),
                                 '@sb1/indeks-react': path.resolve(__dirname, '../indeks-react/lib/main.ts'),
+                                '@sb1/indeks-web': path.resolve(__dirname, '../indeks-web/index.ts'),
+                            },
+                            extensionAlias: {
+                                '.js': ['.ts', '.js'],
                             },
                         },
                     };

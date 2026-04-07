@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { type JSX, type ReactNode, useId } from 'react';
+import { Field } from '../field/Field';
 
 export type TextFieldProps = {
     label: string;
@@ -23,42 +24,12 @@ export function TextField(props: TextFieldProps): JSX.Element {
     const id = inputId ?? generatedId;
 
     return (
-        <InputWrapper inputId={id} label={label} className={className} description={description} errorMessage={errorMessage} disabled={disabled} readOnly={readOnly} {...restProps}>
+        <Field inputId={id} label={label} className={className} description={description} errorMessage={errorMessage} disabled={disabled} readOnly={readOnly} {...restProps}>
             <div className={clsx('ix-text-field')}>
                 {prefix && <div className="ix-text-field__prefix">{prefix}</div>}
-                <input className="ix-text-field__input" placeholder={placeholder} id={id} disabled={disabled} readOnly={readOnly} {...inputProps} />
+                <input className="ix-text-field__input" {...inputProps} placeholder={placeholder} id={id} disabled={disabled} readOnly={readOnly} />
                 {suffix && <div className="ix-text-field__suffix">{suffix}</div>}
             </div>
-        </InputWrapper>
+        </Field>
     );
 }
-
-export const InputWrapper = ({
-    className,
-    label,
-    children,
-    inputId,
-    description,
-    errorMessage,
-    disabled,
-    readOnly,
-    ...restProps
-}: {
-    className?: string;
-    label: string;
-    children: ReactNode;
-    inputId: string;
-    description?: string;
-    errorMessage?: string;
-    disabled?: boolean;
-    readOnly?: boolean;
-}): JSX.Element => {
-    return (
-        <div {...restProps} className={clsx('ix-field', { 'ix-field--disabled' : disabled, 'ix-field--read-only' : readOnly }, className)}>
-            <label htmlFor={inputId} className='ix-label'>{label}</label>
-            {description && <span data-field="description">{description}</span>}
-            {children}
-            <span data-field="error">{errorMessage}</span>
-        </div>
-    );
-};
