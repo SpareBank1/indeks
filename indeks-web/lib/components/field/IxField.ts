@@ -22,12 +22,16 @@
  * 2. Setter `aria-describedby` på input med IDer til description og
  *    error-elementet, slik at skjermlesere leser dem opp etter label og verdi.
  *
- * 3. Setter `role="alert"` og `aria-live="polite"` på error-elementet.
+ * 3. Setter `aria-live="polite"` på error-elementet.
  *    Error-elementet skal alltid ligge i DOM — tomt betyr ingen feil.
  *    Dette er et krav fra ARIA Live Regions: elementet må eksistere i DOM
  *    *før* innholdet settes inn for at skjermlesere skal fange opp endringen.
  *    Hadde vi injisert elementet dynamisk ville mange skjermlesere gått glipp
  *    av meldingen.
+ *
+ *    Vi bruker *ikke* `role="alert"` fordi det impliserer `aria-live="assertive"`
+ *    som avbryter brukeren. Feilmeldinger i skjema er viktige, men ikke så
+ *    kritiske at de bør avbryte — `polite` venter til skjermleseren er ferdig.
  *
  * 4. Bruker MutationObserver på error-elementet. Når innholdet endres:
  *    - Ikke-tomt → `aria-invalid="true"` på input (visuell og semantisk feil)
@@ -140,11 +144,9 @@ export class IxField extends HTMLElement {
                 error.id = `${control.id}-error`;
             }
 
-            // role="alert" + aria-live="polite" settes av komponenten, ikke av
-            // forfatteren. Det er en implementasjonsdetalj i koblingslaget —
-            // forfatteren skal kun forholde seg til at elementet er til stede
-            // og sette textContent når det er en feil.
-            error.setAttribute('role', 'alert');
+            // aria-live="polite" settes av komponenten, ikke av forfatteren.
+            // "polite" venter til skjermleseren er ferdig med å lese — i motsetning
+            // til role="alert" som impliserer "assertive" og avbryter brukeren.
             error.setAttribute('aria-live', 'polite');
             describedBy.push(error.id);
 

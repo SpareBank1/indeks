@@ -62,6 +62,10 @@
 :where(ix-field, .ix-field) [data-field="description"] {
     font-size: var(--ix-font-size-sm);
     color: var(--ix-color-foreground-main-subtle);
+
+    &:empty {
+        display: none;
+    }
 }
 
 :where(.ix-text-field__input::placeholder) {

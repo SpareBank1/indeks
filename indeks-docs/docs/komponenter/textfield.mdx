@@ -272,7 +272,7 @@ Visuell info i prefix/suffix — "kr", "%" — blir ikke nødvendigvis lest opp 
 Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 - **`for`/`id`**: Label kobles til input. Genererer en unik ID hvis input mangler en.
 - **`aria-describedby`**: Input peker til description og error-elementet. Rekkefølgen er meningsfull — hjelpetekst leses før feilmelding.
-- **`role="alert"` + `aria-live="polite"`**: Settes på error-elementet slik at skjermlesere annonserer nye feilmeldinger.
+- **`aria-live="polite"`**: Settes på error-elementet slik at skjermlesere annonserer nye feilmeldinger uten å avbryte brukeren.
 - **`aria-invalid`**: Synkroniseres automatisk med innholdet i error-elementet via MutationObserver.
 
 ### Hva du selv må sørge for
