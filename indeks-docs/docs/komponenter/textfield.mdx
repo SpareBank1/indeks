@@ -311,27 +311,64 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 
 ### `<ix-field>` web component
 
-`<ix-field>` har ingen egne attributter. Alt settes på de native HTML-elementene inni:
+`<ix-field>` har ingen egne attributter — alt settes på native HTML-elementer inni. Strukturen under viser hvor hver del plasseres:
 
-| Element | Identifiseres av | Formål |
-|---------|------------------|--------|
-| `<label>` | Første `<label>` | Labeltekst — kobles automatisk til input |
-| `<input>` / `<select>` / `<textarea>` | Første native form-kontroll | Selve inputfeltet |
-| `[data-field="description"]` | `data-field`-attributt | Hjelpetekst |
-| `[data-field="error"]` | `data-field`-attributt | Feilmelding — skal alltid ligge i DOM |
+```html
+<ix-field>                                        ← wrapper, setter opp ARIA automatisk
+  <label class="ix-label">Beløp i kroner</label>  ← kobles til input via for/id
+  <span data-field="description">                  ← hjelpetekst, kobles via aria-describedby
+    Maks 500 000 kroner
+  </span>
+  <div class="ix-text-field">                      ← container for input + prefix/suffix
+    <div class="ix-text-field__prefix">kr</div>    ← valgfri, speiles i label
+    <input class="ix-text-field__input"            ← selve inputfeltet
+      inputmode="numeric" />
+    <div class="ix-text-field__suffix">,00</div>   ← valgfri, speiles i label
+  </div>
+  <span data-field="error">                        ← alltid i DOM, tomt = ingen feil
+    Beløp må være mellom 1 og 500 000
+  </span>
+</ix-field>
+```
 
-### CSS-klasser
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `<ix-field>` | Ja | Wrapper. Kobler ARIA mellom label, input, description og error automatisk |
+| `<label class="ix-label">` | Ja | Labeltekst. Kobles til input via `for`/`id` — ID genereres om den mangler |
+| `<span data-field="description">` | Nei | Hjelpetekst. Kobles til input via `aria-describedby` |
+| `<div class="ix-text-field">` | Ja | Container for input med eventuell prefix/suffix |
+| `<div class="ix-text-field__prefix">` | Nei | Visuell prefix — husk å speile innholdet i label |
+| `<input class="ix-text-field__input">` | Ja | Inputfeltet. Alle native attributter (`type`, `inputmode`, `name`, `disabled`, `readonly`) settes her |
+| `<div class="ix-text-field__suffix">` | Nei | Visuell suffix — husk å speile innholdet i label |
+| `<span data-field="error">` | Ja | Feilmelding. Alltid i DOM — tomt betyr ingen feil. Trigger `aria-invalid` automatisk |
 
-| Klasse | Formål |
-|--------|--------|
-| `.ix-field` | Ytterste wrapper — flexbox column med gap |
-| `.ix-field--disabled` | Deaktivert tilstand (opacity) |
-| `.ix-field--read-only` | Skrivebeskyttet tilstand |
-| `.ix-label` | Label-styling (font-weight, font-size) |
-| `.ix-text-field` | Container for input + prefix/suffix |
-| `.ix-text-field__input` | Selve inputfeltet |
-| `.ix-text-field__prefix` | Prefix-container |
-| `.ix-text-field__suffix` | Suffix-container |
+### Tilstandsklasser
+
+Settes på `<ix-field>` for å endre visuell tilstand:
+
+| Klasse | Beskrivelse |
+|--------|-------------|
+| `.ix-field--disabled` | Deaktivert — sett også `disabled` på input |
+| `.ix-field--read-only` | Skrivebeskyttet — sett også `readonly` på input |
+
+```jsx live
+<>
+  <ix-field class="ix-field--disabled">
+    <label className="ix-label">Kontonummer</label>
+    <div className="ix-text-field">
+      <input className="ix-text-field__input" defaultValue="1234 56 78903" disabled />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field class="ix-field--read-only">
+    <label className="ix-label">Referanse</label>
+    <div className="ix-text-field">
+      <input className="ix-text-field__input" defaultValue="ORD-2026-0042" readOnly />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
+```
 
 </TabItem>
 </Tabs>
