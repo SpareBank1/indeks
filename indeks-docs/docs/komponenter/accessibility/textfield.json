@@ -31,265 +31,56 @@
     }
   ],
   "handled": [
-    {
-      "id": "1.3.1",
-      "level": "A",
-      "title": "Informasjon og relasjoner",
-      "notes": "Label kobles til input via for/id. Hjelpetekst og feilmelding kobles via aria-describedby."
-    },
-    {
-      "id": "1.3.2",
-      "level": "A",
-      "title": "Meningsfull rekkefølge",
-      "notes": "Label, input, hjelpetekst og feilmelding følger naturlig rekkefølge i DOM."
-    },
-    {
-      "id": "1.3.3",
-      "level": "A",
-      "title": "Sensoriske egenskaper",
-      "notes": "Feiltilstand bruker ikon, tekst og aria-invalid — ikke farge alene."
-    },
-    {
-      "id": "1.4.1",
-      "level": "A",
-      "title": "Bruk av farge",
-      "notes": "Feiltilstand kommuniseres med farge, ikon og tekstlig feilmelding."
-    },
-    {
-      "id": "1.4.4",
-      "level": "AA",
-      "title": "Endre tekststørrelse",
-      "notes": "Relative enheter — skalerer korrekt ved 200 % zoom."
-    },
-    {
-      "id": "1.4.10",
-      "level": "AA",
-      "title": "Omflyt",
-      "notes": "Reflower korrekt ned til 320px viewport."
-    },
-    {
-      "id": "1.4.11",
-      "level": "AA",
-      "title": "Kontrast for ikke-tekstlig innhold",
-      "notes": "Ramme og fokusindikator oppfyller 3:1 kontrastkrav."
-    },
-    {
-      "id": "1.4.12",
-      "level": "AA",
-      "title": "Tekstavstand",
-      "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold."
-    },
-    {
-      "id": "1.4.13",
-      "level": "AA",
-      "title": "Innhold ved hover eller fokus",
-      "notes": "Hjelpetekst er persistent — forsvinner ikke ved fokusflytt."
-    },
-    {
-      "id": "2.1.1",
-      "level": "A",
-      "title": "Tastatur",
-      "notes": "Fullt opererbart med Tab og standard input-oppførsel."
-    },
-    {
-      "id": "2.1.2",
-      "level": "A",
-      "title": "Ingen tastaturfelle",
-      "notes": "Fokus kan navigeres ut med Tab og Shift+Tab."
-    },
-    {
-      "id": "2.4.3",
-      "level": "A",
-      "title": "Fokusrekkefølge",
-      "notes": "Følger naturlig tab-rekkefølge i DOM."
-    },
-    {
-      "id": "2.4.7",
-      "level": "AA",
-      "title": "Synlig fokus",
-      "notes": "Tydelig fokusindikator med god kontrast."
-    },
-    {
-      "id": "2.5.8",
-      "level": "AA",
-      "title": "Målstørrelse",
-      "notes": "Inputfeltet oppfyller minimum 24x24px klikkflate."
-    },
-    {
-      "id": "3.2.1",
-      "level": "A",
-      "title": "Ved fokus",
-      "notes": "Fokus trigger ingen kontekstendring."
-    },
-    {
-      "id": "3.2.2",
-      "level": "A",
-      "title": "Ved inndata",
-      "notes": "Input trigger ingen automatisk kontekstendring."
-    },
-    {
-      "id": "4.1.2",
-      "level": "A",
-      "title": "Navn, rolle, verdi",
-      "notes": "Native input med implisitt rolle. Tilgjengelig navn fra label. Tilstander eksponeres korrekt."
-    }
+    { "id": "1.3.1", "notes": "Label kobles til input via for/id. Hjelpetekst og feilmelding kobles via aria-describedby." },
+    { "id": "1.3.2", "notes": "Label, input, hjelpetekst og feilmelding følger naturlig rekkefølge i DOM." },
+    { "id": "1.3.3", "notes": "Feiltilstand bruker ikon, tekst og aria-invalid — ikke farge alene." },
+    { "id": "1.4.1", "notes": "Feiltilstand kommuniseres med farge, ikon og tekstlig feilmelding." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
+    { "id": "1.4.11", "notes": "Ramme og fokusindikator oppfyller 3:1 kontrastkrav." },
+    { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
+    { "id": "1.4.13", "notes": "Hjelpetekst er persistent — forsvinner ikke ved fokusflytt." },
+    { "id": "2.1.1", "notes": "Fullt opererbart med Tab og standard input-oppførsel." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator med god kontrast." },
+    { "id": "2.5.8", "notes": "Inputfeltet oppfyller minimum 24x24px klikkflate." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
+    { "id": "3.2.2", "notes": "Input trigger ingen automatisk kontekstendring." },
+    { "id": "4.1.2", "notes": "Native input med implisitt rolle. Tilgjengelig navn fra label. Tilstander eksponeres korrekt." }
   ],
   "notRelevant": [
-    {
-      "id": "1.2.1",
-      "title": "Bare lyd og bare video (forhåndsinnspilt)",
-      "reason": "Ingen medieelementer."
-    },
-    {
-      "id": "1.2.2",
-      "title": "Teksting (forhåndsinnspilt)",
-      "reason": "Ingen medieelementer."
-    },
-    {
-      "id": "1.2.3",
-      "title": "Synstolking eller mediealternativ (forhåndsinnspilt)",
-      "reason": "Ingen medieelementer."
-    },
-    {
-      "id": "1.2.4",
-      "title": "Teksting (direkte)",
-      "reason": "Ingen medieelementer."
-    },
-    {
-      "id": "1.2.5",
-      "title": "Synstolking (forhåndsinnspilt)",
-      "reason": "Ingen medieelementer."
-    },
-    {
-      "id": "1.3.4",
-      "title": "Visningsretning",
-      "reason": "Ingen fast orientering — tilpasser seg visningsretning."
-    },
-    {
-      "id": "1.4.2",
-      "title": "Styring av lyd",
-      "reason": "Ingen lydelementer."
-    },
-    {
-      "id": "1.4.5",
-      "title": "Bilder av tekst",
-      "reason": "Ingen bilder av tekst."
-    },
-    {
-      "id": "2.1.4",
-      "title": "Tastatursnarveier",
-      "reason": "Ingen egendefinerte tastatursnarveier."
-    },
-    {
-      "id": "2.2.1",
-      "title": "Justerbar hastighet",
-      "reason": "Ingen tidsbegrensede funksjoner."
-    },
-    {
-      "id": "2.2.2",
-      "title": "Pause, stopp, skjul",
-      "reason": "Ingen animasjon eller automatisk oppdatering."
-    },
-    {
-      "id": "2.3.1",
-      "title": "Terskelverdi på tre glimt",
-      "reason": "Ingen blinkende eller glimtende innhold."
-    },
-    {
-      "id": "2.4.1",
-      "title": "Hoppe over blokker",
-      "reason": "Sidekrav — gjelder ikke enkeltkomponenter."
-    },
-    {
-      "id": "2.4.2",
-      "title": "Sidetitler",
-      "reason": "Sidekrav — gjelder ikke enkeltkomponenter."
-    },
-    {
-      "id": "2.4.4",
-      "title": "Formål med lenke (i kontekst)",
-      "reason": "Ingen lenker i komponenten."
-    },
-    {
-      "id": "2.4.5",
-      "title": "Flere måter",
-      "reason": "Sidekrav — gjelder ikke enkeltkomponenter."
-    },
-    {
-      "id": "2.4.11",
-      "title": "Fokus ikke skjult (minimum)",
-      "reason": "Ingen sticky/overlappende elementer som kan skjule fokus."
-    },
-    {
-      "id": "2.5.1",
-      "title": "Pekerbevegelser",
-      "reason": "Ingen drag-and-drop eller sveipebevegelser."
-    },
-    {
-      "id": "2.5.2",
-      "title": "Avbryt peker",
-      "reason": "Native input-element — nettleseren håndterer pekerinteraksjon."
-    },
-    {
-      "id": "2.5.4",
-      "title": "Bevegelsesaktivering",
-      "reason": "Ingen bevegelsesbasert interaksjon."
-    },
-    {
-      "id": "2.5.6",
-      "title": "Samtidige inndatamekanismer",
-      "reason": "Ingen begrensning av input-type — native HTML-input."
-    },
-    {
-      "id": "2.5.7",
-      "title": "Drabevegelser",
-      "reason": "Ingen drag-and-drop."
-    },
-    {
-      "id": "3.1.1",
-      "title": "Språk på siden",
-      "reason": "Sidekrav — gjelder ikke enkeltkomponenter."
-    },
-    {
-      "id": "3.1.2",
-      "title": "Språk på deler av innhold",
-      "reason": "Komponenten setter ikke lang-attributt — innhold er på sidespråket."
-    },
-    {
-      "id": "3.2.3",
-      "title": "Konsistent navigasjon",
-      "reason": "Sidekrav — gjelder ikke enkeltkomponenter."
-    },
-    {
-      "id": "3.2.4",
-      "title": "Konsistent identifikasjon",
-      "reason": "Systemkrav — gjelder konsistens på tvers av sider, ikke enkeltkomponenter."
-    },
-    {
-      "id": "3.2.6",
-      "title": "Konsistent hjelp",
-      "reason": "Sidekrav — gjelder plassering av hjelpefunksjon på tvers av sider."
-    },
-    {
-      "id": "3.3.4",
-      "title": "Forhindring av feil (juridisk, økonomisk, data)",
-      "reason": "Flytkrav — gjelder bekreftelse/reversering av transaksjoner, ikke enkeltfelter."
-    },
-    {
-      "id": "3.3.7",
-      "title": "Redundant oppføring",
-      "reason": "Flytkrav — gjelder at brukeren ikke skal gjenta informasjon i en prosess."
-    },
-    {
-      "id": "3.3.8",
-      "title": "Tilgjengelig autentisering (minimum)",
-      "reason": "Ikke en autentiseringskomponent."
-    },
-    {
-      "id": "4.1.3",
-      "title": "Statusmeldinger",
-      "reason": "Feilmeldinger håndteres via role=\"alert\" og aria-live (dekket av 3.3.1). Ingen øvrige statusmeldinger."
-    }
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.4" },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native input-element — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6", "reason": "Ingen begrensning av input-type — native HTML-input." },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Feilmeldinger håndteres via role=\"alert\" og aria-live (dekket av 3.3.1). Ingen øvrige statusmeldinger." }
   ],
   "keyboard": [
     { "key": "Tab", "action": "Flytter fokus til inputfeltet" },

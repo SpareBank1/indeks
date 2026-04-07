@@ -1,4 +1,5 @@
 import React from 'react';
+import { wcagCriteria } from '../data/wcag';
 
 // ── Datatyper ─────────────────────────────────────────────────────────────
 
@@ -16,15 +17,12 @@ interface Issue {
 
 interface HandledCriterion {
     id: string;
-    level: 'A' | 'AA' | 'AAA';
-    title: string;
     notes: string;
 }
 
 interface NotRelevantCriterion {
     id: string;
-    title: string;
-    reason: string;
+    reason?: string;
 }
 
 interface KeyboardEntry {
@@ -152,15 +150,18 @@ export default function AccessibilityTable({ data }: AccessibilityTableProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.handled.map((c) => (
-                                <tr key={c.id}>
-                                    <td>
-                                        <strong>{c.id}</strong> {c.title}
-                                    </td>
-                                    <td>{c.level}</td>
-                                    <td>{c.notes}</td>
-                                </tr>
-                            ))}
+                            {data.handled.map((c) => {
+                                const criterion = wcagCriteria[c.id];
+                                return (
+                                    <tr key={c.id}>
+                                        <td>
+                                            <strong>{c.id}</strong> {criterion?.title ?? c.id}
+                                        </td>
+                                        <td>{criterion?.level ?? '?'}</td>
+                                        <td>{c.notes}</td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </details>
@@ -181,14 +182,17 @@ export default function AccessibilityTable({ data }: AccessibilityTableProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.notRelevant.map((c) => (
-                                <tr key={c.id}>
-                                    <td>
-                                        <strong>{c.id}</strong> {c.title}
-                                    </td>
-                                    <td>{c.reason}</td>
-                                </tr>
-                            ))}
+                            {data.notRelevant.map((c) => {
+                                const criterion = wcagCriteria[c.id];
+                                return (
+                                    <tr key={c.id}>
+                                        <td>
+                                            <strong>{c.id}</strong> {criterion?.title ?? c.id}
+                                        </td>
+                                        <td>{c.reason ?? criterion?.defaultReason ?? ''}</td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </details>
