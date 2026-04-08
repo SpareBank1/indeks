@@ -19,18 +19,13 @@
     },
     {
       "summary": "Speil prefix/suffix i labelteksten",
-      "details": "Visuell kontekst i prefix/suffix (\"kr\", \"%\") blir ikke nødvendigvis lest opp av skjermlesere. Labelen må inneholde samme informasjon: \"Beløp i kroner\", ikke bare \"Beløp\".",
-      "wcag": ["1.1.1", "2.5.3"]
+      "details": "Prefix og suffix er skjult fra skjermlesere med aria-hidden. Labelen må inneholde samme informasjon når konteksten ikke er åpenbar. Et felt med \"%\" som suffix bør ha label som \"Rente i prosent\", ikke bare \"Rente\".",
+      "wcag": ["2.4.6", "2.5.3"]
     }
   ],
-  "issues": [
-    {
-      "summary": "Disabled prefix/suffix har for lav kontrast i dark mode",
-      "details": "Kontrasten på prefix/suffix-tekst i disabled-tilstand er 2.64:1 i dark mode — under kravet på 4.5:1. Disabled-elementer er unntatt fra WCAG 1.4.3, men vi bør vurdere om vi likevel ønsker tilstrekkelig kontrast.",
-      "wcag": ["1.4.3"]
-    }
-  ],
+  "issues": [],
   "handled": [
+    { "id": "1.1.1", "notes": "Prefix og suffix settes aria-hidden=\"true\" — rent visuelle elementer som ikke leses av skjermlesere." },
     { "id": "1.3.1", "notes": "Label kobles til input via for/id. Hjelpetekst og feilmelding kobles via aria-describedby." },
     { "id": "1.3.2", "notes": "Label, input, hjelpetekst og feilmelding følger naturlig rekkefølge i DOM." },
     { "id": "1.3.3", "notes": "Feiltilstand bruker ikon, tekst og aria-invalid — ikke farge alene." },
@@ -90,6 +85,7 @@
     "Ved fokus: \"[label], tekstfelt\"",
     "Med hjelpetekst: \"[label], tekstfelt, [hjelpetekst]\"",
     "Ved feil: \"[label], ugyldig, tekstfelt, [feilmelding]\"",
-    "Med skjult label: \"[label], tekstfelt\" — labelen leses opp selv om den ikke er synlig"
+    "Med skjult label: \"[label], tekstfelt\" — labelen leses opp selv om den ikke er synlig",
+    "Med prefix/suffix: prefix og suffix leses ikke opp — konteksten skal ligge i labelen"
   ]
 }

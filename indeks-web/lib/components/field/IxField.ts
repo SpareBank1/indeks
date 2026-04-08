@@ -170,6 +170,12 @@ export class IxField extends HTMLElement {
         if (describedBy.length > 0) {
             control.setAttribute('aria-describedby', describedBy.join(' '));
         }
+
+        // Prefix og suffix er rent visuelle — skjul dem fra skjermlesere.
+        // Konteksten skal ligge i labelteksten.
+        this.querySelectorAll('.ix-text-field__prefix, .ix-text-field__suffix').forEach((el) => {
+            el.setAttribute('aria-hidden', 'true');
+        });
     }
 
     // Holder aria-invalid på input synkronisert med om error-elementet har
