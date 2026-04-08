@@ -1,0 +1,112 @@
+---
+title: ADR-DS-011 Dokumentasjon
+description: Docusaurus 3 som midlertidig dokumentasjonsplattform. Migreres når CMS-avklaringer med merkevare er på plass.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-011: Dokumentasjon (Docusaurus, midlertidig)
+
+<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+
+## Beslutning
+
+**<Term>Docusaurus</Term> 3** brukes som midlertidig dokumentasjonsplattform med fokus på portabelt innhold.
+
+### Docusaurus 3
+
+Markdown-basert, minimal konfigurasjon, raskt å komme i gang. Hostet på Azure Static Web Apps (design.sparebank1.no). Norsk som standard. <Term>MDX</Term> for interaktive eksempler med live React-komponenter. Vedlikeholdes av Team Designsystem.
+
+### Struktur
+
+komponenter/, tokens/, kom-i-gang/, bidra/
+
+### Migreringsstrategi
+
+Markdown-innhold er portabelt og kan mappes til CMS-felter. Custom MDX-komponenter (som `AdrStatusLogg`, `AdrDeltakere`) må reimplementeres på ny plattform, men logikken er enkel og gjenbrukbar. Informasjonsarkitektur-erfaringer er plattformuavhengige.
+
+Migrering initieres når CMS-avklaringer med merkevare og redaktørene er på plass.
+
+### Drivere for beslutningen
+
+- Raskt behov for dokumentasjon — kan ikke vente på CMS-avklaringer
+- Lavt risiko — Docusaurus er enkelt å bytte ut når riktig løsning er klar
+- Portabelt markdown-innhold — investering i innhold og IA er ikke tapt (custom komponenter må reimplementeres, men er enkle)
+- Mulighet for å teste og justere informasjonsarkitektur med ekte brukere
+
+## Bakgrunn
+
+Vi trenger dokumentasjon nå for å komme i gang, teste informasjonsarkitektur og få
+feedback fra konsumenter. På sikt ønsker vi en egen løsning med CMS-integrasjon og
+tilpasset design, men det krever avklaringer med merkevare og redaktørene — og
+utviklingstid vi ikke har nå.
+
+Valget her er bevisst midlertidig. Målet er å komme i gang raskt uten å binde oss
+til en løsning vi ikke kan bytte ut.
+
+## Problemstilling
+
+Hvilken dokumentasjonsplattform lar oss komme raskt i gang og teste informasjonsarkitektur,
+uten å låse oss til en løsning vi ikke kan bytte ut?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Alle som leser eller bidrar til dokumentasjonen. Ikke-tekniske bidragsytere møter
+git-workflow i stedet for <Term>CMS</Term>.
+
+### Ulemper
+
+- Midlertidig — vi vil ikke investere i dype Docusaurus-tilpasninger
+- Ingen CMS — ikke-tekniske bidragsytere må gjennom git-workflow
+- React-låst (Docusaurus er React-basert)
+- Noe dobbeltarbeid når vi migrerer til permanent løsning
+- Dokumentasjonen dekker bare siste versjon av designsystemet — eldre versjoner er ikke tilgjengelige
+
+### Tiltak mot ulemper
+
+- Begrenser Docusaurus-spesifikke tilpasninger
+- Fokus på portabelt markdown-innhold fra dag én
+
+## Forkastede alternativer
+
+### Vente på egen løsning
+
+Ikke publisere dokumentasjon før en permanent, tilpasset løsning er klar.
+
+**Forkastet fordi:** For lang tid uten dokumentasjon. Konsumenter trenger veiledning,
+og vi trenger feedback for å forbedre designsystemet.
+
+### VitePress
+
+Et statisk nettstedsrammeverk bygget på Vite og Vue, primært for dokumentasjon.
+
+**Forkastet fordi:** Vue-basert, noe som gjør det vanskelig å vise live React-komponenter
+i dokumentasjonen. Innholdet er portabelt, men den tekniske tilnærmingen passer
+dårligere med en React-basert komponentleveranse.
+
+### Storybook Docs
+
+Docusaurus-alternativ der Storybook er dokumentasjonsplattformen.
+
+**Forkastet fordi:** Storybook er primært en komponentworkshop, ikke et dokumentasjonsverktøy.
+Begrenset til komponentdokumentasjon — tokens, veiledere og konsepter passer dårlig inn.
+
+### Notion / Confluence
+
+Veletablerte CMS-verktøy som mange i SpareBank 1 allerede bruker.
+
+**Forkastet fordi:** Ikke integrert med kode — eksempler og token-verdier må oppdateres
+manuelt. Vanskelig å holde synkronisert med kodebasen.
+
+### Bygge eget fra start
+
+Lage en tilpasset dokumentasjonssite med CMS-integrasjon og designet av merkevare.
+
+**Forkastet fordi:** Krever CMS-avklaringer og utviklingstid vi ikke har nå. Riktig valg
+på sikt, men feil prioritering akkurat nå.
+
+<AdrDeltakere utarbeidetAv="Team Designsystem" />

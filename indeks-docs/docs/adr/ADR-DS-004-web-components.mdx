@@ -1,0 +1,112 @@
+---
+title: ADR-DS-004 Web Components
+description: Web Components brukes der ren HTML + CSS ikke er nok. React-pakken eksponerer samme funksjonalitet med idiomatisk React API.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-004: Web Components
+
+<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-02-24' }]} />
+
+## Beslutning
+
+Komponentlogikk implementeres som **<Term>Web Components</Term>** i `indeks-web` og eksponeres til React-konsumenter via `indeks-react`. <Term>Shadow DOM</Term> unngås som hovedregel.
+
+Eksempel: `ix-field` er ikke et input-felt — det er et omgivende lag som knytter label, input og feilmelding sammen med korrekte ARIA-relasjoner. Alt dette kan også gjøres med ren HTML; Web Component-en gjør det bare enklere og feilsikkert.
+
+**Shadow DOM:** Vi unngår Shadow DOM som hovedregel. Shadow DOM isolerer markup fra resten av dokumentet, noe som gjør tilgjengelighetsarbeid vanskeligere — skjermlesere og ARIA-relasjoner må fungere på tvers av shadow boundaries, og konsumenter mister muligheten til å style med CSS-variabler. Unntaket er komponenter som viser visuelt innhold basert på universelt utformet data i markup — for eksempel et chart-element som rendres visuelt i Shadow DOM mens tabelldata forblir tilgjengelig i vanlig DOM.
+
+**Arkitektur:** `indeks-web` (Web Components) → `indeks-react` (wrapper).
+React-pakken eksponerer komponentene med idiomatisk React API. Det meste av funksjonaliteten ligger i Web Component-en — React-laget håndterer React-spesifikke ting som event-mapping og prop-konvertering, slik at konsumenter i prinsippet kan gjøre det samme med ren HTML.
+Hvordan `indeks-react` bygges og distribueres er beskrevet i [ADR-DS-005](./ADR-DS-005-react-bibliotek).
+
+### Drivere for beslutningen
+
+- Rammeverk-uavhengighet — webstandard fungerer i React, Vue, Angular, Astro og ren HTML
+- Én kilde til sannhet for komponentlogikk
+- Fremtidssikring uavhengig av rammeverk-trender
+- Nettleser-native uten ekstra runtime
+
+## Bakgrunn
+
+De fleste komponentene i Indeks er ren HTML-markup med CSS-styling — React wrapper bare
+dette, og man kan like gjerne bruke ren HTML. Men noen komponenter trenger mer: logikk,
+tilstandshåndtering eller sammensatt atferd som knytter flere elementer sammen.
+
+SpareBank 1 har team som bruker ulike teknologier — ikke bare React. En løsning som
+låser kompleks komponentlogikk til React er ikke fremtidssikret.
+
+## Problemstilling
+
+Hvordan implementerer vi komponentlogikk slik at den er tilgjengelig for alle team,
+uavhengig av hvilke JavaScript-rammeverk de bruker?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+- **Team Designsystem** — implementerer Web Components
+- **React-konsumenter** — bruker React-wrapperen, merker lite
+- **Andre team** — får tilgang til komponentlogikk uten React-avhengighet
+- **Designere** — ingen endring
+
+### Ulemper
+
+- <Term>SSR</Term>-støtte for Web Components er uavklart — `customElements.define()` er en nettleser-API som ikke finnes i Node.js, og konsekvensene for Next.js og lignende rammeverk er ikke fullt utforsket ennå
+- Utviklere må lære Web Components-standarden (<Term>Custom Elements API</Term>)
+- React-laget håndterer React-spesifikke ting som event-mapping og prop-konvertering
+- Konsumenter er selv ansvarlige for å laste `indeks-web` én gang — dette forhindrer kollisjoner ved registrering av custom elements
+
+### Tiltak mot ulemper
+
+- Etablere klare mønstre for Web Components-utvikling tidlig
+- SSR-støtte må kartlegges per komponent — dette er et åpent spørsmål som vil bli adressert når aktuelle komponenter nærmer seg produksjon
+
+## Forkastede alternativer
+
+### Kun React-komponenter
+
+Fortsette med React-only komponenter for all logikk.
+
+**Forkastet fordi:** Begrenser gjenbruk til React-prosjekter. Vi skal støtte team som bruker andre teknologier enn React, og disse teamene ville vært utestengt fra de mest komplekse komponentene.
+
+### Lit
+
+Et lett bibliotek fra Google for å skrive Web Components med deklarativ template-syntaks
+og reaktivitetssystem. Brukes av blant andre Adobe (Spectrum), SAP og ING.
+
+**Forkastet fordi:** Vi ønsker å holde `indeks-web` fri for eksterne bibliotek- og rammeverk-avhengigheter. Native Custom Elements er håndterbart for komponentene vi faktisk trenger å skrive. Vi ser også til [designsystemet.no](https://designsystemet.no) som gjør det samme med native Web Components — det gir oss mulighet til å lære av og bygge videre på deres erfaringer.
+
+### Stencil.js (Ionic)
+
+Et kompilatorbasert rammeverk for Web Components med TypeScript-first API, JSX-syntaks og innebygd støtte for å generere React- og Vue-wrappers automatisk.
+
+**Forkastet fordi:** Introduserer et kompilatorlag og en egen komponentmodell som gjør koden avhengig av Stencil — native Custom Elements er håndterbart uten dette. Automatisk wrapper-generering er en fordel vi ikke trenger siden vi uansett skriver React-wrapperen manuelt.
+
+### FAST (Microsoft)
+
+Et bibliotek fra Microsoft for å bygge Web Components, brukt som fundament for Fluent UI Web Components.
+
+**Forkastet fordi:** Samme begrunnelse som Lit — vi ønsker å holde `indeks-web` fri for eksterne avhengigheter. FAST introduserer i tillegg en egen komponentmodell og attributt-system som binder komponentene tettere til biblioteket enn native Custom Elements.
+
+### Multi-framework med delt TypeScript-kjerne
+
+Dele forretningslogikk i et rammeverk-agnostisk TypeScript-bibliotek, og skrive
+rammeverk-spesifikke wrappers for React, Vue og Angular.
+
+**Forkastet fordi:** Kompleks build-pipeline med mange wrappers å vedlikeholde.
+Fortsatt rammeverk-spesifikk kode i alle wrappers. Web Components løser det samme
+med én implementasjon.
+
+### Mitosis (Builder.io)
+
+Et verktøy som kompilerer én komponentdefinisjon til React, Vue, Angular og Web Components.
+
+**Forkastet fordi:** Umodent verktøy med begrenset adopsjon. Abstraksjonslaget over
+komponentdefinisjonene gjør feilsøking vanskeligere, og output-koden er ikke idiomatisk
+i noe av målrammeverket.
+
+<AdrDeltakere utarbeidetAv="Team Designsystem" />

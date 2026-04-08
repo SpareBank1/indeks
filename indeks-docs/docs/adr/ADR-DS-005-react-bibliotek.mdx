@@ -1,0 +1,102 @@
+---
+title: ADR-DS-005 React-bibliotek
+description: React-biblioteket bygges med Vite i library mode, distribueres som ESM-only, og krever React 19.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-005: React-bibliotek (Vite, ESM, React 19)
+
+<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+
+## Beslutning
+
+React-biblioteket bygges med **<Term>Vite</Term>** i library mode, distribueres som **<Term>ESM</Term>-only**, og krever **React 19** som <Term>peer dependency</Term>.
+
+### Vite
+
+Library mode med `vite-plugin-dts` for TypeScript declarations. React defineres som external (peer dependency) — ikke bundlet inn i biblioteket. God integrasjon med <Term>Storybook</Term>.
+
+### ESM-only
+
+`"type": "module"` i package.json. Ingen CJS-build. ES2020 target — valgt for å støtte nettlesere tilbake til iOS 15.4. Optimal <Term>tree-shaking</Term> slik at konsumenter bare betaler for det de bruker.
+
+### React 19
+
+Peer dependency `"react": "^19.0.0"` — støtter React 19.x, men ikke 20. React 18 støttes ikke. Designsystemet krever uansett en del fornying hos konsumenter, og React-oppgradering forventes å skje i samme prosess.
+
+### Drivere for beslutningen
+
+- Rask build og hot-reload for god utvikleropplevelse
+- ESM er moderne JavaScript-standard og støtter optimal tree-shaking
+- Konsumenter forventes å oppgradere React i samme prosess som de tar i bruk designsystemet
+
+## Bakgrunn
+
+Komponentbiblioteket trenger en bundler, et distribusjonsformat og en strategi for
+React-versjonsstøtte. ESM (ES Modules) er nå native i alle moderne nettlesere og
+Node.js-versjoner. React 19 ble sluppet i desember 2024.
+
+## Problemstilling
+
+Hvilken bundler, distribusjonsformat og React-versjonsstrategi gir best utvikleropplevelse,
+optimal tree-shaking og langsiktig holdbarhet for komponentbiblioteket?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Konsumenter med eldre CJS-prosjekter må ta i bruk bundler. Konsumenter på React 18
+må oppgradere.
+
+### Ulemper
+
+- Inkompatibel med eldre CJS-prosjekter som ikke bruker bundler
+- Konsumenter på React 18 må oppgradere for å bruke designsystemet
+- Vite er en abstraksjon over Rollup — feilsøking av edge cases i build kan kreve kunnskap om begge (ingen konkret mitigering, akseptert risiko)
+
+### Tiltak mot ulemper
+
+- De fleste moderne bundlere (webpack, Vite, Parcel) håndterer ESM uten konfigurasjon
+- React 19 har vært tilgjengelig siden desember 2024 — oppgradering er rimelig å forvente
+
+## Forkastede alternativer
+
+### Rollup direkte
+
+Vite bruker Rollup under panseret — bruke Rollup direkte gir full kontroll uten
+et abstraksjonslag.
+
+**Forkastet fordi:** Krever mer manuell konfigurasjon enn Vite, og vi mister Vites
+dev server og Storybook-integrasjon som brukes aktivt i utviklingsflyten.
+
+### tsup / esbuild
+
+Raskere bundlere enn Rollup/Vite, særlig for TypeScript-prosjekter.
+
+**Forkastet fordi:** Dårligere Storybook-integrasjon. Storybook er en sentral del av
+arbeidsflyten, og god integrasjon veier tyngre enn marginalt raskere build.
+
+### Webpack
+
+Det mest utbredte build-verktøyet historisk sett.
+
+**Forkastet fordi:** Kompleks konfigurasjon og tregere enn Vite. Library mode er ikke
+Webpacks primære styrke.
+
+### Dual CJS/ESM (begge formater)
+
+Publisere både CommonJS og ES Module-versjoner for å støtte alle konsumenter.
+
+**Forkastet fordi:** Dobbel vedlikeholdsbyrde og økt pakke-størrelse. CJS er på vei ut
+av Node.js-økosystemet, og å vedlikeholde det forsinker avviklingen.
+
+### Støtte React 18 og 19
+
+Beholde støtte for React 18 med peer dependency `"react": "^18.0.0 || ^19.0.0"`.
+
+**Forkastet fordi:** Begrenser oss til features som finnes i begge React-versjonene og krever testing mot begge. Konsumenter forventes å oppgradere React som del av overgangen til Indeks.
+
+<AdrDeltakere utarbeidetAv="Team Designsystem" />
