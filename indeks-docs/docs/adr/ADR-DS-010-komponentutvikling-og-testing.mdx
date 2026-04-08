@@ -1,0 +1,107 @@
+---
+title: ADR-DS-010 Komponentutvikling og testing
+description: Storybook 9 for komponentutvikling. Docker-basert Playwright for reproduserbare visuelle tester og accessibility.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-010: Komponentutvikling og testing
+
+<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+
+## Beslutning
+
+**<Term>Storybook</Term> 9** for isolert komponentutvikling og **<Term>Docker</Term>-basert <Term>Playwright</Term>** for reproduserbare visuelle tester og accessibility-sjekk.
+
+### Storybook 9
+
+Hver komponent har en `.stories.tsx`-fil ved siden av implementasjonen. Port 6006 i utvikling. Addons: a11y og docs. Custom preview med theme switching og device context. Publiseres til design.sparebank1.no/storybook.
+
+### Playwright i Docker
+
+Base image `mcr.microsoft.com/playwright:v1.55.0`. Kjører mot Storybook på port 9009 — en egen port slik at Storybook kan kjøre på port 6006 i utvikling samtidig som man oppdaterer skjermbildetester. Docker Compose orkestrerer services.
+
+Accessibility-testing via <Term>axe-core</Term> kjøres eksplisitt mot <Term>WCAG</Term> 2.2 A og AA (`wcag2a`, `wcag2aa`, `wcag22aa`). Violations blokkerer merge. Unntak kan legges til per komponent, men må dokumenteres i komponentens kode.
+
+Visuelle tester vurderes som del av PR-review. For nye komponenter godkjenner designer implementasjonen før baseline-screenshots settes. Ved feil lastes Playwright-rapporten ned som CI-artefakt for å se hvilke skjermbilder som avviker.
+
+
+Kommandoer: `npm run test:playwright` for tester, `npm run test:playwright:update-screenshots` for å oppdatere baseline-screenshots.
+
+### Drivere for beslutningen
+
+- Isolert utvikling — komponenter utvikles og demonstreres uten full app-kontekst
+- Reproduserbare screenshots uavhengig av utviklerens OS
+- Accessibility-testing (WCAG 2.2 A/AA) integrert i PR-flyten — violations blokkerer merge
+- Industri-standard verktøy som utviklere kjenner fra før
+
+## Bakgrunn
+
+UI-komponenter trenger et isolert utviklingsmiljø der man kan se og interagere med
+komponenter uten å kjøre hele appen. I tillegg trenger vi visuelle regresjonstester
+som fanger uønskede endringer i utseende.
+
+Problemet med visuelle tester er at screenshots varierer mellom operativsystemer —
+fonter rendres ulikt på macOS og Linux, og anti-aliasing varierer. Dette betyr at
+en test som passerer lokalt kan feile i CI, og omvendt.
+
+## Problemstilling
+
+Hvordan sikrer vi reproduserbare visuelle regresjonstester på tvers av operativsystemer,
+og et godt isolert utviklingsmiljø for UI-komponenter?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Utviklere som jobber med React-komponenter bruker Storybook daglig og trenger Docker
+for visuelle tester.
+
+### Ulemper
+
+- Docker kreves for visuelle tester — ikke alle har det installert
+- Tregere enn å kjøre Playwright native, grunnet Docker-overhead
+- Store Docker-image-størrelser
+- Storybook-versjoner må holdes oppdatert
+
+### Tiltak mot ulemper
+
+- Docker Compose gjør det enkelt å kjøre tester med én kommando
+- Storybook-oppgraderinger inngår i løpende vedlikehold
+
+## Forkastede alternativer
+
+### Chromatic / Percy
+
+Skybaserte tjenester for visuell regresjonstesting som tar seg av screenshot-infrastrukturen.
+
+**Forkastet fordi:**
+- Ekstern tjeneste med kostnad per screenshot
+- Mindre kontroll over testmiljøet og data
+- Avhengighet av tredjepart for en kritisk del av CI-flyten
+
+### Native Playwright (uten Docker)
+
+Kjøre Playwright direkte på utviklerens maskin og i CI uten containerisering.
+
+**Forkastet fordi:** Screenshots er ikke reproduserbare på tvers av macOS, Windows og Linux.
+En baseline tatt på macOS vil feile i CI som kjører på Linux, og omvendt.
+
+### Cypress
+
+Et E2E-testverktøy med god utvikleropplevelse og interaktiv testrunner.
+
+**Forkastet fordi:** Dårligere ytelse og mer begrenset multi-browser-støtte enn Playwright.
+Cypress er primært rettet mot E2E-tester, ikke komponenttesting og screenshot-sammenligning.
+
+### Ladle / Histoire
+
+Lettere alternativer til Storybook med raskere oppstartstid.
+
+**Forkastet fordi:** Mindre modne og med færre addons. a11y-integrasjon og Playwright-kobling
+er veldokumentert for Storybook, men ikke disse alternativene. Risikoen for å velge et
+verktøy som ikke er bredt adoptert er høy.
+
+<AdrDeltakere utarbeidetAv="Team Designsystem" />

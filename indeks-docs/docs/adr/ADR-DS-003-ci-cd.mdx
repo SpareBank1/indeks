@@ -1,0 +1,106 @@
+---
+title: ADR-DS-003 CI/CD med GitHub Actions
+description: GitHub Actions for all CI/CD med spesialiserte workflows gruppert etter prefiks — pr-, release-, deploy- og security-.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-003: CI/CD med GitHub Actions
+
+<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+
+## Beslutning
+
+All CI/CD kjøres med **GitHub Actions**, organisert i spesialiserte workflows gruppert etter prefiks: `pr-`, `release-`, `deploy-` og `security-`.
+
+### PR-workflows
+
+Kjøres på pull requests mot main.
+
+- **`pr-build-and-preview.yml`** — Bygger alle pakker, kjører lint og tester, bygger <Term>Storybook</Term>, og deployer forhåndsvisning til Azure Static Web Apps. Inkluderer lisenssjekk og sikkerhetsaudit.
+- **`pr-playwright.yml`** — Kjører <Term>Playwright</Term>-tester i <Term>Docker</Term> mot Storybook. Trigges bare ved endringer i komponent- og stilpakker.
+- **`pr-release-gate.yml`** — Sjekker om det finnes en åpen release-PR. Satt opp som påkrevd status-sjekk i branch protection rules, slik at merge blokkeres automatisk til release-PR-en er håndtert.
+- **`pr-cleanup.yml`** — Sletter Azure-forhåndsvisningen når en PR lukkes.
+
+### Release-workflow
+
+- **`release-tag-and-publish.yml`** — Trigger: push til main. Bruker `dotansimha/changesets-action` med to utfall: hvis det finnes uforbrukte changesets opprettes en versjonerings-PR; hvis en versjonerings-PR nettopp er merget publiseres pakkene til npm. Pakkene publiseres med <Term>npm provenance</Term> — en kryptografisk kobling mellom npm-pakken og GitHub Actions-kjøringen som produserte den, slik at konsumenter kan verifisere at pakken faktisk ble bygget fra kildekoden i repoet.
+
+### Deploy-workflow
+
+- **`deploy-docs.yml`** — Trigger: push til main (ved endringer i docs, storybook, komponenter). Bygger docs, Storybook og eksempel-app, og deployer til Azure Static Web Apps (design.sparebank1.no). Kan kjøres manuelt med valgfri commit-SHA.
+
+### Security-workflows
+
+- **`security-codeql.yml`** — CodeQL-skanning av JavaScript på PR, push til main og ukentlig schedule.
+- **`security-zizmor.yml`** — Skanner workflow-filer med [Zizmor](https://github.com/zizmorcore/zizmor), et statisk analyseverktøy som finner sikkerhetsproblemer i GitHub Actions-konfigurasjoner (f.eks. script injection, overprivilegerte tokens). Kjøres ved endringer i `.github/workflows/`. Funn blokkerer merge via branch protection rules.
+- **`security-npm-deprecate.yml`** — Manuell workflow for å deprecate eller unpublish npm-pakker ved sikkerhetshendelser.
+
+### Drivere for beslutningen
+
+- Tett integrasjon med GitHub — ingen separate tokens, bruker GITHUB_TOKEN
+- God marketplace med ferdige actions for pnpm, Azure og GitHub Pages
+- Innebygd secrets management via GitHub Secrets
+- Alle på teamet kjenner GitHub Actions fra andre prosjekter
+
+## Bakgrunn
+
+Prosjektet trenger automatisert bygging, testing, publisering og deployment. Kilden
+er GitHub, og vi ønsker sterk integrasjon mellom kode og CI/CD — ikke et separat
+verktøy som må autentiseres og vedlikeholdes ved siden av.
+
+## Problemstilling
+
+Hvilken CI/CD-løsning gir best integrasjon med GitHub-basert kildekode, uten å innføre
+ekstra verktøy og autentiseringskompleksitet?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Alle utviklere som pusher kode trigger workflows. Teamet vedlikeholder workflow-filer.
+
+### Ulemper
+
+- Vendor lock-in til GitHub — vanskelig å flytte til annen platform uten å skrive om workflows
+- YAML-konfigurasjon kan bli kompleks og er vanskelig å teste lokalt
+
+### Tiltak mot ulemper
+
+- Workflows holdes enkle og modulære med klare ansvarsgrenser per prefiks
+- Kompleks logikk flyttes til scripts som kan kjøres lokalt
+
+## Forkastede alternativer
+
+### CircleCI
+
+En populær CI/CD-plattform med god ytelse og parallelliseringsevne.
+
+**Forkastet fordi:** Ekstra integrasjon og kostnad. GitHub Actions gir tilsvarende
+funksjonalitet uten ekstra verktøy og med bedre GitHub-integrasjon.
+
+### GitLab CI
+
+CI/CD integrert i GitLab, med sterk integrasjon mellom kode og pipelines.
+
+**Forkastet fordi:** Kildekoden er på GitHub, og å flytte til GitLab bare for CI gir
+ekstra kompleksitet. Fordelene GitLab CI gir er de samme som GitHub Actions allerede
+tilbyr på GitHub-siden.
+
+### Jenkins
+
+Et selvhostet, svært fleksibelt CI/CD-system med lang historikk.
+
+**Forkastet fordi:** Krever egen infrastruktur å vedlikeholde. For et lite team er
+vedlikeholdsoverheaden ikke verdt fleksibiliteten.
+
+### Azure DevOps
+
+Microsofts ALM-platform med Pipelines for CI/CD.
+
+**Forkastet fordi:** Ekstra verktøy utenfor GitHub. SpareBank 1 bruker Azure for hosting,
+men kodeplatformen er GitHub — å splitte CI/CD til Azure DevOps gir unødvendig kompleksitet.
+
+<AdrDeltakere utarbeidetAv="Team Designsystem" />

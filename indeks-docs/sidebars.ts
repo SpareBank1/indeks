@@ -74,6 +74,33 @@ const sidebars: SidebarsConfig = {
             collapsed: true,
             items: ['komponenter/typografi'],
         },
+        {
+            type: 'category',
+            label: 'Arkitekturbeslutninger (ADR)',
+            collapsed: true,
+            items: [
+                'adr/retningslinjer',
+                'ordbok',
+                {
+                    type: 'category',
+                    label: 'ADR-er',
+                    collapsed: false,
+                    items: [
+                        'adr/ADR-DS-001-monorepo-og-byggverktoy',
+                        'adr/ADR-DS-002-versjonering-og-publisering',
+                        'adr/ADR-DS-003-ci-cd',
+                        'adr/ADR-DS-004-web-components',
+                        'adr/ADR-DS-005-react-bibliotek',
+                        'adr/ADR-DS-006-tokens-og-farger',
+                        'adr/ADR-DS-007-fargesystem',
+                        'adr/ADR-DS-008-spacing-system',
+                        'adr/ADR-DS-009-css-only-styling',
+                        'adr/ADR-DS-010-komponentutvikling-og-testing',
+                        'adr/ADR-DS-011-dokumentasjon',
+                    ],
+                },
+            ],
+        },
     ],
 };
 

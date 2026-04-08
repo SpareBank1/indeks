@@ -1,0 +1,96 @@
+---
+title: ADR-DS-007 Fargesystem
+description: Farger genereres med OKLCH for perseptuelt uniforme skalaer. HSL forkastet fordi opplevd lysstyrke varierer mellom fargetoner.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-007: Fargesystem
+
+<AdrStatusLogg
+    historikk={[
+        { status: 'Utkast', dato: '2026-01-23' },
+    ]}
+/>
+
+## Beslutning
+
+Farger genereres med **<Term>OKLCH</Term>** — et perseptuelt uniformt fargerom der lik lightness-verdi gir lik opplevd lysstyrke på tvers av fargetoner. Dette gjør det mulig å generere hele fargeskalaer fra én nøkkelfarge og få forutsigbare resultater.
+
+### Skala-struktur
+
+Fargeskalaer er nummerert fra 0 til 950 (f.eks. blue-0 til blue-950). Fordi OKLCH er perseptuelt uniform gir dette designerne et forutsigbart system å jobbe med — man kan utlede hvilke kombinasjoner som fungerer visuelt og kontrastmessig uten å verifisere hvert par manuelt.
+
+Fargegenerering skjer ved build via scripts i `indeks-tokens/scripts/build-colors/`. Primitive fargeverdier defineres manuelt i JSON og er input til genereringen.
+
+### Semantisk mapping og dark mode
+
+Primitive fargeverdier mappes til semantiske tokens som brukes i kode. De semantiske tokenene er organisert etter bruksområde — `foreground` (tekst), `background`, `fill` (flater og knapper), `surface`, `border` — med varianter som `main`, `subtle` og `inverse`.
+
+Eksempel på mapping:
+
+| Semantisk token | Light mode | Dark mode |
+|---|---|---|
+| `color-fill-main-default` | `brand-550` | `brand-450` |
+| `color-foreground-main-default` | `gray-900` | `gray-0` |
+
+Dark mode fungerer ved at de semantiske tokenene peker på andre trinn i samme skala — ingen nye farger defineres, bare andre trinn. Fordi OKLCH-skalaen er perseptuelt uniform fungerer de samme trinnvalgene for alle fargetoner, og <Term>theming</Term> for nye konsumenter krever kun at primitive farger byttes ut.
+
+### Merkevarefarger
+
+Eksisterende merkevarefarger er ikke eksakt representert i OKLCH-skalaene — fargene justeres noe for å passe inn i den perseptuelt uniforme strukturen. Tilpasning mot merkevare er et kontinuerlig arbeid som pågår i samarbeid med merkevareteamet.
+
+### Drivere for beslutningen
+
+- Theming — konsumenter som Kredittbanken og Spleis kan definere egne nøkkelfarger og få komplette skalaer generert automatisk
+- Forutsigbare fargeskalaer gjør fargearbeid enklere for designere — man slipper å kalibrere hver fargetone manuelt
+- Kontrastgarantier for universell utforming kan utledes fra skala-trinnet alene
+- Konsistente skalaer på tvers av alle fargetoner
+
+## Bakgrunn
+
+Indeks skal støtte theming — Kredittbanken og Spleis har behov for å kunne tilpasse farger til sin merkevare. For at theming skal være praktisk, må det holde å definere et fåtall nøkkelfarger som systemet så bruker til å generere fullstendige fargeskalaer automatisk. Tilnærmingen er inspirert av ok-css (Kredittbankens CSS-rammeverk) som tilrettelegger for nettopp dette, og ligner på måten [designsystemet.no](https://designsystemet.no) håndterer farger.
+
+Dette stiller krav til fargerommet: genererte skalaer må fungere på tvers av ulike fargetoner uten manuell justering for hver kombinasjon. Med <Term>HSL</Term> er dette ikke tilfellet — blå og gul med identiske S/L-verdier oppleves som ulike lysheter, fordi HSL ikke er perseptuelt uniform. Det betyr at en skala generert fra én farge ikke nødvendigvis fungerer like godt for en annen.
+
+## Problemstilling
+
+Hvilket fargerom gir oss fargeskalaer som kan genereres fra en nøkkelfarge og fungere konsistent på tvers av fargetoner — uten manuell kalibrering per farge?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Designere som jobber med farger i Figma. Frontend-utviklere som bruker fargetokens i CSS.
+
+### Ulemper
+
+- OKLCH gir ikke eksakt match med eksisterende merkevarefarger — fargene blir litt justert
+- Noen eldre nettlesere støtter ikke OKLCH nativt — PostCSS genererer fallback-verdier
+
+### Tiltak mot ulemper
+
+- Fargetilpasning mot merkevare er et kontinuerlig arbeid
+- PostCSS-kompilering sikrer at fallback-verdier er tilgjengelige for eldre nettlesere
+
+## Forkastede alternativer
+
+### HSL
+
+HSL er et utbredt fargerom og allerede godt kjent blant webutviklere.
+
+**Forkastet fordi:** HSL er ikke perseptuelt uniform — blå og gul med samme S/L-verdier oppleves
+som ulike lysheter. OKLCH løser dette eksplisitt og gir mer pålitelige kontrastgarantier.
+
+### sRGB / hex-verdier direkte
+
+Definere farger direkte som hex-koder uten et strukturert fargerom.
+
+**Forkastet fordi:** Gir ingen systematisk sammenheng mellom skala-trinn. Kontraster må verifiseres manuelt for hvert par.
+
+<AdrDeltakere
+    utarbeidetAv="Team Designsystem"
+    involvert={['Kredittbanken', 'designsystemet.no']}
+/>

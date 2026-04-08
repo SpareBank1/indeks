@@ -1,0 +1,112 @@
+---
+title: ADR-DS-002 Versjonering og publisering
+description: CSS, Web Components og React har alltid identisk versjonsnummer. Changesets for versjonering. Dual publishing til CDN (anbefalt) og npm.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-002: Versjonering og publisering
+
+<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+
+## Beslutning
+
+`indeks-css`, `indeks-web` og `indeks-react` har alltid identisk versjonsnummer og bumpes alltid sammen. Endringer dokumenteres med **<Term>Changesets</Term>**. Pakker publiseres til både **<Term>CDN</Term>** (anbefalt) og **npm**.
+
+### Versjonering
+
+`indeks-css`, `indeks-web` og `indeks-react` har alltid identisk versjonsnummer — en endring i én bumper alle tre. `indeks-tokens` og `indeks-utils` versjoneres uavhengig. Changesets er konfigurert slik at en endring i `indeks-tokens` eller `indeks-utils` automatisk utløser en patch-bump i `indeks-css`, som igjen bumper `indeks-web` og `indeks-react`.
+
+`indeks-web` er pakken med Web Components (rammeverk-uavhengig komponentlogikk) — se [ADR-DS-004](./ADR-DS-004-web-components) for mer om arkitekturen.
+
+### Changesets
+
+Erstattet Lerna + Conventional Commits. `pnpm changeset` dokumenterer endringer i en fil uavhengig av commit-meldinger. Ingen krav til commit-format.
+
+### Distribusjon
+
+**CDN (anbefalt):** `cdn.sparebank1.no/indeks/css/{versjon}/index.css` — versjonerte URLer kan caches "for alltid" i nettleseren. CDN-bygget publiserer `indeks-css`, `indeks-tokens`, `indeks-utils` og `indeks-web`. `indeks-css` henter automatisk inn tokens og utils, slik at konsumenter bare trenger én `<link>`-tag. CDN-bygget er et eget build-target der PostCSS-plugin erstatter interne npm-imports med absolutte CDN-URLer, slik at CSS-filen er selvforsynt uten bundler.
+
+**npm (alternativ):** `@sb1/indeks-css`, `@sb1/indeks-web` og `@sb1/indeks-react` for bundler-baserte apps. Avhengigheter håndteres automatisk via `workspace:*`.
+
+### Drivere for beslutningen
+
+- Garantert kompatibilitet mellom CSS og React — konsumenter slipper å teste kombinasjoner
+- Optimal CDN-caching med versjonerte URLer
+- Lavere terskel for bidragsytere uten krav om commit-format
+- Fleksibilitet for team med ulik teknisk infrastruktur
+
+## Bakgrunn
+
+`indeks-web` og `indeks-react` avhenger av CSS-klasser fra `indeks-css` — versjoner ute av sync gir feil
+styling. Konsumenter trenger garantert kompatibilitet uten å måtte teste kombinasjoner.
+
+I tillegg må CSS kunne konsumeres på to måter: via bundler (npm) og direkte via `<link>`-tag
+(CDN). CDN-distribusjon krever versjonerte URLer for å muliggjøre evig caching.
+
+Vi brukte tidligere Lerna med Conventional Commits, men brukte mye tid på å rette
+commit-meldinger og terskelen for å bidra var høy. Verktøyet var i tillegg utdatert.
+
+## Problemstilling
+
+Hvordan sikrer vi garantert kompatibilitet mellom CSS og React-pakker, støtter både CDN
+og npm-distribusjon, og holder terskelen for bidrag lav?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Alle konsumenter velger mellom CDN og npm. Alle bidragsytere bruker `pnpm changeset`
+i stedet for Conventional Commits.
+
+### Ulemper
+
+- Små CSS-endringer bumper React-versjon og omvendt, selv uten funksjonell endring
+- Ekstra steg (`pnpm changeset`) i utviklingsflyten
+- To build-outputs å vedlikeholde (npm + CDN)
+- CDN-brukere må manuelt oppdatere versjonsnummer i `<link>`-tag
+
+### Tiltak mot ulemper
+
+- CI blokkerer merge hvis det allerede finnes en åpen release-PR — sikrer at ikke to versjonsoppdateringer havner i køen samtidig
+- CDN-versjoner publiseres automatisk ved release
+
+## Forkastede alternativer
+
+### Alle pakker samme versjon (som @sb1/ffe)
+
+Tokens, CSS og React bumpes alltid til samme versjon, som i SpareBank 1s eksisterende
+designsystem FFE.
+
+**Forkastet fordi:** `indeks-tokens` og `indeks-utils` har uavhengige versjoner nettopp for å unngå dette — en token-endring skal ikke tvinge CSS, Web Components og React til ny versjon. Å låse alle fire til samme versjon fjerner den fordelen og tvinger konsumenter til å ugyldiggjøre all CDN-cache ved selv små token-justeringer.
+
+### Helt uavhengige versjoner
+
+Alle pakker versjoneres uavhengig uten noen form for synkronisering.
+
+**Forkastet fordi:** Vanskelig for konsumenter å vite hvilke kombinasjoner av CSS og React
+som fungerer sammen. Øker supportbyrden.
+
+### Lerna + Conventional Commits
+
+Det opprinnelige verktøyet vi brukte.
+
+**Forkastet fordi:** Utdatert verktøy, høy terskel grunnet krav om spesifikk commit-format,
+og vi brukte faktisk tid på å fikse commit-meldinger i stedet for å lage produktet.
+
+### semantic-release
+
+Automatisk versjonering basert på commit-meldinger.
+
+**Forkastet fordi:** Krever fortsatt Conventional Commits — løser ikke terskelen for bidrag.
+
+### Kun npm eller kun CDN
+
+Publisere bare til én distribusjonskjøre i stedet for begge.
+
+**Forkastet fordi:** Team med ulik infrastruktur trenger begge. Kun CDN fungerer ikke for
+bundler-baserte apper som trenger <Term>tree-shaking</Term>. Kun npm mister CDN-caching-fordelene.
+
+<AdrDeltakere utarbeidetAv="Team Designsystem" />
