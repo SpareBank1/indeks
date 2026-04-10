@@ -1,0 +1,91 @@
+{
+  "component": "TextField",
+  "lastReviewed": "2026-04-07",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv beskrivende labeltekst",
+      "details": "Labelen skal forklare hva som skal fylles inn — ikke handlingen. \"E-postadresse\" er bedre enn \"Skriv inn e-post\". Alle felter må ha en label, selv om den er visuelt skjult med .ix-sr-only.",
+      "wcag": ["2.4.6", "3.3.2"]
+    },
+    {
+      "summary": "Skriv gode feilmeldinger",
+      "details": "Feilmeldingen må si hva som er galt og hva brukeren skal gjøre. \"Kontonummer må ha 11 siffer\" — ikke \"Ugyldig verdi\". Komponenten viser og annonserer meldingen, men du skriver innholdet.",
+      "wcag": ["3.3.1", "3.3.3"]
+    },
+    {
+      "summary": "Sett riktig autocomplete, type og inputMode",
+      "details": "Felter som ber om personlig informasjon må ha riktig autocomplete-verdi. Bruk type=\"email\" for e-post, inputMode=\"numeric\" for tall. Unngå type=\"number\" — bruk inputMode=\"numeric\" i stedet.",
+      "wcag": ["1.3.5"]
+    },
+    {
+      "summary": "Speil prefix/suffix i labelteksten",
+      "details": "Prefix og suffix er skjult fra skjermlesere med aria-hidden. Labelen må inneholde samme informasjon når konteksten ikke er åpenbar. Et felt med \"%\" som suffix bør ha label som \"Rente i prosent\", ikke bare \"Rente\".",
+      "wcag": ["2.4.6", "2.5.3"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.1.1", "notes": "Prefix og suffix settes aria-hidden=\"true\" — rent visuelle elementer som ikke leses av skjermlesere." },
+    { "id": "1.3.1", "notes": "Label kobles til input via for/id. Hjelpetekst og feilmelding kobles via aria-describedby." },
+    { "id": "1.3.2", "notes": "Label, input, hjelpetekst og feilmelding følger naturlig rekkefølge i DOM." },
+    { "id": "1.3.3", "notes": "Feiltilstand bruker ikon, tekst og aria-invalid — ikke farge alene." },
+    { "id": "1.4.1", "notes": "Feiltilstand kommuniseres med farge, ikon og tekstlig feilmelding." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
+    { "id": "1.4.11", "notes": "Ramme og fokusindikator oppfyller 3:1 kontrastkrav." },
+    { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
+    { "id": "1.4.13", "notes": "Hjelpetekst er persistent — forsvinner ikke ved fokusflytt." },
+    { "id": "2.1.1", "notes": "Fullt opererbart med Tab og standard input-oppførsel." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator med god kontrast." },
+    { "id": "2.5.8", "notes": "Inputfeltet oppfyller minimum 24x24px klikkflate." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
+    { "id": "3.2.2", "notes": "Input trigger ingen automatisk kontekstendring." },
+    { "id": "4.1.2", "notes": "Native input med implisitt rolle. Tilgjengelig navn fra label. Tilstander eksponeres korrekt." }
+  ],
+  "notRelevant": [
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.4" },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native input-element — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6", "reason": "Ingen begrensning av input-type — native HTML-input." },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Feilmeldinger håndteres via role=\"alert\" og aria-live (dekket av 3.3.1). Ingen øvrige statusmeldinger." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til inputfeltet" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" }
+  ],
+  "screenReader": [
+    "Ved fokus: \"[label], tekstfelt\"",
+    "Med hjelpetekst: \"[label], tekstfelt, [hjelpetekst]\"",
+    "Ved feil: \"[label], ugyldig, tekstfelt, [feilmelding]\"",
+    "Med skjult label: \"[label], tekstfelt\" — labelen leses opp selv om den ikke er synlig",
+    "Med prefix/suffix: prefix og suffix leses ikke opp — konteksten skal ligge i labelen"
+  ]
+}

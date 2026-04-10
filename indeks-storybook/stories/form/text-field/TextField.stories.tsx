@@ -30,7 +30,7 @@ export const Description: Story = {
 };
 
 export const Invalid: Story = {
-  args: { inputProps: { 'aria-invalid': true }, errorMessage: 'Dette er en feilmelding' },
+  args: { errorMessage: 'Dette er en feilmelding' },
   render: (args) => {
     return <TextField {...args} />;
   },
@@ -62,13 +62,13 @@ export const HTML: Story = {
 
   },
   render: (args) => {
-    return <ix-field className="ix-field">
+    return <ix-field>
       <label className='ix-label'>Test</label>
-      <span className="ix-text-field__description" data-field="description">{args.description}</span>
-      <div className='ix-text-field'> 
-        <input className="ix-text-field__input" placeholder="Placeholder" {...args.inputProps} />
+      <span data-field="description">{args.description}</span>
+      <div className='ix-text-field'>
+        <input className="ix-text-field__input" placeholder="Placeholder" />
       </div>
-      <span className="ix-text-field__error-message" data-field="error">{args.errorMessage}</span>
+      <span data-field="error">{args.errorMessage}</span>
     </ix-field>;
   },
 };

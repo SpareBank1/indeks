@@ -22,12 +22,16 @@
  * 2. Setter `aria-describedby` på input med IDer til description og
  *    error-elementet, slik at skjermlesere leser dem opp etter label og verdi.
  *
- * 3. Setter `role="alert"` og `aria-live="polite"` på error-elementet.
+ * 3. Setter `aria-live="polite"` på error-elementet.
  *    Error-elementet skal alltid ligge i DOM — tomt betyr ingen feil.
  *    Dette er et krav fra ARIA Live Regions: elementet må eksistere i DOM
  *    *før* innholdet settes inn for at skjermlesere skal fange opp endringen.
  *    Hadde vi injisert elementet dynamisk ville mange skjermlesere gått glipp
  *    av meldingen.
+ *
+ *    Vi bruker *ikke* `role="alert"` fordi det impliserer `aria-live="assertive"`
+ *    som avbryter brukeren. Feilmeldinger i skjema er viktige, men ikke så
+ *    kritiske at de bør avbryte — `polite` venter til skjermleseren er ferdig.
  *
  * 4. Bruker MutationObserver på error-elementet. Når innholdet endres:
  *    - Ikke-tomt → `aria-invalid="true"` på input (visuell og semantisk feil)
@@ -100,8 +104,15 @@ export class IxField extends HTMLElement {
         const description = this.querySelector<HTMLElement>('[data-field="description"]');
         const error = this.querySelector<HTMLElement>('[data-field="error"]');
 
-        // Uten en native kontroll er det ingenting å koble — avslutt stille.
-        if (!control) return;
+        // Uten en native kontroll er det ingenting å koble.
+        if (!control) {
+            console.info('[ix-field] Fant ingen <input>, <select> eller <textarea>. ARIA-koblinger ble ikke satt opp.');
+            return;
+        }
+
+        if (control instanceof HTMLInputElement && control.type === 'number') {
+            console.warn('[ix-field] Unngå type="number" — bruk inputMode="numeric" i stedet.');
+        }
 
         // Gi input en stabil ID hvis den mangler en. ID-en er grunnlaget for
         // alle de øvrige koblingene (label[for], aria-describedby).
@@ -133,11 +144,9 @@ export class IxField extends HTMLElement {
                 error.id = `${control.id}-error`;
             }
 
-            // role="alert" + aria-live="polite" settes av komponenten, ikke av
-            // forfatteren. Det er en implementasjonsdetalj i koblingslaget —
-            // forfatteren skal kun forholde seg til at elementet er til stede
-            // og sette textContent når det er en feil.
-            error.setAttribute('role', 'alert');
+            // aria-live="polite" settes av komponenten, ikke av forfatteren.
+            // "polite" venter til skjermleseren er ferdig med å lese — i motsetning
+            // til role="alert" som impliserer "assertive" og avbryter brukeren.
             error.setAttribute('aria-live', 'polite');
             describedBy.push(error.id);
 
@@ -161,6 +170,12 @@ export class IxField extends HTMLElement {
         if (describedBy.length > 0) {
             control.setAttribute('aria-describedby', describedBy.join(' '));
         }
+
+        // Prefix og suffix er rent visuelle — skjul dem fra skjermlesere.
+        // Konteksten skal ligge i labelteksten.
+        this.querySelectorAll('.ix-text-field__prefix, .ix-text-field__suffix').forEach((el) => {
+            el.setAttribute('aria-hidden', 'true');
+        });
     }
 
     // Holder aria-invalid på input synkronisert med om error-elementet har

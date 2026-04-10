@@ -1,0 +1,380 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/textfield.json';
+
+# TextField
+
+TextField er et inputfelt for kortere tekst eller tall, som kontonummer, e-postadresse eller beløp.
+
+## Egnet til
+
+- Kortere tekstinput (én linje)
+- Input med klart forventet format
+
+## Uegnet til
+
+- Lengre fritekst. Bruk `TextArea` i stedet.
+- Komplekse eller sammensatte input (f.eks. dato med flere felt)
+- Valg fra forhåndsdefinerte alternativer. Bruk `select`, `radio` eller `checkbox`.
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField
+  label="Kontonummer"
+  description="11 siffer uten mellomrom"
+/>
+```
+
+Prøv å endre label eller description direkte i editoren. Komponenten kobler `for`/`id` og `aria-describedby` automatisk.
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Kontonummer</label>
+  <span data-field="description">11 siffer uten mellomrom</span>
+  <div className="ix-text-field">
+    <input className="ix-text-field__input" type="text" inputMode="numeric" name="accountNumber" />
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+`<ix-field>` setter opp alle ARIA-koblinger automatisk. Error-elementet skal alltid ligge i DOM. Tomt betyr ingen feil.
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+:::danger Unngå type="number"
+`type="number"` gir uforutsigbar oppførsel: stepper-knapper, scrollhjul endrer verdi, og nettlesere kan fjerne ledende nuller (kontonummer!). Bruk `inputMode="numeric"` i stedet. Det gir talltastatur på mobil uten disse problemene.
+:::
+
+### Med feilmelding
+
+Når valideringen feiler, vis en feilmelding som sier hva som er galt og hva brukeren skal gjøre:
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField
+  label="Kontonummer"
+  description="11 siffer uten mellomrom"
+  errorMessage="Kontonummer må ha 11 siffer"
+  inputProps={{ inputMode: 'numeric' }}
+/>
+```
+
+Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Kontonummer</label>
+  <span data-field="description">11 siffer uten mellomrom</span>
+  <div className="ix-text-field">
+    <input className="ix-text-field__input" inputMode="numeric" />
+  </div>
+  <span data-field="error">Kontonummer må ha 11 siffer</span>
+</ix-field>
+```
+
+`<ix-field>` setter `aria-invalid="true"` automatisk når error-elementet har innhold. Tøm innholdet for å fjerne feiltilstanden:
+
+```js
+const errorEl = document.querySelector('ix-field [data-field="error"]');
+errorEl.textContent = 'Kontonummer må ha 11 siffer';
+// → input får automatisk aria-invalid="true"
+
+errorEl.textContent = '';
+// → aria-invalid fjernes
+```
+
+</TabItem>
+</Tabs>
+
+### Med prefix og suffix
+
+Prefix og suffix gir ekstra kontekst om hva som skal fylles inn:
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextField
+    label="Beløp i kroner"
+    prefix="kr"
+    inputProps={{ inputMode: 'numeric' }}
+  />
+  <TextField
+    label="Rente"
+    suffix="%"
+    inputProps={{ inputMode: 'decimal' }}
+  />
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <ix-field>
+    <label>Beløp i kroner</label>
+    <div className="ix-text-field">
+      <div className="ix-text-field__prefix" aria-hidden="true">kr</div>
+      <input className="ix-text-field__input" inputMode="numeric" />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field>
+    <label>Rente i prosent</label>
+    <div className="ix-text-field">
+      <input className="ix-text-field__input" inputMode="decimal" />
+      <div className="ix-text-field__suffix" aria-hidden="true">%</div>
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+:::warning Prefix og suffix leses ikke opp av skjermlesere
+Prefix og suffix er skjult med aria-hidden. Når konteksten ikke er åpenbar fra labelen, må du speile innholdet der. "Rente i prosent", ikke bare "Rente" med "%" som suffix.
+:::
+
+### Deaktivert og skrivebeskyttet
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextField
+    label="Kontonummer"
+    disabled
+    inputProps={{ value: '1234 56 78903' }}
+  />
+  <TextField
+    label="Kontonummer"
+    readOnly
+    inputProps={{ value: '1234 56 78903' }}
+  />
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <ix-field class="ix-field--disabled">
+    <label>Kontonummer</label>
+    <div className="ix-text-field">
+      <input className="ix-text-field__input" defaultValue="1234 56 78903" disabled />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field class="ix-field--read-only">
+    <label>Kontonummer</label>
+    <div className="ix-text-field">
+      <input className="ix-text-field__input" defaultValue="1234 56 78903" readOnly />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+`disabled` gjør feltet helt inaktivt. Brukeren kan verken fokusere eller interagere med det. `readOnly` lar brukeren fokusere og kopiere verdien, men ikke endre den.
+
+## Retningslinjer
+
+### Tydelige labels gir forutsigbarhet
+
+Alle `TextField` skal ha en synlig og beskrivende label. Labelen skal forklare hva brukeren skal skrive inn, ikke hva de skal gjøre. "E-postadresse" er bedre enn "Skriv inn e-post".
+
+Når labelen beskriver selve dataen, kan brukeren raskt orientere seg uten å lese hele setninger. Dette er spesielt viktig i skjemaer med mange felter, der god struktur reduserer kognitiv belastning og risiko for feil.
+
+### Unngå bruk av placeholder
+
+Placeholder anbefales ikke til viktig informasjon. Når brukeren begynner å skrive, forsvinner teksten og veiledningen går tapt. Bruk `description` i stedet, som alltid er synlig.
+
+### Hjelpetekst gir støtte der det trengs
+
+Hjelpetekst brukes for å gi ekstra kontekst om krav til format eller innhold. Hold den kort, konkret og plassert nær feltet. God hjelpetekst kan redusere feil og behovet for feilmeldinger i etterkant.
+
+:::tip Gjør dette
+`description="11 siffer uten mellomrom"`
+:::
+
+:::warning Ikke dette
+`description="Vennligst fyll inn kontonummeret ditt i det formatet som er korrekt for din kontotype"`
+:::
+
+### Feilmeldinger skal hjelpe, ikke bare varsle
+
+Feilmeldingen skal forklare hva som er feil og hvordan det rettes. Generelle meldinger som "Ugyldig verdi" gir liten verdi. Klare og konkrete tilbakemeldinger gjør det enklere å komme videre.
+
+| Felt | God feilmelding | Dårlig feilmelding |
+|------|----------------|-------------------|
+| Kontonummer | "Kontonummer må ha 11 siffer" | "Ugyldig verdi" |
+| E-post | "Oppgi en gyldig e-postadresse, f.eks. ola@sparebank1.no" | "Feil format" |
+| Beløp | "Beløp må være mellom 1 og 500 000 kroner" | "Ugyldig beløp" |
+
+Komponenten har ingen innebygd validering. Feiltilstand styres utelukkende av innholdet i feilmeldingsfeltet. Sett `errorMessage` i React eller `textContent` på `[data-field="error"]` i HTML.
+
+| Ansvar | Hvem |
+|--------|------|
+| Vise feilmelding og sette `aria-invalid` | Komponenten |
+| Annonsere feilmelding til skjermleser | Komponenten |
+| Bestemme *når* validering skjer | Du |
+| Skrive *hva* feilmeldingen sier | Du |
+
+### Validering bør ikke forstyrre
+
+Valider når brukeren forlater feltet (blur) eller ved innsending, ikke mens de skriver. For tidlig validering kan oppleves som støy og avbryter flyten unødvendig.
+
+### Bredden på feltet påvirker forståelsen
+
+Feltets bredde bør tilpasses det brukeren forventes å skrive. Smale felt signaliserer korte verdier som postnummer, bredere felt signaliserer lengre input som navn eller adresse. Variasjon i bredde gjør skjemaet lettere å skanne. Lik bredde på alle felt kan gjøre det vanskeligere å orientere seg.
+
+### Prefix og suffix må ikke stå alene
+
+Prefix og suffix gir visuell kontekst, men leses ikke nødvendigvis opp av skjermlesere. Labelen må inneholde samme informasjon. Et felt med "kr" som prefix bør ha en label som "Beløp i kroner", ikke bare "Beløp".
+
+:::warning Unngå `type="number"`
+`type="number"` gir uforutsigbar oppførsel på tvers av nettlesere. Bruk `inputMode="numeric"` i stedet. Det gir talltastatur på mobil uten quirksene.
+:::
+
+## Universell utforming
+
+<AccessibilityTable data={a11yData} />
+
+### Hva komponenten gjør automatisk
+
+Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
+- **`for`/`id`**: Label kobles til input. Genererer en unik ID hvis input mangler en.
+- **`aria-describedby`**: Input peker til description og error-elementet. Rekkefølgen er meningsfull. Hjelpetekst leses før feilmelding.
+- **`aria-live="polite"`**: Settes på error-elementet slik at skjermlesere annonserer nye feilmeldinger uten å avbryte brukeren.
+- **`aria-invalid`**: Synkroniseres automatisk med innholdet i error-elementet via MutationObserver.
+
+### Hva du selv må sørge for
+
+:::warning Ditt ansvar
+- **Meningsfull labeltekst** — komponenten kobler label til input, men du må skrive god tekst
+- **Gode feilmeldinger** — komponenten viser dem og annonserer dem, men du skriver innholdet
+- **Riktig `autocomplete`** — sett `autocomplete="name"`, `autocomplete="email"` osv. på felter som ber om personlig informasjon (WCAG 1.3.5)
+- **Riktig `type` og `inputMode`** — `type="email"` for e-post, `inputMode="numeric"` for tall. Gir riktig tastatur på mobil og bedre validering.
+- **Prefix/suffix i label** — prefix og suffix er skjult fra skjermlesere. Når konteksten ikke er åpenbar, må labelen inneholde samme informasjon: "Rente i prosent", ikke bare "Rente"
+:::
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+### TextFieldProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `label` | `string` | Ja | | Synlig labeltekst for feltet |
+| `description` | `string` | Nei | | Hjelpetekst som vises under label. Kobles til input via `aria-describedby` |
+| `errorMessage` | `string` | Nei | | Feilmelding som vises under input. Trigger `aria-invalid` når den har innhold |
+| `prefix` | `ReactNode \| string` | Nei | | Vises foran inputfeltet. Skjult fra skjermlesere med aria-hidden. Husk å speile innholdet i `label` når konteksten ikke er åpenbar |
+| `suffix` | `ReactNode \| string` | Nei | | Vises etter inputfeltet. Skjult fra skjermlesere med aria-hidden. Husk å speile innholdet i `label` når konteksten ikke er åpenbar |
+| `placeholder` | `string` | Nei | | Placeholder-tekst. Bør ikke brukes som bærer av viktig informasjon |
+| `disabled` | `boolean` | Nei | `false` | Deaktiverer feltet helt. Ingen fokus eller interaksjon |
+| `readOnly` | `boolean` | Nei | `false` | Brukeren kan fokusere og kopiere, men ikke endre verdien |
+| `inputId` | `string` | Nei | Auto-generert | Eksplisitt ID for input-elementet. Brukes også for `label[for]` |
+| `inputProps` | `InputHTMLAttributes` | Nei | | Alle standard HTML input-attributter. Settes direkte på `<input>` |
+| `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+### `<ix-field>` web component
+
+`<ix-field>` har ingen egne attributter. Alt settes på native HTML-elementer inni. Strukturen under viser hvor hver del plasseres:
+
+```html
+<ix-field>                                        ← wrapper, setter opp ARIA automatisk
+  <label class="ix-label">Beløp i kroner</label>  ← kobles til input via for/id
+  <span data-field="description">                  ← hjelpetekst, kobles via aria-describedby
+    Maks 500 000 kroner
+  </span>
+  <div class="ix-text-field">                      ← container for input + prefix/suffix
+    <div class="ix-text-field__prefix" aria-hidden="true">kr</div>    ← valgfri, speiles i label
+    <input class="ix-text-field__input"            ← selve inputfeltet
+      inputmode="numeric" />
+    <div class="ix-text-field__suffix" aria-hidden="true">,00</div>   ← valgfri, speiles i label
+  </div>
+  <span data-field="error">                        ← alltid i DOM, tomt = ingen feil
+    Beløp må være mellom 1 og 500 000
+  </span>
+</ix-field>
+```
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `<ix-field>` | Ja | Wrapper. Kobler ARIA mellom label, input, description og error automatisk |
+| `<label class="ix-label">` | Ja | Labeltekst. Kobles til input via `for`/`id`. ID genereres om den mangler |
+| `<span data-field="description">` | Nei | Hjelpetekst. Kobles til input via `aria-describedby` |
+| `<div class="ix-text-field">` | Ja | Container for input med eventuell prefix/suffix |
+| `<div class="ix-text-field__prefix" aria-hidden="true">` | Nei | Visuell prefix. Skjult fra skjermlesere. Husk å speile innholdet i label når konteksten ikke er åpenbar |
+| `<input class="ix-text-field__input">` | Ja | Inputfeltet. Alle native attributter (`type`, `inputmode`, `name`, `disabled`, `readonly`) settes her |
+| `<div class="ix-text-field__suffix" aria-hidden="true">` | Nei | Visuell suffix. Skjult fra skjermlesere. Husk å speile innholdet i label når konteksten ikke er åpenbar |
+| `<span data-field="error">` | Ja | Feilmelding. Alltid i DOM. Tomt betyr ingen feil. Trigger `aria-invalid` automatisk |
+
+### Tilstandsklasser
+
+Settes på `<ix-field>` for å endre visuell tilstand:
+
+| Klasse | Beskrivelse |
+|--------|-------------|
+| `.ix-field--disabled` | Deaktivert. Sett også `disabled` på input |
+| `.ix-field--read-only` | Skrivebeskyttet. Sett også `readonly` på input |
+
+```jsx live
+<>
+  <ix-field class="ix-field--disabled">
+    <label className="ix-label">Kontonummer</label>
+    <div className="ix-text-field">
+      <input className="ix-text-field__input" defaultValue="1234 56 78903" disabled />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field class="ix-field--read-only">
+    <label className="ix-label">Referanse</label>
+    <div className="ix-text-field">
+      <input className="ix-text-field__input" defaultValue="ORD-2026-0042" readOnly />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+## Relatert
+
+- [Typografi](../grunnleggende/typografi) — skriftstørrelser og fontvekter brukt i feltet
+- [Spacing](../grunnleggende/tokens/spacing) — avstandene mellom label, input og feilmelding
+- [Farger](../retningslinjer/farger) — fargetokens for feil, fokus og disabled-tilstander
+- [Deaktiverte tilstander](../monstre-og-maler/deaktiverte-tilstander) — retningslinjer for når disabled er riktig valg

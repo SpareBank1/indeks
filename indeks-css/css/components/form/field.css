@@ -1,4 +1,4 @@
-:where(.ix-field) {
+:where(ix-field, .ix-field) {
     display: flex;
     flex-direction: column;
     gap: var(--ix-spacing-2xs);

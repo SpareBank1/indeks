@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { type JSX, useId } from 'react';
-import { InputWrapper } from '../text-field/TextField';
+import { Field } from '../field/Field';
 
 export type DropdownProps = {
     className?: string;
@@ -21,7 +21,7 @@ export function Dropdown(props: DropdownProps): JSX.Element {
     const { className: inputClassName, ...restInputProps } = inputProps ?? {};
 
     return (
-        <InputWrapper label={label} inputId={id}>
+        <Field label={label} inputId={id}>
             <select
                 id={id}
                 {...restProps}
@@ -39,6 +39,6 @@ export function Dropdown(props: DropdownProps): JSX.Element {
                     </option>
                 ))}
             </select>
-        </InputWrapper>
+        </Field>
     );
 }

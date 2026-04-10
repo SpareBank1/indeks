@@ -72,7 +72,7 @@ const sidebars: SidebarsConfig = {
             type: 'category',
             label: 'Komponenter',
             collapsed: true,
-            items: ['komponenter/typografi'],
+            items: ['komponenter/typografi', 'komponenter/textfield'],
         },
     ],
 };
