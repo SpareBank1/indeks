@@ -1,0 +1,82 @@
+{
+  "component": "TextArea",
+  "lastReviewed": "2026-04-13",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv beskrivende labeltekst",
+      "details": "Labelen skal forklare hva som skal fylles inn. \"Tilbakemelding\" er bedre enn \"Skriv noe\". Alle felter må ha en label, selv om den er visuelt skjult med .ix-sr-only.",
+      "wcag": ["2.4.6", "3.3.2"]
+    },
+    {
+      "summary": "Skriv gode feilmeldinger",
+      "details": "Feilmeldingen må si hva som er galt og hva brukeren skal gjøre. \"Meldingen kan ikke være tom\" — ikke \"Ugyldig verdi\". Komponenten viser og annonserer meldingen, men du skriver innholdet.",
+      "wcag": ["3.3.1", "3.3.3"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Label kobles til textarea via for/id. Hjelpetekst og feilmelding kobles via aria-describedby." },
+    { "id": "1.3.2", "notes": "Label, textarea, hjelpetekst og feilmelding følger naturlig rekkefølge i DOM." },
+    { "id": "1.3.3", "notes": "Feiltilstand bruker tekst, farge og aria-invalid — ikke farge alene." },
+    { "id": "1.4.1", "notes": "Feiltilstand kommuniseres med farge, rammeendring og tekstlig feilmelding." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
+    { "id": "1.4.11", "notes": "Ramme og fokusindikator oppfyller 3:1 kontrastkrav." },
+    { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
+    { "id": "1.4.13", "notes": "Hjelpetekst er persistent — forsvinner ikke ved fokusflytt." },
+    { "id": "2.1.1", "notes": "Fullt opererbart med Tab og standard textarea-oppførsel." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator med god kontrast." },
+    { "id": "2.5.8", "notes": "Tekstområdet oppfyller minimum 24x24px klikkflate." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
+    { "id": "3.2.2", "notes": "Input trigger ingen automatisk kontekstendring." },
+    { "id": "4.1.2", "notes": "Native textarea med implisitt rolle 'textbox' (multiline). Tilgjengelig navn fra label. Tilstander eksponeres korrekt." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1" },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Typiske textarea-brukstilfeller (kommentarer, beskrivelser, tilbakemeldinger) samler ikke personlig informasjon og er derfor unntatt. Dersom feltet brukes til personlig informasjon (f.eks. postadresse), gjelder kravet og autocomplete bør settes." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native textarea — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6", "reason": "Ingen begrensning av input-type — native HTML textarea." },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Feilmeldinger håndteres via aria-live=\"polite\" (dekket av 3.3.1). Ingen øvrige statusmeldinger." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til tekstområdet" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Enter", "action": "Setter inn linjeskift" }
+  ],
+  "screenReader": [
+    "Ved fokus: \"[label], tekstområde\"",
+    "Med hjelpetekst: \"[label], tekstområde, [hjelpetekst]\"",
+    "Ved feil: \"[label], ugyldig, tekstområde, [feilmelding]\"",
+    "Med skjult label: \"[label], tekstområde\" — labelen leses opp selv om den ikke er synlig"
+  ]
+}

@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 // Allowlist: bare story-titler som er oppført her blir testet.
 // Legg til nye titler etter hvert som komponenter er klare for skjermbilde- og UU-testing.
-const ALLOWED_STORY_TITLES: string[] = ['Form/TextField'];
+const ALLOWED_STORY_TITLES: string[] = ['Form/TextField', 'Form/TextArea'];
 
 console.log('Fetching stories');
 
@@ -72,7 +72,7 @@ test.describe('Test all components', () => {
                         // TODO: Vurder om vi likevel ønsker tilstrekkelig kontrast på disabled-felter.
                         .exclude('[disabled]')
                         .exclude('[aria-disabled="true"]')
-                        .exclude('.ix-field--disabled')
+                        .exclude('ix-field:has(:disabled)')
                         .analyze();
 
                     expect(accessibilityScanResults.violations).toEqual([]);

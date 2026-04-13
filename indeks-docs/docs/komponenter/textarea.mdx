@@ -1,0 +1,285 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/textarea.json';
+
+# TextArea
+
+TextArea er et inputfelt for lengre fritekst, som kommentarer, beskrivelser eller tilbakemeldinger.
+
+## Egnet til
+
+- Fritekst over én linje
+- Innhold der lengden varierer og er vanskelig å forutsi
+
+## Uegnet til
+
+- Kortere tekstinput (én linje). Bruk `TextField` i stedet.
+- Strukturerte data som kontonummer, e-post eller datoer
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextArea
+  label="Tilbakemelding"
+  description="Fortell oss hva du synes"
+/>
+```
+
+Komponenten kobler `for`/`id` og `aria-describedby` automatisk.
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Tilbakemelding</label>
+  <span data-field="description">Fortell oss hva du synes</span>
+  <div class="ix-text-area">
+    <textarea></textarea>
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+`<ix-field>` setter opp alle ARIA-koblinger automatisk. Error-elementet skal alltid ligge i DOM. Tomt betyr ingen feil.
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Med feilmelding
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextArea
+  label="Tilbakemelding"
+  errorMessage="Tilbakemelding er påkrevd"
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Tilbakemelding</label>
+  <div class="ix-text-area">
+    <textarea></textarea>
+  </div>
+  <span data-field="error">Tilbakemelding er påkrevd</span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Deaktivert og skrivebeskyttet
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextArea
+    label="Tilbakemelding"
+    disabled
+    inputProps={{ value: 'Deaktivert innhold' }}
+  />
+  <TextArea
+    label="Tilbakemelding"
+    readOnly
+    inputProps={{ value: 'Skrivebeskyttet innhold' }}
+  />
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <ix-field>
+    <label>Tilbakemelding</label>
+    <div class="ix-text-area">
+      <textarea disabled>Deaktivert innhold</textarea>
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field>
+    <label>Tilbakemelding</label>
+    <div class="ix-text-area">
+      <textarea readOnly>Skrivebeskyttet innhold</textarea>
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+`disabled` og `readOnly` settes direkte på textarea. CSS-reglene `:has(:disabled)` og `:has(:read-only)` på `ix-field` tar seg av den visuelle tilstanden automatisk. Resize-håndtaket skjules automatisk for `disabled` og `readOnly`.
+
+### Påkrevd felt
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextArea
+  label="Tilbakemelding"
+  required
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Tilbakemelding</label>
+  <div class="ix-text-area">
+    <textarea required></textarea>
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Antall rader
+
+Bruk `rows`-attributtet for å styre standardhøyden på feltet. Standard nettleseratferd er 2 rader.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextArea
+  label="Beskrivelse"
+  inputProps={{ rows: 6 }}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Beskrivelse</label>
+  <div class="ix-text-area">
+    <textarea rows="6"></textarea>
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Angi forventet størrelse
+
+Feltets høyde bør signalisere forventet tekstmengde. Et lite felt signaliserer kort svar, et større felt inviterer til lengre tekst. Bruk `rows` for å sette en passende standardhøyde.
+
+### Resize
+
+Brukere kan endre høyden på feltet vertikalt. Horisontal resize er deaktivert for å unngå brudd i layout. `disabled` og `readOnly` skjuler resize-håndtaket.
+
+### Unngå karakterbegrensning uten tilbakemelding
+
+Bruk `maxlength` bare hvis du gir brukeren tydelig tilbakemelding om gjenværende tegn. En stille grense som kutter teksten er forvirrende.
+
+### Hjelpetekst gir støtte der det trengs
+
+Bruk `description` for å forklare forventet format eller lengde. "Maks 500 tegn" er bedre enn ingen veiledning.
+
+## Universell utforming
+
+<AccessibilityTable data={a11yData} />
+
+### Hva komponenten gjør automatisk
+
+Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
+- **`for`/`id`**: Label kobles til textarea. Genererer en unik ID hvis textarea mangler en.
+- **`aria-describedby`**: Textarea peker til description og error-elementet. Hjelpetekst leses før feilmelding.
+- **`aria-live="polite"`**: Settes på error-elementet slik at skjermlesere annonserer nye feilmeldinger uten å avbryte brukeren.
+- **`aria-invalid`**: Synkroniseres automatisk med innholdet i error-elementet via MutationObserver.
+- **Required-indikator**: Rød `*` etter label vises automatisk via CSS når textarea har `required`-attributtet (`:has(:required)`).
+
+### Hva du selv må sørge for
+
+:::warning Ditt ansvar
+- **Meningsfull labeltekst** — komponenten kobler label til textarea, men du må skrive god tekst
+- **Gode feilmeldinger** — komponenten viser dem og annonserer dem, men du skriver innholdet
+:::
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+### TextAreaProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `label` | `string` | Ja | | Synlig labeltekst for feltet |
+| `description` | `string` | Nei | | Hjelpetekst som vises under label. Kobles til textarea via `aria-describedby` |
+| `errorMessage` | `string` | Nei | | Feilmelding som vises under textarea. Trigger `aria-invalid` når den har innhold |
+| `placeholder` | `string` | Nei | | Placeholder-tekst. Bør ikke brukes som bærer av viktig informasjon |
+| `disabled` | `boolean` | Nei | `false` | Deaktiverer feltet helt. Ingen fokus eller interaksjon |
+| `readOnly` | `boolean` | Nei | `false` | Brukeren kan fokusere og kopiere, men ikke endre verdien |
+| `required` | `boolean` | Nei | `false` | Setter `required` på textarea. Viser rød `*` etter label automatisk via CSS |
+| `ref` | `Ref<HTMLTextAreaElement>` | Nei | | Ref videresendes til `<textarea>`-elementet |
+| `inputId` | `string` | Nei | Auto-generert | Eksplisitt ID for textarea-elementet. Brukes også for `label[for]` |
+| `inputProps` | `TextareaHTMLAttributes` | Nei | | Alle standard HTML textarea-attributter, inkl. `rows`, `maxLength`, `cols` |
+| `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+### `<ix-field>` med textarea
+
+`<ix-field>` har ingen egne attributter. Alt settes på native HTML-elementer inni:
+
+```html
+<ix-field>                                        ← wrapper, setter opp ARIA automatisk
+  <label class="ix-label">Tilbakemelding</label>  ← kobles til textarea via for/id
+  <span data-field="description">                  ← hjelpetekst, kobles via aria-describedby
+    Maks 500 tegn
+  </span>
+  <div class="ix-text-area">                       ← container for textarea
+    <textarea rows="4"></textarea>                  ← selve tekstområdet
+  </div>
+  <span data-field="error">                        ← alltid i DOM, tomt = ingen feil
+    Tilbakemelding er påkrevd
+  </span>
+</ix-field>
+```
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `<ix-field>` | Ja | Wrapper. Kobler ARIA mellom label, textarea, description og error automatisk |
+| `<label class="ix-label">` | Ja | Labeltekst. Kobles til textarea via `for`/`id`. ID genereres om den mangler |
+| `<span data-field="description">` | Nei | Hjelpetekst. Kobles til textarea via `aria-describedby` |
+| `<div class="ix-text-area">` | Ja | Container for textarea |
+| `<textarea>` | Ja | Tekstområdet. Alle native attributter (`rows`, `cols`, `maxlength`, `disabled`, `readonly`, `required`) settes her |
+| `<span data-field="error">` | Ja | Feilmelding. Alltid i DOM. Tomt betyr ingen feil. Trigger `aria-invalid` automatisk |
+
+</TabItem>
+</Tabs>
+
+## Relatert
+
+- [TextField](./textfield) — for kortere tekstinput på én linje
+- [Typografi](../grunnleggende/typografi) — skriftstørrelser og fontvekter brukt i feltet
+- [Spacing](../grunnleggende/tokens/spacing) — avstandene mellom label, textarea og feilmelding
