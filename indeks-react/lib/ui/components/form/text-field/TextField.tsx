@@ -1,5 +1,4 @@
-import clsx from 'clsx';
-import { type JSX, type ReactNode, useId } from 'react';
+import { forwardRef, type ReactNode, useId } from 'react';
 import { Field } from '../field/Field';
 
 export type TextFieldProps = {
@@ -14,22 +13,20 @@ export type TextFieldProps = {
     errorMessage?: string;
     disabled?: boolean;
     readOnly?: boolean;
+    required?: boolean;
 };
 
-export function TextField(props: TextFieldProps): JSX.Element {
-    const { prefix, suffix, label, inputProps, inputId, className, placeholder, description, errorMessage, disabled, readOnly, ...restProps } = {
-        ...props,
-    };
+export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField({ prefix, suffix, label, inputProps, inputId, className, placeholder, description, errorMessage, disabled, readOnly, required, ...restProps }, ref) {
     const generatedId = useId();
     const id = inputId ?? generatedId;
 
     return (
-        <Field inputId={id} label={label} className={className} description={description} errorMessage={errorMessage} disabled={disabled} readOnly={readOnly} {...restProps}>
-            <div className={clsx('ix-text-field')}>
-                {prefix && <div className="ix-text-field__prefix">{prefix}</div>}
-                <input className="ix-text-field__input" {...inputProps} placeholder={placeholder} id={id} disabled={disabled} readOnly={readOnly} />
-                {suffix && <div className="ix-text-field__suffix">{suffix}</div>}
+        <Field inputId={id} label={label} className={className} description={description} errorMessage={errorMessage} {...restProps}>
+            <div className="ix-text-field">
+                {prefix && <div data-field="prefix">{prefix}</div>}
+                <input ref={ref} {...inputProps} className={inputProps?.className} placeholder={placeholder} id={id} disabled={disabled} readOnly={readOnly} required={required} />
+                {suffix && <div data-field="suffix">{suffix}</div>}
             </div>
         </Field>
     );
-}
+});

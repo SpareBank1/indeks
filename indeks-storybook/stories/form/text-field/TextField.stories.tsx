@@ -48,6 +48,13 @@ export const Disabled: Story = {
   },
 };
 
+export const Required: Story = {
+  args: { required: true, label: 'E-postadresse', inputProps: { type: 'email' } },
+  render: (args) => {
+    return <TextField {...args} />;
+  },
+};
+
 export const ReadOnly: Story = {
   args: { readOnly: true, inputProps: { value: 'Read Only' }, prefix: 'Prefix', suffix: 'Suffix' },
   render: (args) => {
@@ -63,10 +70,10 @@ export const HTML: Story = {
   },
   render: (args) => {
     return <ix-field>
-      <label className='ix-label'>Test</label>
+      <label class='ix-label'>Test</label>
       <span data-field="description">{args.description}</span>
-      <div className='ix-text-field'>
-        <input className="ix-text-field__input" placeholder="Placeholder" />
+      <div class='ix-text-field'>
+        <input placeholder="Placeholder" />
       </div>
       <span data-field="error">{args.errorMessage}</span>
     </ix-field>;

@@ -46,6 +46,8 @@
  *   - `input | select | textarea`     → første native form-kontroll
  *   - `[data-field="description"]`    → hjelpetekst
  *   - `[data-field="error"]`          → feilmelding (alltid til stede, kan være tom)
+ *   - `[data-field="prefix"]`         → visuell prefix (skjules med aria-hidden)
+ *   - `[data-field="suffix"]`         → visuell suffix (skjules med aria-hidden)
  *
  * `data-field` brukes fremfor `slot`-attributtet selv om Shadow DOM ikke er i
  * bruk. `slot` er et reservert nøkkelord knytt til Shadow DOM og ville vært
@@ -173,7 +175,7 @@ export class IxField extends HTMLElement {
 
         // Prefix og suffix er rent visuelle — skjul dem fra skjermlesere.
         // Konteksten skal ligge i labelteksten.
-        this.querySelectorAll('.ix-text-field__prefix, .ix-text-field__suffix').forEach((el) => {
+        this.querySelectorAll('[data-field="prefix"], [data-field="suffix"]').forEach((el) => {
             el.setAttribute('aria-hidden', 'true');
         });
     }

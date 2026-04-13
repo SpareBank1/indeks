@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { createRef } from 'react';
 import { describe, expect, it } from 'vitest';
 import { TextField } from './TextField';
 
@@ -52,20 +53,16 @@ describe('TextField', () => {
         expect(ixField).toBeDefined();
     });
 
-    it('setter disabled-klasse og disabled-attributt på input', () => {
-        const { container } = render(<TextField label="Beløp" disabled />);
+    it('setter disabled-attributt paa input (CSS :has(:disabled) styler field)', () => {
+        render(<TextField label="Beløp" disabled />);
         const input = screen.getByRole('textbox') as HTMLInputElement;
-        const ixField = container.querySelector('ix-field');
         expect(input.disabled).toBe(true);
-        expect(ixField?.classList.contains('ix-field--disabled')).toBe(true);
     });
 
-    it('setter read-only-klasse og readOnly-attributt på input', () => {
-        const { container } = render(<TextField label="Referanse" readOnly />);
+    it('setter readOnly-attributt paa input (CSS :has(:read-only) styler field)', () => {
+        render(<TextField label="Referanse" readOnly />);
         const input = screen.getByRole('textbox') as HTMLInputElement;
-        const ixField = container.querySelector('ix-field');
         expect(input.readOnly).toBe(true);
-        expect(ixField?.classList.contains('ix-field--read-only')).toBe(true);
     });
 
     it('rendrer prefix og suffix', () => {
@@ -97,5 +94,24 @@ describe('TextField', () => {
         const { container } = render(<TextField label="Test" className="custom-class" />);
         const ixField = container.querySelector('ix-field');
         expect(ixField?.classList.contains('custom-class')).toBe(true);
+    });
+
+    it('sender ref videre til input-elementet', () => {
+        const ref = createRef<HTMLInputElement>();
+        render(<TextField label="Test" ref={ref} />);
+        expect(ref.current).toBeInstanceOf(HTMLInputElement);
+        expect(ref.current?.tagName).toBe('INPUT');
+    });
+
+    it('setter required-attributt paa input', () => {
+        render(<TextField label="E-post" required />);
+        const input = screen.getByRole('textbox') as HTMLInputElement;
+        expect(input.required).toBe(true);
+    });
+
+    it('rendrer ingen React-basert required-indikator (haandteres av CSS :has(:required))', () => {
+        const { container } = render(<TextField label="E-post" required />);
+        const indicator = container.querySelector('.ix-field__required');
+        expect(indicator).toBeNull();
     });
 });

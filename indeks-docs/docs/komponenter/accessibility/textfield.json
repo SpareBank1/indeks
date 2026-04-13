@@ -28,8 +28,8 @@
     { "id": "1.1.1", "notes": "Prefix og suffix settes aria-hidden=\"true\" — rent visuelle elementer som ikke leses av skjermlesere." },
     { "id": "1.3.1", "notes": "Label kobles til input via for/id. Hjelpetekst og feilmelding kobles via aria-describedby." },
     { "id": "1.3.2", "notes": "Label, input, hjelpetekst og feilmelding følger naturlig rekkefølge i DOM." },
-    { "id": "1.3.3", "notes": "Feiltilstand bruker ikon, tekst og aria-invalid — ikke farge alene." },
-    { "id": "1.4.1", "notes": "Feiltilstand kommuniseres med farge, ikon og tekstlig feilmelding." },
+    { "id": "1.3.3", "notes": "Feiltilstand bruker tekst, farge og aria-invalid — ikke farge alene." },
+    { "id": "1.4.1", "notes": "Feiltilstand kommuniseres med farge, rammeendring og tekstlig feilmelding." },
     { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
     { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
     { "id": "1.4.11", "notes": "Ramme og fokusindikator oppfyller 3:1 kontrastkrav." },
@@ -75,7 +75,7 @@
     { "id": "3.3.4" },
     { "id": "3.3.7" },
     { "id": "3.3.8" },
-    { "id": "4.1.3", "reason": "Feilmeldinger håndteres via role=\"alert\" og aria-live (dekket av 3.3.1). Ingen øvrige statusmeldinger." }
+    { "id": "4.1.3", "reason": "Feilmeldinger håndteres via aria-live=\"polite\" (dekket av 3.3.1). Ingen øvrige statusmeldinger." }
   ],
   "keyboard": [
     { "key": "Tab", "action": "Flytter fokus til inputfeltet" },
