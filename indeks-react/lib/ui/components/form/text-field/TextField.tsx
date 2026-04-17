@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { forwardRef, type ReactNode, useId } from 'react';
 import { Field } from '../field/Field';
 
@@ -21,8 +22,8 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
     const id = inputId ?? generatedId;
 
     return (
-        <Field inputId={id} label={label} className={className} description={description} errorMessage={errorMessage} {...restProps}>
-            <div className="ix-text-field">
+        <Field inputId={id} label={label} className={className} description={description} errorMessage={errorMessage} disabled={disabled} readOnly={readOnly} {...restProps}>
+            <div className={clsx('ix-text-field')}>
                 {prefix && <div data-field="prefix">{prefix}</div>}
                 <input ref={ref} {...inputProps} className={inputProps?.className} placeholder={placeholder} id={id} disabled={disabled} readOnly={readOnly} required={required} />
                 {suffix && <div data-field="suffix">{suffix}</div>}

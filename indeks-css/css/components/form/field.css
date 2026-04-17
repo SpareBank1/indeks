@@ -4,21 +4,16 @@
     gap: var(--ix-spacing-2xs);
 }
 
-:where(ix-field, .ix-field):has(:disabled) {
+:where(ix-field, .ix-field)[data-disabled] {
     opacity: var(--ix-opacity-disabled);
 }
 
-:where(ix-field, .ix-field):has(:disabled) > .ix-label {
+:where(ix-field, .ix-field)[data-disabled] > label {
     color: var(--ix-color-foreground-main-default);
 }
 
-:where(ix-field, .ix-field):has([readonly]) > .ix-label {
+:where(ix-field, .ix-field)[data-readonly] > label {
     color: var(--ix-color-foreground-main-read-only);
-}
-
-:where(ix-field, .ix-field):has(:required) > label::after {
-    content: " *";
-    color: var(--ix-color-foreground-danger-default);
 }
 
 :where(ix-field, .ix-field) [data-field="description"] {

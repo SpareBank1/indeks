@@ -1,19 +1,10 @@
 :where(.ix-text-field) {
     display: flex;
     align-items: stretch;
-
-    &:has([data-field="prefix"]) > input {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
-
-    &:has([data-field="suffix"]) > input {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-    }
 }
 
-:where(.ix-text-field) > input {
+:where(.ix-text-field) > input,
+:where(.ix-text-field__input) {
     all: unset;
     box-sizing: border-box;
     min-width: 0;
@@ -34,12 +25,25 @@
     }
 
     &:active,
-    &:focus-within {
+    &:focus {
         outline: var(--ix-outline-default);
     }
 }
 
-:where(.ix-text-field) > input:disabled {
+:where(.ix-text-field[data-has-prefix]) > input,
+:where(.ix-text-field[data-has-prefix]) > .ix-text-field__input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+:where(.ix-text-field[data-has-suffix]) > input,
+:where(.ix-text-field[data-has-suffix]) > .ix-text-field__input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+:where(.ix-text-field) > input:disabled,
+:where(.ix-text-field__input:disabled) {
     background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-disabled);
     border-color: var(--ix-color-border-main-default);
@@ -47,19 +51,22 @@
     pointer-events: none;
 }
 
-:where(.ix-text-field) > input:read-only {
+:where(.ix-text-field) > input:read-only,
+:where(.ix-text-field__input:read-only) {
     background-color: var(--ix-color-fill-interactive-read-only);
     color: var(--ix-color-foreground-main-read-only);
     border-color: var(--ix-color-border-main-default);
 }
 
-:where(.ix-text-field) > input[aria-invalid=true] {
+:where(.ix-text-field) > input[aria-invalid=true],
+:where(.ix-text-field__input[aria-invalid="true"]) {
     color: var(--ix-color-foreground-danger-default);
     border-color: var(--ix-color-border-danger-default);
     box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
 }
 
-:where(.ix-text-field) > input::placeholder {
+:where(.ix-text-field) > input::placeholder,
+:where(.ix-text-field__input)::placeholder {
     color: var(--ix-color-foreground-main-subtle);
 }
 

@@ -34,7 +34,6 @@ const sidebars: SidebarsConfig = {
             collapsed: true,
             items: [
                 'grunnleggende/typografi',
-                ,
                 {
                     type: 'category',
                     label: 'Tokens',

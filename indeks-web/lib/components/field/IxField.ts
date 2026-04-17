@@ -87,6 +87,7 @@ export class IxField extends HTMLElement {
     // MutationObserver holdes som instansvariabel slik at den kan kobles fra
     // i disconnectedCallback og ikke lekke minne når elementet fjernes fra DOM.
     private _observer: MutationObserver | null = null;
+    private _stateObserver: MutationObserver | null = null;
 
     connectedCallback(): void {
         this._wire();
@@ -96,6 +97,8 @@ export class IxField extends HTMLElement {
         // Koble fra observer når elementet fjernes fra DOM for å unngå minnelekkasje.
         this._observer?.disconnect();
         this._observer = null;
+        this._stateObserver?.disconnect();
+        this._stateObserver = null;
     }
 
     // ── Kobling ───────────────────────────────────────────────────────────────
@@ -111,6 +114,12 @@ export class IxField extends HTMLElement {
             console.info('[ix-field] Fant ingen <input>, <select> eller <textarea>. ARIA-koblinger ble ikke satt opp.');
             return;
         }
+
+        // Synkroniser disabled/readonly-tilstand fra kontroll til ix-field-host slik at
+        // CSS-reglene [data-disabled] og [data-readonly] virker uten React.
+        this._syncControlState(control);
+        this._stateObserver = new MutationObserver(() => this._syncControlState(control));
+        this._stateObserver.observe(control, { attributes: true, attributeFilter: ['disabled', 'readonly'] });
 
         if (control instanceof HTMLInputElement && control.type === 'number') {
             console.warn('[ix-field] Unngå type="number" — bruk inputMode="numeric" i stedet.');
@@ -175,19 +184,40 @@ export class IxField extends HTMLElement {
 
         // Prefix og suffix er rent visuelle — skjul dem fra skjermlesere.
         // Konteksten skal ligge i labelteksten.
-        this.querySelectorAll('[data-field="prefix"], [data-field="suffix"]').forEach((el) => {
-            el.setAttribute('aria-hidden', 'true');
-        });
+        const prefix = this.querySelector('[data-field="prefix"]');
+        const suffix = this.querySelector('[data-field="suffix"]');
+
+        prefix?.setAttribute('aria-hidden', 'true');
+        suffix?.setAttribute('aria-hidden', 'true');
+
+        // Sett data-has-prefix/suffix på .ix-text-field slik at CSS kan fjerne
+        // radius på input der prefix/suffix støter inntil.
+        const textField = this.querySelector('.ix-text-field');
+        if (textField) {
+            textField.toggleAttribute('data-has-prefix', !!prefix);
+            textField.toggleAttribute('data-has-suffix', !!suffix);
+        }
     }
 
     // Holder aria-invalid på input synkronisert med om error-elementet har
     // innhold. Kalles både ved initialisering og av MutationObserver ved
-    // hver endring.
+    // hver endring. Synkroniserer også data-invalid til .ix-dropdown-container
+    // hvis kontrollen er en select inne i en dropdown.
     private _syncInvalid(control: NativeControl, error: HTMLElement): void {
-        if (error.textContent?.trim()) {
+        const hasError = !!error.textContent?.trim();
+        if (hasError) {
             control.setAttribute('aria-invalid', 'true');
         } else {
             control.removeAttribute('aria-invalid');
         }
+        control.closest('.ix-dropdown')?.toggleAttribute('data-invalid', hasError);
+    }
+
+    // Speiler disabled/readonly-tilstanden fra native kontroll til ix-field-host
+    // slik at CSS-reglene [data-disabled] og [data-readonly] virker uten React.
+    private _syncControlState(control: NativeControl): void {
+        this.toggleAttribute('data-disabled', control.disabled);
+        const readOnly = 'readOnly' in control ? (control as HTMLInputElement | HTMLTextAreaElement).readOnly : false;
+        this.toggleAttribute('data-readonly', readOnly);
     }
 }

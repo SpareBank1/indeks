@@ -7,6 +7,8 @@ export type FieldProps = {
     inputId: string;
     description?: string;
     errorMessage?: string;
+    disabled?: boolean;
+    readOnly?: boolean;
 };
 
 export const Field = forwardRef<HTMLElement, FieldProps>(function Field({
@@ -16,11 +18,13 @@ export const Field = forwardRef<HTMLElement, FieldProps>(function Field({
     inputId,
     description,
     errorMessage,
+    disabled,
+    readOnly,
     ...restProps
 }, ref) {
     return (
-        <ix-field ref={ref} {...restProps} class={className}>
-            <label htmlFor={inputId} className='ix-label'>
+        <ix-field ref={ref} {...restProps} class={className} data-disabled={disabled || undefined} data-readonly={readOnly || undefined}>
+            <label htmlFor={inputId}>
                 {label}
             </label>
             <span data-field="description">{description}</span>

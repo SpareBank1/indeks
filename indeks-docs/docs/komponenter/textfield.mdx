@@ -122,6 +122,12 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn:
     suffix="%"
     inputProps={{ inputMode: 'decimal' }}
   />
+  <TextField
+    label="Beløp i euro"
+    prefix="€"
+    suffix=",00"
+    inputProps={{ inputMode: 'numeric' }}
+  />
 </>
 ```
 
@@ -143,6 +149,15 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn:
     <div class="ix-text-field">
       <input inputMode="decimal" />
       <div data-field="suffix">%</div>
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field>
+    <label>Beløp i euro</label>
+    <div class="ix-text-field">
+      <div data-field="prefix">€</div>
+      <input inputMode="numeric" />
+      <div data-field="suffix">,00</div>
     </div>
     <span data-field="error"></span>
   </ix-field>
@@ -201,37 +216,50 @@ Prefix og suffix er skjult med aria-hidden. Når konteksten ikke er åpenbar fra
 </TabItem>
 </Tabs>
 
-`disabled` og `readOnly` settes direkte på input. CSS-reglene `:has(:disabled)` og `:has(:read-only)` på `ix-field` tar seg av den visuelle tilstanden automatisk. `disabled` gjør feltet helt inaktivt — ingen fokus eller interaksjon. `readOnly` lar brukeren fokusere og kopiere, men ikke endre.
+`disabled` og `readOnly` settes direkte på input. `ix-field` tar seg av den visuelle tilstanden automatisk. `disabled` gjør feltet helt inaktivt — ingen fokus eller interaksjon. `readOnly` lar brukeren fokusere og kopiere, men ikke endre.
 
-### Påkrevd felt
+### Valgfrie felt
 
-Sett `required` for å markere feltet som obligatorisk. En rød `*` vises automatisk etter labelen via CSS (`:has(:required)`), og `required`-attributtet settes på input.
+I banksammenheng er nesten alle felter påkrevd. Merk unntaket — ikke regelen. Legg til `(valgfritt)` i labelteksten når et felt ikke er obligatorisk.
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ```tsx live
-<TextField
-  label="E-postadresse"
-  required
-  inputProps={{ type: 'email', autoComplete: 'email' }}
-/>
+<>
+  <TextField
+    label="E-postadresse"
+    required
+    inputProps={{ type: 'email', autoComplete: 'email' }}
+  />
+  <TextField
+    label="Mobilnummer (valgfritt)"
+    inputProps={{ type: 'tel', autoComplete: 'tel' }}
+  />
+</>
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-field>
-  <label>E-postadresse</label>
-  <div class="ix-text-field">
-    <input type="email" autoComplete="email" required />
-  </div>
-  <span data-field="error"></span>
-</ix-field>
+<>
+  <ix-field>
+    <label>E-postadresse</label>
+    <div class="ix-text-field">
+      <input type="email" autoComplete="email" required />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field>
+    <label>Mobilnummer (valgfritt)</label>
+    <div class="ix-text-field">
+      <input type="tel" autoComplete="tel" />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
 ```
-
-I HTML trenger du bare `required` på input. CSS-regelen `ix-field:has(:required)` tar seg av den visuelle indikatoren.
 
 </TabItem>
 </Tabs>
@@ -306,7 +334,7 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 - **`aria-describedby`**: Input peker til description og error-elementet. Rekkefølgen er meningsfull. Hjelpetekst leses før feilmelding.
 - **`aria-live="polite"`**: Settes på error-elementet slik at skjermlesere annonserer nye feilmeldinger uten å avbryte brukeren.
 - **`aria-invalid`**: Synkroniseres automatisk med innholdet i error-elementet via MutationObserver.
-- **Required-indikator**: Rød `*` etter label vises automatisk via CSS når input har `required`-attributtet (`:has(:required)`).
+- **`required`**: Settes på input for nativ nettleservalidering. Ingen visuell indikator — merk valgfrie felt med `(valgfritt)` i labelteksten.
 
 ### Hva du selv må sørge for
 
@@ -335,10 +363,10 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 | `placeholder` | `string` | Nei | | Placeholder-tekst. Bør ikke brukes som bærer av viktig informasjon |
 | `disabled` | `boolean` | Nei | `false` | Deaktiverer feltet helt. Ingen fokus eller interaksjon |
 | `readOnly` | `boolean` | Nei | `false` | Brukeren kan fokusere og kopiere, men ikke endre verdien |
-| `required` | `boolean` | Nei | `false` | Setter `required` på input. Viser rød `*` etter label automatisk via CSS |
+| `required` | `boolean` | Nei | `false` | Setter `required` på input for nativ nettleservalidering |
 | `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet. Nyttig for fokusstyring og validering |
 | `inputId` | `string` | Nei | Auto-generert | Eksplisitt ID for input-elementet. Brukes også for `label[for]` |
-| `inputProps` | `InputHTMLAttributes` | Nei | | Alle standard HTML input-attributter. Settes direkte på `<input>` |
+| `inputProps` | `InputHTMLAttributes` | Nei | | Alle standard HTML input-attributter. Settes direkte på `<input>`. Bruk `inputProps={{ name: 'feltnavn' }}` for nativ skjema-innsending |
 | `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
 
 </TabItem>
@@ -350,7 +378,7 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 
 ```html
 <ix-field>                                        ← wrapper, setter opp ARIA automatisk
-  <label class="ix-label">Beløp i kroner</label>  ← kobles til input via for/id
+  <label>Beløp i kroner</label>  ← kobles til input via for/id
   <span data-field="description">                  ← hjelpetekst, kobles via aria-describedby
     Maks 500 000 kroner
   </span>
@@ -368,7 +396,7 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 | Del | Påkrevd | Beskrivelse |
 |-----|---------|-------------|
 | `<ix-field>` | Ja | Wrapper. Kobler ARIA mellom label, input, description og error automatisk |
-| `<label class="ix-label">` | Ja | Labeltekst. Kobles til input via `for`/`id`. ID genereres om den mangler |
+| `<label>` | Ja | Labeltekst. Kobles til input via `for`/`id`. ID genereres om den mangler |
 | `<span data-field="description">` | Nei | Hjelpetekst. Kobles til input via `aria-describedby` |
 | `<div class="ix-text-field">` | Ja | Container for input med eventuell prefix/suffix |
 | `<div data-field="prefix">` | Nei | Visuell prefix. Skjules automatisk fra skjermlesere av `<ix-field>`. Husk å speile innholdet i label når konteksten ikke er åpenbar |
@@ -378,19 +406,19 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 
 ### Tilstand via native attributter
 
-Disabled og read-only styres kun via native attributter på input. CSS-reglene `:has(:disabled)` og `:has(:read-only)` på `ix-field` håndterer visuell tilstand automatisk — ingen ekstra klasser trengs:
+Disabled og read-only styres kun via native attributter på input. `ix-field` håndterer visuell tilstand automatisk — ingen ekstra klasser trengs:
 
 ```jsx live
 <>
   <ix-field>
-    <label class="ix-label">Kontonummer</label>
+    <label>Kontonummer</label>
     <div class="ix-text-field">
       <input defaultValue="1234 56 78903" disabled />
     </div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field>
-    <label class="ix-label">Referanse</label>
+    <label>Referanse</label>
     <div class="ix-text-field">
       <input defaultValue="ORD-2026-0042" readOnly />
     </div>
@@ -401,6 +429,88 @@ Disabled og read-only styres kun via native attributter på input. CSS-reglene `
 
 </TabItem>
 </Tabs>
+
+## Tilpasning med CSS
+
+Trenger du `ix-text-field`-stylingen på HTML du setter sammen selv — uten
+React-komponenten eller `<ix-field>` — kan du bruke klassene direkte på elementene dine.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Input-wrapper | `.ix-text-field` |
+| Inputfelt | `.ix-text-field > input` eller `.ix-text-field__input` |
+| Prefix | `.ix-text-field > [data-field="prefix"]` |
+| Suffix | `.ix-text-field > [data-field="suffix"]` |
+| Label | `.ix-label` |
+| Hjelpetekst | `[data-field="description"]` |
+| Feilmelding | `[data-field="error"]` |
+
+`.ix-text-field__input` gir inputfeltet nøyaktig samme stilregler som
+`.ix-text-field > input`. Bruk den når du ikke kan eller vil bruke komponentens
+HTML-struktur.
+
+### Eksempel: bruk i egen HTML-struktur
+
+```html
+<ix-field>
+  <label>Kontonummer</label>
+  <span data-field="description">11 siffer uten mellomrom</span>
+  <div class="ix-text-field">
+    <input class="ix-text-field__input" type="text" inputmode="numeric" name="kontonummer" />
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+## Hva ix-field gjør med DOM-en
+
+`<ix-field>` er en web component som setter opp ARIA-koblinger automatisk når den kobles til DOM. Her er hva som skjer — fra HTML du skriver til HTML etter at `ix-field` har kjørt.
+
+**Før** (det du skriver):
+
+```html
+<ix-field>
+  <label>Beløp i kroner</label>
+  <span data-field="description">Maks 500 000 kroner</span>
+  <div class="ix-text-field">
+    <div data-field="prefix">kr</div>
+    <input inputmode="numeric" />
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+**Etter** (det som er i DOM etter at `ix-field` har kjørt):
+
+```html
+<ix-field>
+  <label for="ix-field-1">Beløp i kroner</label>
+  <span data-field="description" id="ix-field-1-description">Maks 500 000 kroner</span>
+  <div class="ix-text-field" data-has-prefix>
+    <div data-field="prefix" aria-hidden="true">kr</div>
+    <input inputmode="numeric" id="ix-field-1"
+           aria-describedby="ix-field-1-description ix-field-1-error" />
+  </div>
+  <span data-field="error" id="ix-field-1-error" aria-live="polite"></span>
+</ix-field>
+```
+
+Hva som ble lagt til:
+
+| Hva | Hvor | Hvorfor |
+|-----|------|---------|
+| `for="ix-field-1"` | `<label>` | Kobler label til input — klikk på label gir fokus til feltet |
+| `id="ix-field-1"` | `<input>` | Grunnlag for alle ARIA-koblinger. Genereres bare om input mangler en ID |
+| `id="ix-field-1-description"` | description-span | Nødvendig for `aria-describedby`-kobling |
+| `id="ix-field-1-error"` | error-span | Nødvendig for `aria-describedby`-kobling |
+| `aria-describedby="... ..."` | `<input>` | Skjermleseren leser description og feilmelding etter label og verdi |
+| `aria-live="polite"` | error-span | Skjermleseren annonserer feilmeldinger automatisk når de dukker opp |
+| `aria-hidden="true"` | prefix-div | Prefix er visuell kontekst — skal ikke leses opp separat |
+| `data-has-prefix` | `.ix-text-field` | Signaliserer til CSS at input-feltet skal miste venstre radius |
+
+Når error-span får innhold setter `ix-field` i tillegg `aria-invalid="true"` på input automatisk via MutationObserver. Når den tømmes fjernes attributten igjen.
 
 ## Relatert
 

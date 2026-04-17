@@ -1,5 +1,7 @@
-:where(.ix-label) {
+:where(.ix-label),
+:where(ix-field, .ix-field) > label {
     font-weight: var(--ix-font-weight-medium);
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-default);
+    line-height: 150%;
 }
