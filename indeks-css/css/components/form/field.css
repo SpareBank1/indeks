@@ -4,15 +4,18 @@
     gap: var(--ix-spacing-2xs);
 }
 
-:where(ix-field, .ix-field)[data-disabled] {
+:where(ix-field, .ix-field)[data-disabled],
+:where(.ix-field--disabled) {
     opacity: var(--ix-opacity-disabled);
 }
 
-:where(ix-field, .ix-field)[data-disabled] > label {
+:where(ix-field, .ix-field)[data-disabled] > label,
+:where(.ix-field--disabled) > label {
     color: var(--ix-color-foreground-main-default);
 }
 
-:where(ix-field, .ix-field)[data-readonly] > label {
+:where(ix-field, .ix-field)[data-readonly] > label,
+:where(.ix-field--readonly) > label {
     color: var(--ix-color-foreground-main-read-only);
 }
 
