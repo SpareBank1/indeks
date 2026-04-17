@@ -5,17 +5,21 @@ import a11yData from './accessibility/textarea.json';
 
 # TextArea
 
-TextArea er et inputfelt for lengre fritekst, som kommentarer, beskrivelser eller tilbakemeldinger.
+TextArea lar brukeren skrive inn lengre fritekst over flere linjer, som beskrivelser, meldinger eller begrunnelser.
 
 ## Egnet til
 
-- Fritekst over én linje
-- Innhold der lengden varierer og er vanskelig å forutsi
+- Lengre fritekst (flere linjer)
+- Meldinger, kommentarer eller beskrivelser
+- Situasjoner der brukeren trenger plass til å formulere seg
+- Input uten strengt format eller fast lengde
 
 ## Uegnet til
 
-- Kortere tekstinput (én linje). Bruk `TextField` i stedet.
-- Strukturerte data som kontonummer, e-post eller datoer
+- Kort og strukturert input (bruk `TextField`)
+- Valg fra forhåndsdefinerte alternativer (bruk select, radio eller checkbox)
+- Input med tydelig format (f.eks. dato, telefonnummer)
+- Situasjoner der én linje er tilstrekkelig
 
 ## Kom i gang
 
@@ -186,23 +190,106 @@ Bruk `rows`-attributtet for å styre standardhøyden på feltet. Standard nettle
 </TabItem>
 </Tabs>
 
+### Tegnteller
+
+Sett `maxlength` eller `minlength` på textarea — `ix-field` oppretter og oppdaterer en tegnteller automatisk. Med `maxlength` vises `0/200`, med `minlength` vises `0 tegn (minimum 20)`.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack>
+  <TextArea
+    label="Tilbakemelding"
+    inputProps={{ maxLength: 200 }}
+  />
+  <TextArea
+    label="Begrunnelse"
+    inputProps={{ minLength: 20 }}
+  />
+</VStack>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <ix-field>
+    <label>Tilbakemelding</label>
+    <div class="ix-text-area">
+      <textarea maxlength="200"></textarea>
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field>
+    <label>Begrunnelse</label>
+    <div class="ix-text-area">
+      <textarea minlength="20"></textarea>
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+Tellerens ID inkluderes automatisk i `aria-describedby` slik at skjermlesere får det med.
+
 ## Retningslinjer
 
-### Angi forventet størrelse
+### Tydelige labels gir forutsigbarhet
 
-Feltets høyde bør signalisere forventet tekstmengde. Et lite felt signaliserer kort svar, et større felt inviterer til lengre tekst. Bruk `rows` for å sette en passende standardhøyde.
+Alle TextArea skal ha en synlig og beskrivende label. Labelen skal beskrive hvilken informasjon brukeren skal skrive inn, ikke hva de skal gjøre.
+
+Skriv "Beskrivelse av hendelsen" i stedet for "Skriv en beskrivelse". Dette gjør det enklere å forstå hva som forventes og gir bedre støtte når brukeren skal formulere seg.
+
+### Gi tydelige forventninger til innhold
+
+Når brukeren skal skrive lengre tekst, er det ekstra viktig å gi føringer for hva som forventes. Dette kan gjøres gjennom label eller hjelpetekst.
+
+Uten tydelig retning kan brukeren bli usikker på hva de skal skrive, hvor mye som forventes, og hva som er relevant informasjon.
+
+### Unngå placeholder som informasjonsbærer
+
+Placeholder anbefales ikke brukt som bærer av viktig informasjon. Når brukeren begynner å skrive, forsvinner teksten.
+
+Bruk heller label og hjelpetekst for å gi varig veiledning.
+
+### Hjelpetekst gir støtte underveis
+
+Hjelpetekst kan brukes for å gi eksempler eller forklare hva som bør inkluderes. Dette er spesielt nyttig i TextArea, der oppgaven ofte er mer åpen.
+
+Kort og konkret veiledning kan redusere usikkerhet og forbedre kvaliteten på input. "Maks 500 tegn" er bedre enn ingen veiledning.
+
+### Tilpass høyde til forventet innhold
+
+Høyden på TextArea bør reflektere hvor mye tekst som forventes. Bruk `rows` for å sette en passende standardhøyde.
+
+Et for lite felt kan oppleves begrensende, mens et for stort felt kan virke overveldende. Riktig høyde gir en visuell indikasjon på omfanget av oppgaven og gjør det lettere å komme i gang.
 
 ### Resize
 
 Brukere kan endre høyden på feltet vertikalt. Horisontal resize er deaktivert for å unngå brudd i layout. `disabled` og `readOnly` skjuler resize-håndtaket.
 
-### Unngå karakterbegrensning uten tilbakemelding
+### Håndter lange tekster på en god måte
 
-Bruk `maxlength` bare hvis du gir brukeren tydelig tilbakemelding om gjenværende tegn. En stille grense som kutter teksten er forvirrende.
+Når innholdet blir langt, må det være enkelt å lese og redigere teksten.
 
-### Hjelpetekst gir støtte der det trengs
+Dette kan løses med scrolling eller automatisk utvidelse av feltet. Dersom auto-resize brukes, må det skje på en måte som ikke bryter layout eller flytter innhold uforutsigbart.
 
-Bruk `description` for å forklare forventet format eller lengde. "Maks 500 tegn" er bedre enn ingen veiledning.
+### Validering bør ikke forstyrre skrivingen
+
+Siden brukeren ofte skriver sammenhengende tekst, bør validering ikke skje mens de skriver.
+
+Valider heller ved blur eller innsending, slik at brukeren får skrive ferdig før de får tilbakemelding.
+
+### Vurder behov for tegnbegrensning
+
+Dersom det er en maksgrense for tekst, bør dette kommuniseres tydelig. Sett `maxlength` på textarea — da får brukeren automatisk en tegnteller som viser gjenværende tegn. En stille grense som kutter teksten uten tilbakemelding er forvirrende.
+
+`minlength` kan brukes når et minimum antall tegn forventes — telleren viser da hvor mange tegn som er skrevet inn så langt.
 
 ## Universell utforming
 
@@ -216,6 +303,36 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 - **`aria-live="polite"`**: Settes på error-elementet slik at skjermlesere annonserer nye feilmeldinger uten å avbryte brukeren.
 - **`aria-invalid`**: Synkroniseres automatisk med innholdet i error-elementet via MutationObserver.
 - **`required`**: Settes på textarea for nativ nettleservalidering. Ingen visuell indikator — merk valgfrie felt med `(valgfritt)` i labelteksten.
+
+### Skjult label med ariaLabel
+
+Synlig label er alltid anbefalt. I tilfeller der konteksten er helt åpenbar fra omgivelsene (f.eks. et kommentarfelt rett under en overskrift som allerede beskriver det), kan `ariaLabel` brukes i stedet.
+
+:::warning Bruk synlig label
+Skjult label gjør det vanskeligere for alle brukere å orientere seg i skjemaet. Bruk `ariaLabel` kun når synlig label er umulig av layoutmessige grunner, og teksten er meningsfull for skjermleserbrukere.
+:::
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextArea ariaLabel="Kommentar" />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <div class="ix-text-area">
+    <textarea aria-label="Kommentar"></textarea>
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
 
 ### Hva du selv må sørge for
 
@@ -233,7 +350,8 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 
 | Prop | Type | Påkrevd | Standard | Beskrivelse |
 |------|------|---------|----------|-------------|
-| `label` | `string` | Ja | | Synlig labeltekst for feltet |
+| `label` | `string` | Nei* | | Synlig labeltekst for feltet. Anbefalt fremfor `ariaLabel` |
+| `ariaLabel` | `string` | Nei* | | Skjult label for skjermlesere. Brukes kun når synlig label ikke er mulig. *Enten `label` eller `ariaLabel` må settes |
 | `description` | `string` | Nei | | Hjelpetekst som vises under label. Kobles til textarea via `aria-describedby` |
 | `errorMessage` | `string` | Nei | | Feilmelding som vises under textarea. Trigger `aria-invalid` når den har innhold |
 | `placeholder` | `string` | Nei | | Placeholder-tekst. Bør ikke brukes som bærer av viktig informasjon |
@@ -242,7 +360,7 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 | `required` | `boolean` | Nei | `false` | Setter `required` på textarea for nativ nettleservalidering |
 | `ref` | `Ref<HTMLTextAreaElement>` | Nei | | Ref videresendes til `<textarea>`-elementet |
 | `inputId` | `string` | Nei | Auto-generert | Eksplisitt ID for textarea-elementet. Brukes også for `label[for]` |
-| `inputProps` | `TextareaHTMLAttributes` | Nei | | Alle standard HTML textarea-attributter, inkl. `rows`, `maxLength`, `cols` |
+| `inputProps` | `TextareaHTMLAttributes` | Nei | | Alle standard HTML textarea-attributter, inkl. `rows`, `maxLength`, `minLength`, `cols`. `maxLength`/`minLength` aktiverer tegnteller automatisk |
 | `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
 
 </TabItem>

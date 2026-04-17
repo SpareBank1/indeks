@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { createRef } from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { TextField } from './TextField';
 
 describe('TextField', () => {
@@ -113,5 +113,24 @@ describe('TextField', () => {
         const { container } = render(<TextField label="E-post" required />);
         const indicator = container.querySelector('.ix-field__required');
         expect(indicator).toBeNull();
+    });
+
+    it('setter aria-label paa input naar ariaLabel er satt', () => {
+        render(<TextField ariaLabel="Søk" />);
+        const input = screen.getByRole('textbox');
+        expect(input.getAttribute('aria-label')).toBe('Søk');
+    });
+
+    it('renderer ikke label-element naar kun ariaLabel er satt', () => {
+        render(<TextField ariaLabel="Søk" />);
+        const label = document.querySelector('label');
+        expect(label).toBeNull();
+    });
+
+    it('logger advarsel naar verken label eller ariaLabel er satt', () => {
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        render(<TextField />);
+        expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('label'));
+        warnSpy.mockRestore();
     });
 });

@@ -274,6 +274,178 @@ describe('IxField', () => {
         });
     });
 
+    describe('tegnteller', () => {
+        it('oppretter char-count element naar maxlength er satt', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kommentar</label>
+                    <textarea maxlength="200"></textarea>
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const counter = field.querySelector('[data-field="char-count"]');
+            expect(counter).not.toBeNull();
+            expect(counter?.textContent).toBe('0/200');
+        });
+
+        it('oppretter char-count element naar minlength er satt', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kommentar</label>
+                    <textarea minlength="10"></textarea>
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const counter = field.querySelector('[data-field="char-count"]');
+            expect(counter).not.toBeNull();
+            expect(counter?.textContent).toBe('0 tegn (minimum 10)');
+        });
+
+        it('oppretter ikke char-count element naar verken min- eller maxlength er satt', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kommentar</label>
+                    <textarea></textarea>
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const counter = field.querySelector('[data-field="char-count"]');
+            expect(counter).toBeNull();
+        });
+
+        it('inkluderer char-count id i aria-describedby', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kommentar</label>
+                    <textarea maxlength="200"></textarea>
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const textarea = field.querySelector('textarea')!;
+            const counter = field.querySelector('[data-field="char-count"]')!;
+            expect(textarea.getAttribute('aria-describedby')).toContain(counter.id);
+        });
+
+        it('oppdaterer tellerinnhold ved input', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kommentar</label>
+                    <textarea maxlength="200"></textarea>
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const textarea = field.querySelector('textarea')!;
+            const counter = field.querySelector('[data-field="char-count"]')!;
+
+            textarea.value = 'Hei';
+            textarea.dispatchEvent(new Event('input'));
+
+            expect(counter.textContent).toBe('3/200');
+        });
+
+        it('fungerer med input-element og maxlength', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Navn</label>
+                    <input maxlength="50" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const counter = field.querySelector('[data-field="char-count"]');
+            expect(counter).not.toBeNull();
+            expect(counter?.textContent).toBe('0/50');
+        });
+
+        it('kobler fra input-lytter i disconnectedCallback', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kommentar</label>
+                    <textarea maxlength="100"></textarea>
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tilgang til privat felt for aa teste cleanup
+            expect((field as any)._charCountListener).not.toBeNull();
+            field.remove();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tilgang til privat felt for aa teste cleanup
+            expect((field as any)._charCountListener).toBeNull();
+        });
+
+        it('oppretter char-count naar maxlength settes etter connectedCallback (React-timing)', async () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kommentar</label>
+                    <textarea></textarea>
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const textarea = field.querySelector('textarea')!;
+
+            // Ingen teller ennaa — attributtet er ikke satt
+            expect(field.querySelector('[data-field="char-count"]')).toBeNull();
+
+            // React setter attributtet etter mounting
+            textarea.setAttribute('maxlength', '200');
+            await new Promise((r) => setTimeout(r, 0));
+
+            const counter = field.querySelector('[data-field="char-count"]');
+            expect(counter).not.toBeNull();
+            expect(counter?.textContent).toBe('0/200');
+            expect(textarea.getAttribute('aria-describedby')).toContain(counter!.id);
+        });
+    });
+
+    describe('aria-label advarsel', () => {
+        it('advarer naar label mangler og aria-label ikke er satt', () => {
+            const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+            createField(`
+                <ix-field>
+                    <input />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('tilgjengelig navn'));
+            warnSpy.mockRestore();
+        });
+
+        it('advarer ikke naar label finnes', () => {
+            const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+            createField(`
+                <ix-field>
+                    <label>Navn</label>
+                    <input />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            expect(warnSpy).not.toHaveBeenCalledWith(expect.stringContaining('tilgjengelig navn'));
+            warnSpy.mockRestore();
+        });
+
+        it('advarer ikke naar aria-label er satt paa kontrollen', () => {
+            const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+            createField(`
+                <ix-field>
+                    <input aria-label="Søk" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            expect(warnSpy).not.toHaveBeenCalledWith(expect.stringContaining('tilgjengelig navn'));
+            warnSpy.mockRestore();
+        });
+
+        it('advarer ikke naar aria-labelledby er satt paa kontrollen', () => {
+            const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+            createField(`
+                <ix-field>
+                    <input aria-labelledby="ekstern-label" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            expect(warnSpy).not.toHaveBeenCalledWith(expect.stringContaining('tilgjengelig navn'));
+            warnSpy.mockRestore();
+        });
+    });
+
     describe('manglende delelementer', () => {
         it('logger info naar input mangler', () => {
             const infoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
@@ -305,6 +477,60 @@ describe('IxField', () => {
     });
 
     describe('ulike native kontroller', () => {
+        it('fungerer med checkbox der label omslutter input', () => {
+            const field = createField(`
+                <ix-field>
+                    <div class="ix-checkbox">
+                        <label>
+                            <input type="checkbox" />
+                            <span data-field="indicator"></span>
+                            Godta vilkår
+                        </label>
+                        <span data-field="error"></span>
+                    </div>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            const label = field.querySelector('label')!;
+            const error = field.querySelector('[data-field="error"]')!;
+
+            // ID genereres automatisk
+            expect(input.id).toMatch(/^ix-field-\d+$/);
+            // label.htmlFor settes (selv om implicit wrapping allerede virker)
+            expect(label.htmlFor).toBe(input.id);
+            // aria-describedby kobles til error-elementet
+            expect(input.getAttribute('aria-describedby')).toBe(error.id);
+            // aria-live settes av ix-field
+            expect(error.getAttribute('aria-live')).toBe('polite');
+        });
+
+        it('synkroniserer aria-invalid for checkbox via MutationObserver', async () => {
+            const field = createField(`
+                <ix-field>
+                    <div class="ix-checkbox">
+                        <label>
+                            <input type="checkbox" />
+                            <span data-field="indicator"></span>
+                            Godta vilkår
+                        </label>
+                        <span data-field="error"></span>
+                    </div>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            const error = field.querySelector('[data-field="error"]')!;
+
+            expect(input.hasAttribute('aria-invalid')).toBe(false);
+
+            error.textContent = 'Du må godta vilkårene';
+            await new Promise((r) => setTimeout(r, 0));
+            expect(input.getAttribute('aria-invalid')).toBe('true');
+
+            error.textContent = '';
+            await new Promise((r) => setTimeout(r, 0));
+            expect(input.hasAttribute('aria-invalid')).toBe(false);
+        });
+
         it('fungerer med select-element', () => {
             const field = createField(`
                 <ix-field>

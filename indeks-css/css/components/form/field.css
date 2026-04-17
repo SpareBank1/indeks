@@ -32,3 +32,9 @@
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-danger-default);
 }
+
+:where(ix-field, .ix-field) [data-field="char-count"] {
+    font-size: var(--ix-font-size-sm);
+    color: var(--ix-color-foreground-main-subtle);
+    text-align: right;
+}

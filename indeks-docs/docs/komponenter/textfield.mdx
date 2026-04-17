@@ -264,6 +264,53 @@ I banksammenheng er nesten alle felter påkrevd. Merk unntaket — ikke regelen.
 </TabItem>
 </Tabs>
 
+### Tegnteller
+
+Sett `maxlength` eller `minlength` på input — `ix-field` oppretter og oppdaterer en tegnteller automatisk. Med `maxlength` vises `0/50`, med `minlength` vises `0 tegn (minimum 10)`.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextField
+    label="Kort beskrivelse"
+    inputProps={{ maxLength: 50 }}
+  />
+  <TextField
+    label="Begrunnelse"
+    inputProps={{ minLength: 10 }}
+  />
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <ix-field>
+    <label>Kort beskrivelse</label>
+    <div class="ix-text-field">
+      <input maxlength="50" />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field>
+    <label>Begrunnelse</label>
+    <div class="ix-text-field">
+      <input minlength="10" />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+Tellerens ID inkluderes automatisk i `aria-describedby` slik at skjermlesere får det med.
+
 ## Retningslinjer
 
 ### Tydelige labels gir forutsigbarhet
@@ -336,6 +383,36 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 - **`aria-invalid`**: Synkroniseres automatisk med innholdet i error-elementet via MutationObserver.
 - **`required`**: Settes på input for nativ nettleservalidering. Ingen visuell indikator — merk valgfrie felt med `(valgfritt)` i labelteksten.
 
+### Skjult label med ariaLabel
+
+Synlig label er alltid anbefalt. I tilfeller der konteksten er helt åpenbar fra omgivelsene (f.eks. et søkefelt i en søkebar), kan `ariaLabel` brukes i stedet.
+
+:::warning Bruk synlig label
+Skjult label gjør det vanskeligere for alle brukere å orientere seg i skjemaet. Bruk `ariaLabel` kun når synlig label er umulig av layoutmessige grunner, og teksten er meningsfull for skjermleserbrukere.
+:::
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField ariaLabel="Søk" placeholder="Søk..." />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <div class="ix-text-field">
+    <input aria-label="Søk" placeholder="Søk..." />
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
 ### Hva du selv må sørge for
 
 :::warning Ditt ansvar
@@ -355,7 +432,8 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 
 | Prop | Type | Påkrevd | Standard | Beskrivelse |
 |------|------|---------|----------|-------------|
-| `label` | `string` | Ja | | Synlig labeltekst for feltet |
+| `label` | `string` | Nei* | | Synlig labeltekst for feltet. Anbefalt fremfor `ariaLabel` |
+| `ariaLabel` | `string` | Nei* | | Skjult label for skjermlesere. Brukes kun når synlig label ikke er mulig. *Enten `label` eller `ariaLabel` må settes |
 | `description` | `string` | Nei | | Hjelpetekst som vises under label. Kobles til input via `aria-describedby` |
 | `errorMessage` | `string` | Nei | | Feilmelding som vises under input. Trigger `aria-invalid` når den har innhold |
 | `prefix` | `ReactNode \| string` | Nei | | Vises foran inputfeltet. Skjult fra skjermlesere med aria-hidden. Husk å speile innholdet i `label` når konteksten ikke er åpenbar |
@@ -366,7 +444,7 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 | `required` | `boolean` | Nei | `false` | Setter `required` på input for nativ nettleservalidering |
 | `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet. Nyttig for fokusstyring og validering |
 | `inputId` | `string` | Nei | Auto-generert | Eksplisitt ID for input-elementet. Brukes også for `label[for]` |
-| `inputProps` | `InputHTMLAttributes` | Nei | | Alle standard HTML input-attributter. Settes direkte på `<input>`. Bruk `inputProps={{ name: 'feltnavn' }}` for nativ skjema-innsending |
+| `inputProps` | `InputHTMLAttributes` | Nei | | Alle standard HTML input-attributter. Settes direkte på `<input>`. Bruk `inputProps={{ name: 'feltnavn' }}` for nativ skjema-innsending. `maxLength`/`minLength` aktiverer tegnteller automatisk |
 | `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
 
 </TabItem>

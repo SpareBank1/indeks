@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { createRef } from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { TextArea } from './TextArea';
 
 describe('TextArea', () => {
@@ -114,5 +114,24 @@ describe('TextArea', () => {
         const { container } = render(<TextArea label="Tilbakemelding" required />);
         const indicator = container.querySelector('.ix-field__required');
         expect(indicator).toBeNull();
+    });
+
+    it('setter aria-label paa textarea naar ariaLabel er satt', () => {
+        render(<TextArea ariaLabel="Søk" />);
+        const textarea = screen.getByRole('textbox');
+        expect(textarea.getAttribute('aria-label')).toBe('Søk');
+    });
+
+    it('renderer ikke label-element naar kun ariaLabel er satt', () => {
+        render(<TextArea ariaLabel="Søk" />);
+        const label = document.querySelector('label');
+        expect(label).toBeNull();
+    });
+
+    it('logger advarsel naar verken label eller ariaLabel er satt', () => {
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        render(<TextArea />);
+        expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('label'));
+        warnSpy.mockRestore();
     });
 });
