@@ -5,6 +5,24 @@ import { test, expect } from '@playwright/test';
 // Legg til nye titler etter hvert som komponenter er klare for skjermbilde- og UU-testing.
 const ALLOWED_STORY_TITLES: string[] = ['Form/TextField', 'Form/TextArea'];
 
+// Profilrotasjon — mobil prioritert. Hver story testes mot 1 profil (stabil via hash).
+// Legg til profilnavn som tag på en story for å overstyre, f.eks. tags: ['mobile-webkit'].
+const PROFILE_ROTATION = [
+    'mobile-chromium',
+    'mobile-webkit',
+    'desktop-chromium',
+    'desktop-webkit',
+    'desktop-firefox',
+];
+
+function stableProfileIndex(storyId: string): number {
+    let hash = 0;
+    for (const ch of storyId) {
+        hash = ((hash << 5) - hash + ch.charCodeAt(0)) | 0;
+    }
+    return Math.abs(hash) % PROFILE_ROTATION.length;
+}
+
 console.log('Fetching stories');
 
 let stories;
@@ -22,6 +40,7 @@ type StoryEntry = {
     name: string;
     title: string;
     type: string;
+    tags?: string[];
     [key: string]: unknown;
 };
 
@@ -44,11 +63,23 @@ const componentStories =
         ? Object.fromEntries(Object.entries(allStories).filter(([title]) => ALLOWED_STORY_TITLES.includes(title)))
         : allStories;
 
+function getAssignedProfiles(story: StoryEntry): string[] {
+    const tagOverrides = (story.tags ?? []).filter((t) => PROFILE_ROTATION.includes(t));
+    if (tagOverrides.length > 0) return tagOverrides;
+    return [PROFILE_ROTATION[stableProfileIndex(story.id)]];
+}
+
 test.describe('Test all components', () => {
     Object.entries(componentStories).forEach(([title, stories]) => {
         test.describe(title, () => {
             stories.forEach((story) => {
                 test(story.name, async ({ page }, testInfo) => {
+                    const assignedProfiles = getAssignedProfiles(story);
+                    if (!assignedProfiles.includes(testInfo.project.name)) {
+                        test.skip();
+                        return;
+                    }
+
                     const isMobile = testInfo.project.name.startsWith('mobile-');
                     const device = isMobile ? 'mobile' : 'desktop';
                     console.log(`Testing story: ${story.name} (${device})`);
