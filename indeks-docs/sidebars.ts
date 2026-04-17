@@ -34,7 +34,7 @@ const sidebars: SidebarsConfig = {
             collapsed: true,
             items: [
                 'grunnleggende/typografi',
-                ,
+                'grunnleggende/native',
                 {
                     type: 'category',
                     label: 'Tokens',
@@ -44,10 +44,7 @@ const sidebars: SidebarsConfig = {
                         {
                             type: 'category',
                             label: 'Farger',
-                            items: [
-                                'retningslinjer/farger/farger',
-                                'grunnleggende/tokens/farger-native',
-                            ],
+                            items: ['retningslinjer/farger/farger', 'grunnleggende/tokens/farger-native'],
                         },
                         'grunnleggende/tokens/spacing',
                         'grunnleggende/tokens/border',
@@ -60,13 +57,17 @@ const sidebars: SidebarsConfig = {
             type: 'category',
             label: 'Mønstre og maler',
             collapsed: true,
-            items: ['monstre-og-maler/layout', 'monstre-og-maler/spacing', 'monstre-og-maler/deaktiverte-tilstander'],
+            items: [
+                'monstre-og-maler/layout',
+                'monstre-og-maler/spacing',
+                'monstre-og-maler/deaktiverte-tilstander',
+            ],
         },
         {
             type: 'category',
             label: 'Utility-klasser',
             collapsed: true,
-            items: ['grunnleggende/tokens/utilities'],
+            items: ['utility-klasser/oversikt', 'utility-klasser/native'],
         },
         {
             type: 'category',

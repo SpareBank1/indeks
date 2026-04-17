@@ -1,5 +1,6 @@
 @import '@sb1/indeks-css';
 @import 'https://cdn.sparebank1.no/fonts/v1.css';
+@import './settings-popover.css';
 
 * {
     transition: var(--ix-transition-all);
