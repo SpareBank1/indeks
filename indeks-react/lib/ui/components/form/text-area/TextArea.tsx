@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { forwardRef, useId } from 'react';
 import { Field } from '../field/Field';
 
@@ -22,8 +23,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
     const id = inputId ?? generatedId;
 
     return (
-        <Field inputId={id} label={label} className={className} description={description} errorMessage={errorMessage} {...restProps}>
-            <div className="ix-text-area">
+        <Field inputId={id} label={label} className={className} description={description} errorMessage={errorMessage} disabled={disabled} readOnly={readOnly} {...restProps}>
+            <div className={clsx('ix-text-area')}>
                 <textarea ref={ref} {...inputProps} className={inputProps?.className} placeholder={placeholder} id={id} disabled={disabled} readOnly={readOnly} required={required} />
             </div>
         </Field>

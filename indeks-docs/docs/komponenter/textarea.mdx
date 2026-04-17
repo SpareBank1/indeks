@@ -125,17 +125,18 @@ Komponenten kobler `for`/`id` og `aria-describedby` automatisk.
 </TabItem>
 </Tabs>
 
-`disabled` og `readOnly` settes direkte på textarea. CSS-reglene `:has(:disabled)` og `:has(:read-only)` på `ix-field` tar seg av den visuelle tilstanden automatisk. Resize-håndtaket skjules automatisk for `disabled` og `readOnly`.
+`disabled` og `readOnly` settes direkte på textarea. `ix-field` tar seg av den visuelle tilstanden automatisk. Resize-håndtaket skjules automatisk for `disabled` og `readOnly`.
 
-### Påkrevd felt
+### Valgfrie felt
+
+Merk unntaket — ikke regelen. Legg til `(valgfritt)` i labelteksten når feltet ikke er obligatorisk.
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ```tsx live
 <TextArea
-  label="Tilbakemelding"
-  required
+  label="Tilleggskommentarer (valgfritt)"
 />
 ```
 
@@ -144,9 +145,9 @@ Komponenten kobler `for`/`id` og `aria-describedby` automatisk.
 
 ```jsx live
 <ix-field>
-  <label>Tilbakemelding</label>
+  <label>Tilleggskommentarer (valgfritt)</label>
   <div class="ix-text-area">
-    <textarea required></textarea>
+    <textarea></textarea>
   </div>
   <span data-field="error"></span>
 </ix-field>
@@ -214,7 +215,7 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 - **`aria-describedby`**: Textarea peker til description og error-elementet. Hjelpetekst leses før feilmelding.
 - **`aria-live="polite"`**: Settes på error-elementet slik at skjermlesere annonserer nye feilmeldinger uten å avbryte brukeren.
 - **`aria-invalid`**: Synkroniseres automatisk med innholdet i error-elementet via MutationObserver.
-- **Required-indikator**: Rød `*` etter label vises automatisk via CSS når textarea har `required`-attributtet (`:has(:required)`).
+- **`required`**: Settes på textarea for nativ nettleservalidering. Ingen visuell indikator — merk valgfrie felt med `(valgfritt)` i labelteksten.
 
 ### Hva du selv må sørge for
 
@@ -238,7 +239,7 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 | `placeholder` | `string` | Nei | | Placeholder-tekst. Bør ikke brukes som bærer av viktig informasjon |
 | `disabled` | `boolean` | Nei | `false` | Deaktiverer feltet helt. Ingen fokus eller interaksjon |
 | `readOnly` | `boolean` | Nei | `false` | Brukeren kan fokusere og kopiere, men ikke endre verdien |
-| `required` | `boolean` | Nei | `false` | Setter `required` på textarea. Viser rød `*` etter label automatisk via CSS |
+| `required` | `boolean` | Nei | `false` | Setter `required` på textarea for nativ nettleservalidering |
 | `ref` | `Ref<HTMLTextAreaElement>` | Nei | | Ref videresendes til `<textarea>`-elementet |
 | `inputId` | `string` | Nei | Auto-generert | Eksplisitt ID for textarea-elementet. Brukes også for `label[for]` |
 | `inputProps` | `TextareaHTMLAttributes` | Nei | | Alle standard HTML textarea-attributter, inkl. `rows`, `maxLength`, `cols` |
@@ -253,7 +254,7 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 
 ```html
 <ix-field>                                        ← wrapper, setter opp ARIA automatisk
-  <label class="ix-label">Tilbakemelding</label>  ← kobles til textarea via for/id
+  <label>Tilbakemelding</label>  ← kobles til textarea via for/id
   <span data-field="description">                  ← hjelpetekst, kobles via aria-describedby
     Maks 500 tegn
   </span>
@@ -269,7 +270,7 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 | Del | Påkrevd | Beskrivelse |
 |-----|---------|-------------|
 | `<ix-field>` | Ja | Wrapper. Kobler ARIA mellom label, textarea, description og error automatisk |
-| `<label class="ix-label">` | Ja | Labeltekst. Kobles til textarea via `for`/`id`. ID genereres om den mangler |
+| `<label>` | Ja | Labeltekst. Kobles til textarea via `for`/`id`. ID genereres om den mangler |
 | `<span data-field="description">` | Nei | Hjelpetekst. Kobles til textarea via `aria-describedby` |
 | `<div class="ix-text-area">` | Ja | Container for textarea |
 | `<textarea>` | Ja | Tekstområdet. Alle native attributter (`rows`, `cols`, `maxlength`, `disabled`, `readonly`, `required`) settes her |
@@ -277,6 +278,82 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 
 </TabItem>
 </Tabs>
+
+## Tilpasning med CSS
+
+Trenger du `ix-text-area`-stylingen på HTML du setter sammen selv — uten
+React-komponenten eller `<ix-field>` — kan du bruke klassene direkte på elementene dine.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Textarea-wrapper | `.ix-text-area` |
+| Tekstområde | `.ix-text-area > textarea` eller `.ix-text-area__textarea` |
+| Label | `.ix-label` |
+| Hjelpetekst | `[data-field="description"]` |
+| Feilmelding | `[data-field="error"]` |
+
+`.ix-text-area__textarea` gir textarea-elementet nøyaktig samme stilregler som
+`.ix-text-area > textarea`. Bruk den når du ikke kan eller vil bruke komponentens
+HTML-struktur.
+
+### Eksempel: bruk i eigen HTML-struktur
+
+```html
+<ix-field>
+  <label>Tilbakemelding</label>
+  <span data-field="description">Fortell oss hva du synes</span>
+  <div class="ix-text-area">
+    <textarea class="ix-text-area__textarea" rows="4"></textarea>
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+## Hva ix-field gjør med DOM-en
+
+`<ix-field>` er en web component som setter opp ARIA-koblinger automatisk når den kobles til DOM. Her er hva som skjer — fra HTML du skriver til HTML etter at `ix-field` har kjørt.
+
+**Før** (det du skriver):
+
+```html
+<ix-field>
+  <label>Tilbakemelding</label>
+  <span data-field="description">Fortell oss hva du synes</span>
+  <div class="ix-text-area">
+    <textarea rows="4"></textarea>
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+**Etter** (det som er i DOM etter at `ix-field` har kjørt):
+
+```html
+<ix-field>
+  <label for="ix-field-1">Tilbakemelding</label>
+  <span data-field="description" id="ix-field-1-description">Fortell oss hva du synes</span>
+  <div class="ix-text-area">
+    <textarea rows="4" id="ix-field-1"
+              aria-describedby="ix-field-1-description ix-field-1-error"></textarea>
+  </div>
+  <span data-field="error" id="ix-field-1-error" aria-live="polite"></span>
+</ix-field>
+```
+
+Hva som ble lagt til:
+
+| Hva | Hvor | Hvorfor |
+|-----|------|---------|
+| `for="ix-field-1"` | `<label>` | Kobler label til textarea — klikk på label gir fokus til feltet |
+| `id="ix-field-1"` | `<textarea>` | Grunnlag for alle ARIA-koblinger. Genereres bare om textarea mangler en ID |
+| `id="ix-field-1-description"` | description-span | Nødvendig for `aria-describedby`-kobling |
+| `id="ix-field-1-error"` | error-span | Nødvendig for `aria-describedby`-kobling |
+| `aria-describedby="... ..."` | `<textarea>` | Skjermleseren leser description og feilmelding etter label og verdi |
+| `aria-live="polite"` | error-span | Skjermleseren annonserer feilmeldinger automatisk når de dukker opp |
+
+Når error-span får innhold setter `ix-field` i tillegg `aria-invalid="true"` på textarea automatisk via MutationObserver. Når den tømmes fjernes attributten igjen.
 
 ## Relatert
 

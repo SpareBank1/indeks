@@ -2,7 +2,8 @@
     display: flex;
 }
 
-:where(.ix-text-area) > textarea {
+:where(.ix-text-area) > textarea,
+:where(.ix-text-area__textarea) {
     all: unset;
     box-sizing: border-box;
     min-width: 0;
@@ -25,12 +26,13 @@
     }
 
     &:active,
-    &:focus-within {
+    &:focus {
         outline: var(--ix-outline-default);
     }
 }
 
-:where(.ix-text-area) > textarea:disabled {
+:where(.ix-text-area) > textarea:disabled,
+:where(.ix-text-area__textarea:disabled) {
     background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-disabled);
     border-color: var(--ix-color-border-main-default);
@@ -39,19 +41,22 @@
     resize: none;
 }
 
-:where(.ix-text-area) > textarea:read-only {
+:where(.ix-text-area) > textarea:read-only,
+:where(.ix-text-area__textarea:read-only) {
     background-color: var(--ix-color-fill-interactive-read-only);
     color: var(--ix-color-foreground-main-read-only);
     border-color: var(--ix-color-border-main-default);
     resize: none;
 }
 
-:where(.ix-text-area) > textarea[aria-invalid=true] {
+:where(.ix-text-area) > textarea[aria-invalid='true'],
+:where(.ix-text-area__textarea[aria-invalid='true']) {
     color: var(--ix-color-foreground-danger-default);
     border-color: var(--ix-color-border-danger-default);
     box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
 }
 
-:where(.ix-text-area) > textarea::placeholder {
+:where(.ix-text-area) > textarea::placeholder,
+:where(.ix-text-area__textarea)::placeholder {
     color: var(--ix-color-foreground-main-subtle);
 }
