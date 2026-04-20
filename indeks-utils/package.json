@@ -34,6 +34,7 @@
     },
     "scripts": {
         "dev": "echo not implemented",
+        "lint": "stylelint 'css/**/*.css'",
         "build": "rm -rf ./dist ./.build && pnpm run build:utils && pnpm run build:color-utils && pnpm run build:bundle",
         "prepublishOnly": "pnpm run build",
         "test": "echo \"Ingen tester\"",

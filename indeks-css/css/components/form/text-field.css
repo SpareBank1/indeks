@@ -53,7 +53,7 @@
     border-color: var(--ix-color-border-main-default);
 }
 
-:where(.ix-text-field__input[aria-invalid=true]) {
+:where(.ix-text-field__input[aria-invalid="true"]) {
     color: var(--ix-color-foreground-danger-default);
     border-color: var(--ix-color-border-danger-default);
     box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);

@@ -1,8 +1,0 @@
-# Målrettede nettlesere for Indeks.
-# since 2022-03 tilsvarer omtrent: Chrome 99, Edge 99, Firefox 98, Safari 15.4.
-# Bytt til "last 3 years" når eksplisitte minimumskrav ikke lenger er nødvendige.
-since 2022-03
-# Edge >= 99
-# Firefox >= 97
-# Chrome >= 99
-# Safari >= 15.4

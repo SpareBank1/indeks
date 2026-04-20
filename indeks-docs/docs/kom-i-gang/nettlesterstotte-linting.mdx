@@ -1,0 +1,211 @@
+---
+sidebar_label: Nettleserstøtte-linting
+---
+
+# Sett opp linting for nettleserstøtte
+
+<!-- STIKKORD: Intro-avsnitt
+- Indeks støtter nettlesere fra mars 2022 (Chrome/Edge 99, Firefox 98, Safari 15.4)
+- Konsumenter bør sikre at koden de skriver holder seg innenfor det samme targetvinduet
+- Fire lag som jobber sammen — kort oversikt over hva hvert lag gjør og ikke gjør:
+  - browserslist — kilde til sannhet, leses automatisk av CSS- og JS-verktøy
+  - Stylelint — advarer om CSS-features som ikke støttes av targetbrowserne
+  - eslint-plugin-compat — advarer om JS-APIer som ikke støttes (fetch, Array.toSorted() osv.)
+  - Vite build.target + TypeScript lib/target — styrer transpilering av syntaks og type-tilgang
+- Skillet mellom syntaks og APIer er viktig: syntaks (optional chaining, class fields) kan transpileres,
+  men nettleser-APIer kan ikke — de må støttes av nettleseren selv
+-->
+
+## 1. Definer nettlesertarget med browserslist
+
+<!-- STIKKORD:
+- Browserslist er den felles kilden til sannhet — alle verktøyene nedenfor leser herfra automatisk
+- Legg "browserslist"-felt direkte i package.json (én fil, ingen ekstra konfig-fil)
+- Forklar hva de eksplisitte versjonene tilsvarer i praksis (mars 2022-baseline)
+-->
+
+Legg til et `browserslist`-felt i `package.json`:
+
+```json
+{
+    "browserslist": [
+        "Chrome >= 99",
+        "Edge >= 99",
+        "Firefox >= 98",
+        "Safari >= 15.4"
+    ]
+}
+```
+
+## 2. CSS-linting med Stylelint
+
+<!-- STIKKORD:
+- Hva Stylelint er (én setning)
+- Hva stylelint-no-unsupported-browser-features gjør: leser browserslist og advarer om CSS-features som ikke støttes
+- ignorePartialSupport: true — forklar at "delvis støttet" betyr at noe av spesifikasjonen mangler, ikke at featuren ikke virker
+- ignore-listen: postcss-preset-env (stage 2) transpilerer css-nesting og css-variables, så de trengs ikke å varsle om
+-->
+
+### Installer
+
+```bash
+npm install --save-dev stylelint stylelint-config-standard stylelint-no-unsupported-browser-features
+```
+
+### Konfigurasjon
+
+Opprett `stylelint.config.js` i roten:
+
+```js
+export default {
+    extends: ['stylelint-config-standard'],
+    plugins: ['stylelint-no-unsupported-browser-features'],
+    rules: {
+        'plugin/no-unsupported-browser-features': [true, {
+            severity: 'warning',
+            // Delvis støtte er OK — vi vil kun varsle om fullstendig manglende støtte
+            ignorePartialSupport: true,
+            // Legg til features som transpileres av postcss-preset-env
+            ignore: [
+                'css-nesting',     // transpileres av postcss-preset-env stage 2
+                'css-variables',   // transpileres av postcss-preset-env stage 2
+            ],
+        }],
+    },
+    ignoreFiles: ['**/dist/**', '**/node_modules/**'],
+};
+```
+
+### Legg til lint-script
+
+```json
+{
+    "scripts": {
+        "lint:css": "stylelint '**/*.css'"
+    }
+}
+```
+
+<!-- STIKKORD:
+- Tips: bytt glob-mønsteret med den faktiske stien til CSS-filene dine
+- Nevn at .stylelintignore kan brukes for å ekskludere genererte filer
+- Nevn at severity: 'warning' betyr at lint ikke stopper build — bytt til 'error' om ønskelig
+-->
+
+## 3. JS/TS-linting med ESLint
+
+<!-- STIKKORD:
+- eslint-plugin-compat sjekker at koden ikke bruker nettleser-APIer som mangler i targetbrowserne
+- Leser browserslist automatisk fra package.json
+- Eksempler på hva som fanges: Array.toSorted(), URLPattern, strukturerte kloner, osv.
+- Dette er APIer Vite ikke kan transpilere — se neste seksjon
+-->
+
+### Installer
+
+```bash
+npm install --save-dev eslint-plugin-compat
+```
+
+### Konfigurasjon
+
+Legg til i `eslint.config.js` (flat config):
+
+```js
+import compat from 'eslint-plugin-compat';
+
+export default [
+    // ... eksisterende konfig
+    {
+        plugins: { compat },
+        rules: {
+            'compat/compat': 'error',
+        },
+        settings: {
+            // Legg til polyfills her hvis du bruker noen:
+            // polyfills: ['Promise', 'fetch'],
+        },
+    },
+];
+```
+
+<!-- STIKKORD:
+- 'error' stopper build, 'warn' gir advarsel — velg ut fra hvor strengt du vil være
+- settings.polyfills: forklar at polyfills kan hvitelistes slik at plugin ikke klager på dem
+-->
+
+## 4. Vite build.target og TypeScript lib/target
+
+<!-- STIKKORD: Intro til seksjonen
+- Disse to er ikke lint-verktøy, men påvirker direkte hvilke JS-features som fungerer i targetbrowserne
+- Hensiktsmessig å konfigurere konsistent med browserslist
+-->
+
+### Vite build.target
+
+<!-- STIKKORD:
+- Vite bruker esbuild til å transpilere moderne JS-syntaks (optional chaining, nullish coalescing, class fields, osv.)
+- build.target styrer hvilken syntaks esbuild transpilerer ned til
+- Vite leser ikke browserslist automatisk — target må settes manuelt og holdes synkronisert
+- Viktig distinksjon: Vite håndterer syntaks, ESLint (compat) håndterer APIer
+  - Syntaks (transpileres): class fields, optional chaining, async/await
+  - APIer (transpileres ikke): Array.toSorted(), fetch, IntersectionObserver — disse må støttes av nettleseren selv
+- Derfor utfyller Vite og eslint-plugin-compat hverandre: Vite for syntaks, ESLint for APIer
+-->
+
+Legg til `build.target` i `vite.config.js` — versjonene skal matche `browserslist`-feltet i `package.json`:
+
+```js
+// vite.config.js
+export default {
+    build: {
+        target: ['chrome99', 'edge99', 'firefox98', 'safari15.4']
+    }
+};
+```
+
+<!-- STIKKORD:
+- Merk formatet: "chrome99" (ikke "Chrome >= 99") — esbuild har eget format
+- Synkroniseres manuelt med browserslist — ingen automatikk her
+-->
+
+### TypeScript lib og target
+
+<!-- STIKKORD:
+- TypeScript sitt "target" styrer hvilken ES-versjon koden kompileres til (men med Vite/noEmit er det Vite som faktisk transpilerer)
+- "lib" styrer hvilke type-definisjoner TypeScript kjenner til — viktig for at TypeScript skal oppdage
+  APIer som ikke finnes i ES2022 (f.eks. Array.toSorted() er ES2023 og gir TypeScript-feil med lib: ES2022)
+- lib og target bør være konsistente med browserslist: Chrome 99/Edge 99/Firefox 98/Safari 15.4 støtter ES2022
+- target: "ES2022" og lib: ["ES2022", "DOM", "DOM.Iterable"] er riktig for mars 2022-baseline
+- DOM og DOM.Iterable er separate: DOM = nettleser-API-typer, DOM.Iterable = iterable DOM-collections
+- Kombinasjonen TypeScript lib + eslint-plugin-compat gir dobbel dekning:
+  TypeScript gir typefeil på ukjente APIer, ESLint gir lint-feil på ustøttede APIer
+-->
+
+```json
+// tsconfig.json
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"]
+    }
+}
+```
+
+## Verifiser oppsettet
+
+<!-- STIKKORD:
+- Kjør stylelint og se at rene filer gir 0 feil/advarsler
+- Prøv å bruke color-mix() i CSS og se at det gir warning (ikke støttet i Chrome/Edge/Firefox < 111, Safari < 16.2)
+- Prøv å bruke Array.toSorted() i JS/TS og se at det gir error med liste over browsere som mangler støtte
+- Forklar hva output-meldingen betyr (feature-id, browsernavn, versjonsspenn)
+-->
+
+## Vanlige spørsmål
+
+<!-- STIKKORD:
+- "Stylelint klager på CSS jeg vet fungerer" → forklaring av partially supported vs. not supported, bruk ignorePartialSupport: true
+- "Pluginen klager på en feature som transpileres av postcss-preset-env" → legg til feature-id i ignore-listen
+- "Jeg bruker en polyfill for X" → legg til i settings.polyfills i eslint-konfigurasjonen
+- Hvor finner jeg feature-IDene som skal i ignore-listen? → doiuse.com / caniuse.com
+-->

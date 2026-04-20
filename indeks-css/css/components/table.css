@@ -4,14 +4,6 @@
     font-size: var(--ix-base-font-size);
 }
 
-.ix-table--sm .ix-table__cell {
-    font-size: var(--ix-font-size-sm);
-}
-
-.ix-table--lg .ix-table__cell {
-    font-size: var(--ix-font-size-lg);
-}
-
 .ix-table__row {
     font-size: inherit;
     border-top: 1px solid var(--ix-color-border-main-default);
@@ -20,4 +12,12 @@
 .ix-table__cell {
     text-align: left;
     padding: var(--ix-spacing-xs) var(--ix-spacing-md);
+}
+
+.ix-table--sm .ix-table__cell {
+    font-size: var(--ix-font-size-sm);
+}
+
+.ix-table--lg .ix-table__cell {
+    font-size: var(--ix-font-size-lg);
 }

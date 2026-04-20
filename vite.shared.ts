@@ -4,7 +4,7 @@ import type { UserConfig } from 'vite';
  * Delt Vite-konfigurasjon for alle pakker i monorepoet.
  * Importer og bruk med mergeConfig() i pakke-spesifikke vite.config.ts.
  *
- * build.target holdes synkronisert med .browserslistrc (since 2022-03).
+ * build.target holdes synkronisert med browserslist i package.json.
  *
  * @example
  * import { mergeConfig } from 'vite';

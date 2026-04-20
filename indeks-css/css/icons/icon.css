@@ -1,5 +1,5 @@
 :where(.ix-icon) {
-    background-color: currentColor;
+    background-color: currentcolor;
     /* setter fargen til ikonet */
     color: inherit;
     width: var(--ix-font-size-xl);
