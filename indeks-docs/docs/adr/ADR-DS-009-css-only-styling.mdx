@@ -1,0 +1,118 @@
+---
+title: ADR-DS-009 CSS-arkitektur
+description: All styling bruker ren HTML og CSS. Ingen CSS-in-JS. ix-prefix på alle klasser og variabler.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-009: CSS-arkitektur
+
+<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+
+## Beslutning
+
+All styling bruker ren **HTML + CSS** med `ix-`-prefix på alle klasser og custom properties.
+
+### Tokens som CSS custom properties
+
+`--ix-color-primary`, `--ix-spacing-md` etc. Alle tokenverdier er tilgjengelige direkte i CSS uten ekstra byggesteg for konsumenter.
+
+### Utility-klasser
+
+Inspirert av [ok-css](https://github.com/SpareBank1/ok-css) (SpareBank 1s interne CSS-rammeverk), Tailwind og nettbanken: `ix-m-md`, `ix-flex`, `ix-gap-sm`. Dekker ~80% av behovene. For avanserte behov bruker man egne CSS-filer med design tokens.
+
+Responsive varianter følger mønsteret `ix-{breakpoint}-{klasse}`, f.eks. `ix-sm-flex` for flex fra 768px og oppover. Breakpoints: sm (768px), md (1024px), lg (1280px), xl (1600px).
+
+### Nettleserstøtte
+
+<Term>PostCSS</Term> med `postcss-preset-env` og `autoprefixer` håndterer moderne CSS-syntaks ned til nettleserne i `.browserslistrc`. CSS leveres ferdig kompilert i pakken — konsumenter trenger ikke kjøre PostCSS selv.
+
+### CSS-struktur
+
+`indeks-css/css/`: box/, card/, components/, form/, icons/, typography/.
+
+### Dark mode
+
+Temaet styres med CSS-klasser på rotelementet: `ix-light-mode` og `ix-dark-mode` tvinger henholdsvis lyst og mørkt tema. Klassen `ix-regard-color-scheme-preference` følger brukerens OS-preferanse via `prefers-color-scheme`.
+
+:::warning Åpent spørsmål
+Vurder om `ix-regard-color-scheme-preference` bør beholdes eller fjernes. Det er ønskelig at konsumenter eksplisitt velger tema (`ix-light-mode` / `ix-dark-mode`) fremfor å arve OS-preferanse automatisk.
+:::
+
+### Drivere for beslutningen
+
+- Langsiktig holdbarhet — CSS fungerer uavhengig av React-versjoner og JS-trender
+- Ingen runtime overhead — styling er statisk CSS
+- Rammeverk-agnostisk — fungerer med React, Vue, Angular og ren HTML
+- God caching og forutsigbar ytelse
+- Enkel debugging med standard devtools
+
+## Bakgrunn
+
+Vi ønsker et designsystem som varer lenge uavhengig av JavaScript-trender, støtter eldre
+nettlesere basert på `.browserslistrc`, og er enkelt å ta i bruk uten kompleks tooling.
+Et designsystem bør fungere for alle konsumenter — ikke bare de som bruker React.
+
+## Problemstilling
+
+Hvilken styringstilnærming for styling sikrer at designsystemet er rammeverk-agnostisk,
+langsiktig holdbart og uten runtime-overhead?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Alle konsumenter av designsystemet — både React-konsumenter og team som kun bruker CSS.
+
+### Ulemper
+
+- Ingen automatisk scoping — `ix-`-prefix er eneste beskyttelse mot navnekollisjoner
+- Ingen compile-time type checking av klassenavn
+- Utility-klasser dekker ikke alle behov (men dette er bevisst — 80/20-regelen)
+
+### Tiltak mot ulemper
+
+- `ix-`-prefix forhindrer navnekollisjoner i praksis
+- TypeScript-typer for komponent-props gir type safety der det er mulig
+
+## Forkastede alternativer
+
+### Tailwind CSS
+
+Et utility-first CSS-rammeverk som genererer kun de klassene som er i bruk. Svært
+populært og brukes av mange designsystemer.
+
+**Forkastet fordi:**
+- Tailwind forutsetter at konsumenter bruker Tailwinds egen build-pipeline — et eksternt
+  designsystem bør ikke kreve dette av sine konsumenter
+- Tailwinds klassemodell og vårt token-system er grunnleggende ulike paradigmer som
+  er vanskelig å kombinere uten å tape fordelene med begge
+
+### CSS-in-JS (styled-components, Emotion, vanilla-extract)
+
+Styling defineres i JavaScript/TypeScript, nær komponentkoden.
+
+**Forkastet fordi:**
+- Runtime overhead (styled-components/Emotion genererer CSS i nettleseren)
+- Binder designsystemet til React
+- Kompliserer SSR
+- Gjør CSS-only-bruk umulig
+
+### CSS Modules
+
+Modulbasert CSS der klassenavn scopet automatisk per komponent ved build.
+
+**Forkastet fordi:** Genererte hash-baserte klassenavn er vanskelig å debugge og umulige å dokumentere
+(klassenavnet `ix-button` er meningsfullt; `_button_a3f2c_1` er det ikke).
+Eksponerer ikke stabile klassenavn som konsumenter kan bruke direkte.
+
+### Sass/Less
+
+CSS-preprocessorer med variabler, nesting og mixins.
+
+**Forkastet fordi:** Moderne CSS har nå de fleste features som motiverte Sass (custom properties,
+nesting, container queries). Et ekstra byggesteg gir kompleksitet uten tilsvarende verdi.
+
+<AdrDeltakere utarbeidetAv="Team Designsystem" />

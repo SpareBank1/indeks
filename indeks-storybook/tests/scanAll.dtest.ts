@@ -67,6 +67,7 @@ test.describe('Test all components', () => {
                     const accessibilityScanResults = await new AxeBuilder({
                         page,
                     })
+                        .withTags(['wcag2a', 'wcag2aa', 'wcag22aa'])
                         .disableRules(['heading-order', 'page-has-heading-one', 'landmark-one-main', 'region'])
                         // Disabled-elementer er unntatt fra WCAG 1.4.3 kontrastkrav.
                         // TODO: Vurder om vi likevel ønsker tilstrekkelig kontrast på disabled-felter.

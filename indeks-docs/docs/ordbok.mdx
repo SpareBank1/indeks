@@ -1,0 +1,35 @@
+---
+title: Ordbok
+description: Forklaringer på fagbegreper som brukes i Indeks-dokumentasjonen.
+---
+
+import React from 'react';
+import { glossary } from '@site/src/data/glossary';
+
+# Ordbok
+
+Forklaringer på fagbegreper som brukes i dokumentasjonen. Begreper er lenket til herfra der de første gang dukker opp i en ADR eller annen tekst.
+
+<dl>
+    {Object.entries(glossary)
+        .sort(([a], [b]) => a.localeCompare(b, 'no'))
+        .map(([term, entry]) => (
+            <React.Fragment key={term}>
+                <dt id={term} style={{ fontWeight: 600, marginTop: '1.75rem', scrollMarginTop: 'calc(var(--ifm-navbar-height) + 1rem)', fontSize: '1.05rem' }}>
+                    {term}
+                </dt>
+                <dd style={{ marginLeft: '1.5rem', marginTop: '0.25rem', marginBottom: 0 }}>
+                    <p style={{ marginBottom: entry.links ? '0.4rem' : 0 }}>{entry.long}</p>
+                    {entry.links && (
+                        <ul style={{ paddingLeft: '1.25rem', marginBottom: 0 }}>
+                            {entry.links.map(link => (
+                                <li key={link.href}>
+                                    <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </dd>
+            </React.Fragment>
+        ))}
+</dl>

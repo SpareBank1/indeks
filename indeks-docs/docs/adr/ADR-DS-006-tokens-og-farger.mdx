@@ -1,0 +1,98 @@
+---
+title: ADR-DS-006 Design tokens
+description: Design tokens som JSON er single source of truth for web, iOS og Android. Toveis Figma-synkronisering med klare ansvarsgrenser.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-006: Design tokens
+
+<AdrStatusLogg
+    historikk={[
+        { status: 'Utkast', dato: '2026-01-23' },
+    ]}
+/>
+
+## Beslutning
+
+Design tokens defineres som JSON i `indeks-tokens/tokens/` og er single source of truth. Synkroniseres toveis med Figma med klare ansvarsgrenser.
+
+### Token-struktur
+
+JSON-filer i `indeks-tokens/tokens/` (colors/, spacing.json, typography.json, border.json, breakpoints.json, z-index.json, transition.json). Genererer <Term>CSS custom properties</Term> (`--ix-*`), iOS Swift-verdier og Android XML. Fargesystemet er beskrevet i [ADR-DS-007](./ADR-DS-007-fargesystem).
+
+### Figma-sync
+
+Synkroniseringen er toveis men med klare ansvarsgrenser: primitive verdier eies i kode og synkroniseres én vei til Figma. Semantisk mapping (f.eks. blue-600 → color-action) eies av designere i Figma og synkroniseres tilbake til kode via GitHub Actions workflow (`sync-figma-tokens.yml`). De to retningene er separate — det oppstår ikke konflikter mellom dem.
+
+### Drivere for beslutningen
+
+- Konsistens på tvers av plattformer (web, iOS, Android)
+- Versjonskontroll av design-verdier — endringer er sporbare i git
+- Koden er fasit for primitive verdier — designere styrer <Term>semantisk mapping</Term>
+- Theming — konsumenter som Kredittbanken og Spleis kan bytte ut primitive farger og få komplette fargeskalaer og semantiske tokens generert for sitt tema. Se [ADR-DS-007](./ADR-DS-007-fargesystem) for detaljer om fargesystemet
+
+## Bakgrunn
+
+Et designsystem trenger konsistente verdier for farger, spacing, typografi og andre primitiver.
+Disse verdiene må brukes på flere plattformer (web, iOS, Android) og holdes synkronisert med
+Figma.
+
+Vi hadde ingen etablert kilde til sannhet for disse verdiene. Designere jobbet med farger i
+Figma, utviklere hardkodet verdier i CSS, og iOS- og Android-team hadde egne filer. Resultatet
+var drift mellom plattformene og manuelt arbeid hver gang noe skulle oppdateres.
+
+## Problemstilling
+
+Hvordan definerer og distribuerer vi <Term>design tokens</Term> på en måte som sikrer konsistens på tvers
+av web, iOS og Android — og holder Figma og kode i sync — uten at det krever manuelt arbeid
+ved hver endring?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Designere bruker Figma-synkroniseringen og definerer semantisk mapping. Frontend-utviklere
+bruker CSS tokens direkte. Mobilutviklere får genererte outputs for iOS og Android.
+
+### Ulemper
+
+Ingen identifiserte ulemper. Figma-sync kjøres manuelt og ad hoc — det er en bevisst prosess der endringer i primitiver vurderes før de synkroniseres til Figma.
+
+## Forkastede alternativer
+
+### Style Dictionary / Theo
+
+Industristandard-verktøy (Adobe/Amazon) for å transformere design tokens til plattform-spesifikke
+outputs. Brukes av mange store designsystemer.
+
+**Forkastet fordi:** Gir mindre kontroll over output-formatet enn egne scripts, og løser ikke
+behovet for OKLCH-generering uten egne plugins uansett.
+
+### CSS-variabler direkte (uten token-pipeline)
+
+Definere CSS custom properties manuelt i stilark, uten JSON-basert token-pipeline.
+
+**Forkastet fordi:**
+- Kan ikke generere outputs for iOS og Android
+- Ingen Figma-sync uten separat pipeline
+- Ingen versjonskontroll av selve verdiene som data
+
+### Tokens Studio plugin
+
+Figma-plugin som håndterer design tokens direkte i Figma og synkroniserer til kode.
+
+**Forkastet fordi:** Vanskelig å implementere OKLCH-generering, og gir designerne kontroll over primitive verdier — vi ønsker at primitiver eies i kode og at kun semantisk mapping styres fra Figma.
+
+### Manuell eksport fra Figma
+
+Eksportere verdier manuelt fra Figma til CSS-filer ved behov.
+
+**Forkastet fordi:** Feilutsatt prosess uten versjonskontroll, og løser ikke behovet for
+plattform-spesifikke outputs.
+
+<AdrDeltakere
+    utarbeidetAv="Team Designsystem"
+/>

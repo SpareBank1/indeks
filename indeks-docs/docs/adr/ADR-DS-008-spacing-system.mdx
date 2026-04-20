@@ -1,0 +1,133 @@
+---
+title: ADR-DS-008 Spacing-system
+description: Spacing bruker fluid skalering kombinert med et density-system (Compact/Default/Comfortable). Typografi bruker fluid skalering. Verdiene er matematisk beregnet, ikke 8px-grid.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-008: Spacing-system (fluid + density)
+
+<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+
+## Beslutning
+
+Spacing bruker **<Term>fluid skalering</Term>** kombinert med et **<Term>density-system</Term>** — verdier beregnes matematisk og følger ikke 8px-grid.
+
+### Fluid spacing
+
+Basen skalerer flytende med viewport — 16px på mobil (375px), 18px på større skjermer (1024px+). Alle spacing-trinn beregnes fra denne basen med en geometrisk skala (ratio 1.125), slik at hvert trinn er litt større enn det forrige. Typografi skalerer på samme måte, men uten density-nivåer.
+
+Eksempler på `--ix-spacing-md` (trinn 0) og `--ix-spacing-lg` (trinn 3) i Default:
+
+| | 375px | 1024px+ |
+|---|---|---|
+| `--ix-spacing-md` | ~16px | ~18px |
+| `--ix-spacing-lg` | ~20px | ~23px |
+
+### Density
+
+Density styres med CSS-klasser på et container-element og er implementert som et fast skift på ±2 trinn i skalaen. Compact forskyvs 2 trinn ned, Comfortable 2 trinn opp.
+
+Eksempel på `--ix-spacing-md` på 1024px+:
+
+| Compact | Default | Comfortable |
+|---|---|---|
+| ~14px | ~18px | ~23px |
+
+### Typografi
+
+Fontstørrelser bruker samme geometriske skala som spacing, men basen er `rem`-basert — det betyr at brukeren kan endre fontstørrelse via nettleserinnstillinger og at typografien skalerer deretter. Trinnene er definert på `.ix-body` og eksponert som tokens (`--ix-font-size-xs` til `--ix-font-size-5xl`). Det finnes ingen density-nivåer for typografi.
+
+| Token | 375px | 1024px+ |
+|---|---|---|
+| `--ix-font-size-md` | ~16px | ~18px |
+| `--ix-font-size-3xl` | ~25px | ~29px |
+
+### Kombinert
+
+Density settes én gang på et container-element og arves av alle komponenter inni.
+
+### Figma
+
+Designere setter skjermstørrelse på frame og density for bruksområdet, og ser de beregnede verdiene direkte.
+
+### Drivere for beslutningen
+
+- Automatisk responsivitet uten ekstra arbeid fra utviklere
+- Ulike bruksområder krever fundamentalt ulik spacing
+- Matematisk konsistente proporsjoner fremfor subjektive valg
+- Spacing og fontstørrelse er bevisst uavhengige — brukeren kan endre font uten at layout brytes, i tråd med <Term>WCAG</Term> 1.4.4
+
+## Bakgrunn
+
+Designsystemet brukes av team med fundamentalt ulike behov: nettbank og bedriftsløsninger
+trenger informasjonstett layout, mens salgssider og markedsføring trenger luft og rom.
+I tillegg skal komponenter automatisk tilpasse seg skjermstørrelse uten at utviklere
+manuelt håndterer breakpoints.
+
+Et tradisjonelt 8px-grid løser ingen av disse problemene — det er ikke responsivt og
+gir ikke variasjon mellom bruksområder.
+
+## Problemstilling
+
+Hvordan definerer vi et spacing-system som håndterer automatisk responsivitet og støtter
+fundamentalt ulike tetthetsbehov på tvers av bruksområder?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Designere må forstå at verdiene ikke følger 8px-grid. Utviklere får automatisk
+responsivitet uten ekstra arbeid.
+
+### Ulemper
+
+- Systemet gir verdier som 12px, 18px, 27px i stedet for 8px-grid — dette er bevisst
+  og matematisk korrekt, men er uvant for designere med 8px-bakgrunn
+- Tre density-nivåer å forholde seg til (Compact, Default, Comfortable)
+- Systemet gir verdier som ~16px, ~20px, ~23px i stedet for 8px-grid — dette er bevisst og matematisk korrekt, men er uvant for designere med 8px-bakgrunn
+
+### Tiltak mot ulemper
+
+- Dokumentasjon forklarer systemet og begrunnelsen for ikke-grid-verdier
+- Figma-bibliotek gjør det enkelt å se faktiske beregnede verdier
+
+## Forkastede alternativer
+
+### Standard 8px-grid
+
+Det dominerende spacing-systemet i designbransjen. Alle verdier er multipler av 8px.
+
+**Forkastet fordi:** Ikke responsivt i seg selv — responsivitet må håndteres manuelt med
+breakpoints. Løser heller ikke behovet for ulik tetthet mellom nettbank og salgssider.
+
+### Faste breakpoints
+
+Definere ulike spacing-verdier per breakpoint (sm/md/lg) i stedet for fluid skalering.
+
+**Forkastet fordi:** Gir merkbare "hopp" i layout ved breakpoints i stedet for jevn skalering.
+
+### Kun viewport units (vw/vh)
+
+Bruke viewport-relative enheter direkte uten `calc()`-basert fluid logikk.
+
+**Forkastet fordi:** Gir ingen kontroll over minimums- og maksimumsstørrelser. Skaper
+tilgjengelighetsproblemer — brukere som bruker zoom vil ikke få økt spacing som forventet.
+
+### Kun fluid uten density
+
+Implementere fluid skalering uten density-nivåer.
+
+**Forkastet fordi:** Nettbank og salgssider har fundamentalt ulike behov som fluid skalering
+alene ikke kan løse.
+
+### Separate spacing-systemer per bruksområde
+
+Ulike token-sett for nettbank, bedrift og markedsføring.
+
+**Forkastet fordi:** Vanskelig å vedlikeholde — endringer må gjøres på tvers av systemer.
+Mister konsistensen som gjør at produkter fra SpareBank 1 ser ut som én familie.
+
+<AdrDeltakere utarbeidetAv="Team Designsystem" />

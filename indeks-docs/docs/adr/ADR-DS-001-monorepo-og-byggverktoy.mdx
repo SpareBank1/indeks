@@ -1,0 +1,123 @@
+---
+title: ADR-DS-001 Monorepo og byggverktøy
+description: Alle pakker i én monorepo med pnpm (sikkerhetsisolasjon) og Turborepo (intelligent caching). Workspace-protokoll for interne avhengigheter.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+import Term from '@site/src/components/Term';
+
+# ADR-DS-001: Monorepo og byggverktøy
+
+<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+
+## Beslutning
+
+Alle pakker samles i én <Term>Monorepo</Term> med **<Term>pnpm</Term>** som pakkebehandler og **<Term>Turborepo</Term>** for build-orkestrering.
+
+### Monorepo
+
+Alle pakker i samme repo med workspace-protokoll (`workspace:*`) for interne avhengigheter. Pakker publisert til npm: `indeks-tokens`, `indeks-utils`, `indeks-css`, `indeks-web`, `indeks-react`. Private pakker: `indeks-docs`, `indeks-eksempel` og `indeks-storybook`.
+
+### pnpm
+
+Erstattet npm. To sentrale sikkerhetsmekanismer:
+
+`shamefully-hoist=false` sikrer streng isolasjon — pakker kan bare bruke avhengigheter de selv har deklarert i `package.json`. Det forhindrer at kode ved et uhell bruker transitive avhengigheter, noe som reduserer risikoen for at en ondsinnet pakke kan nå kode den ikke skal ha tilgang til.
+
+`strict-peer-dependencies=true` tvinger frem eksplisitte <Term>peer dependency</Term>-erklæringer, slik at versjonskonflikter oppdages tidlig i utviklingen fremfor hos konsumenter i produksjon.
+
+Content-addressable storage betyr at hver pakkeversjon lagres én gang på disken og verifiseres med en hash ved installasjon — manipulasjon av nedlastede pakker oppdages umiddelbart.
+
+### Turborepo
+
+Erstattet Lerna for bygging. `^build` sikrer riktig byggerekkefølge basert på dependency-grafen — `indeks-css` bygges aldri før `indeks-tokens` er ferdig. Caching baseres på innholdshasher av kildefiler og avhengigheter: hvis ingenting har endret seg siden forrige bygg, hoppes pakken over. Parallell bygging der det er mulig.
+
+### Drivere for beslutningen
+
+- Tett kobling mellom pakker krever koordinert utvikling i samme repo
+- Kjent monorepo-mønster fra eksisterende SpareBank 1 designsystem (`@sb1/ffe-*`)
+- Bedre sikkerhet enn npm for pakkebehandling
+- Intelligent caching for raskere CI og lokal utvikling
+
+## Bakgrunn
+
+Designsystemet har tette avhengigheter mellom pakkene:
+
+```
+indeks-tokens → indeks-utils → indeks-css → indeks-web → indeks-react
+```
+
+En endring i tokens påvirker hele kjeden. Pakkene må kunne utvikles og testes i sammenheng,
+ikke isolert. Vi startet med npm workspaces og Lerna, men npm manglet sikkerhetsfunksjoner
+og Lerna var utdatert og treg.
+
+## Problemstilling
+
+Hvilken monorepo-strategi og verktøykjede støtter koordinert utvikling og testing på tvers
+av tett koblede pakker, med god sikkerhet og intelligent caching?
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Alle utviklere som jobber med designsystemet må bruke pnpm og forstå workspace-konsepter.
+
+### Ulemper
+
+- Hele repoet må klones (ikke bare én pakke)
+- Utviklere må installere pnpm — ikke alle har det fra før
+- CI-miljøer må konfigureres med pnpm
+- Noen eldre pakker kan ha problemer med pnpms strenge node_modules-struktur
+
+### Tiltak mot ulemper
+
+- Turborepo-caching og parallellisering gjør CI raskt til tross for én stor repo
+- Dokumentasjon veileder nye utviklere gjennom oppsett
+
+## Forkastede alternativer
+
+### Separate repositories per pakke
+
+Hver pakke i sitt eget git-repository, publisert uavhengig.
+
+**Forkastet fordi:** Vanskelig å koordinere endringer på tvers av pakker. En token-endring
+krever PR i fire separate repos med nøye rekkefølge — i praksis upraktisk.
+
+### Én stor pakke
+
+Slå sammen alle pakker til ett npm-pakke.
+
+**Forkastet fordi:** Konsumenter som bare trenger tokens eller CSS må ta inn React-kode.
+Umuliggjør uavhengig versjonering.
+
+### npm (i stedet for pnpm)
+
+npm er standard og forhåndsinstallert hos alle Node.js-brukere.
+
+**Forkastet fordi:** Mangler pnpms sikkerhetsisolasjon og er tregere, særlig ved store
+dependency-grafer. Gammel npm-basert løsning var allerede en kilde til problemer.
+
+### Yarn Berry (Plug'n'Play)
+
+Yarns nye arkitektur med zero-installs og PnP-resolver i stedet for node_modules.
+
+**Forkastet fordi:** Plug'n'Play bryter mange verktøy som forventer en tradisjonell
+node_modules-mappe (Jest, Storybook m.fl.) og krever stor migrasjonsoverhead for
+å gjøre eksisterende tooling kompatibelt.
+
+### Nx
+
+Et build-system med monorepo-støtte og avansert dependency-graf.
+
+**Forkastet fordi:** Mer komplekst enn nødvendig for dette prosjektet. Turborepo dekker
+behovene med vesentlig enklere konfigurasjon.
+
+### Lerna
+
+Det opprinnelige verktøyet vi brukte for monorepo-håndtering.
+
+**Forkastet fordi:** Utdatert, treg, og Lerna-teamet anbefaler selv Nx eller Turborepo
+for nye prosjekter. Vi opplevde konkrete ytelses- og vedlikeholdsproblemer.
+
+<AdrDeltakere utarbeidetAv="Team Designsystem" />
