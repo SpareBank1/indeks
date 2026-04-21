@@ -53,6 +53,13 @@ export const ReadOnly: Story = {
   },
 };
 
+export const MinMaxLength: Story = {
+  args: { label: 'Tilbakemelding', description: '10–500 tegn', inputProps: { minLength: 10, maxLength: 500 } },
+  render: (args) => {
+    return <TextArea {...args} />;
+  },
+};
+
 export const HTML: Story = {
   args: {
     errorMessage: 'Feilmelding',

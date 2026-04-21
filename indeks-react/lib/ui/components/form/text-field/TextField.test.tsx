@@ -53,6 +53,31 @@ describe('TextField', () => {
         expect(ixField).toBeDefined();
     });
 
+    it('rendrer ix-text-field som wrapper rundt input', () => {
+        const { container } = render(<TextField label="Test" />);
+        const wrapper = container.querySelector('.ix-text-field');
+        expect(wrapper).toBeDefined();
+        expect(wrapper?.querySelector('input')).toBeDefined();
+    });
+
+    it('setter type-propen på input', () => {
+        render(<TextField label="E-post" type="email" />);
+        const input = screen.getByRole('textbox');
+        expect(input.getAttribute('type')).toBe('email');
+    });
+
+    it('eksplisitt type vinner over inputProps.type', () => {
+        render(<TextField label="Test" type="email" inputProps={{ type: 'text' }} />);
+        const input = screen.getByRole('textbox');
+        expect(input.getAttribute('type')).toBe('email');
+    });
+
+    it('sender ukjente HTML-attributter videre til ix-field via restProps', () => {
+        const { container } = render(<TextField label="Test" data-testid="mitt-felt" />);
+        const ixField = container.querySelector('ix-field');
+        expect(ixField?.getAttribute('data-testid')).toBe('mitt-felt');
+    });
+
     it('setter disabled-attributt paa input (CSS :has(:disabled) styler field)', () => {
         render(<TextField label="Beløp" disabled />);
         const input = screen.getByRole('textbox') as HTMLInputElement;
@@ -130,7 +155,7 @@ describe('TextField', () => {
     it('logger advarsel naar verken label eller ariaLabel er satt', () => {
         const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
         render(<TextField />);
-        expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('label'));
+        expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('[TextField]'));
         warnSpy.mockRestore();
     });
 });

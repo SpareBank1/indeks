@@ -3,6 +3,9 @@
     align-items: stretch;
 }
 
+/* BEM-selektoren `.ix-text-field__input` brukes ikke av React-komponenten —
+   den er et tilgjengelig hook for konsumenter som rendrer <input> utenfor
+   `.ix-text-field`-wrapperen og fortsatt vil ha samme styling. */
 :where(.ix-text-field) > input,
 :where(.ix-text-field__input) {
     all: unset;
@@ -24,10 +27,13 @@
         box-shadow: inset 0 0 0 1px var(--ix-color-border-main-hover);
     }
 
-    &:active,
-    &:focus {
-        outline: var(--ix-outline-default);
-    }
+}
+
+:where(.ix-text-field) > input:active,
+:where(.ix-text-field) > input:focus,
+:where(.ix-text-field__input:active),
+:where(.ix-text-field__input:focus) {
+    outline: var(--ix-outline-default);
 }
 
 :where(.ix-text-field[data-has-prefix]) > input,
@@ -58,7 +64,7 @@
     border-color: var(--ix-color-border-main-default);
 }
 
-:where(.ix-text-field) > input[aria-invalid=true],
+:where(.ix-text-field) > input[aria-invalid="true"],
 :where(.ix-text-field__input[aria-invalid="true"]) {
     color: var(--ix-color-foreground-danger-default);
     border-color: var(--ix-color-border-danger-default);

@@ -60,6 +60,12 @@ describe('TextArea', () => {
         expect(wrapper?.querySelector('textarea')).toBeDefined();
     });
 
+    it('sender ukjente HTML-attributter videre til ix-field via restProps', () => {
+        const { container } = render(<TextArea label="Test" data-testid="mitt-felt" />);
+        const ixField = container.querySelector('ix-field');
+        expect(ixField?.getAttribute('data-testid')).toBe('mitt-felt');
+    });
+
     it('setter disabled-attributt paa textarea (CSS :has(:disabled) styler field)', () => {
         render(<TextArea label="Tilbakemelding" disabled />);
         const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
@@ -131,7 +137,7 @@ describe('TextArea', () => {
     it('logger advarsel naar verken label eller ariaLabel er satt', () => {
         const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
         render(<TextArea />);
-        expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('label'));
+        expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('[TextArea]'));
         warnSpy.mockRestore();
     });
 });

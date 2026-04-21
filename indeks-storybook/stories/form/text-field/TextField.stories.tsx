@@ -62,6 +62,20 @@ export const ReadOnly: Story = {
   },
 };
 
+export const MinMax: Story = {
+  args: { label: 'Antall', inputProps: { type: 'number', min: 1, max: 10 } },
+  render: (args) => {
+    return <TextField {...args} />;
+  },
+};
+
+export const MinMaxLength: Story = {
+  args: { label: 'Brukernavn', description: '3–20 tegn', inputProps: { minLength: 3, maxLength: 20 } },
+  render: (args) => {
+    return <TextField {...args} />;
+  },
+};
+
 export const HTML: Story = {
   args: {
     errorMessage: "Feilmelding",

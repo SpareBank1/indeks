@@ -1,7 +1,11 @@
 :where(.ix-text-area) {
     display: flex;
+    align-items: stretch;
 }
 
+/* BEM-selektoren `.ix-text-area__textarea` brukes ikke av React-komponenten —
+   den er et tilgjengelig hook for konsumenter som rendrer <textarea> utenfor
+   `.ix-text-area`-wrapperen og fortsatt vil ha samme styling. */
 :where(.ix-text-area) > textarea,
 :where(.ix-text-area__textarea) {
     all: unset;
@@ -24,11 +28,13 @@
         border-color: var(--ix-color-border-main-hover);
         box-shadow: inset 0 0 0 1px var(--ix-color-border-main-hover);
     }
+}
 
-    &:active,
-    &:focus {
-        outline: var(--ix-outline-default);
-    }
+:where(.ix-text-area) > textarea:active,
+:where(.ix-text-area) > textarea:focus,
+:where(.ix-text-area__textarea:active),
+:where(.ix-text-area__textarea:focus) {
+    outline: var(--ix-outline-default);
 }
 
 :where(.ix-text-area) > textarea:disabled,
@@ -49,8 +55,8 @@
     resize: none;
 }
 
-:where(.ix-text-area) > textarea[aria-invalid='true'],
-:where(.ix-text-area__textarea[aria-invalid='true']) {
+:where(.ix-text-area) > textarea[aria-invalid="true"],
+:where(.ix-text-area__textarea[aria-invalid="true"]) {
     color: var(--ix-color-foreground-danger-default);
     border-color: var(--ix-color-border-danger-default);
     box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
