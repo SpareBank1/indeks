@@ -20,6 +20,11 @@
         "check-licenses": "scripts/check-licenses.sh",
         "update-snapshots": "pnpm --filter @sb1/indeks-storybook update-snapshots"
     },
+    "pnpm": {
+        "overrides": {
+            "webpackbar": "^7.0.0"
+        }
+    },
     "devDependencies": {
         "@changesets/cli": "^2.30.0",
         "@eslint/js": "^10.0.1",
