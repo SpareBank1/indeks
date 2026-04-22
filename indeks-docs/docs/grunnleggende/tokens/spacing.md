@@ -57,7 +57,7 @@ Bak kulissene er spacing-verdiene basert på en beregnet skala som strekker seg 
 
 ### Utility-klasser
 
-Full oversikt over utility-klassene finner du [i oversikten over utility-klasser](/docs/grunnleggende/tokens/utilities#spacing).
+Full oversikt over utility-klassene finner du [i oversikten over utility-klasser](/docs/utility-klasser/oversikt#spacing).
 
 ### CSS Custom Properties
 
@@ -116,7 +116,7 @@ Kan du ta utgangspunkt i disse tabellene:
 
 ### Padding
 
-Verdiene er de samme for `pt`, `pb`, `pl` og `pr`. Se [responsiv spacing](/docs/grunnleggende/tokens/utilities#responsiv-spacing) for padding på forskjellige skjermstørrelser.
+Verdiene er de samme for `pt`, `pb`, `pl` og `pr`. Se [responsiv spacing](/docs/utility-klasser/oversikt#responsiv-spacing) for padding på forskjellige skjermstørrelser.
 
 | Tailwind-token | Indeks Util-klasse | FFE/Tailwind verdi | Indeks verdi mobil | Indeks desktop |
 | -------------- | ------------------ | ------------------ | ------------------ | -------------- |
@@ -136,7 +136,7 @@ Verdiene er de samme for `pt`, `pb`, `pl` og `pr`. Se [responsiv spacing](/docs/
 
 ### Margin
 
-Verdiene er de samme for `mt`, `mb`, `ml` og `mr`. Se [responsiv spacing](/docs/grunnleggende/tokens/utilities#responsiv-spacing) for margin på forskjellige skjermstørrelser.
+Verdiene er de samme for `mt`, `mb`, `ml` og `mr`. Se [responsiv spacing](/docs/utility-klasser/oversikt#responsiv-spacing) for margin på forskjellige skjermstørrelser.
 
 | Tailwind-token | Indeks Util-klasse | FFE/Tailwind verdi | Indeks verdi mobil | Indeks desktop |
 | -------------- | ------------------ | ------------------ | ------------------ | -------------- |

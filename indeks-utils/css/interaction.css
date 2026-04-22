@@ -1,0 +1,26 @@
+.ix-native,
+.ix-native * {
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+    touch-action: manipulation;
+}
+
+.ix-native input,
+.ix-native textarea,
+.ix-native [contenteditable] {
+    user-select: text;
+}
+
+.ix-selectable,
+.ix-selectable * {
+    user-select: text;
+    -webkit-touch-callout: default;
+}
+
+.ix-selectable-all,
+.ix-selectable-all * {
+    user-select: text;
+    user-select: all;
+    -webkit-touch-callout: default;
+}

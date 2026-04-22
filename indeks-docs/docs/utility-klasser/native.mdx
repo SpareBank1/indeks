@@ -1,0 +1,113 @@
+# Native
+
+Utility-klasser for å kontrollere tekstmarkering, berøring og dra-og-slipp-oppførsel i hybridapper der webinnhold vises i en native app sin WebView.
+
+## Klasser
+
+| CSS-klasse           | Beskrivelse                                                                        |
+| -------------------- | ---------------------------------------------------------------------------------- |
+| `.ix-native`         | Gjør at innholdet oppfører seg som native UI. Settes på `<body>` eller en wrapper. |
+| `.ix-selectable`     | Lar brukeren markere og kopiere tekst. Overstyrer `.ix-native`.                    |
+| `.ix-selectable-all` | Ett klikk markerer alt innhold i elementet. Overstyrer `.ix-native`.               |
+
+## CSS-egenskaper
+
+### `.ix-native`
+
+Påvirker elementet selv og alle barn:
+
+| Egenskap                | Verdi          | Effekt                                         |
+| ----------------------- | -------------- | ---------------------------------------------- |
+| `user-select`           | `none`         | Hindrer tekstmarkering                         |
+| `-webkit-touch-callout` | `none`         | Deaktiverer iOS long-press kontekstmeny        |
+| `-webkit-user-drag`     | `none`         | Hindrer dra-og-slipp av elementer (iOS Safari) |
+| `touch-action`          | `manipulation` | Fjerner 300ms tap-delay og dobbelttap-zoom     |
+
+:::warning Skjemafelt unntas automatisk
+Input-felt, textarea og contenteditable-elementer får alltid `user-select: text`, slik at brukere kan redigere og markere tekst i skjemafelt som normalt.
+:::
+
+### `.ix-selectable`
+
+Påvirker elementet selv og alle barn:
+
+| Egenskap                | Verdi     | Effekt                                |
+| ----------------------- | --------- | ------------------------------------- |
+| `user-select`           | `text`    | Tillater vanlig tekstmarkering        |
+| `-webkit-touch-callout` | `default` | Gjenoppretter long-press kontekstmeny |
+
+### `.ix-selectable-all`
+
+Påvirker elementet selv og alle barn:
+
+| Egenskap                | Verdi                    | Effekt                                |
+| ----------------------- | ------------------------ | ------------------------------------- |
+| `user-select`           | `all` (fallback: `text`) | Ett klikk markerer alt innhold        |
+| `-webkit-touch-callout` | `default`                | Gjenoppretter long-press kontekstmeny |
+
+:::info Nettleserstøtte
+`user-select: all` støttes i Chrome 53+, Safari 15+ og Firefox 121+. Eldre Firefox-versjoner får `user-select: text` som fallback.
+:::
+
+## Spesifisitet
+
+Alle klassene bruker vanlige klasseselektorer (spesifisitet `0,1,0`). `.ix-selectable` og `.ix-selectable-all` overstyrer `.ix-native` via kildeorden.
+
+Klassene er kompatible med komponent-CSS-en i Indeks, som bruker `:where()` (spesifisitet `0,0,0`). Utility-klassene vinner derfor alltid over komponent-CSS.
+
+## Eksempler
+
+### Grunnleggende bruk
+
+Prøv å markere teksten i eksempelet under. Tekst innenfor `.ix-native` kan ikke markeres, mens tekst med `.ix-selectable` kan det.
+
+```jsx live
+<div class="ix-native ix-flex ix-flex-col ix-gap-sm ix-p-md">
+    <h3>Mitt native grensesnitt</h3>
+    <p>Denne teksten kan ikke markeres.</p>
+    <div class="ix-flex ix-gap-sm ix-items-center">
+        <button class="ix-button" data-variant="primary">
+            Trykk meg
+        </button>
+        <a class="ix-link-text" href="#">
+            Lenke uten forsinkelse
+        </a>
+    </div>
+    <div class="ix-card ix-p-md ix-selectable">
+        <p class="ix-m-0">
+            <strong>Vilkår:</strong> Denne teksten kan markeres og kopieres.
+        </p>
+    </div>
+</div>
+```
+
+### Marker alt med ett klikk
+
+`.ix-selectable-all` gjør at ett klikk markerer alt innhold i elementet. Praktisk for kontonummer, referanser og kodeblokker.
+
+```jsx live
+<div class="ix-native ix-flex ix-flex-col ix-gap-xs ix-p-md">
+    <p class="ix-text">Kontonummer:</p>
+    <div class="ix-card ix-p-md ix-selectable-all">1234 56 78901</div>
+</div>
+```
+
+### Skjemafelt fungerer alltid
+
+Input-felt, textarea og contenteditable-elementer unntas automatisk fra `.ix-native`, slik at brukere alltid kan redigere tekst.
+
+```jsx live
+<div class="ix-native ix-flex ix-flex-col ix-gap-sm ix-p-md">
+    <p>Tekst som ikke kan markeres.</p>
+    <TextField label="Navn" placeholder="Skriv her — fungerer normalt" />
+</div>
+```
+
+## Tilgjengelighet
+
+Vær oppmerksom på at `user-select: none` kan påvirke brukere som er avhengige av å markere tekst for å kopiere det. Bruk `.ix-selectable` på innhold brukeren kan ha behov for å kopiere, for eksempel:
+
+- Avtaletekst og vilkår
+- Kontaktinformasjon (telefonnummer, e-post, adresse)
+- Kontonummer, referansenummer og betalingsinformasjon
+- Feilmeldinger brukeren kan trenge å dele med kundeservice

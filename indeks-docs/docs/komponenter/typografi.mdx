@@ -72,7 +72,7 @@ Heading-nivå kan overstyres med `size` hvis det visuelle hierarkiet ikke samsva
 
 - Alle overskrifter kommer uten noe spacing.
 - Legg til propen `addRecommendedSpacing` (boolean) for riktig spacing-verdi i forhold til størrelsen.
-- Du kan også bruke [spacing-variabler](../grunnleggende/tokens/utilities#spacing) eller util-klasser til å sette margin selv.
+- Du kan også bruke [spacing-variabler](../utility-klasser/oversikt#spacing) eller util-klasser til å sette margin selv.
 
 ### Props — Heading
 
@@ -331,7 +331,32 @@ For tilfeller der du ikke bruker `Text`-komponenten, finnes det utility-klasser 
 
 ---
 
+## Tilpasning med CSS
+
+Typografi i Indeks er ikke bygget rundt én blokkklasse — stilene er i stedet fordelt på klasser per komponent og størrelse. Du kan bruke disse direkte i egenhåndig HTML uten React-komponentene.
+
+### Tilgjengelige klasser og selektorer
+
+| Komponent | Basisklasse | Størrelsesmodifikatorer |
+|-----------|------------|------------------------|
+| Heading | `ix-heading` | `ix-heading--2xl` `ix-heading--xl` `ix-heading--lg` `ix-heading--md` `ix-heading--sm` `ix-heading--xs` |
+| Text | `ix-text` | `ix-text--2xl` `ix-text--xl` `ix-text--lg` `ix-text--md` `ix-text--sm` `ix-text--xs` |
+| Text (lang) | `ix-text ix-text--long` | — |
+| LinkText | `ix-link-text` | `ix-link-text--underline` `ix-link-text--active` |
+
+Se fullstendig klasseliste med beskrivelse under Props-tabellene i HTML-fanene ovenfor.
+
+### Eksempel: bruk i eigen HTML-struktur
+
+```html
+<h1 class="ix-heading ix-heading--2xl">Renter og betingelser</h1>
+<p class="ix-text ix-text--md ix-text--long">
+  Renten på boliglånet ditt er basert på Nibor pluss et påslag.
+</p>
+<a class="ix-link-text ix-link-text--underline" href="/konto">Se kontooversikt</a>
+```
+
 ## Relatert
 
 - [Typografi — retningslinjer og prinsipper](../grunnleggende/typografi)
-- [Spacing-tokens og utility-klasser](../grunnleggende/tokens/utilities#spacing)
+- [Spacing-tokens og utility-klasser](../utility-klasser/oversikt#spacing)
