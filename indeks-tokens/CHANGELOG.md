@@ -1,5 +1,11 @@
 # @sb1/indeks-tokens
 
+## 0.5.1
+
+### Patch Changes
+
+-   bc00000: Oppdater dark mode input farge
+
 ## 0.5.0
 
 ### Minor Changes

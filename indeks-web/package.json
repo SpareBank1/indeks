@@ -1,6 +1,6 @@
 {
     "name": "@sb1/indeks-web",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "type": "module",
     "description": "Web components for Indeks design system",
     "homepage": "https://design.sparebank1.no",
