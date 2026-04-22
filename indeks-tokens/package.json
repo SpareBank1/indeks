@@ -54,7 +54,7 @@
     "author": "",
     "license": "MIT",
     "devDependencies": {
-        "@figma/rest-api-spec": "^0.36.0",
+        "@figma/rest-api-spec": "^0.37.0",
         "@types/node": "^25.5.0",
         "autoprefixer": "^10.4.27",
         "axios": "^1.15.0",
