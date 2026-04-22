@@ -63,3 +63,8 @@
 .footer svg, .navbar__link svg {
     display: inline-block;
 }
+
+/* Gjenopprett fokusring på textarea — høyere spesifisitet enn Infima sin regel */
+body:not(.navigation-with-keyboard) .ix-text-area textarea:focus {
+    outline: var(--ix-outline-default);
+}

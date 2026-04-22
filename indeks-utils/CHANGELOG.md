@@ -1,5 +1,19 @@
 # @sb1/indeks-utils
 
+## 0.2.0
+
+### Minor Changes
+
+-   31fea2e: Legg til TextArea og oppdater TextField
+
+    Gå mer bort fra BEM der det ikke trengs.
+    Implementer IxField som wrapper inputkomponentene
+
+### Patch Changes
+
+-   Updated dependencies [31fea2e]
+    -   @sb1/indeks-tokens@0.5.0
+
 ## 0.1.22
 
 ### Patch Changes

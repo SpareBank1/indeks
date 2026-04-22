@@ -1,6 +1,6 @@
 :where(.ix-body) {
-    font-size: var(--ii-font-size-0);
-    color: var(--ix-color-foreground-default);
+    font-size: var(--ix-font-size-md);
+    color: var(--ix-color-foreground-main-default);
     font-family: var(--ix-font-family-normal);
     line-height: 1.2;
 

@@ -1,0 +1,68 @@
+:where(.ix-text-area) {
+    display: flex;
+    align-items: stretch;
+}
+
+/* BEM-selektoren `.ix-text-area__textarea` brukes ikke av React-komponenten —
+   den er et tilgjengelig hook for konsumenter som rendrer <textarea> utenfor
+   `.ix-text-area`-wrapperen og fortsatt vil ha samme styling. */
+:where(.ix-text-area) > textarea,
+:where(.ix-text-area__textarea) {
+    all: unset;
+    box-sizing: border-box;
+    min-width: 0;
+    flex-grow: 1;
+    white-space: pre-wrap;
+    overflow: auto;
+    resize: vertical;
+    background-color: var(--ix-color-fill-interactive-default);
+    color: var(--ix-color-foreground-main-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-sm);
+    padding: var(--ix-spacing-sm);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
+    transition: var(--ix-transition-all);
+
+    &:hover {
+        border-color: var(--ix-color-border-main-hover);
+        box-shadow: inset 0 0 0 1px var(--ix-color-border-main-hover);
+    }
+}
+
+:where(.ix-text-area) > textarea:active,
+:where(.ix-text-area) > textarea:focus,
+:where(.ix-text-area__textarea:active),
+:where(.ix-text-area__textarea:focus) {
+    outline: var(--ix-outline-default);
+}
+
+:where(.ix-text-area) > textarea:disabled,
+:where(.ix-text-area__textarea:disabled) {
+    background-color: var(--ix-color-fill-interactive-default);
+    color: var(--ix-color-foreground-main-disabled);
+    border-color: var(--ix-color-border-main-default);
+    cursor: not-allowed;
+    pointer-events: none;
+    resize: none;
+}
+
+:where(.ix-text-area) > textarea:read-only,
+:where(.ix-text-area__textarea:read-only) {
+    background-color: var(--ix-color-fill-interactive-read-only);
+    color: var(--ix-color-foreground-main-read-only);
+    border-color: var(--ix-color-border-main-default);
+    resize: none;
+}
+
+:where(.ix-text-area) > textarea[aria-invalid="true"],
+:where(.ix-text-area__textarea[aria-invalid="true"]) {
+    color: var(--ix-color-foreground-danger-default);
+    border-color: var(--ix-color-border-danger-default);
+    box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
+}
+
+:where(.ix-text-area) > textarea::placeholder,
+:where(.ix-text-area__textarea)::placeholder {
+    color: var(--ix-color-foreground-main-subtle);
+}

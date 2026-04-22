@@ -73,7 +73,35 @@ Siste versjon er <CssVersion />. Se [releases](https://github.com/SpareBank1/ind
 -   **[Utility-klasser](/docs/utility-klasser/oversikt)** - nyttige hjelpeklasser for små justeringer som margin, padding og layout. Inspirert av TailwindCSS.
 -   **[Tokens](/docs/grunnleggende/tokens/introduksjon)** - designtokens for farger, spacing og border mm. Se alle tokens. Brukes når du skal lage egne komponenter.
 
-### 3. Komponenter (React)
+### 3. Web components
+
+Web components fra Indeks fungerer uten React og kan brukes i alle rammeverk — eller direkte i HTML. Last inn scriptet fra CDN:
+
+```html
+<script type="module" src="https://cdn.sparebank1.no/indeks/web/<versjon>/index.js"></script>
+```
+
+Etter at scriptet er lastet er komponentene tilgjengelige som HTML-elementer:
+
+```html
+<ix-field>
+    <label>E-postadresse</label>
+    <input type="email" name="email" />
+    <span data-field="error"></span>
+</ix-field>
+```
+
+#### TypeScript-typer
+
+CDN-scriptet inneholder ingen typedeklarasjoner. Installer npm-pakken som `devDependency` for å få typer:
+
+```bash
+npm install --save-dev @sb1/indeks-web
+```
+
+Pakken registrerer typene globalt via `HTMLElementTagNameMap` og JSX — ingen import nødvendig. TypeScript og JSX-editorer vil da gi autocomplete og typesjekk for `<ix-field>` og de andre komponentene.
+
+### 4. Komponenter (React)
 
 For å bruke komponentbiblioteket i React, installer pakken:
 

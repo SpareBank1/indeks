@@ -1,9 +1,8 @@
-import clsx from 'clsx';
-import { type JSX, type ReactNode } from 'react';
+import { forwardRef, type ReactNode } from 'react';
 
 export type FieldProps = {
     className?: string;
-    label: string;
+    label?: string;
     children: ReactNode;
     inputId: string;
     description?: string;
@@ -12,7 +11,7 @@ export type FieldProps = {
     readOnly?: boolean;
 };
 
-export function Field({
+export const Field = forwardRef<HTMLElement, FieldProps>(function Field({
     className,
     label,
     children,
@@ -22,13 +21,14 @@ export function Field({
     disabled,
     readOnly,
     ...restProps
-}: FieldProps): JSX.Element {
+}, ref) {
+
     return (
-        <ix-field {...restProps} class={clsx({ 'ix-field--disabled' : disabled, 'ix-field--read-only' : readOnly }, className)}>
-            <label htmlFor={inputId} className='ix-label'>{label}</label>
+        <ix-field ref={ref} {...restProps} class={className} data-disabled={disabled || undefined} data-readonly={readOnly || undefined}>
+            {label && <label htmlFor={inputId}>{label}</label>}
             <span data-field="description">{description}</span>
             {children}
             <span data-field="error">{errorMessage}</span>
         </ix-field>
     );
-}
+});

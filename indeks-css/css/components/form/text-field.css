@@ -1,18 +1,12 @@
 :where(.ix-text-field) {
     display: flex;
     align-items: stretch;
-
-    &:has(.ix-text-field__prefix) .ix-text-field__input {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
-
-    &:has(.ix-text-field__suffix) .ix-text-field__input {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-    }
 }
 
+/* BEM-selektoren `.ix-text-field__input` brukes ikke av React-komponenten —
+   den er et tilgjengelig hook for konsumenter som rendrer <input> utenfor
+   `.ix-text-field`-wrapperen og fortsatt vil ha samme styling. */
+:where(.ix-text-field) > input,
 :where(.ix-text-field__input) {
     all: unset;
     box-sizing: border-box;
@@ -33,13 +27,29 @@
         box-shadow: inset 0 0 0 1px var(--ix-color-border-main-hover);
     }
 
-    &:active,
-    &:focus-within {
-        outline: var(--ix-outline-default);
-    }
 }
 
-:where(.ix-field--disabled .ix-text-field__input) {
+:where(.ix-text-field) > input:active,
+:where(.ix-text-field) > input:focus,
+:where(.ix-text-field__input:active),
+:where(.ix-text-field__input:focus) {
+    outline: var(--ix-outline-default);
+}
+
+:where(.ix-text-field[data-has-prefix]) > input,
+:where(.ix-text-field[data-has-prefix]) > .ix-text-field__input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+:where(.ix-text-field[data-has-suffix]) > input,
+:where(.ix-text-field[data-has-suffix]) > .ix-text-field__input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+:where(.ix-text-field) > input:disabled,
+:where(.ix-text-field__input:disabled) {
     background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-disabled);
     border-color: var(--ix-color-border-main-default);
@@ -47,32 +57,27 @@
     pointer-events: none;
 }
 
-:where(.ix-field--read-only .ix-text-field__input) {
+:where(.ix-text-field) > input:read-only,
+:where(.ix-text-field__input:read-only) {
     background-color: var(--ix-color-fill-interactive-read-only);
     color: var(--ix-color-foreground-main-read-only);
     border-color: var(--ix-color-border-main-default);
 }
 
-:where(.ix-text-field__input[aria-invalid=true]) {
+:where(.ix-text-field) > input[aria-invalid="true"],
+:where(.ix-text-field__input[aria-invalid="true"]) {
     color: var(--ix-color-foreground-danger-default);
     border-color: var(--ix-color-border-danger-default);
     box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
 }
 
-:where(ix-field, .ix-field) [data-field="description"] {
-    font-size: var(--ix-font-size-sm);
-    color: var(--ix-color-foreground-main-subtle);
-
-    &:empty {
-        display: none;
-    }
-}
-
-:where(.ix-text-field__input::placeholder) {
+:where(.ix-text-field) > input::placeholder,
+:where(.ix-text-field__input)::placeholder {
     color: var(--ix-color-foreground-main-subtle);
 }
 
-:where(.ix-text-field__prefix, .ix-text-field__suffix) {
+:where(.ix-text-field) > [data-field="prefix"],
+:where(.ix-text-field) > [data-field="suffix"] {
     display: flex;
     align-items: center;
     z-index: var(--ix-z-index-default);
@@ -83,19 +88,14 @@
     padding: var(--ix-spacing-sm);
 }
 
-:where(.ix-text-field__prefix) {
+:where(.ix-text-field) > [data-field="prefix"] {
     border-top-left-radius: var(--ix-border-radius-sm);
     border-bottom-left-radius: var(--ix-border-radius-sm);
     border-right-width: 0;
 }
 
-:where(.ix-text-field__suffix) {
+:where(.ix-text-field) > [data-field="suffix"] {
     border-top-right-radius: var(--ix-border-radius-sm);
     border-bottom-right-radius: var(--ix-border-radius-sm);
     border-left-width: 0;
-}
-
-:where(ix-field, .ix-field) [data-field="error"] {
-    font-size: var(--ix-font-size-md);
-    color: var(--ix-color-foreground-danger-default);
 }
