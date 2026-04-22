@@ -34,7 +34,6 @@ const sidebars: SidebarsConfig = {
             collapsed: true,
             items: [
                 'grunnleggende/typografi',
-                ,
                 {
                     type: 'category',
                     label: 'Tokens',
@@ -72,7 +71,7 @@ const sidebars: SidebarsConfig = {
             type: 'category',
             label: 'Komponenter',
             collapsed: true,
-            items: ['komponenter/typografi', 'komponenter/textfield'],
+            items: ['komponenter/typografi', 'komponenter/textfield', 'komponenter/textarea'],
         },
     ],
 };

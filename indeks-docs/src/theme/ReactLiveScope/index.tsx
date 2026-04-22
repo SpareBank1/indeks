@@ -17,6 +17,7 @@ import {
     Table,
     Tag,
     Text,
+    TextArea,
     TextField,
     VStack,
 } from '@sb1/indeks-react';
@@ -46,6 +47,7 @@ const ReactLiveScope = {
     Table,
     Tag,
     Text,
+    TextArea,
     TextField,
     VStack,
 };

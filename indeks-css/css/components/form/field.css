@@ -4,14 +4,51 @@
     gap: var(--ix-spacing-2xs);
 }
 
+:where(ix-field, .ix-field)[data-disabled],
 :where(.ix-field--disabled) {
     opacity: var(--ix-opacity-disabled);
 }
 
-:where(.ix-field--disabled) .ix-label {
+:where(ix-field, .ix-field)[data-disabled] > label,
+:where(.ix-field--disabled) > label {
     color: var(--ix-color-foreground-main-default);
 }
 
-:where(.ix-field--read-only) .ix-label {
+:where(ix-field, .ix-field)[data-readonly] > label,
+:where(.ix-field--readonly) > label {
     color: var(--ix-color-foreground-main-read-only);
+}
+
+:where(ix-field, .ix-field) [data-field='description'] {
+    font-size: var(--ix-font-size-md);
+    color: var(--ix-color-foreground-main-subtle);
+    line-height: 150%;
+
+    &:empty {
+        display: none;
+    }
+}
+
+/* Label↔description beholder wrapper-gapet på 2xs (de hører visuelt sammen).
+   Description↔input og input↔error skal være xs (litt mer luft). Legger en
+   ekstra margin-top oppå gapet for å få totalen til xs. Reglene aktiveres
+   bare når elementet faktisk har innhold — ellers er det display: none og
+   skal ikke påvirke layout. */
+:where(ix-field, .ix-field) > [data-field='description']:not(:empty) + * {
+    margin-block-start: calc(var(--ix-spacing-xs) - var(--ix-spacing-2xs));
+}
+
+:where(ix-field, .ix-field) > [data-field='error']:not(:empty) {
+    margin-block-start: calc(var(--ix-spacing-xs) - var(--ix-spacing-2xs));
+}
+
+:where(ix-field, .ix-field) [data-field='error'] {
+    font-size: var(--ix-font-size-md);
+    color: var(--ix-color-foreground-danger-default);
+}
+
+:where(ix-field, .ix-field) [data-field='char-count'] {
+    font-size: var(--ix-font-size-sm);
+    color: var(--ix-color-foreground-main-subtle);
+    text-align: right;
 }

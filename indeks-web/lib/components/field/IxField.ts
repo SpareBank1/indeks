@@ -46,6 +46,8 @@
  *   - `input | select | textarea`     → første native form-kontroll
  *   - `[data-field="description"]`    → hjelpetekst
  *   - `[data-field="error"]`          → feilmelding (alltid til stede, kan være tom)
+ *   - `[data-field="prefix"]`         → visuell prefix (skjules med aria-hidden)
+ *   - `[data-field="suffix"]`         → visuell suffix (skjules med aria-hidden)
  *
  * `data-field` brukes fremfor `slot`-attributtet selv om Shadow DOM ikke er i
  * bruk. `slot` er et reservert nøkkelord knytt til Shadow DOM og ville vært
@@ -76,6 +78,7 @@
  */
 
 type NativeControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+type TextControl = HTMLInputElement | HTMLTextAreaElement;
 
 // Globalt teller for å garantere unike IDer på tvers av alle ix-field-instanser
 // på siden. Enkel og deterministisk — ingen UUID-avhengighet nødvendig.
@@ -85,6 +88,9 @@ export class IxField extends HTMLElement {
     // MutationObserver holdes som instansvariabel slik at den kan kobles fra
     // i disconnectedCallback og ikke lekke minne når elementet fjernes fra DOM.
     private _observer: MutationObserver | null = null;
+    private _stateObserver: MutationObserver | null = null;
+    private _charCountListener: (() => void) | null = null;
+    private _charCountControl: TextControl | null = null;
 
     connectedCallback(): void {
         this._wire();
@@ -94,6 +100,9 @@ export class IxField extends HTMLElement {
         // Koble fra observer når elementet fjernes fra DOM for å unngå minnelekkasje.
         this._observer?.disconnect();
         this._observer = null;
+        this._stateObserver?.disconnect();
+        this._stateObserver = null;
+        this._teardownCharCount();
     }
 
     // ── Kobling ───────────────────────────────────────────────────────────────
@@ -110,6 +119,29 @@ export class IxField extends HTMLElement {
             return;
         }
 
+        // Synkroniser disabled/readonly-tilstand fra kontroll til ix-field-host slik at
+        // CSS-reglene [data-disabled] og [data-readonly] virker uten React.
+        // Overvåker også maxlength/minlength: React setter attributtene etter at
+        // connectedCallback har kjørt, så tegnteller kan ikke settes opp i _wire() alene.
+        this._syncControlState(control);
+        this._stateObserver = new MutationObserver((mutations) => {
+            this._syncControlState(control);
+            const affectsCharCount = mutations.some((m) => m.attributeName === 'maxlength' || m.attributeName === 'minlength');
+            if (affectsCharCount && (control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement)) {
+                this._teardownCharCount();
+                const charCountEl = this._setupCharCount(control);
+                if (charCountEl) {
+                    const existing = control.getAttribute('aria-describedby') ?? '';
+                    const ids = existing ? existing.split(' ') : [];
+                    if (!ids.includes(charCountEl.id)) {
+                        ids.push(charCountEl.id);
+                        control.setAttribute('aria-describedby', ids.join(' '));
+                    }
+                }
+            }
+        });
+        this._stateObserver.observe(control, { attributes: true, attributeFilter: ['disabled', 'readonly', 'maxlength', 'minlength'] });
+
         if (control instanceof HTMLInputElement && control.type === 'number') {
             console.warn('[ix-field] Unngå type="number" — bruk inputMode="numeric" i stedet.');
         }
@@ -124,6 +156,11 @@ export class IxField extends HTMLElement {
         // for-kobling — respekter hva utvikleren har satt manuelt.
         if (label && !label.htmlFor) {
             label.htmlFor = control.id;
+        }
+
+        // Et felt uten tilgjengelig navn er ikke operabelt for skjermleserbrukere.
+        if (!label && !control.getAttribute('aria-label') && !control.getAttribute('aria-labelledby')) {
+            console.warn('[ix-field] Kontrollen mangler tilgjengelig navn. Legg til <label>, aria-label eller aria-labelledby. Synlig label er anbefalt.');
         }
 
         // Samle IDer til alle elementer som beskriver input-feltet.
@@ -167,25 +204,103 @@ export class IxField extends HTMLElement {
             this._syncInvalid(control, error);
         }
 
+        // Sett opp tegnteller hvis kontrollen er et tekstfelt med minlength/maxlength.
+        // Merk: React setter attributtene etter connectedCallback, så _stateObserver
+        // fanger opp og kjører _setupCharCount på nytt om attributtene mangler her.
+        if (control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement) {
+            const charCountEl = this._setupCharCount(control);
+            if (charCountEl) {
+                describedBy.push(charCountEl.id);
+            }
+        }
+
         if (describedBy.length > 0) {
             control.setAttribute('aria-describedby', describedBy.join(' '));
         }
 
         // Prefix og suffix er rent visuelle — skjul dem fra skjermlesere.
         // Konteksten skal ligge i labelteksten.
-        this.querySelectorAll('.ix-text-field__prefix, .ix-text-field__suffix').forEach((el) => {
-            el.setAttribute('aria-hidden', 'true');
-        });
+        const prefix = this.querySelector('[data-field="prefix"]');
+        const suffix = this.querySelector('[data-field="suffix"]');
+
+        prefix?.setAttribute('aria-hidden', 'true');
+        suffix?.setAttribute('aria-hidden', 'true');
+
+        // Sett data-has-prefix/suffix på .ix-text-field slik at CSS kan fjerne
+        // radius på input der prefix/suffix støter inntil.
+        const textField = this.querySelector('.ix-text-field');
+        if (textField) {
+            textField.toggleAttribute('data-has-prefix', !!prefix);
+            textField.toggleAttribute('data-has-suffix', !!suffix);
+        }
+    }
+
+    // Oppretter og kobler tegnteller-element hvis kontrollen har minlength/maxlength.
+    // Returnerer elementet slik at kallstedet kan inkludere ID-en i aria-describedby.
+    private _setupCharCount(control: TextControl): HTMLElement | null {
+        const min = control.getAttribute('minlength');
+        const max = control.getAttribute('maxlength');
+        if (!min && !max) return null;
+
+        const el = document.createElement('span');
+        el.id = `${control.id}-char-count`;
+        el.setAttribute('data-field', 'char-count');
+        el.setAttribute('aria-live', 'off');
+
+        this._updateCharCount(el, control, min, max);
+
+        // Plasser etter error-elementet, eller sist i ix-field om error mangler.
+        const error = this.querySelector('[data-field="error"]');
+        if (error?.parentNode) {
+            error.parentNode.insertBefore(el, error.nextSibling);
+        } else {
+            this.appendChild(el);
+        }
+
+        this._charCountControl = control;
+        this._charCountListener = () => this._updateCharCount(el, control, min, max);
+        control.addEventListener('input', this._charCountListener);
+
+        return el;
+    }
+
+    private _teardownCharCount(): void {
+        if (this._charCountListener && this._charCountControl) {
+            this._charCountControl.removeEventListener('input', this._charCountListener);
+        }
+        this._charCountListener = null;
+        this._charCountControl = null;
+        this.querySelector('[data-field="char-count"]')?.remove();
+    }
+
+    private _updateCharCount(el: HTMLElement, control: TextControl, min: string | null, max: string | null): void {
+        const current = control.value.length;
+        if (max) {
+            el.textContent = `${current}/${max}`;
+        } else if (min) {
+            el.textContent = `${current} tegn (minimum ${min})`;
+        }
     }
 
     // Holder aria-invalid på input synkronisert med om error-elementet har
     // innhold. Kalles både ved initialisering og av MutationObserver ved
-    // hver endring.
+    // hver endring. Synkroniserer også data-invalid til .ix-dropdown-container
+    // hvis kontrollen er en select inne i en dropdown.
     private _syncInvalid(control: NativeControl, error: HTMLElement): void {
-        if (error.textContent?.trim()) {
+        const hasError = !!error.textContent?.trim();
+        if (hasError) {
             control.setAttribute('aria-invalid', 'true');
         } else {
             control.removeAttribute('aria-invalid');
         }
+        control.closest('.ix-dropdown')?.toggleAttribute('data-invalid', hasError);
+    }
+
+    // Speiler disabled/readonly-tilstanden fra native kontroll til ix-field-host
+    // slik at CSS-reglene [data-disabled] og [data-readonly] virker uten React.
+    private _syncControlState(control: NativeControl): void {
+        this.toggleAttribute('data-disabled', control.disabled);
+        const readOnly = 'readOnly' in control ? (control as HTMLInputElement | HTMLTextAreaElement).readOnly : false;
+        this.toggleAttribute('data-readonly', readOnly);
     }
 }

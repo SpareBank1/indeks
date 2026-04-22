@@ -16,6 +16,7 @@ dist-ssr
 .build
 
 # Editor directories and files
+.claude/
 .idea
 .DS_Store
 *.suo

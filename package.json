@@ -17,7 +17,13 @@
         "release": "changeset version && pnpm build && changeset publish",
         "ci:publish": "pnpm turbo run build --filter=@sb1/indeks-tokens --filter=@sb1/indeks-utils --filter=@sb1/indeks-css --filter=@sb1/indeks-react --filter=@sb1/indeks-web && changeset publish",
         "ci:version": "pnpm changeset version",
-        "check-licenses": "scripts/check-licenses.sh"
+        "check-licenses": "scripts/check-licenses.sh",
+        "update-snapshots": "pnpm --filter @sb1/indeks-storybook update-snapshots"
+    },
+    "pnpm": {
+        "overrides": {
+            "webpackbar": "^7.0.0"
+        }
     },
     "devDependencies": {
         "@changesets/cli": "^2.30.0",
