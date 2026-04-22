@@ -430,7 +430,7 @@
       "interactive": {
         "default": {
           "$type": "color",
-          "$value": "{color.brand.950}",
+          "$value": "{color.gray.800}",
           "$description": "",
           "$extensions": {
             "com.figma": {
