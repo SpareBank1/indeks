@@ -105,6 +105,10 @@ errorEl.textContent = '';
 
 ### Med prefix og suffix
 
+:::warning Rekkefølge i DOM er avgjørende
+`prefix` må ligge før `<input>`, `suffix` må ligge etter. Feil rekkefølge gir feil visuell plassering.
+:::
+
 Prefix og suffix gir ekstra kontekst om hva som skal fylles inn:
 
 <Tabs groupId="variant">
@@ -114,7 +118,7 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn:
 <>
   <TextField
     label="Beløp i kroner"
-    prefix="kr"
+    suffix="kr"
     inputProps={{ inputMode: 'numeric' }}
   />
   <TextField
@@ -131,6 +135,10 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn:
 </>
 ```
 
+:::note Norsk valutakonvensjon
+Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for NOK, ikke `prefix`. `prefix` brukes for valutasymboler som plasseres foran beløpet (f.eks. `€`, `$`).
+:::
+
 </TabItem>
 <TabItem value="html" label="HTML">
 
@@ -139,8 +147,8 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn:
   <ix-field>
     <label>Beløp i kroner</label>
     <div class="ix-text-field">
-      <div data-field="prefix">kr</div>
       <input inputMode="numeric" />
+      <div data-field="suffix">kr</div>
     </div>
     <span data-field="error"></span>
   </ix-field>
@@ -220,7 +228,7 @@ Prefix og suffix er skjult med aria-hidden. Når konteksten ikke er åpenbar fra
 
 ### Valgfrie felt
 
-I banksammenheng er nesten alle felter påkrevd. Merk unntaket — ikke regelen. Legg til `(valgfritt)` i labelteksten når et felt ikke er obligatorisk.
+I banksammenheng er nesten alle felter påkrevd. Merk unntaket — ikke regelen. Legg til `(valgfritt)` på slutten av labelteksten når et felt ikke er obligatorisk: `label="Mobilnummer (valgfritt)"`. Ikke merk obligatoriske felt — det er standarden.
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
@@ -321,7 +329,11 @@ Når labelen beskriver selve dataen, kan brukeren raskt orientere seg uten å le
 
 ### Unngå bruk av placeholder
 
-Placeholder anbefales ikke til viktig informasjon. Når brukeren begynner å skrive, forsvinner teksten og veiledningen går tapt. Bruk `description` i stedet, som alltid er synlig.
+:::warning Unngå placeholder
+Placeholder forsvinner når brukeren begynner å skrive, kan forveksles med utfylt innhold, og er ikke tilstrekkelig erstatning for label eller description. Bruk `description` for eksempler og hint — det er alltid synlig.
+:::
+
+`description="11 siffer, f.eks. 1234 56 78903"` er bedre enn `placeholder="1234 56 78903"`.
 
 ### Hjelpetekst gir støtte der det trengs
 
