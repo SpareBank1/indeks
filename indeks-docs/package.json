@@ -9,6 +9,7 @@
         "build": "docusaurus build",
         "swizzle": "docusaurus swizzle",
         "deploy": "docusaurus deploy",
+        "preview": "pnpm build && pnpm serve --host 127.0.0.1",
         "clear": "docusaurus clear",
         "serve": "docusaurus serve",
         "write-translations": "docusaurus write-translations",
