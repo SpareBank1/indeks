@@ -129,6 +129,23 @@ const config: Config = {
     } satisfies Preset.ThemeConfig,
 
     plugins: [
+        [
+            '@signalwire/docusaurus-plugin-llms-txt',
+            {
+                siteTitle: 'Indeks Designsystem',
+                siteDescription:
+                    'Felles retningslinjer og komponenter for SpareBank 1. Inneholder tokens, utility-klasser, React- og web components samt mønstre og maler.',
+                depth: 2,
+                content: {
+                    enableMarkdownFiles: true,
+                    enableLlmsFullTxt: true,
+                    includeDocs: true,
+                    includeBlog: false,
+                    includePages: false,
+                    remarkGfm: true,
+                },
+            },
+        ],
         function webpackConfig() {
             return {
                 name: 'custom-webpack-config',
