@@ -4,22 +4,28 @@ React-komponenter for Indeks designsystemet. Denne pakken inneholder ferdigbygde
 
 ## 📦 Del av Indeks
 
-Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks) og må brukes sammen med CSS-styling:
+Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks) og er et tynt React-lag oppå `@sb1/indeks-web`. For å bruke den trenger du tre ting i prosjektet:
 
-- **CDN (anbefalt)** - Last inn CSS fra `cdn.sparebank1.no/indeks/css/<versjon>.css`
-- eller importer via **@sb1/indeks-css** og installer via npm
+1. **CSS** fra `@sb1/indeks-css` (via CDN eller npm)
+2. **Web components** fra `@sb1/indeks-web` (via CDN — kreves også for React)
+3. **Denne pakken** — `@sb1/indeks-react`
 
 ## 📥 Installasjon
 
 ```bash
 npm install @sb1/indeks-react
+npm install --save-dev @sb1/indeks-web
 ```
+
+`@sb1/indeks-web` installeres som `devDependency` fordi runtime-koden lastes fra CDN — npm-pakken brukes kun for TypeScript-typer ved utvikling.
 
 ## 🎨 Styling
 
 Komponentene krever at du inkluderer Indeks CSS.
 
 ### Metode 1: Via CDN (anbefalt)
+
+CDN er anbefalt fordi URL-en deles på tvers av SB1-applikasjoner. Nettleseren kan gjenbruke samme cachede CSS, slik at brukere som allerede har besøkt en annen SB1-app slipper å laste ned stylingen på nytt.
 
 ```html
 <!-- index.html -->
@@ -30,6 +36,7 @@ Komponentene krever at du inkluderer Indeks CSS.
     </head>
     <body>
         <div id="root"></div>
+        <script type="module" src="https://cdn.sparebank1.no/indeks/web/<versjon>/index.js"></script>
     </body>
 </html>
 ```
@@ -43,6 +50,7 @@ npm install @sb1/indeks-css
 ```jsx
 // main.tsx eller App.tsx
 import '@sb1/indeks-css';
+import '@sb1/indeks-web'; // registrerer custom elements
 ```
 
 ## ✨ Bruk
@@ -81,6 +89,7 @@ const MyButton: React.FC<ButtonProps> = (props) => {
 ## 🔗 Relaterte pakker
 
 - [@sb1/indeks-css](https://www.npmjs.com/package/@sb1/indeks-css) - CSS-styling (via CDN eller npm)
+- [@sb1/indeks-web](https://www.npmjs.com/package/@sb1/indeks-web) - Web components som React-pakken wrapper (kreves)
 - [@sb1/indeks-tokens](https://www.npmjs.com/package/@sb1/indeks-tokens) - Design tokens (trenger ikke egen import)
 - [@sb1/indeks-utils](https://www.npmjs.com/package/@sb1/indeks-utils) - Utility-klasser (trenger ikke egen import)
 
