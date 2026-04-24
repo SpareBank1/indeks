@@ -68,3 +68,11 @@
 body:not(.navigation-with-keyboard) .ix-text-area textarea:focus {
     outline: var(--ix-outline-default);
 }
+
+.theme-doc-footer-rapporter {
+    margin-top: var(--ifm-leading);
+    padding-top: var(--ifm-leading);
+    border-top: 1px solid var(--ifm-toc-border-color);
+    font-size: 0.875rem;
+    color: var(--ifm-color-content-secondary);
+}
