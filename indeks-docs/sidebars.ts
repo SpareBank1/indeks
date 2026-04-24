@@ -44,7 +44,11 @@ const sidebars: SidebarsConfig = {
                         {
                             type: 'category',
                             label: 'Farger',
-                            items: ['retningslinjer/farger/farger', 'grunnleggende/tokens/farger-native'],
+                            items: [
+                                'retningslinjer/farger/farger',
+                                'retningslinjer/farger/fargemodus',
+                                'grunnleggende/tokens/farger-native',
+                            ],
                         },
                         'grunnleggende/tokens/spacing',
                         'grunnleggende/tokens/border',

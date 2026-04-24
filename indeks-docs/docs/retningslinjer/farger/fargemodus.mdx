@@ -1,0 +1,36 @@
+# Fargemodus (light og dark)
+
+De semantiske fargevariablene i Indeks (`--ix-color-*`) har egne verdier for light og dark mode. Alle komponenter leser disse variablene, så de tilpasser seg automatisk.
+
+## Anbefalt: følg brukerens systempreferanse
+
+Bruk `.regard-color-scheme-preference` på `<body>`. Da følger siden det brukeren har valgt i operativsystemet, og dere får dark og light mode uten ekstra arbeid:
+
+```html
+<body class="ix-body regard-color-scheme-preference">
+    ...
+</body>
+```
+
+:::important Koordiner på tvers av områder
+En god brukeropplevelse forutsetter at brukeren er i samme modus gjennom hele reisen. Hvis én flate bytter modus mens en annen ikke gjør det, oppleves det som inkonsistent og rotete. Avklar derfor valget på tvers av teamene som lager flatene brukeren beveger seg mellom, og sørg for at alle bruker samme strategi.
+:::
+
+## Klassene
+
+Fargemodus styres av en klasse på et element lenger opp i DOM-en (typisk `<body>` eller en wrapper). Klassen virker på alt innhold under elementet den er satt på:
+
+-   **Ingen klasse** — light mode. Dette er default.
+-   **`.ix-light-mode`** — tvinger light mode.
+-   **`.ix-dark-mode`** — tvinger dark mode.
+-   **`.regard-color-scheme-preference`** — auto: følger brukerens systempreferanse via `prefers-color-scheme`. Dark når OS/nettleser står i dark mode, ellers light.
+
+## Tving én modus
+
+Hvis en flate av en god grunn alltid skal være lys eller mørk, kan `.ix-light-mode` eller `.ix-dark-mode` brukes i stedet. Vær oppmerksom på at dette kan bryte forventningen til brukeren hvis andre flater følger systempreferansen.
+
+```html
+<body class="ix-body ix-light-mode">
+    ...
+</body>
+```
