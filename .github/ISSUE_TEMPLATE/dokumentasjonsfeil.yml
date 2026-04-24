@@ -1,0 +1,22 @@
+name: Dokumentasjonsfeil
+description: Noe i dokumentasjonen er feil, utdatert eller uklart
+labels: ["documentation"]
+body:
+  - type: input
+    id: side
+    attributes:
+      label: Side / URL
+      placeholder: "https://design.sparebank1.no/..."
+    validations:
+      required: true
+  - type: textarea
+    id: beskrivelse
+    attributes:
+      label: Beskrivelse
+      description: Hva er feil eller mangler?
+    validations:
+      required: true
+  - type: textarea
+    id: forslag
+    attributes:
+      label: Forslag til forbedring (valgfritt)
