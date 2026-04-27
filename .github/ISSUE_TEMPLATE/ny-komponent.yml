@@ -1,0 +1,60 @@
+name: Ny komponent
+description: Foreslå en ny komponent til Indeks
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        En komponent i Indeks krever CSS, eventuelt web component og React-innpakning, design i Figma, dokumentasjon og retningslinjer for å være ferdig. Jo mer du kan fylle ut her, jo lettere er det for oss å vurdere og ta videre.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Hvilket problem løser denne komponenten?
+      description: Beskriv situasjonen der du trenger komponenten. Hva prøver brukerne dine å gjøre?
+    validations:
+      required: true
+
+  - type: textarea
+    id: behov
+    attributes:
+      label: Andre med samme behov
+      description: Har du snakket med andre team om dette? Hvem andre har det samme behovet? Lenk gjerne til Slack-tråder eller lignende.
+    validations:
+      required: true
+
+  - type: textarea
+    id: eksisterende
+    attributes:
+      label: Tilsvarende løsninger
+      description: Finnes det løsninger på dette i andre designsystemer (f.eks. Material, Carbon, Fabric)? Lenk gjerne til eksempler.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternativer
+    attributes:
+      label: Alternativer vurdert
+      description: Har du vurdert å løse dette med eksisterende komponenter eller mønster? Hvorfor holder ikke det?
+    validations:
+      required: true
+
+  - type: textarea
+    id: design
+    attributes:
+      label: Forslag til design og oppførsel
+      description: |
+        Beskriv så konkret du kan: stater (default, hover, focus, error, disabled), varianter, responsivitet, animasjon. Legg gjerne ved skisser, Figma-lenker eller skjermbilder.
+
+  - type: checkboxes
+    id: leveranser
+    attributes:
+      label: Hva kan du bidra med?
+      description: Kryss av det du er i stand til å bidra på.
+      options:
+        - label: CSS (indeks-css)
+        - label: Web component (indeks-web)
+        - label: React-komponent (indeks-react)
+        - label: Design i Figma
+        - label: Dokumentasjon og retningslinjer
+        - label: Tilgjengelighetstest (WCAG)
