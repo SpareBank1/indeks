@@ -1,4 +1,4 @@
-import { CssVersion } from './CSSVersion';
+import { CssVersion, WebVersion } from './PackageVersion';
 
 # Utvikler
 
@@ -8,7 +8,7 @@ Kom raskt i gang med Indeks:
 
 1. **Importer styling** i CSS-filen din:
 
-    <pre> @import url('https://cdn.test.sparebank1.no/indeks/css/<CssVersion />/index.css')</pre>
+    <pre> @import url('https://cdn.sparebank1.no/indeks/css/<CssVersion />/index.css')</pre>
 
 2. **Legg til `ix-body`-klassen** på øverste nivå i applikasjonen din:
 
@@ -16,13 +16,25 @@ Kom raskt i gang med Indeks:
     <body class="ix-body">
     ```
 
-3. Så er du klar til å bruke grunnleggende styling og designtokens! Det du kan gjøre nå er: 
-    - Se migreringsguiden for spacing [fra FFE](/docs/grunnleggende/tokens/spacing#migrere-fra-ffe) eller [fra Tailwind](/docs/grunnleggende/tokens/spacing#migrere-fra-tailwind) for å gå over til Indeks sine [spacing-tokens](/docs/grunnleggende/tokens/spacing). 
+3. **Last inn web components** fra CDN i `index.html`:
+
+    <pre>{`<script type="module" src="https://cdn.sparebank1.no/indeks/web/`}<WebVersion />{`/index.js"></script>`}</pre>
+
+4. Så er du klar til å bruke grunnleggende styling og designtokens! Det du kan gjøre nå er:
+    - Se migreringsguiden for spacing [fra FFE](/docs/grunnleggende/tokens/spacing#migrere-fra-ffe) eller [fra Tailwind](/docs/grunnleggende/tokens/spacing#migrere-fra-tailwind) for å gå over til Indeks sine [spacing-tokens](/docs/grunnleggende/tokens/spacing).
     - Se [migreringsguiden for farger](/docs/retningslinjer/farger/#migrere-fra-ffe) for å gå over til Indeks sine [farge-tokens](/docs/retningslinjer/farger/).
     - Ta i bruk [utility-klasser](/docs/utility-klasser/oversikt) for rask styling av margin, padding, layout og mer.
-4. **Installer React-komponenter** (kun i test):
+5. **Installer React-komponenter** *(kun for React/Next.js)*:
+
+    :::note
+    Bruker du Astro, Svelte, Vue eller vanilla HTML er web components fra steg 3 alt du trenger — hopp over dette steget.
+
+    React-komponentene krever at web components (steg 3) er lastet inn. `@sb1/indeks-react` er et tynt lag oppå `@sb1/indeks-web`.
+    :::
+
         ```bash
         npm install @sb1/indeks-react
+        npm install --save-dev @sb1/indeks-web  # kun TypeScript-typer, runtime lastes fra CDN (steg 3)
         ```
 
 :::info Fonter
@@ -35,11 +47,12 @@ Indeks bruker en avart av reset.css for å sikre et konsistent utgangspunkt for 
 
 ## Detaljert installasjon
 
-For å komme i gang med Indeks er det 3 deler du trenger å sette opp i prosjektet ditt:
+For å komme i gang med Indeks er det 4 deler du trenger å sette opp i prosjektet ditt:
 
 1. Fonter
 2. Styling (tokens, utils og komponentstyling)
-3. Komponenter (React-pakken)
+3. Web components (atferd som brukes på tvers, også i React)
+4. Komponenter (React-pakken)
 
 ### 1. Fonter
 
@@ -59,13 +72,13 @@ Uten fontene vil tekst vises i nettleserens standardfont i stedet for SB1s desig
 Installer styling ved å importere CSS-filen fra vår CDN inn i hoved-CSS-filen din:
 
 
-    <pre> @import url('https://cdn.test.sparebank1.no/indeks/css/<CssVersion />/index.css')</pre>
+    <pre> @import url('https://cdn.sparebank1.no/indeks/css/<CssVersion />/index.css')</pre>
 
 :::info
 Siste versjon er <CssVersion />. Se [releases](https://github.com/SpareBank1/indeks/releases) for alle versjoner.
 :::
 
-> Indeks tilbyr også styling via npm-pakken `@sb1/indeks-css`, men vi anbefaler å bruke vår CDN for enklest mulig oppsett og bedre caching for brukerne.
+> Indeks tilbyr også styling via npm-pakken `@sb1/indeks-css`, men vi anbefaler CDN. CDN-URL-en er den samme på tvers av SB1-applikasjoner, slik at nettleseren kan gjenbruke samme cachede CSS — brukere som allerede har besøkt en annen SB1-app slipper å laste ned stylingen på nytt.
 
 **Hva får du med CSS-pakken?**
 
@@ -75,11 +88,11 @@ Siste versjon er <CssVersion />. Se [releases](https://github.com/SpareBank1/ind
 
 ### 3. Web components
 
-Web components fra Indeks fungerer uten React og kan brukes i alle rammeverk — eller direkte i HTML. Last inn scriptet fra CDN:
+Web components fra Indeks er nødvendige i alle prosjekter — også React-prosjekter. `@sb1/indeks-react` er et tynt lag oppå web components (f.eks. rendrer `Field` et `<ix-field>`), så uten at web components er lastet inn vil React-komponentene ikke virke som forventet.
 
-```html
-<script type="module" src="https://cdn.sparebank1.no/indeks/web/<versjon>/index.js"></script>
-```
+Last inn scriptet fra CDN i `index.html`:
+
+<pre>{`<script type="module" src="https://cdn.sparebank1.no/indeks/web/`}<WebVersion />{`/index.js"></script>`}</pre>
 
 Etter at scriptet er lastet er komponentene tilgjengelige som HTML-elementer:
 
@@ -91,6 +104,10 @@ Etter at scriptet er lastet er komponentene tilgjengelige som HTML-elementer:
 </ix-field>
 ```
 
+:::info Hvorfor CDN + devDependency?
+Runtime-koden lastes fra CDN (deles på tvers av SB1-applikasjoner), mens npm-pakken kun brukes til TypeScript-typer ved utvikling. Det er derfor pakken installeres som `devDependency` i stedet for en vanlig `dependency` — ingenting av den havner i den bygde applikasjonen.
+:::
+
 #### TypeScript-typer
 
 CDN-scriptet inneholder ingen typedeklarasjoner. Installer npm-pakken som `devDependency` for å få typer:
@@ -99,14 +116,17 @@ CDN-scriptet inneholder ingen typedeklarasjoner. Installer npm-pakken som `devDe
 npm install --save-dev @sb1/indeks-web
 ```
 
-Pakken registrerer typene globalt via `HTMLElementTagNameMap` og JSX — ingen import nødvendig. TypeScript og JSX-editorer vil da gi autocomplete og typesjekk for `<ix-field>` og de andre komponentene.
+Pakken registrerer typene globalt via `HTMLElementTagNameMap` og JSX — ingen import nødvendig i koden. TypeScript og JSX-editorer vil da gi autocomplete og typesjekk for `<ix-field>` og de andre komponentene. Dette gjelder både for rene web component-prosjekter og for React-prosjekter (React-komponentene rendrer `<ix-*>`-elementer internt).
 
 ### 4. Komponenter (React)
 
-For å bruke komponentbiblioteket i React, installer pakken:
+React-pakken krever at både CSS-en og web components-scriptet fra steg 2 og 3 er lastet inn — `@sb1/indeks-react` er et tynt lag som wrapper `@sb1/indeks-web`.
+
+Installer pakken:
 
 ```bash
 npm install @sb1/indeks-react
+npm install --save-dev @sb1/indeks-web
 ```
 
 Importer komponentene der du skal bruke dem:
@@ -175,12 +195,13 @@ For eksempel, for en knapp:
 
 De fleste trenger ikke å forholde seg til dette, men du kan lese videre hvis du er spesielt interessert.
 
-Indeks er bygget opp av 4 pakker:
+Indeks er bygget opp av 5 pakker:
 
 <ul className="ix-list-disc ix-pl-md">
     <li className="ix-py-2xs">indeks-tokens</li>
     <li className="ix-py-2xs">indeks-utils</li>
     <li className="ix-py-2xs">indeks-css</li>
+    <li className="ix-py-2xs">indeks-web</li>
     <li className="ix-py-2xs">indeks-react</li>
 </ul>
 

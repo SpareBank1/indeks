@@ -4,11 +4,15 @@ Web components for Indeks designsystemet. Komponenter som fungerer i alle rammev
 
 ## 📦 Del av Indeks
 
-Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks). Komponentene bruker CSS-klasser fra `@sb1/indeks-css`, som må lastes separat.
+Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks) og er grunnlaget for komponent-atferden i systemet. Den kreves også i React-prosjekter — `@sb1/indeks-react` er et tynt lag som rendrer `<ix-*>`-elementer, så web components-scriptet fra CDN må lastes i alle Indeks-prosjekter.
+
+Komponentene bruker CSS-klasser fra `@sb1/indeks-css`, som må lastes separat.
 
 ## 📥 Installasjon
 
 ### Via CDN (anbefalt)
+
+CDN er anbefalt fordi URL-en deles på tvers av SB1-applikasjoner. Nettleseren kan gjenbruke samme cachede CSS og JS, slik at brukere som allerede har besøkt en annen SB1-app slipper å laste ned det samme på nytt.
 
 ```html
 <!-- Last inn CSS -->
@@ -17,6 +21,16 @@ Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/
 <!-- Last inn og registrer web components -->
 <script type="module" src="https://cdn.sparebank1.no/indeks/web/<versjon>/index.js"></script>
 ```
+
+#### TypeScript-typer (valgfritt)
+
+CDN-scriptet inneholder ingen typedeklarasjoner. Installer npm-pakken som `devDependency` for å få typer for `<ix-field>` m.fl. både i TypeScript og JSX:
+
+```bash
+npm install --save-dev @sb1/indeks-web
+```
+
+Pakken registrerer typene globalt via `HTMLElementTagNameMap` og JSX — ingen import nødvendig i koden.
 
 Etter at scriptet er lastet inn er alle komponenter tilgjengelige som HTML-elementer:
 

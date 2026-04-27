@@ -6,9 +6,8 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
-// Read version from indeks-css package.json
-const indeksCssPackageJson = JSON.parse(readFileSync(path.resolve(__dirname, '../indeks-css/package.json'), 'utf-8'));
-const cssVersion = indeksCssPackageJson.version;
+const readVersion = (pkg: string): string =>
+    JSON.parse(readFileSync(path.resolve(__dirname, `../${pkg}/package.json`), 'utf-8')).version;
 
 const config: Config = {
     title: 'Indeks Designsystem',
@@ -44,8 +43,33 @@ const config: Config = {
         locales: ['no'],
     },
 
+    headTags: [
+        {
+            tagName: 'link',
+            attributes: {
+                rel: 'alternate',
+                type: 'text/plain',
+                href: '/llms.txt',
+                title: 'LLM-vennlig indeks (llms.txt)',
+            },
+        },
+        {
+            tagName: 'link',
+            attributes: {
+                rel: 'alternate',
+                type: 'text/plain',
+                href: '/llms-full.txt',
+                title: 'LLM-vennlig fullversjon (llms-full.txt)',
+            },
+        },
+    ],
+
     customFields: {
-        cssVersion: cssVersion,
+        cssVersion: readVersion('indeks-css'),
+        reactVersion: readVersion('indeks-react'),
+        webVersion: readVersion('indeks-web'),
+        tokensVersion: readVersion('indeks-tokens'),
+        utilsVersion: readVersion('indeks-utils'),
     },
 
     themes: ['@docusaurus/theme-live-codeblock'],
@@ -129,6 +153,23 @@ const config: Config = {
     } satisfies Preset.ThemeConfig,
 
     plugins: [
+        [
+            '@signalwire/docusaurus-plugin-llms-txt',
+            {
+                siteTitle: 'Indeks Designsystem',
+                siteDescription:
+                    'Felles retningslinjer og komponenter for SpareBank 1. Inneholder tokens, utility-klasser, React- og web components samt mønstre og maler.',
+                depth: 2,
+                content: {
+                    enableMarkdownFiles: true,
+                    enableLlmsFullTxt: true,
+                    includeDocs: true,
+                    includeBlog: false,
+                    includePages: false,
+                    remarkGfm: true,
+                },
+            },
+        ],
         function webpackConfig() {
             return {
                 name: 'custom-webpack-config',
