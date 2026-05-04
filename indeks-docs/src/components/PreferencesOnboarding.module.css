@@ -1,0 +1,73 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    margin: 1rem 0 2rem;
+    border: 1px solid var(--ifm-color-emphasis-200);
+    border-radius: 0.5rem;
+    background: var(--ifm-background-surface-color, var(--ifm-background-color));
+}
+
+.card :global(.ix-heading) {
+    margin: 0;
+}
+
+.choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.hint {
+    margin: 0;
+    color: var(--ifm-color-emphasis-700);
+}
+
+.detailed {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.question {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.questionLabel {
+    margin: 0;
+    font-weight: 500;
+}
+
+.answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0 2rem;
+    border: 1px solid var(--ifm-color-emphasis-200);
+    border-radius: 0.375rem;
+    background: var(--ifm-background-surface-color, var(--ifm-background-color));
+}
+
+.summaryText {
+    margin: 0;
+    color: var(--ifm-color-emphasis-800);
+}
