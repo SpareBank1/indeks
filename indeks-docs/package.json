@@ -28,15 +28,15 @@
         "@sb1/indeks-react": "workspace:*",
         "clsx": "^2.1.1",
         "prism-react-renderer": "^2.4.1",
-        "react": "^19.2.4",
-        "react-dom": "^19.2.4"
+        "react": "^19.2.5",
+        "react-dom": "^19.2.5"
     },
     "devDependencies": {
         "@docusaurus/module-type-aliases": "^3.10.0",
         "@docusaurus/tsconfig": "^3.10.0",
         "@docusaurus/types": "^3.10.0",
         "@signalwire/docusaurus-plugin-llms-txt": "1.2.2",
-        "eslint": "^10.1.0",
+        "eslint": "^10.2.1",
         "search-insights": "^2.17.3",
         "typescript": "~5.9.3"
     },
