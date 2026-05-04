@@ -1,0 +1,35 @@
+.editorDetails {
+    /* Detaljelementet må ikke bryte Playground-containerens border-radius på bunnen. */
+    overflow: hidden;
+}
+
+.editorSummary {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    background: var(--ifm-code-background);
+    color: var(--ifm-font-color-base);
+    font-size: 0.85rem;
+    font-weight: 500;
+    list-style: none;
+    user-select: none;
+    border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.editorSummary::-webkit-details-marker {
+    display: none;
+}
+
+.editorSummary::before {
+    content: '▸';
+    display: inline-block;
+    margin-right: 0.5rem;
+    transition: transform 120ms ease;
+}
+
+.editorDetails[open] > .editorSummary::before {
+    transform: rotate(90deg);
+}
+
+.editorSummary:hover {
+    background: var(--ifm-color-emphasis-200);
+}

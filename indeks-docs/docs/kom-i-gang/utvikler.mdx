@@ -1,128 +1,85 @@
-import { CssVersion, WebVersion } from './PackageVersion';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { CssImportBlock, WebScriptBlock } from './InstallSnippets';
+import PreferencesPanel from '@site/src/components/PreferencesPanel';
 
 # Utvikler
 
-## Quick Start
+Kom i gang med Indeks i prosjektet ditt. Velg teknologi under, så tilpasser guiden seg.
 
-Kom raskt i gang med Indeks:
+## Velg teknologi
 
-1. **Importer styling** i CSS-filen din:
+<PreferencesPanel showHeading={false} />
 
-    <pre> @import url('https://cdn.sparebank1.no/indeks/css/<CssVersion />/index.css')</pre>
-
-2. **Legg til `ix-body`-klassen** på øverste nivå i applikasjonen din:
-
-    ```html
-    <body class="ix-body">
-    ```
-
-3. **Last inn web components** fra CDN i `index.html`:
-
-    <pre>{`<script type="module" src="https://cdn.sparebank1.no/indeks/web/`}<WebVersion />{`/index.js"></script>`}</pre>
-
-4. Så er du klar til å bruke grunnleggende styling og designtokens! Det du kan gjøre nå er:
-    - Se migreringsguiden for spacing [fra FFE](/docs/grunnleggende/tokens/spacing#migrere-fra-ffe) eller [fra Tailwind](/docs/grunnleggende/tokens/spacing#migrere-fra-tailwind) for å gå over til Indeks sine [spacing-tokens](/docs/grunnleggende/tokens/spacing).
-    - Se [migreringsguiden for farger](/docs/retningslinjer/farger/#migrere-fra-ffe) for å gå over til Indeks sine [farge-tokens](/docs/retningslinjer/farger/).
-    - Ta i bruk [utility-klasser](/docs/utility-klasser/oversikt) for rask styling av margin, padding, layout og mer.
-5. **Installer React-komponenter** *(kun for React/Next.js)*:
-
-    :::note
-    Bruker du Astro, Svelte, Vue eller vanilla HTML er web components fra steg 3 alt du trenger — hopp over dette steget.
-
-    React-komponentene krever at web components (steg 3) er lastet inn. `@sb1/indeks-react` er et tynt lag oppå `@sb1/indeks-web`.
-    :::
-
-        ```bash
-        npm install @sb1/indeks-react
-        npm install --save-dev @sb1/indeks-web  # kun TypeScript-typer, runtime lastes fra CDN (steg 3)
-        ```
-
-:::info Fonter
-Hvis du ikke bruker monorepo-generatoren, må du også legge til fonter. Se [detaljert installasjon](#1-fonter) nedenfor.
-:::
-
-:::info CSS Reset
-Indeks bruker en avart av reset.css for å sikre et konsistent utgangspunkt for styling på tvers av nettlesere, i motsetning til FFE, som bruker normalize.css. Det betyr at det kan være noen forskjeller i grunnleggende styling mellom FFE og Indeks, blant annet har ikke listeelementer bullet points som standard.
-:::
-
-## Detaljert installasjon
-
-For å komme i gang med Indeks er det 4 deler du trenger å sette opp i prosjektet ditt:
-
-1. Fonter
-2. Styling (tokens, utils og komponentstyling)
-3. Web components (atferd som brukes på tvers, også i React)
-4. Komponenter (React-pakken)
+## Installasjon
 
 ### 1. Fonter
 
-For å sette opp prosjektet ditt med SB1-fonter må du sørge for at fontene lastes inn.
-Dette legges til automatisk ved bruk av generatoren i monorepo. Hvis appen ikke er generert opp, legg til følgende i `<head>` i HTML-dokumentet ditt:
+Legg til SB1-fontene i `<head>` i HTML-dokumentet ditt. Monorepo-generatoren gjør dette automatisk.
 
 ```html
 <link rel="stylesheet" href="https://cdn.sparebank1.no/fonts/v1.css" />
 ```
 
-:::info
-Uten fontene vil tekst vises i nettleserens standardfont i stedet for SB1s designprofil.
-:::
+### 2. Styling
 
-### 2. CSS
+Importer CSS-en fra CDN inn i hoved-CSS-filen din, og legg `ix-body`-klassen på `<body>`. CDN-URL-en er den samme på tvers av SB1-applikasjoner, så nettleseren kan gjenbruke samme cachede CSS.
 
-Installer styling ved å importere CSS-filen fra vår CDN inn i hoved-CSS-filen din:
+<CssImportBlock />
 
+```html
+<body class="ix-body">
+```
 
-    <pre> @import url('https://cdn.sparebank1.no/indeks/css/<CssVersion />/index.css')</pre>
+Du får komponentstyling, [utility-klasser](/docs/utility-klasser/oversikt) og [designtokens](/docs/grunnleggende/tokens/introduksjon) i samme pakke.
 
-:::info
-Siste versjon er <CssVersion />. Se [releases](https://github.com/SpareBank1/indeks/releases) for alle versjoner.
-:::
-
-> Indeks tilbyr også styling via npm-pakken `@sb1/indeks-css`, men vi anbefaler CDN. CDN-URL-en er den samme på tvers av SB1-applikasjoner, slik at nettleseren kan gjenbruke samme cachede CSS — brukere som allerede har besøkt en annen SB1-app slipper å laste ned stylingen på nytt.
-
-**Hva får du med CSS-pakken?**
-
--   **Komponentstyling** - styling for hele komponenter. Brukes automatisk av React-komponentene, eller kan brukes direkte på HTML-elementer.
--   **[Utility-klasser](/docs/utility-klasser/oversikt)** - nyttige hjelpeklasser for små justeringer som margin, padding og layout. Inspirert av TailwindCSS.
--   **[Tokens](/docs/grunnleggende/tokens/introduksjon)** - designtokens for farger, spacing og border mm. Se alle tokens. Brukes når du skal lage egne komponenter.
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML / web components">
 
 ### 3. Web components
 
-Web components fra Indeks er nødvendige i alle prosjekter — også React-prosjekter. `@sb1/indeks-react` er et tynt lag oppå web components (f.eks. rendrer `Field` et `<ix-field>`), så uten at web components er lastet inn vil React-komponentene ikke virke som forventet.
+Last inn web components-scriptet fra CDN i `index.html`.
 
-Last inn scriptet fra CDN i `index.html`:
+<WebScriptBlock />
 
-<pre>{`<script type="module" src="https://cdn.sparebank1.no/indeks/web/`}<WebVersion />{`/index.js"></script>`}</pre>
-
-Etter at scriptet er lastet er komponentene tilgjengelige som HTML-elementer:
+Komponentene er nå tilgjengelige som HTML-elementer:
 
 ```html
 <ix-field>
     <label>E-postadresse</label>
-    <input type="email" name="email" />
+    <div class="ix-text-field">
+        <input type="email" name="email" />
+    </div>
     <span data-field="error"></span>
 </ix-field>
 ```
 
-:::info Hvorfor CDN + devDependency?
-Runtime-koden lastes fra CDN (deles på tvers av SB1-applikasjoner), mens npm-pakken kun brukes til TypeScript-typer ved utvikling. Det er derfor pakken installeres som `devDependency` i stedet for en vanlig `dependency` — ingenting av den havner i den bygde applikasjonen.
-:::
-
-#### TypeScript-typer
-
-CDN-scriptet inneholder ingen typedeklarasjoner. Installer npm-pakken som `devDependency` for å få typer:
+Vil du ha TypeScript-typer for `<ix-field>` og de andre elementene? Installer `@sb1/indeks-web` som `devDependency` — pakken registrerer typene globalt via `HTMLElementTagNameMap` og JSX.
 
 ```bash
 npm install --save-dev @sb1/indeks-web
 ```
 
-Pakken registrerer typene globalt via `HTMLElementTagNameMap` og JSX — ingen import nødvendig i koden. TypeScript og JSX-editorer vil da gi autocomplete og typesjekk for `<ix-field>` og de andre komponentene. Dette gjelder både for rene web component-prosjekter og for React-prosjekter (React-komponentene rendrer `<ix-*>`-elementer internt).
+Runtime-koden lastes fra CDN, så ingenting av pakken havner i den bygde applikasjonen.
 
-### 4. Komponenter (React)
+</TabItem>
+<TabItem value="react" label="React">
 
-React-pakken krever at både CSS-en og web components-scriptet fra steg 2 og 3 er lastet inn — `@sb1/indeks-react` er et tynt lag som wrapper `@sb1/indeks-web`.
+### 3. Web components
 
-Installer pakken:
+Last inn web components-scriptet fra CDN i `index.html`. `@sb1/indeks-react` er et tynt lag oppå web components og rendrer `<ix-*>`-elementer internt, så scriptet må være lastet for at React-komponentene skal virke.
+
+<WebScriptBlock />
+
+</TabItem>
+</Tabs>
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+### 4. React-komponenter
+
+Installer React-pakken. `@sb1/indeks-web` tas som `devDependency` — den brukes kun til TypeScript-typer, runtime lastes fra CDN (steg 3).
 
 ```bash
 npm install @sb1/indeks-react
@@ -135,8 +92,6 @@ Importer komponentene der du skal bruke dem:
 import { Button, Text } from '@sb1/indeks-react';
 ```
 
-Nå kan du begynne å bruke Indeks-komponenter i React-prosjektene dine:
-
 ```jsx
 function App() {
     return (
@@ -148,48 +103,71 @@ function App() {
 }
 ```
 
-## Hva nå?
+</TabItem>
+<TabItem value="html" label="HTML / web components">
 
-Nå som du har satt opp Indeks kan du:
+</TabItem>
+</Tabs>
 
-{/* -   Utforsk [komponenter](/docs/komponenter/byggeklosser) og se hva som er tilgjengelig */}
--   Lær om [designtokens](/docs/grunnleggende/tokens/introduksjon) for å lage egne komponenter
--   Bruk [util-klasser](/docs/utility-klasser/oversikt) for rask styling
--   Se [mønstre og maler](/docs/monstre-og-maler/layout) for vanlige bruksområder
+## Hold CDN-URL-er i takt med `@sb1/indeks-react`
 
-{/* ### MBC Provider (Preview) 🚧
+`@sb1/indeks-css` og `@sb1/indeks-web` versjonslåses til samme versjon som
+`@sb1/indeks-react`. Når Dependabot bumper React-pakken i `package.json`,
+må CDN-URL-ene i `index.html` og CSS-filene dine oppdateres til samme versjon
+— ellers får du drift mellom det React-komponentene forventer og det som
+faktisk er lastet i nettleseren.
 
-:::info Preview
-Denne funksjonaliteten er under utvikling og ikke tilgjengelig ennå.
-:::
+Scriptet `indeks-react sync-cdn` oppdaterer URL-ene til å matche versjonen
+du har installert. Legg til to scripts i `package.json`:
 
-Hvis du bruker designsystemet med MBC (Mobilbank Communication), kan du bruke `MBCProvider` for å gi komponentene tilgang til native funksjonalitet. `MBCProvider` er en komponent som wrapper appen din og gir context til komponentene, slik at de kan interagere med native funksjonalitet gjennom MBC.
-
-```jsx
-import { MBCProvider } from '@sb1/indeks-react';
-
-function App() {
-    return (
-        <MBCProvider>
-            <YourApp />
-        </MBCProvider>
-    );
+```json
+{
+  "scripts": {
+    "prebuild": "indeks-react sync-cdn --check",
+    "sync-indeks": "indeks-react sync-cdn"
+  }
 }
 ```
 
-### Bruk uten React (Preview) 🚧
+- `prebuild` kjører før hver `npm run build` og **feiler** hvis URL-ene ikke
+  matcher installert versjon. Dette er med vilje: hvis builden auto-fikser
+  driften, vil det som deployes kunne bruke andre klasser enn det du har
+  testet lokalt. La utvikleren se feilen og kjøre sync eksplisitt.
+- `sync-indeks` kjører du selv etter en dependency-bump — eller når `prebuild`
+  feiler. Den oppdaterer filene, du commit-er endringene og kjører builden på nytt.
 
-:::info Preview
-Denne funksjonaliteten er under utvikling. Du kan allerede bruke CSS-klassene direkte, men dokumentasjonen er ikke komplett.
-:::
+Typisk flyt etter en Dependabot-bump:
 
-Hvis du ikke bruker React, kan du bruke CSS-klassene for komponentene direkte på HTML-elementer. Se kildekoden til eksemplene i dokumentasjonen for å finne ut hvordan bruke komponentene uten React.
+```bash
+npm install          # ny indeks-react-versjon låst i package-lock
+npm run build        # prebuild feiler: drift funnet
+npm run sync-indeks  # URL-ene oppdateres
+git add -A && git commit -m "sync CDN til <versjon>"
+npm run build        # passer nå
+```
 
-For eksempel, for en knapp:
+### Hvorfor ikke `postinstall`?
 
-```html
-<button class="ix-button ix-button--primary">Klikk meg</button>
-``` */}
+Vi anbefaler `npm install --ignore-scripts` av sikkerhetsgrunner. Det hopper
+over alle lifecycle-hooks, så CDN-sync må hektes på en kommando du
+eksplisitt kjører.
+
+## Installere via npm i stedet for CDN
+
+`@sb1/indeks-css` og `@sb1/indeks-web` finnes også på npm, men vi anbefaler CDN. Med CDN deler alle SB1-applikasjoner samme URL, så nettleseren kan gjenbruke cachen på tvers av apper — brukerne slipper å laste ned CSS og web components på nytt når de bytter mellom SB1-tjenester.
+
+Hvis du likevel vil bundle det selv (f.eks. intern app uten CDN-tilgang):
+
+```bash
+npm install @sb1/indeks-css @sb1/indeks-web
+```
+
+## Hva nå?
+
+- Lær om [designtokens](/docs/grunnleggende/tokens/introduksjon) for å lage egne komponenter
+- Bruk [utility-klasser](/docs/utility-klasser/oversikt) for rask styling
+- Se [mønstre og maler](/docs/monstre-og-maler/layout) for vanlige bruksområder
+- Migrering: [spacing fra FFE](/docs/grunnleggende/tokens/spacing#migrere-fra-ffe), [spacing fra Tailwind](/docs/grunnleggende/tokens/spacing#migrere-fra-tailwind), [farger fra FFE](/docs/retningslinjer/farger/#migrere-fra-ffe)
 
 ## Teknisk struktur
 

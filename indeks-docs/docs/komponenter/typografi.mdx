@@ -1,7 +1,7 @@
 ---
 description: >
-  Typografikomponenter i Indeks. Klassenavn følger mønsteret ix-heading ix-heading--{størrelse}
-  (ikke ix-heading-1 e.l.) — se klasseoversikten på siden for riktig bruk.
+    Typografikomponenter i Indeks. Klassenavn følger mønsteret ix-heading ix-heading--{størrelse}
+    (ikke ix-heading-1 e.l.) — se klasseoversikten på siden for riktig bruk.
 ---
 
 import Tabs from '@theme/Tabs';
@@ -56,8 +56,12 @@ Heading-nivå kan overstyres med `size` hvis det visuelle hierarkiet ikke samsva
 
 ```tsx live
 <>
-  <Heading as="h1" size="lg">Renter og betingelser</Heading>
-  <Heading as="h2" size="md">Effektiv rente</Heading>
+    <Heading as="h1" size="lg">
+        Renter og betingelser
+    </Heading>
+    <Heading as="h2" size="md">
+        Effektiv rente
+    </Heading>
 </>
 ```
 
@@ -66,8 +70,8 @@ Heading-nivå kan overstyres med `size` hvis det visuelle hierarkiet ikke samsva
 
 ```jsx live
 <>
-  <h1 className="ix-heading ix-heading--lg">Renter og betingelser</h1>
-  <h2 className="ix-heading ix-heading--md">Effektiv rente</h2>
+    <h1 className="ix-heading ix-heading--lg">Renter og betingelser</h1>
+    <h2 className="ix-heading ix-heading--md">Effektiv rente</h2>
 </>
 ```
 
@@ -85,25 +89,25 @@ Heading-nivå kan overstyres med `size` hvis det visuelle hierarkiet ikke samsva
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
-| Prop                    | Type                              | Standard   | Beskrivelse                                                 |
-| ----------------------- | --------------------------------- | ---------- | ----------------------------------------------------------- |
-| `as`                    | `h1` \| `h2` \| `h3` \| `h4` \| `h5` \| `h6` | — (påkrevd) | Semantisk HTML-element. Bestemmer heading-nivå.             |
-| `size`                  | `2xl` \| `xl` \| `lg` \| `md` \| `sm` \| `xs` | Utledet fra `as` | Visuell størrelse. Overstyrer standard mapping.             |
-| `addRecommendedSpacing` | `boolean`                         | `false`    | Legger til `margin-bottom` basert på størrelse.             |
-| `className`             | `string`                          | —          | Ekstra CSS-klasser.                                         |
+| Prop                    | Type                                          | Standard         | Beskrivelse                                     |
+| ----------------------- | --------------------------------------------- | ---------------- | ----------------------------------------------- |
+| `as`                    | `h1` \| `h2` \| `h3` \| `h4` \| `h5` \| `h6`  | — (påkrevd)      | Semantisk HTML-element. Bestemmer heading-nivå. |
+| `size`                  | `2xl` \| `xl` \| `lg` \| `md` \| `sm` \| `xs` | Utledet fra `as` | Visuell størrelse. Overstyrer standard mapping. |
+| `addRecommendedSpacing` | `boolean`                                     | `false`          | Legger til `margin-bottom` basert på størrelse. |
+| `className`             | `string`                                      | —                | Ekstra CSS-klasser.                             |
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
-| Klasse              | Beskrivelse                                      |
-| ------------------- | ------------------------------------------------ |
-| `ix-heading`        | Påkrevd basisklasse. Setter farge og linjehøyde. |
-| `ix-heading--2xl`   | Størrelse 2xl — tilsvarer h1.                    |
-| `ix-heading--xl`    | Størrelse xl — tilsvarer h2.                     |
-| `ix-heading--lg`    | Størrelse lg — tilsvarer h3.                     |
-| `ix-heading--md`    | Størrelse md — tilsvarer h4.                     |
-| `ix-heading--sm`    | Størrelse sm — tilsvarer h5.                     |
-| `ix-heading--xs`    | Størrelse xs — tilsvarer h6.                     |
+| Klasse            | Beskrivelse                                      |
+| ----------------- | ------------------------------------------------ |
+| `ix-heading`      | Påkrevd basisklasse. Setter farge og linjehøyde. |
+| `ix-heading--2xl` | Størrelse 2xl — tilsvarer h1.                    |
+| `ix-heading--xl`  | Størrelse xl — tilsvarer h2.                     |
+| `ix-heading--lg`  | Størrelse lg — tilsvarer h3.                     |
+| `ix-heading--md`  | Størrelse md — tilsvarer h4.                     |
+| `ix-heading--sm`  | Størrelse sm — tilsvarer h5.                     |
+| `ix-heading--xs`  | Størrelse xs — tilsvarer h6.                     |
 
 </TabItem>
 </Tabs>
@@ -142,8 +146,8 @@ Tekst rendres som standard i en `<p>`. Bruk `as` når elementet ikke er en parag
 
 ```tsx live
 <ul>
-  <Text as="li">Brukskonto</Text>
-  <Text as="li">Sparekonto</Text>
+    <Text as="li">Brukskonto</Text>
+    <Text as="li">Sparekonto</Text>
 </ul>
 ```
 
@@ -152,8 +156,8 @@ Tekst rendres som standard i en `<p>`. Bruk `as` når elementet ikke er en parag
 
 ```jsx live
 <ul>
-  <li className="ix-text ix-text--md">Brukskonto</li>
-  <li className="ix-text ix-text--md">Sparekonto</li>
+    <li className="ix-text ix-text--md">Brukskonto</li>
+    <li className="ix-text ix-text--md">Sparekonto</li>
 </ul>
 ```
 
@@ -169,9 +173,8 @@ Standard linjehøyde er 1.2. Brødtekst som er lengre enn noen få linjer trenge
 
 ```tsx live
 <Text long>
-  Renten på boliglånet ditt er basert på Nibor pluss et påslag. Den effektive
-  renten inkluderer alle gebyrer og kostnader knyttet til lånet, og gir deg et
-  mer realistisk bilde av hva lånet faktisk koster deg per år.
+    Renten på boliglånet ditt er basert på Nibor pluss et påslag. Den effektive renten inkluderer alle gebyrer og
+    kostnader knyttet til lånet, og gir deg et mer realistisk bilde av hva lånet faktisk koster deg per år.
 </Text>
 ```
 
@@ -180,9 +183,8 @@ Standard linjehøyde er 1.2. Brødtekst som er lengre enn noen få linjer trenge
 
 ```jsx live
 <p className="ix-text ix-text--md ix-text--long">
-  Renten på boliglånet ditt er basert på Nibor pluss et påslag. Den effektive
-  renten inkluderer alle gebyrer og kostnader knyttet til lånet, og gir deg et
-  mer realistisk bilde av hva lånet faktisk koster deg per år.
+    Renten på boliglånet ditt er basert på Nibor pluss et påslag. Den effektive renten inkluderer alle gebyrer og
+    kostnader knyttet til lånet, og gir deg et mer realistisk bilde av hva lånet faktisk koster deg per år.
 </p>
 ```
 
@@ -198,8 +200,12 @@ Bruk `<strong>` og `<em>` for å utheve tekst med henholdsvis fet og kursiv stil
 
 ```tsx live
 <>
-  <Text>Saldo: <strong>12 345,00 kr</strong></Text>
-  <Text>Renten er <em>variabel</em> og kan endres.</Text>
+    <Text>
+        Saldo: <strong>12 345,00 kr</strong>
+    </Text>
+    <Text>
+        Renten er <em>variabel</em> og kan endres.
+    </Text>
 </>
 ```
 
@@ -214,8 +220,12 @@ Vil du utheve en hel paragraf uten `<p>`-elementet, bruk `as`:
 
 ```jsx live
 <>
-  <p className="ix-text ix-text--md">Saldo: <strong>12 345,00 kr</strong></p>
-  <p className="ix-text ix-text--md">Renten er <em>variabel</em> og kan endres.</p>
+    <p className="ix-text ix-text--md">
+        Saldo: <strong>12 345,00 kr</strong>
+    </p>
+    <p className="ix-text ix-text--md">
+        Renten er <em>variabel</em> og kan endres.
+    </p>
 </>
 ```
 
@@ -227,27 +237,27 @@ Vil du utheve en hel paragraf uten `<p>`-elementet, bruk `as`:
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
-| Prop                    | Type                              | Standard | Beskrivelse                                                  |
-| ----------------------- | --------------------------------- | -------- | ------------------------------------------------------------ |
-| `as`                    | `ElementType`                     | `p`      | HTML-element som rendres. Kan være `span`, `strong`, `em`, etc. |
-| `size`                  | `2xl` \| `xl` \| `lg` \| `md` \| `sm` \| `xs` | `md`     | Skriftstørrelse.                                             |
-| `long`                  | `boolean`                         | `false`  | Øker linjehøyden til 1.4. Bruk for tekst over flere linjer. |
-| `addRecommendedSpacing` | `boolean`                         | `false`  | Legger til anbefalt `margin-bottom` under teksten.           |
-| `className`             | `string`                          | —        | Ekstra CSS-klasser.                                          |
+| Prop                    | Type                                          | Standard | Beskrivelse                                                     |
+| ----------------------- | --------------------------------------------- | -------- | --------------------------------------------------------------- |
+| `as`                    | `ElementType`                                 | `p`      | HTML-element som rendres. Kan være `span`, `strong`, `em`, etc. |
+| `size`                  | `2xl` \| `xl` \| `lg` \| `md` \| `sm` \| `xs` | `md`     | Skriftstørrelse.                                                |
+| `long`                  | `boolean`                                     | `false`  | Øker linjehøyden til 1.4. Bruk for tekst over flere linjer.     |
+| `addRecommendedSpacing` | `boolean`                                     | `false`  | Legger til anbefalt `margin-bottom` under teksten.              |
+| `className`             | `string`                                      | —        | Ekstra CSS-klasser.                                             |
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
-| Klasse          | Beskrivelse                                          |
-| --------------- | ---------------------------------------------------- |
-| `ix-text`       | Påkrevd basisklasse. Setter linjehøyde.              |
-| `ix-text--2xl`  | Størrelse 2xl.                                       |
-| `ix-text--xl`   | Størrelse xl.                                        |
-| `ix-text--lg`   | Størrelse lg.                                        |
-| `ix-text--md`   | Størrelse md (tilsvarer standard brødtekst).         |
-| `ix-text--sm`   | Størrelse sm.                                        |
-| `ix-text--xs`   | Størrelse xs.                                        |
-| `ix-text--long` | Øker linjehøyde til 1.4 for lengre tekstblokker.     |
+| Klasse          | Beskrivelse                                      |
+| --------------- | ------------------------------------------------ |
+| `ix-text`       | Påkrevd basisklasse. Setter linjehøyde.          |
+| `ix-text--2xl`  | Størrelse 2xl.                                   |
+| `ix-text--xl`   | Størrelse xl.                                    |
+| `ix-text--lg`   | Størrelse lg.                                    |
+| `ix-text--md`   | Størrelse md (tilsvarer standard brødtekst).     |
+| `ix-text--sm`   | Størrelse sm.                                    |
+| `ix-text--xs`   | Størrelse xs.                                    |
+| `ix-text--long` | Øker linjehøyde til 1.4 for lengre tekstblokker. |
 
 </TabItem>
 </Tabs>
@@ -271,7 +281,9 @@ Vil du utheve en hel paragraf uten `<p>`-elementet, bruk `as`:
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<a className="ix-link-text ix-link-text--underline" href="/konto">Se kontooversikt</a>
+<a className="ix-link-text ix-link-text--underline" href="/konto">
+    Se kontooversikt
+</a>
 ```
 
 </TabItem>
@@ -282,21 +294,21 @@ Vil du utheve en hel paragraf uten `<p>`-elementet, bruk `as`:
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
-| Prop        | Type            | Standard | Beskrivelse                                                     |
-| ----------- | --------------- | -------- | --------------------------------------------------------------- |
-| `as`        | `ElementType`   | `a`      | HTML-element som rendres. Bruk f.eks. `Link` fra React Router.  |
-| `size`      | `'sm' \| 'md' \| 'lg'` | `md` | Skriftstørrelse.                                            |
-| `underline` | `boolean`       | `true`   | Viser understrek. Deaktiver kun i spesielle kontekster.         |
-| `isActive`  | `boolean`       | `false`  | Markerer lenken som aktiv — brukes i navigasjonsmenyer o.l.     |
-| `className` | `string`        | —        | Ekstra CSS-klasser.                                             |
+| Prop        | Type                   | Standard | Beskrivelse                                                    |
+| ----------- | ---------------------- | -------- | -------------------------------------------------------------- |
+| `as`        | `ElementType`          | `a`      | HTML-element som rendres. Bruk f.eks. `Link` fra React Router. |
+| `size`      | `'sm' \| 'md' \| 'lg'` | `md`     | Skriftstørrelse.                                               |
+| `underline` | `boolean`              | `true`   | Viser understrek. Deaktiver kun i spesielle kontekster.        |
+| `isActive`  | `boolean`              | `false`  | Markerer lenken som aktiv — brukes i navigasjonsmenyer o.l.    |
+| `className` | `string`               | —        | Ekstra CSS-klasser.                                            |
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
-| Klasse                    | Beskrivelse                                                            |
-| ------------------------- | ---------------------------------------------------------------------- |
-| `ix-link-text`            | Påkrevd basisklasse. Setter lenkefarge og fjerner standard understrek. |
-| `ix-link-text--underline` | Viser understrek. Legg til som standard.                               |
+| Klasse                    | Beskrivelse                                                                                                             |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `ix-link-text`            | Påkrevd basisklasse. Setter lenkefarge og fjerner standard understrek.                                                  |
+| `ix-link-text--underline` | Viser understrek. Legg til som standard.                                                                                |
 | `ix-link-text--active`    | Aktiv-tilstand. Endrer lenkefargen til aktiv-varianten. Brukes typisk for å markere gjeldende side i navigasjonsmenyer. |
 
 </TabItem>
@@ -312,15 +324,15 @@ For tilfeller der du ikke bruker `Text`-komponenten, finnes det utility-klasser 
 
 ```jsx live
 <>
-  <p className="ix-font-size-xs">xs — ekstra liten tekst</p>
-  <p className="ix-font-size-sm">sm — liten tekst</p>
-  <p className="ix-font-size-md">md — standardstørrelse</p>
-  <p className="ix-font-size-lg">lg — stor tekst</p>
-  <p className="ix-font-size-xl">xl — ekstra stor tekst</p>
-  <p className="ix-font-size-2xl">2xl</p>
-  <p className="ix-font-size-3xl">3xl</p>
-  <p className="ix-font-size-4xl">4xl</p>
-  <p className="ix-font-size-5xl">5xl</p>
+    <p className="ix-font-size-xs">xs — ekstra liten tekst</p>
+    <p className="ix-font-size-sm">sm — liten tekst</p>
+    <p className="ix-font-size-md">md — standardstørrelse</p>
+    <p className="ix-font-size-lg">lg — stor tekst</p>
+    <p className="ix-font-size-xl">xl — ekstra stor tekst</p>
+    <p className="ix-font-size-2xl">2xl</p>
+    <p className="ix-font-size-3xl">3xl</p>
+    <p className="ix-font-size-4xl">4xl</p>
+    <p className="ix-font-size-5xl">5xl</p>
 </>
 ```
 
@@ -329,7 +341,7 @@ For tilfeller der du ikke bruker `Text`-komponenten, finnes det utility-klasser 
 | Klasse            | Beskrivelse                                                              |
 | ----------------- | ------------------------------------------------------------------------ |
 | `.ix-text-bold`   | Setter `font-weight: medium`. Tilsvarer effekten av `<strong>` og `<b>`. |
-| `.ix-text-italic` | Setter `font-style: italic`. Tilsvarer effekten av `<em>` og `<i>`.     |
+| `.ix-text-italic` | Setter `font-style: italic`. Tilsvarer effekten av `<em>` og `<i>`.      |
 
 :::tip
 `strong` og `b` arver automatisk bold-stilen fra `.ix-body`. Det samme gjelder `em` og `i` for kursiv. Utility-klassene er nyttige når du ikke kan endre HTML-semantikken.
@@ -343,12 +355,12 @@ Typografi i Indeks er ikke bygget rundt én blokkklasse — stilene er i stedet 
 
 ### Tilgjengelige klasser og selektorer
 
-| Komponent | Basisklasse | Størrelsesmodifikatorer |
-|-----------|------------|------------------------|
-| Heading | `ix-heading` | `ix-heading--2xl` `ix-heading--xl` `ix-heading--lg` `ix-heading--md` `ix-heading--sm` `ix-heading--xs` |
-| Text | `ix-text` | `ix-text--2xl` `ix-text--xl` `ix-text--lg` `ix-text--md` `ix-text--sm` `ix-text--xs` |
-| Text (lang) | `ix-text ix-text--long` | — |
-| LinkText | `ix-link-text` | `ix-link-text--underline` `ix-link-text--active` |
+| Komponent   | Basisklasse             | Størrelsesmodifikatorer                                                                                |
+| ----------- | ----------------------- | ------------------------------------------------------------------------------------------------------ |
+| Heading     | `ix-heading`            | `ix-heading--2xl` `ix-heading--xl` `ix-heading--lg` `ix-heading--md` `ix-heading--sm` `ix-heading--xs` |
+| Text        | `ix-text`               | `ix-text--2xl` `ix-text--xl` `ix-text--lg` `ix-text--md` `ix-text--sm` `ix-text--xs`                   |
+| Text (lang) | `ix-text ix-text--long` | —                                                                                                      |
+| LinkText    | `ix-link-text`          | `ix-link-text--underline` `ix-link-text--active`                                                       |
 
 Se fullstendig klasseliste med beskrivelse under Props-tabellene i HTML-fanene ovenfor.
 
@@ -356,9 +368,7 @@ Se fullstendig klasseliste med beskrivelse under Props-tabellene i HTML-fanene o
 
 ```html
 <h1 class="ix-heading ix-heading--2xl">Renter og betingelser</h1>
-<p class="ix-text ix-text--md ix-text--long">
-  Renten på boliglånet ditt er basert på Nibor pluss et påslag.
-</p>
+<p class="ix-text ix-text--md ix-text--long">Renten på boliglånet ditt er basert på Nibor pluss et påslag.</p>
 <a class="ix-link-text ix-link-text--underline" href="/konto">Se kontooversikt</a>
 ```
 

@@ -19,7 +19,7 @@ Dark mode kommer automatisk med når man bruker semantiske fargevariabelnavn.
 
 ## Background
 
-Vi har 2 bakgrunnsfarger, `default` og `tinted`.  De skal kun brukes som bakgrunnsfarge på en side.
+Vi har 2 bakgrunnsfarger, `default` og `tinted`. De skal kun brukes som bakgrunnsfarge på en side.
 
 <table>
     <tbody>
@@ -75,7 +75,7 @@ Brukes til mindre elemeneter som f.eks. Tag, Checkbox og Badge.
         <FillSingleBlock variant="disabled" className="interactive">
             Elementet kan ikke brukes i det hele tatt
         </FillSingleBlock>
-        <FillSingleBlock variant="read-only" className="interactive" >
+        <FillSingleBlock variant="read-only" className="interactive">
             Kan ikke endres, men kan brukes til å lese/kopiere
         </FillSingleBlock>
     </tbody>
@@ -160,160 +160,159 @@ Focus border brukes for å indikere hvilket element som har fokus, for eksempel 
 </table>
 
 ## Migrere fra FFE
-Hvis du har laget dine egne komponenter eller bruker farger på andre måter fra FFE, kan du bruke denne oversikten for å migrere til Indeks sine farge-variabler. 
+
+Hvis du har laget dine egne komponenter eller bruker farger på andre måter fra FFE, kan du bruke denne oversikten for å migrere til Indeks sine farge-variabler.
 
 :::info Manglende fargevariabler?
 Denne oversikten er et utgangspunkt for migrering, og ikke nødvendigvis en 1-til-1 mapping. Fargesystemet i Indeks er forenklet fra FFE, og en del FFE-farger har ingen direkte ekvivalent i Indeks. Bruk skjønn, vurder konteksten når du migrerer og ta kontakt med designsystemteamet hvis du er usikker.
 :::
 
-| FFE-token                     | Indeks-token                      |
-| ----------------------------- | -------------------------------- |
-| --ffe-color-background-default | ix-color-background-default | 
-| --ffe-color-background-subtle |  | 
-| --ffe-color-surface-primary-default | ix-color-surface-main-default | 
-| --ffe-color-surface-primary-default-hover | ix-color-surface-main-hover | 
-| --ffe-color-surface-primary-default-pressed | ix-color-surface-main-active | 
-| --ffe-color-surface-secondary-default |  | 
-| --ffe-color-surface-secondary-default-hover |  | 
-| --ffe-color-surface-secondary-default-pressed |  | 
-| --ffe-color-surface-tertiary-default |  | 
-| --ffe-color-surface-tertiary-default-hover |  | 
-| --ffe-color-surface-tertiary-default-pressed |  | 
-| --ffe-color-surface-neutral-default |  | 
-| --ffe-color-surface-neutral-default-hover |  | 
-| --ffe-color-surface-neutral-default-pressed |  | 
-| --ffe-color-surface-feedback-info | ix-color-surface-info-default | 
-| --ffe-color-surface-feedback-success | ix-color-surface-success-default | 
-| --ffe-color-surface-feedback-warning | ix-color-surface-warning-default | 
-| --ffe-color-surface-feedback-critical | ix-color-surface-danger-default | 
-| --ffe-color-surface-feedback-tip |  | 
-| --ffe-color-fill-primary-default | ix-color-fill-main-default | 
-| --ffe-color-fill-primary-default-hover | ix-color-fill-main-hover | 
-| --ffe-color-fill-primary-default-pressed | ix-color-fill-main-active | 
-| --ffe-color-fill-primary-selected-default | ix-color-fill-main-default | 
-| --ffe-color-fill-primary-selected-hover | ix-color-fill-main-hover | 
-| --ffe-color-fill-primary-selected-pressed | ix-color-fill-main-active | 
-| --ffe-color-fill-primary-subtle | ix-color-fill-main-subtle-default | 
-| --ffe-color-fill-primary-subtle-hover | ix-color-fill-main-subtle-hover | 
-| --ffe-color-fill-primary-subtle-pressed | ix-color-fill-main-subtle-active | 
-| --ffe-color-fill-primary-invisible |  | 
-| --ffe-color-fill-secondary-default |  | 
-| --ffe-color-fill-secondary-default-hover |  | 
-| --ffe-color-fill-secondary-default-pressed |  | 
-| --ffe-color-fill-secondary-subtle |  | 
-| --ffe-color-fill-secondary-subtle-hover |  | 
-| --ffe-color-fill-secondary-subtle-pressed |  | 
-| --ffe-color-fill-tertiary-default |  | 
-| --ffe-color-fill-tertiary-default-hover |  | 
-| --ffe-color-fill-tertiary-default-pressed |  | 
-| --ffe-color-fill-tertiary-subtle |  | 
-| --ffe-color-fill-tertiary-subtle-hover |  | 
-| --ffe-color-fill-tertiary-subtle-pressed |  | 
-| --ffe-color-fill-neutral-default | ix-color-fill-neutral-default | 
-| --ffe-color-fill-neutral-default-hover | ix-color-fill-neutral-hover | 
-| --ffe-color-fill-neutral-default-pressed | ix-color-fill-neutral-active | 
-| --ffe-color-fill-neutral-subtle | ix-color-fill-neutral-subtle-default | 
-| --ffe-color-fill-neutral-subtle-hover | ix-color-fill-neutral-subtle-hover | 
-| --ffe-color-fill-neutral-subtle-pressed | ix-color-fill-neutral-subtle-active | 
-| --ffe-color-fill-neutral-extra-subtle |  | 
-| --ffe-color-fill-neutral-extra-subtle-hover |  | 
-| --ffe-color-fill-neutral-extra-subtle-pressed |  | 
-| --ffe-color-fill-feedback-info | ix-color-fill-info-default | 
-| --ffe-color-fill-feedback-info-subtle | ix-color-fill-info-subtle-default | 
-| --ffe-color-fill-feedback-success | ix-color-fill-success-default | 
-| --ffe-color-fill-feedback-success-subtle | ix-color-fill-success-subtle-default | 
-| --ffe-color-fill-feedback-warning | ix-color-fill-warning-default | 
-| --ffe-color-fill-feedback-warning-subtle | ix-color-fill-warning-subtle-default | 
-| --ffe-color-fill-feedback-critical | ix-color-fill-danger-default | 
-| --ffe-color-fill-feedback-critical-subtle | ix-color-fill-danger-subtle-default | 
-| --ffe-color-fill-feedback-tip |  | 
-| --ffe-color-fill-feedback-tip-subtle |  | 
-| --ffe-color-foreground-default | ix-color-foreground-main-default | 
-| --ffe-color-foreground-subtle | ix-color-foreground-main-subtle | 
-| --ffe-color-foreground-emphasis | ix-color-foreground-main-emphasis | 
-| --ffe-color-foreground-inverse | ix-color-foreground-inverse-default | 
-| --ffe-color-foreground-interactive-link | ix-color-foreground-link-default | 
-| --ffe-color-foreground-interactive-link-hover | ix-color-foreground-link-hover | 
-| --ffe-color-foreground-interactive-link-pressed | ix-color-foreground-link-active | 
-| --ffe-color-foreground-interactive-link-active | ix-color-foreground-link-active | 
-| --ffe-color-foreground-interactive-disabled | ix-color-foreground-main-disabled | 
-| --ffe-color-foreground-feedback-info | ix-color-foreground-info-default | 
-| --ffe-color-foreground-feedback-success | ix-color-foreground-success-default | 
-| --ffe-color-foreground-feedback-warning |  | 
-| --ffe-color-foreground-feedback-critical | ix-color-foreground-danger-default | 
-| --ffe-color-foreground-feedback-tip |  | 
-| --ffe-color-border-primary-default | ix-color-border-main-default | 
-| --ffe-color-border-primary-default-hover | ix-color-border-main-hover | 
-| --ffe-color-border-primary-default-pressed | ix-color-border-main-active | 
-| --ffe-color-border-primary-subtle |  | 
-| --ffe-color-border-primary-subtle-hover |  | 
-| --ffe-color-border-primary-subtle-pressed |  | 
-| --ffe-color-border-primary-emphasis |  | 
-| --ffe-color-border-feedback-info | ix-color-border-info-default | 
-| --ffe-color-border-feedback-success | ix-color-border-success-default | 
-| --ffe-color-border-feedback-warning | ix-color-border-warning-default | 
-| --ffe-color-border-feedback-critical | ix-color-border-danger-default | 
-| --ffe-color-border-feedback-tip |  | 
-| --ffe-color-border-interactive-focus | ix-color-border-focus-default | 
-| --ffe-color-border-interactive-selected |  | 
-| --ffe-color-component-form-input-foreground-default |  | 
-| --ffe-color-component-form-input-foreground-subtle |  | 
-| --ffe-color-component-form-input-foreground-placeholder |  | 
-| --ffe-color-component-form-input-foreground-disabled |  | 
-| --ffe-color-component-form-input-foreground-read-only |  | 
-| --ffe-color-component-form-input-foreground-error |  | 
-| --ffe-color-component-form-input-border-active |  | 
-| --ffe-color-component-form-input-fill-default |  | 
-| --ffe-color-component-form-input-fill-default-hover |  | 
-| --ffe-color-component-form-input-fill-default-pressed |  | 
-| --ffe-color-component-form-input-fill-disabled |  | 
-| --ffe-color-component-form-input-fill-read-only |  | 
-| --ffe-color-component-form-input-fill-error |  | 
-| --ffe-color-component-form-toggleswitch-handle-default |  | 
-| --ffe-color-component-form-toggleswitch-handle-disabled |  | 
-| --ffe-color-component-form-toggleswitch-fill-default |  | 
-| --ffe-color-component-form-toggleswitch-fill-default-hover |  | 
-| --ffe-color-component-form-toggleswitch-fill-default-pressed |  | 
-| --ffe-color-component-form-toggleswitch-fill-selected |  | 
-| --ffe-color-component-form-toggleswitch-fill-selected-hover |  | 
-| --ffe-color-component-form-toggleswitch-fill-selected-pressed |  | 
-| --ffe-color-component-form-toggleswitch-fill-selected-disabled |  | 
-| --ffe-color-component-form-toggleswitch-fill-selected-read-only |  | 
-| --ffe-color-component-form-toggleswitch-fill-critical |  | 
-| --ffe-color-component-form-toggleswitch-fill-disabled |  | 
-| --ffe-color-component-form-toggleswitch-fill-read-only |  | 
-| --ffe-color-component-button-action-border-default |  | 
-| --ffe-color-component-button-action-border-hover |  | 
-| --ffe-color-component-button-action-border-pressed |  | 
-| --ffe-color-component-button-action-fill-default |  | 
-| --ffe-color-component-button-action-fill-hover |  | 
-| --ffe-color-component-button-action-fill-pressed |  | 
-| --ffe-color-component-button-action-foreground-default |  | 
-| --ffe-color-component-button-action-foreground-hover |  | 
-| --ffe-color-component-button-primary-border-default |  | 
-| --ffe-color-component-button-primary-border-hover |  | 
-| --ffe-color-component-button-primary-border-pressed |  | 
-| --ffe-color-component-button-primary-fill-default |  | 
-| --ffe-color-component-button-primary-fill-hover |  | 
-| --ffe-color-component-button-primary-fill-pressed |  | 
-| --ffe-color-component-button-primary-foreground-default |  | 
-| --ffe-color-component-button-primary-foreground-hover |  | 
-| --ffe-color-component-button-secondary-border-default |  | 
-| --ffe-color-component-button-secondary-border-hover |  | 
-| --ffe-color-component-button-secondary-border-pressed |  | 
-| --ffe-color-component-button-secondary-fill-default |  | 
-| --ffe-color-component-button-secondary-fill-hover |  | 
-| --ffe-color-component-button-secondary-fill-pressed |  | 
-| --ffe-color-component-button-secondary-foreground-default |  | 
-| --ffe-color-component-button-secondary-foreground-hover |  | 
-| --ffe-color-component-button-tertiary-fill-default |  | 
-| --ffe-color-component-button-tertiary-fill-hover |  | 
-| --ffe-color-component-button-tertiary-fill-pressed |  | 
-| --ffe-color-component-button-tertiary-foreground-default |  | 
-| --ffe-color-component-button-tertiary-foreground-hover |  | 
-| --ffe-color-component-logo-name |  | 
-| --ffe-color-component-logo-number1 |  | 
-| --ffe-color-component-logo-circle-dark-red |  | 
-| --ffe-color-component-logo-circle-light-red |  | 
-
-
+| FFE-token                                                       | Indeks-token                         |
+| --------------------------------------------------------------- | ------------------------------------ |
+| --ffe-color-background-default                                  | ix-color-background-default          |
+| --ffe-color-background-subtle                                   |                                      |
+| --ffe-color-surface-primary-default                             | ix-color-surface-main-default        |
+| --ffe-color-surface-primary-default-hover                       | ix-color-surface-main-hover          |
+| --ffe-color-surface-primary-default-pressed                     | ix-color-surface-main-active         |
+| --ffe-color-surface-secondary-default                           |                                      |
+| --ffe-color-surface-secondary-default-hover                     |                                      |
+| --ffe-color-surface-secondary-default-pressed                   |                                      |
+| --ffe-color-surface-tertiary-default                            |                                      |
+| --ffe-color-surface-tertiary-default-hover                      |                                      |
+| --ffe-color-surface-tertiary-default-pressed                    |                                      |
+| --ffe-color-surface-neutral-default                             |                                      |
+| --ffe-color-surface-neutral-default-hover                       |                                      |
+| --ffe-color-surface-neutral-default-pressed                     |                                      |
+| --ffe-color-surface-feedback-info                               | ix-color-surface-info-default        |
+| --ffe-color-surface-feedback-success                            | ix-color-surface-success-default     |
+| --ffe-color-surface-feedback-warning                            | ix-color-surface-warning-default     |
+| --ffe-color-surface-feedback-critical                           | ix-color-surface-danger-default      |
+| --ffe-color-surface-feedback-tip                                |                                      |
+| --ffe-color-fill-primary-default                                | ix-color-fill-main-default           |
+| --ffe-color-fill-primary-default-hover                          | ix-color-fill-main-hover             |
+| --ffe-color-fill-primary-default-pressed                        | ix-color-fill-main-active            |
+| --ffe-color-fill-primary-selected-default                       | ix-color-fill-main-default           |
+| --ffe-color-fill-primary-selected-hover                         | ix-color-fill-main-hover             |
+| --ffe-color-fill-primary-selected-pressed                       | ix-color-fill-main-active            |
+| --ffe-color-fill-primary-subtle                                 | ix-color-fill-main-subtle-default    |
+| --ffe-color-fill-primary-subtle-hover                           | ix-color-fill-main-subtle-hover      |
+| --ffe-color-fill-primary-subtle-pressed                         | ix-color-fill-main-subtle-active     |
+| --ffe-color-fill-primary-invisible                              |                                      |
+| --ffe-color-fill-secondary-default                              |                                      |
+| --ffe-color-fill-secondary-default-hover                        |                                      |
+| --ffe-color-fill-secondary-default-pressed                      |                                      |
+| --ffe-color-fill-secondary-subtle                               |                                      |
+| --ffe-color-fill-secondary-subtle-hover                         |                                      |
+| --ffe-color-fill-secondary-subtle-pressed                       |                                      |
+| --ffe-color-fill-tertiary-default                               |                                      |
+| --ffe-color-fill-tertiary-default-hover                         |                                      |
+| --ffe-color-fill-tertiary-default-pressed                       |                                      |
+| --ffe-color-fill-tertiary-subtle                                |                                      |
+| --ffe-color-fill-tertiary-subtle-hover                          |                                      |
+| --ffe-color-fill-tertiary-subtle-pressed                        |                                      |
+| --ffe-color-fill-neutral-default                                | ix-color-fill-neutral-default        |
+| --ffe-color-fill-neutral-default-hover                          | ix-color-fill-neutral-hover          |
+| --ffe-color-fill-neutral-default-pressed                        | ix-color-fill-neutral-active         |
+| --ffe-color-fill-neutral-subtle                                 | ix-color-fill-neutral-subtle-default |
+| --ffe-color-fill-neutral-subtle-hover                           | ix-color-fill-neutral-subtle-hover   |
+| --ffe-color-fill-neutral-subtle-pressed                         | ix-color-fill-neutral-subtle-active  |
+| --ffe-color-fill-neutral-extra-subtle                           |                                      |
+| --ffe-color-fill-neutral-extra-subtle-hover                     |                                      |
+| --ffe-color-fill-neutral-extra-subtle-pressed                   |                                      |
+| --ffe-color-fill-feedback-info                                  | ix-color-fill-info-default           |
+| --ffe-color-fill-feedback-info-subtle                           | ix-color-fill-info-subtle-default    |
+| --ffe-color-fill-feedback-success                               | ix-color-fill-success-default        |
+| --ffe-color-fill-feedback-success-subtle                        | ix-color-fill-success-subtle-default |
+| --ffe-color-fill-feedback-warning                               | ix-color-fill-warning-default        |
+| --ffe-color-fill-feedback-warning-subtle                        | ix-color-fill-warning-subtle-default |
+| --ffe-color-fill-feedback-critical                              | ix-color-fill-danger-default         |
+| --ffe-color-fill-feedback-critical-subtle                       | ix-color-fill-danger-subtle-default  |
+| --ffe-color-fill-feedback-tip                                   |                                      |
+| --ffe-color-fill-feedback-tip-subtle                            |                                      |
+| --ffe-color-foreground-default                                  | ix-color-foreground-main-default     |
+| --ffe-color-foreground-subtle                                   | ix-color-foreground-main-subtle      |
+| --ffe-color-foreground-emphasis                                 | ix-color-foreground-main-emphasis    |
+| --ffe-color-foreground-inverse                                  | ix-color-foreground-inverse-default  |
+| --ffe-color-foreground-interactive-link                         | ix-color-foreground-link-default     |
+| --ffe-color-foreground-interactive-link-hover                   | ix-color-foreground-link-hover       |
+| --ffe-color-foreground-interactive-link-pressed                 | ix-color-foreground-link-active      |
+| --ffe-color-foreground-interactive-link-active                  | ix-color-foreground-link-active      |
+| --ffe-color-foreground-interactive-disabled                     | ix-color-foreground-main-disabled    |
+| --ffe-color-foreground-feedback-info                            | ix-color-foreground-info-default     |
+| --ffe-color-foreground-feedback-success                         | ix-color-foreground-success-default  |
+| --ffe-color-foreground-feedback-warning                         |                                      |
+| --ffe-color-foreground-feedback-critical                        | ix-color-foreground-danger-default   |
+| --ffe-color-foreground-feedback-tip                             |                                      |
+| --ffe-color-border-primary-default                              | ix-color-border-main-default         |
+| --ffe-color-border-primary-default-hover                        | ix-color-border-main-hover           |
+| --ffe-color-border-primary-default-pressed                      | ix-color-border-main-active          |
+| --ffe-color-border-primary-subtle                               |                                      |
+| --ffe-color-border-primary-subtle-hover                         |                                      |
+| --ffe-color-border-primary-subtle-pressed                       |                                      |
+| --ffe-color-border-primary-emphasis                             |                                      |
+| --ffe-color-border-feedback-info                                | ix-color-border-info-default         |
+| --ffe-color-border-feedback-success                             | ix-color-border-success-default      |
+| --ffe-color-border-feedback-warning                             | ix-color-border-warning-default      |
+| --ffe-color-border-feedback-critical                            | ix-color-border-danger-default       |
+| --ffe-color-border-feedback-tip                                 |                                      |
+| --ffe-color-border-interactive-focus                            | ix-color-border-focus-default        |
+| --ffe-color-border-interactive-selected                         |                                      |
+| --ffe-color-component-form-input-foreground-default             |                                      |
+| --ffe-color-component-form-input-foreground-subtle              |                                      |
+| --ffe-color-component-form-input-foreground-placeholder         |                                      |
+| --ffe-color-component-form-input-foreground-disabled            |                                      |
+| --ffe-color-component-form-input-foreground-read-only           |                                      |
+| --ffe-color-component-form-input-foreground-error               |                                      |
+| --ffe-color-component-form-input-border-active                  |                                      |
+| --ffe-color-component-form-input-fill-default                   |                                      |
+| --ffe-color-component-form-input-fill-default-hover             |                                      |
+| --ffe-color-component-form-input-fill-default-pressed           |                                      |
+| --ffe-color-component-form-input-fill-disabled                  |                                      |
+| --ffe-color-component-form-input-fill-read-only                 |                                      |
+| --ffe-color-component-form-input-fill-error                     |                                      |
+| --ffe-color-component-form-toggleswitch-handle-default          |                                      |
+| --ffe-color-component-form-toggleswitch-handle-disabled         |                                      |
+| --ffe-color-component-form-toggleswitch-fill-default            |                                      |
+| --ffe-color-component-form-toggleswitch-fill-default-hover      |                                      |
+| --ffe-color-component-form-toggleswitch-fill-default-pressed    |                                      |
+| --ffe-color-component-form-toggleswitch-fill-selected           |                                      |
+| --ffe-color-component-form-toggleswitch-fill-selected-hover     |                                      |
+| --ffe-color-component-form-toggleswitch-fill-selected-pressed   |                                      |
+| --ffe-color-component-form-toggleswitch-fill-selected-disabled  |                                      |
+| --ffe-color-component-form-toggleswitch-fill-selected-read-only |                                      |
+| --ffe-color-component-form-toggleswitch-fill-critical           |                                      |
+| --ffe-color-component-form-toggleswitch-fill-disabled           |                                      |
+| --ffe-color-component-form-toggleswitch-fill-read-only          |                                      |
+| --ffe-color-component-button-action-border-default              |                                      |
+| --ffe-color-component-button-action-border-hover                |                                      |
+| --ffe-color-component-button-action-border-pressed              |                                      |
+| --ffe-color-component-button-action-fill-default                |                                      |
+| --ffe-color-component-button-action-fill-hover                  |                                      |
+| --ffe-color-component-button-action-fill-pressed                |                                      |
+| --ffe-color-component-button-action-foreground-default          |                                      |
+| --ffe-color-component-button-action-foreground-hover            |                                      |
+| --ffe-color-component-button-primary-border-default             |                                      |
+| --ffe-color-component-button-primary-border-hover               |                                      |
+| --ffe-color-component-button-primary-border-pressed             |                                      |
+| --ffe-color-component-button-primary-fill-default               |                                      |
+| --ffe-color-component-button-primary-fill-hover                 |                                      |
+| --ffe-color-component-button-primary-fill-pressed               |                                      |
+| --ffe-color-component-button-primary-foreground-default         |                                      |
+| --ffe-color-component-button-primary-foreground-hover           |                                      |
+| --ffe-color-component-button-secondary-border-default           |                                      |
+| --ffe-color-component-button-secondary-border-hover             |                                      |
+| --ffe-color-component-button-secondary-border-pressed           |                                      |
+| --ffe-color-component-button-secondary-fill-default             |                                      |
+| --ffe-color-component-button-secondary-fill-hover               |                                      |
+| --ffe-color-component-button-secondary-fill-pressed             |                                      |
+| --ffe-color-component-button-secondary-foreground-default       |                                      |
+| --ffe-color-component-button-secondary-foreground-hover         |                                      |
+| --ffe-color-component-button-tertiary-fill-default              |                                      |
+| --ffe-color-component-button-tertiary-fill-hover                |                                      |
+| --ffe-color-component-button-tertiary-fill-pressed              |                                      |
+| --ffe-color-component-button-tertiary-foreground-default        |                                      |
+| --ffe-color-component-button-tertiary-foreground-hover          |                                      |
+| --ffe-color-component-logo-name                                 |                                      |
+| --ffe-color-component-logo-number1                              |                                      |
+| --ffe-color-component-logo-circle-dark-red                      |                                      |
+| --ffe-color-component-logo-circle-light-red                     |                                      |
