@@ -28,8 +28,12 @@
             "import": "./dist/main.js"
         }
     },
+    "bin": {
+        "indeks-react": "./bin/sync-cdn.js"
+    },
     "files": [
         "dist",
+        "bin",
         "CHANGELOG.md",
         "README.md"
     ],

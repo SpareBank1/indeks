@@ -109,6 +109,49 @@ function App() {
 </TabItem>
 </Tabs>
 
+## Hold CDN-URL-er i takt med `@sb1/indeks-react`
+
+`@sb1/indeks-css` og `@sb1/indeks-web` versjonslåses til samme versjon som
+`@sb1/indeks-react`. Når Dependabot bumper React-pakken i `package.json`,
+må CDN-URL-ene i `index.html` og CSS-filene dine oppdateres til samme versjon
+— ellers får du drift mellom det React-komponentene forventer og det som
+faktisk er lastet i nettleseren.
+
+Scriptet `indeks-react sync-cdn` oppdaterer URL-ene til å matche versjonen
+du har installert. Legg til to scripts i `package.json`:
+
+```json
+{
+  "scripts": {
+    "prebuild": "indeks-react sync-cdn --check",
+    "sync-indeks": "indeks-react sync-cdn"
+  }
+}
+```
+
+- `prebuild` kjører før hver `npm run build` og **feiler** hvis URL-ene ikke
+  matcher installert versjon. Dette er med vilje: hvis builden auto-fikser
+  driften, vil det som deployes kunne bruke andre klasser enn det du har
+  testet lokalt. La utvikleren se feilen og kjøre sync eksplisitt.
+- `sync-indeks` kjører du selv etter en dependency-bump — eller når `prebuild`
+  feiler. Den oppdaterer filene, du commit-er endringene og kjører builden på nytt.
+
+Typisk flyt etter en Dependabot-bump:
+
+```bash
+npm install          # ny indeks-react-versjon låst i package-lock
+npm run build        # prebuild feiler: drift funnet
+npm run sync-indeks  # URL-ene oppdateres
+git add -A && git commit -m "sync CDN til <versjon>"
+npm run build        # passer nå
+```
+
+### Hvorfor ikke `postinstall`?
+
+Vi anbefaler `npm install --ignore-scripts` av sikkerhetsgrunner. Det hopper
+over alle lifecycle-hooks, så CDN-sync må hektes på en kommando du
+eksplisitt kjører.
+
 ## Installere via npm i stedet for CDN
 
 `@sb1/indeks-css` og `@sb1/indeks-web` finnes også på npm, men vi anbefaler CDN. Med CDN deler alle SB1-applikasjoner samme URL, så nettleseren kan gjenbruke cachen på tvers av apper — brukerne slipper å laste ned CSS og web components på nytt når de bytter mellom SB1-tjenester.

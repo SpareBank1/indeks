@@ -1,5 +1,6 @@
 // TODO: legg til eslint-plugin-react-hooks igjen når den støtter ESLint 10
 // import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import { baseConfig } from '../eslint.shared.js';
 
@@ -17,6 +18,12 @@ export default [
                 varsIgnorePattern: '^_',
                 argsIgnorePattern: '^_',
             }],
+        },
+    },
+    {
+        files: ['bin/**/*.js'],
+        languageOptions: {
+            globals: globals.node,
         },
     },
 ];
