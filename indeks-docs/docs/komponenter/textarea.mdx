@@ -1,6 +1,6 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import AccessibilityTable from '@site/src/components/AccessibilityTable';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
 import a11yData from './accessibility/textarea.json';
 
 # TextArea
@@ -293,7 +293,10 @@ Dersom det er en maksgrense for tekst, bør dette kommuniseres tydelig. Sett `ma
 
 ## Universell utforming
 
-<AccessibilityTable data={a11yData} />
+### Hva du selv må sørge for
+
+- **Meningsfull labeltekst** — komponenten kobler label til textarea, men du må skrive god tekst
+- **Gode feilmeldinger** — komponenten viser dem og annonserer dem, men du skriver innholdet
 
 ### Hva komponenten gjør automatisk
 
@@ -304,13 +307,11 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 - **`aria-invalid`**: Synkroniseres automatisk med innholdet i error-elementet via MutationObserver.
 - **`required`**: Settes på textarea for nativ nettleservalidering. Ingen visuell indikator — merk valgfrie felt med `(valgfritt)` i labelteksten.
 
-### Skjult label med ariaLabel
+<KeyboardAndScreenReader data={a11yData} />
 
-Synlig label er alltid anbefalt. I tilfeller der konteksten er helt åpenbar fra omgivelsene (f.eks. et kommentarfelt rett under en overskrift som allerede beskriver det), kan `ariaLabel` brukes i stedet.
+#### Skjult label med ariaLabel
 
-:::warning Bruk synlig label
-Skjult label gjør det vanskeligere for alle brukere å orientere seg i skjemaet. Bruk `ariaLabel` kun når synlig label er umulig av layoutmessige grunner, og teksten er meningsfull for skjermleserbrukere.
-:::
+Synlig label er alltid anbefalt. I tilfeller der konteksten er helt åpenbar fra omgivelsene (f.eks. et kommentarfelt rett under en overskrift som allerede beskriver det), kan `ariaLabel` brukes i stedet. Bruk det kun når synlig label er umulig av layoutmessige grunner — skjult label gjør det vanskeligere for alle brukere å orientere seg i skjemaet.
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
@@ -334,12 +335,9 @@ Skjult label gjør det vanskeligere for alle brukere å orientere seg i skjemaet
 </TabItem>
 </Tabs>
 
-### Hva du selv må sørge for
+### WCAG-kriterier
 
-:::warning Ditt ansvar
-- **Meningsfull labeltekst** — komponenten kobler label til textarea, men du må skrive god tekst
-- **Gode feilmeldinger** — komponenten viser dem og annonserer dem, men du skriver innholdet
-:::
+<AccessibilityTable data={a11yData} />
 
 ## Props / API
 
