@@ -54,14 +54,6 @@ Komponentene er nå tilgjengelige som HTML-elementer:
 </ix-field>
 ```
 
-Vil du ha TypeScript-typer for `<ix-field>` og de andre elementene? Installer `@sb1/indeks-web` som `devDependency` — pakken registrerer typene globalt via `HTMLElementTagNameMap` og JSX.
-
-```bash
-npm install --save-dev @sb1/indeks-web
-```
-
-Runtime-koden lastes fra CDN, så ingenting av pakken havner i den bygde applikasjonen.
-
 </TabItem>
 <TabItem value="react" label="React">
 
@@ -74,16 +66,70 @@ Last inn web components-scriptet fra CDN i `index.html`. `@sb1/indeks-react` er 
 </TabItem>
 </Tabs>
 
+### 3a. TypeScript-typer (valgfritt)
+
+Bruker du TypeScript? Installer `@sb1/indeks-web` som `devDependency` for å få TS-kjennskap til `<ix-field>` og andre `ix-*`-elementer. Runtime lastes fortsatt fra CDN (steg 3), så pakken havner ikke i produksjonsbundlen.
+
+```bash
+npm install --save-dev @sb1/indeks-web
+```
+
+Aktiver typene ved å legge pakken i `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "types": ["@sb1/indeks-web"]
+  }
+}
+```
+
+Pakken bruker `declare global` for å utvide `HTMLElementTagNameMap` og `JSX.IntrinsicElements`. TypeScript plukker bare opp dette hvis pakken er listet i `types` eller importert.
+
+### 3b. Autocomplete i editor (valgfritt)
+
+Få forslag på klassenavn og CSS-variabler når du skriver. VSCode-utvidelser gir dette — men krever to utvidelser (ingen enkelt-utvidelse dekker begge):
+
+- [HTML CSS Support](https://marketplace.visualstudio.com/items?itemName=ecmel.vscode-html-css) — autocomplete på `className="ix-..."` i HTML, JSX og TSX.
+- [CSS Variable Autocomplete](https://marketplace.visualstudio.com/items?itemName=vunguyentuan.vscode-css-variables) — autocomplete på `var(--ix-*)`.
+
+Legg til workspace-konfig som peker til CSS-filen i `@sb1/indeks-css`. Siden tokens og utils er inlinet i `index.css`, er det bare én fil å peke til:
+
+```json
+// .vscode/settings.json
+{
+  "css.styleSheets": [
+    "node_modules/@sb1/indeks-css/dist/npm/index.css"
+  ],
+  "cssVariables.lookupFiles": [
+    "node_modules/@sb1/indeks-css/dist/npm/index.css"
+  ]
+}
+```
+
+Anbefal utvidelsene for alle team-medlemmer:
+
+```json
+// .vscode/extensions.json
+{
+  "recommendations": [
+    "ecmel.vscode-html-css",
+    "vunguyentuan.vscode-css-variables"
+  ]
+}
+```
+
+Reload VSCode-vinduet etter `npm install` for at utvidelsene skal plukke opp filen. Autocomplete virker på rene string-literaler — `clsx(...)` og template-strings mister delvis støtte. Andre editorer (Cursor, WebStorm, Zed) har tilsvarende utvidelser fra sine markedsplasser.
+
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ### 4. React-komponenter
 
-Installer React-pakken. `@sb1/indeks-web` tas som `devDependency` — den brukes kun til TypeScript-typer, runtime lastes fra CDN (steg 3).
+Installer React-pakken:
 
 ```bash
 npm install @sb1/indeks-react
-npm install --save-dev @sb1/indeks-web
 ```
 
 Importer komponentene der du skal bruke dem:
@@ -103,22 +149,11 @@ function App() {
 }
 ```
 
-</TabItem>
-<TabItem value="html" label="HTML / web components">
+### 5. Hold CDN-URL-er i takt
 
-</TabItem>
-</Tabs>
+`@sb1/indeks-css` og `@sb1/indeks-web` versjonslåses til samme versjon som `@sb1/indeks-react`. Når Dependabot bumper React-pakken i `package.json`, må CDN-URL-ene i `index.html` og CSS-filene dine oppdateres til samme versjon — ellers får du drift mellom det React-komponentene forventer og det som faktisk er lastet i nettleseren.
 
-## Hold CDN-URL-er i takt med `@sb1/indeks-react`
-
-`@sb1/indeks-css` og `@sb1/indeks-web` versjonslåses til samme versjon som
-`@sb1/indeks-react`. Når Dependabot bumper React-pakken i `package.json`,
-må CDN-URL-ene i `index.html` og CSS-filene dine oppdateres til samme versjon
-— ellers får du drift mellom det React-komponentene forventer og det som
-faktisk er lastet i nettleseren.
-
-Scriptet `indeks-react sync-cdn` oppdaterer URL-ene til å matche versjonen
-du har installert. Legg til to scripts i `package.json`:
+Scriptet `indeks-react sync-cdn` oppdaterer URL-ene til å matche versjonen du har installert. Legg til to scripts i `package.json`:
 
 ```json
 {
@@ -129,12 +164,8 @@ du har installert. Legg til to scripts i `package.json`:
 }
 ```
 
-- `prebuild` kjører før hver `npm run build` og **feiler** hvis URL-ene ikke
-  matcher installert versjon. Dette er med vilje: hvis builden auto-fikser
-  driften, vil det som deployes kunne bruke andre klasser enn det du har
-  testet lokalt. La utvikleren se feilen og kjøre sync eksplisitt.
-- `sync-indeks` kjører du selv etter en dependency-bump — eller når `prebuild`
-  feiler. Den oppdaterer filene, du commit-er endringene og kjører builden på nytt.
+- `prebuild` kjører før hver `npm run build` og **feiler** hvis URL-ene ikke matcher installert versjon. Dette er med vilje: hvis builden auto-fikser driften, vil det som deployes kunne bruke andre klasser enn det du har testet lokalt. La utvikleren se feilen og kjøre sync eksplisitt.
+- `sync-indeks` kjører du selv etter en dependency-bump — eller når `prebuild` feiler. Den oppdaterer filene, du commit-er endringene og kjører builden på nytt.
 
 Typisk flyt etter en Dependabot-bump:
 
@@ -146,11 +177,13 @@ git add -A && git commit -m "sync CDN til <versjon>"
 npm run build        # passer nå
 ```
 
-### Hvorfor ikke `postinstall`?
+Vi anbefaler `npm install --ignore-scripts` av sikkerhetsgrunner, og det hopper over alle lifecycle-hooks — derfor kan vi ikke sette dette opp som `postinstall`. CDN-sync må hektes på en kommando du eksplisitt kjører.
 
-Vi anbefaler `npm install --ignore-scripts` av sikkerhetsgrunner. Det hopper
-over alle lifecycle-hooks, så CDN-sync må hektes på en kommando du
-eksplisitt kjører.
+</TabItem>
+<TabItem value="html" label="HTML / web components">
+
+</TabItem>
+</Tabs>
 
 ## Installere via npm i stedet for CDN
 
