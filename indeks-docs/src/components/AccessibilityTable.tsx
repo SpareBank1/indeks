@@ -47,16 +47,21 @@ interface AccessibilityTableProps {
 
 // ── Styling ───────────────────────────────────────────────────────────────
 
-const sectionStyles: React.CSSProperties = {
+const outerSectionStyles: React.CSSProperties = {
     border: '1px solid var(--ix-color-border-main-default)',
     borderRadius: 'var(--ix-border-radius-sm)',
     padding: 'var(--ix-spacing-md)',
-    marginBottom: 'var(--ix-spacing-md)',
 };
 
-const dangerSectionStyles: React.CSSProperties = {
-    ...sectionStyles,
-    borderColor: 'var(--ix-color-border-danger-default)',
+const innerDetailsStyles: React.CSSProperties = {
+    marginTop: 'var(--ix-spacing-sm)',
+    paddingLeft: 'var(--ix-spacing-sm)',
+    borderLeft: '2px solid var(--ix-color-border-main-default)',
+};
+
+const dangerInnerDetailsStyles: React.CSSProperties = {
+    ...innerDetailsStyles,
+    borderLeftColor: 'var(--ix-color-border-danger-default)',
 };
 
 const summaryStyles: React.CSSProperties = {
@@ -64,142 +69,224 @@ const summaryStyles: React.CSSProperties = {
     fontWeight: 'var(--ix-font-weight-medium)' as string,
 };
 
-const wcagTagStyles: React.CSSProperties = {
-    fontSize: 'var(--ix-font-size-sm)',
-    color: 'var(--ix-color-foreground-main-subtle)',
-};
-
-const countBadgeStyles: React.CSSProperties = {
+const summaryMetaStyles: React.CSSProperties = {
     fontSize: 'var(--ix-font-size-sm)',
     color: 'var(--ix-color-foreground-main-subtle)',
     fontWeight: 'normal',
 };
 
+const tableStyles: React.CSSProperties = {
+    marginTop: 'var(--ix-spacing-sm)',
+};
+
+// ── Hjelpere ──────────────────────────────────────────────────────────────
+
+interface ConsumerRow {
+    id: string;
+    summary: string;
+    details: string;
+}
+
+function flattenConsumer(items: ConsumerResponsibility[]): ConsumerRow[] {
+    return items.flatMap((item) =>
+        item.wcag.map((id) => ({ id, summary: item.summary, details: item.details })),
+    );
+}
+
+interface IssueRow {
+    id: string;
+    summary: string;
+    details: string;
+}
+
+function flattenIssues(items: Issue[]): IssueRow[] {
+    return items.flatMap((item) =>
+        item.wcag.map((id) => ({ id, summary: item.summary, details: item.details })),
+    );
+}
+
 // ── Komponent ─────────────────────────────────────────────────────────────
 
 export default function AccessibilityTable({ data }: AccessibilityTableProps) {
-    const hasIssues = data.issues.length > 0;
-    const hasConsumer = data.consumerResponsibilities.length > 0;
-
-    const totalCriteria =
-        data.consumerResponsibilities.reduce((sum, item) => sum + item.wcag.length, 0) +
-        data.issues.reduce((sum, item) => sum + item.wcag.length, 0) +
-        data.handled.length +
-        data.notRelevant.length;
+    const consumerRows = flattenConsumer(data.consumerResponsibilities);
+    const issueRows = flattenIssues(data.issues);
+    const consumerCount = consumerRows.length;
+    const handledCount = data.handled.length;
+    const notRelevantCount = data.notRelevant.length;
+    const issuesCount = issueRows.length;
 
     return (
         <div className="ix-flex ix-flex-col ix-gap-md">
             <p style={{ color: 'var(--ix-color-foreground-main-subtle)', margin: 0 }}>
-                Sist gjennomgått: {data.lastReviewed} — {totalCriteria} av 56 WCAG 2.2-kriterier vurdert
+                Sist gjennomgått: {data.lastReviewed} — alle 56 WCAG 2.2-kriterier vurdert
             </p>
 
-            {/* Ditt ansvar — alltid synlig */}
-            {hasConsumer && (
-                <div style={sectionStyles}>
-                    <h4 style={{ marginTop: 0 }}>Ditt ansvar</h4>
-                    <p style={{ color: 'var(--ix-color-foreground-main-subtle)', marginTop: 0 }}>
-                        Disse tingene må teamet selv sørge for.
-                    </p>
-                    {data.consumerResponsibilities.map((item, i) => (
-                        <details key={i} style={{ marginBottom: 'var(--ix-spacing-sm)' }}>
-                            <summary style={summaryStyles}>
-                                {item.summary}
-                                <span style={wcagTagStyles}> — WCAG {item.wcag.join(', ')}</span>
-                            </summary>
-                            <p style={{ marginTop: 'var(--ix-spacing-xs)', paddingLeft: 'var(--ix-spacing-md)' }}>
-                                {item.details}
-                            </p>
-                        </details>
-                    ))}
-                </div>
-            )}
+            <details style={outerSectionStyles}>
+                <summary style={summaryStyles}>
+                    WCAG-kriterier
+                    <span style={{ ...summaryMetaStyles, display: 'block', marginTop: 'var(--ix-spacing-xs)' }}>
+                        {consumerCount} ditt ansvar · {handledCount} håndtert ·{' '}
+                        {notRelevantCount} ikke relevant · {issuesCount} ikke på plass
+                    </span>
+                </summary>
 
-            {/* Ikke på plass — alltid synlig, danger-styling */}
-            {hasIssues && (
-                <div style={dangerSectionStyles}>
-                    <h4 style={{ marginTop: 0, color: 'var(--ix-color-foreground-danger-default)' }}>
-                        Ikke på plass
-                    </h4>
-                    {data.issues.map((item, i) => (
-                        <details key={i} style={{ marginBottom: 'var(--ix-spacing-sm)' }}>
-                            <summary style={summaryStyles}>
-                                {item.summary}
-                                <span style={wcagTagStyles}> — WCAG {item.wcag.join(', ')}</span>
-                            </summary>
-                            <p style={{ marginTop: 'var(--ix-spacing-xs)', paddingLeft: 'var(--ix-spacing-md)' }}>
-                                {item.details}
-                            </p>
-                        </details>
-                    ))}
-                </div>
-            )}
+                {/* Ditt ansvar */}
+                {consumerCount > 0 && (
+                    <details style={innerDetailsStyles}>
+                        <summary style={summaryStyles}>
+                            Ditt ansvar <span style={summaryMetaStyles}>({consumerCount})</span>
+                        </summary>
+                        <table style={tableStyles}>
+                            <thead>
+                                <tr>
+                                    <th>Kriterium</th>
+                                    <th>Nivå</th>
+                                    <th>Hva du må gjøre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {consumerRows.map((row, i) => {
+                                    const criterion = wcagCriteria[row.id];
+                                    return (
+                                        <tr key={`${row.id}-${i}`}>
+                                            <td>
+                                                <strong>{row.id}</strong> {criterion?.title ?? row.id}
+                                            </td>
+                                            <td>{criterion?.level ?? '?'}</td>
+                                            <td>
+                                                <strong>{row.summary}.</strong> {row.details}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </details>
+                )}
 
-            {/* Håndtert av komponenten — collapsed */}
-            {data.handled.length > 0 && (
-                <details style={sectionStyles}>
-                    <summary style={summaryStyles}>
-                        Håndtert av komponenten{' '}
-                        <span style={countBadgeStyles}>({data.handled.length} kriterier bestått)</span>
-                    </summary>
-                    <table style={{ marginTop: 'var(--ix-spacing-sm)' }}>
-                        <thead>
-                            <tr>
-                                <th>Kriterium</th>
-                                <th>Nivå</th>
-                                <th>Hva komponenten gjør</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data.handled.map((c) => {
-                                const criterion = wcagCriteria[c.id];
-                                return (
-                                    <tr key={c.id}>
-                                        <td>
-                                            <strong>{c.id}</strong> {criterion?.title ?? c.id}
-                                        </td>
-                                        <td>{criterion?.level ?? '?'}</td>
-                                        <td>{c.notes}</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </details>
-            )}
+                {/* Håndtert av komponenten */}
+                {handledCount > 0 && (
+                    <details style={innerDetailsStyles}>
+                        <summary style={summaryStyles}>
+                            Håndtert av komponenten{' '}
+                            <span style={summaryMetaStyles}>({handledCount})</span>
+                        </summary>
+                        <table style={tableStyles}>
+                            <thead>
+                                <tr>
+                                    <th>Kriterium</th>
+                                    <th>Nivå</th>
+                                    <th>Hva komponenten gjør</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.handled.map((c) => {
+                                    const criterion = wcagCriteria[c.id];
+                                    return (
+                                        <tr key={c.id}>
+                                            <td>
+                                                <strong>{c.id}</strong> {criterion?.title ?? c.id}
+                                            </td>
+                                            <td>{criterion?.level ?? '?'}</td>
+                                            <td>{c.notes}</td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </details>
+                )}
 
-            {/* Ikke relevant — collapsed */}
-            {data.notRelevant.length > 0 && (
-                <details style={sectionStyles}>
-                    <summary style={summaryStyles}>
-                        Ikke relevant for denne komponenten{' '}
-                        <span style={countBadgeStyles}>({data.notRelevant.length} kriterier)</span>
-                    </summary>
-                    <table style={{ marginTop: 'var(--ix-spacing-sm)' }}>
-                        <thead>
-                            <tr>
-                                <th>Kriterium</th>
-                                <th>Hvorfor ikke relevant</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data.notRelevant.map((c) => {
-                                const criterion = wcagCriteria[c.id];
-                                return (
-                                    <tr key={c.id}>
-                                        <td>
-                                            <strong>{c.id}</strong> {criterion?.title ?? c.id}
-                                        </td>
-                                        <td>{c.reason ?? criterion?.defaultReason ?? ''}</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </details>
-            )}
+                {/* Ikke relevant */}
+                {notRelevantCount > 0 && (
+                    <details style={innerDetailsStyles}>
+                        <summary style={summaryStyles}>
+                            Ikke relevant <span style={summaryMetaStyles}>({notRelevantCount})</span>
+                        </summary>
+                        <table style={tableStyles}>
+                            <thead>
+                                <tr>
+                                    <th>Kriterium</th>
+                                    <th>Nivå</th>
+                                    <th>Hvorfor ikke relevant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.notRelevant.map((c) => {
+                                    const criterion = wcagCriteria[c.id];
+                                    return (
+                                        <tr key={c.id}>
+                                            <td>
+                                                <strong>{c.id}</strong> {criterion?.title ?? c.id}
+                                            </td>
+                                            <td>{criterion?.level ?? '?'}</td>
+                                            <td>{c.reason ?? criterion?.defaultReason ?? ''}</td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </details>
+                )}
 
-            {/* Tastatur */}
-            {data.keyboard && data.keyboard.length > 0 && (
+                {/* Ikke på plass */}
+                {issuesCount > 0 && (
+                    <details style={dangerInnerDetailsStyles}>
+                        <summary
+                            style={{
+                                ...summaryStyles,
+                                color: 'var(--ix-color-foreground-danger-default)',
+                            }}
+                        >
+                            Ikke på plass <span style={summaryMetaStyles}>({issuesCount})</span>
+                        </summary>
+                        <table style={tableStyles}>
+                            <thead>
+                                <tr>
+                                    <th>Kriterium</th>
+                                    <th>Nivå</th>
+                                    <th>Hva som mangler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {issueRows.map((row, i) => {
+                                    const criterion = wcagCriteria[row.id];
+                                    return (
+                                        <tr key={`${row.id}-${i}`}>
+                                            <td>
+                                                <strong>{row.id}</strong> {criterion?.title ?? row.id}
+                                            </td>
+                                            <td>{criterion?.level ?? '?'}</td>
+                                            <td>
+                                                <strong>{row.summary}.</strong> {row.details}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </details>
+                )}
+            </details>
+        </div>
+    );
+}
+
+// ── Tastatur og skjermleser ───────────────────────────────────────────────
+
+interface KeyboardAndScreenReaderProps {
+    data: Pick<AccessibilityData, 'keyboard' | 'screenReader'>;
+}
+
+export function KeyboardAndScreenReader({ data }: KeyboardAndScreenReaderProps) {
+    const hasKeyboard = data.keyboard && data.keyboard.length > 0;
+    const hasScreenReader = data.screenReader && data.screenReader.length > 0;
+
+    if (!hasKeyboard && !hasScreenReader) return null;
+
+    return (
+        <div className="ix-flex ix-flex-col ix-gap-md">
+            {hasKeyboard && (
                 <div>
                     <h4>Tastaturnavigasjon</h4>
                     <table>
@@ -210,7 +297,7 @@ export default function AccessibilityTable({ data }: AccessibilityTableProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.keyboard.map((entry) => (
+                            {data.keyboard!.map((entry) => (
                                 <tr key={entry.key}>
                                     <td>
                                         <kbd>{entry.key}</kbd>
@@ -223,12 +310,11 @@ export default function AccessibilityTable({ data }: AccessibilityTableProps) {
                 </div>
             )}
 
-            {/* Skjermleser */}
-            {data.screenReader && data.screenReader.length > 0 && (
+            {hasScreenReader && (
                 <div>
                     <h4>Skjermleser</h4>
                     <ul>
-                        {data.screenReader.map((announcement, index) => (
+                        {data.screenReader!.map((announcement, index) => (
                             <li key={index}>{announcement}</li>
                         ))}
                     </ul>

@@ -21,7 +21,6 @@ Eksempler på egenskaper som kan legges til med utility-klasser er spacing (marg
 </div>
 ```
 
-
 ## Spacing
 
 Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. Baseverdien er responsiv og varierer mellom 16px og 18px basert på skjermstørrelse. Alle spacing-verdier beregnes som multipler av baseverdien, og kan overstyres av `density`-modifierne.
@@ -30,146 +29,192 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 
 ### Padding
 
-| CSS-klasse             | Verdi                                |
-| ---------------------- | ------------------------------------------ |
-| `.ix-p-0`              | `padding: 0;`                          |
-| `.ix-p-2xs`            | `padding: var(--ix-spacing-2xs);`           |
-| `.ix-p-xs`             | `padding: var(--ix-spacing-xs);`            |
-| `.ix-p-sm`             | `padding: var(--ix-spacing-sm);`            |
-| `.ix-p-md`             | `padding: var(--ix-spacing-md);`            |
-| `.ix-p-lg`             | `padding: var(--ix-spacing-lg);`            |
-| `.ix-p-xl`             | `padding: var(--ix-spacing-xl);`             |
-| `.ix-p-2xl`            | `padding: var(--ix-spacing-2xl);`           |
-| `.ix-p-3xl`            | `padding: var(--ix-spacing-3xl);`           |
-| `.ix-p-4xl`            | `padding: var(--ix-spacing-4xl);`           |
-| `.ix-pt-0`             | `padding-top: 0;`                         |
-| `.ix-pt-2xs`           | `padding-top: var(--ix-spacing-2xs);`     |
-| `.ix-pt-xs`            | `padding-top: var(--ix-spacing-xs);`      |
-| `.ix-pt-sm`            | `padding-top: var(--ix-spacing-sm);`      |
-| `.ix-pt-md`            | `padding-top: var(--ix-spacing-md);`      |
-| `.ix-pt-lg`            | `padding-top: var(--ix-spacing-lg);`      |
-| `.ix-pt-xl`            | `padding-top: var(--ix-spacing-xl);`      |
-| `.ix-pt-2xl`           | `padding-top: var(--ix-spacing-2xl);`     |
-| `.ix-pt-3xl`           | `padding-top: var(--ix-spacing-3xl);`     |
-| `.ix-pt-4xl`           | `padding-top: var(--ix-spacing-4xl);`     |
-| `.ix-pr-0`             | `padding-right: 0;`                        |
-| `.ix-pr-2xs`           | `padding-right: var(--ix-spacing-2xs);`   |
-| `.ix-pr-xs`            | `padding-right: var(--ix-spacing-xs);`    |
-| `.ix-pr-sm`            | `padding-right: var(--ix-spacing-sm);`    |
-| `.ix-pr-md`            | `padding-right: var(--ix-spacing-md);`    |
-| `.ix-pr-lg`            | `padding-right: var(--ix-spacing-lg);`    |
-| `.ix-pr-xl`            | `padding-right: var(--ix-spacing-xl);`    |
-| `.ix-pr-2xl`           | `padding-right: var(--ix-spacing-2xl);`   |
-| `.ix-pr-3xl`           | `padding-right: var(--ix-spacing-3xl);`   |
-| `.ix-pr-4xl`           | `padding-right: var(--ix-spacing-4xl);`   |
-| `.ix-pb-0`             | `padding-bottom: 0;`                         |
-| `.ix-pb-2xs`           | `padding-bottom: var(--ix-spacing-2xs);`     |
-| `.ix-pb-xs`            | `padding-bottom: var(--ix-spacing-xs);`      |
-| `.ix-pb-sm`            | `padding-bottom: var(--ix-spacing-sm);`      |
-| `.ix-pb-md`            | `padding-bottom: var(--ix-spacing-md);`      |
-| `.ix-pb-lg`            | `padding-bottom: var(--ix-spacing-lg);`      |
-| `.ix-pb-xl`            | `padding-bottom: var(--ix-spacing-xl);`      |
-| `.ix-pb-2xl`           | `padding-bottom: var(--ix-spacing-2xl);`     |
-| `.ix-pb-3xl`           | `padding-bottom: var(--ix-spacing-3xl);`     |
-| `.ix-pb-4xl`           | `padding-bottom: var(--ix-spacing-4xl);`     |
-| `.ix-pl-0`             | `padding-left: 0;`                      |
-| `.ix-pl-2xs`           | `padding-left: var(--ix-spacing-2xs);`  |
-| `.ix-pl-xs`            | `padding-left: var(--ix-spacing-xs);`   |
-| `.ix-pl-sm`            | `padding-left: var(--ix-spacing-sm);`   |
-| `.ix-pl-md`            | `padding-left: var(--ix-spacing-md);`   |
-| `.ix-pl-lg`            | `padding-left: var(--ix-spacing-lg);`   |
-| `.ix-pl-xl`            | `padding-left: var(--ix-spacing-xl);`   |
-| `.ix-pl-2xl`           | `padding-left: var(--ix-spacing-2xl);`  |
-| `.ix-pl-3xl`           | `padding-left: var(--ix-spacing-3xl);`  |
-| `.ix-pl-4xl`           | `padding-left: var(--ix-spacing-4xl);`  |
+| CSS-klasse   | Verdi                                    |
+| ------------ | ---------------------------------------- |
+| `.ix-p-0`    | `padding: 0;`                            |
+| `.ix-p-2xs`  | `padding: var(--ix-spacing-2xs);`        |
+| `.ix-p-xs`   | `padding: var(--ix-spacing-xs);`         |
+| `.ix-p-sm`   | `padding: var(--ix-spacing-sm);`         |
+| `.ix-p-md`   | `padding: var(--ix-spacing-md);`         |
+| `.ix-p-lg`   | `padding: var(--ix-spacing-lg);`         |
+| `.ix-p-xl`   | `padding: var(--ix-spacing-xl);`         |
+| `.ix-p-2xl`  | `padding: var(--ix-spacing-2xl);`        |
+| `.ix-p-3xl`  | `padding: var(--ix-spacing-3xl);`        |
+| `.ix-p-4xl`  | `padding: var(--ix-spacing-4xl);`        |
+| `.ix-pt-0`   | `padding-top: 0;`                        |
+| `.ix-pt-2xs` | `padding-top: var(--ix-spacing-2xs);`    |
+| `.ix-pt-xs`  | `padding-top: var(--ix-spacing-xs);`     |
+| `.ix-pt-sm`  | `padding-top: var(--ix-spacing-sm);`     |
+| `.ix-pt-md`  | `padding-top: var(--ix-spacing-md);`     |
+| `.ix-pt-lg`  | `padding-top: var(--ix-spacing-lg);`     |
+| `.ix-pt-xl`  | `padding-top: var(--ix-spacing-xl);`     |
+| `.ix-pt-2xl` | `padding-top: var(--ix-spacing-2xl);`    |
+| `.ix-pt-3xl` | `padding-top: var(--ix-spacing-3xl);`    |
+| `.ix-pt-4xl` | `padding-top: var(--ix-spacing-4xl);`    |
+| `.ix-pr-0`   | `padding-right: 0;`                      |
+| `.ix-pr-2xs` | `padding-right: var(--ix-spacing-2xs);`  |
+| `.ix-pr-xs`  | `padding-right: var(--ix-spacing-xs);`   |
+| `.ix-pr-sm`  | `padding-right: var(--ix-spacing-sm);`   |
+| `.ix-pr-md`  | `padding-right: var(--ix-spacing-md);`   |
+| `.ix-pr-lg`  | `padding-right: var(--ix-spacing-lg);`   |
+| `.ix-pr-xl`  | `padding-right: var(--ix-spacing-xl);`   |
+| `.ix-pr-2xl` | `padding-right: var(--ix-spacing-2xl);`  |
+| `.ix-pr-3xl` | `padding-right: var(--ix-spacing-3xl);`  |
+| `.ix-pr-4xl` | `padding-right: var(--ix-spacing-4xl);`  |
+| `.ix-pb-0`   | `padding-bottom: 0;`                     |
+| `.ix-pb-2xs` | `padding-bottom: var(--ix-spacing-2xs);` |
+| `.ix-pb-xs`  | `padding-bottom: var(--ix-spacing-xs);`  |
+| `.ix-pb-sm`  | `padding-bottom: var(--ix-spacing-sm);`  |
+| `.ix-pb-md`  | `padding-bottom: var(--ix-spacing-md);`  |
+| `.ix-pb-lg`  | `padding-bottom: var(--ix-spacing-lg);`  |
+| `.ix-pb-xl`  | `padding-bottom: var(--ix-spacing-xl);`  |
+| `.ix-pb-2xl` | `padding-bottom: var(--ix-spacing-2xl);` |
+| `.ix-pb-3xl` | `padding-bottom: var(--ix-spacing-3xl);` |
+| `.ix-pb-4xl` | `padding-bottom: var(--ix-spacing-4xl);` |
+| `.ix-pl-0`   | `padding-left: 0;`                       |
+| `.ix-pl-2xs` | `padding-left: var(--ix-spacing-2xs);`   |
+| `.ix-pl-xs`  | `padding-left: var(--ix-spacing-xs);`    |
+| `.ix-pl-sm`  | `padding-left: var(--ix-spacing-sm);`    |
+| `.ix-pl-md`  | `padding-left: var(--ix-spacing-md);`    |
+| `.ix-pl-lg`  | `padding-left: var(--ix-spacing-lg);`    |
+| `.ix-pl-xl`  | `padding-left: var(--ix-spacing-xl);`    |
+| `.ix-pl-2xl` | `padding-left: var(--ix-spacing-2xl);`   |
+| `.ix-pl-3xl` | `padding-left: var(--ix-spacing-3xl);`   |
+| `.ix-pl-4xl` | `padding-left: var(--ix-spacing-4xl);`   |
+| `.ix-px-0`   | `padding-inline: 0;`                     |
+| `.ix-px-2xs` | `padding-inline: var(--ix-spacing-2xs);` |
+| `.ix-px-xs`  | `padding-inline: var(--ix-spacing-xs);`  |
+| `.ix-px-sm`  | `padding-inline: var(--ix-spacing-sm);`  |
+| `.ix-px-md`  | `padding-inline: var(--ix-spacing-md);`  |
+| `.ix-px-lg`  | `padding-inline: var(--ix-spacing-lg);`  |
+| `.ix-px-xl`  | `padding-inline: var(--ix-spacing-xl);`  |
+| `.ix-px-2xl` | `padding-inline: var(--ix-spacing-2xl);` |
+| `.ix-px-3xl` | `padding-inline: var(--ix-spacing-3xl);` |
+| `.ix-px-4xl` | `padding-inline: var(--ix-spacing-4xl);` |
+| `.ix-py-0`   | `padding-block: 0;`                      |
+| `.ix-py-2xs` | `padding-block: var(--ix-spacing-2xs);`  |
+| `.ix-py-xs`  | `padding-block: var(--ix-spacing-xs);`   |
+| `.ix-py-sm`  | `padding-block: var(--ix-spacing-sm);`   |
+| `.ix-py-md`  | `padding-block: var(--ix-spacing-md);`   |
+| `.ix-py-lg`  | `padding-block: var(--ix-spacing-lg);`   |
+| `.ix-py-xl`  | `padding-block: var(--ix-spacing-xl);`   |
+| `.ix-py-2xl` | `padding-block: var(--ix-spacing-2xl);`  |
+| `.ix-py-3xl` | `padding-block: var(--ix-spacing-3xl);`  |
+| `.ix-py-4xl` | `padding-block: var(--ix-spacing-4xl);`  |
 
 ### Margin
 
-| CSS-klasse     | Verdi                                              |
-| -------------- | -------------------------------------------------------- |
-| `.ix-m-0`      | `margin: 0;`                                            |
-| `.ix-m-auto`   | `margin: auto;`                                         |
-| `.ix-m-2xs`    | `margin: var(--ix-spacing-2xs);`                         |
-| `.ix-m-xs`     | `margin: var(--ix-spacing-xs);`                          |
-| `.ix-m-sm`     | `margin: var(--ix-spacing-sm);`                          |
-| `.ix-m-md`     | `margin: var(--ix-spacing-md);`                          |
-| `.ix-m-lg`     | `margin: var(--ix-spacing-lg);`                          |
-| `.ix-m-xl`     | `margin: var(--ix-spacing-xl);`                          |
-| `.ix-m-2xl`    | `margin: var(--ix-spacing-2xl);`                         |
-| `.ix-m-3xl`    | `margin: var(--ix-spacing-3xl);`                         |
-| `.ix-m-4xl`    | `margin: var(--ix-spacing-4xl);`                         |
-| `.ix-mt-0`     | `margin-top: 0;`                                        |
-| `.ix-mt-2xs`   | `margin-top: var(--ix-spacing-2xs);`                    |
-| `.ix-mt-xs`    | `margin-top: var(--ix-spacing-xs);`                     |
-| `.ix-mt-sm`    | `margin-top: var(--ix-spacing-sm);`                     |
-| `.ix-mt-md`    | `margin-top: var(--ix-spacing-md);`                     |
-| `.ix-mt-lg`    | `margin-top: var(--ix-spacing-lg);`                     |
-| `.ix-mt-xl`    | `margin-top: var(--ix-spacing-xl);`                     |
-| `.ix-mt-2xl`   | `margin-top: var(--ix-spacing-2xl);`                    |
-| `.ix-mt-3xl`   | `margin-top: var(--ix-spacing-3xl);`                    |
-| `.ix-mt-4xl`   | `margin-top: var(--ix-spacing-4xl);`                    |
-| `.ix-mr-0`     | `margin-right: 0;`                                       |
-| `.ix-mr-2xs`   | `margin-right: var(--ix-spacing-2xs);`                   |
-| `.ix-mr-xs`    | `margin-right: var(--ix-spacing-xs);`                   |
-| `.ix-mr-sm`    | `margin-right: var(--ix-spacing-sm);`                   |
-| `.ix-mr-md`    | `margin-right: var(--ix-spacing-md);`                   |
-| `.ix-mr-lg`    | `margin-right: var(--ix-spacing-lg);`                   |
-| `.ix-mr-xl`    | `margin-right: var(--ix-spacing-xl);`                   |
-| `.ix-mr-2xl`   | `margin-right: var(--ix-spacing-2xl);`                   |
-| `.ix-mr-3xl`   | `margin-right: var(--ix-spacing-3xl);`                   |
-| `.ix-mr-4xl`   | `margin-right: var(--ix-spacing-4xl);`                   |
-| `.ix-mb-0`     | `margin-bottom: 0;`                                        |
-| `.ix-mb-2xs`   | `margin-bottom: var(--ix-spacing-2xs);`                    |
-| `.ix-mb-xs`    | `margin-bottom: var(--ix-spacing-xs);`                     |
-| `.ix-mb-sm`    | `margin-bottom: var(--ix-spacing-sm);`                     |
-| `.ix-mb-md`    | `margin-bottom: var(--ix-spacing-md);`                     |
-| `.ix-mb-lg`    | `margin-bottom: var(--ix-spacing-lg);`                     |
-| `.ix-mb-xl`    | `margin-bottom: var(--ix-spacing-xl);`                     |
-| `.ix-mb-2xl`   | `margin-bottom: var(--ix-spacing-2xl);`                    |
-| `.ix-mb-3xl`   | `margin-bottom: var(--ix-spacing-3xl);`                    |
-| `.ix-mb-4xl`   | `margin-bottom: var(--ix-spacing-4xl);`                    |
-| `.ix-ml-0`     | `margin-left: 0;`                                     |
-| `.ix-ml-2xs`   | `margin-left: var(--ix-spacing-2xs);`                 |
-| `.ix-ml-xs`    | `margin-left: var(--ix-spacing-xs);`                 |
-| `.ix-ml-sm`    | `margin-left: var(--ix-spacing-sm);`                 |
-| `.ix-ml-md`    | `margin-left: var(--ix-spacing-md);`                 |
-| `.ix-ml-lg`    | `margin-left: var(--ix-spacing-lg);`                 |
-| `.ix-ml-xl`    | `margin-left: var(--ix-spacing-xl);`                 |
-| `.ix-ml-2xl`   | `margin-left: var(--ix-spacing-2xl);`                 |
-| `.ix-ml-3xl`   | `margin-left: var(--ix-spacing-3xl);`                 |
-| `.ix-ml-4xl`   | `margin-left: var(--ix-spacing-4xl);`                 |
-| `.ix-my-2xs`   | `margin-block: var(--ix-spacing-2xs)`       |
-| `.ix-my-xs`    | `margin-block: var(--ix-spacing-xs);`       |
-| `.ix-my-sm`    | `margin-block: var(--ix-spacing-sm);`       |
-| `.ix-my-md`    | `margin-block: var(--ix-spacing-md);`       |
-| `.ix-my-lg`    | `margin-block: var(--ix-spacing-lg);`       |
-| `.ix-my-xl`    | `margin-block: var(--ix-spacing-xl);`       |
-| `.ix-my-2xl`   | `margin-block: var(--ix-spacing-2xl);`       |
-| `.ix-my-3xl`   | `margin-block: var(--ix-spacing-3xl);`       |
-| `.ix-my-4xl`   | `margin-block: var(--ix-spacing-4xl);`       |
-| `.ix-mx-2xs`   | `margin-inline: var(--ix-spacing-2xs);`  |
-| `.ix-mx-xs`    | `margin-inline: var(--ix-spacing-xs);`  |
-| `.ix-mx-sm`    | `margin-inline: var(--ix-spacing-sm);`  |
-| `.ix-mx-md`    | `margin-inline: var(--ix-spacing-md);`  |
-| `.ix-mx-lg`    | `margin-inline: var(--ix-spacing-lg);`  |
-| `.ix-mx-xl`    | `margin-inline: var(--ix-spacing-xl);`  |
-| `.ix-mx-2xl`   | `margin-inline: var(--ix-spacing-2xl);`  |
-| `.ix-mx-3xl`   | `margin-inline: var(--ix-spacing-3xl);`  |
-| `.ix-mx-4xl`   | `margin-inline: var(--ix-spacing-4xl);`  |
+| CSS-klasse   | Verdi                                   |
+| ------------ | --------------------------------------- |
+| `.ix-m-0`    | `margin: 0;`                            |
+| `.ix-m-auto` | `margin: auto;`                         |
+| `.ix-m-2xs`  | `margin: var(--ix-spacing-2xs);`        |
+| `.ix-m-xs`   | `margin: var(--ix-spacing-xs);`         |
+| `.ix-m-sm`   | `margin: var(--ix-spacing-sm);`         |
+| `.ix-m-md`   | `margin: var(--ix-spacing-md);`         |
+| `.ix-m-lg`   | `margin: var(--ix-spacing-lg);`         |
+| `.ix-m-xl`   | `margin: var(--ix-spacing-xl);`         |
+| `.ix-m-2xl`  | `margin: var(--ix-spacing-2xl);`        |
+| `.ix-m-3xl`  | `margin: var(--ix-spacing-3xl);`        |
+| `.ix-m-4xl`  | `margin: var(--ix-spacing-4xl);`        |
+| `.ix-mt-0`   | `margin-top: 0;`                        |
+| `.ix-mt-2xs` | `margin-top: var(--ix-spacing-2xs);`    |
+| `.ix-mt-xs`  | `margin-top: var(--ix-spacing-xs);`     |
+| `.ix-mt-sm`  | `margin-top: var(--ix-spacing-sm);`     |
+| `.ix-mt-md`  | `margin-top: var(--ix-spacing-md);`     |
+| `.ix-mt-lg`  | `margin-top: var(--ix-spacing-lg);`     |
+| `.ix-mt-xl`  | `margin-top: var(--ix-spacing-xl);`     |
+| `.ix-mt-2xl` | `margin-top: var(--ix-spacing-2xl);`    |
+| `.ix-mt-3xl` | `margin-top: var(--ix-spacing-3xl);`    |
+| `.ix-mt-4xl` | `margin-top: var(--ix-spacing-4xl);`    |
+| `.ix-mr-0`   | `margin-right: 0;`                      |
+| `.ix-mr-2xs` | `margin-right: var(--ix-spacing-2xs);`  |
+| `.ix-mr-xs`  | `margin-right: var(--ix-spacing-xs);`   |
+| `.ix-mr-sm`  | `margin-right: var(--ix-spacing-sm);`   |
+| `.ix-mr-md`  | `margin-right: var(--ix-spacing-md);`   |
+| `.ix-mr-lg`  | `margin-right: var(--ix-spacing-lg);`   |
+| `.ix-mr-xl`  | `margin-right: var(--ix-spacing-xl);`   |
+| `.ix-mr-2xl` | `margin-right: var(--ix-spacing-2xl);`  |
+| `.ix-mr-3xl` | `margin-right: var(--ix-spacing-3xl);`  |
+| `.ix-mr-4xl` | `margin-right: var(--ix-spacing-4xl);`  |
+| `.ix-mb-0`   | `margin-bottom: 0;`                     |
+| `.ix-mb-2xs` | `margin-bottom: var(--ix-spacing-2xs);` |
+| `.ix-mb-xs`  | `margin-bottom: var(--ix-spacing-xs);`  |
+| `.ix-mb-sm`  | `margin-bottom: var(--ix-spacing-sm);`  |
+| `.ix-mb-md`  | `margin-bottom: var(--ix-spacing-md);`  |
+| `.ix-mb-lg`  | `margin-bottom: var(--ix-spacing-lg);`  |
+| `.ix-mb-xl`  | `margin-bottom: var(--ix-spacing-xl);`  |
+| `.ix-mb-2xl` | `margin-bottom: var(--ix-spacing-2xl);` |
+| `.ix-mb-3xl` | `margin-bottom: var(--ix-spacing-3xl);` |
+| `.ix-mb-4xl` | `margin-bottom: var(--ix-spacing-4xl);` |
+| `.ix-ml-0`   | `margin-left: 0;`                       |
+| `.ix-ml-2xs` | `margin-left: var(--ix-spacing-2xs);`   |
+| `.ix-ml-xs`  | `margin-left: var(--ix-spacing-xs);`    |
+| `.ix-ml-sm`  | `margin-left: var(--ix-spacing-sm);`    |
+| `.ix-ml-md`  | `margin-left: var(--ix-spacing-md);`    |
+| `.ix-ml-lg`  | `margin-left: var(--ix-spacing-lg);`    |
+| `.ix-ml-xl`  | `margin-left: var(--ix-spacing-xl);`    |
+| `.ix-ml-2xl` | `margin-left: var(--ix-spacing-2xl);`   |
+| `.ix-ml-3xl` | `margin-left: var(--ix-spacing-3xl);`   |
+| `.ix-ml-4xl` | `margin-left: var(--ix-spacing-4xl);`   |
+| `.ix-my-2xs` | `margin-block: var(--ix-spacing-2xs)`   |
+| `.ix-my-xs`  | `margin-block: var(--ix-spacing-xs);`   |
+| `.ix-my-sm`  | `margin-block: var(--ix-spacing-sm);`   |
+| `.ix-my-md`  | `margin-block: var(--ix-spacing-md);`   |
+| `.ix-my-lg`  | `margin-block: var(--ix-spacing-lg);`   |
+| `.ix-my-xl`  | `margin-block: var(--ix-spacing-xl);`   |
+| `.ix-my-2xl` | `margin-block: var(--ix-spacing-2xl);`  |
+| `.ix-my-3xl` | `margin-block: var(--ix-spacing-3xl);`  |
+| `.ix-my-4xl` | `margin-block: var(--ix-spacing-4xl);`  |
+| `.ix-mx-0`    | `margin-inline: 0;`                    |
+| `.ix-mx-auto` | `margin-inline: auto;`                 |
+| `.ix-mx-2xs` | `margin-inline: var(--ix-spacing-2xs);` |
+| `.ix-mx-xs`  | `margin-inline: var(--ix-spacing-xs);`  |
+| `.ix-mx-sm`  | `margin-inline: var(--ix-spacing-sm);`  |
+| `.ix-mx-md`  | `margin-inline: var(--ix-spacing-md);`  |
+| `.ix-mx-lg`  | `margin-inline: var(--ix-spacing-lg);`  |
+| `.ix-mx-xl`  | `margin-inline: var(--ix-spacing-xl);`  |
+| `.ix-mx-2xl` | `margin-inline: var(--ix-spacing-2xl);` |
+| `.ix-mx-3xl` | `margin-inline: var(--ix-spacing-3xl);` |
+| `.ix-mx-4xl` | `margin-inline: var(--ix-spacing-4xl);` |
 
 ### Gap
 
-| CSS-klasse                      | Verdi                                              |
-| ------------------------------- | --------------------------------------------------------- |
-| `.ix-gap-2xs` | `gap: var(--ix-spacing-2xs);`  |
-| `.ix-gap-xs` | `gap: var(--ix-spacing-xs);`  |
-| `.ix-gap-sm` | `gap: var(--ix-spacing-sm);`  |
-| `.ix-gap-md` | `gap: var(--ix-spacing-md);`  |
-| `.ix-gap-lg` | `gap: var(--ix-spacing-lg);`  |
-| `.ix-gap-xl` | `gap: var(--ix-spacing-xl);`  |
-| `.ix-gap-2xl` | `gap: var(--ix-spacing-2xl);`  |
-| `.ix-gap-3xl` | `gap: var(--ix-spacing-3xl);`  |
-| `.ix-gap-4xl` | `gap: var(--ix-spacing-4xl);`  |
+`gap` setter både `row-gap` og `column-gap` samtidig. Bruk `row-gap`/`col-gap`
+når du trenger ulike verdier i de to retningene.
+
+| CSS-klasse        | Verdi                                |
+| ----------------- | ------------------------------------ |
+| `.ix-gap-0`       | `gap: 0;`                            |
+| `.ix-gap-2xs`     | `gap: var(--ix-spacing-2xs);`        |
+| `.ix-gap-xs`      | `gap: var(--ix-spacing-xs);`         |
+| `.ix-gap-sm`      | `gap: var(--ix-spacing-sm);`         |
+| `.ix-gap-md`      | `gap: var(--ix-spacing-md);`         |
+| `.ix-gap-lg`      | `gap: var(--ix-spacing-lg);`         |
+| `.ix-gap-xl`      | `gap: var(--ix-spacing-xl);`         |
+| `.ix-gap-2xl`     | `gap: var(--ix-spacing-2xl);`        |
+| `.ix-gap-3xl`     | `gap: var(--ix-spacing-3xl);`        |
+| `.ix-gap-4xl`     | `gap: var(--ix-spacing-4xl);`        |
+| `.ix-row-gap-0`   | `row-gap: 0;`                        |
+| `.ix-row-gap-2xs` | `row-gap: var(--ix-spacing-2xs);`    |
+| `.ix-row-gap-xs`  | `row-gap: var(--ix-spacing-xs);`     |
+| `.ix-row-gap-sm`  | `row-gap: var(--ix-spacing-sm);`     |
+| `.ix-row-gap-md`  | `row-gap: var(--ix-spacing-md);`     |
+| `.ix-row-gap-lg`  | `row-gap: var(--ix-spacing-lg);`     |
+| `.ix-row-gap-xl`  | `row-gap: var(--ix-spacing-xl);`     |
+| `.ix-row-gap-2xl` | `row-gap: var(--ix-spacing-2xl);`    |
+| `.ix-row-gap-3xl` | `row-gap: var(--ix-spacing-3xl);`    |
+| `.ix-row-gap-4xl` | `row-gap: var(--ix-spacing-4xl);`    |
+| `.ix-col-gap-0`   | `column-gap: 0;`                     |
+| `.ix-col-gap-2xs` | `column-gap: var(--ix-spacing-2xs);` |
+| `.ix-col-gap-xs`  | `column-gap: var(--ix-spacing-xs);`  |
+| `.ix-col-gap-sm`  | `column-gap: var(--ix-spacing-sm);`  |
+| `.ix-col-gap-md`  | `column-gap: var(--ix-spacing-md);`  |
+| `.ix-col-gap-lg`  | `column-gap: var(--ix-spacing-lg);`  |
+| `.ix-col-gap-xl`  | `column-gap: var(--ix-spacing-xl);`  |
+| `.ix-col-gap-2xl` | `column-gap: var(--ix-spacing-2xl);` |
+| `.ix-col-gap-3xl` | `column-gap: var(--ix-spacing-3xl);` |
+| `.ix-col-gap-4xl` | `column-gap: var(--ix-spacing-4xl);` |
 
 ### Responsiv spacing
 
@@ -183,166 +228,166 @@ For eksempel gir klassen `.ix-md-p-2xl` padding med verdien av 2xl på medium (`
 
 #### Responsiv margin
 
-| CSS-klasse                       | Verdi                                                                  |
-| -------------------------------- | ---------------------------------------------------------------------------- |
-| `.ix-<skjermstørrelse>-m-0`      | `margin: 0;`                       |
-| `.ix-<skjermstørrelse>-m-2xs`    | `margin: var(--ix-spacing-2xs);`                        |
-| `.ix-<skjermstørrelse>-m-xs`     | `margin: var(--ix-spacing-xs);`                        |
-| `.ix-<skjermstørrelse>-m-sm`     | `margin: var(--ix-spacing-sm);`                        |
-| `.ix-<skjermstørrelse>-m-md`     | `margin: var(--ix-spacing-md);`                        |
-| `.ix-<skjermstørrelse>-m-lg`     | `margin: var(--ix-spacing-lg);`                        |
-| `.ix-<skjermstørrelse>-m-xl`     | `margin: var(--ix-spacing-xl);`                        |
-| `.ix-<skjermstørrelse>-m-2xl`    | `margin: var(--ix-spacing-2xl);`                        |
-| `.ix-<skjermstørrelse>-m-3xl`    | `margin: var(--ix-spacing-3xl);`                        |
-| `.ix-<skjermstørrelse>-m-4xl`    | `margin: var(--ix-spacing-4xl);`                        |
-| `.ix-<skjermstørrelse>-m-auto`   | `margin: auto;`                   |
-| `.ix-<skjermstørrelse>-mt-0`     | `margin-top: 0;`                      |
-| `.ix-<skjermstørrelse>-mt-2xs`   | `margin-top: var(--ix-spacing-2xs);`                   |
-| `.ix-<skjermstørrelse>-mt-xs`    | `margin-top: var(--ix-spacing-xs);`                   |
-| `.ix-<skjermstørrelse>-mt-sm`    | `margin-top: var(--ix-spacing-sm);`                   |
-| `.ix-<skjermstørrelse>-mt-md`    | `margin-top: var(--ix-spacing-md);`                   |
-| `.ix-<skjermstørrelse>-mt-lg`    | `margin-top: var(--ix-spacing-lg);`                   |
-| `.ix-<skjermstørrelse>-mt-xl`    | `margin-top: var(--ix-spacing-xl);`                   |
-| `.ix-<skjermstørrelse>-mt-2xl`   | `margin-top: var(--ix-spacing-2xl);`                   |
-| `.ix-<skjermstørrelse>-mt-3xl`   | `margin-top: var(--ix-spacing-3xl);`                   |
-| `.ix-<skjermstørrelse>-mt-4xl`   | `margin-top: var(--ix-spacing-4xl);`                   |
-| `.ix-<skjermstørrelse>-mb-0`     | `margin-bottom: 0;`                      |
-| `.ix-<skjermstørrelse>-mb-2xs`   | `margin-bottom: var(--ix-spacing-2xs);`                   |
-| `.ix-<skjermstørrelse>-mb-xs`    | `margin-bottom: var(--ix-spacing-xs);`                   |
-| `.ix-<skjermstørrelse>-mb-sm`    | `margin-bottom: var(--ix-spacing-sm);`                   |
-| `.ix-<skjermstørrelse>-mb-md`    | `margin-bottom: var(--ix-spacing-md);`                   |
-| `.ix-<skjermstørrelse>-mb-lg`    | `margin-bottom: var(--ix-spacing-lg);`                   |
-| `.ix-<skjermstørrelse>-mb-xl`    | `margin-bottom: var(--ix-spacing-xl);`                   |
-| `.ix-<skjermstørrelse>-mb-2xl`   | `margin-bottom: var(--ix-spacing-2xl);`                   |
-| `.ix-<skjermstørrelse>-mb-3xl`   | `margin-bottom: var(--ix-spacing-3xl);`                   |
-| `.ix-<skjermstørrelse>-mb-4xl`   | `margin-bottom: var(--ix-spacing-4xl);`                   |
-| `.ix-<skjermstørrelse>-mr-0`     | `margin-right: 0;`                     |
-| `.ix-<skjermstørrelse>-mr-2xs`   | `margin-right: var(--ix-spacing-2xs);`                  |
-| `.ix-<skjermstørrelse>-mr-xs`    | `margin-right: var(--ix-spacing-xs);`                  |
-| `.ix-<skjermstørrelse>-mr-sm`    | `margin-right: var(--ix-spacing-sm);`                  |
-| `.ix-<skjermstørrelse>-mr-md`    | `margin-right: var(--ix-spacing-md);`                  |
-| `.ix-<skjermstørrelse>-mr-lg`    | `margin-right: var(--ix-spacing-lg);`                  |
-| `.ix-<skjermstørrelse>-mr-xl`    | `margin-right: var(--ix-spacing-xl);`                  |
-| `.ix-<skjermstørrelse>-mr-2xl`   | `margin-right: var(--ix-spacing-2xl);`                  |
-| `.ix-<skjermstørrelse>-mr-3xl`   | `margin-right: var(--ix-spacing-3xl);`                  |
-| `.ix-<skjermstørrelse>-mr-4xl`   | `margin-right: var(--ix-spacing-4xl);`                  |
-| `.ix-<skjermstørrelse>-ml-0`     | `margin-left: 0;`                   |
-| `.ix-<skjermstørrelse>-ml-2xs`   | `margin-left: var(--ix-spacing-2xs);`                |
-| `.ix-<skjermstørrelse>-ml-xs`    | `margin-left: var(--ix-spacing-xs);`                |
-| `.ix-<skjermstørrelse>-ml-sm`    | `margin-left: var(--ix-spacing-sm);`                |
-| `.ix-<skjermstørrelse>-ml-md`    | `margin-left: var(--ix-spacing-md);`                |
-| `.ix-<skjermstørrelse>-ml-lg`    | `margin-left: var(--ix-spacing-lg);`                |
-| `.ix-<skjermstørrelse>-ml-xl`    | `margin-left: var(--ix-spacing-xl);`                |
-| `.ix-<skjermstørrelse>-ml-2xl`   | `margin-left: var(--ix-spacing-2xl);`                |
-| `.ix-<skjermstørrelse>-ml-3xl`   | `margin-left: var(--ix-spacing-3xl);`                |
-| `.ix-<skjermstørrelse>-ml-4xl`   | `margin-left: var(--ix-spacing-4xl);`                |
-| `.ix-<skjermstørrelse>-my-2xs`   | `margin-block: var(--ix-spacing-2xs);`      |
-| `.ix-<skjermstørrelse>-my-xs`    | `margin-block: var(--ix-spacing-xs);`      |
-| `.ix-<skjermstørrelse>-my-sm`    | `margin-block: var(--ix-spacing-sm);`      |
-| `.ix-<skjermstørrelse>-my-md`    | `margin-block: var(--ix-spacing-md);`      |
-| `.ix-<skjermstørrelse>-my-lg`    | `margin-block: var(--ix-spacing-lg);`      |
-| `.ix-<skjermstørrelse>-my-xl`    | `margin-block: var(--ix-spacing-xl);`      |
-| `.ix-<skjermstørrelse>-my-2xl`   | `margin-block: var(--ix-spacing-2xl);`      |
-| `.ix-<skjermstørrelse>-my-3xl`   | `margin-block: var(--ix-spacing-3xl);`      |
-| `.ix-<skjermstørrelse>-my-4xl`   | `margin-block: var(--ix-spacing-4xl);`      |
-| `.ix-<skjermstørrelse>-mx-2xs`   | `margin-inline: var(--ix-spacing-2xs);` |
-| `.ix-<skjermstørrelse>-mx-xs`    | `margin-inline: var(--ix-spacing-xs);` |
-| `.ix-<skjermstørrelse>-mx-sm`    | `margin-inline: var(--ix-spacing-sm);` |
-| `.ix-<skjermstørrelse>-mx-md`    | `margin-inline: var(--ix-spacing-md);` |
-| `.ix-<skjermstørrelse>-mx-lg`    | `margin-inline: var(--ix-spacing-lg);` |
-| `.ix-<skjermstørrelse>-mx-xl`    | `margin-inline: var(--ix-spacing-xl);` |
-| `.ix-<skjermstørrelse>-mx-2xl`   | `margin-inline: var(--ix-spacing-2xl);` |
-| `.ix-<skjermstørrelse>-mx-3xl`   | `margin-inline: var(--ix-spacing-3xl);` |
-| `.ix-<skjermstørrelse>-mx-4xl`   | `margin-inline: var(--ix-spacing-4xl);` |
+| CSS-klasse                     | Verdi                                   |
+| ------------------------------ | --------------------------------------- |
+| `.ix-<skjermstørrelse>-m-0`    | `margin: 0;`                            |
+| `.ix-<skjermstørrelse>-m-2xs`  | `margin: var(--ix-spacing-2xs);`        |
+| `.ix-<skjermstørrelse>-m-xs`   | `margin: var(--ix-spacing-xs);`         |
+| `.ix-<skjermstørrelse>-m-sm`   | `margin: var(--ix-spacing-sm);`         |
+| `.ix-<skjermstørrelse>-m-md`   | `margin: var(--ix-spacing-md);`         |
+| `.ix-<skjermstørrelse>-m-lg`   | `margin: var(--ix-spacing-lg);`         |
+| `.ix-<skjermstørrelse>-m-xl`   | `margin: var(--ix-spacing-xl);`         |
+| `.ix-<skjermstørrelse>-m-2xl`  | `margin: var(--ix-spacing-2xl);`        |
+| `.ix-<skjermstørrelse>-m-3xl`  | `margin: var(--ix-spacing-3xl);`        |
+| `.ix-<skjermstørrelse>-m-4xl`  | `margin: var(--ix-spacing-4xl);`        |
+| `.ix-<skjermstørrelse>-m-auto` | `margin: auto;`                         |
+| `.ix-<skjermstørrelse>-mt-0`   | `margin-top: 0;`                        |
+| `.ix-<skjermstørrelse>-mt-2xs` | `margin-top: var(--ix-spacing-2xs);`    |
+| `.ix-<skjermstørrelse>-mt-xs`  | `margin-top: var(--ix-spacing-xs);`     |
+| `.ix-<skjermstørrelse>-mt-sm`  | `margin-top: var(--ix-spacing-sm);`     |
+| `.ix-<skjermstørrelse>-mt-md`  | `margin-top: var(--ix-spacing-md);`     |
+| `.ix-<skjermstørrelse>-mt-lg`  | `margin-top: var(--ix-spacing-lg);`     |
+| `.ix-<skjermstørrelse>-mt-xl`  | `margin-top: var(--ix-spacing-xl);`     |
+| `.ix-<skjermstørrelse>-mt-2xl` | `margin-top: var(--ix-spacing-2xl);`    |
+| `.ix-<skjermstørrelse>-mt-3xl` | `margin-top: var(--ix-spacing-3xl);`    |
+| `.ix-<skjermstørrelse>-mt-4xl` | `margin-top: var(--ix-spacing-4xl);`    |
+| `.ix-<skjermstørrelse>-mb-0`   | `margin-bottom: 0;`                     |
+| `.ix-<skjermstørrelse>-mb-2xs` | `margin-bottom: var(--ix-spacing-2xs);` |
+| `.ix-<skjermstørrelse>-mb-xs`  | `margin-bottom: var(--ix-spacing-xs);`  |
+| `.ix-<skjermstørrelse>-mb-sm`  | `margin-bottom: var(--ix-spacing-sm);`  |
+| `.ix-<skjermstørrelse>-mb-md`  | `margin-bottom: var(--ix-spacing-md);`  |
+| `.ix-<skjermstørrelse>-mb-lg`  | `margin-bottom: var(--ix-spacing-lg);`  |
+| `.ix-<skjermstørrelse>-mb-xl`  | `margin-bottom: var(--ix-spacing-xl);`  |
+| `.ix-<skjermstørrelse>-mb-2xl` | `margin-bottom: var(--ix-spacing-2xl);` |
+| `.ix-<skjermstørrelse>-mb-3xl` | `margin-bottom: var(--ix-spacing-3xl);` |
+| `.ix-<skjermstørrelse>-mb-4xl` | `margin-bottom: var(--ix-spacing-4xl);` |
+| `.ix-<skjermstørrelse>-mr-0`   | `margin-right: 0;`                      |
+| `.ix-<skjermstørrelse>-mr-2xs` | `margin-right: var(--ix-spacing-2xs);`  |
+| `.ix-<skjermstørrelse>-mr-xs`  | `margin-right: var(--ix-spacing-xs);`   |
+| `.ix-<skjermstørrelse>-mr-sm`  | `margin-right: var(--ix-spacing-sm);`   |
+| `.ix-<skjermstørrelse>-mr-md`  | `margin-right: var(--ix-spacing-md);`   |
+| `.ix-<skjermstørrelse>-mr-lg`  | `margin-right: var(--ix-spacing-lg);`   |
+| `.ix-<skjermstørrelse>-mr-xl`  | `margin-right: var(--ix-spacing-xl);`   |
+| `.ix-<skjermstørrelse>-mr-2xl` | `margin-right: var(--ix-spacing-2xl);`  |
+| `.ix-<skjermstørrelse>-mr-3xl` | `margin-right: var(--ix-spacing-3xl);`  |
+| `.ix-<skjermstørrelse>-mr-4xl` | `margin-right: var(--ix-spacing-4xl);`  |
+| `.ix-<skjermstørrelse>-ml-0`   | `margin-left: 0;`                       |
+| `.ix-<skjermstørrelse>-ml-2xs` | `margin-left: var(--ix-spacing-2xs);`   |
+| `.ix-<skjermstørrelse>-ml-xs`  | `margin-left: var(--ix-spacing-xs);`    |
+| `.ix-<skjermstørrelse>-ml-sm`  | `margin-left: var(--ix-spacing-sm);`    |
+| `.ix-<skjermstørrelse>-ml-md`  | `margin-left: var(--ix-spacing-md);`    |
+| `.ix-<skjermstørrelse>-ml-lg`  | `margin-left: var(--ix-spacing-lg);`    |
+| `.ix-<skjermstørrelse>-ml-xl`  | `margin-left: var(--ix-spacing-xl);`    |
+| `.ix-<skjermstørrelse>-ml-2xl` | `margin-left: var(--ix-spacing-2xl);`   |
+| `.ix-<skjermstørrelse>-ml-3xl` | `margin-left: var(--ix-spacing-3xl);`   |
+| `.ix-<skjermstørrelse>-ml-4xl` | `margin-left: var(--ix-spacing-4xl);`   |
+| `.ix-<skjermstørrelse>-my-2xs` | `margin-block: var(--ix-spacing-2xs);`  |
+| `.ix-<skjermstørrelse>-my-xs`  | `margin-block: var(--ix-spacing-xs);`   |
+| `.ix-<skjermstørrelse>-my-sm`  | `margin-block: var(--ix-spacing-sm);`   |
+| `.ix-<skjermstørrelse>-my-md`  | `margin-block: var(--ix-spacing-md);`   |
+| `.ix-<skjermstørrelse>-my-lg`  | `margin-block: var(--ix-spacing-lg);`   |
+| `.ix-<skjermstørrelse>-my-xl`  | `margin-block: var(--ix-spacing-xl);`   |
+| `.ix-<skjermstørrelse>-my-2xl` | `margin-block: var(--ix-spacing-2xl);`  |
+| `.ix-<skjermstørrelse>-my-3xl` | `margin-block: var(--ix-spacing-3xl);`  |
+| `.ix-<skjermstørrelse>-my-4xl` | `margin-block: var(--ix-spacing-4xl);`  |
+| `.ix-<skjermstørrelse>-mx-2xs` | `margin-inline: var(--ix-spacing-2xs);` |
+| `.ix-<skjermstørrelse>-mx-xs`  | `margin-inline: var(--ix-spacing-xs);`  |
+| `.ix-<skjermstørrelse>-mx-sm`  | `margin-inline: var(--ix-spacing-sm);`  |
+| `.ix-<skjermstørrelse>-mx-md`  | `margin-inline: var(--ix-spacing-md);`  |
+| `.ix-<skjermstørrelse>-mx-lg`  | `margin-inline: var(--ix-spacing-lg);`  |
+| `.ix-<skjermstørrelse>-mx-xl`  | `margin-inline: var(--ix-spacing-xl);`  |
+| `.ix-<skjermstørrelse>-mx-2xl` | `margin-inline: var(--ix-spacing-2xl);` |
+| `.ix-<skjermstørrelse>-mx-3xl` | `margin-inline: var(--ix-spacing-3xl);` |
+| `.ix-<skjermstørrelse>-mx-4xl` | `margin-inline: var(--ix-spacing-4xl);` |
 
 Responsiv padding og gap følger samme mønster som responsiv margin.
 
 #### Responsiv padding
 
-| CSS-klasse                       | Verdi                                                                   |
-| ------------------------------------- | ----------------------------------------------------------------------------- |
-| `.ix-<skjermstørrelse>-p-0`           | `padding: 0;`                       |
-| `.ix-<skjermstørrelse>-p-2xs`         | `padding: var(--ix-spacing-2xs);`                        |
-| `.ix-<skjermstørrelse>-p-xs`          | `padding: var(--ix-spacing-xs);`                        |
-| `.ix-<skjermstørrelse>-p-sm`          | `padding: var(--ix-spacing-sm);`                        |
-| `.ix-<skjermstørrelse>-p-md`          | `padding: var(--ix-spacing-md);`                        |
-| `.ix-<skjermstørrelse>-p-lg`          | `padding: var(--ix-spacing-lg);`                        |
-| `.ix-<skjermstørrelse>-p-xl`          | `padding: var(--ix-spacing-xl);`                        |
-| `.ix-<skjermstørrelse>-p-2xl`         | `padding: var(--ix-spacing-2xl);`                        |
-| `.ix-<skjermstørrelse>-p-3xl`         | `padding: var(--ix-spacing-3xl);`                        |
-| `.ix-<skjermstørrelse>-p-4xl`         | `padding: var(--ix-spacing-4xl);`                        |
-| `.ix-<skjermstørrelse>-pt-0`          | `padding-top: 0;`                      |
-| `.ix-<skjermstørrelse>-pt-2xs`        | `padding-top: var(--ix-spacing-2xs);`                   |
-| `.ix-<skjermstørrelse>-pt-xs`         | `padding-top: var(--ix-spacing-xs);`                   |
-| `.ix-<skjermstørrelse>-pt-sm`         | `padding-top: var(--ix-spacing-sm);`                   |
-| `.ix-<skjermstørrelse>-pt-md`         | `padding-top: var(--ix-spacing-md);`                   |
-| `.ix-<skjermstørrelse>-pt-lg`         | `padding-top: var(--ix-spacing-lg);`                   |
-| `.ix-<skjermstørrelse>-pt-xl`         | `padding-top: var(--ix-spacing-xl);`                   |
-| `.ix-<skjermstørrelse>-pt-2xl`        | `padding-top: var(--ix-spacing-2xl);`                   |
-| `.ix-<skjermstørrelse>-pt-3xl`        | `padding-top: var(--ix-spacing-3xl);`                   |
-| `.ix-<skjermstørrelse>-pt-4xl`        | `padding-top: var(--ix-spacing-4xl);`                   |
-| `.ix-<skjermstørrelse>-pb-0`          | `padding-bottom: 0;`                      |
-| `.ix-<skjermstørrelse>-pb-2xs`        | `padding-bottom: var(--ix-spacing-2xs);`                   |
-| `.ix-<skjermstørrelse>-pb-xs`         | `padding-bottom: var(--ix-spacing-xs);`                   |
-| `.ix-<skjermstørrelse>-pb-sm`         | `padding-bottom: var(--ix-spacing-sm);`                   |
-| `.ix-<skjermstørrelse>-pb-md`         | `padding-bottom: var(--ix-spacing-md);`                   |
-| `.ix-<skjermstørrelse>-pb-lg`         | `padding-bottom: var(--ix-spacing-lg);`                   |
-| `.ix-<skjermstørrelse>-pb-xl`         | `padding-bottom: var(--ix-spacing-xl);`                   |
-| `.ix-<skjermstørrelse>-pb-2xl`        | `padding-bottom: var(--ix-spacing-2xl);`                   |
-| `.ix-<skjermstørrelse>-pb-3xl`        | `padding-bottom: var(--ix-spacing-3xl);`                   |
-| `.ix-<skjermstørrelse>-pb-4xl`        | `padding-bottom: var(--ix-spacing-4xl);`                   |
-| `.ix-<skjermstørrelse>-pr-0`          | `padding-right: 0;`                     |
-| `.ix-<skjermstørrelse>-pr-2xs`        | `padding-right: var(--ix-spacing-2xs);`                  |
-| `.ix-<skjermstørrelse>-pr-xs`         | `padding-right: var(--ix-spacing-xs);`                  |
-| `.ix-<skjermstørrelse>-pr-sm`         | `padding-right: var(--ix-spacing-sm);`                  |
-| `.ix-<skjermstørrelse>-pr-md`         | `padding-right: var(--ix-spacing-md);`                  |
-| `.ix-<skjermstørrelse>-pr-lg`         | `padding-right: var(--ix-spacing-lg);`                  |
-| `.ix-<skjermstørrelse>-pr-xl`         | `padding-right: var(--ix-spacing-xl);`                  |
-| `.ix-<skjermstørrelse>-pr-2xl`        | `padding-right: var(--ix-spacing-2xl);`                  |
-| `.ix-<skjermstørrelse>-pr-3xl`        | `padding-right: var(--ix-spacing-3xl);`                  |
-| `.ix-<skjermstørrelse>-pr-4xl`        | `padding-right: var(--ix-spacing-4xl);`                  |
-| `.ix-<skjermstørrelse>-pl-0`          | `padding-left: 0;`                   |
-| `.ix-<skjermstørrelse>-pl-2xs`        | `padding-left: var(--ix-spacing-2xs);`                |
-| `.ix-<skjermstørrelse>-pl-xs`         | `padding-left: var(--ix-spacing-xs);`                |
-| `.ix-<skjermstørrelse>-pl-sm`         | `padding-left: var(--ix-spacing-sm);`                |
-| `.ix-<skjermstørrelse>-pl-md`         | `padding-left: var(--ix-spacing-md);`                |
-| `.ix-<skjermstørrelse>-pl-lg`         | `padding-left: var(--ix-spacing-lg);`                |
-| `.ix-<skjermstørrelse>-pl-xl`         | `padding-left: var(--ix-spacing-xl);`                |
-| `.ix-<skjermstørrelse>-pl-2xl`        | `padding-left: var(--ix-spacing-2xl);`                |
-| `.ix-<skjermstørrelse>-pl-3xl`        | `padding-left: var(--ix-spacing-3xl);`                |
-| `.ix-<skjermstørrelse>-pl-4xl`        | `padding-left: var(--ix-spacing-4xl);`                |
-| `.ix-<skjermstørrelse>-py-2xs`        | `padding-top: var(--ix-spacing-2xs);`<br/> `padding-bottom: var(--ix-spacing-2xs);`      |
-| `.ix-<skjermstørrelse>-py-xs`         | `padding-top: var(--ix-spacing-xs);`<br/> `padding-bottom: var(--ix-spacing-xs);`      |
-| `.ix-<skjermstørrelse>-py-sm`         | `padding-top: var(--ix-spacing-sm);`<br/> `padding-bottom: var(--ix-spacing-sm);`      |
-| `.ix-<skjermstørrelse>-py-md`         | `padding-top: var(--ix-spacing-md);`<br/> `padding-bottom: var(--ix-spacing-md);`      |
-| `.ix-<skjermstørrelse>-py-lg`         | `padding-top: var(--ix-spacing-lg);`<br/> `padding-bottom: var(--ix-spacing-lg);`      |
-| `.ix-<skjermstørrelse>-py-xl`         | `padding-top: var(--ix-spacing-xl);`<br/> `padding-bottom: var(--ix-spacing-xl);`      |
-| `.ix-<skjermstørrelse>-py-2xl`        | `padding-top: var(--ix-spacing-2xl);`<br/> `padding-bottom: var(--ix-spacing-2xl);`      |
-| `.ix-<skjermstørrelse>-py-3xl`        | `padding-top: var(--ix-spacing-3xl);`<br/> `padding-bottom: var(--ix-spacing-3xl);`      |
-| `.ix-<skjermstørrelse>-py-4xl`        | `padding-top: var(--ix-spacing-4xl);`<br/> `padding-bottom: var(--ix-spacing-4xl);`      |
-| `.ix-<skjermstørrelse>-px-2xs`        | `padding-left: var(--ix-spacing-2xs);`<br/> `padding-right: var(--ix-spacing-2xs);` |
-| `.ix-<skjermstørrelse>-px-xs`         | `padding-left: var(--ix-spacing-xs);`<br/> `padding-right: var(--ix-spacing-xs);` |
-| `.ix-<skjermstørrelse>-px-sm`         | `padding-left: var(--ix-spacing-sm);`<br/> `padding-right: var(--ix-spacing-sm);` |
-| `.ix-<skjermstørrelse>-px-md`         | `padding-left: var(--ix-spacing-md);`<br/> `padding-right: var(--ix-spacing-md);` |
-| `.ix-<skjermstørrelse>-px-lg`         | `padding-left: var(--ix-spacing-lg);`<br/> `padding-right: var(--ix-spacing-lg);` |
-| `.ix-<skjermstørrelse>-px-xl`         | `padding-left: var(--ix-spacing-xl);`<br/> `padding-right: var(--ix-spacing-xl);` |
-| `.ix-<skjermstørrelse>-px-2xl`        | `padding-left: var(--ix-spacing-2xl);`<br/> `padding-right: var(--ix-spacing-2xl);` |
-| `.ix-<skjermstørrelse>-px-3xl`        | `padding-left: var(--ix-spacing-3xl);`<br/> `padding-right: var(--ix-spacing-3xl);` |
-| `.ix-<skjermstørrelse>-px-4xl`        | `padding-left: var(--ix-spacing-4xl);`<br/> `padding-right: var(--ix-spacing-4xl);` |
+| CSS-klasse                     | Verdi                                                                               |
+| ------------------------------ | ----------------------------------------------------------------------------------- |
+| `.ix-<skjermstørrelse>-p-0`    | `padding: 0;`                                                                       |
+| `.ix-<skjermstørrelse>-p-2xs`  | `padding: var(--ix-spacing-2xs);`                                                   |
+| `.ix-<skjermstørrelse>-p-xs`   | `padding: var(--ix-spacing-xs);`                                                    |
+| `.ix-<skjermstørrelse>-p-sm`   | `padding: var(--ix-spacing-sm);`                                                    |
+| `.ix-<skjermstørrelse>-p-md`   | `padding: var(--ix-spacing-md);`                                                    |
+| `.ix-<skjermstørrelse>-p-lg`   | `padding: var(--ix-spacing-lg);`                                                    |
+| `.ix-<skjermstørrelse>-p-xl`   | `padding: var(--ix-spacing-xl);`                                                    |
+| `.ix-<skjermstørrelse>-p-2xl`  | `padding: var(--ix-spacing-2xl);`                                                   |
+| `.ix-<skjermstørrelse>-p-3xl`  | `padding: var(--ix-spacing-3xl);`                                                   |
+| `.ix-<skjermstørrelse>-p-4xl`  | `padding: var(--ix-spacing-4xl);`                                                   |
+| `.ix-<skjermstørrelse>-pt-0`   | `padding-top: 0;`                                                                   |
+| `.ix-<skjermstørrelse>-pt-2xs` | `padding-top: var(--ix-spacing-2xs);`                                               |
+| `.ix-<skjermstørrelse>-pt-xs`  | `padding-top: var(--ix-spacing-xs);`                                                |
+| `.ix-<skjermstørrelse>-pt-sm`  | `padding-top: var(--ix-spacing-sm);`                                                |
+| `.ix-<skjermstørrelse>-pt-md`  | `padding-top: var(--ix-spacing-md);`                                                |
+| `.ix-<skjermstørrelse>-pt-lg`  | `padding-top: var(--ix-spacing-lg);`                                                |
+| `.ix-<skjermstørrelse>-pt-xl`  | `padding-top: var(--ix-spacing-xl);`                                                |
+| `.ix-<skjermstørrelse>-pt-2xl` | `padding-top: var(--ix-spacing-2xl);`                                               |
+| `.ix-<skjermstørrelse>-pt-3xl` | `padding-top: var(--ix-spacing-3xl);`                                               |
+| `.ix-<skjermstørrelse>-pt-4xl` | `padding-top: var(--ix-spacing-4xl);`                                               |
+| `.ix-<skjermstørrelse>-pb-0`   | `padding-bottom: 0;`                                                                |
+| `.ix-<skjermstørrelse>-pb-2xs` | `padding-bottom: var(--ix-spacing-2xs);`                                            |
+| `.ix-<skjermstørrelse>-pb-xs`  | `padding-bottom: var(--ix-spacing-xs);`                                             |
+| `.ix-<skjermstørrelse>-pb-sm`  | `padding-bottom: var(--ix-spacing-sm);`                                             |
+| `.ix-<skjermstørrelse>-pb-md`  | `padding-bottom: var(--ix-spacing-md);`                                             |
+| `.ix-<skjermstørrelse>-pb-lg`  | `padding-bottom: var(--ix-spacing-lg);`                                             |
+| `.ix-<skjermstørrelse>-pb-xl`  | `padding-bottom: var(--ix-spacing-xl);`                                             |
+| `.ix-<skjermstørrelse>-pb-2xl` | `padding-bottom: var(--ix-spacing-2xl);`                                            |
+| `.ix-<skjermstørrelse>-pb-3xl` | `padding-bottom: var(--ix-spacing-3xl);`                                            |
+| `.ix-<skjermstørrelse>-pb-4xl` | `padding-bottom: var(--ix-spacing-4xl);`                                            |
+| `.ix-<skjermstørrelse>-pr-0`   | `padding-right: 0;`                                                                 |
+| `.ix-<skjermstørrelse>-pr-2xs` | `padding-right: var(--ix-spacing-2xs);`                                             |
+| `.ix-<skjermstørrelse>-pr-xs`  | `padding-right: var(--ix-spacing-xs);`                                              |
+| `.ix-<skjermstørrelse>-pr-sm`  | `padding-right: var(--ix-spacing-sm);`                                              |
+| `.ix-<skjermstørrelse>-pr-md`  | `padding-right: var(--ix-spacing-md);`                                              |
+| `.ix-<skjermstørrelse>-pr-lg`  | `padding-right: var(--ix-spacing-lg);`                                              |
+| `.ix-<skjermstørrelse>-pr-xl`  | `padding-right: var(--ix-spacing-xl);`                                              |
+| `.ix-<skjermstørrelse>-pr-2xl` | `padding-right: var(--ix-spacing-2xl);`                                             |
+| `.ix-<skjermstørrelse>-pr-3xl` | `padding-right: var(--ix-spacing-3xl);`                                             |
+| `.ix-<skjermstørrelse>-pr-4xl` | `padding-right: var(--ix-spacing-4xl);`                                             |
+| `.ix-<skjermstørrelse>-pl-0`   | `padding-left: 0;`                                                                  |
+| `.ix-<skjermstørrelse>-pl-2xs` | `padding-left: var(--ix-spacing-2xs);`                                              |
+| `.ix-<skjermstørrelse>-pl-xs`  | `padding-left: var(--ix-spacing-xs);`                                               |
+| `.ix-<skjermstørrelse>-pl-sm`  | `padding-left: var(--ix-spacing-sm);`                                               |
+| `.ix-<skjermstørrelse>-pl-md`  | `padding-left: var(--ix-spacing-md);`                                               |
+| `.ix-<skjermstørrelse>-pl-lg`  | `padding-left: var(--ix-spacing-lg);`                                               |
+| `.ix-<skjermstørrelse>-pl-xl`  | `padding-left: var(--ix-spacing-xl);`                                               |
+| `.ix-<skjermstørrelse>-pl-2xl` | `padding-left: var(--ix-spacing-2xl);`                                              |
+| `.ix-<skjermstørrelse>-pl-3xl` | `padding-left: var(--ix-spacing-3xl);`                                              |
+| `.ix-<skjermstørrelse>-pl-4xl` | `padding-left: var(--ix-spacing-4xl);`                                              |
+| `.ix-<skjermstørrelse>-py-2xs` | `padding-block: var(--ix-spacing-2xs);`  |
+| `.ix-<skjermstørrelse>-py-xs`  | `padding-block: var(--ix-spacing-xs);`   |
+| `.ix-<skjermstørrelse>-py-sm`  | `padding-block: var(--ix-spacing-sm);`   |
+| `.ix-<skjermstørrelse>-py-md`  | `padding-block: var(--ix-spacing-md);`   |
+| `.ix-<skjermstørrelse>-py-lg`  | `padding-block: var(--ix-spacing-lg);`   |
+| `.ix-<skjermstørrelse>-py-xl`  | `padding-block: var(--ix-spacing-xl);`   |
+| `.ix-<skjermstørrelse>-py-2xl` | `padding-block: var(--ix-spacing-2xl);`  |
+| `.ix-<skjermstørrelse>-py-3xl` | `padding-block: var(--ix-spacing-3xl);`  |
+| `.ix-<skjermstørrelse>-py-4xl` | `padding-block: var(--ix-spacing-4xl);`  |
+| `.ix-<skjermstørrelse>-px-2xs` | `padding-inline: var(--ix-spacing-2xs);` |
+| `.ix-<skjermstørrelse>-px-xs`  | `padding-inline: var(--ix-spacing-xs);`  |
+| `.ix-<skjermstørrelse>-px-sm`  | `padding-inline: var(--ix-spacing-sm);`  |
+| `.ix-<skjermstørrelse>-px-md`  | `padding-inline: var(--ix-spacing-md);`  |
+| `.ix-<skjermstørrelse>-px-lg`  | `padding-inline: var(--ix-spacing-lg);`  |
+| `.ix-<skjermstørrelse>-px-xl`  | `padding-inline: var(--ix-spacing-xl);`  |
+| `.ix-<skjermstørrelse>-px-2xl` | `padding-inline: var(--ix-spacing-2xl);` |
+| `.ix-<skjermstørrelse>-px-3xl` | `padding-inline: var(--ix-spacing-3xl);` |
+| `.ix-<skjermstørrelse>-px-4xl` | `padding-inline: var(--ix-spacing-4xl);` |
 
 #### Responsiv gap
 
-| CSS-klasse                       | Verdi                                        |
-| -------------------------------- | -------------------------------------------------- |
-| `.ix-<skjermstørrelse>-gap-2xs`  | `gap: var(--ix-spacing-2xs);` |
-| `.ix-<skjermstørrelse>-gap-xs`   | `gap: var(--ix-spacing-xs);` |
-| `.ix-<skjermstørrelse>-gap-sm`   | `gap: var(--ix-spacing-sm);` |
-| `.ix-<skjermstørrelse>-gap-md`   | `gap: var(--ix-spacing-md);` |
-| `.ix-<skjermstørrelse>-gap-lg`   | `gap: var(--ix-spacing-lg);` |
-| `.ix-<skjermstørrelse>-gap-xl`   | `gap: var(--ix-spacing-xl);` |
-| `.ix-<skjermstørrelse>-gap-2xl`  | `gap: var(--ix-spacing-2xl);` |
-| `.ix-<skjermstørrelse>-gap-3xl`  | `gap: var(--ix-spacing-3xl);` |
-| `.ix-<skjermstørrelse>-gap-4xl`  | `gap: var(--ix-spacing-4xl);` |
+| CSS-klasse                      | Verdi                         |
+| ------------------------------- | ----------------------------- |
+| `.ix-<skjermstørrelse>-gap-2xs` | `gap: var(--ix-spacing-2xs);` |
+| `.ix-<skjermstørrelse>-gap-xs`  | `gap: var(--ix-spacing-xs);`  |
+| `.ix-<skjermstørrelse>-gap-sm`  | `gap: var(--ix-spacing-sm);`  |
+| `.ix-<skjermstørrelse>-gap-md`  | `gap: var(--ix-spacing-md);`  |
+| `.ix-<skjermstørrelse>-gap-lg`  | `gap: var(--ix-spacing-lg);`  |
+| `.ix-<skjermstørrelse>-gap-xl`  | `gap: var(--ix-spacing-xl);`  |
+| `.ix-<skjermstørrelse>-gap-2xl` | `gap: var(--ix-spacing-2xl);` |
+| `.ix-<skjermstørrelse>-gap-3xl` | `gap: var(--ix-spacing-3xl);` |
+| `.ix-<skjermstørrelse>-gap-4xl` | `gap: var(--ix-spacing-4xl);` |
 
 ## Density modifiers
 
@@ -354,29 +399,29 @@ Responsiv padding og gap følger samme mønster som responsiv margin.
 
 ## Flex
 
-| CSS-klasse            | Verdi                                             |
-| --------------------- | ------------------------------------------------------- |
-| `.ix-flex`            | `display: flex;`                                        |
-| `.ix-inline-flex`     | `display: inline-flex;`                                 |
-| `.ix-flex-row`        | `flex-direction: row;`                                  |
-| `.ix-flex-col`        | `flex-direction: column;`                               |
-| `.ix-flex-wrap`       | `flex-wrap: wrap;`                                      |
-| `.ix-flex-nowrap`     | `flex-wrap: nowrap;`                                     |
-| `.ix-flex-grow`       | `flex-grow: 1;`                                         |
-| `.ix-flex-shrink`     | `flex-shrink: 1;`                                       |
-| `.ix-justify-start`   | `justify-content: flex-start;`                           |
-| `.ix-justify-center`  | `justify-content: center;`                               |
-| `.ix-justify-end`     | `justify-content: flex-end;`                             |
-| `.ix-justify-between` | `justify-content: space-between;`                        |
-| `.ix-justify-around`  | `justify-content: space-around;`                         |
-| `.ix-justify-evenly`  | `justify-content: space-evenly;`                         |
-| `.ix-justify-stretch` | `justify-content: stretch;`                               |
-| `.ix-items-start`     | `align-items: flex-start;`                               |
-| `.ix-items-center`    | `align-items: center;`                                   |
-| `.ix-items-end`       | `align-items: flex-end;`                                 |
-| `.ix-items-stretch`   | `align-items: stretch;`                                  |
-| `.ix-items-baseline`  | `align-items: baseline;`                                 |
-| `.ix-self-auto`       | `align-self: auto;`                                      |
+| CSS-klasse            | Verdi                             |
+| --------------------- | --------------------------------- |
+| `.ix-flex`            | `display: flex;`                  |
+| `.ix-inline-flex`     | `display: inline-flex;`           |
+| `.ix-flex-row`        | `flex-direction: row;`            |
+| `.ix-flex-col`        | `flex-direction: column;`         |
+| `.ix-flex-wrap`       | `flex-wrap: wrap;`                |
+| `.ix-flex-nowrap`     | `flex-wrap: nowrap;`              |
+| `.ix-flex-grow`       | `flex-grow: 1;`                   |
+| `.ix-flex-shrink`     | `flex-shrink: 1;`                 |
+| `.ix-justify-start`   | `justify-content: flex-start;`    |
+| `.ix-justify-center`  | `justify-content: center;`        |
+| `.ix-justify-end`     | `justify-content: flex-end;`      |
+| `.ix-justify-between` | `justify-content: space-between;` |
+| `.ix-justify-around`  | `justify-content: space-around;`  |
+| `.ix-justify-evenly`  | `justify-content: space-evenly;`  |
+| `.ix-justify-stretch` | `justify-content: stretch;`       |
+| `.ix-items-start`     | `align-items: flex-start;`        |
+| `.ix-items-center`    | `align-items: center;`            |
+| `.ix-items-end`       | `align-items: flex-end;`          |
+| `.ix-items-stretch`   | `align-items: stretch;`           |
+| `.ix-items-baseline`  | `align-items: baseline;`          |
+| `.ix-self-auto`       | `align-self: auto;`               |
 
 ### Responsiv flex
 
@@ -390,52 +435,50 @@ For eksempel kan klassen `.ix-md-flex` brukes for å sette `display: flex` på m
 
 ## Grid
 
-| CSS-klasse               | Verdi                                             |
-| ------------------------ | ------------------------------------------------- |
-| `.ix-grid`               | `display: grid;`                                  |
-| `.ix-inline-grid`        | `display: inline-grid;`                           |
-| `.ix-grid-cols-1`        | `grid-template-columns: repeat(1, minmax(0, 1fr));` |
-| `.ix-grid-cols-2`        | `grid-template-columns: repeat(2, minmax(0, 1fr));` |
-| `.ix-grid-cols-3`        | `grid-template-columns: repeat(3, minmax(0, 1fr));` |
-| `.ix-grid-cols-4`        | `grid-template-columns: repeat(4, minmax(0, 1fr));` |
-| `.ix-grid-cols-5`        | `grid-template-columns: repeat(5, minmax(0, 1fr));` |
-| `.ix-grid-cols-6`        | `grid-template-columns: repeat(6, minmax(0, 1fr));` |
-| `.ix-grid-cols-7`        | `grid-template-columns: repeat(7, minmax(0, 1fr));` |
-| `.ix-grid-cols-8`        | `grid-template-columns: repeat(8, minmax(0, 1fr));` |
-| `.ix-grid-cols-9`        | `grid-template-columns: repeat(9, minmax(0, 1fr));` |
-| `.ix-grid-cols-10`       | `grid-template-columns: repeat(10, minmax(0, 1fr));` |
-| `.ix-grid-cols-11`       | `grid-template-columns: repeat(11, minmax(0, 1fr));` |
-| `.ix-grid-cols-12`       | `grid-template-columns: repeat(12, minmax(0, 1fr));` |
-| `.ix-grid-stretch-middle`   | `grid-template-columns: auto 1fr auto;` |
-| `.ix-grid-auto-fit-xs`   | `grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));` |
-| `.ix-grid-auto-fit-sm`   | `grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));` |
-| `.ix-grid-auto-fit-md`   | `grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));` |
-| `.ix-grid-auto-fit-lg`   | `grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));` |
-| `.ix-grid-auto-fill-xs`  | `grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));` |
-| `.ix-grid-auto-fill-sm`  | `grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));` |
-| `.ix-grid-auto-fill-md`  | `grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));` |
-| `.ix-grid-auto-fill-lg`  | `grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));` |
-| `.ix-grid-rows-1`        | `grid-template-rows: repeat(1, minmax(0, 1fr));` |
-| `.ix-grid-rows-2`        | `grid-template-rows: repeat(2, minmax(0, 1fr));` |
-| `.ix-grid-rows-3`        | `grid-template-rows: repeat(3, minmax(0, 1fr));` |
-| `.ix-grid-rows-4`        | `grid-template-rows: repeat(4, minmax(0, 1fr));` |
-| `.ix-col-span-1`         | `grid-column: span 1 / span 1;`                 |
-| `.ix-col-span-2`         | `grid-column: span 2 / span 2;`                 |
-| `.ix-col-span-3`         | `grid-column: span 3 / span 3;`                 |
-| `.ix-col-span-4`         | `grid-column: span 4 / span 4;`                 |
-| `.ix-col-span-5`         | `grid-column: span 5 / span 5;`                 |
-| `.ix-col-span-6`         | `grid-column: span 6 / span 6;`                 |
-| `.ix-col-span-full`      | `grid-column: span 12 / span 12;`                 |
-| `.ix-row-span-1`         | `grid-row: span 1 / span 1;`                    |
-| `.ix-row-span-2`         | `grid-row: span 2 / span 2;`                    |
-| `.ix-row-span-3`         | `grid-row: span 3 / span 3;`                    |
-| `.ix-row-span-full`      | `grid-row: span 12 / span 12;`                     |
-| `.ix-col-start-1`        | `grid-column-start: 1;`                |
-| `.ix-col-start-2`        | `grid-column-start: 2;`                |
-| `.ix-col-start-3`        | `grid-column-start: 3;`                |
-| `.ix-col-end-1`          | `grid-column-end: 1;`                |
-| `.ix-col-end-2`          | `grid-column-end: 2;`                |
-| `.ix-col-end-3`          | `grid-column-end: 3;`                |
+| CSS-klasse                | Verdi                                                           |
+| ------------------------- | --------------------------------------------------------------- |
+| `.ix-grid`                | `display: grid;`                                                |
+| `.ix-inline-grid`         | `display: inline-grid;`                                         |
+| `.ix-grid-cols-1`         | `grid-template-columns: repeat(1, minmax(0, 1fr));`             |
+| `.ix-grid-cols-2`         | `grid-template-columns: repeat(2, minmax(0, 1fr));`             |
+| `.ix-grid-cols-3`         | `grid-template-columns: repeat(3, minmax(0, 1fr));`             |
+| `.ix-grid-cols-4`         | `grid-template-columns: repeat(4, minmax(0, 1fr));`             |
+| `.ix-grid-cols-6`         | `grid-template-columns: repeat(6, minmax(0, 1fr));`             |
+| `.ix-grid-cols-12`        | `grid-template-columns: repeat(12, minmax(0, 1fr));`            |
+| `.ix-grid-stretch-middle` | `grid-template-columns: auto 1fr auto;`                         |
+| `.ix-grid-auto-fit-xs`    | `grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));`  |
+| `.ix-grid-auto-fit-sm`    | `grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));`  |
+| `.ix-grid-auto-fit-md`    | `grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));`  |
+| `.ix-grid-auto-fit-lg`    | `grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));`  |
+| `.ix-grid-auto-fill-xs`   | `grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));` |
+| `.ix-grid-auto-fill-sm`   | `grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));` |
+| `.ix-grid-auto-fill-md`   | `grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));` |
+| `.ix-grid-auto-fill-lg`   | `grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));` |
+| `.ix-grid-rows-1`         | `grid-template-rows: repeat(1, minmax(0, 1fr));`                |
+| `.ix-grid-rows-2`         | `grid-template-rows: repeat(2, minmax(0, 1fr));`                |
+| `.ix-grid-rows-3`         | `grid-template-rows: repeat(3, minmax(0, 1fr));`                |
+| `.ix-grid-rows-4`         | `grid-template-rows: repeat(4, minmax(0, 1fr));`                |
+| `.ix-col-span-1`          | `grid-column: span 1 / span 1;`                                 |
+| `.ix-col-span-2`          | `grid-column: span 2 / span 2;`                                 |
+| `.ix-col-span-3`          | `grid-column: span 3 / span 3;`                                 |
+| `.ix-col-span-4`          | `grid-column: span 4 / span 4;`                                 |
+| `.ix-col-span-6`          | `grid-column: span 6 / span 6;`                                 |
+| `.ix-col-span-8`          | `grid-column: span 8 / span 8;`                                 |
+| `.ix-col-span-9`          | `grid-column: span 9 / span 9;`                                 |
+| `.ix-col-span-10`         | `grid-column: span 10 / span 10;`                               |
+| `.ix-col-span-11`         | `grid-column: span 11 / span 11;`                               |
+| `.ix-col-span-12`         | `grid-column: span 12 / span 12;`                               |
+| `.ix-col-span-full`       | `grid-column: span 12 / span 12;`                               |
+| `.ix-row-span-1`          | `grid-row: span 1 / span 1;`                                    |
+| `.ix-row-span-2`          | `grid-row: span 2 / span 2;`                                    |
+| `.ix-row-span-3`          | `grid-row: span 3 / span 3;`                                    |
+| `.ix-row-span-full`       | `grid-row: span 12 / span 12;`                                  |
+| `.ix-col-start-1`         | `grid-column-start: 1;`                                         |
+| `.ix-col-start-2`         | `grid-column-start: 2;`                                         |
+| `.ix-col-start-3`         | `grid-column-start: 3;`                                         |
+| `.ix-col-end-1`           | `grid-column-end: 1;`                                           |
+| `.ix-col-end-2`           | `grid-column-end: 2;`                                           |
+| `.ix-col-end-3`           | `grid-column-end: 3;`                                           |
 
 ### Responsiv grid
 
@@ -449,51 +492,51 @@ For eksempel kan klassen `.ix-md-grid` brukes for å sette `display: grid` på m
 
 ## Størrelser
 
-| CSS-klasse      | Verdi                          |
-| --------------- | ------------------------------------ |
-| `.ix-w-full`    | `width: 100%;`                 |
-| `.ix-w-fit`     | `width: fit-content;` |
-| `.ix-max-w-sm`     | `max-width: 768px;` |
-| `.ix-max-w-md`     | `max-width: 1024px;` |
-| `.ix-max-w-lg`     | `max-width: 1280px;` |
-| `.ix-max-w-xl`     | `max-width: 1600px;` |
-| `.ix-h-full`    | `height: 100%;`                  |
-| `.ix-h-fit`     | `height: fit-content;`  |
-| `.ix-size-full` | `width: 100%; height: 100%;`   |
+| CSS-klasse      | Verdi                        |
+| --------------- | ---------------------------- |
+| `.ix-w-full`    | `width: 100%;`               |
+| `.ix-w-fit`     | `width: fit-content;`        |
+| `.ix-max-w-sm`  | `max-width: 768px;`          |
+| `.ix-max-w-md`  | `max-width: 1024px;`         |
+| `.ix-max-w-lg`  | `max-width: 1280px;`         |
+| `.ix-max-w-xl`  | `max-width: 1600px;`         |
+| `.ix-h-full`    | `height: 100%;`              |
+| `.ix-h-fit`     | `height: fit-content;`       |
+| `.ix-size-full` | `width: 100%; height: 100%;` |
 
 ### Responsive størrelser
 
 Utility-klassene for størrelser har også responsive varianter for `sm`, `md`, `lg` og `xl` skjermstørrelser. Disse klassene fungerer på samme måte som standard-variantene, men aktiveres kun ved angitt skjermstørrelse og oppover.
 
-| CSS-klasse                        | Verdi                                                                |
-| --------------------------------- | -------------------------------------------------------------------------- |
-| `.ix-<skjermstørrelse>-w-full`    | `width: 100%;`                 |
-| `.ix-<skjermstørrelse>-w-fit`     | `width: fit-content;` |
-| `.ix-<skjermstørrelse>-h-full`    | `height: 100%;`                  |
-| `.ix-<skjermstørrelse>-h-fit`     | `height: fit-content;`  |
-| `.ix-<skjermstørrelse>-size-full` | `width: 100%; height: 100%;`   |
+| CSS-klasse                        | Verdi                        |
+| --------------------------------- | ---------------------------- |
+| `.ix-<skjermstørrelse>-w-full`    | `width: 100%;`               |
+| `.ix-<skjermstørrelse>-w-fit`     | `width: fit-content;`        |
+| `.ix-<skjermstørrelse>-h-full`    | `height: 100%;`              |
+| `.ix-<skjermstørrelse>-h-fit`     | `height: fit-content;`       |
+| `.ix-<skjermstørrelse>-size-full` | `width: 100%; height: 100%;` |
 
 ## Display
 
-| CSS-klasse         | Verdi                   |
-| ------------------ | ----------------------------- |
-| `.ix-block`        | `display: block;`         |
-| `.ix-inline`       | `display: inline;`        |
-| `.ix-inline-block` | `display: inline-block;`  |
-| `.ix-hidden`       | `display: none;` |
+| CSS-klasse         | Verdi                    |
+| ------------------ | ------------------------ |
+| `.ix-block`        | `display: block;`        |
+| `.ix-inline`       | `display: inline;`       |
+| `.ix-inline-block` | `display: inline-block;` |
+| `.ix-hidden`       | `display: none;`         |
 
 ## Position
 
-| CSS-klasse                                   | Verdi       |
-| -------------------------------------------- | ----------------- |
-| `.ix-relative`                               | `position: relative;`  |
-| `.ix-absolute`                               | `position: absolute;` |
-| `.ix-fixed`                                  | `position: fixed;`    |
-| `.ix-sticky`                                 | `position: sticky;`   |
-| `.ix-top-0`                                  | `top: 0;` |
-| `.ix-right-0`                                | `right: 0;` |
-| `.ix-bottom-0`                               | `bottom: 0;` |
-| `.ix-left-0`                                 | `left: 0;` |
+| CSS-klasse     | Verdi                 |
+| -------------- | --------------------- |
+| `.ix-relative` | `position: relative;` |
+| `.ix-absolute` | `position: absolute;` |
+| `.ix-fixed`    | `position: fixed;`    |
+| `.ix-sticky`   | `position: sticky;`   |
+| `.ix-top-0`    | `top: 0;`             |
+| `.ix-right-0`  | `right: 0;`           |
+| `.ix-bottom-0` | `bottom: 0;`          |
+| `.ix-left-0`   | `left: 0;`            |
 
 ## Z-Index
 
@@ -501,35 +544,35 @@ Utility-klassene for størrelser har også responsive varianter for `sm`, `md`, 
 
 ## Tekst
 
-| CSS-klasse              | Verdi                 |
-| ----------------------- | --------------------------- |
-| `.ix-text-left`         | `text-align: left;`    |
-| `.ix-text-center`       | `text-align: center;`     |
-| `.ix-text-right`        | `text-align: right;`      |
-| `.ix-text-justify`      | `text-align: justify;` |
-| `.ix-text-inherit`      | `text-align: inherit;`              |
-| `.ix-whitespace-nowrap` | `white-space: nowrap;`      |
-| `.ix-truncate`          | `text-overflow: ellipsis; overflow: hidden; white-space: nowrap;`    |
-| `.ix-underline`         | `text-decoration: underline;` |
-| `.ix-no-underline`      | `text-decoration: none;`       |
-| `.ix-line-through`      | `text-decoration: line-through;`    |
+| CSS-klasse              | Verdi                                                             |
+| ----------------------- | ----------------------------------------------------------------- |
+| `.ix-text-left`         | `text-align: left;`                                               |
+| `.ix-text-center`       | `text-align: center;`                                             |
+| `.ix-text-right`        | `text-align: right;`                                              |
+| `.ix-text-justify`      | `text-align: justify;`                                            |
+| `.ix-text-inherit`      | `text-align: inherit;`                                            |
+| `.ix-whitespace-nowrap` | `white-space: nowrap;`                                            |
+| `.ix-truncate`          | `text-overflow: ellipsis; overflow: hidden; white-space: nowrap;` |
+| `.ix-underline`         | `text-decoration: underline;`                                     |
+| `.ix-no-underline`      | `text-decoration: none;`                                          |
+| `.ix-line-through`      | `text-decoration: line-through;`                                  |
 
 ## Overflow
 
-| CSS-klasse             | Verdi          |
+| CSS-klasse             | Verdi                |
 | ---------------------- | -------------------- |
-| `.ix-overflow-hidden`  | `overflow: hidden;`       |
-| `.ix-overflow-auto`    | `overflow: auto;`        |
-| `.ix-overflow-visible` | `overflow: visible;`         |
-| `.ix-overflow-scroll`  | `overflow: scroll;` |
+| `.ix-overflow-hidden`  | `overflow: hidden;`  |
+| `.ix-overflow-auto`    | `overflow: auto;`    |
+| `.ix-overflow-visible` | `overflow: visible;` |
+| `.ix-overflow-scroll`  | `overflow: scroll;`  |
 
 ## Lister
 
-| CSS-klasse         | Verdi                        |
-| ------------------ | ---------------------------- |
-| `.ix-list-none`    | `list-style: none;`          |
-| `.ix-list-disc`    | `list-style: disc;`          |
-| `.ix-list-decimal` | `list-style: decimal;`       |
+| CSS-klasse         | Verdi                          |
+| ------------------ | ------------------------------ |
+| `.ix-list-none`    | `list-style: none;`            |
+| `.ix-list-disc`    | `list-style: disc;`            |
+| `.ix-list-decimal` | `list-style: decimal;`         |
 | `.ix-list-inside`  | `list-style-position: inside;` |
 
 :::info CSS Reset
@@ -538,10 +581,25 @@ Indeks bruker en avart av reset.css for å sikre et konsistent utgangspunkt for 
 
 ## Border
 
+| CSS-klasse                  | Verdi                                                                                                  |
+| --------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `.ix-border-default`        | `border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);`                    |
+| `.ix-border-top-default`    | `border-top: var(--ix-border-width-default) solid var(--ix-color-border-main-default);`                |
+| `.ix-border-right-default`  | `border-right: var(--ix-border-width-default) solid var(--ix-color-border-main-default);`              |
+| `.ix-border-bottom-default` | `border-bottom: var(--ix-border-width-default) solid var(--ix-color-border-main-default);`             |
+| `.ix-border-left-default`   | `border-left: var(--ix-border-width-default) solid var(--ix-color-border-main-default);`               |
+| `.ix-border-dashed`         | `border: var(--ix-border-width-default) dashed var(--ix-color-border-main-default);`                   |
+| `.ix-border-none`           | `border: none;`                                                                                        |
+
 <UtilsTable tokens={borderTokens['border']['width']} prefix="border-width" />
 <UtilsTable tokens={borderTokens['border']['radius']} prefix="border-radius" />
 
 ## Outline
+
+| CSS-klasse            | Verdi                                                                                    |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| `.ix-outline-default` | `outline: var(--ix-outline-width-default) solid var(--ix-color-border-focus-default);`   |
+
 <UtilsTable tokens={outlineTokens.outline.width} prefix="outline-width" />
 <UtilsTable tokens={outlineTokens.outline.offset} prefix="outline-offset" />
 
@@ -554,21 +612,23 @@ Indeks bruker en avart av reset.css for å sikre et konsistent utgangspunkt for 
 | `.ix-surface-tertiary`           | Tertiær bakgrunnsfarge  |
 | `.ix-surface-neutral`            | Nøytral bakgrunnsfarge  |
 | `.ix-color-background-default`   | Standard bakgrunnsfarge |
-| `.ix-color-background-default`   | Subtil bakgrunnsfarge   |
+| `.ix-color-background-tinted`    | Tonet bakgrunnsfarge    |
 
 ## Transition
 
 Transitions i Indeks bruker standardverdier for varighet og timing-funksjon, som er definert i CSS-variabler. Disse variablene kan brukes i egne stiler for å sikre konsistente overganger.
 
-| CSS-variabel                     | Verdi             | Beskrivelse           |
-| -------------------------------- | ----------------- | --------------------- |
-| `--ix-transition-duration`  | `0.2s` | Standard varighet for overganger |
+| CSS-variabel                      | Verdi                           | Beskrivelse                             |
+| --------------------------------- | ------------------------------- | --------------------------------------- |
+| `--ix-transition-duration`        | `0.2s`                          | Standard varighet for overganger        |
 | `--ix-transition-timing-function` | `cubic-bezier(.25, .1, .25, 1)` | Standard timing-funksjon for overganger |
 
 Du kan også bruke en forhåndsdefinert utility-klasse som bruker disse verdiene for å enkelt legge til en overgang på et element:
 
 ```jsx
-<a href="#" className="ix-transition-all">Hover over meg</a>
+<a href="#" className="ix-transition-all">
+    Hover over meg
+</a>
 ```
 
 ## Typografi-variabler

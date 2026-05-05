@@ -1,0 +1,13 @@
+.active {
+    display: contents;
+}
+
+/*
+ * Den ikke-valgte varianten fjernes visuelt, men beholdes i DOM slik at
+ * overskriftsankere og lenker forblir gyldige. `display: none` skjuler også
+ * innhold fra skjermlesere, noe som er ønskelig — det er tross alt varianten
+ * brukeren ikke har valgt.
+ */
+.inactive {
+    display: none;
+}

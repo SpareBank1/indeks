@@ -1,6 +1,6 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import AccessibilityTable from '@site/src/components/AccessibilityTable';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
 import a11yData from './accessibility/textfield.json';
 
 # TextField
@@ -51,11 +51,11 @@ Prøv å endre label eller description direkte i editoren. Komponenten kobler `f
 </TabItem>
 </Tabs>
 
-## Eksempler
-
-:::danger Unngå type="number"
-`type="number"` gir uforutsigbar oppførsel: stepper-knapper, scrollhjul endrer verdi, og nettlesere kan fjerne ledende nuller (kontonummer!). Bruk `inputMode="numeric"` i stedet. Det gir talltastatur på mobil uten disse problemene.
+:::warning Unngå `type="number"`
+`type="number"` gir uforutsigbar oppførsel: stepper-knapper, scrollhjul endrer verdi, og nettlesere kan fjerne ledende nuller (kontonummer!). Bruk `inputMode="numeric"` i stedet — det gir talltastatur på mobil uten quirksene.
 :::
+
+## Eksempler
 
 ### Med feilmelding
 
@@ -105,11 +105,7 @@ errorEl.textContent = '';
 
 ### Med prefix og suffix
 
-:::warning Rekkefølge i DOM er avgjørende
-`prefix` må ligge før `<input>`, `suffix` må ligge etter. Feil rekkefølge gir feil visuell plassering.
-:::
-
-Prefix og suffix gir ekstra kontekst om hva som skal fylles inn:
+Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må ligge før `<input>`, `suffix` må ligge etter — feil rekkefølge gir feil visuell plassering.
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
@@ -134,10 +130,6 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn:
   />
 </>
 ```
-
-:::note Norsk valutakonvensjon
-Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for NOK, ikke `prefix`. `prefix` brukes for valutasymboler som plasseres foran beløpet (f.eks. `€`, `$`).
-:::
 
 </TabItem>
 <TabItem value="html" label="HTML">
@@ -175,9 +167,7 @@ Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for
 </TabItem>
 </Tabs>
 
-:::warning Prefix og suffix leses ikke opp av skjermlesere
-Prefix og suffix er skjult med aria-hidden. Når konteksten ikke er åpenbar fra labelen, må du speile innholdet der. "Rente i prosent", ikke bare "Rente" med "%" som suffix.
-:::
+Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for NOK, ikke `prefix`. `prefix` brukes for valutasymboler som plasseres foran beløpet (f.eks. `€`, `$`).
 
 ### Deaktivert og skrivebeskyttet
 
@@ -329,9 +319,7 @@ Når labelen beskriver selve dataen, kan brukeren raskt orientere seg uten å le
 
 ### Unngå bruk av placeholder
 
-:::warning Unngå placeholder
 Placeholder forsvinner når brukeren begynner å skrive, kan forveksles med utfylt innhold, og er ikke tilstrekkelig erstatning for label eller description. Bruk `description` for eksempler og hint — det er alltid synlig.
-:::
 
 `description="11 siffer, f.eks. 1234 56 78903"` er bedre enn `placeholder="1234 56 78903"`.
 
@@ -339,13 +327,9 @@ Placeholder forsvinner når brukeren begynner å skrive, kan forveksles med utfy
 
 Hjelpetekst brukes for å gi ekstra kontekst om krav til format eller innhold. Hold den kort, konkret og plassert nær feltet. God hjelpetekst kan redusere feil og behovet for feilmeldinger i etterkant.
 
-:::tip Gjør dette
-`description="11 siffer uten mellomrom"`
-:::
-
-:::warning Ikke dette
-`description="Vennligst fyll inn kontonummeret ditt i det formatet som er korrekt for din kontotype"`
-:::
+| Gjør dette | Ikke dette |
+|------------|------------|
+| `description="11 siffer uten mellomrom"` | `description="Vennligst fyll inn kontonummeret ditt i det formatet som er korrekt for din kontotype"` |
 
 ### Feilmeldinger skal hjelpe, ikke bare varsle
 
@@ -378,13 +362,15 @@ Feltets bredde bør tilpasses det brukeren forventes å skrive. Smale felt signa
 
 Prefix og suffix gir visuell kontekst, men leses ikke nødvendigvis opp av skjermlesere. Labelen må inneholde samme informasjon. Et felt med "kr" som prefix bør ha en label som "Beløp i kroner", ikke bare "Beløp".
 
-:::warning Unngå `type="number"`
-`type="number"` gir uforutsigbar oppførsel på tvers av nettlesere. Bruk `inputMode="numeric"` i stedet. Det gir talltastatur på mobil uten quirksene.
-:::
-
 ## Universell utforming
 
-<AccessibilityTable data={a11yData} />
+### Hva du selv må sørge for
+
+- **Meningsfull labeltekst** — komponenten kobler label til input, men du må skrive god tekst
+- **Gode feilmeldinger** — komponenten viser dem og annonserer dem, men du skriver innholdet
+- **Riktig `autocomplete`** — sett `autocomplete="name"`, `autocomplete="email"` osv. på felter som ber om personlig informasjon (WCAG 1.3.5)
+- **Riktig `type` og `inputMode`** — `type="email"` for e-post, `inputMode="numeric"` for tall. Gir riktig tastatur på mobil og bedre validering.
+- **Prefix/suffix i label** — prefix og suffix er skjult fra skjermlesere. Når konteksten ikke er åpenbar, må labelen inneholde samme informasjon: "Rente i prosent", ikke bare "Rente"
 
 ### Hva komponenten gjør automatisk
 
@@ -395,13 +381,11 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 - **`aria-invalid`**: Synkroniseres automatisk med innholdet i error-elementet via MutationObserver.
 - **`required`**: Settes på input for nativ nettleservalidering. Ingen visuell indikator — merk valgfrie felt med `(valgfritt)` i labelteksten.
 
-### Skjult label med ariaLabel
+<KeyboardAndScreenReader data={a11yData} />
 
-Synlig label er alltid anbefalt. I tilfeller der konteksten er helt åpenbar fra omgivelsene (f.eks. et søkefelt i en søkebar), kan `ariaLabel` brukes i stedet.
+#### Skjult label med ariaLabel
 
-:::warning Bruk synlig label
-Skjult label gjør det vanskeligere for alle brukere å orientere seg i skjemaet. Bruk `ariaLabel` kun når synlig label er umulig av layoutmessige grunner, og teksten er meningsfull for skjermleserbrukere.
-:::
+Synlig label er alltid anbefalt. I tilfeller der konteksten er helt åpenbar fra omgivelsene (f.eks. et søkefelt i en søkebar), kan `ariaLabel` brukes i stedet. Bruk det kun når synlig label er umulig av layoutmessige grunner — skjult label gjør det vanskeligere for alle brukere å orientere seg i skjemaet.
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
@@ -425,15 +409,9 @@ Skjult label gjør det vanskeligere for alle brukere å orientere seg i skjemaet
 </TabItem>
 </Tabs>
 
-### Hva du selv må sørge for
+### WCAG-kriterier
 
-:::warning Ditt ansvar
-- **Meningsfull labeltekst** — komponenten kobler label til input, men du må skrive god tekst
-- **Gode feilmeldinger** — komponenten viser dem og annonserer dem, men du skriver innholdet
-- **Riktig `autocomplete`** — sett `autocomplete="name"`, `autocomplete="email"` osv. på felter som ber om personlig informasjon (WCAG 1.3.5)
-- **Riktig `type` og `inputMode`** — `type="email"` for e-post, `inputMode="numeric"` for tall. Gir riktig tastatur på mobil og bedre validering.
-- **Prefix/suffix i label** — prefix og suffix er skjult fra skjermlesere. Når konteksten ikke er åpenbar, må labelen inneholde samme informasjon: "Rente i prosent", ikke bare "Rente"
-:::
+<AccessibilityTable data={a11yData} />
 
 ## Props / API
 

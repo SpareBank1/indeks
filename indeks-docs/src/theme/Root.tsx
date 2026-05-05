@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import { PreferencesProvider } from '@site/src/preferences/PreferencesContext';
 
 // Docusaurus tvinger et valgt tema (data-theme="dark"|"light" på <html>).
 // Vi speiler dette ved å sette enten .ix-light-mode eller .ix-dark-mode
 // på indeks-roten, slik at eksempler i docs følger Docusaurus-temaet
 // i stedet for brukerens OS-preferanse.
-export default function Root({ children }) {
-    const [mode, setMode] = useState(null);
+export default function Root({ children }: { children: ReactNode }) {
+    const [mode, setMode] = useState<'light' | 'dark' | null>(null);
 
     useEffect(() => {
         const html = document.documentElement;
-        const read = () => (html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+        const read = (): 'light' | 'dark' => (html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
         setMode(read());
         const observer = new MutationObserver(() => setMode(read()));
         observer.observe(html, { attributes: true, attributeFilter: ['data-theme'] });
@@ -17,5 +18,9 @@ export default function Root({ children }) {
     }, []);
 
     const className = mode ? `ix-body ix-${mode}-mode` : 'ix-body';
-    return <div className={className}>{children}</div>;
+    return (
+        <PreferencesProvider>
+            <div className={className}>{children}</div>
+        </PreferencesProvider>
+    );
 }

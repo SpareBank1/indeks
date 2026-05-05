@@ -53,6 +53,26 @@ import '@sb1/indeks-css';
 import '@sb1/indeks-web'; // registrerer custom elements
 ```
 
+## 🔄 Hold CDN-URL-er i takt
+
+`@sb1/indeks-css` og `@sb1/indeks-web` versjonslåses til samme versjon som denne pakken. Når `@sb1/indeks-react` bumpes, må CDN-URL-ene i prosjektet ditt oppdateres tilsvarende — ellers får du drift mellom React-komponentenes forventede DOM og det som faktisk er lastet i nettleseren.
+
+Pakken har et innebygd script for dette. Legg til i `package.json`:
+
+```json
+{
+    "scripts": {
+        "prebuild": "indeks-react sync-cdn --check",
+        "sync-indeks": "indeks-react sync-cdn"
+    }
+}
+```
+
+- `prebuild` feiler hvis CDN-URL-ene ikke matcher installert versjon. Med vilje — hvis builden auto-fikser, kan det som deployes bruke andre klasser enn det du har testet.
+- `sync-indeks` kjører du eksplisitt for å oppdatere URL-ene i `index.html`, CSS-filer osv.
+
+Scriptet bruker ikke `postinstall` fordi SB1 anbefaler `npm install --ignore-scripts` — da blir lifecycle-hooks hoppet over.
+
 ## ✨ Bruk
 
 ```jsx
