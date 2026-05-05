@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { createRef } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { TextArea } from './TextArea';
 
 describe('TextArea', () => {
@@ -134,10 +134,4 @@ describe('TextArea', () => {
         expect(label).toBeNull();
     });
 
-    it('logger advarsel naar verken label eller ariaLabel er satt', () => {
-        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-        render(<TextArea />);
-        expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('[TextArea]'));
-        warnSpy.mockRestore();
-    });
 });

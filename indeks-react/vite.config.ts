@@ -11,6 +11,7 @@ export default mergeConfig(sharedConfig, {
         dts({
             include: ['lib'],
             exclude: ['**/*.test.ts', '**/*.test.tsx'],
+            entryRoot: 'lib',
             compilerOptions: {
                 allowImportingTsExtensions: false,
             },
