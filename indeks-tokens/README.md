@@ -4,11 +4,10 @@ Design tokens for Indeks designsystemet. Denne pakken inneholder farger, spacing
 
 ## 📦 Del av Indeks
 
-Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks) og brukes internt av:
+Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks) og brukes under bygging av:
 
-- **@sb1/indeks-css** - CSS-biblioteket (inkluderer tokens automatisk)
+- **@sb1/indeks-css** - CSS-biblioteket (inlines tokens inn i bundlet CSS)
 - **@sb1/indeks-utils** - CSS utility-klasser
-- **@sb1/indeks-react** - React-komponenter
 
 ## 💡 Bør du installere denne pakken?
 

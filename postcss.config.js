@@ -18,15 +18,15 @@ export default ({ env }) => {
             // Resolves @import statements
             postcssImport({
                 filter: (path) => {
-                    // When building for CDN, skip resolving CDN URLs (they should remain as external imports)
+                    // CDN-bygget beholder CDN-URL-refs som eksterne imports
+                    // (postcssCdnImports har allerede erstattet @sb1/-imports).
                     if (isCdn && path.startsWith('/indeks/')) {
-                        return false; // Skip CDN URLs
+                        return false;
                     }
-                    // When building for npm, skip package imports (keep them as @import for consumer's bundler)
-                    if (!isCdn && path.startsWith('@sb1/')) {
-                        return false; // Skip package imports - let consumer resolve them
-                    }
-                    return true; // Process local file imports only
+                    // npm-bygget inlines alt — tokens og utils havner i
+                    // samme fil som komponent-CSS. Konsumenten trenger kun
+                    // @sb1/indeks-css.
+                    return true;
                 },
             }),
 
