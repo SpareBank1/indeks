@@ -1,18 +1,18 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { createRef } from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { TextField } from './TextField';
 
 describe('TextField', () => {
     it('rendrer label koblet til input via htmlFor/id', () => {
-        render(<TextField label="Kontonummer" inputId="konto" />);
+        render(<TextField label="Kontonummer" id="konto" />);
         const input = screen.getByRole('textbox');
         const label = document.querySelector('label');
         expect(input.id).toBe('konto');
         expect(label?.htmlFor).toBe('konto');
     });
 
-    it('genererer id automatisk når inputId ikke er satt', () => {
+    it('genererer id automatisk når id ikke er satt', () => {
         render(<TextField label="E-post" />);
         const input = screen.getByRole('textbox');
         expect(input.id).toBeTruthy();
@@ -66,16 +66,10 @@ describe('TextField', () => {
         expect(input.getAttribute('type')).toBe('email');
     });
 
-    it('eksplisitt type vinner over inputProps.type', () => {
-        render(<TextField label="Test" type="email" inputProps={{ type: 'text' }} />);
+    it('spreader ukjente HTML-attributter videre til input', () => {
+        render(<TextField label="Test" data-testid="mitt-felt" />);
         const input = screen.getByRole('textbox');
-        expect(input.getAttribute('type')).toBe('email');
-    });
-
-    it('sender ukjente HTML-attributter videre til ix-field via restProps', () => {
-        const { container } = render(<TextField label="Test" data-testid="mitt-felt" />);
-        const ixField = container.querySelector('ix-field');
-        expect(ixField?.getAttribute('data-testid')).toBe('mitt-felt');
+        expect(input.getAttribute('data-testid')).toBe('mitt-felt');
     });
 
     it('setter disabled-attributt paa input (CSS :has(:disabled) styler field)', () => {
@@ -96,17 +90,11 @@ describe('TextField', () => {
         expect(screen.getByText(',00')).toBeDefined();
     });
 
-    it('sender inputProps videre til input', () => {
-        render(<TextField label="E-post" inputProps={{ type: 'email', autoComplete: 'email' }} />);
+    it('setter autocomplete paa input via spread', () => {
+        render(<TextField label="E-post" type="email" autoComplete="email" />);
         const input = screen.getByRole('textbox');
         expect(input.getAttribute('type')).toBe('email');
         expect(input.getAttribute('autocomplete')).toBe('email');
-    });
-
-    it('eksplisitte props (disabled, readOnly) vinner over inputProps', () => {
-        render(<TextField label="Test" disabled={true} inputProps={{ disabled: false } as React.InputHTMLAttributes<HTMLInputElement>} />);
-        const input = screen.getByRole('textbox') as HTMLInputElement;
-        expect(input.disabled).toBe(true);
     });
 
     it('setter placeholder på input', () => {
@@ -152,4 +140,31 @@ describe('TextField', () => {
         expect(label).toBeNull();
     });
 
+    it('setter top-level value paa input (controlled)', () => {
+        render(<TextField label="E-post" value="ola@sb1.no" onChange={() => {}} />);
+        const input = screen.getByRole('textbox') as HTMLInputElement;
+        expect(input.value).toBe('ola@sb1.no');
+    });
+
+    it('setter top-level defaultValue paa input (uncontrolled)', () => {
+        render(<TextField label="E-post" defaultValue="ola@sb1.no" />);
+        const input = screen.getByRole('textbox') as HTMLInputElement;
+        expect(input.value).toBe('ola@sb1.no');
+    });
+
+    it('kaller top-level onChange naar verdien endres', () => {
+        const onChange = vi.fn();
+        render(<TextField label="E-post" defaultValue="" onChange={onChange} />);
+        const input = screen.getByRole('textbox');
+        fireEvent.change(input, { target: { value: 'ny verdi' } });
+        expect(onChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('className gaar til wrapper (ix-field), ikke til input', () => {
+        const { container } = render(<TextField label="Test" className="custom" />);
+        const ixField = container.querySelector('ix-field');
+        const input = screen.getByRole('textbox');
+        expect(ixField?.classList.contains('custom')).toBe(true);
+        expect(input.classList.contains('custom')).toBe(false);
+    });
 });
