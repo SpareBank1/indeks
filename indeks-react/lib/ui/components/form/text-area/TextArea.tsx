@@ -22,10 +22,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
     const generatedId = useId();
     const id = inputId ?? generatedId;
 
-    if (process.env.NODE_ENV !== 'production' && !label && !ariaLabel) {
-        console.warn('[TextArea] Feltet mangler label. Sett enten label (synlig) eller ariaLabel (skjult). Synlig label er anbefalt.');
-    }
-
     return (
         <Field inputId={id} label={label} className={className} description={description} errorMessage={errorMessage} disabled={disabled} readOnly={readOnly} {...restProps}>
             <div className="ix-text-area">
