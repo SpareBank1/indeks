@@ -1,15 +1,15 @@
 import clsx from 'clsx';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 export type TextProps<As extends ElementType> = {
-    /** Elementtypen som skal brukes, h1-h6 */
+    /** Elementtypen som skal brukes - standard er 'p' */
     as?: As;
     /** Innholdet som skal vises i tekst-komponenten */
     children?: ReactNode;
     /** Ekstra CSS-klasser som skal legges til komponenten */
     className?: string;
-    /** Ststørrelsen på overskriften, hvis man vil overstyre fra standard */
+    /** Tekststørrelse - standard er 'md' */
     size?: '2xl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs';
-    /** Spacing under overskriften, for å få passe luft */
+    /** Spacing under teksten/avsnittet */
     addRecommendedSpacing?: boolean;
     /** Brukes når teksten strekker seg over flere linjer. Øker linjehøyden for bedre lesbarhet */
     long?: boolean;
@@ -27,9 +27,11 @@ export function Text<As extends ElementType = 'p'>(props: TextProps<As>): JSX.El
         ...props,
     };
 
-    const textClass = `ix-text--${size}`;
-    const spacingClass = addRecommendedSpacing ? 'ix-mb-md' : '';
-    const longClass = long ? 'ix-text--long' : '';
-
-    return <Component {...restProps} className={clsx('ix-text', textClass, spacingClass, longClass, className)} />;
+    return (
+        <Component
+            {...restProps}
+            data-size={size}
+            className={clsx('ix-text', { 'ix-mb-md': addRecommendedSpacing, 'ix-text--long': long }, className)}
+        />
+    );
 }

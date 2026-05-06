@@ -4,10 +4,7 @@ import type {
   ReactNode,
 } from "react";
 import clsx from "clsx";
-import {
-  extractComponentSizeClassname,
-  type ComponentSize,
-} from "../../../types/types";
+import type { ComponentSize } from "../../../types/types";
 
 export type {{componentName}}Props<As extends ElementType> = {
   as?: As;
@@ -28,14 +25,12 @@ export function {{componentName}}<As extends ElementType = "div">(
     ...props,
   };
 
-  const { componentSizeClassName } = extractComponentSizeClassname(size);
-
   return (
     <Component
       {...restProps}
+      data-size={size}
       className={clsx(
         "ix-{{dashCase componentName}}",
-        componentSizeClassName,
         className
       )}
     />

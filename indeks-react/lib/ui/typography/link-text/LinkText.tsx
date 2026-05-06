@@ -4,10 +4,7 @@ import type {
   ComponentPropsWithoutRef,
 } from "react";
 import clsx from "clsx";
-import {
-  extractComponentSizeClassname,
-  type ComponentSize,
-} from "../../../types/types";
+import type { ComponentSize } from "../../../types/types";
 
 export type LinkTextProps<As extends ElementType = "a"> = {
   as?: As;
@@ -29,15 +26,13 @@ export function LinkText<As extends ElementType = "a">(
     ...restProps
   } = props;
 
-  const { componentSizeClassName } = extractComponentSizeClassname(size);
-
   return (
     <Component
       {...restProps}
+      data-size={size}
       className={clsx(
         "ix-link-text",
-        componentSizeClassName,
-        { "ix-link-text--underline": underline },
+        { "ix-link-text--no-underline": !underline },
         { "ix-link-text--active": isActive },
         className
       )}

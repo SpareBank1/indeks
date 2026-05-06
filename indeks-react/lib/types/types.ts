@@ -31,15 +31,6 @@ export type SpacingProps = {
     paddingY?: Size;
 };
 
-export function extractComponentSizeClassname(componentClass: string, size?: ComponentSize) {
-    const cls = clsx({
-        [`${componentClass}--${size}`]: size && size !== 'md',
-    });
-    return {
-        componentSizeClassName: cls,
-    };
-}
-
 export function extractSpacingClassnameFromProps(props: SpacingProps) {
     const {
         margin,

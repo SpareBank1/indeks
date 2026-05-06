@@ -22,12 +22,12 @@
     visibility: hidden;
 }
 
-.ix-loading-spinner--sm::before {
+.ix-loading-spinner[data-size="sm"]::before {
     height: 45px;
     width: 45px;
 }
 
-.ix-loading-spinner--lg::before {
+.ix-loading-spinner[data-size="lg"]::before {
     height: 150px;
     width: 150px;
 }
