@@ -17,11 +17,11 @@
     border: var(--ix-border-width-default) solid var(--border-color);
 }
 
-:where(.ix-tag--sm) {
+:where(.ix-tag[data-size="sm"]) {
     font-size: var(--ix-font-size-sm);
 }
 
-:where(.ix-tag--lg) {
+:where(.ix-tag[data-size="lg"]) {
     font-size: var(--ix-font-size-lg);
 }
 

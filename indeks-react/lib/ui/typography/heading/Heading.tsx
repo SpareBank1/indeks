@@ -49,8 +49,12 @@ export type HeadingProps = React.ComponentProps<HeadingElement> & {
 export const Heading = ({ as, className, size, addRecommendedSpacing, ...rest }: HeadingProps) => {
     const Component = as;
     const headingSize = size ?? getsizeFromElement(as);
-    const headingClass = `ix-heading--${headingSize.toLowerCase()}`;
-    const spacingClass = addRecommendedSpacing ? getSpacingFromElement(headingSize) : '';
 
-    return <Component className={clsx('ix-heading', headingClass, spacingClass, className)} {...rest} />;
+    return (
+        <Component
+            data-size={headingSize}
+            className={clsx('ix-heading', { [getSpacingFromElement(headingSize)]: addRecommendedSpacing }, className)}
+            {...rest}
+        />
+    );
 };

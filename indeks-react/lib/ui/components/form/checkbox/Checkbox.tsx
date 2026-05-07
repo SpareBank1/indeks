@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useId, type JSX } from 'react';
 import { useFocus } from '../../../../hooks/useFocus';
-import { extractComponentSizeClassname, type ComponentSize } from '../../../../types/types';
+import type { ComponentSize } from '../../../../types/types';
 
 export type CheckboxProps = {
     className?: string;
@@ -18,8 +18,6 @@ export function Checkbox(props: CheckboxProps): JSX.Element {
     const generatedId = useId();
     const id = inputId ?? generatedId;
 
-    const { componentSizeClassName } = extractComponentSizeClassname('ix-checkbox', size);
-
     const { ref, getFocusClasses } = useFocus<HTMLInputElement>();
 
     return (
@@ -28,12 +26,13 @@ export function Checkbox(props: CheckboxProps): JSX.Element {
                 type="checkbox"
                 id={id}
                 ref={ref}
-                className={clsx('ix-checkbox__input', componentSizeClassName)}
+                className="ix-checkbox__input"
                 {...inputProps}
             />
             <label
                 htmlFor={id}
-                className={clsx('ix-checkbox', componentSizeClassName, className, getFocusClasses('form'))}
+                data-size={size}
+                className={clsx('ix-checkbox', className, getFocusClasses('form'))}
                 {...restProps}
             >
                 {label}
