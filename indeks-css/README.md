@@ -4,12 +4,12 @@ CSS-bibliotek for Indeks designsystemet. Denne pakken inneholder all styling du 
 
 ## 📦 Del av Indeks
 
-Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks) og inkluderer automatisk:
+Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks). Tokens og utility-klasser er inlinet i den bygde CSS-filen, så du får alt i én fil:
 
 -   **@sb1/indeks-tokens** - Design tokens (farger, spacing, typografi)
 -   **@sb1/indeks-utils** - CSS utility-klasser
 
-Du trenger ikke å installere tokens eller utils separat!
+Du trenger ikke å installere tokens eller utils separat — alt ligger i `@sb1/indeks-css`.
 
 ## 📥 Installasjon
 

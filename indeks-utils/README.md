@@ -4,9 +4,9 @@ CSS utility-klasser for Indeks designsystemet. Denne pakken inneholder hjelpekla
 
 ## 📦 Del av Indeks
 
-Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks) og brukes internt av:
+Denne pakken er en del av [Indeks designsystemet](https://github.com/SpareBank1/indeks) og brukes under bygging av:
 
--   **@sb1/indeks-css** - CSS-biblioteket (inkluderer utils automatisk)
+-   **@sb1/indeks-css** - CSS-biblioteket (inlines utils inn i bundlet CSS)
 
 ## 💡 Bør du installere denne pakken?
 
