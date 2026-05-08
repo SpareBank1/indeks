@@ -118,6 +118,7 @@
 }
 
 :where(textarea) {
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     resize: vertical;
 }
 

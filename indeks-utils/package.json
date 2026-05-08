@@ -41,7 +41,8 @@
         "build:utils": "npm run build:utils:css",
         "build:utils:css": "tsx scripts/build-utils/index.ts platform=css path=./.build/css",
         "build:color-utils": "node scripts/build-colors/index.js",
-        "build:bundle": "postcss ./index.css -o ./dist/index.css"
+        "build:bundle": "postcss ./index.css -o ./dist/index.css",
+        "lint": "stylelint \"css/**/*.css\""
     },
     "author": "",
     "license": "MIT",

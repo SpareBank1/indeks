@@ -22,6 +22,7 @@
     transition: var(--ix-transition-all);
     z-index: var(--ix-z-index-elevated);
 
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     &:hover {
         border-color: var(--ix-color-border-main-hover);
         box-shadow: inset 0 0 0 1px var(--ix-color-border-main-hover);
@@ -53,6 +54,7 @@
     background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-disabled);
     border-color: var(--ix-color-border-main-default);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
     pointer-events: none;
 }

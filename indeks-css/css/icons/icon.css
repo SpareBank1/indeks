@@ -5,6 +5,7 @@
     width: var(--ix-font-size-xl);
     height: var(--ix-font-size-xl);
     display: inline-block;
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     mask-size: cover;
 }
 

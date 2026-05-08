@@ -14,6 +14,7 @@
     flex-grow: 1;
     white-space: pre-wrap;
     overflow: auto;
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     resize: vertical;
     background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-default);
@@ -24,6 +25,7 @@
     outline-offset: var(--ix-outline-offset-default);
     transition: var(--ix-transition-all);
 
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     &:hover {
         border-color: var(--ix-color-border-main-hover);
         box-shadow: inset 0 0 0 1px var(--ix-color-border-main-hover);
@@ -42,8 +44,10 @@
     background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-disabled);
     border-color: var(--ix-color-border-main-default);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
     pointer-events: none;
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     resize: none;
 }
 
@@ -52,6 +56,7 @@
     background-color: var(--ix-color-fill-interactive-read-only);
     color: var(--ix-color-foreground-main-read-only);
     border-color: var(--ix-color-border-main-default);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     resize: none;
 }
 

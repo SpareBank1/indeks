@@ -16,6 +16,6 @@ import type { UserConfig } from 'vite';
  */
 export const sharedConfig: UserConfig = {
     build: {
-        target: ['edge99', 'firefox98', 'chrome99', 'safari15.4']
+        target: ['edge100', 'firefox100', 'chrome100', 'safari15.4', 'ios15.4']
     }
 };

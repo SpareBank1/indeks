@@ -3,6 +3,7 @@
     user-select: none;
     -webkit-touch-callout: none;
     -webkit-user-drag: none;
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     touch-action: manipulation;
 }
 
