@@ -33,7 +33,7 @@ export const Invalid: Story = {
  * TODO: Vurder om vi likevel ønsker tilstrekkelig kontrast på disabled-felter.
  */
 export const Disabled: Story = {
-  args: { disabled: true, inputProps: { value: 'Disabled innhold' } },
+  args: { disabled: true, defaultValue: 'Disabled innhold' },
   render: (args) => {
     return <TextArea {...args} />;
   },
@@ -47,14 +47,14 @@ export const Required: Story = {
 };
 
 export const ReadOnly: Story = {
-  args: { readOnly: true, inputProps: { value: 'Read only innhold' } },
+  args: { readOnly: true, defaultValue: 'Read only innhold' },
   render: (args) => {
     return <TextArea {...args} />;
   },
 };
 
 export const MinMaxLength: Story = {
-  args: { label: 'Tilbakemelding', description: '10–500 tegn', inputProps: { minLength: 10, maxLength: 500 } },
+  args: { label: 'Tilbakemelding', description: '10–500 tegn', minLength: 10, maxLength: 500 },
   render: (args) => {
     return <TextArea {...args} />;
   },

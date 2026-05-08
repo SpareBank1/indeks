@@ -42,35 +42,35 @@ export const Invalid: Story = {
  * TODO: Vurder om vi likevel ønsker tilstrekkelig kontrast på disabled-felter.
  */
 export const Disabled: Story = {
-  args: { disabled: true, inputProps: { value: 'Disabled' }, prefix: 'Prefix', suffix: 'Suffix' },
+  args: { disabled: true, defaultValue: 'Disabled', prefix: 'Prefix', suffix: 'Suffix' },
   render: (args) => {
     return <TextField {...args} />;
   },
 };
 
 export const Required: Story = {
-  args: { required: true, label: 'E-postadresse', inputProps: { type: 'email' } },
+  args: { required: true, label: 'E-postadresse', type: 'email' },
   render: (args) => {
     return <TextField {...args} />;
   },
 };
 
 export const ReadOnly: Story = {
-  args: { readOnly: true, inputProps: { value: 'Read Only' }, prefix: 'Prefix', suffix: 'Suffix' },
+  args: { readOnly: true, defaultValue: 'Read Only', prefix: 'Prefix', suffix: 'Suffix' },
   render: (args) => {
     return <TextField {...args} />;
   },
 };
 
 export const MinMax: Story = {
-  args: { label: 'Antall', inputProps: { type: 'number', min: 1, max: 10 } },
+  args: { label: 'Antall', type: 'number', min: 1, max: 10 },
   render: (args) => {
     return <TextField {...args} />;
   },
 };
 
 export const MinMaxLength: Story = {
-  args: { label: 'Brukernavn', description: '3–20 tegn', inputProps: { minLength: 3, maxLength: 20 } },
+  args: { label: 'Brukernavn', description: '3–20 tegn', minLength: 3, maxLength: 20 },
   render: (args) => {
     return <TextField {...args} />;
   },

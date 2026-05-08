@@ -1,18 +1,18 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { createRef } from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { TextArea } from './TextArea';
 
 describe('TextArea', () => {
     it('rendrer label koblet til textarea via htmlFor/id', () => {
-        render(<TextArea label="Tilbakemelding" inputId="feedback" />);
+        render(<TextArea label="Tilbakemelding" id="feedback" />);
         const textarea = screen.getByRole('textbox');
         const label = document.querySelector('label');
         expect(textarea.id).toBe('feedback');
         expect(label?.htmlFor).toBe('feedback');
     });
 
-    it('genererer id automatisk når inputId ikke er satt', () => {
+    it('genererer id automatisk når id ikke er satt', () => {
         render(<TextArea label="Tilbakemelding" />);
         const textarea = screen.getByRole('textbox');
         expect(textarea.id).toBeTruthy();
@@ -60,10 +60,10 @@ describe('TextArea', () => {
         expect(wrapper?.querySelector('textarea')).toBeDefined();
     });
 
-    it('sender ukjente HTML-attributter videre til ix-field via restProps', () => {
-        const { container } = render(<TextArea label="Test" data-testid="mitt-felt" />);
-        const ixField = container.querySelector('ix-field');
-        expect(ixField?.getAttribute('data-testid')).toBe('mitt-felt');
+    it('spreader ukjente HTML-attributter videre til textarea', () => {
+        render(<TextArea label="Test" data-testid="mitt-felt" />);
+        const textarea = screen.getByRole('textbox');
+        expect(textarea.getAttribute('data-testid')).toBe('mitt-felt');
     });
 
     it('setter disabled-attributt paa textarea (CSS :has(:disabled) styler field)', () => {
@@ -78,17 +78,11 @@ describe('TextArea', () => {
         expect(textarea.readOnly).toBe(true);
     });
 
-    it('sender inputProps videre til textarea', () => {
-        render(<TextArea label="Tilbakemelding" inputProps={{ rows: 5, maxLength: 500 }} />);
+    it('setter rows og maxLength paa textarea via spread', () => {
+        render(<TextArea label="Tilbakemelding" rows={5} maxLength={500} />);
         const textarea = screen.getByRole('textbox');
         expect(textarea.getAttribute('rows')).toBe('5');
         expect(textarea.getAttribute('maxlength')).toBe('500');
-    });
-
-    it('eksplisitte props (disabled, readOnly) vinner over inputProps', () => {
-        render(<TextArea label="Test" disabled={true} inputProps={{ disabled: false } as React.TextareaHTMLAttributes<HTMLTextAreaElement>} />);
-        const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
-        expect(textarea.disabled).toBe(true);
     });
 
     it('setter placeholder på textarea', () => {
@@ -134,4 +128,31 @@ describe('TextArea', () => {
         expect(label).toBeNull();
     });
 
+    it('setter top-level value paa textarea (controlled)', () => {
+        render(<TextArea label="Tilbakemelding" value="hei" onChange={() => {}} />);
+        const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
+        expect(textarea.value).toBe('hei');
+    });
+
+    it('setter top-level defaultValue paa textarea (uncontrolled)', () => {
+        render(<TextArea label="Tilbakemelding" defaultValue="hei" />);
+        const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
+        expect(textarea.value).toBe('hei');
+    });
+
+    it('kaller top-level onChange naar verdien endres', () => {
+        const onChange = vi.fn();
+        render(<TextArea label="Tilbakemelding" defaultValue="" onChange={onChange} />);
+        const textarea = screen.getByRole('textbox');
+        fireEvent.change(textarea, { target: { value: 'ny verdi' } });
+        expect(onChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('className gaar til wrapper (ix-field), ikke til textarea', () => {
+        const { container } = render(<TextArea label="Test" className="custom" />);
+        const ixField = container.querySelector('ix-field');
+        const textarea = screen.getByRole('textbox');
+        expect(ixField?.classList.contains('custom')).toBe(true);
+        expect(textarea.classList.contains('custom')).toBe(false);
+    });
 });

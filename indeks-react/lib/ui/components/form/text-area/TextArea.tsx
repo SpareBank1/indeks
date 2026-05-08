@@ -1,31 +1,44 @@
 import { forwardRef, useId } from 'react';
 import { Field } from '../field/Field';
 
-export type TextAreaProps = Omit<React.HTMLAttributes<HTMLElement>, 'className' | 'children'> & {
+type TextAreaOwnProps = {
     label?: string;
     ariaLabel?: string;
+    /** CSS-klasse på wrapperen (`<ix-field>`). */
     className?: string;
-    inputId?: string;
-    inputProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>;
-    placeholder?: string;
     description?: string;
     errorMessage?: string;
-    disabled?: boolean;
-    readOnly?: boolean;
-    required?: boolean;
 };
 
+export type TextAreaProps = TextAreaOwnProps &
+    Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, keyof TextAreaOwnProps>;
+
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function TextArea(
-    { label, ariaLabel, inputProps, inputId, className, placeholder, description, errorMessage, disabled, readOnly, required, ...restProps },
+    { label, ariaLabel, className, id, description, errorMessage, disabled, readOnly, ...inputAttrs },
     ref
 ) {
     const generatedId = useId();
-    const id = inputId ?? generatedId;
+    const textareaId = id ?? generatedId;
 
     return (
-        <Field inputId={id} label={label} className={className} description={description} errorMessage={errorMessage} disabled={disabled} readOnly={readOnly} {...restProps}>
+        <Field
+            inputId={textareaId}
+            label={label}
+            className={className}
+            description={description}
+            errorMessage={errorMessage}
+            disabled={disabled}
+            readOnly={readOnly}
+        >
             <div className="ix-text-area">
-                <textarea ref={ref} {...inputProps} placeholder={placeholder} id={id} disabled={disabled} readOnly={readOnly} required={required} aria-label={ariaLabel} />
+                <textarea
+                    ref={ref}
+                    {...inputAttrs}
+                    id={textareaId}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                    aria-label={ariaLabel}
+                />
             </div>
         </Field>
     );
