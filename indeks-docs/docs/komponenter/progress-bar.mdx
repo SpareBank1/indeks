@@ -1,0 +1,269 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/progress-bar.json';
+
+# ProgressBar
+
+ProgressBar viser fremdriften i en prosess — enten som en kontinuerlig progresjon (for eksempel opplasting) eller som status for fullføring (for eksempel steg ferdig/feilet). Komponenten gir brukeren tydelig feedback på hvor langt man har kommet, og om noe er fullført eller krever oppmerksomhet.
+
+## Egnet til
+
+- Brukeren må vente på at en prosess fullføres (lasting, opplasting, behandling)
+- Det er viktig å vise fremdrift for å redusere usikkerhet
+- En prosess har tydelig start og slutt
+- Du vil bekrefte at et steg er fullført eller feilet
+- Fremdrift er viktigere enn nøyaktig tidsestimat
+
+**Eksempler:** opplasting av dokumenter, registrering/onboarding med bakgrunnsprosesser, systemprosesser som validering eller synkronisering.
+
+## Uegnet til
+
+- Prosessen er tilnærmet umiddelbar
+- Du ikke kan vise reell eller meningsfull fremdrift
+- Du kun vil indikere at noe pågår — bruk `Spinner` i stedet
+- Du vil vise plassering i et flerstegsforløp — bruk Stepper
+- Status handler om varsling eller tilbakemelding — bruk Message
+
+## Eksempler
+
+### Aktiv prosess
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<ProgressBar
+  value={65}
+  label="Laster opp dokumenter"
+  supportText="65 % fullført"
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-progress-bar
+  value="65"
+  data-state="active"
+  label="Laster opp dokumenter"
+  data-support-text="65 % fullført"
+/>
+```
+
+`<ix-progress-bar>` genererer all indre HTML og setter opp ARIA-attributter automatisk basert på `value` og `data-state`.
+
+</TabItem>
+</Tabs>
+
+### Fullført
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<ProgressBar
+  state="success"
+  label="Laster opp dokumenter"
+  supportText="Alle dokumenter er lastet opp"
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-progress-bar
+  value="100"
+  data-state="success"
+  label="Laster opp dokumenter"
+  data-support-text="Alle dokumenter er lastet opp"
+/>
+```
+
+</TabItem>
+</Tabs>
+
+I success-tilstand fjernes `role="progressbar"` fra track og statusikon vises automatisk. Tilstandsendringen annonseres for skjermlesere via `aria-live`.
+
+### Feilet
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<ProgressBar
+  state="error"
+  value={40}
+  label="Laster opp dokumenter"
+  supportText="Opplastingen feilet. Prøv igjen."
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-progress-bar
+  value="40"
+  data-state="error"
+  label="Laster opp dokumenter"
+  data-support-text="Opplastingen feilet. Prøv igjen."
+/>
+```
+
+</TabItem>
+</Tabs>
+
+I error-tilstand beholdes progresjonsverdien visuelt, men `role="progressbar"` fjernes. Støtteteksten skal forklare hva som gikk galt og hva brukeren kan gjøre videre.
+
+### Uten label
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<ProgressBar value={30} aria-label="Laster inn innhold" />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-progress-bar value="30" data-state="active" aria-label="Laster inn innhold" />
+```
+
+</TabItem>
+</Tabs>
+
+Uten synlig label bør du legge til `aria-label` på `<ix-progress-bar>`-elementet for å gi skjermleserbrukere et tilgjengelig navn.
+
+## Retningslinjer
+
+### Typer
+
+ProgressBar finnes i to varianter:
+
+- **Uten label** — brukes når kontekst er tydelig og ekstra forklaring ikke er nødvendig. Legg da til `aria-label` på elementet for tilgjengelighet.
+- **Med label** — anbefalt når brukeren trenger forklaring på hva som skjer eller hva fremdriften gjelder.
+
+### Prosent og verdi
+
+Prosentvis verdi kan vises som del av label eller støttetekst dersom det gir reell verdi for brukeren. Unngå prosent hvis verdien er usikker eller beregnes kunstig. Ved ukjent varighet bør du vurdere en `Spinner` i stedet.
+
+### Label og støttetekst
+
+Label skal beskrive hva som skjer, ikke bare at noe pågår. «Laster opp dokumenter» er bedre enn «Prosessering». Unngå tekniske formuleringer.
+
+Ved error skal label eller støttetekst forklare hva som gikk galt og hva brukeren kan gjøre videre. Ikke bruk støttetekst som bare gjentar labelen.
+
+| Tilstand | God støttetekst | Dårlig støttetekst |
+|----------|-----------------|--------------------|
+| success | «Alle filer er lastet opp» | «Fullført» |
+| error | «Opplastingen feilet. Sjekk filstørrelse og prøv igjen.» | «Noe gikk galt» |
+
+### Én prosess om gangen
+
+Ikke bruk flere ProgressBars for å vise deltilstander i samme prosess. Én sammenhengende prosess — én ProgressBar. Ikke bruk ProgressBar og Spinner for samme prosess.
+
+### Bruk i flyt
+
+Plasser ProgressBar nær innholdet eller handlingen den hører til. Unngå å bruke flere ProgressBars samtidig på samme side.
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+### ProgressBarProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `value` | `number` | Nei | `0` | Progresjonsverdi 0–100. Clampes automatisk. Ignoreres visuelt i success og error. |
+| `state` | `'active' \| 'success' \| 'error'` | Nei | `'active'` | Tilstand. |
+| `label` | `string` | Nei | | Synlig label over progress-linja. |
+| `supportText` | `string` | Nei | | Støttetekst under progress-linja. |
+| `className` | `string` | Nei | | Ekstra CSS-klasse på rotelementet. |
+
+Alle standard HTML-attributter for `<div>` støttes i tillegg og forwarded til rotelementet.
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+### `<ix-progress-bar>`-attributter
+
+| Attributt | Type | Standard | Beskrivelse |
+|-----------|------|----------|-------------|
+| `value` | `number` | `0` | Progresjonsverdi 0–100. Clampes til [0, 100]. |
+| `data-state` | `'active' \| 'success' \| 'error'` | `'active'` | Tilstand. CSS leser direkte. |
+| `label` | `string` | — | Synlig label over sporet. Kobles automatisk via `aria-labelledby`. |
+| `data-support-text` | `string` | — | Støttetekst under sporet. Annonseres via `aria-live` ved tilstandsoverganger. |
+
+`<ix-progress-bar>` genererer all indre HTML automatisk og setter opp ARIA-attributter basert på `value` og `data-state`.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Trenger du `ix-progress-bar`-stylingen uten React-komponenten eller `<ix-progress-bar>` web component, kan du bruke klassene direkte. Merk at du da selv er ansvarlig for ARIA-attributter.
+
+### Tilgjengelige klasser og custom properties
+
+| Element / custom property | Beskrivelse |
+|---------------------------|-------------|
+| `.ix-progress-bar` | Rotelementet |
+| `.ix-progress-bar__header` | Rad med label og statusikon |
+| `.ix-progress-bar__label` | Labeltekst |
+| `.ix-progress-bar__track` | Sporreil (bakgrunnen) |
+| `.ix-progress-bar__fill` | Fylt del av sporet |
+| `.ix-progress-bar__support-text` | Støttetekst under sporet |
+| `--ix-progress-bar-value` | Bredde på fill (0%–100%). Settes av web component, eller direkte med `style` |
+| `[data-state="active\|success\|error"]` | Settes på rotelementet. Styrer farge på fill og ikon. |
+
+### Eksempel: ren HTML uten web component
+
+```html
+<div class="ix-progress-bar" data-state="active"
+     role="progressbar"
+     aria-valuenow="65"
+     aria-valuemin="0"
+     aria-valuemax="100"
+     aria-labelledby="pb-label">
+  <div class="ix-progress-bar__header">
+    <span class="ix-progress-bar__label" id="pb-label">Laster opp dokumenter</span>
+  </div>
+  <div class="ix-progress-bar__track" aria-hidden="true"
+       style="--ix-progress-bar-value: 65%">
+    <div class="ix-progress-bar__fill"></div>
+  </div>
+  <span class="ix-progress-bar__support-text">65 % fullført</span>
+</div>
+```
+
+Uten `<ix-progress-bar>` web component må du sette ARIA-attributter manuelt og oppdatere `aria-valuenow` og `--ix-progress-bar-value` i JavaScript ved progresjonsendringer.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Gi komponenten et tilgjengelig navn** — bruk `label`-attributt/prop, eller legg til `aria-label` direkte på `<ix-progress-bar>` når synlig label mangler
+- **Skriv meningsfull støttetekst ved error** — teksten annonseres til skjermlesere via `aria-live`. Forklar hva som gikk galt og hva brukeren kan gjøre videre
+- **Ikke oppdater fremdrift for raskt** — hyppige endringer i `value` kan forstyrre skjermleserbrukere. Oppdater med intervaller som gir meningsfull informasjon
+
+### Hva komponenten gjør automatisk
+
+Når du bruker `<ix-progress-bar>` eller React-komponenten:
+
+- `role="progressbar"`, `aria-valuemin="0"`, `aria-valuemax="100"` og `aria-valuenow` settes på host-elementet (`<ix-progress-bar>`) i active-tilstand
+- I success/error fjernes progressbar-rollen — statusen er ikke lenger en fremdriftslinje
+- State-overganger annonseres via `aria-live="polite"` med teksten fra `data-support-text`
+- Statusikon injiseres automatisk i header ved success og error med `aria-hidden="true"` — status formidles via tekst, ikke ikon alene
+- `aria-labelledby` kobles til label-elementet automatisk (genererer ID om nødvendig)
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />

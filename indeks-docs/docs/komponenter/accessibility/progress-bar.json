@@ -1,0 +1,79 @@
+{
+  "component": "ProgressBar",
+  "lastReviewed": "2026-05-08",
+  "consumerResponsibilities": [
+    {
+      "summary": "Gi komponenten et tilgjengelig navn",
+      "details": "Bruk label-prop (React) eller legg til en .ix-progress-bar__label med id koblet via aria-labelledby på track. Uten et tilgjengelig navn vet ikke skjermleserbrukere hva prosessen gjelder.",
+      "wcag": ["4.1.2"]
+    },
+    {
+      "summary": "Skriv meningsfull støttetekst ved error",
+      "details": "Støtteteksten brukes som annonsering til skjermlesere ved state-overgang til error. Forklar hva som gikk galt og hva brukeren kan gjøre videre — ikke bare «Feil».",
+      "wcag": ["3.3.1", "3.3.3"]
+    },
+    {
+      "summary": "Ikke oppdater fremdrift for raskt",
+      "details": "Hyppige endringer i aria-valuenow (f.eks. hvert 100ms) kan forstyrre skjermleserbrukere. Oppdater med intervaller som gir meningsfull informasjon.",
+      "wcag": ["2.2.2"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "role=progressbar, aria-valuemin, aria-valuemax og aria-valuenow eksponerer rolle og verdi i active-tilstand. aria-labelledby kobler til synlig label automatisk." },
+    { "id": "1.3.3", "notes": "Tilstand (active/success/error) formidles med farge, ikon og tekst — ikke farge alene." },
+    { "id": "1.4.1", "notes": "Status kommuniseres via farge, ikon og tekst. Ikoner er aria-hidden — skjermlesere får informasjonen via aria-live og tekst." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport. Komponenten er horisontal og skalerer i bredden." },
+    { "id": "1.4.11", "notes": "Kontrast mellom fylt og ufylt del av sporet oppfyller Non-text Contrast 3:1 via semantiske tokens." },
+    { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
+    { "id": "2.1.1", "notes": "Komponenten er ikke interaktiv og trenger ikke tastaturnavigasjon." },
+    { "id": "2.1.2", "notes": "Ikke fokuserbar — ingen fokus å sette fast i." },
+    { "id": "4.1.2", "notes": "role=progressbar med aria-valuemin/max/now i active-tilstand. I success/error fjernes rollen og aria-hidden settes på track. Tilstandsoverganger annonseres via aria-live=polite." },
+    { "id": "4.1.3", "notes": "State-overganger til success og error annonseres via aria-live=polite med tekst fra støttetekst-elementet." }
+  ],
+  "notRelevant": [
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.2", "reason": "Komponenten følger naturlig DOM-rekkefølge: header, track, støttetekst." },
+    { "id": "1.3.4" },
+    { "id": "1.3.5" },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.13", "reason": "Ingen hover- eller fokusbasert innhold i komponenten." },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.3" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.7", "reason": "Ikke fokuserbar." },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Ikke interaktiv — ingen pekeroperasjoner." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "2.5.8" },
+    { "id": "3.2.1" },
+    { "id": "3.2.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.2" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" }
+  ],
+  "keyboard": [],
+  "screenReader": [
+    "I active-tilstand: «[label], fremdriftslinje, [verdi] prosent»",
+    "Ved overgang til success: støtteteksten annonseres automatisk via aria-live=polite",
+    "Ved overgang til error: støtteteksten annonseres automatisk via aria-live=polite",
+    "Ikon i success/error leses ikke opp — status formidles via tekst og aria-live"
+  ]
+}
