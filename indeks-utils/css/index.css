@@ -11,5 +11,6 @@
 @import './spacing.css';
 @import './state-colors.css';
 @import './transition.css';
+@import './hitbox.css';
 @import './interaction.css';
 @import './typography.css';
