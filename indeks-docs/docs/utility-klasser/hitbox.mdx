@@ -1,0 +1,142 @@
+# Hitbox
+
+Hitbox utvider det klikkbare arealet til et element uten å påvirke layout. Nyttig for å oppfylle
+WCAG 2.5.5 (44×44 px minimum touch target) på små ikonknapper, lenker og andre klikkbare elementer
+der visuell størrelse er satt av designet.
+
+Teknikken bruker `::before`-pseudo-elementet til å utvide det interaktive arealet. Elementet selv
+beholder sin visuelle størrelse og layout-påvirkning. Inspirert av [bazza.dev/craft/2026/hit-area](https://bazza.dev/craft/2026/hit-area).
+
+## Klasser
+
+`.ix-hitbox` er basisklassen og må alltid brukes. Legg til én eller flere størrelsesklasser for å
+kontrollere utvidelsen i de retningene du trenger.
+
+### Basisklasse
+
+| CSS-klasse   | Beskrivelse                                                                          |
+| ------------ | ------------------------------------------------------------------------------------ |
+| `.ix-hitbox` | Setter `position: relative` og aktiverer `::before`-pseudo-elementet. Alltid påkrevd. |
+
+### Uniform utvidelse (alle sider)
+
+| CSS-klasse        | Utvidelse (alle sider)      |
+| ----------------- | --------------------------- |
+| `.ix-hitbox-2xs`  | `var(--ix-spacing-2xs)`     |
+| `.ix-hitbox-xs`   | `var(--ix-spacing-xs)`      |
+| `.ix-hitbox-sm`   | `var(--ix-spacing-sm)`      |
+| `.ix-hitbox-md`   | `var(--ix-spacing-md)`      |
+| `.ix-hitbox-lg`   | `var(--ix-spacing-lg)`      |
+| `.ix-hitbox-xl`   | `var(--ix-spacing-xl)`      |
+| `.ix-hitbox-2xl`  | `var(--ix-spacing-2xl)`     |
+
+### X-akse (venstre + høyre)
+
+| CSS-klasse          | Utvidelse (venstre + høyre) |
+| ------------------- | --------------------------- |
+| `.ix-hitbox-x-2xs`  | `var(--ix-spacing-2xs)`     |
+| `.ix-hitbox-x-xs`   | `var(--ix-spacing-xs)`      |
+| `.ix-hitbox-x-sm`   | `var(--ix-spacing-sm)`      |
+| `.ix-hitbox-x-md`   | `var(--ix-spacing-md)`      |
+| `.ix-hitbox-x-lg`   | `var(--ix-spacing-lg)`      |
+| `.ix-hitbox-x-xl`   | `var(--ix-spacing-xl)`      |
+| `.ix-hitbox-x-2xl`  | `var(--ix-spacing-2xl)`     |
+
+### Y-akse (topp + bunn)
+
+| CSS-klasse          | Utvidelse (topp + bunn)     |
+| ------------------- | --------------------------- |
+| `.ix-hitbox-y-2xs`  | `var(--ix-spacing-2xs)`     |
+| `.ix-hitbox-y-xs`   | `var(--ix-spacing-xs)`      |
+| `.ix-hitbox-y-sm`   | `var(--ix-spacing-sm)`      |
+| `.ix-hitbox-y-md`   | `var(--ix-spacing-md)`      |
+| `.ix-hitbox-y-lg`   | `var(--ix-spacing-lg)`      |
+| `.ix-hitbox-y-xl`   | `var(--ix-spacing-xl)`      |
+| `.ix-hitbox-y-2xl`  | `var(--ix-spacing-2xl)`     |
+
+### Individuelle sider
+
+| CSS-klasse          | Utvidelse  |
+| ------------------- | ---------- |
+| `.ix-hitbox-t-2xs`  | Topp: `var(--ix-spacing-2xs)` |
+| `.ix-hitbox-t-xs`   | Topp: `var(--ix-spacing-xs)`  |
+| `.ix-hitbox-t-sm`   | Topp: `var(--ix-spacing-sm)`  |
+| `.ix-hitbox-t-md`   | Topp: `var(--ix-spacing-md)`  |
+| `.ix-hitbox-t-lg`   | Topp: `var(--ix-spacing-lg)`  |
+| `.ix-hitbox-t-xl`   | Topp: `var(--ix-spacing-xl)`  |
+| `.ix-hitbox-t-2xl`  | Topp: `var(--ix-spacing-2xl)` |
+| `.ix-hitbox-r-2xs`  | Høyre: `var(--ix-spacing-2xs)` |
+| `.ix-hitbox-r-xs`   | Høyre: `var(--ix-spacing-xs)`  |
+| `.ix-hitbox-r-sm`   | Høyre: `var(--ix-spacing-sm)`  |
+| `.ix-hitbox-r-md`   | Høyre: `var(--ix-spacing-md)`  |
+| `.ix-hitbox-r-lg`   | Høyre: `var(--ix-spacing-lg)`  |
+| `.ix-hitbox-r-xl`   | Høyre: `var(--ix-spacing-xl)`  |
+| `.ix-hitbox-r-2xl`  | Høyre: `var(--ix-spacing-2xl)` |
+| `.ix-hitbox-b-2xs`  | Bunn: `var(--ix-spacing-2xs)` |
+| `.ix-hitbox-b-xs`   | Bunn: `var(--ix-spacing-xs)`  |
+| `.ix-hitbox-b-sm`   | Bunn: `var(--ix-spacing-sm)`  |
+| `.ix-hitbox-b-md`   | Bunn: `var(--ix-spacing-md)`  |
+| `.ix-hitbox-b-lg`   | Bunn: `var(--ix-spacing-lg)`  |
+| `.ix-hitbox-b-xl`   | Bunn: `var(--ix-spacing-xl)`  |
+| `.ix-hitbox-b-2xl`  | Bunn: `var(--ix-spacing-2xl)` |
+| `.ix-hitbox-l-2xs`  | Venstre: `var(--ix-spacing-2xs)` |
+| `.ix-hitbox-l-xs`   | Venstre: `var(--ix-spacing-xs)`  |
+| `.ix-hitbox-l-sm`   | Venstre: `var(--ix-spacing-sm)`  |
+| `.ix-hitbox-l-md`   | Venstre: `var(--ix-spacing-md)`  |
+| `.ix-hitbox-l-lg`   | Venstre: `var(--ix-spacing-lg)`  |
+| `.ix-hitbox-l-xl`   | Venstre: `var(--ix-spacing-xl)`  |
+| `.ix-hitbox-l-2xl`  | Venstre: `var(--ix-spacing-2xl)` |
+
+## CSS-egenskaper
+
+Størrelsesklassene setter interne CSS-variabler som basisklassen bruker. Du kan overstyre disse
+direkte hvis du trenger en egendefinert størrelse:
+
+| CSS-variabel    | Kontrollerer  | Standard |
+| --------------- | ------------- | -------- |
+| `--ii-hit-t`    | Topp-utvidelse | `0px`   |
+| `--ii-hit-r`    | Høyre-utvidelse | `0px`  |
+| `--ii-hit-b`    | Bunn-utvidelse | `0px`   |
+| `--ii-hit-l`    | Venstre-utvidelse | `0px` |
+
+```css
+/* Egendefinert hitbox-størrelse */
+.min-knapp {
+    --ii-hit-t: 12px;
+    --ii-hit-b: 12px;
+}
+```
+
+## Debug
+
+To klasser gjør det enklere å visualisere hitbox-arealet under utvikling. Fjern dem før produksjon.
+
+| CSS-klasse               | Beskrivelse                                                                                           |
+| ------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `.ix-hitbox-debug`       | Viser alltid hitbox-arealet med blå ramme og bakgrunn. Bytter til grønt ved hover.                    |
+| `.ix-hitbox-debug-hover` | Viser bare hitbox-arealet ved hover, med grønn ramme og bakgrunn. Brukes for å bekrefte at arealet er riktig uten å forstyrre det visuelle designet. |
+
+Fargesignalene er de samme som i originalen fra bazza.dev: blå = «her er hitbox-arealet», grønt = «hover aktiv, treffer du innenfor?».
+
+### Eksempel
+
+```jsx live
+<div class="ix-flex ix-gap-xl ix-p-xl ix-items-center">
+    <button class="ix-button ix-hitbox ix-hitbox-sm ix-hitbox-debug" data-variant="tertiary" data-size="sm">
+        Debug alltid
+    </button>
+    <button class="ix-button ix-hitbox ix-hitbox-sm ix-hitbox-debug-hover" data-variant="tertiary" data-size="sm">
+        Debug ved hover
+    </button>
+</div>
+```
+
+## Tilgjengelighet
+
+Hitbox bruker `::before`-pseudo-elementet til å utvide det klikkbare arealet. Pseudo-elementet
+legges over nærliggende innhold hvis elementet ikke er plassert i en beholder med `overflow: hidden`
+eller `clip-path`. Sørg for at hitbox-arealet ikke overlapper andre klikkbare elementer ved å gi
+tilstrekkelig mellomrom mellom dem.
+
+Klassen setter automatisk `position: relative` på elementet via `.ix-hitbox`. Ikke fjern dette —
+uten `position: relative` vil `::before` posisjonere seg mot nærmeste posisjonerte forfar.
