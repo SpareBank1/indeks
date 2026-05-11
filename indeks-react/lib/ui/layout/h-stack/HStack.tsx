@@ -1,18 +1,39 @@
 import clsx from 'clsx';
-import type { ElementType, JSX } from 'react';
-import { Box, type BoxProps } from '../box/Box';
+import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
+import type { GapSize } from '../../../types/types';
 
-export type HStackProps<T extends ElementType = 'div'> = BoxProps<T>;
+export type HStackAlign = 'start' | 'center' | 'end';
 
-export function HStack<T extends ElementType = 'div'>({
+export type HStackProps<As extends ElementType = 'div'> = {
+    as?: As;
+    ref?: React.Ref<HTMLElement>;
+    children?: ReactNode;
+    className?: string;
+    align?: HStackAlign;
+    gap?: GapSize;
+} & Omit<ComponentPropsWithoutRef<As>, 'as'>;
+
+export function HStack<As extends ElementType = 'div'>({
+    as,
     children,
     className,
-    as,
+    align = 'center',
+    gap,
     ...restProps
-}: HStackProps<T>): JSX.Element {
+}: HStackProps<As>): JSX.Element {
+    if (as) {
+        const Component = as as ElementType;
+        const alignClass = align === 'center' ? 'ix-stack-horizontal' : `ix-stack-horizontal-${align}`;
+        const gapClass = gap ? `ix-gap-${gap}` : undefined;
+        return (
+            <Component className={clsx('ix-stack', alignClass, gapClass, className)} {...restProps}>
+                {children}
+            </Component>
+        );
+    }
     return (
-        <Box as={as ?? 'div'} className={clsx('ix-hstack', className)} {...restProps}>
+        <ix-stack horizontal={align === 'center' ? true : align} gap={gap} class={className} {...restProps}>
             {children}
-        </Box>
+        </ix-stack>
     );
 }

@@ -77,7 +77,17 @@ const sidebars: SidebarsConfig = {
             type: 'category',
             label: 'Komponenter',
             collapsed: true,
-            items: ['komponenter/typografi', 'komponenter/textfield', 'komponenter/textarea'],
+            items: [
+                'komponenter/typografi',
+                'komponenter/textfield',
+                'komponenter/textarea',
+                {
+                    type: 'category',
+                    label: 'Primitiver',
+                    collapsed: false,
+                    items: ['komponenter/primitives/stack'],
+                },
+            ],
         },
     ],
 };

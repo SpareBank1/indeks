@@ -1,4 +1,3 @@
-import { HStack } from '@sb1/indeks-react';
 import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
@@ -27,7 +26,7 @@ export default function Layout() {
 
     return (
         <div className="">
-            <HStack as="nav" surfaceColor="main" padding="md" gap="md" className="ix-border-bottom-default">
+            <nav className="ix-stack-horizontal ix-color-surface-main-default ix-p-md ix-border-bottom-default ix-gap-md">
                 <Header activeArea={activeArea} setActiveArea={setActiveArea} />
                 {activeArea === 'eksempelsider' && (
                     <SubMenu menuItems={examplePageMenuItems} basePath="/eksempelsider" />
@@ -35,7 +34,7 @@ export default function Layout() {
                 {activeArea === 'internTesting' && (
                     <SubMenu menuItems={internalTestingMenuItems} basePath="/internTesting" />
                 )}
-            </HStack>
+            </nav>
 
             <main>
                 <Outlet />

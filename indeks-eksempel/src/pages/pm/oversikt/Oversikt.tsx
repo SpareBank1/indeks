@@ -9,11 +9,7 @@ export default function PMOversikt() {
             <div className="ix-max-w-full">
                 <HStack
                     gap="sm"
-                    padding="xl"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    fullWidth={true}
-                    className="ix-max-w-lg ix-m-auto"
+                    className="ix-p-xl ix-justify-between ix-w-full ix-max-w-lg ix-m-auto"
                 >
                     <Heading as="h1">Min oversikt</Heading>
                     <HStack gap="sm">
@@ -32,16 +28,16 @@ export default function PMOversikt() {
                     </HStack>
                 </HStack>
 
-                <VStack gap="sm" paddingX="xl" fullWidth={false} alignItems="start" className="ix-max-w-lg ix-m-auto">
+                <VStack gap="sm" className="ix-px-xl ix-max-w-lg ix-m-auto">
                     <Heading as="h2" size="sm">
                         Til godkjenning
                     </Heading>
                     <Card className="ix-p-md" surfaceColor="main">
-                        <HStack justifyContent="space-between">
+                        <HStack className="ix-justify-between">
                             <div>Telenor</div>
                             <div>399 kr</div>
                         </HStack>
-                        <HStack justifyContent="center" className="ix-my-sm">
+                        <HStack className="ix-justify-center ix-my-sm">
                             <Tag variant="info" size="sm" type="subtle">
                                 <Icon size="sm" materialDesignName="account_balance" />
                                 Regningskonto
@@ -50,7 +46,7 @@ export default function PMOversikt() {
                                 <Icon size="sm" materialDesignName="calendar_month" />I dag
                             </Tag>
                         </HStack>
-                        <HStack justifyContent="space-between">
+                        <HStack className="ix-justify-between">
                             <Button variant="secondary">Se mer</Button>
                             <Button variant="primary" className="ix-flex-grow">
                                 Godkjenn
@@ -62,10 +58,8 @@ export default function PMOversikt() {
                 <div className="ix-grid ix-col-gap-lg ix-px-xl ix-py-2xl ix-justify-center ix-grid-auto-fit-lg ix-max-w-lg ix-m-auto">
                     <div>
                         <HStack
-                            justifyContent="space-between"
                             gap="md"
-                            alignItems="center"
-                            className="ix-mb-md ix-pt-2xs ix-relative"
+                            className="ix-justify-between ix-mb-md ix-pt-2xs ix-relative"
                         >
                             <Heading as="h2" size="md">
                                 Daglig Bruk
@@ -79,10 +73,7 @@ export default function PMOversikt() {
                         </HStack>
                         <Card className="ix-mb-sm" surfaceColor="main">
                             <HStack
-                                className="ix-p-sm"
-                                justifyContent="end"
-                                alignItems="center"
-                                fullWidth={true}
+                                className="ix-p-sm ix-justify-end ix-w-full"
                                 gap="2xs"
                             >
                                 <Text size="sm" className="ix-m-0">
@@ -101,10 +92,8 @@ export default function PMOversikt() {
                     </div>
                     <div>
                         <HStack
-                            justifyContent="space-between"
                             gap="md"
-                            alignItems="center"
-                            className="ix-mb-md ix-pt-2xs"
+                            className="ix-justify-between ix-mb-md ix-pt-2xs"
                         >
                             <Heading as="h2" size="md">
                                 Økonomi
@@ -118,10 +107,8 @@ export default function PMOversikt() {
                     <div className="ix-max-w-lg ix-m-auto ix-grid ix-col-gap-lg ix-px-xl ix-py-2xl ix-justify-center ix-grid-auto-fit-lg">
                         <div>
                             <HStack
-                                justifyContent="space-between"
                                 gap="md"
-                                alignItems="center"
-                                className="ix-mb-md ix-pt-2xs ix-relative"
+                                className="ix-justify-between ix-mb-md ix-pt-2xs ix-relative"
                             >
                                 <Heading as="h2" size="md">
                                     Sparing
@@ -136,10 +123,7 @@ export default function PMOversikt() {
                             <ClickableRow accountName="Min sparing" iconName="savings" />
                             <Card className="ix-mb-sm" surfaceColor="main">
                                 <HStack
-                                    className="ix-p-sm"
-                                    justifyContent="end"
-                                    alignItems="center"
-                                    fullWidth={true}
+                                    className="ix-p-sm ix-justify-end ix-w-full"
                                     gap="2xs"
                                 >
                                     <Text size="sm" className="ix-m-0 ix-text-secondary">
@@ -156,7 +140,7 @@ export default function PMOversikt() {
                                 <AccountRow amount={25000} accountName="Konto for barn" accountNumber="22 334 45 566" />
                             </Card>
                             <Card
-                                className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-align-center ix-p-sm"
+                                className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm"
                                 border="dashed"
                             >
                                 <Icon materialDesignName="add_circle" size="xl" />
@@ -172,10 +156,8 @@ export default function PMOversikt() {
                         </div>
                         <div>
                             <HStack
-                                justifyContent="space-between"
                                 gap="md"
-                                alignItems="center"
-                                className="ix-mb-md ix-pt-2xs"
+                                className="ix-justify-between ix-mb-md ix-pt-2xs"
                             >
                                 <Heading as="h2" size="md">
                                     Mine barn
@@ -189,10 +171,8 @@ export default function PMOversikt() {
                         </div>
                         <div>
                             <HStack
-                                justifyContent="space-between"
                                 gap="md"
-                                alignItems="center"
-                                className="ix-mb-md ix-pt-2xs"
+                                className="ix-justify-between ix-mb-md ix-pt-2xs"
                             >
                                 <Heading as="h2" size="md">
                                     Bolig
@@ -211,10 +191,8 @@ export default function PMOversikt() {
                 <div className="ix-grid ix-col-gap-lg ix-px-xl ix-pt-3xl ix-justify-center ix-grid-auto-fit-lg ix-max-w-lg ix-m-auto">
                     <div>
                         <HStack
-                            justifyContent="space-between"
                             gap="md"
-                            alignItems="center"
-                            className="ix-mb-md ix-pt-2xs ix-relative"
+                            className="ix-justify-between ix-mb-md ix-pt-2xs ix-relative"
                         >
                             <Heading as="h2" size="md">
                                 Sparing
@@ -235,10 +213,8 @@ export default function PMOversikt() {
                     </div>
                     <div>
                         <HStack
-                            justifyContent="space-between"
                             gap="md"
-                            alignItems="center"
-                            className="ix-mb-md ix-pt-2xs"
+                            className="ix-justify-between ix-mb-md ix-pt-2xs"
                         >
                             <Heading as="h2" size="md">
                                 Lån
@@ -250,7 +226,7 @@ export default function PMOversikt() {
                             <AccountRow amount={300} accountName="Loan account" accountNumber="Account number" />
                         </Card>
                         <Card
-                            className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-align-center ix-p-sm"
+                            className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm"
                             border="dashed"
                         >
                             <Icon materialDesignName="add_circle" size="xl" />
@@ -266,10 +242,8 @@ export default function PMOversikt() {
                     </div>
                     <div>
                         <HStack
-                            justifyContent="space-between"
                             gap="md"
-                            alignItems="center"
-                            className="ix-mb-md ix-pt-2xs"
+                            className="ix-justify-between ix-mb-md ix-pt-2xs"
                         >
                             <Heading as="h2" size="md">
                                 Forsikring
