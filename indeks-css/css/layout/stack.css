@@ -1,0 +1,82 @@
+:where(ix-stack, .ix-stack) {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--ix-spacing-md);
+}
+
+/* --- Vertikal --- */
+
+:where(ix-stack[vertical], ix-stack.ix-stack-vertical, .ix-stack-vertical) {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+:where(ix-stack[vertical="center"], ix-stack.ix-stack-vertical-center, .ix-stack-vertical-center) {
+    flex-direction: column;
+    align-items: center;
+}
+
+:where(ix-stack[vertical="end"], ix-stack.ix-stack-vertical-end, .ix-stack-vertical-end) {
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* --- Horisontal --- */
+
+:where(ix-stack[horizontal], ix-stack[horizontal="center"], ix-stack.ix-stack-horizontal, .ix-stack-horizontal),
+:where(ix-stack.ix-stack-horizontal-center, .ix-stack-horizontal-center) {
+    flex-direction: row;
+    align-items: center;
+}
+
+:where(ix-stack[horizontal="start"], ix-stack.ix-stack-horizontal-start, .ix-stack-horizontal-start) {
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+:where(ix-stack[horizontal="end"], ix-stack.ix-stack-horizontal-end, .ix-stack-horizontal-end) {
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+/* --- Gap --- */
+
+:where(ix-stack[gap="none"]) { gap: 0; }
+:where(ix-stack[gap="2xs"])  { gap: var(--ix-spacing-2xs); }
+:where(ix-stack[gap="xs"])   { gap: var(--ix-spacing-xs); }
+:where(ix-stack[gap="sm"])   { gap: var(--ix-spacing-sm); }
+:where(ix-stack[gap="md"])   { gap: var(--ix-spacing-md); }
+:where(ix-stack[gap="lg"])   { gap: var(--ix-spacing-lg); }
+:where(ix-stack[gap="xl"])   { gap: var(--ix-spacing-xl); }
+:where(ix-stack[gap="2xl"])  { gap: var(--ix-spacing-2xl); }
+:where(ix-stack[gap="3xl"])  { gap: var(--ix-spacing-3xl); }
+:where(ix-stack[gap="4xl"])  { gap: var(--ix-spacing-4xl); }
+
+/* --- Modifikatorer --- */
+
+:where(ix-stack[reverse], ix-stack.ix-stack-reverse, .ix-stack.ix-stack-reverse) {
+    flex-direction: column-reverse;
+}
+
+:where(
+    ix-stack[horizontal][reverse],
+    ix-stack[horizontal="center"][reverse],
+    ix-stack[horizontal="start"][reverse],
+    ix-stack[horizontal="end"][reverse],
+    ix-stack.ix-stack-horizontal.ix-stack-reverse,
+    ix-stack.ix-stack-horizontal-center.ix-stack-reverse,
+    ix-stack.ix-stack-horizontal-start.ix-stack-reverse,
+    ix-stack.ix-stack-horizontal-end.ix-stack-reverse,
+    .ix-stack-horizontal.ix-stack-reverse,
+    .ix-stack-horizontal-center.ix-stack-reverse,
+    .ix-stack-horizontal-start.ix-stack-reverse,
+    .ix-stack-horizontal-end.ix-stack-reverse
+) {
+    flex-direction: row-reverse;
+}
+
+:where(ix-stack[nowrap], ix-stack.ix-stack-nowrap, .ix-stack-nowrap) {
+    flex-wrap: nowrap;
+}

@@ -29,6 +29,14 @@ declare module 'react' {
                 'data-orientation'?: 'vertical' | 'horizontal';
                 'data-state'?: 'error' | 'readonly' | 'disabled';
             };
+            'ix-stack': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+                class?: string;
+                horizontal?: boolean | 'center' | 'start' | 'end';
+                vertical?: 'center' | 'end';
+                reverse?: boolean;
+                nowrap?: boolean;
+                gap?: import('./types/types').GapSize;
+            };
         }
     }
 }

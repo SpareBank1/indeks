@@ -1,4 +1,4 @@
-import { Text } from '@sb1/indeks-react';
+import { HStack, Text } from '@sb1/indeks-react';
 import clsx from 'clsx';
 import React from 'react';
 
@@ -13,10 +13,10 @@ export const ForegroundBlock: React.FC<ForegroundBlockProps> = ({ variant, contr
     return (
         <tr className="ix-color-background-default ix-mb-xs">
             <td className="ix-p-0">
-                <div
+                <HStack
                     className={clsx(
-                        'ix-flex ix-align-center ix-p-xs',
-                        { className },
+                        'ix-p-xs',
+                        { [className]: className },
                         { ['ix-color-fill-main-default']: contrast }
                     )}
                     style={{
@@ -27,7 +27,7 @@ export const ForegroundBlock: React.FC<ForegroundBlockProps> = ({ variant, contr
                     <Text size="sm" className={className}>
                         {variant} tekst
                     </Text>
-                </div>
+                </HStack>
             </td>
             <td className="ix-p-sm ix-color-surface-main-default">
                 <div>{className}</div>

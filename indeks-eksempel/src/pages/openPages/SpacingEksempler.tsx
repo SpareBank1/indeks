@@ -31,10 +31,7 @@ const SpacingEksempler: React.FC = () => {
 
     return (
         <div style={{ padding: '2rem' }}>
-            <div
-                className="ix-flex ix-justify-space-between ix-align"
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-            >
+            <HStack className="ix-justify-between">
                 <Heading as="h1">Padding størrelser</Heading>
                 <button
                     onClick={handleRefresh}
@@ -51,7 +48,7 @@ const SpacingEksempler: React.FC = () => {
                 >
                     {isLoading ? 'Updating...' : 'Last inn verdier på nytt'}
                 </button>
-            </div>
+            </HStack>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 {spacingVars
@@ -105,7 +102,7 @@ const SpacingEksempler: React.FC = () => {
             </div>
             <div className="ix-grid">
                 <Heading as="h1">Margin</Heading>
-                <VStack gap="0">
+                <VStack gap="none">
                     {['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'].map((size) => (
                         <div key={size} className={`ix-mb-${size} ${spacingClasses}`} style={marginBoxStyle}>
                             <div style={contentBoxStyle}>
@@ -118,7 +115,7 @@ const SpacingEksempler: React.FC = () => {
 
             <div className="ix-grid">
                 <Heading as="h1">Gap</Heading>
-                <VStack gap="0">
+                <VStack gap="none">
                     {['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'].map((size) => (
                         <div
                             key={size}
