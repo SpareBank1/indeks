@@ -2,58 +2,59 @@
     --ix-progress-bar-fill: var(--ix-color-fill-main-default);
     --ix-progress-bar-track-height: 8px;
 
-    display: flex;
-    flex-direction: column;
-    gap: var(--ix-spacing-2xs);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    row-gap: var(--ix-spacing-2xs);
     width: 100%;
 }
 
-:where(ix-progress-bar[data-state="success"], .ix-progress-bar[data-state="success"]) {
+:where(ix-progress-bar[state="success"], .ix-progress-bar[state="success"]) {
     --ix-progress-bar-fill: var(--ix-color-fill-success-default);
 }
 
-:where(ix-progress-bar[data-state="error"], .ix-progress-bar[data-state="error"]) {
+:where(ix-progress-bar[state="error"], .ix-progress-bar[state="error"]) {
     --ix-progress-bar-fill: var(--ix-color-fill-danger-default);
 }
 
-:where(.ix-progress-bar__header) {
-    display: flex;
-    align-items: center;
-    gap: var(--ix-spacing-xs);
-}
-
-:where(.ix-progress-bar__header[hidden]) {
-    display: none;
-}
-
-:where(.ix-progress-bar__label) {
-    flex: 1;
+:where(ix-progress-bar, .ix-progress-bar) > label {
+    grid-column: 1;
     font-size: var(--ix-font-size-md);
     font-weight: var(--ix-font-weight-medium);
     color: var(--ix-color-foreground-main-default);
     line-height: 150%;
 }
 
-:where(.ix-progress-bar__header .ix-icon) {
-    flex-shrink: 0;
-    color: var(--ix-progress-bar-fill);
+:where(.ix-progress-bar__percent) {
+    grid-column: 2;
+    font-size: var(--ix-font-size-sm);
+    color: var(--ix-color-foreground-main-subtle);
+    line-height: 150%;
+    align-self: center;
 }
 
-:where(.ix-progress-bar__track) {
-    position: relative;
+:where(ix-progress-bar, .ix-progress-bar) > .ix-icon {
+    grid-column: 2;
+    color: var(--ix-progress-bar-fill);
+    align-self: center;
+    flex-shrink: 0;
+}
+
+:where(ix-progress-bar, .ix-progress-bar) > progress {
+    grid-column: 1 / -1;
+    appearance: none;
+    -webkit-appearance: none;
+    display: block;
+    width: 100%;
     height: var(--ix-progress-bar-track-height);
-    min-height: var(--ix-progress-bar-track-height);
+    border: none;
+}
+
+:where(ix-progress-bar, .ix-progress-bar) > progress::-webkit-progress-bar {
     background-color: var(--ix-color-fill-neutral-subtle);
     border-radius: var(--ix-border-radius-pill);
-    overflow: hidden;
-    width: 100%;
 }
 
-:where(.ix-progress-bar__fill) {
-    position: absolute;
-    inset-block: 0;
-    inset-inline-start: 0;
-    width: var(--ix-progress-bar-value, 0%);
+:where(ix-progress-bar, .ix-progress-bar) > progress::-webkit-progress-value {
     background-color: var(--ix-progress-bar-fill);
     border-radius: var(--ix-border-radius-pill);
     transition:
@@ -61,16 +62,7 @@
         background-color var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
-:where(ix-progress-bar[data-state="success"], .ix-progress-bar[data-state="success"]) .ix-progress-bar__fill {
-    width: 100%;
-}
-
-:where(.ix-progress-bar__support-text) {
-    font-size: var(--ix-font-size-sm);
-    color: var(--ix-color-foreground-main-subtle);
-    line-height: 150%;
-}
-
-:where(.ix-progress-bar__support-text:empty) {
-    display: none;
+:where(ix-progress-bar, .ix-progress-bar) > progress::-moz-progress-bar {
+    background-color: var(--ix-progress-bar-fill);
+    border-radius: var(--ix-border-radius-pill);
 }

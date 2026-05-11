@@ -3,12 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { ProgressBar } from './ProgressBar';
 
 describe('ProgressBar', () => {
-    it('rendrer uten feil', () => {
-        const { container } = render(<ProgressBar />);
-        expect(container.querySelector('ix-progress-bar')).not.toBeNull();
-    });
-
-    it('bruker ix-progress-bar som rotelement', () => {
+    it('rendrer ix-progress-bar som rotelement', () => {
         const { container } = render(<ProgressBar />);
         expect(container.firstElementChild?.tagName.toLowerCase()).toBe('ix-progress-bar');
     });
@@ -20,46 +15,67 @@ describe('ProgressBar', () => {
         expect(root?.classList.contains('ix-progress-bar')).toBe(true);
     });
 
-    it('sender data-state til rotelement', () => {
-        const { container } = render(<ProgressBar state="success" />);
-        const root = container.firstElementChild;
-        expect(root?.getAttribute('data-state')).toBe('success');
+    it('setter state-attributt ved success', () => {
+        const { container } = render(<ProgressBar value={100} state="success" />);
+        expect(container.firstElementChild?.getAttribute('state')).toBe('success');
     });
 
-    it('defaulter data-state til active', () => {
+    it('setter state-attributt ved error', () => {
+        const { container } = render(<ProgressBar value={40} state="error" />);
+        expect(container.firstElementChild?.getAttribute('state')).toBe('error');
+    });
+
+    it('setter ikke state-attributt ved active', () => {
+        const { container } = render(<ProgressBar state="active" />);
+        expect(container.firstElementChild?.hasAttribute('state')).toBe(false);
+    });
+
+    it('setter ikke state-attributt uten state-prop', () => {
         const { container } = render(<ProgressBar />);
-        const root = container.firstElementChild;
-        expect(root?.getAttribute('data-state')).toBe('active');
+        expect(container.firstElementChild?.hasAttribute('state')).toBe(false);
     });
 
-    it('sender value-attributt til ix-progress-bar', () => {
+    it('rendrer progress-element med korrekt value og max', () => {
         const { container } = render(<ProgressBar value={65} />);
-        const root = container.firstElementChild;
-        expect(root?.getAttribute('value')).toBe('65');
+        const progress = container.querySelector('progress');
+        expect(progress).not.toBeNull();
+        expect(progress?.getAttribute('value')).toBe('65');
+        expect(progress?.getAttribute('max')).toBe('100');
+    });
+
+    it('rendrer label-element når label-prop er satt', () => {
+        const { container } = render(<ProgressBar value={65} label="Laster opp dokumenter" />);
+        const label = container.querySelector('label');
+        expect(label).not.toBeNull();
+        expect(label?.textContent).toBe('Laster opp dokumenter');
+    });
+
+    it('rendrer ikke label-element når label-prop mangler', () => {
+        const { container } = render(<ProgressBar value={65} />);
+        expect(container.querySelector('label')).toBeNull();
+    });
+
+    it('kobler label til progress via htmlFor/id', () => {
+        const { container } = render(<ProgressBar value={65} label="Laster opp" />);
+        const label = container.querySelector('label');
+        const progress = container.querySelector('progress');
+        expect(label?.htmlFor).toBeTruthy();
+        expect(label?.htmlFor).toBe(progress?.id);
+    });
+
+    it('setter ingen id på progress når label mangler', () => {
+        const { container } = render(<ProgressBar value={65} />);
+        expect(container.querySelector('progress')?.id).toBeFalsy();
     });
 
     it('clammer value over 100 til 100', () => {
         const { container } = render(<ProgressBar value={150} />);
-        const root = container.firstElementChild;
-        expect(root?.getAttribute('value')).toBe('100');
+        expect(container.querySelector('progress')?.getAttribute('value')).toBe('100');
     });
 
     it('clammer value under 0 til 0', () => {
         const { container } = render(<ProgressBar value={-10} />);
-        const root = container.firstElementChild;
-        expect(root?.getAttribute('value')).toBe('0');
-    });
-
-    it('sender label-attributt til ix-progress-bar', () => {
-        const { container } = render(<ProgressBar label="Laster opp dokumenter" />);
-        const root = container.firstElementChild;
-        expect(root?.getAttribute('label')).toBe('Laster opp dokumenter');
-    });
-
-    it('sender data-support-text-attributt til ix-progress-bar', () => {
-        const { container } = render(<ProgressBar supportText="65 % fullført" />);
-        const root = container.firstElementChild;
-        expect(root?.getAttribute('data-support-text')).toBe('65 % fullført');
+        expect(container.querySelector('progress')?.getAttribute('value')).toBe('0');
     });
 
     it('videresender native props til rotelement', () => {

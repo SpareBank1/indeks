@@ -8,9 +8,7 @@ const meta = {
     tags: ['autodocs'],
     args: {
         value: 65,
-        state: 'active',
         label: 'Laster opp dokumenter',
-        supportText: '65 % fullført',
     },
     argTypes: {
         state: {
@@ -32,7 +30,6 @@ export const Success: Story = {
     args: {
         state: 'success',
         value: 100,
-        supportText: 'Alle dokumenter er lastet opp',
     },
     name: 'Fullført',
 };
@@ -41,7 +38,6 @@ export const Error: Story = {
     args: {
         state: 'error',
         value: 40,
-        supportText: 'Opplastingen feilet. Prøv igjen.',
     },
     name: 'Feilet',
 };
@@ -50,7 +46,6 @@ export const UtenLabel: Story = {
     args: {
         value: 30,
         label: undefined,
-        supportText: undefined,
         'aria-label': 'Laster inn innhold',
     },
     name: 'Uten label',
@@ -58,11 +53,9 @@ export const UtenLabel: Story = {
 
 export const HTML: Story = {
     render: () => (
-        <ix-progress-bar
-            value="65"
-            data-state="active"
-            label="Laster opp dokumenter"
-            data-support-text="65 % fullført"
-        />
+        <ix-progress-bar>
+            <label>Laster opp dokumenter</label>
+            <progress value="65" max="100"></progress>
+        </ix-progress-bar>
     ),
 };

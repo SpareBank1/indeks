@@ -1,33 +1,25 @@
 /**
- * IxProgressBar — selvdokumenterende progress-bar som genererer all indre HTML.
+ * IxProgressBar — ARIA-lim for nativt `<progress>`-element.
  *
- * ## Designfilosofi
- *
- * Forfatteren skriver kun host-elementet med attributter — komponenten bygger
- * hele den indre strukturen (header, track, fill, support-text) selv.
- *
- * ## Attributter
- *
- * | Attributt          | Type                              | Default   | Beskrivelse                   |
- * |--------------------|-----------------------------------|-----------|-------------------------------|
- * | `value`            | number (0–100)                    | `0`       | Progresjonsverdi. Clampes.    |
- * | `data-state`       | `active` \| `success` \| `error`  | `active`  | Tilstand. CSS leser direkte.  |
- * | `label`            | string                            | —         | Synlig label over sporet.     |
- * | `data-support-text`| string                            | —         | Støttetekst under sporet.     |
+ * Forfatteren skriver `<label>` og `<progress>` som barn.
+ * Komponenten kobler dem, injiserer visuell prosentvisning og statusikon,
+ * og annonserer tilstandsskift via `aria-live`.
  *
  * @example Grunnleggende bruk
- * <ix-progress-bar value="65" data-state="active"
- *   label="Laster opp dokumenter"
- *   data-support-text="65 % fullført">
+ * <ix-progress-bar>
+ *   <label>Laster opp dokumenter</label>
+ *   <progress value="65" max="100"></progress>
  * </ix-progress-bar>
  *
- * @example Uten label
- * <ix-progress-bar value="30" data-state="active"></ix-progress-bar>
+ * @example Uten synlig label
+ * <ix-progress-bar aria-label="Laster inn innhold">
+ *   <progress value="30" max="100"></progress>
+ * </ix-progress-bar>
  *
  * @example Fullført
- * <ix-progress-bar value="100" data-state="success"
- *   label="Laster opp dokumenter"
- *   data-support-text="Alle dokumenter er lastet opp">
+ * <ix-progress-bar state="success">
+ *   <label>Laster opp dokumenter</label>
+ *   <progress value="100" max="100"></progress>
  * </ix-progress-bar>
  */
 
@@ -43,131 +35,138 @@ let progressBarCounter = 0;
 
 export class IxProgressBar extends HTMLElement {
     static get observedAttributes(): string[] {
-        return ['value', 'data-state', 'label', 'data-support-text'];
+        return ['state', 'aria-label'];
     }
 
+    private _progress: HTMLProgressElement | null = null;
+    private _label: HTMLLabelElement | null = null;
+    private _percent: HTMLSpanElement | null = null;
     private _announcer: HTMLSpanElement | null = null;
-    private _header: HTMLElement | null = null;
-    private _track: HTMLElement | null = null;
-    private _supportText: HTMLElement | null = null;
-    private _labelEl: HTMLElement | null = null;
+    private _observer: MutationObserver | null = null;
 
     connectedCallback(): void {
-        this._build();
-        this._sync();
+        this._wire();
+        this._observe();
+        this._syncState();
     }
 
     disconnectedCallback(): void {
+        this._observer?.disconnect();
+        this._observer = null;
+        this._progress = null;
+        this._label = null;
+        this._percent = null;
         this._announcer = null;
-        this._header = null;
-        this._track = null;
-        this._supportText = null;
-        this._labelEl = null;
     }
 
-    attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null): void {
+    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
         if (oldValue === newValue) return;
         if (this.isConnected) {
-            this._sync();
+            if (name === 'aria-label') {
+                this._forwardAriaLabel();
+            } else {
+                this._syncState();
+            }
         }
     }
 
-    // ── Bygg DOM-struktur ────────────────────────────────────────────────────
+    // ── Kobling ───────────────────────────────────────────────────────────────
 
-    private _build(): void {
-        this.innerHTML = '';
+    private _wire(): void {
+        this._progress = this.querySelector<HTMLProgressElement>('progress');
+        this._label = this.querySelector<HTMLLabelElement>('label');
 
-        this._header = document.createElement('div');
-        this._header.className = 'ix-progress-bar__header';
+        if (!this._progress) return;
 
-        this._labelEl = document.createElement('span');
-        this._labelEl.className = 'ix-progress-bar__label';
-        this._header.appendChild(this._labelEl);
+        if (this._label) {
+            if (!this._progress.id) {
+                this._progress.id = `ix-pb-${++progressBarCounter}`;
+            }
+            this._label.htmlFor = this._progress.id;
+        } else {
+            this._forwardAriaLabel();
+        }
 
-        const fill = document.createElement('div');
-        fill.className = 'ix-progress-bar__fill';
+        // Injiser prosentvisning
+        if (!this.querySelector('.ix-progress-bar__percent')) {
+            this._percent = document.createElement('span');
+            this._percent.className = 'ix-progress-bar__percent';
+            this._progress.insertAdjacentElement('beforebegin', this._percent);
+        } else {
+            this._percent = this.querySelector<HTMLSpanElement>('.ix-progress-bar__percent');
+        }
 
-        this._track = document.createElement('div');
-        this._track.className = 'ix-progress-bar__track';
-        this._track.appendChild(fill);
+        // Injiser aria-live-announcer
+        if (!this.querySelector('[aria-live]')) {
+            this._announcer = document.createElement('span');
+            this._announcer.setAttribute('aria-live', 'polite');
+            this._announcer.setAttribute('aria-atomic', 'true');
+            this._announcer.style.cssText =
+                'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;';
+            this.appendChild(this._announcer);
+        } else {
+            this._announcer = this.querySelector<HTMLSpanElement>('[aria-live]');
+        }
 
-        this._supportText = document.createElement('span');
-        this._supportText.className = 'ix-progress-bar__support-text';
+        this._updatePercent();
+    }
 
-        this._announcer = document.createElement('span');
-        this._announcer.setAttribute('aria-live', 'polite');
-        this._announcer.setAttribute('aria-atomic', 'true');
-        this._announcer.style.cssText =
-            'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;';
-
-        this.appendChild(this._header);
-        this.appendChild(this._track);
-        this.appendChild(this._supportText);
-        this.appendChild(this._announcer);
+    private _observe(): void {
+        if (!this._progress) return;
+        this._observer = new MutationObserver(() => {
+            this._updatePercent();
+        });
+        this._observer.observe(this._progress, { attributes: true, attributeFilter: ['value'] });
     }
 
     // ── Synkronisering ────────────────────────────────────────────────────────
 
-    private _sync(): void {
-        if (!this._track || !this._header || !this._supportText || !this._labelEl) return;
-
+    private _syncState(): void {
         const state = this._resolveState();
-        const value = this._resolveValue();
-        const label = this.getAttribute('label') ?? '';
-        const supportText = this.getAttribute('data-support-text') ?? '';
-
-        this._labelEl.textContent = label;
-        this._supportText.textContent = supportText;
-
-        // Koble host til label via aria-labelledby når synlig label finnes
-        if (label) {
-            if (!this._labelEl.id) {
-                this._labelEl.id = `ix-progress-bar-label-${++progressBarCounter}`;
-            }
-            this.setAttribute('aria-labelledby', this._labelEl.id);
-        } else {
-            this.removeAttribute('aria-labelledby');
-        }
-
-        this._track!.style.setProperty('--ix-progress-bar-value', `${value}%`);
-
-        const hasHeaderContent = !!label || state !== 'active';
-        this._header!.hidden = !hasHeaderContent;
-
-        if (state === 'active') {
-            this._applyActiveAria(value);
-        } else {
-            this._applyTerminalAria();
-            this._announce(state, supportText);
-        }
-
         this._syncIcon(state);
+        this._syncProgressAria(state);
+        if (state !== 'active') {
+            this._announce(state);
+        }
+        if (this._percent) {
+            this._percent.hidden = state !== 'active';
+        }
     }
 
-    private _applyActiveAria(value: number): void {
-        this.setAttribute('role', 'progressbar');
-        this.setAttribute('aria-valuemin', '0');
-        this.setAttribute('aria-valuemax', '100');
-        this.setAttribute('aria-valuenow', String(value));
-        this._track!.setAttribute('aria-hidden', 'true');
+    private _syncProgressAria(state: ProgressBarState): void {
+        if (!this._progress) return;
+        if (state === 'active') {
+            this._progress.removeAttribute('aria-hidden');
+        } else {
+            this._progress.setAttribute('aria-hidden', 'true');
+        }
     }
 
-    private _applyTerminalAria(): void {
-        this.removeAttribute('role');
-        this.removeAttribute('aria-valuemin');
-        this.removeAttribute('aria-valuemax');
-        this.removeAttribute('aria-valuenow');
-        this._track!.setAttribute('aria-hidden', 'true');
+    private _updatePercent(): void {
+        if (!this._percent || !this._progress) return;
+        const max = this._progress.max || 100;
+        const value = this._progress.value;
+        const pct = Math.round((value / max) * 100);
+        this._percent.textContent = `${pct} %`;
     }
 
-    private _announce(state: Exclude<ProgressBarState, 'active'>, supportText: string): void {
+    private _forwardAriaLabel(): void {
+        if (!this._progress || this._label) return;
+        const label = this.getAttribute('aria-label');
+        if (label) {
+            this._progress.setAttribute('aria-label', label);
+        } else {
+            this._progress.removeAttribute('aria-label');
+        }
+    }
+
+    private _announce(state: Exclude<ProgressBarState, 'active'>): void {
         if (!this._announcer) return;
-        const fallback = state === 'success' ? 'Fullført' : 'Feilet';
-        this._announcer.textContent = supportText || fallback;
+        this._announcer.textContent = state === 'success' ? 'Fullført' : 'Feilet';
     }
 
     private _syncIcon(state: ProgressBarState): void {
-        const existing = this._header!.querySelector<HTMLElement>('[data-progress-bar="icon"]');
+        const existing = this.querySelector<HTMLElement>('[data-progress-bar="icon"]');
 
         if (state === 'active') {
             existing?.remove();
@@ -185,37 +184,29 @@ export class IxProgressBar extends HTMLElement {
 
         const icon = document.createElement('span');
         icon.setAttribute('data-progress-bar', 'icon');
-        icon.setAttribute('role', 'img');
         icon.setAttribute('aria-hidden', 'true');
         icon.className = 'ix-icon';
         icon.style.maskImage = maskUrl;
         (icon.style as CSSStyleDeclaration & { webkitMaskImage: string }).webkitMaskImage = maskUrl;
-        this._header!.appendChild(icon);
+
+        // Plasser ikon etter label (eller som første barn) — kolonneposisjon styres av CSS
+        if (this._label) {
+            this._label.insertAdjacentElement('afterend', icon);
+        } else {
+            this.insertAdjacentElement('afterbegin', icon);
+        }
     }
 
     // ── Hjelpere ─────────────────────────────────────────────────────────────
 
     private _resolveState(): ProgressBarState {
-        const raw = this.getAttribute('data-state');
+        const raw = this.getAttribute('state');
         if (raw === 'success' || raw === 'error') return raw;
         if (raw !== null && raw !== 'active') {
-            console.warn(`[ix-progress-bar] Ugyldig data-state="${raw}". Gyldige verdier: active | success | error. Faller tilbake til "active".`);
+            console.warn(
+                `[ix-progress-bar] Ugyldig state="${raw}". Gyldige verdier: active | success | error. Faller tilbake til "active".`,
+            );
         }
         return 'active';
-    }
-
-    private _resolveValue(): number {
-        const rawAttr = this.getAttribute('value');
-        const raw = parseFloat(rawAttr ?? '0');
-        if (isNaN(raw)) {
-            if (rawAttr !== null) {
-                console.warn(`[ix-progress-bar] Ugyldig value="${rawAttr}". Forventet et tall mellom 0 og 100. Faller tilbake til 0.`);
-            }
-            return 0;
-        }
-        if (raw < 0 || raw > 100) {
-            console.warn(`[ix-progress-bar] value="${raw}" er utenfor gyldig område [0, 100]. Clampes til ${Math.min(100, Math.max(0, raw))}.`);
-        }
-        return Math.min(100, Math.max(0, raw));
     }
 }

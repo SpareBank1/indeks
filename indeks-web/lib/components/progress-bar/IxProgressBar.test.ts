@@ -17,255 +17,270 @@ afterEach(() => {
 });
 
 describe('IxProgressBar', () => {
-    describe('DOM-generering', () => {
-        it('bygger header, track, fill, support-text og announcer', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="active"></ix-progress-bar>`);
-            expect(el.querySelector('.ix-progress-bar__header')).not.toBeNull();
-            expect(el.querySelector('.ix-progress-bar__label')).not.toBeNull();
-            expect(el.querySelector('.ix-progress-bar__track')).not.toBeNull();
-            expect(el.querySelector('.ix-progress-bar__fill')).not.toBeNull();
-            expect(el.querySelector('.ix-progress-bar__support-text')).not.toBeNull();
-            expect(el.querySelector('[aria-live="polite"]')).not.toBeNull();
-        });
-
-        it('erstatter forfatters indre HTML med generert struktur', () => {
-            const el = mount(
-                `<ix-progress-bar value="50" data-state="active"><p id="author-content">test</p></ix-progress-bar>`,
-            );
-            expect(el.querySelector('#author-content')).toBeNull();
-            expect(el.querySelector('.ix-progress-bar__track')).not.toBeNull();
-        });
-    });
-
-    describe('Header-synlighet', () => {
-        it('skjuler header når label mangler og tilstand er active', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="active"></ix-progress-bar>`);
-            expect(el.querySelector<HTMLElement>('.ix-progress-bar__header')?.hidden).toBe(true);
-        });
-
-        it('viser header når label er satt', () => {
-            const el = mount(
-                `<ix-progress-bar value="50" data-state="active" label="Laster opp"></ix-progress-bar>`,
-            );
-            expect(el.querySelector<HTMLElement>('.ix-progress-bar__header')?.hidden).toBe(false);
-        });
-
-        it('viser header i success selv uten label (pga ikon)', () => {
-            const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
-            expect(el.querySelector<HTMLElement>('.ix-progress-bar__header')?.hidden).toBe(false);
-        });
-
-        it('viser header i error selv uten label (pga ikon)', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="error"></ix-progress-bar>`);
-            expect(el.querySelector<HTMLElement>('.ix-progress-bar__header')?.hidden).toBe(false);
-        });
-    });
-
-    describe('ARIA i active-tilstand', () => {
-        it('setter role=progressbar, valuemin, valuemax og valuenow på host', () => {
-            const el = mount(`<ix-progress-bar value="40" data-state="active"></ix-progress-bar>`);
-            expect(el.getAttribute('role')).toBe('progressbar');
-            expect(el.getAttribute('aria-valuemin')).toBe('0');
-            expect(el.getAttribute('aria-valuemax')).toBe('100');
-            expect(el.getAttribute('aria-valuenow')).toBe('40');
-        });
-
-        it('setter aria-hidden på track', () => {
-            const el = mount(`<ix-progress-bar value="40" data-state="active"></ix-progress-bar>`);
-            const track = el.querySelector('.ix-progress-bar__track')!;
-            expect(track.getAttribute('aria-hidden')).toBe('true');
-        });
-
-        it('setter --ix-progress-bar-value CSS custom property på track', () => {
-            const el = mount(`<ix-progress-bar value="65" data-state="active"></ix-progress-bar>`);
-            const track = el.querySelector<HTMLElement>('.ix-progress-bar__track')!;
-            expect(track.style.getPropertyValue('--ix-progress-bar-value')).toBe('65%');
-        });
-
-        it('setter --ix-progress-bar-value ved initial render med data-state="error"', () => {
-            const el = mount(`<ix-progress-bar value="40" data-state="error"></ix-progress-bar>`);
-            const track = el.querySelector<HTMLElement>('.ix-progress-bar__track')!;
-            expect(track.style.getPropertyValue('--ix-progress-bar-value')).toBe('40%');
-        });
-    });
-
-    describe('ARIA i terminal-tilstand (success/error)', () => {
-        it('fjerner progressbar-rolle og aria-value* fra host i success', () => {
-            const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
-            expect(el.hasAttribute('role')).toBe(false);
-            expect(el.hasAttribute('aria-valuemin')).toBe(false);
-            expect(el.hasAttribute('aria-valuemax')).toBe(false);
-            expect(el.hasAttribute('aria-valuenow')).toBe(false);
-        });
-
-        it('setter aria-hidden på track i success', () => {
-            const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
-            const track = el.querySelector('.ix-progress-bar__track')!;
-            expect(track.getAttribute('aria-hidden')).toBe('true');
-        });
-
-        it('fjerner progressbar-rolle og aria-value* fra host i error', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="error"></ix-progress-bar>`);
-            expect(el.hasAttribute('role')).toBe(false);
-            expect(el.hasAttribute('aria-valuenow')).toBe(false);
-        });
-
-        it('setter aria-hidden på track i error', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="error"></ix-progress-bar>`);
-            const track = el.querySelector('.ix-progress-bar__track')!;
-            expect(track.getAttribute('aria-hidden')).toBe('true');
-        });
-    });
-
-    describe('Verdi-clamping', () => {
-        it('clammer verdi over 100 til 100', () => {
-            const el = mount(`<ix-progress-bar value="150" data-state="active"></ix-progress-bar>`);
-            expect(el.getAttribute('aria-valuenow')).toBe('100');
-        });
-
-        it('clammer verdi under 0 til 0', () => {
-            const el = mount(`<ix-progress-bar value="-10" data-state="active"></ix-progress-bar>`);
-            expect(el.getAttribute('aria-valuenow')).toBe('0');
-        });
-
-        it('behandler ugyldig verdi som 0', () => {
-            const el = mount(`<ix-progress-bar value="abc" data-state="active"></ix-progress-bar>`);
-            expect(el.getAttribute('aria-valuenow')).toBe('0');
-        });
-    });
-
     describe('Label-kobling', () => {
-        it('setter label-tekst i label-elementet', () => {
-            const el = mount(
-                `<ix-progress-bar value="50" data-state="active" label="Laster opp"></ix-progress-bar>`,
-            );
-            const label = el.querySelector<HTMLElement>('.ix-progress-bar__label')!;
-            expect(label.textContent).toBe('Laster opp');
+        it('setter label[for] til progress[id]', () => {
+            const el = mount(`
+                <ix-progress-bar>
+                    <label>Laster opp</label>
+                    <progress value="65" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            const label = el.querySelector('label')!;
+            const progress = el.querySelector('progress')!;
+            expect(progress.id).toMatch(/^ix-pb-\d+$/);
+            expect(label.htmlFor).toBe(progress.id);
         });
 
-        it('genererer ID på label og setter aria-labelledby på host', () => {
-            const el = mount(
-                `<ix-progress-bar value="50" data-state="active" label="Laster opp"></ix-progress-bar>`,
-            );
-            const label = el.querySelector<HTMLElement>('.ix-progress-bar__label')!;
-            expect(label.id).toMatch(/^ix-progress-bar-label-\d+$/);
-            expect(el.getAttribute('aria-labelledby')).toBe(label.id);
+        it('gjenbruker eksisterende id på progress', () => {
+            const el = mount(`
+                <ix-progress-bar>
+                    <label>Laster opp</label>
+                    <progress id="my-progress" value="65" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('label')!.htmlFor).toBe('my-progress');
         });
 
-        it('fjerner aria-labelledby fra host når label mangler', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="active"></ix-progress-bar>`);
-            expect(el.hasAttribute('aria-labelledby')).toBe(false);
-        });
-
-        it('gjenbruker eksisterende ID på label-element ved attributtendring', () => {
-            const el = mount(
-                `<ix-progress-bar value="50" data-state="active" label="Laster opp"></ix-progress-bar>`,
-            );
-            const label = el.querySelector<HTMLElement>('.ix-progress-bar__label')!;
-            const firstId = label.id;
-            el.setAttribute('label', 'Ny tekst');
-            expect(label.id).toBe(firstId);
+        it('setter ingen label[for] når label mangler', () => {
+            const el = mount(`
+                <ix-progress-bar aria-label="Laster inn">
+                    <progress value="30" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('label')).toBeNull();
         });
     });
 
-    describe('data-support-text', () => {
-        it('setter støttetekst i support-text-elementet', () => {
-            const el = mount(
-                `<ix-progress-bar value="50" data-state="active" data-support-text="50 % fullført"></ix-progress-bar>`,
-            );
-            const supportText = el.querySelector('.ix-progress-bar__support-text')!;
-            expect(supportText.textContent).toBe('50 % fullført');
+    describe('aria-label videreføring', () => {
+        it('kopierer aria-label fra host til progress når label mangler', () => {
+            const el = mount(`
+                <ix-progress-bar aria-label="Laster inn innhold">
+                    <progress value="30" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('progress')?.getAttribute('aria-label')).toBe('Laster inn innhold');
+        });
+
+        it('oppdaterer aria-label på progress ved attributtendring', () => {
+            const el = mount(`
+                <ix-progress-bar aria-label="Gammel tekst">
+                    <progress value="30" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            el.setAttribute('aria-label', 'Ny tekst');
+            expect(el.querySelector('progress')?.getAttribute('aria-label')).toBe('Ny tekst');
+        });
+
+        it('kopierer ikke aria-label når synlig label finnes', () => {
+            const el = mount(`
+                <ix-progress-bar aria-label="Ignorert">
+                    <label>Synlig label</label>
+                    <progress value="30" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('progress')?.hasAttribute('aria-label')).toBe(false);
+        });
+    });
+
+    describe('Prosentvisning', () => {
+        it('injiserer __percent-span', () => {
+            const el = mount(`
+                <ix-progress-bar>
+                    <label>Laster opp</label>
+                    <progress value="65" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('.ix-progress-bar__percent')).not.toBeNull();
+        });
+
+        it('viser korrekt prosent basert på value og max', () => {
+            const el = mount(`
+                <ix-progress-bar>
+                    <label>Laster opp</label>
+                    <progress value="65" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('.ix-progress-bar__percent')?.textContent).toBe('65 %');
+        });
+
+        it('oppdaterer prosent når progress value-attributt endres', async () => {
+            const el = mount(`
+                <ix-progress-bar>
+                    <label>Laster opp</label>
+                    <progress value="40" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            el.querySelector('progress')!.setAttribute('value', '80');
+            await Promise.resolve();
+            expect(el.querySelector('.ix-progress-bar__percent')?.textContent).toBe('80 %');
+        });
+
+        it('skjuler prosent i success-tilstand', () => {
+            const el = mount(`
+                <ix-progress-bar state="success">
+                    <label>Laster opp</label>
+                    <progress value="100" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector<HTMLElement>('.ix-progress-bar__percent')!.hidden).toBe(true);
+        });
+
+        it('skjuler prosent i error-tilstand', () => {
+            const el = mount(`
+                <ix-progress-bar state="error">
+                    <label>Laster opp</label>
+                    <progress value="40" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector<HTMLElement>('.ix-progress-bar__percent')!.hidden).toBe(true);
+        });
+    });
+
+    describe('aria-hidden på progress ved terminal-tilstand', () => {
+        it('setter ikke aria-hidden på progress uten state-attributt', () => {
+            const el = mount(`
+                <ix-progress-bar>
+                    <progress value="65" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('progress')?.hasAttribute('aria-hidden')).toBe(false);
+        });
+
+        it('setter aria-hidden="true" på progress i success', () => {
+            const el = mount(`
+                <ix-progress-bar state="success">
+                    <progress value="100" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('progress')?.getAttribute('aria-hidden')).toBe('true');
+        });
+
+        it('setter aria-hidden="true" på progress i error', () => {
+            const el = mount(`
+                <ix-progress-bar state="error">
+                    <progress value="40" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('progress')?.getAttribute('aria-hidden')).toBe('true');
+        });
+
+        it('fjerner aria-hidden fra progress når state endres til active', () => {
+            const el = mount(`
+                <ix-progress-bar state="success">
+                    <progress value="100" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            el.setAttribute('state', 'active');
+            expect(el.querySelector('progress')?.hasAttribute('aria-hidden')).toBe(false);
         });
     });
 
     describe('Ikoninjeksjon', () => {
-        it('injiserer ikon i header ved success', () => {
-            const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
-            const icon = el.querySelector('[data-progress-bar="icon"]');
-            expect(icon).not.toBeNull();
-            expect(icon?.getAttribute('aria-hidden')).toBe('true');
-        });
-
-        it('injiserer ikon i header ved error', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="error"></ix-progress-bar>`);
-            const icon = el.querySelector('[data-progress-bar="icon"]');
-            expect(icon).not.toBeNull();
-        });
-
-        it('viser ikke ikon i active', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="active"></ix-progress-bar>`);
-            expect(el.querySelector('[data-progress-bar="icon"]')).toBeNull();
-        });
-
-        it('fjerner ikon når data-state endres tilbake til active', () => {
-            const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
+        it('injiserer ikon ved success', () => {
+            const el = mount(`
+                <ix-progress-bar state="success">
+                    <label>Laster opp</label>
+                    <progress value="100" max="100"></progress>
+                </ix-progress-bar>
+            `);
             expect(el.querySelector('[data-progress-bar="icon"]')).not.toBeNull();
-            el.setAttribute('data-state', 'active');
+        });
+
+        it('injiserer ikon ved error', () => {
+            const el = mount(`
+                <ix-progress-bar state="error">
+                    <label>Laster opp</label>
+                    <progress value="40" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('[data-progress-bar="icon"]')).not.toBeNull();
+        });
+
+        it('viser ikke ikon uten state-attributt', () => {
+            const el = mount(`
+                <ix-progress-bar>
+                    <label>Laster opp</label>
+                    <progress value="65" max="100"></progress>
+                </ix-progress-bar>
+            `);
             expect(el.querySelector('[data-progress-bar="icon"]')).toBeNull();
+        });
+
+        it('fjerner ikon når state endres tilbake til active', () => {
+            const el = mount(`
+                <ix-progress-bar state="success">
+                    <label>Laster opp</label>
+                    <progress value="100" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            el.setAttribute('state', 'active');
+            expect(el.querySelector('[data-progress-bar="icon"]')).toBeNull();
+        });
+
+        it('ikon har aria-hidden="true"', () => {
+            const el = mount(`
+                <ix-progress-bar state="success">
+                    <label>Laster opp</label>
+                    <progress value="100" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('[data-progress-bar="icon"]')?.getAttribute('aria-hidden')).toBe('true');
         });
     });
 
     describe('aria-live annonsering', () => {
         it('injiserer skjult aria-live-element med aria-atomic', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="active"></ix-progress-bar>`);
+            const el = mount(`
+                <ix-progress-bar>
+                    <progress value="65" max="100"></progress>
+                </ix-progress-bar>
+            `);
             const announcer = el.querySelector('[aria-live="polite"]');
             expect(announcer).not.toBeNull();
             expect(announcer?.getAttribute('aria-atomic')).toBe('true');
         });
 
-        it('fyller announcer med data-support-text ved success', () => {
-            const el = mount(
-                `<ix-progress-bar value="100" data-state="success" data-support-text="Alle filer er lastet opp"></ix-progress-bar>`,
-            );
-            const announcer = el.querySelector('[aria-live="polite"]')!;
-            expect(announcer.textContent).toBe('Alle filer er lastet opp');
+        it('annonserer «Fullført» ved success', () => {
+            const el = mount(`
+                <ix-progress-bar state="success">
+                    <progress value="100" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('[aria-live="polite"]')?.textContent).toBe('Fullført');
         });
 
-        it('bruker fallback-tekst «Fullført» ved success uten support-text', () => {
-            const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
-            const announcer = el.querySelector('[aria-live="polite"]')!;
-            expect(announcer.textContent).toBe('Fullført');
+        it('annonserer «Feilet» ved error', () => {
+            const el = mount(`
+                <ix-progress-bar state="error">
+                    <progress value="40" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            expect(el.querySelector('[aria-live="polite"]')?.textContent).toBe('Feilet');
         });
 
-        it('bruker fallback-tekst «Feilet» ved error uten support-text', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="error"></ix-progress-bar>`);
-            const announcer = el.querySelector('[aria-live="polite"]')!;
-            expect(announcer.textContent).toBe('Feilet');
-        });
-    });
-
-    describe('attributeChangedCallback', () => {
-        it('oppdaterer aria-valuenow på host når value-attributt endres', () => {
-            const el = mount(`<ix-progress-bar value="30" data-state="active"></ix-progress-bar>`);
-            expect(el.getAttribute('aria-valuenow')).toBe('30');
-            el.setAttribute('value', '75');
-            expect(el.getAttribute('aria-valuenow')).toBe('75');
-        });
-
-        it('bytter til terminal-modus når data-state endres til success', () => {
-            const el = mount(`<ix-progress-bar value="100" data-state="active"></ix-progress-bar>`);
-            expect(el.getAttribute('role')).toBe('progressbar');
-            el.setAttribute('data-state', 'success');
-            expect(el.hasAttribute('role')).toBe(false);
-            expect(el.querySelector('.ix-progress-bar__track')?.getAttribute('aria-hidden')).toBe('true');
-        });
-
-        it('bytter tilbake til active-modus når data-state endres fra success til active', () => {
-            const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
-            expect(el.hasAttribute('role')).toBe(false);
-            el.setAttribute('data-state', 'active');
-            expect(el.getAttribute('role')).toBe('progressbar');
+        it('annonserer når state endres til success', () => {
+            const el = mount(`
+                <ix-progress-bar>
+                    <progress value="100" max="100"></progress>
+                </ix-progress-bar>
+            `);
+            el.setAttribute('state', 'success');
+            expect(el.querySelector('[aria-live="polite"]')?.textContent).toBe('Fullført');
         });
     });
 
-    describe('cleanup', () => {
-        it('nullstiller interne referanser i disconnectedCallback', () => {
-            const el = mount(`<ix-progress-bar value="50" data-state="active"></ix-progress-bar>`);
+    describe('Cleanup', () => {
+        it('disconnecterer MutationObserver i disconnectedCallback', () => {
+            const el = mount(`
+                <ix-progress-bar>
+                    <progress value="65" max="100"></progress>
+                </ix-progress-bar>
+            `);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tilgang til privat felt for å teste cleanup
-            expect((el as any)._announcer).not.toBeNull();
+            expect((el as any)._observer).not.toBeNull();
             el.remove();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tilgang til privat felt for å teste cleanup
-            expect((el as any)._announcer).toBeNull();
+            expect((el as any)._observer).toBeNull();
         });
     });
 });

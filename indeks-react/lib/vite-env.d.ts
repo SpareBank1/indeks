@@ -7,7 +7,7 @@ declare module 'react' {
     namespace JSX {
         interface IntrinsicElements {
             'ix-field': React.DetailedHTMLProps<React.HTMLAttributes<IxField>, IxField> & { class?: string };
-            'ix-progress-bar': React.DetailedHTMLProps<React.HTMLAttributes<IxProgressBar>, IxProgressBar> & { class?: string; value?: number; label?: string; 'data-support-text'?: string };
+            'ix-progress-bar': React.DetailedHTMLProps<React.HTMLAttributes<IxProgressBar>, IxProgressBar> & { class?: string; state?: string; children?: React.ReactNode };
         }
     }
 }
