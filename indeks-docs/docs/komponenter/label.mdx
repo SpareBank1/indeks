@@ -1,0 +1,157 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/label.json';
+
+# Label
+
+Label er ledeteksten til et skjemafelt.
+
+## Egnet til
+
+- Ledetekst koblet til et inputfelt
+- Frittstående label utenfor en full feltstruktur
+
+## Uegnet til
+
+- Informasjonstekst uten tilhørende inputfelt
+- Feltstruktur med label, hjelpetekst og feilmelding — bruk TextField eller feltkomponentene som håndterer det samlet
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div>
+  <label class="ix-label" for="konto-html">Kontonummer</label>
+  <input id="konto-html" type="text" />
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<div>
+  <Label htmlFor="konto">Kontonummer</Label>
+  <input id="konto" type="text" />
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+## Bruk med ix-field
+
+Normalt trenger du ikke bruke `ix-label` direkte. `<ix-field>` styler `<label>`-elementet inni seg automatisk — ingen klasse nødvendig:
+
+```jsx live
+<ix-field>
+  <label for="konto-field">Kontonummer</label>
+  <span data-field="description">11 siffer uten mellomrom</span>
+  <div class="ix-text-field">
+    <input id="konto-field" type="text" inputMode="numeric" />
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+`ix-label` brukes når du setter opp en skjemastruktur manuelt — uten `<ix-field>` — og trenger riktig typografi på `<label>`-elementet.
+
+## Retningslinjer
+
+### Kort og presis
+
+1–3 ord er ideelt. Labelen skal navngi dataen, ikke beskrive handlingen.
+
+| Gjør dette | Ikke dette |
+|------------|------------|
+| Kontonummer | Vennligst oppgi kontonummeret ditt |
+| E-postadresse | Skriv inn e-post |
+| Fødselsdato | Dato |
+
+### Setningsformat uten kolon
+
+Stor forbokstav, ingen kolon på slutten. "Kontonummer", ikke "Kontonummer:" og ikke "kontonummer".
+
+### Formatkrav hører hjemme i description
+
+Ikke gjør labelen lang for å få plass til krav eller eksempler. Bruk en description under feltet i stedet.
+
+| Gjør dette | Ikke dette |
+|------------|------------|
+| Label: "Kontonummer" + description: "11 siffer uten mellomrom" | Label: "Kontonummer (11 siffer uten mellomrom)" |
+
+### Visuell nærhet
+
+Label skal stå tett over feltet den tilhører. Avstanden mellom label og input bør være klart mindre enn avstanden mellom to felt i skjemaet — ellers er den visuelle koblingen uklar for seende brukere.
+
+### Merk unntaket, ikke regelen
+
+I banksammenheng er nesten alle felt påkrevd. Merk valgfrie felt med "(valgfritt)" i labelteksten — ikke påkrevde felt med stjerne eller annen markering.
+
+### Unngå forkortelser og intern sjargong
+
+Skriv ut ord med mindre målgruppen er fagpersoner som kjenner dem godt. "Organisasjonsnummer", ikke "Org.nr." — med mindre skjemaet er rettet mot regnskapsførere eller lignende.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Meningsfull labeltekst** — labelen skal forklare hva som skal fylles inn, ikke handlingen. "E-postadresse" er bedre enn "Skriv inn e-post"
+- **Koble label til input** — sett `for` (HTML) eller `htmlFor` (React) til ID-en på inputfeltet. Uten denne koblingen kan skjermlesere ikke assosiere labelen med feltet
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### `.ix-label`
+
+Legg til klassen `ix-label` på et `<label>`-element:
+
+```html
+<label class="ix-label" for="input-id">Labeltekst</label>
+```
+
+`for`-attributtet kobler label til input. Uten `for` er labelen ikke programmatisk koblet til feltet.
+
+</TabItem>
+<TabItem value="react" label="React">
+
+### LabelProps
+
+| Prop | Type | Påkrevd | Beskrivelse |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | Nei | Labelteksten |
+| `htmlFor` | `string` | Nei* | Kobler label til input via `for`-attributt. *Alltid anbefalt |
+| `className` | `string` | Nei | Ekstra CSS-klasser |
+| `ref` | `Ref<HTMLLabelElement>` | Nei | Ref videresendes til `<label>`-elementet |
+
+I tillegg støttes alle standard HTML label-attributter.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Label har ingen egne CSS-variabler å overstyre. Typografien arves fra token-systemet:
+
+| Egenskap | Token |
+|----------|-------|
+| Skriftstørrelse | `--ix-font-size-md` |
+| Fontvekt | `--ix-font-weight-medium` |
+| Farge | `--ix-color-foreground-main-default` |
+| Linjehøyde | `150%` |
+
+## Relatert
+
+- [TextField](../komponenter/textfield) — feltstruktur med label, input, hjelpetekst og feilmelding
+- [Typografi](../grunnleggende/typografi) — skriftstørrelser og fontvekter

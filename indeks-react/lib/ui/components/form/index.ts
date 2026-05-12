@@ -1,4 +1,5 @@
 export { Field } from './field/Field';
+export { Label } from './label/Label';
 export { Form } from './form/Form';
 export { Checkbox } from './checkbox/Checkbox';
 export { Dropdown } from './dropdown/Dropdown';
