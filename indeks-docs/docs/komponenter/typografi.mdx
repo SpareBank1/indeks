@@ -8,31 +8,37 @@ import TabItem from '@theme/TabItem';
 
 # Typografi
 
-Vi deler opp typografi i Indeks etter tre kategorier: overskrifter, brødtekst og lenker.
+Indeks deler typografi i tre komponenter:
 
-```tsx
-import { Heading, Text, LinkText } from '@sb1/indeks-react';
-```
+- [`Heading`](#overskrifter-heading) — overskrifter (h1–h6)
+- [`Text`](#brødtekst-text) — brødtekst og løpende tekst
+- [`LinkText`](#lenker-linktext) — lenker i løpende tekst
+
+Alle bruker `data-size` for å styre visuell størrelse uavhengig av semantisk element.
 
 ## Overskrifter (Heading)
 
-For overskrifter har vi en egen komponent: `Heading`.
+Overskrifter i Indeks skiller mellom semantisk nivå og visuell størrelse. Semantisk nivå bestemmer dokumentstrukturen og hva skjermlesere annonserer — alltid et HTML-element fra `h1` til `h6`. Visuell størrelse styrer utseendet og følger som standard en fast mapping, men kan overstyres hvis det visuelle hierarkiet krever det.
 
-Heading-nivå spesifiseres med `as`-propen. Størrelse og semantikk er holdt adskilt — du kan fritt overstyre størrelsen med `size` hvis det visuelle hierarkiet ikke samsvarer med det semantiske.
+De tre største størrelsene (`2xl`–`lg`) bruker SpareBank 1 Title, de tre minste bruker SpareBank 1.
 
-| Størrelse (`size`) | Heading-nivå (`as`) | Font              |
-| ------------------ | ------------------- | ----------------- |
-| `2xl`              | `h1`                | SpareBank 1 Title |
-| `xl`               | `h2`                | SpareBank 1 Title |
-| `lg`               | `h3`                | SpareBank 1 Title |
-| `md`               | `h4`                | SpareBank 1       |
-| `sm`               | `h5`                | SpareBank 1       |
-| `xs`               | `h6`                | SpareBank 1       |
+| Størrelse (`size`) | Heading-nivå (`as`) | Font              | Eksempel |
+| ------------------ | ------------------- | ----------------- | -------- |
+| `2xl`              | `h1`                | SpareBank 1 Title | <span className="ix-heading" data-size="2xl">Overskrift</span> |
+| `xl`               | `h2`                | SpareBank 1 Title | <span className="ix-heading" data-size="xl">Overskrift</span> |
+| `lg`               | `h3`                | SpareBank 1 Title | <span className="ix-heading" data-size="lg">Overskrift</span> |
+| `md`               | `h4`                | SpareBank 1       | <span className="ix-heading" data-size="md">Overskrift</span> |
+| `sm`               | `h5`                | SpareBank 1       | <span className="ix-heading" data-size="sm">Overskrift</span> |
+| `xs`               | `h6`                | SpareBank 1       | <span className="ix-heading" data-size="xs">Overskrift</span> |
 
 ### Kom i gang
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
+
+```tsx
+import { Heading } from '@sb1/indeks-react';
+```
 
 ```tsx live
 <Heading as="h1">Renter og betingelser</Heading>
@@ -79,9 +85,41 @@ Heading-nivå kan overstyres med `size` hvis det visuelle hierarkiet ikke samsva
 
 ### Spacing i overskrifter
 
-- Alle overskrifter kommer uten noe spacing.
-- Legg til propen `addRecommendedSpacing` (boolean) for riktig spacing-verdi i forhold til størrelsen.
-- Du kan også bruke [spacing-variabler](../utility-klasser/oversikt#spacing) eller util-klasser til å sette margin selv.
+Alle overskrifter kommer uten spacing som standard. Du kan legge til anbefalt spacing basert på størrelsen, eller bruke [spacing-utility-klasser](../utility-klasser/oversikt#spacing) til å sette margin selv.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+Bruk `addRecommendedSpacing`-propen for å legge til anbefalt `margin-bottom` basert på størrelse:
+
+```tsx live
+<>
+    <Heading as="h1" addRecommendedSpacing>Renter og betingelser</Heading>
+    <Heading as="h2" addRecommendedSpacing>Effektiv rente</Heading>
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+Legg til spacing-klassen som tilsvarer størrelsen:
+
+| Størrelse | Klasse |
+| --------- | ------ |
+| `2xl` (h1) | `ix-mb-sm` |
+| `xl` (h2) | `ix-mb-xs` |
+| `lg` (h3) | `ix-mb-sm` |
+| `md`–`xs` (h4–h6) | `ix-mb-2xs` |
+
+```jsx live
+<>
+    <h1 className="ix-heading ix-mb-sm" data-size="2xl">Renter og betingelser</h1>
+    <h2 className="ix-heading ix-mb-xs" data-size="xl">Effektiv rente</h2>
+</>
+```
+
+</TabItem>
+</Tabs>
 
 ### Props — Heading
 
@@ -115,12 +153,18 @@ Heading-nivå kan overstyres med `size` hvis det visuelle hierarkiet ikke samsva
 
 ## Brødtekst (Text)
 
-Brødtekster lages med `Text`-komponenten. Standard element er `<p>`, men det kan overstyres med `as`. Størrelsene (`xs`–`2xl`) følger [samme skala som spacing](../grunnleggende/tokens/spacing#spacing-skala).
+`Text` er utgangspunktet for all løpende tekst — beskrivelser, hjelpetekster, meldinger og innhold som ikke er overskrift eller lenke. Standard størrelse er `md`, og standard element er `<p>`.
+
+Størrelsene (`xs`–`2xl`) følger [samme skala som spacing](../grunnleggende/tokens/spacing#spacing-skala), noe som gjør det lett å kombinere tekststørrelse og luft uten å blande ulike skalaer.
 
 ### Kom i gang
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
+
+```tsx
+import { Text } from '@sb1/indeks-react';
+```
 
 ```tsx live
 <Text>Kontoen din har en saldo på 12 345,00 kr.</Text>
@@ -138,10 +182,12 @@ Brødtekster lages med `Text`-komponenten. Standard element er `<p>`, men det ka
 
 ### Eget element
 
-Tekst rendres som standard i en `<p>`. Bruk `as` når elementet ikke er en paragraf — for eksempel i lister, tabellceller eller når du nøster inn i andre elementer:
+`ix-text`-klassen kan settes på alle block- og inline-elementer.
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
+
+Tekst rendres som standard i en `<p>`. Bruk `as` når elementet ikke er en paragraf — for eksempel i lister eller tabellceller:
 
 ```tsx live
 <ul>
@@ -165,7 +211,7 @@ Tekst rendres som standard i en `<p>`. Bruk `as` når elementet ikke er en parag
 
 ### Linjehøyde
 
-Standard linjehøyde er 1.2. Brødtekst som er lengre enn noen få linjer trenger større linjehøyde for bedre lesbarhet, og kan overstyres til 1.4 med `long`-propen:
+Standard linjehøyde er 1.2. Brødtekst over flere linjer trenger større linjehøyde for bedre lesbarhet — sett den til 1.4 med modifikatoren under:
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
@@ -179,6 +225,8 @@ Standard linjehøyde er 1.2. Brødtekst som er lengre enn noen få linjer trenge
 
 </TabItem>
 <TabItem value="html" label="HTML">
+
+Legg til `ix-text--long` for økt linjehøyde:
 
 ```jsx live
 <p className="ix-text ix-text--long" data-size="md">
@@ -265,12 +313,16 @@ Vil du utheve en hel paragraf uten `<p>`-elementet, bruk `as`:
 
 ## Lenker (LinkText)
 
-`LinkText` brukes til navigasjon i løpende tekst. Standard element er `<a>`, men det kan overstyres med `as` — for eksempel for å bruke en router-komponent.
+`LinkText` er lenker som sitter i løpende tekst — ikke frittstående knapper eller navigasjonslenker. Komponenten setter riktig lenkefarge, understrek og aktiv-tilstand, og fungerer med `<a>` eller en hvilken som helst router-komponent.
 
 ### Kom i gang
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
+
+```tsx
+import { LinkText } from '@sb1/indeks-react';
+```
 
 ```tsx live
 <LinkText href="/konto">Se kontooversikt</LinkText>

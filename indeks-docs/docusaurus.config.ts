@@ -92,6 +92,9 @@ const config: Config = {
     ],
 
     themeConfig: {
+        tableOfContents: {
+            maxHeadingLevel: 2,
+        },
         // Replace with your project's social card
         image: 'img/docusaurus-social-card.jpg',
         navbar: {

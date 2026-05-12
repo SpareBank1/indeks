@@ -1,3 +1,7 @@
+.editorWrapper {
+    position: relative;
+}
+
 .editorDetails {
     /* Detaljelementet må ikke bryte Playground-containerens border-radius på bunnen. */
     overflow: hidden;
@@ -32,4 +36,36 @@
 
 .editorSummary:hover {
     background: var(--ifm-color-emphasis-200);
+}
+
+.variantToggle {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    padding-block: 0.5rem;
+}
+
+.variantBtn {
+    background: none;
+    border: 1px solid var(--ifm-color-emphasis-300);
+    border-radius: 4px;
+    color: var(--ifm-font-color-base);
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    line-height: 1.4;
+}
+
+.variantBtn:hover {
+    background: var(--ifm-color-emphasis-200);
+}
+
+.variantBtnActive {
+    background: var(--ifm-color-primary);
+    border-color: var(--ifm-color-primary);
+    color: white;
 }
