@@ -1,0 +1,414 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/button.json';
+
+# Button
+
+Button lar brukeren utføre en handling, som å sende inn et skjema, lagre endringer eller navigere videre i en prosess.
+
+## Egnet til
+
+- Handlinger som skjer umiddelbart (f.eks. lagre, sende, bekrefte)
+- Navigasjon mellom steg i en prosess
+- Primære og sekundære handlinger i en visning
+- Handlinger som påvirker innhold eller systemtilstand
+
+## Uegnet til
+
+- Navigasjon til nye sider uten at noe utføres — bruk lenke (`<a>`) i stedet
+- Handlinger som ikke er tilgjengelige eller ikke kan utføres
+- Visuell dekorasjon uten funksjon
+- For mange samtidige valg
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Button>Send inn</Button>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button className="ix-button" data-variant="primary" type="button">
+  Send inn
+</button>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Varianter
+
+`primary` er standardvarianten og bør brukes for den viktigste handlingen på siden. Unngå to primary-knapper ved siden av hverandre.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="tertiary">Tertiary</Button>
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <button className="ix-button" data-variant="primary" type="button">Primary</button>
+  <button className="ix-button" data-variant="secondary" type="button">Secondary</button>
+  <button className="ix-button" data-variant="tertiary" type="button">Tertiary</button>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+### Fare
+
+Bruk `danger` for destruktive handlinger som sletting eller avbryt-operasjoner der konsekvensen er vanskelig å reversere.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <Button danger>Slett konto</Button>
+  <Button variant="secondary" danger>Avbryt overføring</Button>
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <button className="ix-button" data-variant="primary" data-danger="true" type="button">
+    Slett konto
+  </button>
+  <button className="ix-button" data-variant="secondary" data-danger="true" type="button">
+    Avbryt overføring
+  </button>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+### Størrelser
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <Button size="sm">Liten</Button>
+  <Button>Medium (standard)</Button>
+  <Button size="lg">Stor</Button>
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <button className="ix-button" data-variant="primary" data-size="sm" type="button">Liten</button>
+  <button className="ix-button" data-variant="primary" type="button">Medium (standard)</button>
+  <button className="ix-button" data-variant="primary" data-size="lg" type="button">Stor</button>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+### Full bredde
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Button width="full">Fortsett</Button>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button className="ix-button ix-w-full" data-variant="primary" type="button">
+  Fortsett
+</button>
+```
+
+</TabItem>
+</Tabs>
+
+### Med ikon
+
+Ikon-knapper med tekst trenger ingen ekstra ARIA — teksten er den tilgjengelige labelen. Plasser ikonet foran teksten.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Button>
+  <Icon name="sparing" />
+  Pålogget
+</Button>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button className="ix-button" data-variant="primary" type="button">
+  <span className="ix-icon" style={{maskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)", WebkitMaskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)"}} aria-hidden="true" />
+  Pålogget
+</button>
+```
+
+</TabItem>
+</Tabs>
+
+### Ikonknapp (uten tekst)
+
+Knapper med bare ikon **må** ha `aria-label` som beskriver handlingen.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Button aria-label="Gå til sparing">
+  <Icon name="sparing" />
+</Button>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button className="ix-button" data-variant="primary" type="button" aria-label="Gå til sparing">
+  <span className="ix-icon" style={{maskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)", WebkitMaskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)"}} />
+</button>
+```
+
+</TabItem>
+</Tabs>
+
+:::warning Ikonknapp uten aria-label
+En knapp med bare ikon og ingen `aria-label` er usynlig for skjermlesere. Brukeren hører bare "knapp" — ingen beskrivelse av hva den gjør.
+:::
+
+### Laster
+
+Når en asynkron operasjon er i gang, sett `loading` og `loadingLabel`. Knappen deaktiveres for skjermlesere og `loadingLabel` annonseres.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Button loading loadingLabel="Sender inn…">
+  Send inn
+</Button>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button className="ix-button" data-variant="primary" type="button"
+        aria-disabled="true" aria-label="Sender inn…">
+  Sender inn…
+</button>
+```
+
+</TabItem>
+</Tabs>
+
+### Deaktivert
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Button disabled>Deaktivert</Button>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button className="ix-button" data-variant="primary" type="button" disabled>
+  Deaktivert
+</button>
+```
+
+</TabItem>
+</Tabs>
+
+Vurder om brukeren i stedet bør se en forklaring på hvorfor handlingen ikke er tilgjengelig. En disabled-knapp uten kontekst er forvirrende.
+
+### Som lenke
+
+Bruk `as="a"` når knappen navigerer til en URL. Den beholder button-styling, men rendres som `<a>`.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Button as="a" href="https://www.sparebank1.no">
+  Gå til sparebank1.no
+</Button>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<a className="ix-button" data-variant="primary" href="https://www.sparebank1.no">
+  Gå til sparebank1.no
+</a>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Bruk riktig komponent: handling vs. navigasjon
+
+Knapper skal brukes når brukeren utfører en handling som påvirker systemet — som å lagre, sende eller bekrefte noe. Dersom brukeren kun skal navigere til en ny side uten at noe behandles, skal lenke brukes i stedet. Skillet er viktig både for brukerens forventninger og for tilgjengelighet.
+
+### Tydelig handling i label gir forutsigbarhet
+
+Knappetekst skal beskrive hva som skjer når brukeren klikker. Den bør være handlingsorientert og konkret. "Lagre endringer" er tydeligere enn "OK", fordi den forklarer hva handlingen faktisk gjør.
+
+### Unngå generiske labels
+
+Generiske tekster som "OK", "Send" eller "Neste" kan være uklare uten kontekst. Der det er mulig, bør teksten spesifisere hva som skjer — som "Send søknad" eller "Gå til betaling".
+
+### Teksten skal være kort og énlinjet
+
+Knappetekst skal være kort og presis. Korte tekster gjør knapper lettere å skanne og sikrer at layouten holder seg stabil på tvers av skjermstørrelser.
+
+### Hierarki skaper struktur og prioritering
+
+Knapper skal ha et tydelig visuelt hierarki som viser hva som er viktigst å gjøre:
+
+- **Primærknapp** — hovedhandlingen i en visning
+- **Sekundærknapp** — alternative handlinger
+- **Tertiærknapp** — mindre viktige eller støttende handlinger
+- **Destruktiv knapp** — handlinger som sletter eller endrer data permanent
+
+Dersom en tertiær knapp brukes alene, skal den alltid kombineres med ikon. Dette sikrer at den fremstår som en handling og ikke forveksles med vanlig tekst.
+
+### Én primær handling per visning
+
+Hver side eller seksjon bør ha én tydelig primær handling. Denne bør fremheves visuelt slik at det er klart hva brukeren skal gjøre videre. Flere primære knapper skaper konkurranse om oppmerksomheten og gjør det vanskeligere å ta en beslutning.
+
+### Plassering og rekkefølge påvirker valg
+
+Når flere knapper plasseres ved siden av hverandre, skal primærknappen stå først. Et unntak er navigasjon mellom steg, som "Forrige" og "Neste" — der skal den sekundære knappen "Forrige" stå først. Dette samsvarer med brukerens forventning om retning og progresjon.
+
+### Ikonknapper krever ekstra tydelighet
+
+Knapper som kun består av ikon er forbeholdt løsninger for mer erfarne brukere, siden handlingen ikke beskrives med tekst. Unntak kan gjøres for godt etablerte ikoner som lukk eller slett — men knappen må alltid ha en tilgjengelig tekst via `aria-label`.
+
+### Bekreft destruktive handlinger
+
+Handlinger som sletter eller endrer data permanent bør enten kreve en ekstra bekreftelse (f.eks. en modal) eller tydelig merkes som destruktive med `danger`-prop.
+
+### Ikke bruk disabled uten forklaring
+
+Disabled-knapper kan være vanskelig å forstå hvis det ikke er tydelig hvorfor de ikke kan brukes. Vurder om handlingen heller bør skjules, eller om det bør forklares hva som mangler for at knappen skal bli aktiv.
+
+### Tilpass bredde til innhold og kontekst
+
+Knapper bør som hovedregel tilpasse seg innholdet sitt. Full bredde kan brukes der det gir mening — for eksempel på mobil — men bør brukes bevisst for å unngå at alle handlinger fremstår som like viktige.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Ikonknapper må ha `aria-label`** — knapper uten synlig tekst er meningsløse for skjermlesere uten en beskrivende label. Labelen skal beskrive handlingen, ikke ikonet: `aria-label="Slett melding"`, ikke `aria-label="Søppelkasse-ikon"`.
+- **Gi `loadingLabel` ved loading-tilstand** — uten denne er knappen anonym for skjermlesere mens den laster.
+- **Unngå disabled som standard** — disabled-knapper sier ikke brukeren hva som mangler. Der det er mulig, la knappen være aktiv og gi tydelig feilmelding ved innsending.
+- **Bruk riktig element** — bruk `<button>` (standard) for handlinger og `as="a"` / `<a>` for navigasjon. Ikke legg click-handlers på `<div>` eller `<span>`.
+- **Ikke stol på farge alene** — forskjeller mellom knappetyper må ikke kun kommuniseres med farge. Tekst og eventuelt ikon må også skille dem fra hverandre.
+- **Gi tilbakemelding på handling** — når en knapp aktiveres, skal brukeren få tydelig tilbakemelding. Bruk `loading`-tilstanden for asynkrone operasjoner for å hindre usikkerhet og gjentatte klikk.
+
+### Hva komponenten gjør automatisk
+
+- **`type="button"`** settes som standard så knappen ikke sender inn skjema utilsiktet.
+- **`aria-disabled="true"`** settes ved `loading=true` slik at skjermlesere vet at knappen midlertidig er utilgjengelig.
+- **`aria-label`** byttes til `loadingLabel` ved loading slik at skjermleser-brukere vet hva som skjer.
+- **Fokusindikator** via `:focus-visible` — synlig for tastaturbrukere, ikke for mus.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `variant` | `'primary' \| 'secondary' \| 'tertiary'` | `'primary'` | Visuell variant |
+| `danger` | `boolean` | `false` | Bruk fare-farger for destruktive handlinger |
+| `loading` | `boolean` | `false` | Vis lasteindikator og deaktiver for skjermlesere |
+| `loadingLabel` | `string` | | Tekst vist og annonsert av skjermleser under lasting. Påkrevd når `loading=true` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Størrelse |
+| `width` | `'full' \| 'auto'` | `'auto'` | `'full'` strekker knappen til full bredde av forelderen |
+| `as` | `ElementType` | `'button'` | Render som annet element, f.eks. `'a'` for lenke-knapper |
+| `aria-label` | `string` | | Skjult label for skjermlesere. Påkrevd for ikonknapper uten synlig tekst |
+| `disabled` | `boolean` | | Deaktiverer knappen helt (nativ HTML-attributt) |
+
+I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `type`, `form`, `name`, `value`, `tabIndex` osv.) og settes direkte på `<button>`-elementet.
+
+## Tilpasning med CSS
+
+Trenger du `ix-button`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte.
+
+### Tilgjengelige klasser og data-attributter
+
+| Element/tilstand | Selektor / attributt |
+|-----------------|----------------------|
+| Knapp | `.ix-button` |
+| Variant | `data-variant="primary"` / `"secondary"` / `"tertiary"` |
+| Fare-tilstand | `data-danger="true"` |
+| Liten størrelse | `data-size="sm"` |
+| Stor størrelse | `data-size="lg"` |
+| Full bredde | `.ix-w-full` |
+
+### Eksempel: ren HTML
+
+```html
+<button class="ix-button" data-variant="primary" type="button">
+  Send inn
+</button>
+
+<a class="ix-button" data-variant="secondary" href="/tilbake">
+  Avbryt
+</a>
+
+<button class="ix-button" data-variant="primary" data-danger="true" type="button">
+  Slett konto
+</button>
+```
+
+## Relatert
+
+- [Typografi](../grunnleggende/typografi) — skriftstørrelser brukt i knapper
+- [Spacing](../grunnleggende/tokens/spacing) — padding-tokens for sm/md/lg
+- [Farger](../retningslinjer/farger) — fargetokens for varianter og danger
+- [Deaktiverte tilstander](../monstre-og-maler/deaktiverte-tilstander) — retningslinjer for når disabled er riktig valg

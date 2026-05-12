@@ -78,6 +78,7 @@ const sidebars: SidebarsConfig = {
             label: 'Komponenter',
             collapsed: true,
             items: [
+                'komponenter/button',
                 'komponenter/typografi',
                 {
                     type: 'category',
