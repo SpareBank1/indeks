@@ -68,3 +68,22 @@
 body:not(.navigation-with-keyboard) .ix-text-area textarea:focus {
     outline: var(--ix-outline-default);
 }
+
+.hb-demo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ix-spacing-2xl);
+    padding: var(--ix-spacing-2xl);
+}
+
+.hb-demo > div {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background: var(--ix-color-surface-main-default);
+    border: 1px solid var(--ix-color-border-main-default);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    cursor: pointer;
+}

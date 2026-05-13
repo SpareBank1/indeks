@@ -71,7 +71,7 @@ const sidebars: SidebarsConfig = {
             type: 'category',
             label: 'Utility-klasser',
             collapsed: true,
-            items: ['utility-klasser/oversikt', 'utility-klasser/native'],
+            items: ['utility-klasser/oversikt', 'utility-klasser/native', 'utility-klasser/hitbox'],
         },
         {
             type: 'category',

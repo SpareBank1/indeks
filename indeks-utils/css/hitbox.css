@@ -1,0 +1,98 @@
+/* Inspirert av bazza.dev/craft/2026/hit-area — tilpasset Indeks med eget navn og spacing-tokens */
+
+.ix-hitbox {
+    position: relative;
+    --ii-hit-t: 0px;
+    --ii-hit-r: 0px;
+    --ii-hit-b: 0px;
+    --ii-hit-l: 0px;
+}
+
+.ix-hitbox::before {
+    content: '';
+    position: absolute;
+    top: calc(-1 * var(--ii-hit-t));
+    right: calc(-1 * var(--ii-hit-r));
+    bottom: calc(-1 * var(--ii-hit-b));
+    left: calc(-1 * var(--ii-hit-l));
+}
+
+/* Uniform */
+.ix-hitbox-2xs { --ii-hit-t: var(--ix-spacing-2xs); --ii-hit-r: var(--ix-spacing-2xs); --ii-hit-b: var(--ix-spacing-2xs); --ii-hit-l: var(--ix-spacing-2xs); }
+.ix-hitbox-xs  { --ii-hit-t: var(--ix-spacing-xs);  --ii-hit-r: var(--ix-spacing-xs);  --ii-hit-b: var(--ix-spacing-xs);  --ii-hit-l: var(--ix-spacing-xs);  }
+.ix-hitbox-sm  { --ii-hit-t: var(--ix-spacing-sm);  --ii-hit-r: var(--ix-spacing-sm);  --ii-hit-b: var(--ix-spacing-sm);  --ii-hit-l: var(--ix-spacing-sm);  }
+.ix-hitbox-md  { --ii-hit-t: var(--ix-spacing-md);  --ii-hit-r: var(--ix-spacing-md);  --ii-hit-b: var(--ix-spacing-md);  --ii-hit-l: var(--ix-spacing-md);  }
+.ix-hitbox-lg  { --ii-hit-t: var(--ix-spacing-lg);  --ii-hit-r: var(--ix-spacing-lg);  --ii-hit-b: var(--ix-spacing-lg);  --ii-hit-l: var(--ix-spacing-lg);  }
+.ix-hitbox-xl  { --ii-hit-t: var(--ix-spacing-xl);  --ii-hit-r: var(--ix-spacing-xl);  --ii-hit-b: var(--ix-spacing-xl);  --ii-hit-l: var(--ix-spacing-xl);  }
+.ix-hitbox-2xl { --ii-hit-t: var(--ix-spacing-2xl); --ii-hit-r: var(--ix-spacing-2xl); --ii-hit-b: var(--ix-spacing-2xl); --ii-hit-l: var(--ix-spacing-2xl); }
+
+/* X-akse (venstre + høyre) */
+.ix-hitbox-x-2xs { --ii-hit-r: var(--ix-spacing-2xs); --ii-hit-l: var(--ix-spacing-2xs); }
+.ix-hitbox-x-xs  { --ii-hit-r: var(--ix-spacing-xs);  --ii-hit-l: var(--ix-spacing-xs);  }
+.ix-hitbox-x-sm  { --ii-hit-r: var(--ix-spacing-sm);  --ii-hit-l: var(--ix-spacing-sm);  }
+.ix-hitbox-x-md  { --ii-hit-r: var(--ix-spacing-md);  --ii-hit-l: var(--ix-spacing-md);  }
+.ix-hitbox-x-lg  { --ii-hit-r: var(--ix-spacing-lg);  --ii-hit-l: var(--ix-spacing-lg);  }
+.ix-hitbox-x-xl  { --ii-hit-r: var(--ix-spacing-xl);  --ii-hit-l: var(--ix-spacing-xl);  }
+.ix-hitbox-x-2xl { --ii-hit-r: var(--ix-spacing-2xl); --ii-hit-l: var(--ix-spacing-2xl); }
+
+/* Y-akse (topp + bunn) */
+.ix-hitbox-y-2xs { --ii-hit-t: var(--ix-spacing-2xs); --ii-hit-b: var(--ix-spacing-2xs); }
+.ix-hitbox-y-xs  { --ii-hit-t: var(--ix-spacing-xs);  --ii-hit-b: var(--ix-spacing-xs);  }
+.ix-hitbox-y-sm  { --ii-hit-t: var(--ix-spacing-sm);  --ii-hit-b: var(--ix-spacing-sm);  }
+.ix-hitbox-y-md  { --ii-hit-t: var(--ix-spacing-md);  --ii-hit-b: var(--ix-spacing-md);  }
+.ix-hitbox-y-lg  { --ii-hit-t: var(--ix-spacing-lg);  --ii-hit-b: var(--ix-spacing-lg);  }
+.ix-hitbox-y-xl  { --ii-hit-t: var(--ix-spacing-xl);  --ii-hit-b: var(--ix-spacing-xl);  }
+.ix-hitbox-y-2xl { --ii-hit-t: var(--ix-spacing-2xl); --ii-hit-b: var(--ix-spacing-2xl); }
+
+/* Topp */
+.ix-hitbox-t-2xs { --ii-hit-t: var(--ix-spacing-2xs); }
+.ix-hitbox-t-xs  { --ii-hit-t: var(--ix-spacing-xs);  }
+.ix-hitbox-t-sm  { --ii-hit-t: var(--ix-spacing-sm);  }
+.ix-hitbox-t-md  { --ii-hit-t: var(--ix-spacing-md);  }
+.ix-hitbox-t-lg  { --ii-hit-t: var(--ix-spacing-lg);  }
+.ix-hitbox-t-xl  { --ii-hit-t: var(--ix-spacing-xl);  }
+.ix-hitbox-t-2xl { --ii-hit-t: var(--ix-spacing-2xl); }
+
+/* Høyre */
+.ix-hitbox-r-2xs { --ii-hit-r: var(--ix-spacing-2xs); }
+.ix-hitbox-r-xs  { --ii-hit-r: var(--ix-spacing-xs);  }
+.ix-hitbox-r-sm  { --ii-hit-r: var(--ix-spacing-sm);  }
+.ix-hitbox-r-md  { --ii-hit-r: var(--ix-spacing-md);  }
+.ix-hitbox-r-lg  { --ii-hit-r: var(--ix-spacing-lg);  }
+.ix-hitbox-r-xl  { --ii-hit-r: var(--ix-spacing-xl);  }
+.ix-hitbox-r-2xl { --ii-hit-r: var(--ix-spacing-2xl); }
+
+/* Bunn */
+.ix-hitbox-b-2xs { --ii-hit-b: var(--ix-spacing-2xs); }
+.ix-hitbox-b-xs  { --ii-hit-b: var(--ix-spacing-xs);  }
+.ix-hitbox-b-sm  { --ii-hit-b: var(--ix-spacing-sm);  }
+.ix-hitbox-b-md  { --ii-hit-b: var(--ix-spacing-md);  }
+.ix-hitbox-b-lg  { --ii-hit-b: var(--ix-spacing-lg);  }
+.ix-hitbox-b-xl  { --ii-hit-b: var(--ix-spacing-xl);  }
+.ix-hitbox-b-2xl { --ii-hit-b: var(--ix-spacing-2xl); }
+
+/* Venstre */
+.ix-hitbox-l-2xs { --ii-hit-l: var(--ix-spacing-2xs); }
+.ix-hitbox-l-xs  { --ii-hit-l: var(--ix-spacing-xs);  }
+.ix-hitbox-l-sm  { --ii-hit-l: var(--ix-spacing-sm);  }
+.ix-hitbox-l-md  { --ii-hit-l: var(--ix-spacing-md);  }
+.ix-hitbox-l-lg  { --ii-hit-l: var(--ix-spacing-lg);  }
+.ix-hitbox-l-xl  { --ii-hit-l: var(--ix-spacing-xl);  }
+.ix-hitbox-l-2xl { --ii-hit-l: var(--ix-spacing-2xl); }
+
+/* Debug — viser hitbox-arealet alltid (blå) og bytter til grønt ved hover */
+.ix-hitbox-debug::before {
+    outline: 2px dashed rgba(0, 100, 255, 0.7);
+    background: rgba(0, 100, 255, 0.1);
+}
+
+.ix-hitbox-debug:hover::before {
+    outline: 2px dashed rgba(0, 200, 80, 0.7);
+    background: rgba(0, 200, 80, 0.2);
+}
+
+/* Debug hover — viser kun hitbox-arealet ved hover (grønt) */
+.ix-hitbox-debug-hover:hover::before {
+    outline: 2px dashed rgba(0, 200, 80, 0.7);
+    background: rgba(0, 200, 80, 0.2);
+}
