@@ -1,0 +1,55 @@
+:root,
+:host,
+[data-status="default"],
+.ix-dark-mode,
+.ix-light-mode,
+.regard-color-scheme-preference {
+    --ix-color-status-surface: var(--ix-color-surface-main-default);
+    --ix-color-status-border: var(--ix-color-border-main-default);
+    --ix-color-status-fill: var(--ix-color-fill-main-default);
+    --ix-color-status-fill-subtle: var(--ix-color-fill-main-subtle);
+}
+
+.ix-color-status-surface {
+    background-color: var(--ix-color-status-surface);
+}
+
+.ix-color-status-border {
+    border-color: var(--ix-color-status-border);
+}
+
+.ix-color-status-fill {
+    background-color: var(--ix-color-status-fill);
+}
+
+.ix-color-status-fill-subtle {
+    background-color: var(--ix-color-status-fill-subtle);
+}
+
+[data-status="info"] {
+    --ix-color-status-surface: var(--ix-color-surface-info-default);
+    --ix-color-status-border: var(--ix-color-border-info-default);
+    --ix-color-status-fill: var(--ix-color-fill-info-default);
+    --ix-color-status-fill-subtle: var(--ix-color-fill-info-subtle);
+}
+
+[data-status="success"] {
+    --ix-color-status-surface: var(--ix-color-surface-success-default);
+    --ix-color-status-border: var(--ix-color-border-success-default);
+    --ix-color-status-fill: var(--ix-color-fill-success-default);
+    --ix-color-status-fill-subtle: var(--ix-color-fill-success-subtle);
+}
+
+[data-status="warning"] {
+    --ix-color-status-surface: var(--ix-color-surface-warning-default);
+    --ix-color-status-border: var(--ix-color-border-warning-default);
+    --ix-color-status-fill: var(--ix-color-fill-warning-default);
+    --ix-color-status-fill-subtle: var(--ix-color-fill-warning-subtle);
+}
+
+[data-status="danger"] {
+    --ix-color-status-surface: var(--ix-color-surface-danger-default);
+    --ix-color-status-border: var(--ix-color-border-danger-default);
+    --ix-color-status-fill: var(--ix-color-fill-danger-default);
+    --ix-color-status-fill-subtle: var(--ix-color-fill-danger-subtle);
+}

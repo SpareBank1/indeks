@@ -13,13 +13,14 @@ const randomFacts = [
 ];
 
 const StateKort: React.FC = () => {
-    const [status, setStatus] = React.useState('ix-status-default');
+    const [status, setStatus] = React.useState('default');
 
     return (
         <VStack
-            className={`${status} ix-border-radius-md ix-color-border ix-border-width-default ix-p-sm ix-color-surface`}
+            className="ix-border-radius-md ix-color-status-border ix-border-width-default ix-p-sm ix-color-status-surface"
+            data-status={status}
         >
-            <div className="ikon-sirkel ix-color-fill ix-color-foreground-inverse ix-color-border">
+            <div className="ikon-sirkel ix-color-status-fill ix-color-foreground-inverse ix-color-status-border">
                 <Icon name="hjem" size="lg" className=" ix-color-foreground-inverse" />
             </div>
             <div>
@@ -39,11 +40,11 @@ const StateKort: React.FC = () => {
                     style={{ width: '100%', marginTop: 4 }}
                     className="ix-color-surface-main-default ix-border-default ix-border-radius-md ix-py-2xs"
                 >
-                    <option value="ix-status-default">Default</option>
-                    <option value="ix-status-info">Info</option>
-                    <option value="ix-status-success">Suksess</option>
-                    <option value="ix-status-warning">Advarsel</option>
-                    <option value="ix-status-danger">Feil</option>
+                    <option value="default">Default</option>
+                    <option value="info">Info</option>
+                    <option value="success">Suksess</option>
+                    <option value="warning">Advarsel</option>
+                    <option value="danger">Feil</option>
                 </select>
             </label>
             <Button>

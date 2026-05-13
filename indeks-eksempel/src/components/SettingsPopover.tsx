@@ -51,12 +51,12 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
                             <select
                                 id="sizeDropdown"
                                 className="ix-border-default"
-                                defaultValue="ix-density--default"
+                                defaultValue="default"
                                 onChange={onDensityChange}
                             >
-                                <option value="ix-density--compact">Compact</option>
-                                <option value="ix-density--default">Default</option>
-                                <option value="ix-density--comfortable">Comfortable</option>
+                                <option value="compact">Compact</option>
+                                <option value="default">Default</option>
+                                <option value="comfortable">Comfortable</option>
                             </select>
                         </label>
 

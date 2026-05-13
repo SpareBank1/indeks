@@ -25,10 +25,11 @@ const BodyContent: React.FC = () => {
 
     const handleDensityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const bodyDiv = document.getElementsByClassName('ix-body')[0];
-        bodyDiv?.classList.remove('ix-density--compact', 'ix-density--default', 'ix-density--comfortable');
         const selectedDensity = event.target.value;
         if (selectedDensity) {
-            bodyDiv?.classList.add(selectedDensity);
+            (bodyDiv as HTMLElement)?.setAttribute('data-density', selectedDensity);
+        } else {
+            (bodyDiv as HTMLElement)?.removeAttribute('data-density');
         }
         setTimeout(() => {
             updateSpacing();
@@ -45,7 +46,7 @@ const BodyContent: React.FC = () => {
     };
 
     return (
-        <div className="ix-body ix-density--default ix-scala-system regard-color-scheme-preference" style={{ fontSize: '16px' }}>
+        <div className="ix-body ix-scala-system regard-color-scheme-preference" data-density="default" style={{ fontSize: '16px' }}>
             <SettingsPopover
                 onDensityChange={handleDensityChange}
                 onFontSizeChange={handleFontSizeChange}

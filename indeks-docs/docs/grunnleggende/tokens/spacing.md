@@ -18,19 +18,19 @@ Spacing-systemet i Indeks kan justeres basert på hvor kompakt eller romslig (de
 
 - **Default**: Standard visning med balanserte spacing-verdier som gir god lesbarhet og tydelig struktur. Dette er anbefalt valg for de fleste flater og brukstilfeller.
 
-- **Compact**: Kompakt visning med reduserte spacing-verdier. Er godt egnet for flater med behov for høy informasjonstetthet, som for eksempel rådgiverflater og andre interne systemer. Et kompakt område kan settes ved bruk av klassen `ix-density--compact`.
+- **Compact**: Kompakt visning med reduserte spacing-verdier. Er godt egnet for flater med behov for høy informasjonstetthet, som for eksempel rådgiverflater og andre interne systemer. Et kompakt område kan settes ved bruk av attributtet `data-density="compact"`.
 
-- **Comfortable**: Komfortabel visning med økte spacing-verdier som gir et mer romslig uttrykk. Egner seg godt for åpne nettsider, salgskanaler og kampanjer, der innholdet skal få mer luft og oppmerksomhet. Et komfortabelt område kan settes ved bruk av klassen `ix-density--comfortable`.
+- **Comfortable**: Komfortabel visning med økte spacing-verdier som gir et mer romslig uttrykk. Egner seg godt for åpne nettsider, salgskanaler og kampanjer, der innholdet skal få mer luft og oppmerksomhet. Et komfortabelt område kan settes ved bruk av attributtet `data-density="comfortable"`.
 
 ```html
 <!-- Standard -->
-<div class="ix-body ix-density--default">...</div>
+<div class="ix-body" data-density="default">...</div>
 
 <!-- Kompakt -->
-<div class="ix-body ix-density--compact">...</div>
+<div class="ix-body" data-density="compact">...</div>
 
 <!-- Komfortabel -->
-<div class="ix-body ix-density--comfortable">...</div>
+<div class="ix-body" data-density="comfortable">...</div>
 ```
 
 ## Spacing-skala

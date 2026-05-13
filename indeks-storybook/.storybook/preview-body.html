@@ -8,9 +8,9 @@
     <div class="size-control">
         <label for="sizeDropdown">Density:</label>
         <select id="sizeDropdown" class="size-dropdown">
-            <option value="ix-density--compact">Compact</option>
-            <option selected value="ix-density--default">Default</option>
-            <option value="ix-density--comfortable">Comfortable</option>
+            <option value="compact">Compact</option>
+            <option selected value="default">Default</option>
+            <option value="comfortable">Comfortable</option>
         </select>
     </div>
 </div>
@@ -35,12 +35,10 @@
 
         sizeDropdown.addEventListener('change', function () {
 
-            // Remove existing ix-density classes
-            document.body.classList.remove('ix-density--compact', 'ix-density--default', 'ix-density--comfortable');
-
-            // Add the selected class if not default
             if (this.value) {
-                document.body.classList.add(this.value);
+                document.body.setAttribute('data-density', this.value);
+            } else {
+                document.body.removeAttribute('data-density');
             }
         });
     };
