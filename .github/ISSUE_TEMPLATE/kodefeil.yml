@@ -1,0 +1,28 @@
+name: Kodefeil
+description: Rapporter en feil i en komponent, token eller stil
+labels: ["bug"]
+body:
+  - type: input
+    id: komponent
+    attributes:
+      label: Komponent / pakke
+      placeholder: "f.eks. TextField, @sb1/indeks-react"
+    validations:
+      required: true
+  - type: textarea
+    id: beskrivelse
+    attributes:
+      label: Beskrivelse
+      description: Hva skjer, og hva forventet du skulle skje?
+    validations:
+      required: true
+  - type: textarea
+    id: reprodusere
+    attributes:
+      label: Steg for å reprodusere
+      placeholder: "1. Gjør X\n2. Se Y"
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      placeholder: "f.eks. 2.1.0"
