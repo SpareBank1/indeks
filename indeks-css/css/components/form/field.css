@@ -24,6 +24,7 @@
     color: var(--ix-color-foreground-main-subtle);
     line-height: 150%;
 
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     &:empty {
         display: none;
     }
