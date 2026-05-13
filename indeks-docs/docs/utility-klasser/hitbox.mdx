@@ -107,6 +107,70 @@ direkte hvis du trenger en egendefinert størrelse:
 }
 ```
 
+## Eksempler
+
+### Uniform utvidelse
+
+Legg merke til at den visuelle størrelsen er uendret — bare det klikkbare arealet vokser.
+
+```jsx live
+<div class="hb-demo">
+    <div class="ix-hitbox ix-hitbox-2xs ix-hitbox-debug">2xs</div>
+    <div class="ix-hitbox ix-hitbox-xs ix-hitbox-debug">xs</div>
+    <div class="ix-hitbox ix-hitbox-sm ix-hitbox-debug">sm</div>
+    <div class="ix-hitbox ix-hitbox-md ix-hitbox-debug">md</div>
+    <div class="ix-hitbox ix-hitbox-lg ix-hitbox-debug">lg</div>
+</div>
+```
+
+### X-akse
+
+Nyttig for lenker og knapper i navigasjon der du vil utvide klikkbart areal horisontalt uten å påvirke linjehøyden.
+
+```jsx live
+<div class="hb-demo">
+    <div class="ix-hitbox ix-hitbox-x-sm ix-hitbox-debug">x-sm</div>
+    <div class="ix-hitbox ix-hitbox-x-md ix-hitbox-debug">x-md</div>
+    <div class="ix-hitbox ix-hitbox-x-lg ix-hitbox-debug">x-lg</div>
+</div>
+```
+
+### Y-akse
+
+Nyttig for ikoner og kompakte verktøylinjeknapper der du vil utvide treffarealet opp og ned.
+
+```jsx live
+<div class="hb-demo">
+    <div class="ix-hitbox ix-hitbox-y-sm ix-hitbox-debug">y-sm</div>
+    <div class="ix-hitbox ix-hitbox-y-md ix-hitbox-debug">y-md</div>
+    <div class="ix-hitbox ix-hitbox-y-lg ix-hitbox-debug">y-lg</div>
+</div>
+```
+
+### Individuelle sider
+
+Nyttig for elementer som sitter langs en kant og bare trenger utvidelse innover — for eksempel en lukk-knapp i et hjørne.
+
+```jsx live
+<div class="hb-demo">
+    <div class="ix-hitbox ix-hitbox-t-lg ix-hitbox-debug">t-lg</div>
+    <div class="ix-hitbox ix-hitbox-r-lg ix-hitbox-debug">r-lg</div>
+    <div class="ix-hitbox ix-hitbox-b-lg ix-hitbox-debug">b-lg</div>
+    <div class="ix-hitbox ix-hitbox-l-lg ix-hitbox-debug">l-lg</div>
+</div>
+```
+
+### Kombiner akseklasser
+
+Bruk x- og y-akseklassene sammen for asymmetrisk utvidelse.
+
+```jsx live
+<div class="hb-demo">
+    <div class="ix-hitbox ix-hitbox-x-lg ix-hitbox-y-2xs ix-hitbox-debug">x-lg y-2xs</div>
+    <div class="ix-hitbox ix-hitbox-x-2xs ix-hitbox-y-lg ix-hitbox-debug">x-2xs y-lg</div>
+</div>
+```
+
 ## Debug
 
 To klasser gjør det enklere å visualisere hitbox-arealet under utvikling. Fjern dem før produksjon.
