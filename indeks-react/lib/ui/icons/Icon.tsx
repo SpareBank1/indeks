@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import type { ElementType, JSX } from 'react';
-import { getIconName, type IconName } from './icon-types';
-import type { MaterialDesignIconName } from './material-design-icon-types';
+import type { IconName } from './icon-types';
 
 export type IconProps<As extends ElementType> = {
     as?: As;
@@ -11,45 +10,36 @@ export type IconProps<As extends ElementType> = {
     size?: 'sm' | 'md' | 'lg' | 'xl';
 } & (
     | {
-          /** Navn på ikonet men bruk av fellesbetegnelser for SpareBank1. Gjensidig utelukkende med `materialDesignName`. */
+          /** Navn på ikonet med bruk av fellesbetegnelser for SpareBank1. Gjensidig utelukkende med `materialDesignName`. */
           name: IconName;
           materialDesignName?: never;
       }
     | {
           name?: never;
           /** Navn på Material Design-ikonet. Gjensidig utelukkende med `name`. */
-          materialDesignName: MaterialDesignIconName;
+          materialDesignName: string;
       }
 );
 
-const ICON_CDN_BASE = 'https://cdn.sparebank1.no/icons';
-
-export function Icon<As extends ElementType = 'span'>(props: IconProps<As>): JSX.Element {
+export function Icon<As extends ElementType = 'ix-icon'>(props: IconProps<As>): JSX.Element {
     const {
-        as: Component = 'span',
+        as: Component = 'ix-icon',
         className,
         ariaLabel,
         name,
         materialDesignName,
         size = 'md',
         ...restProps
-    } = {
-        ...props,
-    };
-
-    const iconName = (name && getIconName(name)) || materialDesignName;
+    } = props;
 
     return (
         <Component
-            role="img"
             aria-label={ariaLabel}
-            aria-hidden={!ariaLabel}
             {...restProps}
-            className={clsx('ix-icon', { [`ix-icon--${size}`]: size && size !== 'md' }, className)}
-            style={{
-                maskImage: `url(${ICON_CDN_BASE}/${iconName}.svg)`,
-                WebkitMaskImage: `url(${ICON_CDN_BASE}/${iconName}.svg)`,
-            }}
+            name={name}
+            materialdesignname={materialDesignName}
+            size={size !== 'md' ? size : undefined}
+            className={clsx('ix-icon', className)}
         />
     );
 }

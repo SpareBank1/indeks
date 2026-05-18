@@ -1,4 +1,5 @@
 import { forwardRef, type ReactNode } from 'react';
+import type { IxField } from '@sb1/indeks-web';
 
 export type FieldProps = {
     className?: string;
@@ -11,7 +12,7 @@ export type FieldProps = {
     readOnly?: boolean;
 };
 
-export const Field = forwardRef<HTMLElement, FieldProps>(function Field({
+export const Field = forwardRef<IxField, FieldProps>(function Field({
     className,
     label,
     children,

@@ -1,4 +1,4 @@
-:where(.ix-icon) {
+:where(ix-icon, .ix-icon) {
     background-color: currentColor;
     /* setter fargen til ikonet */
     color: inherit;
@@ -7,19 +7,29 @@
     display: inline-block;
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     mask-size: cover;
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    -webkit-mask-size: cover;
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    mask-position: center;
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    mask-image: var(--ii-icon-url);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    -webkit-mask-image: var(--ii-icon-url);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    -webkit-mask-position: center;
 }
 
-:where(.ix-icon--sm) {
+:where(ix-icon[data-size="sm"], .ix-icon[data-size="sm"]) {
     width: var(--ix-font-size-lg);
     height: var(--ix-font-size-lg);
 }
 
-:where(.ix-icon--lg) {
+:where(ix-icon[data-size="lg"], .ix-icon[data-size="lg"]) {
     width: var(--ix-font-size-2xl);
     height: var(--ix-font-size-2xl);
 }
 
-:where(.ix-icon--xl) {
+:where(ix-icon[data-size="xl"], .ix-icon[data-size="xl"]) {
     width: var(--ix-font-size-3xl);
     height: var(--ix-font-size-3xl);
 }
