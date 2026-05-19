@@ -1,4 +1,5 @@
 import { forwardRef, type ReactNode } from 'react';
+import { Label } from '../label/Label';
 
 export type FieldProps = {
     className?: string;
@@ -25,7 +26,7 @@ export const Field = forwardRef<HTMLElement, FieldProps>(function Field({
 
     return (
         <ix-field ref={ref} {...restProps} class={className} data-disabled={disabled || undefined} data-readonly={readOnly || undefined}>
-            {label && <label htmlFor={inputId}>{label}</label>}
+            {label && <Label htmlFor={inputId}>{label}</Label>}
             <span data-field="description">{description}</span>
             {children}
             <span data-field="error">{errorMessage}</span>
