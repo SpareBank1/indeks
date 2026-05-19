@@ -5,18 +5,14 @@
     width: var(--ix-font-size-xl);
     height: var(--ix-font-size-xl);
     display: inline-block;
-    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    /* stylelint-disable plugin/no-unsupported-browser-features */
     mask-size: cover;
-    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     -webkit-mask-size: cover;
-    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     mask-position: center;
-    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     mask-image: var(--ii-icon-url);
-    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     -webkit-mask-image: var(--ii-icon-url);
-    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     -webkit-mask-position: center;
+    /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
 :where(ix-icon[data-size="sm"], .ix-icon[data-size="sm"]) {
