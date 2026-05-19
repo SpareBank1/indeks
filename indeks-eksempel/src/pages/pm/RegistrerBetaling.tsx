@@ -14,7 +14,7 @@ export default function PMRegistrerBetaling() {
                         <TextField label="Kroner" className="ix-col-span-2 " />
                         <TextField label="Øre" />
                     </div>
-                    <HStack className="ix-align-flex-end">
+                    <HStack align="end">
                         <TextField label="Dato" className="ix-flex-grow ix-p" />
                         <Button variant="secondary" size="lg">
                             I dag

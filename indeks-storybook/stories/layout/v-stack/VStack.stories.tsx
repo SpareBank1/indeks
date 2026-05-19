@@ -6,22 +6,39 @@ const meta = {
   title: "Layout/VStack",
   component: VStack,
   tags: ["autodocs"],
-  args: { children: "Tekst" },
+  args: {
+    gap: "md",
+    children: (
+      <>
+        <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 1</div>
+        <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 2</div>
+        <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 3</div>
+      </>
+    ),
+  },
 } satisfies Meta<typeof VStack>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Standard: Story = {};
 
-export const EgendefinertBarn: Story = {
-  args: {},
-  render: (args) => {
-    return (
-      <VStack {...args}>
-        <p>Jeg er et egedefinert barn</p>
-      </VStack>
-    );
-  },
+export const AlignCenter: Story = {
+  args: { align: "center" },
+};
+
+export const AlignEnd: Story = {
+  args: { align: "end" },
+};
+
+export const HTML: Story = {
+  render: () => (
+    <div dangerouslySetInnerHTML={{ __html: `
+      <ix-stack gap="md">
+        <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 1</div>
+        <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 2</div>
+        <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 3</div>
+      </ix-stack>
+    `}} />
+  ),
 };

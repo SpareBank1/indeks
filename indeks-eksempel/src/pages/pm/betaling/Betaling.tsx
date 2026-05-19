@@ -28,7 +28,7 @@ export default function PMBetaling() {
                     <Text>Det er fordi vi ikke jobber da. Dette er viktig informasjon. </Text>
                 </Card>
             </div>
-            <VStack justifyContent="center" alignItems="center" padding="sm">
+            <VStack align="center" className="ix-items-center ix-p-sm">
                 <Card surfaceColor="main" className="ix-m-sm ix-mb-xl ix-w-full ix-max-w-sm ">
                     <BetalingListelement
                         iconName="account_balance_wallet"
@@ -92,7 +92,7 @@ export default function PMBetaling() {
                         description="Oversikt over tidligere betalinger og overføringer"
                     />
                 </Card>
-                <Card surfaceColor="main" className="ix-mt-xl ix-w-full ix-align-center ix-p-xl ix-gap-lg ix-max-w-sm ">
+                <Card surfaceColor="main" className="ix-mt-xl ix-w-full ix-items-center ix-p-xl ix-gap-lg ix-max-w-sm ">
                     Hva synes du om denne siden?
                     <HStack gap="xs">
                         <Button variant="secondary">

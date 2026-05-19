@@ -14,7 +14,7 @@ export const AccountRow: React.FC<AccountRowProps> = ({ amount, accountName, acc
     }).format(amount);
 
     return (
-        <div className="ix-grid ix-align-center ix-py-xs ix-px-sm ix-grid-stretch-middle">
+        <div className="ix-grid ix-items-center ix-py-xs ix-px-sm ix-grid-stretch-middle">
             <div className="ix-p-xs ix-border-radius-circle ix-w-fit ix-h-fit eksempel-icon-bubble">
                 <Icon materialDesignName="account_balance" />
             </div>
