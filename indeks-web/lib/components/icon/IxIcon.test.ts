@@ -41,30 +41,13 @@ describe('IxIcon', () => {
     });
 
     describe('data-size', () => {
-        it('setter data-size="sm" naar size="sm"', () => {
-            const icon = createIcon(`<ix-icon name="hjem" size="sm"></ix-icon>`);
+        it('har data-size="sm" naar data-size="sm" er satt direkte', () => {
+            const icon = createIcon(`<ix-icon name="hjem" data-size="sm"></ix-icon>`);
             expect(icon.getAttribute('data-size')).toBe('sm');
         });
 
-        it('setter ikke data-size naar size="md"', () => {
-            const icon = createIcon(`<ix-icon name="hjem" size="md"></ix-icon>`);
-            expect(icon.hasAttribute('data-size')).toBe(false);
-        });
-
-        it('setter ikke data-size naar size mangler', () => {
+        it('har ikke data-size naar attributtet mangler', () => {
             const icon = createIcon(`<ix-icon name="hjem"></ix-icon>`);
-            expect(icon.hasAttribute('data-size')).toBe(false);
-        });
-
-        it('oppdaterer data-size naar size-attributt endres', () => {
-            const icon = createIcon(`<ix-icon name="hjem" size="sm"></ix-icon>`);
-            icon.setAttribute('size', 'lg');
-            expect(icon.getAttribute('data-size')).toBe('lg');
-        });
-
-        it('fjerner data-size naar size endres til md', () => {
-            const icon = createIcon(`<ix-icon name="hjem" size="sm"></ix-icon>`);
-            icon.setAttribute('size', 'md');
             expect(icon.hasAttribute('data-size')).toBe(false);
         });
     });

@@ -38,7 +38,7 @@ export function Icon<As extends ElementType = 'ix-icon'>(props: IconProps<As>): 
             {...restProps}
             name={name}
             materialdesignname={materialDesignName}
-            size={size !== 'md' ? size : undefined}
+            data-size={size !== 'md' ? size : undefined}
             className={clsx('ix-icon', className)}
         />
     );

@@ -11,7 +11,7 @@ export type IconName = keyof typeof ICON_NAMES;
 
 export class IxIcon extends HTMLElement {
     static get observedAttributes(): string[] {
-        return ['name', 'materialdesignname', 'size', 'aria-label'];
+        return ['name', 'materialdesignname', 'aria-label'];
     }
 
     connectedCallback(): void {
@@ -26,7 +26,6 @@ export class IxIcon extends HTMLElement {
     private _update(): void {
         const nameAttr = this.getAttribute('name');
         const materialDesignName = this.getAttribute('materialdesignname');
-        const size = this.getAttribute('size') ?? 'md';
         const ariaLabel = this.getAttribute('aria-label');
 
         const iconFileName = nameAttr
@@ -37,12 +36,6 @@ export class IxIcon extends HTMLElement {
             this.style.setProperty('--ii-icon-url', `url(${ICON_CDN_BASE}/${iconFileName}.svg)`);
         } else {
             this.style.removeProperty('--ii-icon-url');
-        }
-
-        if (size && size !== 'md') {
-            this.setAttribute('data-size', size);
-        } else {
-            this.removeAttribute('data-size');
         }
 
         if (ariaLabel) {
