@@ -1,0 +1,179 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/icon.json';
+
+# Icon
+
+Ikon-komponenten viser SVG-ikoner fra SpareBank 1s CDN ved hjelp av CSS `mask-image`. Ikoner arver farge fra omgivende tekst.
+
+## Egnet til
+
+- Dekorative ikoner ved siden av tekst
+- Semantiske ikoner som formidler informasjon uten tilstøtende tekst (med `ariaLabel`)
+
+## Uegnet til
+
+- Ikoner som eneste interaktive element uten tilgjengelig navn — bruk en knapp med `aria-label` rundt ikonet
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Icon name="hjem" />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html live
+<ix-icon name="hjem"></ix-icon>
+```
+
+Web componenten og React-komponenten bruker de samme norske aliasene (`hjem`, `meny`, `sparing`). Web componenten mapper til riktig SVG-filnavn automatisk.
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Størrelser
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack alignItems="center">
+  <Icon name="hjem" size="sm" />
+  <Icon name="hjem" size="md" />
+  <Icon name="hjem" size="lg" />
+  <Icon name="hjem" size="xl" />
+</HStack>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html live
+<div class="ix-hstack ix-items-center">
+  <ix-icon name="hjem" size="sm"></ix-icon>
+  <ix-icon name="hjem"></ix-icon>
+  <ix-icon name="hjem" size="lg"></ix-icon>
+  <ix-icon name="hjem" size="xl"></ix-icon>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+### Semantisk ikon
+
+Bruk `ariaLabel` når ikonet formidler informasjon som ikke er tilgjengelig andre steder:
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Icon name="hjem" ariaLabel="Gå til forsiden" />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html live
+<ix-icon name="hjem" aria-label="Gå til forsiden"></ix-icon>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Bruk ikon sammen med tekst der det er mulig
+
+Ikoner alene er tvetydige. Kombinasjon med synlig tekst gjør intensjonen klar for alle brukere, uavhengig av kjennskap til ikonspråket.
+
+### Dekorative ikoner trenger ingen label
+
+Ikoner som støtter tekst som allerede forklarer innholdet er dekorative. Ikke legg til `ariaLabel` — det gir dobbel annonsering til skjermlesere.
+
+### Meningsbærende ikoner trenger aria-label
+
+Når et ikon brukes alene uten tilstøtende synlig tekst og formidler informasjon, sett `ariaLabel`. Eksempel: et varselsikon som er eneste indikasjon på feil.
+
+### Ikoner i knapper og lenker
+
+Et ikon i en knapp eller lenke trenger ikke egen `ariaLabel` — sett `aria-label` på den interaktive komponenten. Dobbel merking gir støy for skjermleserbrukere.
+
+### Farge er ikke alene bærer av mening
+
+Ikonet skal kommunisere gjennom form, ikke farge alene. Brukere med fargeblindhet eller høy kontrast-modus skal forstå ikonet uten å se fargen.
+
+### Velg størrelse etter kontekst
+
+`sm` egner seg til kompakt UI som etiketter og badges. `md` (standard) passer ved siden av tekst i løpende innhold. `lg` og `xl` brukes til frittstående ikoner, navigasjon og illustrerende elementer.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Semantiske ikoner trenger aria-label** — sett `ariaLabel` når ikonet formidler informasjon uten tilstøtende synlig tekst
+- **Ikoner i knapper** — knapper med kun ikon trenger `aria-label` på knappen, ikke på ikonet
+
+### Hva komponenten gjør automatisk
+
+- `aria-hidden="true"` settes automatisk på dekorative ikoner
+- `role="img"` settes automatisk når `aria-label` er til stede
+- `--ii-icon-url` settes på elementet slik at `mask-image` i CSS kan bruke den
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `name` | `IconName` | Nei* | | Norsk alias for SpareBank 1-ikoner (`hjem`, `meny`, `sparing`). Gjensidig utelukkende med `materialDesignName` |
+| `materialDesignName` | `string` | Nei* | | Material Design-ikonnavn (f.eks. `"arrow_forward"`). Gjensidig utelukkende med `name` |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | Nei | `'md'` | Størrelse på ikonet |
+| `ariaLabel` | `string` | Nei | | Tilgjengelig navn for semantiske ikoner. Når satt: `role="img"` legges til, `aria-hidden` fjernes |
+| `as` | `ElementType` | Nei | `'ix-icon'` | HTML-element eller komponent som rendres |
+| `className` | `string` | Nei | | Ekstra CSS-klasser |
+
+\* Én av `name` eller `materialDesignName` må settes.
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+| Attributt | Type | Standard | Beskrivelse |
+|-----------|------|----------|-------------|
+| `name` | `IconName` | | Norsk alias for SpareBank 1-ikoner (`hjem`, `meny`, `sparing`). Web componenten mapper til riktig SVG-filnavn. |
+| `materialdesignname` | `string` | | Material Design-ikonnavn |
+| `size` | `sm \| md \| lg \| xl` | `md` | Størrelse på ikonet |
+| `aria-label` | `string` | | Tilgjengelig navn for semantiske ikoner |
+
+Uten web componenten (kun `.ix-icon`-klassen) kan du sette `data-size` direkte på elementet.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Ikonets farge arves fra omgivende tekst via `color: inherit`. For å endre farge, sett `color` på et overordnet element.
+
+Størrelsesstegene er knyttet til typografitokens:
+
+| Størrelse | Token |
+|-----------|-------|
+| `sm` | `--ix-font-size-lg` |
+| `md` (standard) | `--ix-font-size-xl` |
+| `lg` | `--ix-font-size-2xl` |
+| `xl` | `--ix-font-size-3xl` |

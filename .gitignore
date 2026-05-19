@@ -43,3 +43,6 @@ coverage/
 
 # npm pack
 *.tgz
+
+# Refs (eksterne designsystem-referanser)
+_refs/
