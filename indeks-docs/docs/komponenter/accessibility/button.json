@@ -1,0 +1,108 @@
+{
+  "component": "Button",
+  "lastReviewed": "2026-05-08",
+  "consumerResponsibilities": [
+    {
+      "summary": "Sett aria-label på ikonknapper",
+      "details": "En knapp med bare ikon og ingen synlig tekst er meningsløs for skjermlesere uten en beskrivende label. Bruk aria-label=\"Last opp vedlegg\" direkte på knappen. Labelen skal beskrive handlingen, ikke ikonet.",
+      "wcag": ["4.1.2", "2.4.6"]
+    },
+    {
+      "summary": "Unngå disabled som standard — foretrekk tydelig feilmelding",
+      "details": "Disabled-knapper sier ikke brukeren hva som mangler. Der det er mulig, la knappen være aktiv og gi tydelig feilmelding ved innsending. Hvis disabled brukes, sørg for at brukeren har fått forklart hvorfor.",
+      "wcag": ["3.3.1", "3.3.3"]
+    },
+    {
+      "summary": "Bruk semantisk HTML-element",
+      "details": "Bruk standard <button> for handlinger og <a> (via as=\"a\") for navigasjon. Ikke bruk <div> eller <span> som knapp — det bryter nativ tastaturnavigasjon og skjermleser-annonsering.",
+      "wcag": ["4.1.2"]
+    },
+    {
+      "summary": "Gi loadingLabel ved loading-tilstand",
+      "details": "Når loading=true vises loadingLabel som knappens innhold og aria-label. Uten loadingLabel er knappen anonym for skjermlesere under lasting. Bruk norsk tekst som «Sender inn…» eller «Laster…».",
+      "wcag": ["4.1.2", "3.3.1"]
+    },
+    {
+      "summary": "Kombiner tertiærknapp alene med ikon",
+      "details": "En tertiærknapp uten tekst og ikon kan forveksles med vanlig tekst. Dersom tertiærknapp brukes uten omgivende kontekst som tydelig viser at det er en handling, skal den alltid ha et ikon.",
+      "wcag": ["1.3.3", "2.4.6"]
+    },
+    {
+      "summary": "Bekreft destruktive handlinger",
+      "details": "Handlinger som sletter eller endrer data permanent bør enten kreve en ekstra bekreftelse (f.eks. en modal) eller tydelig merkes som destruktive med danger-prop. Ikke stol på at farge alene kommuniserer alvorlighetsgraden.",
+      "wcag": ["3.3.4", "1.4.1"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Native <button>-element med implisitt rolle. Tekst-innhold gir tilgjengelig navn automatisk." },
+    { "id": "1.3.2", "notes": "Innholdet følger naturlig lekkefølge i DOM." },
+    { "id": "1.4.1", "notes": "Danger-tilstand kommuniseres med fargeendring og semantisk klasse — ikke farge alene." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
+    { "id": "1.4.11", "notes": "Fokusindikator oppfyller 3:1 kontrastkrav." },
+    { "id": "2.1.1", "notes": "Native <button> aktiveres med Enter og Space. Fullt opererbart med tastatur." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med outline-token." },
+    { "id": "2.5.8", "notes": "Minimumsstørrelse md oppfyller 24x24px klikkflate (padding + innhold)." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
+    { "id": "1.4.3", "notes": "Tekst- og ikonfarge i alle varianter bruker --ix-color-component-button-*-foreground-* tokens mot sine respektive fill-tokens. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG." },
+    { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button. Tilgjengelig navn fra innhold eller aria-label. Native disabled settes ved loading." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Knappen har ingen ikke-tekstlig innhold som bilder — ikon-barn er dekorativt og skjules med aria-hidden." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Knappen formidler ikke instruksjoner — den utfører en handling." },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt som ber om personlig informasjon." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.12" },
+    { "id": "1.4.13" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Lenkeknapper (as=\"a\") må ha meningsfull tekst — det er konsumentens ansvar." },
+    { "id": "2.4.5" },
+    { "id": "2.4.6" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native button-element — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.2", "reason": "Knappen trigger ingen automatisk kontekstendring ved fokus." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1" },
+    { "id": "3.3.2" },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Knappen genererer ingen statusmeldinger selv." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til knappen" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Enter", "action": "Aktiverer knappen" },
+    { "key": "Space", "action": "Aktiverer knappen" }
+  ],
+  "screenReader": [
+    "Ved fokus: \"[knappetekst], knapp\"",
+    "Ikonknapp: \"[aria-label], knapp\"",
+    "Ved loading: \"[loadingLabel], knapp, deaktivert\"",
+    "Danger-variant: ingen ekstra annonsering — den visuelle fare-indikasjonen er ikke eksponert semantisk. Konteksten rundt knappen må forklare konsekvensen."
+  ]
+}
