@@ -1,0 +1,276 @@
+---
+title: Tooltip
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/tooltip.json';
+
+# Tooltip
+
+En Tooltip er en liten informasjonsboks som vises når brukeren holder musepekeren over, fokuserer på eller berører et element. Den brukes til å gi ekstra kontekst, forklaringer eller detaljer uten å forstyrre hovedinnholdet.
+
+:::info Kun tekst
+Tooltip-panelet viser kun ren tekst. Bruk [Popover](#) for innhold som krever formatering, lenker eller interaktive elementer.
+:::
+
+## Egnet til
+
+- Kort, supplerende informasjon knyttet til et element
+- Forklaring av ikoner, begreper eller forkortelser
+- Kontekst til handlinger før brukeren utfører dem
+- Når informasjonen ikke er kritisk for å fullføre oppgaven
+
+## Uegnet til
+
+- Viktig informasjon som brukeren må forstå for å fullføre en oppgave
+- Lengre forklaringer eller komplekse instruksjoner — bruk popover i stedet
+- Innhold som må være tilgjengelig på mobil uten hover
+- Som erstatning for tydelige etiketter
+
+## Bruk på skjemafelt
+
+Tooltip integreres i skjemafelt via `tooltip`-prop (React) eller `tooltip`-attributt (HTML) på feltkomponentene. `<ix-field>` injiserer automatisk en info-ikon-knapp i label-raden.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field tooltip="Fullt juridisk navn som det står i passet" tooltip-label="Mer informasjon om Navn">
+  <label>Navn</label>
+  <div className="ix-text-field">
+    <input type="text" />
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField
+  label="Navn"
+  tooltip="Fullt juridisk navn som det står i passet"
+  tooltipLabel="Mer informasjon om Navn"
+/>
+```
+
+</TabItem>
+</Tabs>
+
+### Med TextArea
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field tooltip="Maks 500 tegn, ingen HTML" tooltip-label="Mer informasjon om Beskrivelse">
+  <label>Beskrivelse</label>
+  <div className="ix-text-area">
+    <textarea></textarea>
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<TextArea
+  label="Beskrivelse"
+  tooltip="Maks 500 tegn, ingen HTML"
+  tooltipLabel="Mer informasjon om Beskrivelse"
+/>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Innhold
+
+Hold teksten kort og presis — ideelt 1–4 ord eller én kort setning. Tooltip er ikke egnet til lengre forklaringer.
+
+- Skriv i et klart og enkelt språk
+- Unngå fagbegreper hvis mulig
+- Start med det viktigste først
+- Ikke bruk punktlister
+- Kun ren tekst — ingen HTML, lenker eller formatering
+
+### Posisjonering
+
+Tooltip plasseres automatisk over trigger-elementet (`top` som standard) og flipper til motsatt side om det ikke er plass. Plassering kan overstyres via `tooltipPlacement` (React) eller `tooltip-placement` (HTML):
+
+| Verdi | Beskrivelse |
+|-------|-------------|
+| `top` | Over trigger, sentrert (standard) |
+| `top-start` | Over trigger, justert mot venstre |
+| `top-end` | Over trigger, justert mot høyre |
+| `bottom` | Under trigger, sentrert |
+| `bottom-start` | Under trigger, justert mot venstre |
+| `bottom-end` | Under trigger, justert mot høyre |
+| `left` | Til venstre for trigger |
+| `right` | Til høyre for trigger |
+
+Pilen peker alltid mot senteret av trigger-elementet, også etter at panelet er clamped til viewport.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', padding: '3rem'}}>
+  <ix-field tooltip="Tekst over feltet" tooltip-placement="top" tooltip-label="Mer informasjon">
+    <label>Top (standard)</label>
+    <div className="ix-text-field"><input type="text" /></div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field tooltip="Justert mot venstre" tooltip-placement="top-start" tooltip-label="Mer informasjon">
+    <label>Top-start</label>
+    <div className="ix-text-field"><input type="text" /></div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field tooltip="Justert mot høyre" tooltip-placement="top-end" tooltip-label="Mer informasjon">
+    <label>Top-end</label>
+    <div className="ix-text-field"><input type="text" /></div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field tooltip="Tekst under feltet" tooltip-placement="bottom" tooltip-label="Mer informasjon">
+    <label>Bottom</label>
+    <div className="ix-text-field"><input type="text" /></div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field tooltip="Justert mot venstre" tooltip-placement="bottom-start" tooltip-label="Mer informasjon">
+    <label>Bottom-start</label>
+    <div className="ix-text-field"><input type="text" /></div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field tooltip="Justert mot høyre" tooltip-placement="bottom-end" tooltip-label="Mer informasjon">
+    <label>Bottom-end</label>
+    <div className="ix-text-field"><input type="text" /></div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field tooltip="Tekst til venstre" tooltip-placement="left" tooltip-label="Mer informasjon">
+    <label>Left</label>
+    <div className="ix-text-field"><input type="text" /></div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field tooltip="Tekst til høyre" tooltip-placement="right" tooltip-label="Mer informasjon">
+    <label>Right</label>
+    <div className="ix-text-field"><input type="text" /></div>
+    <span data-field="error"></span>
+  </ix-field>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', padding: '3rem'}}>
+  <TextField label="Top (standard)" tooltip="Tekst over feltet" tooltipPlacement="top" tooltipLabel="Mer informasjon" />
+  <TextField label="Top-start" tooltip="Justert mot venstre" tooltipPlacement="top-start" tooltipLabel="Mer informasjon" />
+  <TextField label="Top-end" tooltip="Justert mot høyre" tooltipPlacement="top-end" tooltipLabel="Mer informasjon" />
+  <TextField label="Bottom" tooltip="Tekst under feltet" tooltipPlacement="bottom" tooltipLabel="Mer informasjon" />
+  <TextField label="Bottom-start" tooltip="Justert mot venstre" tooltipPlacement="bottom-start" tooltipLabel="Mer informasjon" />
+  <TextField label="Bottom-end" tooltip="Justert mot høyre" tooltipPlacement="bottom-end" tooltipLabel="Mer informasjon" />
+  <TextField label="Left" tooltip="Tekst til venstre" tooltipPlacement="left" tooltipLabel="Mer informasjon" />
+  <TextField label="Right" tooltip="Tekst til høyre" tooltipPlacement="right" tooltipLabel="Mer informasjon" />
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+### Interaksjon
+
+- Vises ved hover (300 ms delay), focus og touch
+- Lukkes når musepekeren forlater trigger, fokus flyttes, eller brukeren trykker `Escape`
+- Trenger ikke aktiv lukking — forsvinner automatisk
+- Kun én tooltip er synlig om gangen
+
+## API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### `<ix-field>`-attributter
+
+| Attributt | Type | Beskrivelse |
+|-----------|------|-------------|
+| `tooltip` | `string` | Innholdet som vises i tooltip. Kun tekst — ingen HTML. Trigger injeksjon av info-knapp i label-raden. |
+| `tooltip-label` | `string` | `aria-label` på info-knappen. **Alltid påkrevd** for riktig tilgjengelighet — se advarsel over. |
+| `tooltip-placement` | se tabell over | Ønsket plassering. Flipper automatisk om det ikke er plass. Standard: `"top"`. |
+| `data-tooltip` | `string` | Brukes direkte på et hvilket som helst element for å gi det tooltip-oppførsel. Kun tekst. |
+| `data-tooltip-placement` | se tabell over | Ønsket plassering på vilkårlige `data-tooltip`-elementer. Standard: `"top"`. |
+
+</TabItem>
+<TabItem value="react" label="React">
+
+### Props på TextField og TextArea
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `tooltip` | `string` | | Innholdet som vises i tooltip. Kun tekst — ingen HTML. Trigger injeksjon av info-knapp i label-raden. |
+| `tooltipLabel` | `string` | | `aria-label` på info-knappen. **Alltid påkrevd** for riktig tilgjengelighet — se advarsel over. |
+| `tooltipPlacement` | se tabell over | `"top"` | Ønsket plassering. Flipper automatisk om det ikke er plass. |
+
+</TabItem>
+</Tabs>
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Send alltid inn `tooltipLabel`** — det er den eneste måten info-knappen får et tilgjengelig navn på riktig språk. Mangler den, vises en konsolladvarsel under utvikling.
+- **Tooltip er ikke eneste kilde til kritisk informasjon** — informasjon brukeren *må* ha for å fullføre en oppgave skal ligge i label eller description.
+- **Kun tekst i tooltip** — ikke legg inn HTML, lenker eller formatering i tooltip-verdien.
+
+### Hva komponenten gjør automatisk
+
+- **`role="tooltip"`** settes på panelet — skjermlesere behandler det korrekt som supplerende beskrivelse
+- **`aria-describedby`** kobles dynamisk fra info-knappen til tooltip-panelet når tooltip åpnes, og fjernes ved lukking
+- **`aria-label`** settes på info-knappen med verdien fra `tooltipLabel` / `tooltip-label`
+- **Escape** lukker tooltip uten å flytte fokus (WCAG 2.1.2)
+- **Focus** aktiverer tooltip — tastaturbrukere har full tilgang
+- **44×44 px touch-mål** via `::before` på info-knappen (WCAG 2.5.8)
+- **Focus-visible-ring** på info-knappen (WCAG 2.4.7)
+- **Inverted farger** med tilstrekkelig kontrast mellom tekst og bakgrunn (WCAG 1.4.3)
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Tilpasning med CSS
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Tooltip-panel | `.ix-tooltip` |
+| Pil (pseudo-element) | `.ix-tooltip::before` |
+| Plassering over trigger | `.ix-tooltip[data-placement^="top"]` |
+| Plassering under trigger | `.ix-tooltip[data-placement^="bottom"]` |
+| Plassering til venstre | `.ix-tooltip[data-placement="left"]` |
+| Plassering til høyre | `.ix-tooltip[data-placement="right"]` |
+| Label-rad (label + info-knapp) | `.ix-field__label-row` |
+| Info-knapp | `.ix-field__tooltip-btn` |
+
+### Tilpassede farger
+
+```css
+.ix-tooltip {
+  --ix-tooltip-background: var(--ix-color-foreground-main-default);
+  --ix-tooltip-color: var(--ix-color-foreground-inverse-default);
+}
+```
+
+## Relatert
+
+- [TextField](./textfield) — tekstfelt der tooltip er tilgjengelig via `tooltip`-prop
+- [TextArea](./textarea) — tekstområde der tooltip er tilgjengelig via `tooltip`-prop

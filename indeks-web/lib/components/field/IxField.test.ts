@@ -561,4 +561,97 @@ describe('IxField', () => {
             expect(label.htmlFor).toBe(textarea.id);
         });
     });
+
+    describe('tooltip-knapp', () => {
+        it('injiserer tooltip-knapp naar tooltip-attributt er satt', () => {
+            const field = createField(`
+                <ix-field tooltip="Hjelpetekst">
+                    <label>Navn</label>
+                    <input />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const btn = field.querySelector('.ix-field__tooltip-btn');
+            expect(btn).not.toBeNull();
+            expect(btn!.getAttribute('data-tooltip')).toBe('Hjelpetekst');
+        });
+
+        it('setter standard aria-label paa knappen', () => {
+            const field = createField(`
+                <ix-field tooltip="Hjelpetekst">
+                    <label>Navn</label>
+                    <input />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const btn = field.querySelector('.ix-field__tooltip-btn');
+            expect(btn!.getAttribute('aria-label')).toBe('Mer informasjon');
+        });
+
+        it('bruker tooltip-label-attributt som aria-label', () => {
+            const field = createField(`
+                <ix-field tooltip="Hjelpetekst" tooltip-label="More information">
+                    <label>Name</label>
+                    <input />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const btn = field.querySelector('.ix-field__tooltip-btn');
+            expect(btn!.getAttribute('aria-label')).toBe('More information');
+        });
+
+        it('wrapper label i label-row', () => {
+            const field = createField(`
+                <ix-field tooltip="Hjelpetekst">
+                    <label>Navn</label>
+                    <input />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const labelRow = field.querySelector('.ix-field__label-row');
+            expect(labelRow).not.toBeNull();
+            expect(labelRow!.querySelector('label')).not.toBeNull();
+            expect(labelRow!.querySelector('.ix-field__tooltip-btn')).not.toBeNull();
+        });
+
+        it('oppdaterer knapp ved endring av tooltip-attributt', async () => {
+            const field = createField(`
+                <ix-field tooltip="Gammel tekst">
+                    <label>Navn</label>
+                    <input />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            field.setAttribute('tooltip', 'Ny tekst');
+            await Promise.resolve();
+            const btn = field.querySelector('.ix-field__tooltip-btn');
+            expect(btn!.getAttribute('data-tooltip')).toBe('Ny tekst');
+        });
+
+        it('fjerner tooltip-knapp naar tooltip-attributt fjernes, men beholder label-row', async () => {
+            const field = createField(`
+                <ix-field tooltip="Hjelpetekst">
+                    <label>Navn</label>
+                    <input />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            field.removeAttribute('tooltip');
+            await Promise.resolve();
+            expect(field.querySelector('.ix-field__tooltip-btn')).toBeNull();
+            expect(field.querySelector('.ix-field__label-row')).not.toBeNull();
+        });
+
+        it('oppretter alltid label-row for label, selv uten tooltip', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Navn</label>
+                    <input />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            expect(field.querySelector('.ix-field__label-row')).not.toBeNull();
+            expect(field.querySelector('.ix-field__tooltip-btn')).toBeNull();
+        });
+    });
 });

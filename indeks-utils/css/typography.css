@@ -1,9 +1,4 @@
-:where(.ix-body) {
-    font-size: var(--ix-font-size-md);
-    color: var(--ix-color-foreground-main-default);
-    font-family: var(--ix-font-family-normal);
-    line-height: 1.2;
-
+:where(:root) {
     --ix-font-size-xs: var(--ii-font-size--2);
     --ix-font-size-sm: var(--ii-font-size--1);
     --ix-font-size-md: var(--ii-font-size-0);
@@ -13,6 +8,13 @@
     --ix-font-size-3xl: var(--ii-font-size-5);
     --ix-font-size-4xl: var(--ii-font-size-7);
     --ix-font-size-5xl: var(--ii-font-size-9);
+}
+
+:where(.ix-body) {
+    font-size: var(--ix-font-size-md);
+    color: var(--ix-color-foreground-main-default);
+    font-family: var(--ix-font-family-normal);
+    line-height: 1.2;
 }
 
 .ix-text-bold,

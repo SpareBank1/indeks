@@ -76,6 +76,27 @@ export const MinMaxLength: Story = {
   },
 };
 
+export const MedTooltip: Story = {
+  args: {
+    tooltip: 'Fullt juridisk navn som det står i passet',
+    tooltipLabel: 'Mer informasjon om Navn',
+  },
+  render: (args) => {
+    return <TextField {...args} />;
+  },
+};
+
+export const TooltipPlassering: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', padding: '3rem' }}>
+      <TextField label="Top (standard)" tooltip="Tekst over feltet" tooltipPlacement="top" />
+      <TextField label="Bottom" tooltip="Tekst under feltet" tooltipPlacement="bottom" />
+      <TextField label="Left" tooltip="Tekst til venstre" tooltipPlacement="left" />
+      <TextField label="Right" tooltip="Tekst til høyre" tooltipPlacement="right" />
+    </div>
+  ),
+};
+
 export const HTML: Story = {
   args: {
     errorMessage: "Feilmelding",
@@ -84,9 +105,9 @@ export const HTML: Story = {
   },
   render: (args) => {
     return <ix-field>
-      <label class='ix-label'>Test</label>
+      <label className='ix-label'>Test</label>
       <span data-field="description">{args.description}</span>
-      <div class='ix-text-field'>
+      <div className='ix-text-field'>
         <input placeholder="Placeholder" />
       </div>
       <span data-field="error">{args.errorMessage}</span>

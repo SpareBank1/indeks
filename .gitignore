@@ -43,3 +43,6 @@ coverage/
 
 # npm pack
 *.tgz
+
+# Referanse-repoer (eksterne designsystem for research)
+_refs/

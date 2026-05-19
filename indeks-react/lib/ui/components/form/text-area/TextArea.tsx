@@ -8,13 +8,16 @@ type TextAreaOwnProps = {
     className?: string;
     description?: string;
     errorMessage?: string;
+    tooltip?: string;
+    tooltipLabel?: string;
+    tooltipPlacement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
 };
 
 export type TextAreaProps = TextAreaOwnProps &
     Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, keyof TextAreaOwnProps>;
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function TextArea(
-    { label, ariaLabel, className, id, description, errorMessage, disabled, readOnly, ...inputAttrs },
+    { label, ariaLabel, className, id, description, errorMessage, tooltip, tooltipLabel, tooltipPlacement, disabled, readOnly, ...inputAttrs },
     ref
 ) {
     const generatedId = useId();
@@ -27,6 +30,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
             className={className}
             description={description}
             errorMessage={errorMessage}
+            tooltip={tooltip}
+            tooltipLabel={tooltipLabel}
+            tooltipPlacement={tooltipPlacement}
             disabled={disabled}
             readOnly={readOnly}
         >

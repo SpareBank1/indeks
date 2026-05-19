@@ -1,4 +1,4 @@
-:where(.ix-body, [data-density="default"]) {
+:where(:root, .ix-body, [data-density="default"]) {
     --ix-spacing-2xs: var(--ii-spacing-size--10);
     --ix-spacing-xs: var(--ii-spacing-size--7);
     --ix-spacing-sm: var(--ii-spacing-size--3);
