@@ -8,6 +8,7 @@ interface SpacingContextType {
 
 const SpacingContext = createContext<SpacingContextType | undefined>(undefined);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSpacing = () => {
     const context = useContext(SpacingContext);
     if (!context) {
@@ -16,6 +17,7 @@ export const useSpacing = () => {
     return context;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const spacingVars = [
     // Padding left
     'ix-pl-2xs',
