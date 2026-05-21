@@ -89,10 +89,10 @@ export const MedTooltip: Story = {
 export const TooltipPlassering: Story = {
   render: () => (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', padding: '3rem' }}>
-      <TextField label="Top (standard)" tooltip="Tekst over feltet" tooltipPlacement="top" />
-      <TextField label="Bottom" tooltip="Tekst under feltet" tooltipPlacement="bottom" />
-      <TextField label="Left" tooltip="Tekst til venstre" tooltipPlacement="left" />
-      <TextField label="Right" tooltip="Tekst til høyre" tooltipPlacement="right" />
+      <TextField label="Top (standard)" tooltip="Tekst over feltet" tooltipPlacement="top" tooltipLabel="Mer informasjon" />
+      <TextField label="Bottom" tooltip="Tekst under feltet" tooltipPlacement="bottom" tooltipLabel="Mer informasjon" />
+      <TextField label="Left" tooltip="Tekst til venstre" tooltipPlacement="left" tooltipLabel="Mer informasjon" />
+      <TextField label="Right" tooltip="Tekst til høyre" tooltipPlacement="right" tooltipLabel="Mer informasjon" />
     </div>
   ),
 };

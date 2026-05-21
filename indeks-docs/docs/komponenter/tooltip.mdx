@@ -225,7 +225,7 @@ Pilen peker alltid mot senteret av trigger-elementet, også etter at panelet er 
 
 ### Hva du selv må sørge for
 
-- **Send alltid inn `tooltipLabel`** — det er den eneste måten info-knappen får et tilgjengelig navn på riktig språk. Mangler den, vises en konsolladvarsel under utvikling.
+- **Send alltid inn `tooltipLabel`** — info-knappen har ingen hardkodet `aria-label`. Uten `tooltipLabel` (React) / `tooltip-label` (HTML) vil knappen stå uten tilgjengelig navn. En konsolladvarsel vises under utvikling. Eksempler: `"Mer informasjon"` (bokmål), `"Meir informasjon"` (nynorsk), `"More information"` (engelsk).
 - **Tooltip er ikke eneste kilde til kritisk informasjon** — informasjon brukeren *må* ha for å fullføre en oppgave skal ligge i label eller description.
 - **Kun tekst i tooltip** — ikke legg inn HTML, lenker eller formatering i tooltip-verdien.
 

@@ -341,17 +341,18 @@ export class IxField extends HTMLElement {
     // Injiserer info-ikon-knapp i label-row når tooltip-attributt er satt.
     // label-row er alltid til stede etter _wire(), så her er det bare knappen som endres.
     private _setupTooltipBtn(content: string): void {
-        if (import.meta.env.DEV && !this.getAttribute('tooltip-label')) {
+        const tooltipLabel = this.getAttribute('tooltip-label');
+        if (import.meta.env.DEV && !tooltipLabel) {
             console.warn('[ix-field] tooltip er satt uten tooltip-label. Knappen mangler tilgjengelig navn på riktig språk (WCAG 4.1.2). Sett tooltip-label="Mer informasjon" (bokmål), "Meir informasjon" (nynorsk) eller "More information" (engelsk).');
         }
-        const tooltipLabel = this.getAttribute('tooltip-label') ?? 'Mer informasjon';
 
         // Oppdater eksisterende knapp om den allerede finnes
         const existingBtn = this.querySelector<HTMLButtonElement>('.ix-field__tooltip-btn');
         if (existingBtn) {
             existingBtn.setAttribute('data-tooltip', content);
             existingBtn.setAttribute('data-tooltip-placement', this.getAttribute('tooltip-placement') ?? 'top');
-            existingBtn.setAttribute('aria-label', tooltipLabel);
+            if (tooltipLabel) existingBtn.setAttribute('aria-label', tooltipLabel);
+            else existingBtn.removeAttribute('aria-label');
             return;
         }
 
@@ -363,7 +364,7 @@ export class IxField extends HTMLElement {
         btn.className = 'ix-field__tooltip-btn';
         btn.setAttribute('data-tooltip', content);
         btn.setAttribute('data-tooltip-placement', this.getAttribute('tooltip-placement') ?? 'top');
-        btn.setAttribute('aria-label', tooltipLabel);
+        if (tooltipLabel) btn.setAttribute('aria-label', tooltipLabel);
 
         const icon = document.createElement('span');
         icon.className = 'ix-icon';

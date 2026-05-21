@@ -3,8 +3,8 @@
   "lastReviewed": "2026-05-15",
   "consumerResponsibilities": [
     {
-      "summary": "Send inn tooltipLabel på alle språk appen støtter",
-      "details": "Standardverdien på info-knappens aria-label er \"Mer informasjon\" (norsk bokmål). Send inn tooltipLabel (React) / tooltip-label (HTML) med riktig oversettelse for nynorsk og engelsk: \"Meir informasjon\" / \"More information\".",
+      "summary": "Send alltid inn tooltipLabel på riktig språk",
+      "details": "Info-knappen har ingen hardkodet aria-label — konsumenten er ansvarlig for å sende inn riktig tekst. Bruk tooltipLabel (React) / tooltip-label (HTML) med verdien for appens språk: \"Mer informasjon\" (bokmål), \"Meir informasjon\" (nynorsk) eller \"More information\" (engelsk). Mangler tooltip-label vil knappen stå uten tilgjengelig navn og bryte WCAG 4.1.2.",
       "wcag": ["4.1.2", "3.1.2"]
     },
     {

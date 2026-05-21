@@ -576,7 +576,7 @@ describe('IxField', () => {
             expect(btn!.getAttribute('data-tooltip')).toBe('Hjelpetekst');
         });
 
-        it('setter standard aria-label paa knappen', () => {
+        it('setter ikke aria-label paa knappen naar tooltip-label mangler', () => {
             const field = createField(`
                 <ix-field tooltip="Hjelpetekst">
                     <label>Navn</label>
@@ -585,7 +585,7 @@ describe('IxField', () => {
                 </ix-field>
             `);
             const btn = field.querySelector('.ix-field__tooltip-btn');
-            expect(btn!.getAttribute('aria-label')).toBe('Mer informasjon');
+            expect(btn!.hasAttribute('aria-label')).toBe(false);
         });
 
         it('bruker tooltip-label-attributt som aria-label', () => {

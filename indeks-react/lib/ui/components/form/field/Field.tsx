@@ -10,7 +10,6 @@ export type FieldProps = {
     disabled?: boolean;
     readOnly?: boolean;
     tooltip?: string;
-    /** Standard: 'Mer informasjon' */
     tooltipLabel?: string;
     tooltipPlacement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
 };
