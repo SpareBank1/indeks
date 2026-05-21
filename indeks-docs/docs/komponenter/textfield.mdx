@@ -39,7 +39,7 @@ Prøv å endre label eller description direkte i editoren. Komponenten kobler `f
 <ix-field>
   <label>Kontonummer</label>
   <span data-field="description">11 siffer uten mellomrom</span>
-  <div className="ix-text-field">
+  <div class="ix-text-field">
     <input type="text" inputMode="numeric" name="accountNumber" />
   </div>
   <span data-field="error"></span>
@@ -78,7 +78,7 @@ Bruk `tooltip` for å gi ekstra kontekst som ikke er kritisk for å fullføre op
 ```jsx live
 <ix-field tooltip="Fullt juridisk navn som det står i passet" tooltip-label="Mer informasjon om Navn">
   <label>Navn</label>
-  <div className="ix-text-field">
+  <div class="ix-text-field">
     <input type="text" />
   </div>
   <span data-field="error"></span>
@@ -113,7 +113,7 @@ Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
 <ix-field>
   <label>Kontonummer</label>
   <span data-field="description">11 siffer uten mellomrom</span>
-  <div className="ix-text-field">
+  <div class="ix-text-field">
     <input inputMode="numeric" />
   </div>
   <span data-field="error">Kontonummer må ha 11 siffer</span>
@@ -169,7 +169,7 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må li
 <>
   <ix-field>
     <label>Beløp i kroner</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <input inputMode="numeric" />
       <div data-field="suffix">kr</div>
     </div>
@@ -177,7 +177,7 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må li
   </ix-field>
   <ix-field>
     <label>Rente i prosent</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <input inputMode="decimal" />
       <div data-field="suffix">%</div>
     </div>
@@ -185,7 +185,7 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må li
   </ix-field>
   <ix-field>
     <label>Beløp i euro</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <div data-field="prefix">€</div>
       <input inputMode="numeric" />
       <div data-field="suffix">,00</div>
@@ -227,14 +227,14 @@ Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for
 <>
   <ix-field>
     <label>Kontonummer</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <input defaultValue="1234 56 78903" disabled />
     </div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field>
     <label>Kontonummer</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <input defaultValue="1234 56 78903" readOnly />
     </div>
     <span data-field="error"></span>
@@ -277,14 +277,14 @@ I banksammenheng er nesten alle felter påkrevd. Merk unntaket — ikke regelen.
 <>
   <ix-field>
     <label>E-postadresse</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <input type="email" autoComplete="email" required />
     </div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field>
     <label>Mobilnummer (valgfritt)</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <input type="tel" autoComplete="tel" />
     </div>
     <span data-field="error"></span>
@@ -322,14 +322,14 @@ Sett `maxlength` eller `minlength` på input — `ix-field` oppretter og oppdate
 <>
   <ix-field>
     <label>Kort beskrivelse</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <input maxlength="50" />
     </div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field>
     <label>Begrunnelse</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <input minlength="10" />
     </div>
     <span data-field="error"></span>
@@ -432,7 +432,7 @@ Synlig label er alltid anbefalt. I tilfeller der konteksten er helt åpenbar fra
 
 ```jsx live
 <ix-field>
-  <div className="ix-text-field">
+  <div class="ix-text-field">
     <input aria-label="Søk" placeholder="Søk..." />
   </div>
   <span data-field="error"></span>
@@ -509,14 +509,14 @@ Disabled og read-only styres kun via native attributter på input. `ix-field` h�
 <>
   <ix-field>
     <label>Kontonummer</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <input defaultValue="1234 56 78903" disabled />
     </div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field>
     <label>Referanse</label>
-    <div className="ix-text-field">
+    <div class="ix-text-field">
       <input defaultValue="ORD-2026-0042" readOnly />
     </div>
     <span data-field="error"></span>

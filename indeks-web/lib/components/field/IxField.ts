@@ -155,7 +155,7 @@ export class IxField extends HTMLElement {
         });
         this._stateObserver.observe(control, { attributes: true, attributeFilter: ['disabled', 'readonly', 'maxlength', 'minlength'] });
 
-        if (control instanceof HTMLInputElement && control.type === 'number') {
+        if (import.meta.env.DEV && control instanceof HTMLInputElement && control.type === 'number') {
             console.warn('[ix-field] Unngå type="number" — bruk inputMode="numeric" i stedet.');
         }
 
@@ -182,7 +182,7 @@ export class IxField extends HTMLElement {
         }
 
         // Et felt uten tilgjengelig navn er ikke operabelt for skjermleserbrukere.
-        if (!label && !control.getAttribute('aria-label') && !control.getAttribute('aria-labelledby')) {
+        if (import.meta.env.DEV && !label && !control.getAttribute('aria-label') && !control.getAttribute('aria-labelledby')) {
             console.warn('[ix-field] Kontrollen mangler tilgjengelig navn. Legg til <label>, aria-label eller aria-labelledby. Synlig label er anbefalt.');
         }
 
@@ -341,7 +341,7 @@ export class IxField extends HTMLElement {
     // Injiserer info-ikon-knapp i label-row når tooltip-attributt er satt.
     // label-row er alltid til stede etter _wire(), så her er det bare knappen som endres.
     private _setupTooltipBtn(content: string): void {
-        if (!this.getAttribute('tooltip-label')) {
+        if (import.meta.env.DEV && !this.getAttribute('tooltip-label')) {
             console.warn('[ix-field] tooltip er satt uten tooltip-label. Knappen mangler tilgjengelig navn på riktig språk (WCAG 4.1.2). Sett tooltip-label="Mer informasjon" (bokmål), "Meir informasjon" (nynorsk) eller "More information" (engelsk).');
         }
         const tooltipLabel = this.getAttribute('tooltip-label') ?? 'Mer informasjon';

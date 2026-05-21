@@ -39,7 +39,7 @@ Tooltip integreres i skjemafelt via `tooltip`-prop (React) eller `tooltip`-attri
 ```jsx live
 <ix-field tooltip="Fullt juridisk navn som det står i passet" tooltip-label="Mer informasjon om Navn">
   <label>Navn</label>
-  <div className="ix-text-field">
+  <div class="ix-text-field">
     <input type="text" />
   </div>
   <span data-field="error"></span>
@@ -68,7 +68,7 @@ Tooltip integreres i skjemafelt via `tooltip`-prop (React) eller `tooltip`-attri
 ```jsx live
 <ix-field tooltip="Maks 500 tegn, ingen HTML" tooltip-label="Mer informasjon om Beskrivelse">
   <label>Beskrivelse</label>
-  <div className="ix-text-area">
+  <div class="ix-text-area">
     <textarea></textarea>
   </div>
   <span data-field="error"></span>
@@ -125,42 +125,42 @@ Pilen peker alltid mot senteret av trigger-elementet, også etter at panelet er 
 <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', padding: '3rem'}}>
   <ix-field tooltip="Tekst over feltet" tooltip-placement="top" tooltip-label="Mer informasjon">
     <label>Top (standard)</label>
-    <div className="ix-text-field"><input type="text" /></div>
+    <div class="ix-text-field"><input type="text" /></div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field tooltip="Justert mot venstre" tooltip-placement="top-start" tooltip-label="Mer informasjon">
     <label>Top-start</label>
-    <div className="ix-text-field"><input type="text" /></div>
+    <div class="ix-text-field"><input type="text" /></div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field tooltip="Justert mot høyre" tooltip-placement="top-end" tooltip-label="Mer informasjon">
     <label>Top-end</label>
-    <div className="ix-text-field"><input type="text" /></div>
+    <div class="ix-text-field"><input type="text" /></div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field tooltip="Tekst under feltet" tooltip-placement="bottom" tooltip-label="Mer informasjon">
     <label>Bottom</label>
-    <div className="ix-text-field"><input type="text" /></div>
+    <div class="ix-text-field"><input type="text" /></div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field tooltip="Justert mot venstre" tooltip-placement="bottom-start" tooltip-label="Mer informasjon">
     <label>Bottom-start</label>
-    <div className="ix-text-field"><input type="text" /></div>
+    <div class="ix-text-field"><input type="text" /></div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field tooltip="Justert mot høyre" tooltip-placement="bottom-end" tooltip-label="Mer informasjon">
     <label>Bottom-end</label>
-    <div className="ix-text-field"><input type="text" /></div>
+    <div class="ix-text-field"><input type="text" /></div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field tooltip="Tekst til venstre" tooltip-placement="left" tooltip-label="Mer informasjon">
     <label>Left</label>
-    <div className="ix-text-field"><input type="text" /></div>
+    <div class="ix-text-field"><input type="text" /></div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field tooltip="Tekst til høyre" tooltip-placement="right" tooltip-label="Mer informasjon">
     <label>Right</label>
-    <div className="ix-text-field"><input type="text" /></div>
+    <div class="ix-text-field"><input type="text" /></div>
     <span data-field="error"></span>
   </ix-field>
 </div>
@@ -266,7 +266,6 @@ Pilen peker alltid mot senteret av trigger-elementet, også etter at panelet er 
 ```css
 .ix-tooltip {
   --ix-tooltip-background: var(--ix-color-foreground-main-default);
-  --ix-tooltip-color: var(--ix-color-foreground-inverse-default);
 }
 ```
 

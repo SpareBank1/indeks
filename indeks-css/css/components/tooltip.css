@@ -5,7 +5,6 @@
 
 .ix-tooltip {
     --ix-tooltip-background: var(--ix-color-foreground-main-default);
-    --ix-tooltip-color: var(--ix-color-foreground-inverse-default);
     --ix-tooltip-arrow-size: 6px;
 
     position: fixed;
@@ -15,7 +14,7 @@
     padding: var(--ix-spacing-xs) var(--ix-spacing-sm);
     pointer-events: auto;
     background: var(--ix-tooltip-background);
-    color: var(--ix-tooltip-color);
+    color: var(--ix-color-foreground-inverse-default);
     border-radius: var(--ix-border-radius-sm);
     font-size: var(--ix-font-size-sm);
     line-height: 150%;
