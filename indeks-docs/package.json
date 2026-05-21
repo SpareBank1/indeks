@@ -12,7 +12,6 @@
         "preview": "pnpm build && pnpm serve --host 127.0.0.1",
         "clear": "docusaurus clear",
         "serve": "docusaurus serve",
-        "preview": "pnpm build && pnpm serve --host 127.0.0.1",
         "write-translations": "docusaurus write-translations",
         "update-packages": "npx npm-check-updates -i --format group",
         "write-heading-ids": "docusaurus write-heading-ids",

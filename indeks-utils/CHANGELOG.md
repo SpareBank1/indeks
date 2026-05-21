@@ -1,5 +1,11 @@
 # @sb1/indeks-utils
 
+## 0.4.0
+
+### Minor Changes
+
+-   9a41a0e: Legg til tooltip
+
 ## 0.3.0
 
 ### Minor Changes

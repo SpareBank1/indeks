@@ -1,5 +1,11 @@
 # @sb1/indeks-css
 
+## 0.5.0
+
+### Minor Changes
+
+-   9a41a0e: Legg til tooltip
+
 ## 0.4.0
 
 ### Minor Changes
