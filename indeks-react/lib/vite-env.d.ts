@@ -1,11 +1,11 @@
 /// <reference types="vite/client" />
 
-import type { IxField } from '@sb1/indeks-web';
+export {};
 
 declare module 'react' {
     namespace JSX {
         interface IntrinsicElements {
-            'ix-field': React.DetailedHTMLProps<React.HTMLAttributes<IxField>, IxField> & { class?: string };
+            'ix-field': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & { [key: string]: unknown; class?: string };
         }
     }
 }

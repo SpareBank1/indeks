@@ -1,0 +1,71 @@
+@keyframes ix-tooltip-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.ix-tooltip {
+    --ix-tooltip-background: var(--ix-color-foreground-main-default);
+    --ix-tooltip-arrow-size: 6px;
+
+    position: fixed;
+    inset: 0 auto auto 0; /* JS sets top/left via inline style */
+    z-index: var(--ix-z-index-overlay);
+
+    padding: var(--ix-spacing-xs) var(--ix-spacing-sm);
+    pointer-events: auto;
+    background: var(--ix-tooltip-background);
+    color: var(--ix-color-foreground-inverse-default);
+    border-radius: var(--ix-border-radius-sm);
+    font-size: var(--ix-font-size-sm);
+    line-height: 150%;
+    max-width: 20rem;
+    word-break: break-word;
+
+    animation: ix-tooltip-fade-in 0.15s ease-in-out forwards;
+
+    &::before {
+        content: '';
+        position: absolute;
+        width: var(--ix-tooltip-arrow-size);
+        height: var(--ix-tooltip-arrow-size);
+        background: var(--ix-tooltip-background);
+    }
+
+    /* top-* — pil ned */
+    &[data-placement^='top']::before {
+        bottom: calc(var(--ix-tooltip-arrow-size) / -2);
+        left: calc(var(--_arrow-x) - var(--ix-tooltip-arrow-size) / 2);
+        transform: rotate(45deg);
+    }
+
+    /* bottom-* — pil opp */
+    &[data-placement^='bottom']::before {
+        top: calc(var(--ix-tooltip-arrow-size) / -2);
+        left: calc(var(--_arrow-x) - var(--ix-tooltip-arrow-size) / 2);
+        transform: rotate(45deg);
+    }
+
+    /* left — pil høyre */
+    &[data-placement='left']::before {
+        right: calc(var(--ix-tooltip-arrow-size) / -2);
+        top: calc(var(--_arrow-y) - var(--ix-tooltip-arrow-size) / 2);
+        transform: rotate(45deg);
+    }
+
+    /* right — pil venstre */
+    &[data-placement='right']::before {
+        left: calc(var(--ix-tooltip-arrow-size) / -2);
+        top: calc(var(--_arrow-y) - var(--ix-tooltip-arrow-size) / 2);
+        transform: rotate(45deg);
+    }
+}
+
+.ix-tooltip[hidden] {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ix-tooltip {
+        animation: none;
+    }
+}

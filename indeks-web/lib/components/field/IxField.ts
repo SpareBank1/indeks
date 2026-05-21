@@ -84,6 +84,8 @@ type TextControl = HTMLInputElement | HTMLTextAreaElement;
 // på siden. Enkel og deterministisk — ingen UUID-avhengighet nødvendig.
 let fieldCounter = 0;
 
+const ICON_URL = 'https://cdn.sparebank1.no/icons/info.svg';
+
 export class IxField extends HTMLElement {
     // MutationObserver holdes som instansvariabel slik at den kan kobles fra
     // i disconnectedCallback og ikke lekke minne når elementet fjernes fra DOM.
@@ -92,8 +94,13 @@ export class IxField extends HTMLElement {
     private _charCountListener: (() => void) | null = null;
     private _charCountControl: TextControl | null = null;
 
+    static get observedAttributes(): string[] {
+        return ['tooltip', 'tooltip-label', 'tooltip-placement'];
+    }
+
     connectedCallback(): void {
         this._wire();
+        this._syncTooltip();
     }
 
     disconnectedCallback(): void {
@@ -103,6 +110,12 @@ export class IxField extends HTMLElement {
         this._stateObserver?.disconnect();
         this._stateObserver = null;
         this._teardownCharCount();
+    }
+
+    attributeChangedCallback(name: string, _oldValue: string | null, _newValue: string | null): void {
+        if (name === 'tooltip' || name === 'tooltip-label' || name === 'tooltip-placement') {
+            if (this.isConnected) this._syncTooltip();
+        }
     }
 
     // ── Kobling ───────────────────────────────────────────────────────────────
@@ -142,7 +155,7 @@ export class IxField extends HTMLElement {
         });
         this._stateObserver.observe(control, { attributes: true, attributeFilter: ['disabled', 'readonly', 'maxlength', 'minlength'] });
 
-        if (control instanceof HTMLInputElement && control.type === 'number') {
+        if (import.meta.env.DEV && control instanceof HTMLInputElement && control.type === 'number') {
             console.warn('[ix-field] Unngå type="number" — bruk inputMode="numeric" i stedet.');
         }
 
@@ -152,6 +165,16 @@ export class IxField extends HTMLElement {
             control.id = `ix-field-${++fieldCounter}`;
         }
 
+        // Wrap label i label-row om den ikke allerede er wrappet.
+        // label-row er alltid til stede slik at tooltip-knappen kan injiseres uten
+        // å endre DOM-strukturen rundt labelen.
+        if (label && !label.closest('.ix-field__label-row')) {
+            const labelRow = document.createElement('div');
+            labelRow.className = 'ix-field__label-row';
+            label.parentNode!.insertBefore(labelRow, label);
+            labelRow.appendChild(label);
+        }
+
         // Koble label til input. Sjekker at label ikke allerede har en eksplisitt
         // for-kobling — respekter hva utvikleren har satt manuelt.
         if (label && !label.htmlFor) {
@@ -159,7 +182,7 @@ export class IxField extends HTMLElement {
         }
 
         // Et felt uten tilgjengelig navn er ikke operabelt for skjermleserbrukere.
-        if (!label && !control.getAttribute('aria-label') && !control.getAttribute('aria-labelledby')) {
+        if (import.meta.env.DEV && !label && !control.getAttribute('aria-label') && !control.getAttribute('aria-labelledby')) {
             console.warn('[ix-field] Kontrollen mangler tilgjengelig navn. Legg til <label>, aria-label eller aria-labelledby. Synlig label er anbefalt.');
         }
 
@@ -302,5 +325,58 @@ export class IxField extends HTMLElement {
         this.toggleAttribute('data-disabled', control.disabled);
         const readOnly = 'readOnly' in control ? (control as HTMLInputElement | HTMLTextAreaElement).readOnly : false;
         this.toggleAttribute('data-readonly', readOnly);
+    }
+
+    // Synkroniserer tooltip-knappen med tooltip/tooltip-label-attributtene.
+    // Kalt fra connectedCallback og attributeChangedCallback.
+    private _syncTooltip(): void {
+        const content = this.getAttribute('tooltip');
+        if (content) {
+            this._setupTooltipBtn(content);
+        } else {
+            this._teardownTooltipBtn();
+        }
+    }
+
+    // Injiserer info-ikon-knapp i label-row når tooltip-attributt er satt.
+    // label-row er alltid til stede etter _wire(), så her er det bare knappen som endres.
+    private _setupTooltipBtn(content: string): void {
+        const tooltipLabel = this.getAttribute('tooltip-label');
+        if (import.meta.env.DEV && !tooltipLabel) {
+            console.warn('[ix-field] tooltip er satt uten tooltip-label. Knappen mangler tilgjengelig navn på riktig språk (WCAG 4.1.2). Sett tooltip-label="Mer informasjon" (bokmål), "Meir informasjon" (nynorsk) eller "More information" (engelsk).');
+        }
+
+        // Oppdater eksisterende knapp om den allerede finnes
+        const existingBtn = this.querySelector<HTMLButtonElement>('.ix-field__tooltip-btn');
+        if (existingBtn) {
+            existingBtn.setAttribute('data-tooltip', content);
+            existingBtn.setAttribute('data-tooltip-placement', this.getAttribute('tooltip-placement') ?? 'top');
+            if (tooltipLabel) existingBtn.setAttribute('aria-label', tooltipLabel);
+            else existingBtn.removeAttribute('aria-label');
+            return;
+        }
+
+        const labelRow = this.querySelector<HTMLElement>('.ix-field__label-row');
+        if (!labelRow) return;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ix-field__tooltip-btn';
+        btn.setAttribute('data-tooltip', content);
+        btn.setAttribute('data-tooltip-placement', this.getAttribute('tooltip-placement') ?? 'top');
+        if (tooltipLabel) btn.setAttribute('aria-label', tooltipLabel);
+
+        const icon = document.createElement('span');
+        icon.className = 'ix-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.style.maskImage = `url(${ICON_URL})`;
+        btn.appendChild(icon);
+
+        labelRow.appendChild(btn);
+    }
+
+    // Fjerner kun tooltip-knappen — label-row beholdes.
+    private _teardownTooltipBtn(): void {
+        this.querySelector('.ix-field__tooltip-btn')?.remove();
     }
 }

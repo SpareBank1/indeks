@@ -10,13 +10,16 @@ type TextFieldOwnProps = {
     suffix?: ReactNode;
     description?: string;
     errorMessage?: string;
+    tooltip?: string;
+    tooltipLabel?: string;
+    tooltipPlacement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
 };
 
 export type TextFieldProps = TextFieldOwnProps &
     Omit<React.InputHTMLAttributes<HTMLInputElement>, keyof TextFieldOwnProps | 'size'>;
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
-    { label, ariaLabel, className, id, prefix, suffix, description, errorMessage, disabled, readOnly, ...inputAttrs },
+    { label, ariaLabel, className, id, prefix, suffix, description, errorMessage, tooltip, tooltipLabel, tooltipPlacement, disabled, readOnly, ...inputAttrs },
     ref
 ) {
     const generatedId = useId();
@@ -29,6 +32,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
             className={className}
             description={description}
             errorMessage={errorMessage}
+            tooltip={tooltip}
+            tooltipLabel={tooltipLabel}
+            tooltipPlacement={tooltipPlacement}
             disabled={disabled}
             readOnly={readOnly}
         >

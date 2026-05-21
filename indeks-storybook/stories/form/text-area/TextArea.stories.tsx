@@ -60,6 +60,17 @@ export const MinMaxLength: Story = {
   },
 };
 
+export const MedTooltip: Story = {
+  args: {
+    label: 'Tilbakemelding',
+    tooltip: 'Maks 500 tegn, ingen HTML',
+    tooltipLabel: 'Mer informasjon om Tilbakemelding',
+  },
+  render: (args) => {
+    return <TextArea {...args} />;
+  },
+};
+
 export const HTML: Story = {
   args: {
     errorMessage: 'Feilmelding',
@@ -68,9 +79,9 @@ export const HTML: Story = {
   render: (args) => {
     return (
       <ix-field>
-        <label class="ix-label">Test</label>
+        <label className="ix-label">Test</label>
         <span data-field="description">{args.description}</span>
-        <div class="ix-text-area">
+        <div className="ix-text-area">
           <textarea placeholder="Placeholder" />
         </div>
         <span data-field="error">{args.errorMessage}</span>

@@ -43,7 +43,6 @@ export const One: Story = {
 
 export const Preview: Story = {
     args: { as: 'h1' },
-    name: 'Preview',
     render: (args) => {
         return (
             <>

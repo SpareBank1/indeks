@@ -56,6 +56,37 @@ Komponenten kobler `for`/`id` og `aria-describedby` automatisk.
 
 ## Eksempler
 
+### Med tooltip
+
+Bruk `tooltip` for å gi ekstra kontekst som ikke er kritisk for å fullføre oppgaven. Sett alltid `tooltipLabel` på riktig språk — det er det tilgjengelige navnet på info-knappen.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextArea
+  label="Beskrivelse"
+  tooltip="Maks 500 tegn, ingen HTML"
+  tooltipLabel="Mer informasjon om Beskrivelse"
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field tooltip="Maks 500 tegn, ingen HTML" tooltip-label="Mer informasjon om Beskrivelse">
+  <label>Beskrivelse</label>
+  <div class="ix-text-area">
+    <textarea></textarea>
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
 ### Med feilmelding
 
 <Tabs groupId="variant">

@@ -52,4 +52,9 @@ export const baseConfig = [
         },
     },
     compatConfig,
+    {
+        rules: {
+            '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+        },
+    },
 ];

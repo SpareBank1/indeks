@@ -18,6 +18,8 @@ export default {
                     'text-decoration',
                     // basic text-indent: 0 is universally supported
                     'css-text-indent',
+                    // css nesting is transpiled by postcss-preset-env (stage 2)
+                    'css-nesting',
                 ],
             },
         ],

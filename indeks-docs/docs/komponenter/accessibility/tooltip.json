@@ -1,0 +1,90 @@
+{
+  "component": "Tooltip",
+  "lastReviewed": "2026-05-15",
+  "consumerResponsibilities": [
+    {
+      "summary": "Send alltid inn tooltipLabel på riktig språk",
+      "details": "Info-knappen har ingen hardkodet aria-label — konsumenten er ansvarlig for å sende inn riktig tekst. Bruk tooltipLabel (React) / tooltip-label (HTML) med verdien for appens språk: \"Mer informasjon\" (bokmål), \"Meir informasjon\" (nynorsk) eller \"More information\" (engelsk). Mangler tooltip-label vil knappen stå uten tilgjengelig navn og bryte WCAG 4.1.2.",
+      "wcag": ["4.1.2", "3.1.2"]
+    },
+    {
+      "summary": "Ikke bruk tooltip som eneste kilde til kritisk informasjon",
+      "details": "Tooltip er supplementær informasjon — ikke kritisk. Informasjon brukeren må ha for å fullføre en oppgave skal ligge synlig i label, description eller annen permanent tekst. Tooltip er uegnet på mobil der hover ikke er tilgjengelig, og er unntatt fra ellers strenge krav til alternativ (WCAG 1.4.13 tillater at hover-innhold kan lukkes uten krav om persistens utover interaksjonen).",
+      "wcag": ["1.4.13"]
+    },
+    {
+      "summary": "Hold tooltip-innholdet kort",
+      "details": "Tooltip er designet for 1–4 ord eller én kort setning. Lengre forklaringer, punktlister eller lenker hører ikke hjemme i en tooltip. Bruk popover for lengre innhold.",
+      "wcag": ["3.1.5"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "role=\"tooltip\" på panelet gir skjermleseren korrekt semantikk. aria-describedby kobles dynamisk fra trigger til panel ved åpning." },
+    { "id": "1.3.2", "notes": "Trigger-knappen og panelet følger naturlig DOM-rekkefølge." },
+    { "id": "1.3.3", "notes": "Informasjon formidles via tekst, ikke farge alene." },
+    { "id": "1.4.1", "notes": "Tooltip bruker ikke farge som eneste bærende informasjon." },
+    { "id": "1.4.3", "notes": "Tooltip-panelet bruker inverterte design tokens (mørk bakgrunn, lys tekst) med tilstrekkelig kontrast." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Tooltip-panelet er position: fixed og tilpasser seg viewport ved posisjonering." },
+    { "id": "1.4.11", "notes": "Fokusindikator på info-knappen oppfyller 3:1 kontrastkrav." },
+    { "id": "1.4.12", "notes": "Tåler økt line-height og bokstavavstand uten tap av innhold." },
+    { "id": "1.4.13", "notes": "Tooltip forblir synlig ved hover over panelet (safe-area via pointer-events). Lukkes med Escape. Forsvinner ikke ved hover over trigger-elementet." },
+    { "id": "2.1.1", "notes": "Tooltip aktiveres ved focus — tastaturbrukere får tilgang uten mus." },
+    { "id": "2.1.2", "notes": "Tooltip lukkes med Escape uten å flytte fokus." },
+    { "id": "2.4.3", "notes": "Info-knappen er en <button> som følger naturlig tab-rekkefølge." },
+    { "id": "2.4.7", "notes": "Tydelig focus-visible-ring på info-knappen." },
+    { "id": "2.5.8", "notes": "Info-knappen har min-width/height 44px — oppfyller touch-målkrav." },
+    { "id": "3.2.1", "notes": "Fokus på trigger åpner tooltip, men trigger ingen navigasjon eller kontekstendring." },
+    { "id": "4.1.2", "notes": "Info-knappen er en native <button> med aria-label. role=\"tooltip\" på panel. aria-describedby kobler trigger til panel." }
+  ],
+  "notRelevant": [
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ingen input-felter i tooltip." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.6", "reason": "Tooltip er ikke en overskrift eller label." },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native <button> — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.2", "reason": "Tooltip aktiveres av hover/focus, ikke av skjemainnsending." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1" },
+    { "id": "3.3.2" },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Ingen statusmeldinger — tooltip-innhold er ikke en statusmelding." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til info-knappen" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Escape", "action": "Lukker tooltip uten å flytte fokus" }
+  ],
+  "screenReader": [
+    "Ved fokus på info-knappen: \"[tooltipLabel], knapp\" — f.eks. \"Mer informasjon, knapp\"",
+    "Tooltip-innhold leses som tilleggsbeskrivelse: \"[label], tekstfelt, [tooltip-innhold]\" når aria-describedby er satt",
+    "Tooltip-innholdet annonseres ikke ved åpning — det er tilgjengelig via aria-describedby og leses ved fokus på trigger"
+  ]
+}
