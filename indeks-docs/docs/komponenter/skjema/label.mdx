@@ -59,6 +59,40 @@ Normalt trenger du ikke bruke `ix-label` direkte. `<ix-field>` styler `<label>`-
 
 `ix-label` brukes når du setter opp en skjemastruktur manuelt — uten `<ix-field>` — og trenger riktig typografi på `<label>`-elementet.
 
+### Tooltip
+
+:::note
+Tooltip settes på `<ix-field>` / `<Field>`, ikke på `<label>` / `<Label>`. `ix-field` injiserer automatisk en info-ikon-knapp i label-raden.
+:::
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field tooltip="Fullt juridisk navn som det står i passet" tooltip-label="Mer informasjon om Navn">
+  <label for="navn-tooltip">Navn</label>
+  <div class="ix-text-field"><input id="navn-tooltip" type="text" /></div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField
+  label="Navn"
+  inputId="navn-tooltip-react"
+  tooltip="Fullt juridisk namn som det står i passet"
+  tooltipLabel="Mer informasjon om Navn"
+/>
+```
+
+</TabItem>
+</Tabs>
+
+Se [Tooltip](./tooltip) for full dokumentasjon av props og retningslinjer.
+
 ## Retningslinjer
 
 ### Kort og presis
