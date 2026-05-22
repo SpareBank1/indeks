@@ -1,0 +1,42 @@
+import IconAnalyseTable from '@site/src/components/IconAnalyseTable';
+
+# Ikonanalyse
+
+Oversikt over alle Material Design-ikoner brukt i SB1-apper per april 2026, med forslag til semantiske norske navn.
+
+Datagrunnlag: ikonbruksanalyse `2026-04-08` — 362 unike ikoner, 60+ apper analysert.
+
+## Tierinndeling
+
+Ikoner er delt i tre tier basert på hvor mange apper som bruker dem:
+
+| Tier | Kriterium | Antall ikoner |
+|------|-----------|:---:|
+| **Tier 1** | 3+ apper | 152 |
+| **Tier 2** | 2 apper | 45 |
+| **Tier 3** | 1 app | 165 |
+
+Vi starter med å tilby semantiske navn for **Tier 1**. Tier 2 og 3 er med i tabellen for referanse.
+
+## Sammenslåingskandidater
+
+Flere Material Design-ikoner dekker samme semantikk og bør peke til ett kanonisk navn:
+
+- **Piler høyre**: `chevron_right`, `arrow_right`, `keyboard_arrow_right`, `arrow_right_alt` — felles: `pil-hoyre`
+- **Piler venstre**: `chevron_left`, `arrow_back`, `arrow_left_alt` — felles: `pil-venstre`
+- **Hjem/bolig**: `home`, `house`, `home_filled` — vurder `hjem` vs `bolig`
+- **Hytte**: `cabin`, `cottage` — felles: `hytte`
+- **Lommebok**: `wallet`, `account_balance_wallet` — felles: `lommebok`
+- **Gruppe**: `group`, `groups`, `people`, `diversity_2` — felles: `gruppe`
+- **Telefon**: `call`, `phone` — felles: `telefon`
+- **Utropstegn**: `exclamation`, `priority_high` — felles: `utropstegn`
+- **Info**: `info`, `info_i` — felles: `info`
+- **Kalender**: `calendar_month`, `event` — vurder om de er ulike nok
+
+Kolonnen **Notat** i tabellen markerer alle sammenslåingskandidater.
+
+## Alle ikoner
+
+Bruk søk og filter for å utforske. Klikk «Bare kandidater for sammenslåing» for å se hvilke ikoner som overlapper.
+
+<IconAnalyseTable />

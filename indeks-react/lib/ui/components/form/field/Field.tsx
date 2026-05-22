@@ -1,5 +1,6 @@
 import { forwardRef, type ReactNode } from 'react';
 import { Label } from '../label/Label';
+import type { IxField } from '@sb1/indeks-web';
 
 export type FieldProps = {
     className?: string;
@@ -15,7 +16,7 @@ export type FieldProps = {
     tooltipPlacement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
 };
 
-export const Field = forwardRef<HTMLElement, FieldProps>(function Field({
+export const Field = forwardRef<IxField, FieldProps>(function Field({
     className,
     label,
     children,
