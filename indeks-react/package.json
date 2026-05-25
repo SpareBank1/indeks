@@ -64,17 +64,17 @@
         "@types/node": "^25.6.2",
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
-        "@vitejs/plugin-react": "^6.0.1",
-        "@vitest/browser": "^4.1.5",
+        "@vitejs/plugin-react": "^6.0.2",
+        "@vitest/browser": "^4.1.6",
         "eslint-plugin-react-refresh": "^0.5.2",
         "jsdom": "^29.1.1",
         "plop": "^4.0.5",
         "react": "^19.2.6",
         "react-dom": "^19.2.6",
         "typescript": "~6.0.3",
-        "vite": "^8.0.12",
+        "vite": "^8.0.13",
         "vite-plugin-dts": "^5.0.0",
-        "vitest": "^4.1.5",
+        "vitest": "^4.1.6",
         "vitest-browser-react": "^2.2.0"
     }
 }
