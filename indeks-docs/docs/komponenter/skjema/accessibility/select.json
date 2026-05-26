@@ -1,0 +1,100 @@
+{
+  "component": "Select",
+  "lastReviewed": "2026-05-18",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv beskrivende labeltekst",
+      "details": "Labelen skal forklare hva brukeren skal velge — ikke handlingen. \"Land\" eller \"Foretrukket kontaktmetode\" er bedre enn \"Velg et alternativ\". Alle select-felter må ha en label, enten synlig eller via ariaLabel.",
+      "wcag": ["2.4.6", "3.3.2"]
+    },
+    {
+      "summary": "Skriv gode feilmeldinger",
+      "details": "Feilmeldingen må si hva som er galt og hva brukeren skal gjøre. \"Du må velge et land\" — ikke \"Ugyldig valg\". Komponenten viser og annonserer meldingen, men du skriver innholdet.",
+      "wcag": ["3.3.1", "3.3.3"]
+    },
+    {
+      "summary": "Bruk meningsfulle option-tekster",
+      "details": "Hvert alternativ skal ha en tydelig og beskrivende tekst. Unngå forkortelser eller koder som ikke gir mening for brukeren. \"Norge\" er bedre enn \"NO\".",
+      "wcag": ["2.4.6"]
+    },
+    {
+      "summary": "Grupper relaterte alternativer med optgroup",
+      "details": "Når listen inneholder mange alternativer, bruk optgroup for å gruppere relaterte valg. Dette gjør det lettere å navigere og forstå strukturen.",
+      "wcag": ["1.3.1"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Label kobles til select via for/id. Hjelpetekst og feilmelding kobles via aria-describedby. Optgroup gir semantisk gruppering." },
+    { "id": "1.3.2", "notes": "Label, select, hjelpetekst og feilmelding følger naturlig rekkefølge i DOM." },
+    { "id": "1.3.3", "notes": "Feiltilstand bruker tekst, farge og aria-invalid — ikke farge alene." },
+    { "id": "1.4.1", "notes": "Feiltilstand kommuniseres med farge, rammeendring og tekstlig feilmelding." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
+    { "id": "1.4.11", "notes": "Ramme og fokusindikator oppfyller 3:1 kontrastkrav." },
+    { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
+    { "id": "1.4.13", "notes": "Hjelpetekst er persistent — forsvinner ikke ved fokusflytt." },
+    { "id": "2.1.1", "notes": "Fullt opererbart med tastatur. Native select gir Tab, Enter/Space for å åpne, piltaster for navigering, Enter for valg, Escape for å lukke." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab. Ingen tastaturfelle." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator med god kontrast." },
+    { "id": "2.5.8", "notes": "Select-feltet oppfyller minimum 44px klikkflate." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
+    { "id": "3.2.2", "notes": "Valg trigger ingen automatisk kontekstendring med mindre onChange eksplisitt gjør det." },
+    { "id": "4.1.2", "notes": "Native select med implisitt combobox-rolle. Tilgjengelig navn fra label. Tilstander (valgt alternativ, disabled) eksponeres korrekt." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Ingen bilder eller ikoner i komponenten." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et felt for personlig informasjon — autocomplete gjelder ikke." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native select-element — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6", "reason": "Ingen bevegelsesaktivering." },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Feilmeldinger håndteres via aria-live=\"polite\". Ingen øvrige statusmeldinger." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til select-feltet" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Enter / Space", "action": "Åpner nedtrekkslisten" },
+    { "key": "Arrow Up/Down", "action": "Navigerer mellom alternativer i listen" },
+    { "key": "Enter", "action": "Velger markert alternativ og lukker listen" },
+    { "key": "Escape", "action": "Lukker listen uten å endre valg" },
+    { "key": "Home", "action": "Går til første alternativ" },
+    { "key": "End", "action": "Går til siste alternativ" },
+    { "key": "Bokstav", "action": "Hopper til første alternativ som starter med bokstaven" }
+  ],
+  "screenReader": [
+    "Ved fokus: \"[label], kombinasjonsboks, [valgt verdi]\"",
+    "Med hjelpetekst: \"[label], kombinasjonsboks, [valgt verdi], [hjelpetekst]\"",
+    "Ved feil: \"[label], ugyldig, kombinasjonsboks, [valgt verdi], [feilmelding]\"",
+    "Med optgroup: grupper annonseres med \"[gruppenavn], gruppe\" før alternativene i gruppen",
+    "Ved navigering i listen: \"[alternativ], [posisjon] av [total]\"",
+    "Disabled alternativ: \"[alternativ], nedtonet\""
+  ]
+}

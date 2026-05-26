@@ -1,4 +1,10 @@
-import { Button, Card, Dropdown, Form, Heading, HStack, TextField } from '@sb1/indeks-react';
+import { Button, Card, Form, Heading, HStack, Select, TextField } from '@sb1/indeks-react';
+
+const kontoOptions = [
+    { value: 'brukskonto', label: 'Brukskonto - 1234 56 78901' },
+    { value: 'sparekonto', label: 'Sparekonto - 1234 56 78902' },
+    { value: 'bsu', label: 'BSU - 1234 56 78903' },
+];
 
 export default function PMRegistrerBetaling() {
     return (
@@ -8,8 +14,8 @@ export default function PMRegistrerBetaling() {
                     Betale
                 </Heading>
                 <Form>
-                    <Dropdown label="Fra konto" placeholder="Velg konto" />
-                    <Dropdown label="Til konto" placeholder="Ve konto" />
+                    <Select label="Fra konto" placeholder="Velg konto" options={kontoOptions} />
+                    <Select label="Til konto" placeholder="Velg konto" options={kontoOptions} />
                     <div className="ix-grid ix-grid-cols-3 ">
                         <TextField label="Kroner" className="ix-col-span-2 " />
                         <TextField label="Øre" />

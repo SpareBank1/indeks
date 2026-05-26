@@ -85,6 +85,7 @@ const sidebars: SidebarsConfig = {
                     collapsed: false,
                     items: [
                         'komponenter/skjema/label',
+                        'komponenter/skjema/select',
                         'komponenter/skjema/textfield',
                         'komponenter/skjema/textarea',
                         'komponenter/skjema/tooltip',
