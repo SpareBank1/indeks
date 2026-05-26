@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
+import { Icon, type MaterialDesignIconName } from '@sb1/indeks-react';
 import { ikoner, type IconEntry } from '../data/iconAnalyseData';
-
-const CDN_BASE = 'https://cdn.sparebank1.no/icons';
 
 const tierLabel: Record<number, string> = {
     1: 'Tier 1 — 3+ apper',
@@ -16,23 +15,7 @@ const tierColor: Record<number, string> = {
 };
 
 function IconPreview({ mdNavn }: { mdNavn: string }) {
-    const url = `${CDN_BASE}/${mdNavn}.svg`;
-    return (
-        <span
-            aria-hidden="true"
-            style={{
-                display: 'inline-block',
-                width: '1.5rem',
-                height: '1.5rem',
-                backgroundColor: 'currentColor',
-                maskImage: `url(${url})`,
-                WebkitMaskImage: `url(${url})`,
-                maskSize: 'cover',
-                WebkitMaskSize: 'cover',
-                flexShrink: 0,
-            }}
-        />
-    );
+    return <Icon materialDesignName={mdNavn as MaterialDesignIconName} />;
 }
 
 function MergeTag({ mergeMed }: { mergeMed: string }) {

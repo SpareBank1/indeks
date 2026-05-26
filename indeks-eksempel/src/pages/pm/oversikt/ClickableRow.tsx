@@ -17,7 +17,7 @@ export const ClickableRow: React.FC<ClickableRowProps> = ({ accountName, iconNam
                     {accountName}
                 </Heading>
             </div>
-            <Icon materialDesignName="chevron_right" size="lg" />
+            <Icon name="pil-hoyre" size="lg" />
         </Card>
     );
 };
