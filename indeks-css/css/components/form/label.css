@@ -3,5 +3,5 @@
     font-weight: var(--ix-font-weight-medium);
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-default);
-    line-height: 150%;
+    line-height: 1.2;
 }
