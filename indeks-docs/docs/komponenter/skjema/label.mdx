@@ -7,19 +7,15 @@ import a11yData from './accessibility/label.json';
 
 Label er ledeteksten til et skjemafelt.
 
-:::note
-I de fleste tilfeller bruker du **ikke** Label direkte — bruk [TextField](./textfield) eller [TextArea](./textarea) som håndterer label, hjelpetekst og feilmelding samlet. Label er for situasjoner der du bygger opp en feltstruktur manuelt eller trenger en frittstående ledetekst.
-:::
-
 ## Egnet til
 
 - Ledetekst koblet til et inputfelt
-- Frittstående label utenfor en full feltstruktur
+
 
 ## Uegnet til
 
-- Informasjonstekst uten tilhørende inputfelt
-- Feltstruktur med label, hjelpetekst og feilmelding — bruk TextField eller feltkomponentene som håndterer det samlet
+- Text uten tilhørende inputfelt
+
 
 ## Kom i gang
 
@@ -29,7 +25,7 @@ I de fleste tilfeller bruker du **ikke** Label direkte — bruk [TextField](./te
 ```jsx live
 <div>
   <label class="ix-label" for="konto-html">Kontonummer</label>
-  <input id="konto-html" type="text" />
+  <div class="ix-text-field"><input id="konto-html" type="text" /></div>
 </div>
 ```
 
@@ -39,16 +35,19 @@ I de fleste tilfeller bruker du **ikke** Label direkte — bruk [TextField](./te
 ```tsx live
 <div>
   <Label htmlFor="konto">Kontonummer</Label>
-  <input id="konto" type="text" />
+  <div className="ix-text-field"><input id="konto" type="text" /></div>
 </div>
 ```
 
 </TabItem>
 </Tabs>
 
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
 ## Bruk med ix-field
 
-Normalt trenger du ikke bruke `ix-label` direkte. `<ix-field>` styler `<label>`-elementet inni seg automatisk — ingen klasse nødvendig:
+`ix-label` er en CSS-klasse. Bruker du `<ix-field>`, trenger du den ikke — `<ix-field>` styler `<label>`-elementet inni seg automatisk:
 
 ```jsx live
 <ix-field>
@@ -61,13 +60,14 @@ Normalt trenger du ikke bruke `ix-label` direkte. `<ix-field>` styler `<label>`-
 </ix-field>
 ```
 
-`ix-label` brukes når du setter opp en skjemastruktur manuelt — uten `<ix-field>` — og trenger riktig typografi på `<label>`-elementet.
+Bruker du ikke `<ix-field>`, legger du `ix-label`-klassen på `<label>`-elementet selv — som i "Kom i gang"-eksemplet over.
+
+</TabItem>
+<TabItem value="react" label="React">
+</TabItem>
+</Tabs>
 
 ### Tooltip
-
-:::note
-Tooltip settes på `<ix-field>` / `<Field>`, ikke på `<label>` / `<Label>`. `ix-field` injiserer automatisk en info-ikon-knapp i label-raden.
-:::
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -111,7 +111,7 @@ Se [Tooltip](./tooltip) for full dokumentasjon av props og retningslinjer.
 
 ### Setningsformat uten kolon
 
-Stor forbokstav, ingen kolon på slutten. "Kontonummer", ikke "Kontonummer:" og ikke "kontonummer".
+Stor forbokstav, ingen kolon på slutten. 
 
 ### Formatkrav hører hjemme i description
 
@@ -123,11 +123,11 @@ Ikke gjør labelen lang for å få plass til krav eller eksempler. Bruk en descr
 
 ### Visuell nærhet
 
-Label skal stå tett over feltet den tilhører. Avstanden mellom label og input bør være klart mindre enn avstanden mellom to felt i skjemaet — ellers er den visuelle koblingen uklar for seende brukere.
+Label skal stå tett over feltet den tilhører. Kortere avstand mellom label og input enn mellom to felt gjør koblingen tydelig for øyet.
 
 ### Merk unntaket, ikke regelen
 
-I banksammenheng er nesten alle felt påkrevd. Merk valgfrie felt med "(valgfritt)" i labelteksten — ikke påkrevde felt med stjerne eller annen markering.
+I banksammenheng er nesten alle felt påkrevd. Merk valgfrie felt med "(valgfritt)" i labelteksten. Ikke merk påkrevde felt med stjerne.
 
 ### Unngå forkortelser og intern sjargong
 
