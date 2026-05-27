@@ -107,9 +107,7 @@ export const MedTooltip: Story = {
 
 export const HTML: Story = {
     render: () => (
-        <ix-field>
-            <label class="ix-label" htmlFor="html-select">
-                Land
+            <label class="ix-label" for="html-select">
             </label>
             <span data-field="description">Velg landet du bor i</span>
             <select id="html-select" name="land" class="ix-select">
