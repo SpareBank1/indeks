@@ -1,0 +1,60 @@
+:where(.ix-select) {
+    all: unset;
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+    background-color: var(--ix-color-fill-interactive-default);
+    color: var(--ix-color-foreground-main-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-sm);
+    padding: var(--ix-spacing-sm);
+    padding-right: calc(var(--ix-spacing-sm) + 1.5em);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
+    transition: var(--ix-transition-all);
+    cursor: pointer;
+    min-height: 44px;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--ix-spacing-sm) center;
+    background-size: 1em;
+}
+
+:where(.ix-select:hover) {
+    border-color: var(--ix-color-border-main-hover);
+    box-shadow: inset 0 0 0 1px var(--ix-color-border-main-hover);
+}
+
+:where(.ix-select:focus-visible) {
+    outline: var(--ix-outline-default);
+}
+
+:where(.ix-select:disabled) {
+    background-color: var(--ix-color-fill-interactive-default);
+    color: var(--ix-color-foreground-main-disabled);
+    border-color: var(--ix-color-border-main-default);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+:where(.ix-select[aria-invalid="true"]) {
+    color: var(--ix-color-foreground-danger-default);
+    border-color: var(--ix-color-border-danger-default);
+    box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
+}
+
+:where(.ix-select option) {
+    background-color: var(--ix-color-surface-main-default);
+    color: var(--ix-color-foreground-main-default);
+}
+
+:where(.ix-select option:disabled) {
+    color: var(--ix-color-foreground-main-disabled);
+}
+
+:where(.ix-select optgroup) {
+    font-weight: var(--ix-font-weight-medium);
+    color: var(--ix-color-foreground-main-default);
+}

@@ -1,0 +1,475 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/select.json';
+
+# Select
+
+Select lar brukeren velge ett alternativ fra en nedtrekksliste. Komponenten skjuler alternativene til brukeren åpner listen, og brukes når det ikke er nødvendig å vise alle valg samtidig.
+
+## Egnet til
+
+- Når brukeren skal velge ett alternativ fra en liste
+- Lister med mange alternativer der det ikke er plass til å vise alle
+- Valg som er kjent eller enkle å kjenne igjen
+- Situasjoner der det er viktig å spare plass i grensesnittet
+
+## Uegnet til
+
+- Korte lister med få alternativer (bruk radio-knapper)
+- Når det er viktig å sammenligne alternativer før valg
+- Når alternativene er komplekse eller krever forklaring
+- Situasjoner der brukeren bør se alle valg samtidig
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Land"
+  placeholder="Velg land..."
+  options={[
+    { value: 'no', label: 'Norge' },
+    { value: 'se', label: 'Sverige' },
+    { value: 'dk', label: 'Danmark' },
+  ]}
+/>
+```
+
+Prøv å legge til flere alternativer i `options`-arrayen.
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Land</label>
+  <select class="ix-select" name="land">
+    <option value="" disabled selected>Velg land...</option>
+    <option value="no">Norge</option>
+    <option value="se">Sverige</option>
+    <option value="dk">Danmark</option>
+  </select>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+`<ix-field>` setter opp ARIA-koblinger automatisk. Error-elementet skal alltid ligge i DOM.
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Med hjelpetekst
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Foretrukket kontaktmetode"
+  description="Vi bruker dette for å sende deg viktig informasjon"
+  placeholder="Velg..."
+  options={[
+    { value: 'email', label: 'E-post' },
+    { value: 'sms', label: 'SMS' },
+    { value: 'phone', label: 'Telefon' },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Foretrukket kontaktmetode</label>
+  <span data-field="description">Vi bruker dette for å sende deg viktig informasjon</span>
+  <select class="ix-select" name="contact">
+    <option value="" disabled selected>Velg...</option>
+    <option value="email">E-post</option>
+    <option value="sms">SMS</option>
+    <option value="phone">Telefon</option>
+  </select>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Med grupperte alternativer
+
+Bruk `optgroup` for å gruppere relaterte alternativer. Dette gjør lange lister lettere å navigere.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Velg land"
+  placeholder="Velg..."
+  options={[
+    {
+      label: 'Norden',
+      options: [
+        { value: 'no', label: 'Norge' },
+        { value: 'se', label: 'Sverige' },
+        { value: 'dk', label: 'Danmark' },
+      ],
+    },
+    {
+      label: 'Europa',
+      options: [
+        { value: 'de', label: 'Tyskland' },
+        { value: 'fr', label: 'Frankrike' },
+        { value: 'es', label: 'Spania' },
+      ],
+    },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Velg land</label>
+  <select class="ix-select" name="land">
+    <option value="" disabled selected>Velg...</option>
+    <optgroup label="Norden">
+      <option value="no">Norge</option>
+      <option value="se">Sverige</option>
+      <option value="dk">Danmark</option>
+    </optgroup>
+    <optgroup label="Europa">
+      <option value="de">Tyskland</option>
+      <option value="fr">Frankrike</option>
+      <option value="es">Spania</option>
+    </optgroup>
+  </select>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Med feilmelding
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Land"
+  placeholder="Velg land..."
+  errorMessage="Du må velge et land for å fortsette"
+  options={[
+    { value: 'no', label: 'Norge' },
+    { value: 'se', label: 'Sverige' },
+    { value: 'dk', label: 'Danmark' },
+  ]}
+/>
+```
+
+Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Land</label>
+  <select class="ix-select" name="land">
+    <option value="" disabled selected>Velg land...</option>
+    <option value="no">Norge</option>
+    <option value="se">Sverige</option>
+    <option value="dk">Danmark</option>
+  </select>
+  <span data-field="error">Du må velge et land for å fortsette</span>
+</ix-field>
+```
+
+`<ix-field>` setter `aria-invalid="true"` automatisk når error-elementet har innhold.
+
+</TabItem>
+</Tabs>
+
+### Med tooltip
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Bostedsland"
+  tooltip="Vi trenger denne informasjonen for å beregne skatt"
+  tooltipLabel="Mer informasjon om Bostedsland"
+  placeholder="Velg..."
+  options={[
+    { value: 'no', label: 'Norge' },
+    { value: 'se', label: 'Sverige' },
+    { value: 'dk', label: 'Danmark' },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field tooltip="Vi trenger denne informasjonen for å beregne skatt" tooltip-label="Mer informasjon om Bostedsland">
+  <label>Bostedsland</label>
+  <select class="ix-select" name="land">
+    <option value="" disabled selected>Velg...</option>
+    <option value="no">Norge</option>
+    <option value="se">Sverige</option>
+    <option value="dk">Danmark</option>
+  </select>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Deaktivert
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Land"
+  disabled
+  defaultValue="no"
+  options={[
+    { value: 'no', label: 'Norge' },
+    { value: 'se', label: 'Sverige' },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Land</label>
+  <select class="ix-select" name="land" disabled>
+    <option value="no" selected>Norge</option>
+    <option value="se">Sverige</option>
+  </select>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Med deaktivert alternativ
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Leveringsmetode"
+  placeholder="Velg..."
+  options={[
+    { value: 'standard', label: 'Standard levering (3–5 dager)' },
+    { value: 'express', label: 'Ekspress (ikke tilgjengelig)', disabled: true },
+    { value: 'pickup', label: 'Hent i butikk' },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Leveringsmetode</label>
+  <select class="ix-select" name="delivery">
+    <option value="" disabled selected>Velg...</option>
+    <option value="standard">Standard levering (3–5 dager)</option>
+    <option value="express" disabled>Ekspress (ikke tilgjengelig)</option>
+    <option value="pickup">Hent i butikk</option>
+  </select>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Tydelige labels gir forutsigbarhet
+
+Alle select-felter skal ha en synlig og beskrivende label. Labelen skal beskrive hvilken informasjon feltet gjelder, ikke hva brukeren skal gjøre.
+
+For eksempel bør man skrive "Land" i stedet for "Velg land". Når labelen beskriver selve dataen, blir det enklere å forstå hva som forventes.
+
+Dette gjør skjemaet lettere å skanne og reduserer behovet for ekstra forklaring.
+
+### Bruk select når plass eller antall tilsier det
+
+Select egner seg når det er mange alternativer, eller når det ikke er nødvendig å vise alle samtidig. Ved å skjule listen reduseres visuell støy, og grensesnittet blir mer kompakt.
+
+For korte lister er det ofte bedre å bruke radio-knapper, siden de gir bedre oversikt og gjør det enklere å sammenligne valgene.
+
+### Valgt verdi må alltid være tydelig
+
+Når listen er lukket, skal det være tydelig hvilket alternativ som er valgt. Brukeren skal ikke være i tvil om hva som er gjeldende verdi.
+
+Dersom det brukes placeholder, må det være tydelig at dette ikke er et valgt alternativ.
+
+### Rekkefølge påvirker hvor lett det er å finne frem
+
+Alternativene bør som hovedregel sorteres alfabetisk, slik at brukeren raskt kan finne det de leter etter.
+
+I noen tilfeller kan det være mer hensiktsmessig å prioritere de mest relevante eller brukte valgene øverst, særlig i lange lister.
+
+### Gruppering gir bedre oversikt
+
+Dersom listen inneholder mange alternativer, bør disse grupperes logisk (for eksempel med optgroup). Dette gjør det enklere å orientere seg og finne riktig valg.
+
+### Unngå komplekst innhold i alternativer
+
+Alternativene i en select bør være korte og enkle å forstå. Lange tekster eller komplekse beskrivelser gjør det vanskeligere å skanne listen og ta et valg.
+
+Dersom alternativene krever mer forklaring, bør man vurdere en annen komponent.
+
+### Interaksjon skal være forutsigbar
+
+Når brukeren åpner listen og velger et alternativ, skal listen lukkes og verdien oppdateres umiddelbart.
+
+Brukeren skal kunne navigere med tastatur og enkelt endre valget uten unødvendige steg.
+
+## Tilgjengelighet / universell utforming
+
+### Semantisk struktur og korrekt rolle
+
+Select skal implementeres med korrekt HTML (`<select>`) eller med riktig ARIA-roller dersom det er en custom komponent. Dette sikrer at hjelpemidler forstår hvordan komponenten fungerer.
+
+Alle select-felter må ha en programmessig koblet label.
+
+### Label må være tilgjengelig
+
+Select skal alltid ha en tydelig label som beskriver hva brukeren skal velge. Skjermlesere bruker denne for å gi kontekst til feltet.
+
+Uten en god label blir det vanskelig å forstå hva valget gjelder.
+
+### Tydelig fokus og tastaturnavigasjon
+
+Select må være fullt opererbar med tastatur. Brukeren skal kunne navigere til feltet med Tab, åpne listen med Enter eller Space, og navigere mellom alternativer med piltaster.
+
+Fokusindikatoren må være tydelig og ha god kontrast.
+
+### Tilstrekkelig størrelse og klikkeflate
+
+Select-feltet må ha tilstrekkelig størrelse (minimum 44px høyde) for å være enkelt å bruke, spesielt på touch-enheter.
+
+### Vær bevisst på bruk av disabled
+
+Bruk av disabled state frarådes. Et deaktivert felt kan være vanskelig å forstå uten forklaring.
+
+Vurder om feltet heller bør skjules, vises som ren tekst, eller settes til readOnly.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+### SelectProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `label` | `string` | Nei* | | Synlig labeltekst for feltet. Anbefalt fremfor `ariaLabel` |
+| `ariaLabel` | `string` | Nei* | | Skjult label for skjermlesere. Brukes kun når synlig label ikke er mulig. *Enten `label` eller `ariaLabel` må settes |
+| `description` | `string` | Nei | | Hjelpetekst som vises under label. Kobles til select via `aria-describedby` |
+| `errorMessage` | `string` | Nei | | Feilmelding som vises under select. Trigger `aria-invalid` når den har innhold |
+| `placeholder` | `string` | Nei | | Placeholder-tekst som vises som første (disabled) alternativ |
+| `options` | `(SelectOption \| SelectOptionGroup)[]` | Nei | `[]` | Liste med alternativer eller grupper av alternativer |
+| `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
+| `ref` | `Ref<HTMLSelectElement>` | Nei | | Ref videresendes til `<select>`-elementet |
+
+I tillegg støttes alle standard HTML select-attributter (`value`, `defaultValue`, `onChange`, `onBlur`, `disabled`, `required`, `id`, `name` osv.) som settes direkte på komponenten.
+
+### SelectOption
+
+| Prop | Type | Påkrevd | Beskrivelse |
+|------|------|---------|-------------|
+| `value` | `string` | Ja | Verdien som sendes ved valg |
+| `label` | `string` | Ja | Teksten som vises for alternativet |
+| `disabled` | `boolean` | Nei | Gjør alternativet utilgjengelig for valg |
+
+### SelectOptionGroup
+
+| Prop | Type | Påkrevd | Beskrivelse |
+|------|------|---------|-------------|
+| `label` | `string` | Ja | Overskriften for gruppen |
+| `options` | `SelectOption[]` | Ja | Alternativene i gruppen |
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+### `<ix-field>` med `<select>`
+
+`<ix-field>` har ingen egne attributter. Alt settes på native HTML-elementer inni:
+
+```html
+<ix-field>
+  <label>Land</label>
+  <span data-field="description">Velg landet du bor i</span>
+  <select class="ix-select" name="land">
+    <option value="" disabled>Velg...</option>
+    <optgroup label="Norden">
+      <option value="no">Norge</option>
+      <option value="se">Sverige</option>
+    </optgroup>
+  </select>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `<ix-field>` | Ja | Wrapper. Kobler ARIA mellom label, select, description og error |
+| `<label>` | Ja | Labeltekst. Kobles til select via `for`/`id` |
+| `<span data-field="description">` | Nei | Hjelpetekst. Kobles til select via `aria-describedby` |
+| `<select class="ix-select">` | Ja | Selve nedtrekkslisten |
+| `<option>` | Ja | Alternativene i listen |
+| `<optgroup>` | Nei | Gruppering av alternativer |
+| `<span data-field="error">` | Ja | Feilmelding. Alltid i DOM. Tomt = ingen feil |
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Select-felt | `.ix-select` |
+| Label | `.ix-label` |
+| Hjelpetekst | `[data-field="description"]` |
+| Feilmelding | `[data-field="error"]` |
+
+## Relatert
+
+- [TextField](./textfield) — for fritekst-input
+- [TextArea](./textarea) — for lengre fritekst
