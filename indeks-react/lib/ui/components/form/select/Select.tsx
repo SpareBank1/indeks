@@ -71,7 +71,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
                 id={selectId}
                 className="ix-select"
                 disabled={disabled}
+                aria-label={ariaLabel}
                 aria-invalid={errorMessage?.trim() ? 'true' : undefined}
+            >
                 {placeholder && (
                     <option value="" disabled>
                         {placeholder}
