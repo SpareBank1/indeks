@@ -130,7 +130,6 @@
 /* Disabled */
 :where(.ix-button:disabled:not([data-loading])) {
     opacity: 0.4;
-    cursor: not-allowed;
     pointer-events: none;
 }
 
