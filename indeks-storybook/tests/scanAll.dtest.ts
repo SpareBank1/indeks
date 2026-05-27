@@ -90,6 +90,8 @@ test.describe('Test all components', () => {
                         }
                     );
                     await page.locator('#storybook-root').isVisible();
+                    await page.waitForFunction(() => customElements.get('ix-icon') !== undefined);
+                    await page.waitForLoadState('networkidle');
 
                     const storiesContainer = page.locator('#stories-container');
                     await storiesContainer.waitFor({ state: 'visible' });
