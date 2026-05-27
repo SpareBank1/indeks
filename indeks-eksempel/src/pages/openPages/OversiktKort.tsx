@@ -40,7 +40,7 @@ const OversiktKort: React.FC<OversiktKortProps> = ({ title, variant = 'default' 
             </div>
             <TextField label="Fødselsdato" placeholder="Her er en placeholder" />
             <Button>
-                <Icon materialDesignName="check" />
+                <Icon name="hake" />
                 Primary
             </Button>
         </VStack>

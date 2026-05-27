@@ -1,11 +1,25 @@
 /// <reference types="vite/client" />
 
-export {};
+import type { IxField, IxIcon } from '@sb1/indeks-web';
+import type { IconName } from './ui/icons/icon-types';
 
 declare module 'react' {
     namespace JSX {
         interface IntrinsicElements {
-            'ix-field': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & { [key: string]: unknown; class?: string };
+            'ix-field': React.DetailedHTMLProps<React.HTMLAttributes<IxField>, IxField> & {
+                class?: string;
+                tooltip?: string;
+                'tooltip-label'?: string;
+                'tooltip-placement'?: string;
+            };
+            'ix-icon': React.DetailedHTMLProps<React.HTMLAttributes<IxIcon>, IxIcon> & {
+                name?: IconName;
+                materialdesignname?: string;
+                'data-size'?: 'sm' | 'md' | 'lg' | 'xl';
+                'aria-label'?: string;
+                'aria-labelledby'?: string;
+                class?: string;
+            };
         }
     }
 }
