@@ -64,8 +64,6 @@ describe('Select', () => {
         expect(error?.textContent).toBe('');
     });
 
-        expect(ixField).not.toBeNull();
-
     it('rendrer select med ix-select klasse', () => {
         const { container } = render(<Select label="Land" options={basicOptions} />);
         const select = container.querySelector('.ix-select');
