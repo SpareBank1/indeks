@@ -43,7 +43,7 @@ export default function PMOversikt() {
                         </HStack>
                         <HStack justifyContent="center" className="ix-my-sm">
                             <Tag variant="info" size="sm" type="subtle">
-                                <Icon size="sm" materialDesignName="account_balance" />
+                                <Icon size="sm" name="bankkonto" />
                                 Regningskonto
                             </Tag>
                             <Tag variant="danger" size="sm" type="subtle">

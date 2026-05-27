@@ -81,6 +81,12 @@ const sidebars: SidebarsConfig = {
                 'komponenter/typografi',
                 {
                     type: 'category',
+                    label: 'Icon',
+                    link: { type: 'doc', id: 'komponenter/icon' },
+                    items: ['komponenter/icon-analyse'],
+                },
+                {
+                    type: 'category',
                     label: 'Skjema',
                     collapsed: false,
                     items: [

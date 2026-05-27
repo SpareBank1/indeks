@@ -17,7 +17,7 @@ const BetalingListelement: React.FC<BetalingListelementProps> = ({ iconName, car
                 </Heading>
                 <Text>{description}</Text>
             </div>
-            <Icon materialDesignName="chevron_right" size="lg" />
+            <Icon name="pil-hoyre" size="lg" />
         </div>
     );
 };

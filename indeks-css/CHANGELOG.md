@@ -1,5 +1,11 @@
 # @sb1/indeks-css
 
+## 0.6.0
+
+### Minor Changes
+
+-   2348f42: Legg til ix-icon komponent
+
 ## 0.5.0
 
 ### Minor Changes

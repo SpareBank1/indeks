@@ -48,7 +48,7 @@ const StateKort: React.FC = () => {
                 </select>
             </label>
             <Button>
-                <Icon materialDesignName="check" />
+                <Icon name="hake" />
                 Primary
             </Button>
         </VStack>
