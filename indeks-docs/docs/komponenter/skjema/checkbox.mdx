@@ -1,0 +1,358 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/checkbox.json';
+
+# Checkbox
+
+Checkbox lar brukeren velge én eller flere alternativer fra en liste. Hvert valg er uavhengig av de andre, og flere kan være valgt samtidig.
+
+## Egnet til
+
+- Når brukeren skal kunne velge flere alternativer samtidig
+- Samtykker (f.eks. vilkår eller abonnement)
+- Filtrering der flere valg kan kombineres
+- Situasjoner der hvert valg er uavhengig av de andre
+
+## Uegnet til
+
+- Når brukeren kun skal velge ett alternativ (bruk RadioButton)
+- Lange eller komplekse lister med mange valg
+- Situasjoner der valg påvirker hverandre eller er gjensidig utelukkende
+- Når det er behov for sterk veiledning eller forklaring per valg
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Checkbox label="Jeg godtar vilkårene" name="terms" />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<label className="ix-checkbox">
+  <input type="checkbox" className="ix-checkbox__input" name="terms" />
+  <span className="ix-checkbox__box">
+    <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  </span>
+  <span className="ix-checkbox__label">Jeg godtar vilkårene</span>
+</label>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Med hjelpetekst
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Checkbox
+  label="Send meg nyhetsbrev"
+  description="Du kan når som helst melde deg av"
+  name="newsletter"
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label className="ix-checkbox">
+    <input type="checkbox" className="ix-checkbox__input" name="newsletter" />
+    <span className="ix-checkbox__box">
+      <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+    <span className="ix-checkbox__label">Send meg nyhetsbrev</span>
+  </label>
+  <span data-field="description">Du kan når som helst melde deg av</span>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Med feilmelding
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Checkbox
+  label="Jeg godtar vilkårene"
+  errorMessage="Du må godta vilkårene for å fortsette"
+  name="terms"
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label className="ix-checkbox">
+    <input type="checkbox" className="ix-checkbox__input" name="terms" aria-invalid="true" />
+    <span className="ix-checkbox__box">
+      <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+    <span className="ix-checkbox__label">Jeg godtar vilkårene</span>
+  </label>
+  <span data-field="error">Du må godta vilkårene for å fortsette</span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Indeterminate (delvis valgt)
+
+Indeterminate-tilstanden brukes for "velg alle"-checkboxer når noen, men ikke alle, underliggende valg er krysset av.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Checkbox label="Velg alle" indeterminate name="select-all" />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+function IndeterminateCheckbox() {
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    if (ref.current) ref.current.indeterminate = true;
+  }, []);
+  return (
+    <label className="ix-checkbox">
+      <input ref={ref} type="checkbox" className="ix-checkbox__input" name="select-all" />
+      <span className="ix-checkbox__box">
+        <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <svg className="ix-checkbox__icon ix-checkbox__icon--indeterminate" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      </span>
+      <span className="ix-checkbox__label">Velg alle</span>
+    </label>
+  );
+}
+```
+
+I HTML må `indeterminate` settes via JavaScript: `checkbox.indeterminate = true`
+
+</TabItem>
+</Tabs>
+
+### Deaktivert
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <Checkbox label="Ikke tilgjengelig" disabled />
+  <Checkbox label="Allerede godtatt" disabled defaultChecked />
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <label className="ix-checkbox ix-checkbox--disabled">
+    <input type="checkbox" className="ix-checkbox__input" disabled />
+    <span className="ix-checkbox__box">
+      <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+    <span className="ix-checkbox__label">Ikke tilgjengelig</span>
+  </label>
+  <label className="ix-checkbox ix-checkbox--disabled">
+    <input type="checkbox" className="ix-checkbox__input" disabled defaultChecked />
+    <span className="ix-checkbox__box">
+      <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+    <span className="ix-checkbox__label">Allerede godtatt</span>
+  </label>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+### Gruppe med flere checkboxer
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
+  <legend style={{ fontWeight: 'var(--ix-font-weight-medium)', marginBottom: '8px' }}>
+    Hvordan vil du bli kontaktet?
+  </legend>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <Checkbox label="E-post" name="contact" value="email" />
+    <Checkbox label="SMS" name="contact" value="sms" />
+    <Checkbox label="Telefon" name="contact" value="phone" />
+  </div>
+</fieldset>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
+  <legend style={{ fontWeight: 'var(--ix-font-weight-medium)', marginBottom: '8px' }}>
+    Hvordan vil du bli kontaktet?
+  </legend>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <label className="ix-checkbox">
+      <input type="checkbox" className="ix-checkbox__input" name="contact" value="email" />
+      <span className="ix-checkbox__box">
+        <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
+      <span className="ix-checkbox__label">E-post</span>
+    </label>
+    <label className="ix-checkbox">
+      <input type="checkbox" className="ix-checkbox__input" name="contact" value="sms" />
+      <span className="ix-checkbox__box">
+        <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
+      <span className="ix-checkbox__label">SMS</span>
+    </label>
+    <label className="ix-checkbox">
+      <input type="checkbox" className="ix-checkbox__input" name="contact" value="phone" />
+      <span className="ix-checkbox__box">
+        <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
+      <span className="ix-checkbox__label">Telefon</span>
+    </label>
+  </div>
+</fieldset>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Tydelige labels gir forutsigbarhet
+
+Alle checkboxer skal ha en synlig og beskrivende label. Labelen skal beskrive hva som blir valgt, ikke hva brukeren skal gjøre.
+
+For eksempel bør man skrive "Motta nyhetsbrev" i stedet for "Meld meg på nyhetsbrev". Når labelen beskriver selve valget, blir det enklere å forstå hva som skjer når checkboxen hukes velges.
+
+Dette gjør det lettere å skanne listen og reduserer risikoen for misforståelser.
+
+### Checkbox bør som hovedregel brukes i gruppe
+
+Checkboxer bør som hovedregel presenteres som en del av en gruppe med flere valg. Dette gjør det tydelig for brukeren at de kan velge ett eller flere alternativer, og gir nødvendig kontekst for hva valgene gjelder.
+
+Når flere checkboxer hører sammen, bør de grupperes både visuelt og semantisk, gjerne med en overskrift eller legend.
+
+En enkeltstående checkbox kan likevel brukes i noen tilfeller, typisk når brukeren skal bekrefte eller godta noe, som for eksempel vilkår eller samtykke. I slike situasjoner representerer checkboxen et tydelig av/på-valg, og fungerer godt alene.
+
+### Hele raden skal være klikkbar
+
+Både checkboxen og tilhørende label skal være klikkbar. Dette gir en større trefflate og gjør komponenten enklere å bruke, spesielt på mobil og for brukere med nedsatt motorikk.
+
+En større klikkeflate gir en mer robust og tilgivende brukeropplevelse.
+
+### Orientering som liste gir bedre skannbarhet
+
+Alternativene skal som hovedregel vises vertikalt, én under den andre. Dette gjør det enklere å skanne listen og sammenligne valgene.
+
+Horisontal plassering gjør det vanskeligere å lese, spesielt når teksten er ulik i lengde. Det kan også skape utfordringer for brukere som zoomer inn på siden, da innholdet lettere brytes på uforutsigbare måter.
+
+### Rekkefølge påvirker hvor lett det er å finne frem
+
+I de fleste tilfeller bør alternativene sorteres alfabetisk, slik at brukeren raskt kan finne det de leter etter.
+
+I noen tilfeller kan det være mer hensiktsmessig å prioritere de mest relevante eller brukte valgene øverst. Dette kan redusere tiden det tar å gjøre et valg, særlig i lengre lister.
+
+### Bruk checkbox når valgene er uavhengige
+
+Checkboxer signaliserer at flere valg kan gjøres samtidig. Det er derfor viktig at valgene faktisk er uavhengige av hverandre.
+
+Dersom valg påvirker hverandre eller er gjensidig utelukkende, bør man vurdere andre komponenter, som RadioButton.
+
+### Bruk indeterminate med forsiktighet
+
+Indeterminate-tilstand (delvis valgt) kan brukes i hierarkiske valg, som "velg alle". Denne tilstanden bør kun brukes når det er tydelig hva den representerer.
+
+Uten tydelig kontekst kan den være vanskelig å forstå og føre til usikkerhet hos brukeren.
+
+### Unngå for mange valg samtidig
+
+Store lister med mange checkboxer kan bli krevende å navigere i. Når antall valg øker, øker også den kognitive belastningen.
+
+Dersom listen blir lang, bør man vurdere å dele opp innholdet, bruke filtrering eller andre mekanismer for å gjøre det enklere å orientere seg.
+
+## Tilgjengelighet / universell utforming
+
+### Semantisk struktur og kobling mellom label og felt
+
+Checkbox skal implementeres med korrekt HTML (`<input type="checkbox">`) og ha en programmessig koblet label. Dette gjør at skjermlesere kan formidle hva valget gjelder og hvilken tilstand det har.
+
+Når flere checkboxer hører sammen, skal de grupperes med `fieldset` og `legend`. Dette gir nødvendig kontekst og gjør det tydelig hva valgene gjelder.
+
+### Label og legend må være tilgjengelige
+
+Alle checkboxer må ha en tydelig label, og grupper må ha en beskrivende legend. Skjermlesere leser disse sammen med tilstanden (valgt/ikke valgt), og uten denne informasjonen mister brukeren viktig kontekst.
+
+Teksten skal være konkret og beskrive hva som velges, slik at brukeren forstår konsekvensen av valget.
+
+### Skjule label eller legend visuelt
+
+CheckboxGroup skal alltid ha en legend, og hver Checkbox skal ha en label. I enkelte tilfeller kan disse skjules visuelt ved hjelp av `hideLegend` eller `hideLabel`, for eksempel i tabeller der konteksten allerede er gitt av kolonneoverskrifter.
+
+Selv om teksten ikke er synlig, må den fortsatt være meningsfull og beskrivende. Skjermlesere leser fortsatt denne informasjonen, og den er avgjørende for at brukeren skal forstå hva valget gjelder.
+
+### Tydelig fokus og tastaturnavigasjon
+
+Checkboxer skal være fullt opererbare med tastatur. Brukeren skal kunne navigere med Tab og endre tilstand med Space.
+
+Fokusindikatoren må være tydelig og ha god kontrast, slik at det er enkelt å se hvilken checkbox som er aktiv.
+
+### Indeterminate må formidles korrekt
+
+Dersom indeterminate-tilstand brukes, må denne formidles korrekt til hjelpemidler (f.eks. via `aria-checked="mixed"`). Dette sikrer at også ikke-visuelle brukere forstår tilstanden.
+
+### Vær bevisst på bruk av disabled
+
+Bruk av disabled state frarådes. Et deaktivert valg kan være vanskelig å oppfatte og forstå, spesielt dersom brukeren ikke får noen forklaring på hvorfor det ikke kan velges.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />

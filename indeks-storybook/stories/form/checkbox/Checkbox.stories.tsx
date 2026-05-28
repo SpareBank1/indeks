@@ -1,23 +1,105 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Checkbox } from '@sb1/indeks-react';
 
 const meta = {
-  title: "Form/Checkbox",
-  component: Checkbox,
-  tags: ["autodocs"],
-  args: { label: "Label" },
+    title: 'Form/Checkbox',
+    component: Checkbox,
+    tags: ['autodocs'],
+    args: {
+        label: 'Jeg godtar vilkårene',
+    },
 } satisfies Meta<typeof Checkbox>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Standard: Story = {};
 
-export const EgendefinertBarn: Story = {
-  args: {},
-  render: (args) => {
-    return <Checkbox {...args}></Checkbox>;
-  },
+export const Avkrysset: Story = {
+    args: {
+        defaultChecked: true,
+    },
+};
+
+export const MedBeskrivelse: Story = {
+    args: {
+        label: 'Send meg nyhetsbrev',
+        description: 'Du kan når som helst melde deg av',
+    },
+};
+
+export const MedFeilmelding: Story = {
+    args: {
+        label: 'Jeg godtar vilkårene',
+        errorMessage: 'Du må godta vilkårene for å fortsette',
+    },
+};
+
+export const Indeterminate: Story = {
+    args: {
+        label: 'Velg alle',
+        indeterminate: true,
+    },
+};
+
+export const Påkrevd: Story = {
+    args: {
+        label: 'Jeg bekrefter at opplysningene er korrekte',
+        required: true,
+    },
+};
+
+/**
+ * Disabled-elementer er unntatt fra WCAG 1.4.3 kontrastkrav.
+ */
+export const Deaktivert: Story = {
+    args: {
+        label: 'Ikke tilgjengelig',
+        disabled: true,
+    },
+};
+
+export const DeaktivertAvkrysset: Story = {
+    args: {
+        label: 'Allerede godtatt',
+        disabled: true,
+        defaultChecked: true,
+    },
+};
+
+export const MedTooltip: Story = {
+    args: {
+        label: 'Lagre betalingsinformasjon',
+        tooltip: 'Kortinformasjonen lagres sikkert og kryptert',
+        tooltipLabel: 'Mer informasjon om lagring',
+    },
+};
+
+export const FlereCheckboxer: Story = {
+    render: () => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <Checkbox label="E-post" name="contact" value="email" />
+            <Checkbox label="SMS" name="contact" value="sms" />
+            <Checkbox label="Telefon" name="contact" value="phone" />
+        </div>
+    ),
+};
+
+export const HTML: Story = {
+    render: () => (
+        <ix-field>
+            <label className="ix-checkbox">
+                <input type="checkbox" className="ix-checkbox__input" name="terms" />
+                <span className="ix-checkbox__box">
+                    <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                </span>
+                <span className="ix-checkbox__label">Jeg godtar vilkårene</span>
+            </label>
+            <span data-field="description">Les vilkårene før du godtar</span>
+            <span data-field="error" aria-live="polite"></span>
+        </ix-field>
+    ),
 };
