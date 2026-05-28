@@ -2,35 +2,31 @@ import type { ComponentPropsWithoutRef, JSX } from 'react';
 import clsx from 'clsx';
 import type { ComponentSize } from '../../../types/types';
 
-const texts = {
-    nb: { ariaLabel: 'Laster...' },
-    nn: { ariaLabel: 'Lastar...' },
-    en: { ariaLabel: 'Loading...' },
-};
-
 export type SpinnerProps = {
     className?: string;
-    loadingText?: React.ReactNode;
-    /** 'nb', 'nn', or 'en' */
-    locale?: 'nb' | 'nn' | 'en';
+    /** Synlig tekst under hjulet */
+    label?: string;
+    /** Tilgjengelig navn for skjermlesere — overstyrer label */
+    loadingLabel?: string;
     size?: ComponentSize;
-} & ComponentPropsWithoutRef<'div'>;
+} & Omit<ComponentPropsWithoutRef<'div'>, 'children'>;
 
-export function Spinner({ className, loadingText, locale = 'nb', size = 'md' }: SpinnerProps): JSX.Element {
+export function Spinner({
+    className,
+    label,
+    loadingLabel,
+    size = 'md',
+    ...rest
+}: SpinnerProps): JSX.Element {
     return (
         <div
-            aria-live="assertive"
-            className={clsx('ix-loading-spinner-container', className)}
-            data-testid="spinner-container"
+            role="status"
+            aria-label={loadingLabel ?? label ?? 'Laster...'}
+            className={clsx('ix-spinner', className)}
+            data-size={size}
+            {...rest}
         >
-            <span
-                data-size={size}
-                className="ix-loading-spinner"
-                role="img"
-                aria-label={typeof loadingText === 'string' ? loadingText : texts[locale].ariaLabel}
-                aria-hidden={!!loadingText}
-            />
-            {loadingText}
+            {label}
         </div>
     );
 }
