@@ -11,6 +11,9 @@ export default defineConfig({
     maxFailures: 5,
     use: {
         trace: 'on-first-retry',
+        contextOptions: {
+            reducedMotion: 'reduce',
+        },
     },
 
     webServer: {

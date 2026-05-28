@@ -1,0 +1,156 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/spinner.json';
+
+# Spinner
+
+Spinner viser at noe lastes inn eller at en operasjon pågår. Den er ikke-interaktiv og kommuniserer utelukkende tilstand.
+
+## Egnet til
+
+- Sideinnlasting eller data-henting som tar mer enn ~300 ms
+- Bakgrunnsoperasjoner der brukeren bør vite at noe skjer
+- Inline-lasting i deler av en side
+
+## Uegnet til
+
+- Fremdrift der prosenten er kjent — bruk ProgressBar i stedet
+- Svært korte operasjoner (under ~300 ms) der spinneren vil flimre
+- Som eneste tilbakemelding på en brukerhandling uten etterfølgende bekreftelse
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Spinner />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div
+  className="ix-spinner"
+  role="status"
+  aria-label="Laster..."
+/>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Med synlig tekst
+
+`label` vises under hjulet og brukes som `aria-label` om ikke `loadingLabel` er satt.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Spinner label="Laster inn data..." />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div
+  className="ix-spinner"
+  role="status"
+  aria-label="Laster inn data..."
+  data-size="md"
+>
+  Laster inn data...
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+### Størrelser
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <Spinner size="sm" aria-label="Liten spinner" />
+  <Spinner size="md" aria-label="Middels spinner" />
+  <Spinner size="lg" aria-label="Stor spinner" />
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <div className="ix-spinner" role="status" aria-label="Liten spinner" data-size="sm" />
+  <div className="ix-spinner" role="status" aria-label="Middels spinner" data-size="md" />
+  <div className="ix-spinner" role="status" aria-label="Stor spinner" data-size="lg" />
+</>
+```
+
+</TabItem>
+</Tabs>
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Gi alltid en meningsfull `loadingLabel`** — standard-labelen (`Laster...`) er et nødanker. Gi en kontekstuell tekst som `loadingLabel="Henter kontooversikt..."` der du kan.
+- **Sørg for at spinneren er synlig i konteksten** — farge-token (`--ix-color-border-info-default`) kan ha dårlig kontrast mot noen bakgrunner. Sjekk kontrasten i den faktiske konteksten.
+- **Gi etterfølgende tilbakemelding** — skjermlesere hører status-meldingen, men bør også høre hva som skjedde etter lasting. Sørg for at resultatsiden eller innholdet er annonsert korrekt.
+
+### Hva komponenten gjør automatisk
+
+- **`role="status"`** setter en ARIA live region (politeness: polite) — skjermlesere annonserer `aria-label`-verdien uten å avbryte pågående tale.
+- **`aria-label`** settes automatisk basert på `loadingLabel` → `label` → `'Laster...'`.
+- **`prefers-reduced-motion`** stopper animasjonen helt for brukere som har slått av bevegelse i operativsystemet.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Størrelse på hjulet |
+| `label` | `string` | | Synlig tekst under hjulet. Brukes som `aria-label` om `loadingLabel` ikke er satt |
+| `loadingLabel` | `string` | `'Laster...'` | Tilgjengelig navn for skjermlesere. Overstyrer `label` |
+| `className` | `string` | | Ekstra CSS-klasser |
+
+I tillegg støttes alle standard HTML `<div>`-attributter (`id`, `style`, `aria-*` osv.).
+
+## Tilpasning med CSS
+
+### Tilgjengelige klasser og data-attributter
+
+| Element/tilstand | Selektor / attributt |
+|-----------------|----------------------|
+| Spinner | `.ix-spinner` |
+| Liten | `data-size="sm"` (24×24 px) |
+| Middels | `data-size="md"` (40×40 px, standard) |
+| Stor | `data-size="lg"` (64×64 px) |
+
+### Eksempel: ren HTML
+
+```html
+<div class="ix-spinner" role="status" aria-label="Laster..." data-size="md"></div>
+
+<div class="ix-spinner" role="status" aria-label="Laster inn konto..." data-size="lg">
+  Laster inn konto...
+</div>
+```
+
+## Relatert
+
+- [Button loading](./button) — spinner i knapp-kontekst

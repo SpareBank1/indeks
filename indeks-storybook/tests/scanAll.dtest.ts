@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 // Allowlist: bare story-titler som er oppført her blir testet.
 // Legg til nye titler etter hvert som komponenter er klare for skjermbilde- og UU-testing.
-const ALLOWED_STORY_TITLES: string[] = ['Form/TextField', 'Form/TextArea', 'Form/Label', 'Form/Select', 'Icons/Icon', 'Components/Button'];
+const ALLOWED_STORY_TITLES: string[] = ['Form/TextField', 'Form/TextArea', 'Form/Label', 'Form/Select', 'Icons/Icon', 'Components/Button', 'Components/Spinner'];
 
 // Profilrotasjon — mobil prioritert. Hver story testes mot 1 profil (stabil via hash).
 // Legg til profilnavn som tag på en story for å overstyre, f.eks. tags: ['mobile-webkit'].
