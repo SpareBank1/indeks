@@ -115,19 +115,19 @@ describe('Checkbox', () => {
         const { container } = render(<Checkbox label="Test" />);
         const field = container.querySelector('ix-field');
         expect(field).toBeNull();
-        expect(container.querySelector('.ix-checkbox')).toBeDefined();
+        expect(container.querySelector('.ix-checkbox')).not.toBeNull();
     });
 
     it('rendrer med Field-wrapper når description er satt', () => {
         const { container } = render(<Checkbox label="Test" description="Hjelpetekst" />);
         const field = container.querySelector('ix-field');
-        expect(field).toBeDefined();
+        expect(field).not.toBeNull();
     });
 
     it('rendrer med Field-wrapper når errorMessage er satt', () => {
         const { container } = render(<Checkbox label="Test" errorMessage="Feil" />);
         const field = container.querySelector('ix-field');
-        expect(field).toBeDefined();
+        expect(field).not.toBeNull();
     });
 
     it('setter required-attributt på input', () => {

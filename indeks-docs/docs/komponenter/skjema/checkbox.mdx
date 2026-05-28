@@ -269,7 +269,7 @@ I HTML må `indeterminate` settes via JavaScript: `checkbox.indeterminate = true
 
 Alle checkboxer skal ha en synlig og beskrivende label. Labelen skal beskrive hva som blir valgt, ikke hva brukeren skal gjøre.
 
-For eksempel bør man skrive "Motta nyhetsbrev" i stedet for "Meld meg på nyhetsbrev". Når labelen beskriver selve valget, blir det enklere å forstå hva som skjer når checkboxen hukes velges.
+For eksempel bør man skrive "Motta nyhetsbrev" i stedet for "Meld meg på nyhetsbrev". Når labelen beskriver selve valget, blir det enklere å forstå hva som skjer når checkboxen hukes av.
 
 Dette gjør det lettere å skanne listen og reduserer risikoen for misforståelser.
 
@@ -333,7 +333,7 @@ Teksten skal være konkret og beskrive hva som velges, slik at brukeren forstår
 
 ### Skjule label eller legend visuelt
 
-CheckboxGroup skal alltid ha en legend, og hver Checkbox skal ha en label. I enkelte tilfeller kan disse skjules visuelt ved hjelp av `hideLegend` eller `hideLabel`, for eksempel i tabeller der konteksten allerede er gitt av kolonneoverskrifter.
+Hver checkbox må ha en tydelig label, og grupper av relaterte checkboxer må ha en beskrivende legend. Dersom teksten skjules visuelt, må den fortsatt være tilgjengelig for hjelpemidler.
 
 Selv om teksten ikke er synlig, må den fortsatt være meningsfull og beskrivende. Skjermlesere leser fortsatt denne informasjonen, og den er avgjørende for at brukeren skal forstå hva valget gjelder.
 
@@ -345,7 +345,7 @@ Fokusindikatoren må være tydelig og ha god kontrast, slik at det er enkelt å 
 
 ### Indeterminate må formidles korrekt
 
-Dersom indeterminate-tilstand brukes, må denne formidles korrekt til hjelpemidler (f.eks. via `aria-checked="mixed"`). Dette sikrer at også ikke-visuelle brukere forstår tilstanden.
+Dersom indeterminate-tilstand brukes, må denne formidles korrekt til hjelpemidler. Dette sikrer at også ikke-visuelle brukere forstår tilstanden.
 
 ### Vær bevisst på bruk av disabled
 
