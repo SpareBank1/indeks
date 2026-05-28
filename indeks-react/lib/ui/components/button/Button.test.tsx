@@ -4,7 +4,7 @@ import { Icon } from '../../icons';
 import { Button } from './Button';
 
 describe('Button', () => {
-    it('should render as a button by default with correct className', () => {
+    it('skal rendre som button som standard med riktig className', () => {
         render(<Button>Click me</Button>);
         const button = screen.getByRole('button', { name: 'Click me' });
         expect(button).toBeDefined();
@@ -12,7 +12,7 @@ describe('Button', () => {
         expect(button.classList).toContain('ix-button');
     });
 
-    it('should render as a link when "as" prop is set to "a"', () => {
+    it('skal rendre som lenke når as="a"', () => {
         render(
             <Button as="a" href="https://example.com">
                 Go to example
@@ -24,7 +24,7 @@ describe('Button', () => {
         expect(link.attributes.getNamedItem('href')?.value).toBe('https://example.com');
     });
 
-    it('should pass additional props to the rendered element', () => {
+    it('skal videresende ekstra props til elementet', () => {
         render(
             <Button id="custom-id" data-test="test-value">
                 Test Button
@@ -35,88 +35,106 @@ describe('Button', () => {
         expect(button.attributes.getNamedItem('data-test')?.value).toBe('test-value');
     });
 
-    it('should pass on role when set', () => {
-        render(<Button role="submit">Role Button</Button>);
-        const button = screen.getByRole('submit');
+    it('skal videresende role når satt', () => {
+        render(<Button role="menuitem">Role Button</Button>);
+        const button = screen.getByRole('menuitem');
         expect(button).toBeDefined();
     });
-
-    /** TODO: Disabled state */
 });
 
-describe('Button loading state', () => {
+describe('Button disabled-tilstand', () => {
+    it('skal ha disabled-attributt når disabled=true', () => {
+        render(<Button disabled>Deaktivert</Button>);
+        const button = screen.getByRole('button', { name: 'Deaktivert' });
+        expect(button).toHaveProperty('disabled', true);
+    });
+
+    it('skal ikke aktiveres når disabled', () => {
+        render(<Button disabled>Deaktivert</Button>);
+        const button = screen.getByRole('button', { name: 'Deaktivert' });
+        expect(button.getAttribute('disabled')).not.toBeNull();
+    });
+});
+
+describe('Button loading-tilstand', () => {
     let button: HTMLElement;
 
     beforeEach(() => {
         render(
             <Button loading loadingLabel="Laster">
-                Submit
+                Send inn
             </Button>
         );
         button = screen.getByRole('button');
     });
 
-    it('should show loading state when loading is true', () => {
-        expect(screen.getByText('Loading...')).toBeDefined();
+    it('skal vise loadingLabel som innhold ved loading', () => {
+        expect(screen.getByText('Laster')).toBeDefined();
     });
 
-    it('and should be disabled for screen readers', () => {
-        expect(button.attributes.getNamedItem('aria-disabled')?.value).toBe('true');
+    it('skal være deaktivert for skjermlesere', () => {
+        expect(button).toHaveProperty('disabled', true);
     });
 
-    it('should have an aria-label attribute for accessibility', () => {
+    it('skal ha aria-label satt til loadingLabel', () => {
         expect(button.attributes.getNamedItem('aria-label')?.value).toBe('Laster');
     });
 });
 
-describe('Button variants', () => {
-    it('should render primary button by default', () => {
+describe('Button varianter', () => {
+    it('skal sette data-variant=primary som standard', () => {
         render(<Button>Primary Button</Button>);
         const button = screen.getByRole('button', { name: 'Primary Button' });
-        expect(button.classList).toContain('ix-button--primary');
+        expect(button.getAttribute('data-variant')).toBe('primary');
     });
 
-    it('should render secondary button when variant is set to secondary', () => {
+    it('skal sette data-variant=secondary', () => {
         render(<Button variant="secondary">Secondary Button</Button>);
         const button = screen.getByRole('button', { name: 'Secondary Button' });
-        expect(button.classList).toContain('ix-button--secondary');
+        expect(button.getAttribute('data-variant')).toBe('secondary');
     });
 
-    it('should render tertiary button when variant is set to tertiary', () => {
+    it('skal sette data-variant=tertiary', () => {
         render(<Button variant="tertiary">Tertiary Button</Button>);
         const button = screen.getByRole('button', { name: 'Tertiary Button' });
-        expect(button.classList).toContain('ix-button--tertiary');
+        expect(button.getAttribute('data-variant')).toBe('tertiary');
     });
 
-    it('should render danger button when variant is set to danger', () => {
+    it('skal sette data-danger=true ved danger=true', () => {
         render(<Button danger>Danger Button</Button>);
         const button = screen.getByRole('button', { name: 'Danger Button' });
-        expect(button.classList).toContain('ix-button--primary-danger');
+        expect(button.getAttribute('data-danger')).toBe('true');
+    });
+
+    it('skal ikke sette data-danger uten danger-prop', () => {
+        render(<Button>Normal Button</Button>);
+        const button = screen.getByRole('button', { name: 'Normal Button' });
+        expect(button.hasAttribute('data-danger')).toBe(false);
     });
 });
 
-describe('Button sizes', () => {
-    it('should render button with medium size by default', () => {
+describe('Button størrelser', () => {
+    it('skal ikke sette data-size for medium (standard)', () => {
         render(<Button>Medium Button</Button>);
         const button = screen.getByRole('button', { name: 'Medium Button' });
-        expect(button.classList).toContain('ix-button');
+        expect(button.hasAttribute('data-size')).toBe(false);
     });
 
-    it('should render button with small size when size prop is set to small', () => {
+    it('skal sette data-size=sm', () => {
         render(<Button size="sm">Small Button</Button>);
         const button = screen.getByRole('button', { name: 'Small Button' });
-        expect(button.classList.contains('ix-button--sm')).toBe(true);
+        expect(button.getAttribute('data-size')).toBe('sm');
     });
 
-    it('should render button with large size when size prop is set to large', () => {
+    it('skal sette data-size=lg', () => {
         render(<Button size="lg">Large Button</Button>);
         const button = screen.getByRole('button', { name: 'Large Button' });
-        expect(button.classList).toContain('ix-button--lg');
+        expect(button.getAttribute('data-size')).toBe('lg');
     });
 });
 
-describe('Button with icon', () => {
-    it('should render button with icon', () => {
+describe('Button med ikon', () => {
+    it('skal rendre ikon inne i knappen', () => {
         render(
             <Button>
                 <Icon name="hjem" />
@@ -127,20 +145,10 @@ describe('Button with icon', () => {
         const icon = button.getElementsByClassName('ix-icon')[0];
         expect(icon).toBeDefined();
     });
-
-    it.skip('should render icon-only class when button has only an icon', () => {
-        render(
-            <Button>
-                <Icon name="hjem" />
-            </Button>
-        );
-        const button = screen.getByRole('button');
-        expect(button.classList).toContain('ix-button--icon-only');
-    });
 });
 
-describe('Button width', () => {
-    it('should render button with full width when width prop is set to full', () => {
+describe('Button bredde', () => {
+    it('skal ha full-bredde-klasse ved width=full', () => {
         render(<Button width="full">Full Width Button</Button>);
         const button = screen.getByRole('button', { name: 'Full Width Button' });
         expect(button.classList).toContain('ix-w-full');

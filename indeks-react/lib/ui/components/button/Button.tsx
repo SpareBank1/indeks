@@ -1,49 +1,77 @@
 import clsx from 'clsx';
-import React from 'react';
+import { forwardRef } from 'react';
+import type {
+    ButtonHTMLAttributes,
+    ComponentPropsWithRef,
+    ElementType,
+    FC,
+    JSX,
+    ReactNode,
+    RefAttributes,
+} from 'react';
 
-type ButtonProps<T extends React.ElementType = 'button'> = {
-    as?: T;
-    variant?: 'primary' | 'secondary' | 'tertiary';
-    danger?: boolean;
-    loading?: boolean;
-    loadingLabel?: string;
-    size?: 'sm' | 'md' | 'lg';
-    width?: 'full' | 'auto';
-    children: React.ReactNode;
-    className?: string;
-    ariaLabel?: string;
-} & React.ComponentPropsWithoutRef<T>;
+type LoadingProps =
+    | { loading?: false; loadingLabel?: string }
+    | { loading: true; loadingLabel: string };
 
-export function Button<T extends React.ElementType = 'button'>({
-    as,
-    children,
-    variant = 'primary',
-    danger = false,
-    loading = false,
-    loadingLabel,
-    size = 'md',
-    width = 'auto',
-    type = 'button',
-    className,
-    ariaLabel,
-    ...props
-}: ButtonProps<T>) {
-    const Component = as || 'button';
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
+    LoadingProps & {
+        /** Visuell variant. @default "primary" */
+        variant?: 'primary' | 'secondary' | 'tertiary';
+        /** Bruk fare-farger for destruktive handlinger. */
+        danger?: boolean;
+        /** @default "md" */
+        size?: 'sm' | 'md' | 'lg';
+        /** @default "auto" */
+        width?: 'full' | 'auto';
+        children?: ReactNode;
+        /** Render som annet element eller komponent, f.eks. "a". */
+        as?: ElementType;
+    };
+
+interface OverridableComponent<Component, Element extends HTMLElement> {
+    (props: Component & RefAttributes<Element>): ReturnType<FC>;
+    <As extends ElementType>(
+        props: { as: As } & Component & Omit<ComponentPropsWithRef<As>, keyof Component | 'as'>,
+    ): ReturnType<FC>;
+}
+
+export const Button: OverridableComponent<ButtonProps, HTMLButtonElement> = forwardRef<
+    HTMLButtonElement,
+    ButtonProps
+>(function Button(
+    {
+        as,
+        children,
+        variant = 'primary',
+        danger = false,
+        loading = false,
+        loadingLabel,
+        size = 'md',
+        width = 'auto',
+        type = 'button',
+        disabled,
+        className,
+        'aria-label': ariaLabel,
+        ...props
+    },
+    ref,
+): JSX.Element {
+    const Component = (as ?? 'button') as ElementType;
     return (
         <Component
-            className={clsx(
-                'ix-button',
-                `ix-button--${variant}${danger ? '-danger' : ''}`,
-                { [`ix-button--${size}`]: size !== 'md' },
-                { 'ix-w-full': width === 'full' },
-                className
-            )}
+            ref={ref}
+            className={clsx('ix-button', width === 'full' && 'ix-w-full', className)}
+            data-variant={variant}
+            data-size={size !== 'md' ? size : undefined}
+            data-danger={danger ? 'true' : undefined}
+            data-loading={loading ? 'true' : undefined}
             aria-label={loading ? loadingLabel : ariaLabel}
-            aria-disabled={loading ? 'true' : undefined}
+            disabled={loading ? true : disabled}
             type={type}
             {...props}
         >
-            {loading ? 'Loading...' : children}
+            {loading ? loadingLabel : children}
         </Component>
     );
-}
+});

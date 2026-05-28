@@ -1,17 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { Icon, Button } from '@sb1/indeks-react';
+import { Button, Icon } from '@sb1/indeks-react';
 
 const meta = {
     title: 'Components/Button',
     component: Button,
-    args: { onClick: fn(), children: 'Button' },
+    tags: ['autodocs'],
+    args: { onClick: fn(), children: 'Knapp' },
 } satisfies Meta<typeof Button>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {};
+export const Standard: Story = {};
 
 export const Secondary: Story = {
     args: { variant: 'secondary' },
@@ -19,6 +20,21 @@ export const Secondary: Story = {
 
 export const Tertiary: Story = {
     args: { variant: 'tertiary' },
+};
+
+/**
+ * Tertiærknapp brukt alene skal alltid kombineres med ikon så den
+ * fremstår som en handling og ikke forveksles med vanlig tekst.
+ */
+export const TertiaryWithIcon: Story = {
+    args: { variant: 'tertiary' },
+    name: 'Tertiær med ikon',
+    render: (args) => (
+        <Button {...args}>
+            <Icon size={args.size} name="hjem" />
+            Rediger
+        </Button>
+    ),
 };
 
 export const Danger: Story = {
@@ -30,36 +46,40 @@ export const FullWidth: Story = {
     name: 'Full bredde',
 };
 
+/**
+ * Disabled-knapper er unntatt fra WCAG 1.4.3 kontrastkrav.
+ * Vurder om det er bedre å vise en forklaring til brukeren fremfor å deaktivere knappen.
+ */
+export const Disabled: Story = {
+    args: { disabled: true },
+    name: 'Deaktivert',
+};
+
+export const Loading: Story = {
+    args: { loading: true, loadingLabel: 'Sender inn...' },
+    name: 'Laster',
+};
+
 export const WithIcon: Story = {
-    args: {
-        size: 'md',
-    },
+    args: { size: 'md' },
     name: 'Med ikon',
-    render: (args) => {
-        return (
-            <div>
-                <Button {...args}>
-                    <Icon size={args.size} name="sparing" />
-                    Pålogget
-                </Button>
-            </div>
-        );
-    },
+    render: (args) => (
+        <Button {...args}>
+            <Icon size={args.size} name="sparing" />
+            Pålogget
+        </Button>
+    ),
 };
 
 export const IconOnly: Story = {
     args: {
         size: 'md',
-        ariaLabel: 'Last opp vedlegg',
+        'aria-label': 'Gå til sparing',
     },
     name: 'Ikonknapp',
-    render: (args) => {
-        return (
-            <div>
-                <Button {...args}>
-                    <Icon size={args.size} name="sparing" />
-                </Button>
-            </div>
-        );
-    },
+    render: (args) => (
+        <Button {...args}>
+            <Icon size={args.size} name="sparing" />
+        </Button>
+    ),
 };
