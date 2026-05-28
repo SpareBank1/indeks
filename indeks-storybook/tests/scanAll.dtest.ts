@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 // Allowlist: bare story-titler som er oppført her blir testet.
 // Legg til nye titler etter hvert som komponenter er klare for skjermbilde- og UU-testing.
-const ALLOWED_STORY_TITLES: string[] = ['Form/TextField', 'Form/TextArea', 'Form/Label', 'Form/Select', 'Form/Checkbox', 'Icons/Icon'];
+const ALLOWED_STORY_TITLES: string[] = ['Form/TextField', 'Form/TextArea', 'Form/Label', 'Form/Select', 'Form/Checkbox', 'Icons/Icon', 'Components/Button'];
 
 // Profilrotasjon — mobil prioritert. Hver story testes mot 1 profil (stabil via hash).
 // Legg til profilnavn som tag på en story for å overstyre, f.eks. tags: ['mobile-webkit'].
@@ -90,6 +90,8 @@ test.describe('Test all components', () => {
                         }
                     );
                     await page.locator('#storybook-root').isVisible();
+                    await page.waitForFunction(() => customElements.get('ix-icon') !== undefined);
+                    await page.waitForLoadState('networkidle');
 
                     const storiesContainer = page.locator('#stories-container');
                     await storiesContainer.waitFor({ state: 'visible' });

@@ -76,3 +76,4 @@ export const HTML: Story = {
     <ix-icon name="hjem" aria-label="Hjem" />
   ),
 };
+
