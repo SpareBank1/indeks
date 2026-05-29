@@ -17,16 +17,16 @@
         "clsx": "^2.1.1",
         "react": "^19.2.6",
         "react-dom": "^19.2.6",
-        "react-router-dom": "^7.15.0"
+        "react-router-dom": "^7.15.1"
     },
     "devDependencies": {
-        "@types/node": "^25.6.2",
-        "@types/react": "^19.2.14",
+        "@types/node": "^25.9.1",
+        "@types/react": "^19.2.15",
         "@types/react-dom": "^19.2.3",
-        "@vitejs/plugin-react": "^6.0.1",
+        "@vitejs/plugin-react": "^6.0.2",
         "debug": "^4.4.3",
         "eslint-plugin-react-refresh": "^0.5.2",
         "typescript": "~6.0.3",
-        "vite": "^8.0.12"
+        "vite": "^8.0.14"
     }
 }
