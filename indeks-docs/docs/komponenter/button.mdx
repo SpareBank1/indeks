@@ -181,13 +181,13 @@ Ikon-knapper med tekst trenger ingen ekstra ARIA — teksten er den tilgjengelig
 
 ### Ikonknapp (uten tekst)
 
-Knapper med bare ikon **må** ha `aria-label` som beskriver handlingen.
+Knapper med bare ikon **må** ha `aria-label` som beskriver handlingen. Bruk `iconOnly` for å gjøre knappen rund.
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ```tsx live
-<Button aria-label="Gå til sparing">
+<Button iconOnly aria-label="Gå til sparing">
   <Icon name="sparing" />
 </Button>
 ```
@@ -196,7 +196,7 @@ Knapper med bare ikon **må** ha `aria-label` som beskriver handlingen.
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<button className="ix-button" data-variant="primary" type="button" aria-label="Gå til sparing">
+<button className="ix-button" data-variant="primary" data-icon-only type="button" aria-label="Gå til sparing">
   <span className="ix-icon" style={{maskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)", WebkitMaskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)"}} />
 </button>
 ```
@@ -210,29 +210,38 @@ En knapp med bare ikon og ingen `aria-label` er usynlig for skjermlesere. Bruker
 
 ### Laster
 
-Når en asynkron operasjon er i gang, sett `loading` og `loadingLabel`. Knappen deaktiveres for skjermlesere og `loadingLabel` annonseres.
+Når en asynkron operasjon er i gang, sett `loading` og `loadingLabel`. Knappen deaktiveres, en spinner vises, og `loadingLabel` annonseres til skjermleseren.
+
+I React erstattes children (inkludert ikon) automatisk med spinner og `loadingLabel`. I HTML må du selv erstatte innholdet og sette `disabled` + `data-loading="true"`.
+
+Spinneren arver knappens tekstfarge, så den får riktig kontrast i alle varianter — også på fylt primary-bakgrunn.
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ```tsx live
-<Button loading loadingLabel="Sender inn…">
-  Send inn
-</Button>
+<>
+  <Button loading loadingLabel="Sender...">Primary</Button>
+  <Button variant="secondary" loading loadingLabel="Sender...">Secondary</Button>
+  <Button variant="tertiary" loading loadingLabel="Sender...">Tertiary</Button>
+  <Button danger loading loadingLabel="Sletter...">Danger</Button>
+</>
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<button className="ix-button" data-variant="primary" type="button"
-        aria-disabled="true" aria-label="Sender inn…">
+<button className="ix-button" data-variant="primary" data-loading="true" type="button"
+        disabled aria-label="Sender inn…">
+  <span className="ix-spinner" aria-hidden="true" />
   Sender inn…
 </button>
 ```
 
 </TabItem>
 </Tabs>
+
 
 ### Deaktivert
 
@@ -349,8 +358,9 @@ Knapper bør som hovedregel tilpasse seg innholdet sitt. Full bredde kan brukes 
 ### Hva komponenten gjør automatisk
 
 - **`type="button"`** settes som standard så knappen ikke sender inn skjema utilsiktet.
-- **`aria-disabled="true"`** settes ved `loading=true` slik at skjermlesere vet at knappen midlertidig er utilgjengelig.
+- **`disabled`** settes ved `loading=true` slik at knappen ikke kan aktiveres mens operasjonen pågår.
 - **`aria-label`** byttes til `loadingLabel` ved loading slik at skjermleser-brukere vet hva som skjer.
+- **Spinner** rendres automatisk ved `loading=true` og erstatter eventuelle ikoner.
 - **Fokusindikator** via `:focus-visible` — synlig for tastaturbrukere, ikke for mus.
 
 <KeyboardAndScreenReader data={a11yData} />
@@ -369,6 +379,7 @@ Knapper bør som hovedregel tilpasse seg innholdet sitt. Full bredde kan brukes 
 | `loadingLabel` | `string` | | Tekst vist og annonsert av skjermleser under lasting. Påkrevd når `loading=true` |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Størrelse |
 | `width` | `'full' \| 'auto'` | `'auto'` | `'full'` strekker knappen til full bredde av forelderen |
+| `iconOnly` | `boolean` | `false` | Gjør knappen rund — bruk kun når innholdet er et enkelt ikon. Krever `aria-label` |
 | `as` | `ElementType` | `'button'` | Render som annet element, f.eks. `'a'` for lenke-knapper |
 | `aria-label` | `string` | | Skjult label for skjermlesere. Påkrevd for ikonknapper uten synlig tekst |
 | `disabled` | `boolean` | | Deaktiverer knappen helt (nativ HTML-attributt) |
@@ -389,6 +400,8 @@ Trenger du `ix-button`-stylingen på HTML du setter sammen selv — uten React-k
 | Liten størrelse | `data-size="sm"` |
 | Stor størrelse | `data-size="lg"` |
 | Full bredde | `.ix-w-full` |
+| Ikonknapp (rund) | `data-icon-only` |
+| Laster | `data-loading="true"` + `disabled` (innhold må erstattes med `<span class="ix-spinner">` + tekst) |
 
 ### Eksempel: ren HTML
 
@@ -403,6 +416,10 @@ Trenger du `ix-button`-stylingen på HTML du setter sammen selv — uten React-k
 
 <button class="ix-button" data-variant="primary" data-danger="true" type="button">
   Slett konto
+</button>
+
+<button class="ix-button" data-variant="secondary" data-icon-only type="button" aria-label="Slett">
+  <!-- ix-icon her -->
 </button>
 ```
 

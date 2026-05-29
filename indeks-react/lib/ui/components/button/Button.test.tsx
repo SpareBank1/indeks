@@ -72,14 +72,27 @@ describe('Button loading-tilstand', () => {
         expect(screen.getByText('Laster')).toBeDefined();
     });
 
-    it('skal være deaktivert for skjermlesere', () => {
+    it('skal være deaktivert', () => {
         expect(button).toHaveProperty('disabled', true);
     });
 
     it('skal ha aria-label satt til loadingLabel', () => {
         expect(button.attributes.getNamedItem('aria-label')?.value).toBe('Laster');
     });
+
+    it('skal rendre Spinner inni knappen', () => {
+        const spinner = button.getElementsByClassName('ix-spinner')[0];
+        expect(spinner).toBeDefined();
+        expect(spinner.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('skal sette data-loading=true', () => {
+        expect(button.getAttribute('data-loading')).toBe('true');
+    });
 });
+
+
+
 
 describe('Button varianter', () => {
     it('skal sette data-variant=primary som standard', () => {

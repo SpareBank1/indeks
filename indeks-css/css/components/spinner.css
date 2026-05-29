@@ -31,6 +31,16 @@
     animation: ix-spinner-spin 0.9s linear infinite;
 }
 
+:where(.ix-button .ix-spinner) {
+    --ii-spinner-size: 1em;
+    --ii-spinner-border: 0.125em;
+}
+
+:where(.ix-button .ix-spinner)::before {
+    border-top-color: currentcolor;
+    box-shadow: 0 0 0 var(--ii-spinner-border) transparent;
+}
+
 @keyframes ix-spinner-spin {
     to {
         transform: rotate(360deg);

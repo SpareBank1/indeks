@@ -60,6 +60,32 @@ export const Loading: Story = {
     name: 'Laster',
 };
 
+/**
+ * Spinneren arver knappens tekstfarge via `currentcolor`, så den får riktig
+ * kontrast i alle varianter — også på fylt primary-bakgrunn.
+ */
+export const LoadingVariants: Story = {
+    name: 'Laster (alle varianter)',
+    render: () => (
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <Button loading loadingLabel="Sender...">
+                Primary
+            </Button>
+            <Button variant="secondary" loading loadingLabel="Sender...">
+                Secondary
+            </Button>
+            <Button variant="tertiary" loading loadingLabel="Sender...">
+                Tertiary
+            </Button>
+            <Button danger loading loadingLabel="Sletter...">
+                Danger
+            </Button>
+        </div>
+    ),
+};
+
+
+
 export const WithIcon: Story = {
     args: { size: 'md' },
     name: 'Med ikon',
@@ -71,9 +97,14 @@ export const WithIcon: Story = {
     ),
 };
 
+/**
+ * Knapp med bare ikon som innhold. `iconOnly` gjør knappen rund og kvadratisk.
+ * Bruk alltid `aria-label` for å beskrive handlingen.
+ */
 export const IconOnly: Story = {
     args: {
         size: 'md',
+        iconOnly: true,
         'aria-label': 'Gå til sparing',
     },
     name: 'Ikonknapp',
