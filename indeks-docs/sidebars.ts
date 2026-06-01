@@ -93,10 +93,17 @@ const sidebars: SidebarsConfig = {
                     collapsed: false,
                     items: [
                         'komponenter/skjema/label',
+                        {
+                            type: 'category',
+                            label: 'RadioGroup',
+                            link: { type: 'doc', id: 'komponenter/skjema/radio-group' },
+                            items: ['komponenter/skjema/radio-group-designvalg'],
+                        },
                         'komponenter/skjema/select',
                         'komponenter/skjema/textfield',
                         'komponenter/skjema/textarea',
                         'komponenter/skjema/tooltip',
+                        'komponenter/skjema/validation-message',
                     ],
                 },
             ],

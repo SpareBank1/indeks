@@ -1,0 +1,84 @@
+{
+  "component": "ValidationMessage",
+  "lastReviewed": "2026-05-29",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv konkret feilmeldingstekst",
+      "details": "Meldingen skal forklare hva brukeren må gjøre, ikke bare at noe er feil. \"Du må fylle ut kontonummer\" er bedre enn \"Ugyldig verdi\".",
+      "wcag": ["3.3.1", "3.3.3"]
+    },
+    {
+      "summary": "Hold elementet i DOM",
+      "details": "Behold <span data-field=\"error\"> i DOM også når feilen er borte. Sett innholdet til en tom streng i stedet for å fjerne elementet. aria-live-regioner må være i DOM før innholdet endres for at skjermlesere skal fange opp oppdateringer.",
+      "wcag": ["4.1.3"]
+    },
+    {
+      "summary": "Plasser meldingen nær feltet",
+      "details": "ValidationMessage skal stå i nærheten av tilhørende input i DOM-rekkefølgen. Inne i <ix-field> eller <ix-radio-group> kobles den automatisk via aria-describedby. Bruker du komponenten alene, må du selv sette aria-describedby på input til id-en på meldingen.",
+      "wcag": ["1.3.1", "1.3.2", "3.3.1"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.4.3", "notes": "Feilmeldingsteksten bruker --ix-color-foreground-danger-default. Forventes å oppfylle 4,5:1 mot standard bakgrunn. Kontroller med kontrastverktøy ved egendefinerte bakgrunnsfarger." },
+    { "id": "1.4.1", "notes": "Feilmeldingen formidles ikke kun med farge — teksten beskriver feilen eksplisitt, og inputen får aria-invalid=\"true\" via ix-field/ix-radio-group." },
+    { "id": "1.4.4", "notes": "Bruker --ix-font-size-md (relativ enhet) — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
+    { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
+    { "id": "3.3.1", "notes": "Identifiserer feil i input via aria-invalid (settes av ix-field/ix-radio-group) og kobler beskrivende feilmelding via aria-describedby." },
+    { "id": "4.1.3", "notes": "ix-field/ix-radio-group setter aria-live=\"polite\" på elementet slik at endringer kunngjøres til skjermlesere." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1" },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3" },
+    { "id": "1.3.4" },
+    { "id": "1.3.5" },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.11", "reason": "ValidationMessage er ikke en UI-komponent med ramme eller ikon — kun tekst." },
+    { "id": "1.4.13" },
+    { "id": "2.1.1", "reason": "Ikke interaktiv." },
+    { "id": "2.1.2" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.3" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.6", "reason": "Ikke en label eller heading." },
+    { "id": "2.4.7", "reason": "Ikke fokuserbar." },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2" },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "2.5.8", "reason": "Inline-element — unntatt fra minimumskravet på 24×24 px (inline exception)." },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.1" },
+    { "id": "3.2.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.2", "reason": "Komponenten er ikke selv en label — den viser feilmeldingen om en label/input." },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.2", "notes": "Native span-element — eksponerer tekstinnhold til skjermlesere. ARIA-koblingene (aria-describedby, aria-invalid, aria-live) settes av ix-field/ix-radio-group." }
+  ],
+  "keyboard": [],
+  "screenReader": [
+    "Leses opp etter labelteksten på inputen den er koblet til (via aria-describedby), når inputen har fokus",
+    "Endringer i innholdet kunngjøres polite via aria-live (satt av ix-field eller ix-radio-group)",
+    "Inputen annonseres som «ugyldig» når elementet har innhold (aria-invalid=\"true\")"
+  ]
+}
