@@ -1,7 +1,13 @@
 import clsx from 'clsx';
 import { type JSX, type ReactNode } from 'react';
 import { ValidationMessage } from '../validation-message/ValidationMessage';
+import { RadioButton } from './RadioButton';
 import { RadioGroupContext } from './RadioGroupContext';
+
+export type RadioOption = {
+    value: string;
+    label: string;
+};
 
 export type RadioGroupProps = {
     legend: string;
@@ -16,7 +22,8 @@ export type RadioGroupProps = {
     orientation?: 'vertical' | 'horizontal';
     hideLegend?: boolean;
     className?: string;
-    children: ReactNode;
+    options?: RadioOption[];
+    children?: ReactNode;
 };
 
 // React-laget er tynt: ix-radio-group (WC) eier id, name, htmlFor, aria-*-koblinger,
@@ -36,9 +43,15 @@ export function RadioGroup({
     orientation,
     hideLegend,
     className,
+    options,
     children,
 }: RadioGroupProps): JSX.Element {
     const dataState = errorMessage ? 'error' : readOnly ? 'readonly' : disabled ? 'disabled' : undefined;
+    const renderedChildren = options
+        ? options.map((option) => (
+              <RadioButton key={option.value} value={option.value} label={option.label} />
+          ))
+        : children;
 
     return (
         <ix-radio-group
@@ -49,20 +62,14 @@ export function RadioGroup({
             readonly={readOnly || undefined}
             required={required || undefined}
         >
-            <span
-                data-field="legend"
-                className={hideLegend ? 'ix-sr-only' : 'ix-radio-group__legend'}
-            >
+            <span data-field="legend" className={hideLegend ? 'ix-sr-only' : undefined}>
+                {readOnly && <ix-icon materialdesignname="lock" />}
                 {legend}
             </span>
-            {description && (
-                <p data-field="description" className="ix-radio-group__description">
-                    {description}
-                </p>
-            )}
-            <div className="ix-radio-group__items">
+            {description && <p data-field="description">{description}</p>}
+            <div data-field="items">
                 <RadioGroupContext.Provider value={{ name, value, onChange }}>
-                    {children}
+                    {renderedChildren}
                 </RadioGroupContext.Provider>
             </div>
             <ValidationMessage>{errorMessage}</ValidationMessage>

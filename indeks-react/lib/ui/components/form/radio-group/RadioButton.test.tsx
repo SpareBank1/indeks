@@ -11,21 +11,21 @@ import { RadioGroup } from './RadioGroup';
 
 describe('RadioButton', () => {
     describe('standalone (uten gruppe)', () => {
-        it('rendrer div.ix-radio-button', () => {
+        it('rendrer wrapper-div', () => {
             const { container } = render(<RadioButton value="a" label="A" />);
-            expect(container.querySelector('div.ix-radio-button')).not.toBeNull();
+            expect(container.querySelector('div')).not.toBeNull();
         });
 
-        it('rendrer input.ix-radio-button__input med type="radio"', () => {
+        it('rendrer input med type="radio"', () => {
             const { container } = render(<RadioButton value="a" label="A" />);
-            const input = container.querySelector('input.ix-radio-button__input');
+            const input = container.querySelector('input');
             expect(input).not.toBeNull();
             expect(input?.getAttribute('type')).toBe('radio');
         });
 
-        it('rendrer label.ix-radio-button__label', () => {
+        it('rendrer label', () => {
             const { container } = render(<RadioButton value="a" label="Alternativ A" />);
-            const label = container.querySelector('label.ix-radio-button__label');
+            const label = container.querySelector('label');
             expect(label).not.toBeNull();
             expect(label?.textContent).toContain('Alternativ A');
         });
@@ -43,20 +43,6 @@ describe('RadioButton', () => {
         it('setter name direkte ved standalone-bruk', () => {
             const { container } = render(<RadioButton value="a" label="A" name="min-gruppe" />);
             expect(container.querySelector('input')?.getAttribute('name')).toBe('min-gruppe');
-        });
-
-        it('rendrer description i span.ix-radio-button__description', () => {
-            const { container } = render(
-                <RadioButton value="a" label="A" description="Kun for privatpersoner" />
-            );
-            const desc = container.querySelector('.ix-radio-button__description');
-            expect(desc).not.toBeNull();
-            expect(desc?.textContent).toBe('Kun for privatpersoner');
-        });
-
-        it('rendrer ikke description-element uten description-prop', () => {
-            const { container } = render(<RadioButton value="a" label="A" />);
-            expect(container.querySelector('.ix-radio-button__description')).toBeNull();
         });
 
         it('setter disabled på input når prop er satt', () => {

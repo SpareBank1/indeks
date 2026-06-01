@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 
 const DefaultChildren = (
     <>
-        <RadioButton value="privat" label="Privat" description="Kun for privatpersoner" />
+        <RadioButton value="privat" label="Privat" />
         <RadioButton value="bedrift" label="Bedrift" />
         <RadioButton value="annet" label="Annet" />
     </>
@@ -71,28 +71,35 @@ export const HideLegend: Story = {
     render: (args) => <RadioGroup {...args}>{DefaultChildren}</RadioGroup>,
 };
 
+export const MedOptions: Story = {
+    args: {
+        legend: 'Velg abonnement',
+        name: 'abonnement',
+        options: [
+            { value: 'basis', label: 'Basis' },
+            { value: 'premium', label: 'Premium' },
+            { value: 'family', label: 'Family' },
+        ],
+    },
+};
+
 export const HTML: Story = {
     render: () => (
         <ix-radio-group name="kundetype-html">
-            <span data-field="legend" class="ix-radio-group__legend">Velg kundetype</span>
-            <p data-field="description" class="ix-radio-group__description">
-                Velg hvilken kundetype som passer best
-            </p>
-            <div class="ix-radio-group__items">
-                <div class="ix-radio-button">
-                    <input type="radio" class="ix-radio-button__input" id="html-privat" name="kundetype-html" value="privat" checked />
-                    <label class="ix-radio-button__label" htmlFor="html-privat">
-                        Privat
-                        <span class="ix-radio-button__description">Kun for privatpersoner</span>
-                    </label>
+            <span data-field="legend">Velg kundetype</span>
+            <p data-field="description">Velg hvilken kundetype som passer best</p>
+            <div data-field="items">
+                <div>
+                    <input type="radio" value="privat" defaultChecked />
+                    <label>Privat</label>
                 </div>
-                <div class="ix-radio-button">
-                    <input type="radio" class="ix-radio-button__input" id="html-bedrift" name="kundetype-html" value="bedrift" />
-                    <label class="ix-radio-button__label" htmlFor="html-bedrift">Bedrift</label>
+                <div>
+                    <input type="radio" value="bedrift" />
+                    <label>Bedrift</label>
                 </div>
-                <div class="ix-radio-button">
-                    <input type="radio" class="ix-radio-button__input" id="html-annet" name="kundetype-html" value="annet" />
-                    <label class="ix-radio-button__label" htmlFor="html-annet">Annet</label>
+                <div>
+                    <input type="radio" value="annet" />
+                    <label>Annet</label>
                 </div>
             </div>
             <span data-field="error"></span>

@@ -1,11 +1,9 @@
-import clsx from 'clsx';
 import { forwardRef, type InputHTMLAttributes, type JSX } from 'react';
 import { useRadioGroupContext } from './RadioGroupContext';
 
 export type RadioButtonProps = {
     value: string;
     label: string;
-    description?: string;
     disabled?: boolean;
     className?: string;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'type' | 'size' | 'children' | 'onChange'>;
@@ -23,7 +21,7 @@ export type RadioButtonProps = {
 //  - readOnly er en no-op på input[type="radio"] — WC blokkerer tastatur i stedet
 //  - required settes på første input av WC; aria-required på host
 export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(function RadioButton(
-    { value, label, description, disabled, className, id, ...restInputAttrs },
+    { value, label, disabled, className, id, ...restInputAttrs },
     ref
 ): JSX.Element {
     const ctx = useRadioGroupContext();
@@ -35,25 +33,19 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(functi
     }
 
     return (
-        <div className={clsx('ix-radio-button', className)}>
+        <div className={className}>
             <input
                 ref={ref}
                 type="radio"
                 id={id}
                 value={value}
                 name={name}
-                className="ix-radio-button__input"
                 disabled={disabled}
                 checked={isChecked}
                 onChange={ctx ? handleChange : undefined}
                 {...restInputAttrs}
             />
-            <label className="ix-radio-button__label">
-                {label}
-                {description && (
-                    <span className="ix-radio-button__description">{description}</span>
-                )}
-            </label>
+            <label>{label}</label>
         </div>
     );
 });

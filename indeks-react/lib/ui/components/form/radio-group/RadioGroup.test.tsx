@@ -97,10 +97,10 @@ describe('RadioGroup', () => {
         expect(legend?.classList.contains('ix-sr-only')).toBe(true);
     });
 
-    it('legend får ix-radio-group__legend-klasse uten hideLegend', () => {
+    it('legend har ingen ix-sr-only-klasse uten hideLegend', () => {
         const { container } = renderGroup();
         const legend = container.querySelector('span[data-field="legend"]');
-        expect(legend?.classList.contains('ix-radio-group__legend')).toBe(true);
+        expect(legend?.classList.contains('ix-sr-only')).toBe(false);
     });
 
     it('sender name via context — alle inputs får samme name fra WC', () => {
@@ -161,9 +161,75 @@ describe('RadioGroup', () => {
         expect(host?.classList.contains('min-klasse')).toBe(true);
     });
 
-    it('rendrer barn inni ix-radio-group__items', () => {
+    it('rendrer barn inni items-container', () => {
         const { container } = renderGroup();
-        const items = container.querySelector('.ix-radio-group__items');
-        expect(items?.querySelectorAll('.ix-radio-button').length).toBe(3);
+        const items = container.querySelector('[data-field="items"]');
+        expect(items?.querySelectorAll('input[type="radio"]').length).toBe(3);
+    });
+
+    describe('options-prop', () => {
+        it('rendrer en RadioButton per option', () => {
+            const { container } = render(
+                <RadioGroup
+                    legend="Velg kundetype"
+                    options={[
+                        { value: 'privat', label: 'Privat' },
+                        { value: 'bedrift', label: 'Bedrift' },
+                    ]}
+                />
+            );
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            expect(inputs.length).toBe(2);
+            expect(inputs[0].value).toBe('privat');
+            expect(inputs[1].value).toBe('bedrift');
+        });
+
+        it('rendrer label-tekst per option', () => {
+            const { container } = render(
+                <RadioGroup
+                    legend="Velg"
+                    options={[
+                        { value: 'a', label: 'Alternativ A' },
+                        { value: 'b', label: 'Alternativ B' },
+                    ]}
+                />
+            );
+            const labels = container.querySelectorAll('label');
+            expect(labels[0].textContent).toBe('Alternativ A');
+            expect(labels[1].textContent).toBe('Alternativ B');
+        });
+
+        it('options overstyrer children når begge er gitt', () => {
+            const { container } = render(
+                <RadioGroup
+                    legend="Velg"
+                    options={[{ value: 'a', label: 'A' }]}
+                >
+                    <RadioButton value="ignorert" label="Ignorert" />
+                </RadioGroup>
+            );
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            expect(inputs.length).toBe(1);
+            expect(inputs[0].value).toBe('a');
+        });
+
+        it('kontrollert value/onChange virker med options', () => {
+            const onChange = vi.fn();
+            const { container } = render(
+                <RadioGroup
+                    legend="Velg"
+                    value="b"
+                    onChange={onChange}
+                    options={[
+                        { value: 'a', label: 'A' },
+                        { value: 'b', label: 'B' },
+                    ]}
+                />
+            );
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            expect(inputs[1].checked).toBe(true);
+            fireEvent.click(inputs[0]);
+            expect(onChange).toHaveBeenCalledWith('a');
+        });
     });
 });

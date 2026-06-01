@@ -27,43 +27,75 @@ RadioGroup lar brukeren velge ett alternativ fra en liste av gjensidig utelukken
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-radio-group name="kundetype">
-  <span data-field="legend" class="ix-radio-group__legend">Velg kundetype</span>
-  <div class="ix-radio-group__items">
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="r-privat" name="kundetype" value="privat" />
-      <label class="ix-radio-button__label" htmlFor="r-privat">
-        Privat
-        <span class="ix-radio-button__description">Kun for privatpersoner</span>
-      </label>
+<ix-radio-group name="kundetype-html">
+  <span data-field="legend">Velg kundetype</span>
+  <div data-field="items">
+    <div>
+      <input type="radio" value="privat" defaultChecked />
+      <label>Privat</label>
     </div>
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="r-bedrift" name="kundetype" value="bedrift" />
-      <label class="ix-radio-button__label" htmlFor="r-bedrift">Bedrift</label>
+    <div>
+      <input type="radio" value="bedrift" />
+      <label>Bedrift</label>
     </div>
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="r-annet" name="kundetype" value="annet" />
-      <label class="ix-radio-button__label" htmlFor="r-annet">Annet</label>
+    <div>
+      <input type="radio" value="annet" />
+      <label>Annet</label>
     </div>
   </div>
   <span data-field="error"></span>
 </ix-radio-group>
 ```
 
-`<ix-radio-group>` setter opp `role="radiogroup"`, `aria-labelledby` til legend og `aria-describedby` til description og error automatisk. Error-elementet skal alltid ligge i DOM. Tomt betyr ingen feil.
+`<ix-radio-group>` styler naken `<input type="radio">` og `<label>` som ligger inni `[data-field="items"]`. Den genererer `id` på hver input og kobler `for`/`id` mellom label og input automatisk, setter opp `role="radiogroup"`, `aria-labelledby` til legend og `aria-describedby` til description og error. Error-elementet skal alltid ligge i DOM. Tomt betyr ingen feil.
 
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
-<RadioGroup legend="Velg kundetype" name="kundetype">
-  <RadioButton value="privat" label="Privat" description="Kun for privatpersoner" />
+<RadioGroup
+  legend="Velg kundetype"
+  name="kundetype"
+  value="privat"
+  options={[
+    { value: 'privat', label: 'Privat' },
+    { value: 'bedrift', label: 'Bedrift' },
+    { value: 'annet', label: 'Annet' },
+  ]}
+/>
+```
+
+For enkle lister er `options`-propen den raskeste veien — på samme måte som `Select`. Hver option har `value` og `label`.
+
+I praksis vil du som regel holde valgt verdi i state og koble den via `value`/`onChange`:
+
+```tsx
+const [kundetype, setKundetype] = useState<string>();
+
+<RadioGroup
+  legend="Velg kundetype"
+  name="kundetype"
+  value={kundetype}
+  onChange={setKundetype}
+  options={[
+    { value: 'privat', label: 'Privat' },
+    { value: 'bedrift', label: 'Bedrift' },
+    { value: 'annet', label: 'Annet' },
+  ]}
+/>
+```
+
+Trenger du mer — deaktiverte alternativer, custom `id`-er eller ref — bruk `RadioButton`-barn i stedet:
+
+```tsx live
+<RadioGroup legend="Velg kundetype" name="kundetype-children" value="privat">
+  <RadioButton value="privat" label="Privat" />
   <RadioButton value="bedrift" label="Bedrift" />
   <RadioButton value="annet" label="Annet" />
 </RadioGroup>
 ```
 
-Komponenten håndterer name-propagering og ARIA-kobling automatisk. Hver RadioButton må ha en unik value innenfor gruppen.
+Komponenten håndterer name-propagering og ARIA-kobling automatisk. Hver RadioButton må ha en unik value innenfor gruppen. Hvis både `options` og children er satt, vinner `options`.
 
 </TabItem>
 </Tabs>
@@ -72,25 +104,7 @@ Komponenten håndterer name-propagering og ARIA-kobling automatisk. Hver RadioBu
 
 ### Med beskrivelse
 
-Bruk `description` for å gi ekstra kontekst til hele gruppen, og `description` på den enkelte RadioButton for å forklare et spesifikt alternativ.
-
-<Diskuter title="RadioButton-description: i label eller via aria-describedby?">
-
-I dag legges per-knapp `description` inni `<label>`, slik at skjermleser leser den sammen med radio-tilstand. Aksel og Digdir kobler den i stedet via `aria-describedby` på inputen.
-
-**I label** (vår nåværende løsning)
-- Hele teksten leses ved fokus — brukeren får full kontekst umiddelbart.
-- Kan bli langt for grupper med mange alternativer eller lange beskrivelser.
-- Beskrivelsen blir del av det tilgjengelige navnet, ikke en separat beskrivelse.
-
-**Via aria-describedby**
-- Kortere annonsering ved fokus — kun label leses umiddelbart, beskrivelsen kommer etter en pause.
-- Brukere som navigerer raskt kan hoppe over beskrivelsen.
-- Mer i tråd med hvordan TextField og andre felt håndterer description.
-
-Beslutning: ?
-
-</Diskuter>
+Bruk `description` for å gi ekstra kontekst til hele gruppen.
 
 <Diskuter title="Verifiser forced-colors (Windows høykontrast) selv">
 
@@ -119,24 +133,16 @@ Sjekk at: ringen er synlig (`CanvasText`), valgt prikk har brukerens accent-farg
 
 ```jsx live
 <ix-radio-group name="abonnement-html">
-  <span data-field="legend" class="ix-radio-group__legend">Velg abonnement</span>
-  <p data-field="description" class="ix-radio-group__description">
-    Du kan endre dette senere
-  </p>
-  <div class="ix-radio-group__items">
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="ab-basis" name="abonnement-html" value="basis" />
-      <label class="ix-radio-button__label" htmlFor="ab-basis">
-        Basis
-        <span class="ix-radio-button__description">99 kr/mnd. Inkluderer det viktigste.</span>
-      </label>
+  <span data-field="legend">Velg abonnement</span>
+  <p data-field="description">Du kan endre dette senere</p>
+  <div data-field="items">
+    <div>
+      <input type="radio" value="basis" defaultChecked />
+      <label>Basis</label>
     </div>
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="ab-premium" name="abonnement-html" value="premium" />
-      <label class="ix-radio-button__label" htmlFor="ab-premium">
-        Premium
-        <span class="ix-radio-button__description">199 kr/mnd. Inkluderer alt.</span>
-      </label>
+    <div>
+      <input type="radio" value="premium" />
+      <label>Premium</label>
     </div>
   </div>
   <span data-field="error"></span>
@@ -151,10 +157,12 @@ Sjekk at: ringen er synlig (`CanvasText`), valgt prikk har brukerens accent-farg
   legend="Velg abonnement"
   description="Du kan endre dette senere"
   name="abonnement"
->
-  <RadioButton value="basis" label="Basis" description="99 kr/mnd. Inkluderer det viktigste." />
-  <RadioButton value="premium" label="Premium" description="199 kr/mnd. Inkluderer alt." />
-</RadioGroup>
+  value="basis"
+  options={[
+    { value: 'basis', label: 'Basis' },
+    { value: 'premium', label: 'Premium' },
+  ]}
+/>
 ```
 
 </TabItem>
@@ -169,15 +177,15 @@ For svært korte lister kan alternativene vises ved siden av hverandre. Bruk det
 
 ```jsx live
 <ix-radio-group name="kontakt-html" data-orientation="horizontal">
-  <span data-field="legend" class="ix-radio-group__legend">Kontaktes på e-post?</span>
-  <div class="ix-radio-group__items">
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="k-ja" name="kontakt-html" value="ja" />
-      <label class="ix-radio-button__label" htmlFor="k-ja">Ja</label>
+  <span data-field="legend">Kontaktes på e-post?</span>
+  <div data-field="items">
+    <div>
+      <input type="radio" value="ja" defaultChecked />
+      <label>Ja</label>
     </div>
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="k-nei" name="kontakt-html" value="nei" />
-      <label class="ix-radio-button__label" htmlFor="k-nei">Nei</label>
+    <div>
+      <input type="radio" value="nei" />
+      <label>Nei</label>
     </div>
   </div>
   <span data-field="error"></span>
@@ -188,10 +196,16 @@ For svært korte lister kan alternativene vises ved siden av hverandre. Bruk det
 <TabItem value="react" label="React">
 
 ```tsx live
-<RadioGroup legend="Kontaktes på e-post?" name="kontakt" orientation="horizontal">
-  <RadioButton value="ja" label="Ja" />
-  <RadioButton value="nei" label="Nei" />
-</RadioGroup>
+<RadioGroup
+  legend="Kontaktes på e-post?"
+  name="kontakt"
+  orientation="horizontal"
+  value="ja"
+  options={[
+    { value: 'ja', label: 'Ja' },
+    { value: 'nei', label: 'Nei' },
+  ]}
+/>
 ```
 
 </TabItem>
@@ -206,22 +220,25 @@ Når validering feiler, vis en feilmelding som forklarer hva som er galt og hva 
 
 ```jsx live
 <ix-radio-group name="bydel-html" data-state="error">
-  <span data-field="legend" class="ix-radio-group__legend">Hvilken bydel bor du i?</span>
-  <div class="ix-radio-group__items">
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="b-ostbyen" name="bydel-html" value="ostbyen" />
-      <label class="ix-radio-button__label" htmlFor="b-ostbyen">Østbyen</label>
+  <span data-field="legend">Hvilken bydel bor du i?</span>
+  <div data-field="items">
+    <div>
+      <input type="radio" value="ostbyen" defaultChecked />
+      <label>Østbyen</label>
     </div>
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="b-lerkendal" name="bydel-html" value="lerkendal" />
-      <label class="ix-radio-button__label" htmlFor="b-lerkendal">Lerkendal</label>
+    <div>
+      <input type="radio" value="lerkendal" />
+      <label>Lerkendal</label>
     </div>
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="b-heimdal" name="bydel-html" value="heimdal" />
-      <label class="ix-radio-button__label" htmlFor="b-heimdal">Heimdal</label>
+    <div>
+      <input type="radio" value="heimdal" />
+      <label>Heimdal</label>
     </div>
   </div>
-  <span data-field="error">Du må velge en bydel før du kan fortsette</span>
+  <span data-field="error">
+    <ix-icon materialdesignname="dangerous"></ix-icon>
+    Du må velge en bydel før du kan fortsette
+  </span>
 </ix-radio-group>
 ```
 
@@ -232,12 +249,14 @@ Når validering feiler, vis en feilmelding som forklarer hva som er galt og hva 
 <RadioGroup
   legend="Hvilken bydel bor du i?"
   name="bydel"
+  value="ostbyen"
   errorMessage="Du må velge en bydel før du kan fortsette"
->
-  <RadioButton value="ostbyen" label="Østbyen" />
-  <RadioButton value="lerkendal" label="Lerkendal" />
-  <RadioButton value="heimdal" label="Heimdal" />
-</RadioGroup>
+  options={[
+    { value: 'ostbyen', label: 'Østbyen' },
+    { value: 'lerkendal', label: 'Lerkendal' },
+    { value: 'heimdal', label: 'Heimdal' },
+  ]}
+/>
 ```
 
 </TabItem>
@@ -253,14 +272,14 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
 ```jsx live
 <ix-radio-group name="rad-1-html" data-orientation="horizontal">
   <span data-field="legend" class="ix-sr-only">Velg favoritt for rad 1</span>
-  <div class="ix-radio-group__items">
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="rad1-a" name="rad-1-html" value="a" />
-      <label class="ix-radio-button__label" htmlFor="rad1-a">A</label>
+  <div data-field="items">
+    <div>
+      <input type="radio" value="a" defaultChecked />
+      <label>A</label>
     </div>
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="rad1-b" name="rad-1-html" value="b" />
-      <label class="ix-radio-button__label" htmlFor="rad1-b">B</label>
+    <div>
+      <input type="radio" value="b" />
+      <label>B</label>
     </div>
   </div>
   <span data-field="error"></span>
@@ -276,10 +295,12 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
   name="rad-1"
   orientation="horizontal"
   hideLegend
->
-  <RadioButton value="a" label="A" />
-  <RadioButton value="b" label="B" />
-</RadioGroup>
+  value="a"
+  options={[
+    { value: 'a', label: 'A' },
+    { value: 'b', label: 'B' },
+  ]}
+/>
 ```
 
 </TabItem>
@@ -295,29 +316,32 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
 ```jsx live
 <>
   <ix-radio-group name="ro-html" readonly data-state="readonly">
-    <span data-field="legend" class="ix-radio-group__legend">Skrivebeskyttet</span>
-    <div class="ix-radio-group__items">
-      <div class="ix-radio-button">
-        <input type="radio" class="ix-radio-button__input" id="ro-a" name="ro-html" value="a" defaultChecked />
-        <label class="ix-radio-button__label" htmlFor="ro-a">Alternativ A</label>
+    <span data-field="legend">
+      <ix-icon materialdesignname="lock"></ix-icon>
+      Skrivebeskyttet
+    </span>
+    <div data-field="items">
+      <div>
+        <input type="radio" value="a" defaultChecked />
+        <label>Alternativ A</label>
       </div>
-      <div class="ix-radio-button">
-        <input type="radio" class="ix-radio-button__input" id="ro-b" name="ro-html" value="b" />
-        <label class="ix-radio-button__label" htmlFor="ro-b">Alternativ B</label>
+      <div>
+        <input type="radio" value="b" />
+        <label>Alternativ B</label>
       </div>
     </div>
     <span data-field="error"></span>
   </ix-radio-group>
   <ix-radio-group name="dis-html" disabled data-state="disabled">
-    <span data-field="legend" class="ix-radio-group__legend">Deaktivert</span>
-    <div class="ix-radio-group__items">
-      <div class="ix-radio-button">
-        <input type="radio" class="ix-radio-button__input" id="dis-a" name="dis-html" value="a" />
-        <label class="ix-radio-button__label" htmlFor="dis-a">Alternativ A</label>
+    <span data-field="legend">Deaktivert</span>
+    <div data-field="items">
+      <div>
+        <input type="radio" value="a" defaultChecked />
+        <label>Alternativ A</label>
       </div>
-      <div class="ix-radio-button">
-        <input type="radio" class="ix-radio-button__input" id="dis-b" name="dis-html" value="b" />
-        <label class="ix-radio-button__label" htmlFor="dis-b">Alternativ B</label>
+      <div>
+        <input type="radio" value="b" />
+        <label>Alternativ B</label>
       </div>
     </div>
     <span data-field="error"></span>
@@ -330,14 +354,26 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
 
 ```tsx live
 <>
-  <RadioGroup legend="Skrivebeskyttet" name="ro" readOnly value="a">
-    <RadioButton value="a" label="Alternativ A" />
-    <RadioButton value="b" label="Alternativ B" />
-  </RadioGroup>
-  <RadioGroup legend="Deaktivert" name="dis" disabled>
-    <RadioButton value="a" label="Alternativ A" />
-    <RadioButton value="b" label="Alternativ B" />
-  </RadioGroup>
+  <RadioGroup
+    legend="Skrivebeskyttet"
+    name="ro"
+    readOnly
+    value="a"
+    options={[
+      { value: 'a', label: 'Alternativ A' },
+      { value: 'b', label: 'Alternativ B' },
+    ]}
+  />
+  <RadioGroup
+    legend="Deaktivert"
+    name="dis"
+    disabled
+    value="a"
+    options={[
+      { value: 'a', label: 'Alternativ A' },
+      { value: 'b', label: 'Alternativ B' },
+    ]}
+  />
 </>
 ```
 
@@ -421,10 +457,10 @@ Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for 
 <ix-radio-group>                                  ← wrapper, role="radiogroup" settes automatisk
   <span data-field="legend">Velg kundetype</span> ← gruppens label, aria-labelledby kobles automatisk
   <p data-field="description">...</p>             ← valgfri hjelpetekst
-  <div class="ix-radio-group__items">             ← container for radioknappene
-    <div class="ix-radio-button">                 ← én radioknapp
-      <input type="radio" name="..." value="..." />
-      <label>Label</label>
+  <div data-field="items">                        ← container for radioknappene
+    <div>                                         ← wrapper rundt input + label
+      <input type="radio" value="..." />          ← id og name genereres av WC
+      <label>Label</label>                        ← for-attributt kobles av WC
     </div>
     ...
   </div>
@@ -443,11 +479,10 @@ Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for 
 |-----|---------|-------------|
 | `<span data-field="legend">` | Ja | Gruppe-label. Kobles via `aria-labelledby` |
 | `<p data-field="description">` | Nei | Hjelpetekst for hele gruppen |
-| `<div class="ix-radio-group__items">` | Ja | Container for radioknappene |
-| `<div class="ix-radio-button">` | Ja | Wrapper for én radioknapp + label |
+| `<div data-field="items">` | Ja | Container for radioknappene |
+| `<div>` | Ja | Wrapper rundt én input + label. Holder dem som ett flex-barn og som direkte søsken |
 | `<input type="radio">` | Ja | Selve radio-elementet. `name` propageres automatisk hvis utelatt |
 | `<label>` | Ja | Synlig labeltekst. `for`/`id` kobles automatisk |
-| `<span class="ix-radio-button__description">` | Nei | Beskrivelse for det enkelte alternativet, plasseres inni labelen |
 | `<span data-field="error">` | Ja | Feilmelding. Alltid i DOM. Tomt = ingen feil |
 
 ### Tilstand via native attributter
@@ -473,7 +508,17 @@ Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for 
 | `orientation` | `'vertical' \| 'horizontal'` | Nei | `'vertical'` | Layout-orientering |
 | `hideLegend` | `boolean` | Nei | `false` | Skjuler legend visuelt — leses fortsatt av skjermlesere |
 | `className` | `string` | Nei | | CSS-klasse på `<ix-radio-group>`-rotelementet |
-| `children` | `ReactNode` | Ja | | RadioButton-elementer |
+| `options` | `RadioOption[]` | Nei* | | Liste med alternativer. Snarvei for enkle lister — alternativ til `children` |
+| `children` | `ReactNode` | Nei* | | RadioButton-elementer. Brukes når du trenger mer kontroll enn `options` gir |
+
+*Enten `options` eller `children` må være satt. Hvis begge er satt, vinner `options`.
+
+### RadioOption
+
+| Felt | Type | Påkrevd | Beskrivelse |
+|------|------|---------|-------------|
+| `value` | `string` | Ja | Verdien som settes på input |
+| `label` | `string` | Ja | Synlig labeltekst |
 
 ### RadioButtonProps
 
@@ -481,7 +526,6 @@ Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for 
 |------|------|---------|----------|-------------|
 | `value` | `string` | Ja | | Verdien som settes på input. Brukes for å identifisere alternativet i gruppen |
 | `label` | `string` | Ja | | Synlig labeltekst |
-| `description` | `string` | Nei | | Beskrivelse av alternativet, plasseres under labelen |
 | `disabled` | `boolean` | Nei | `false` | Deaktiverer denne enkelt-knappen (kommer i tillegg til gruppe-disabled) |
 | `className` | `string` | Nei | | CSS-klasse på wrapper-div |
 | `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet |
@@ -497,39 +541,46 @@ I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocu
 
 ## Tilpasning med CSS
 
-Trenger du `ix-radio-group`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte på elementene dine.
+Inni `<ix-radio-group>` styles naken `<input type="radio">` og `<label>` automatisk — du trenger ikke skrive klasser. BEM-klassene finnes som hooks for konsumenter som vil bruke radio-styling utenfor `<ix-radio-group>`.
 
 ### Tilgjengelige klasser og selektorer
 
 | Element | Selektor |
 |---------|----------|
 | Gruppe-wrapper | `.ix-radio-group` (eller tagnavn `ix-radio-group`) |
-| Legend | `.ix-radio-group__legend` |
-| Description | `.ix-radio-group__description` |
-| Items-container | `.ix-radio-group__items` |
-| Radio-wrapper | `.ix-radio-button` |
-| Input (visuelt skjult) | `.ix-radio-button__input` |
-| Label (med radio-indikator) | `.ix-radio-button__label` |
-| Beskrivelse på enkeltvalg | `.ix-radio-button__description` |
+| Legend | `[data-field="legend"]` |
+| Description | `[data-field="description"]` |
+| Items-container | `[data-field="items"]` |
+| Radio-wrapper (utenfor gruppen) | `.ix-radio-button` |
+| Input — visuelt skjult (utenfor gruppen) | `.ix-radio-button__input` |
+| Label med radio-indikator (utenfor gruppen) | `.ix-radio-button__label` |
 | Feilmelding | `[data-field="error"]` |
 | Skjult legend | `.ix-sr-only` |
 
 ### Eksempel: bruk i egen HTML-struktur
 
+Inni `<ix-radio-group>` trengs ingen klasser, og heller ikke `id` eller `for` — komponenten kobler input og label automatisk:
+
 ```html
 <ix-radio-group name="kundetype">
-  <span data-field="legend" class="ix-radio-group__legend">Velg kundetype</span>
-  <div class="ix-radio-group__items">
-    <div class="ix-radio-button">
-      <input type="radio" class="ix-radio-button__input" id="r-privat" name="kundetype" value="privat" />
-      <label class="ix-radio-button__label" for="r-privat">
-        Privat
-        <span class="ix-radio-button__description">Kun for privatpersoner</span>
-      </label>
+  <span data-field="legend">Velg kundetype</span>
+  <div data-field="items">
+    <div>
+      <input type="radio" value="privat" />
+      <label>Privat</label>
     </div>
   </div>
   <span data-field="error"></span>
 </ix-radio-group>
+```
+
+Bygger du radio-styling utenfor `<ix-radio-group>`, bruk BEM-klassene direkte:
+
+```html
+<div class="ix-radio-button">
+  <input type="radio" class="ix-radio-button__input" id="r-1" name="x" value="1" />
+  <label class="ix-radio-button__label" for="r-1">Alternativ 1</label>
+</div>
 ```
 
 ## Designvalg
