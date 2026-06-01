@@ -1,0 +1,73 @@
+# Designvalg for RadioGroup
+
+Denne siden forklarer *hvorfor* RadioGroup er bygget som den er. Den er ment for de som er nysgjerrige på avveiningene bak komponenten — du trenger den ikke for å bruke den. For bruk og API, se [RadioGroup](./radio-group).
+
+## WC eier ARIA og DOM-synk; React-laget er bevisst tynt
+
+Hele ARIA-koblingsapparatet — id-generering, `htmlFor`, `name`-synkronisering, `aria-labelledby`/`describedby`/`invalid`/`required`, disabled-propagering og readonly-tastaturblokk — ligger i `<ix-radio-group>`. React-wrapperen eksponerer kun props-API, kontrollert state og presentasjons-attributter (`data-state`, `data-orientation`, `className`).
+
+*Hvorfor:* HTML- og React-bruk får identisk a11y-oppførsel uten duplisering. *Vurdert:* eie ARIA i React og late web component-en være ren styling — ville gjort HTML-bruken systematisk dårligere.
+
+## `<div role="radiogroup">`, ikke `<fieldset>`
+
+Komponenten bruker en host-`<div>` (gjennom custom element `<ix-radio-group>`) med `role="radiogroup"` istedenfor native `<fieldset>` + `<legend>`.
+
+*Hvorfor:* Safari har kjente bugs med `<fieldset>` kombinert med `flex`/`grid`-layout, og DigDir anbefaler ARIA-varianten for radioknapp-grupper. *Vurdert:* native `<fieldset>` — semantisk reneste, men praktisk ubrukelig på grunn av layout-buggene. Detaljene står i `_strategier/accessibility-cross-cutting-concerns.md` §9.6.
+
+## Compound-komponent: `RadioGroup` + `RadioButton`
+
+API-et i React er `<RadioGroup>` med `<RadioButton>`-barn, ikke en prop-array (`options={...}`).
+
+*Hvorfor:* gir lesbar JSX og lar hver knapp bære eget innhold (description, custom labels, ekstra HTML-attributter). *Vurdert:* `options`-array — låser strukturen og gjør alt som ikke er "label + value" tungvint.
+
+## Context bærer kun `name`, `value`, `onChange`
+
+`RadioGroupContext` propagerer det React må vite om: gruppens `name`, valgt verdi og change-handler. `disabled`, `readOnly` og `required` ligger *ikke* i Context — de settes som HTML-attributter på `<ix-radio-group>`, og web component-en propagerer dem ned til hver `<input>`.
+
+*Hvorfor:* unngår dobbelt sannhet. WC må uansett vite om disabled for å håndtere per-knapp bevaring (se under), så å duplisere det i Context ville bare gitt to kilder å holde i synk.
+
+## Ingen egen web component for `RadioButton`
+
+`indeks-web` har bare `<ix-radio-group>`. En enkelt radioknapp er CSS rundt en native `<input type="radio">` og har ingen logikk som krever JavaScript.
+
+*Vurdert:* `<ix-radio-button>` for symmetri med gruppen, men det ville bare wrappet et input uten å gi noe.
+
+## `childList`-observer wirer dynamisk lagt til inputs
+
+En MutationObserver lytter etter at nye `<input type="radio">` legges til etter mount (typisk via React conditional rendering) og kjører ID-/name-/htmlFor-/disabled-wiring på dem (`indeks-web/lib/components/radio-group/IxRadioGroup.ts`).
+
+*Hvorfor:* a11y må fungere ved dynamiske gruppestørrelser uten at forfatteren manuelt må kalle noe.
+
+## `aria-labelledby` til legend, `aria-describedby` til description og error
+
+Gruppen får sitt tilgjengelige navn fra legend-elementet via `aria-labelledby`. Hjelpetekst og evt. feilmelding kobles via `aria-describedby` (description først, error etter).
+
+*Hvorfor:* gir skjermlesere konsistent rekkefølge — gruppe-navn → hjelpetekst → feilmelding.
+
+## `aria-invalid` settes kun på host, ikke på hver input
+
+Error-elementet ligger alltid i DOM. En MutationObserver setter `aria-invalid="true"` på `<ix-radio-group>` så snart error-noden får innhold, og fjerner attributten igjen når den tømmes.
+
+*Hvorfor:* gruppens validitet er det som teller for skjermlesere — å duplisere `aria-invalid` på hver input gir ingen merverdi. *Vurdert:* per-input `aria-invalid` — bare støy, samme informasjon én gang.
+
+## `aria-live="polite"` på error, ikke `role="alert"`
+
+Error-elementet får `aria-live="polite"`. Komponenten setter dette selv — forfatteren skal ikke skrive det.
+
+*Hvorfor:* `polite` venter til skjermleseren er ferdig med pågående annonsering, mens `role="alert"` (implisitt `assertive`) avbryter. Feilmeldinger i skjema skal ikke avbryte brukeren midt i en setning.
+
+## Native tastaturoppførsel beholdes
+
+Tab inn/ut av gruppen, piltaster (alle fire retninger) for å bytte valg, Space for å velge. Vi har ingen egne tastatur-handlere — native `<input type="radio">` med felles `name` gir alt gratis.
+
+*Eneste unntak:* `readonly` blokkeres i en `keydown`-listener fordi `readOnly` er en no-op på radio-input per HTML-spec. `pointer-events: none` i CSS dekker mus og touch.
+
+## `required` på første input, `disabled` bevart per knapp via `WeakMap`
+
+For `required`: web component-en setter `required` på *kun* første input og `aria-required="true"` på host. HTML5-form-validering trigges av én `required` siden alle inputs deler `name`.
+
+*Hvorfor:* Safari viser separate validation-bobler per input hvis flere er `required`. *Vurdert:* `required` på alle inputs — gir duplikate bobler.
+
+For `disabled`: web component-en snapshotter hver inputs egen `disabled` i en `WeakMap` første gang gruppe-`disabled` toggles på, og restorer verdien når gruppe-`disabled` toggles av igjen.
+
+*Hvorfor:* per-knapp `disabled` (satt av forfatteren) må overleve at gruppen blir deaktivert og reaktivert. *Vurdert:* enkel overskriving av `input.disabled` — ville mistet per-knapp-info ved første gruppe-toggle.

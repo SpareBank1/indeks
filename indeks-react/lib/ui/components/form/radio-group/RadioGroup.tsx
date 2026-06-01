@@ -1,48 +1,71 @@
 import clsx from 'clsx';
-import { Fragment, useId, type JSX } from 'react';
-import { useFocus } from '../../../../hooks/useFocus';
+import { type JSX, type ReactNode } from 'react';
+import { ValidationMessage } from '../validation-message/ValidationMessage';
+import { RadioGroupContext } from './RadioGroupContext';
 
 export type RadioGroupProps = {
-    className?: string;
     legend: string;
     description?: string;
-    inputprops?: React.InputHTMLAttributes<HTMLInputElement>;
-    options: { value: string; label: string }[];
+    errorMessage?: string;
+    name?: string;
+    value?: string;
+    onChange?: (value: string) => void;
+    required?: boolean;
+    disabled?: boolean;
+    readOnly?: boolean;
+    orientation?: 'vertical' | 'horizontal';
+    hideLegend?: boolean;
+    className?: string;
+    children: ReactNode;
 };
 
-export function RadioGroup(props: RadioGroupProps): JSX.Element {
-    const { className, legend, inputprops, description, options, ...restProps } = {
-        ...props,
-    };
-
-    const generatedId = useId();
-    const idOrName = inputprops?.name ?? generatedId;
-
-    const { ref, getFocusClasses } = useFocus<HTMLInputElement>();
+// React-laget er tynt: ix-radio-group (WC) eier id, name, htmlFor, aria-*-koblinger,
+// aria-invalid, aria-required, og disabled-propagering til barn-inputs. React-laget
+// eksponerer kun props-API, kontrollert state (value/onChange) og presentasjons-
+// attributter (data-state/data-orientation/className).
+export function RadioGroup({
+    legend,
+    description,
+    errorMessage,
+    name,
+    value,
+    onChange,
+    required,
+    disabled,
+    readOnly,
+    orientation,
+    hideLegend,
+    className,
+    children,
+}: RadioGroupProps): JSX.Element {
+    const dataState = errorMessage ? 'error' : readOnly ? 'readonly' : disabled ? 'disabled' : undefined;
 
     return (
-        <fieldset className={clsx('ix-radio-group', className)} {...restProps}>
-            <legend>{legend}</legend>
-            <p>{description}</p>
-            {options.map((option) => (
-                <Fragment key={option.value}>
-                    <input
-                        id={`${idOrName}-${option.value}`}
-                        type="radio"
-                        name={idOrName}
-                        value={option.value}
-                        className="ix-radio__input"
-                        ref={ref}
-                        {...inputprops}
-                    />
-                    <label
-                        className={clsx('ix-radio__label', getFocusClasses('form'))}
-                        htmlFor={`${idOrName}-${option.value}`}
-                    >
-                        {option.label}
-                    </label>
-                </Fragment>
-            ))}
-        </fieldset>
+        <ix-radio-group
+            class={clsx(className) || undefined}
+            data-orientation={orientation !== 'vertical' ? orientation : undefined}
+            data-state={dataState}
+            disabled={disabled || undefined}
+            readonly={readOnly || undefined}
+            required={required || undefined}
+        >
+            <span
+                data-field="legend"
+                className={hideLegend ? 'ix-sr-only' : 'ix-radio-group__legend'}
+            >
+                {legend}
+            </span>
+            {description && (
+                <p data-field="description" className="ix-radio-group__description">
+                    {description}
+                </p>
+            )}
+            <div className="ix-radio-group__items">
+                <RadioGroupContext.Provider value={{ name, value, onChange }}>
+                    {children}
+                </RadioGroupContext.Provider>
+            </div>
+            <ValidationMessage>{errorMessage}</ValidationMessage>
+        </ix-radio-group>
     );
 }

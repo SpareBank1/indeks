@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import type { IxField, IxIcon } from '@sb1/indeks-web';
+import type { IxField, IxIcon, IxRadioGroup } from '@sb1/indeks-web';
 import type { IconName } from './ui/icons/icon-types';
 
 declare module 'react' {
@@ -19,6 +19,14 @@ declare module 'react' {
                 'aria-label'?: string;
                 'aria-labelledby'?: string;
                 class?: string;
+            };
+            'ix-radio-group': React.DetailedHTMLProps<React.HTMLAttributes<IxRadioGroup>, IxRadioGroup> & {
+                class?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                required?: boolean | '';
+                'data-orientation'?: 'vertical' | 'horizontal';
+                'data-state'?: 'error' | 'readonly' | 'disabled';
             };
         }
     }
