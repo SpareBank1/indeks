@@ -23,6 +23,7 @@ export const Avkrysset: Story = {
 };
 
 export const MedBeskrivelse: Story = {
+    tags: ['mobile-chromium'],
     args: {
         label: 'Send meg nyhetsbrev',
         description: 'Du kan når som helst melde deg av',
