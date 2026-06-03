@@ -5,3 +5,10 @@
 .ix-transition-all {
     transition: var(--ix-transition-all);
 }
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --ix-transition-all: none;
+        --ix-transition-duration: 0s;
+    }
+}
