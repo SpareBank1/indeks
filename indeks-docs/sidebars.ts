@@ -79,6 +79,7 @@ const sidebars: SidebarsConfig = {
             collapsed: true,
             items: [
                 'komponenter/button',
+                'komponenter/spinner',
                 'komponenter/typografi',
                 {
                     type: 'category',
