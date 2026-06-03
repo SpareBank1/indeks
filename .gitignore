@@ -46,3 +46,6 @@ coverage/
 
 # Referanse-repoer (eksterne designsystem for research)
 _refs/
+
+# Core-dumper
+core
