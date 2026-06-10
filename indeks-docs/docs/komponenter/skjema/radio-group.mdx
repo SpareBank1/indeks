@@ -56,7 +56,7 @@ RadioGroup lar brukeren velge ett alternativ fra en liste av gjensidig utelukken
 <RadioGroup
   legend="Velg kundetype"
   name="kundetype"
-  value="privat"
+  defaultValue="privat"
   options={[
     { value: 'privat', label: 'Privat' },
     { value: 'bedrift', label: 'Bedrift' },
@@ -70,7 +70,7 @@ For enkle lister er `options`-propen den raskeste veien — på samme måte som 
 I praksis vil du som regel holde valgt verdi i state og koble den via `value`/`onChange`:
 
 ```tsx
-const [kundetype, setKundetype] = useState<string>();
+const [kundetype, setKundetype] = useState<string>('privat');
 
 <RadioGroup
   legend="Velg kundetype"
@@ -88,7 +88,7 @@ const [kundetype, setKundetype] = useState<string>();
 Trenger du mer — deaktiverte alternativer, custom `id`-er eller ref — bruk `RadioButton`-barn i stedet:
 
 ```tsx live
-<RadioGroup legend="Velg kundetype" name="kundetype-children" value="privat">
+<RadioGroup legend="Velg kundetype" name="kundetype-children" defaultValue="privat">
   <RadioButton value="privat" label="Privat" />
   <RadioButton value="bedrift" label="Bedrift" />
   <RadioButton value="annet" label="Annet" />
@@ -157,7 +157,7 @@ Sjekk at: ringen er synlig (`CanvasText`), valgt prikk har brukerens accent-farg
   legend="Velg abonnement"
   description="Du kan endre dette senere"
   name="abonnement"
-  value="basis"
+  defaultValue="basis"
   options={[
     { value: 'basis', label: 'Basis' },
     { value: 'premium', label: 'Premium' },
@@ -200,7 +200,7 @@ For svært korte lister kan alternativene vises ved siden av hverandre. Bruk det
   legend="Kontaktes på e-post?"
   name="kontakt"
   orientation="horizontal"
-  value="ja"
+  defaultValue="ja"
   options={[
     { value: 'ja', label: 'Ja' },
     { value: 'nei', label: 'Nei' },
@@ -249,7 +249,7 @@ Når validering feiler, vis en feilmelding som forklarer hva som er galt og hva 
 <RadioGroup
   legend="Hvilken bydel bor du i?"
   name="bydel"
-  value="ostbyen"
+  defaultValue="ostbyen"
   errorMessage="Du må velge en bydel før du kan fortsette"
   options={[
     { value: 'ostbyen', label: 'Østbyen' },
@@ -295,7 +295,7 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
   name="rad-1"
   orientation="horizontal"
   hideLegend
-  value="a"
+  defaultValue="a"
   options={[
     { value: 'a', label: 'A' },
     { value: 'b', label: 'B' },
@@ -358,7 +358,7 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
     legend="Skrivebeskyttet"
     name="ro"
     readOnly
-    value="a"
+    defaultValue="a"
     options={[
       { value: 'a', label: 'Alternativ A' },
       { value: 'b', label: 'Alternativ B' },
@@ -368,7 +368,7 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
     legend="Deaktivert"
     name="dis"
     disabled
-    value="a"
+    defaultValue="a"
     options={[
       { value: 'a', label: 'Alternativ A' },
       { value: 'b', label: 'Alternativ B' },
@@ -500,7 +500,8 @@ Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for 
 | `description` | `string` | Nei | | Hjelpetekst for hele gruppen |
 | `errorMessage` | `string` | Nei | | Feilmelding. Trigger `aria-invalid` automatisk når satt |
 | `name` | `string` | Nei | auto-generert | `name`-attributtet på alle inputs. Genereres hvis utelatt |
-| `value` | `string` | Nei | | Kontrollert: hvilket alternativ som er valgt |
+| `value` | `string` | Nei | | Kontrollert modus: hvilket alternativ som er valgt. Bruk sammen med `onChange` |
+| `defaultValue` | `string` | Nei | | Ukontrollert modus: initiell verdi. Brukeren kan endre fritt |
 | `onChange` | `(value: string) => void` | Nei | | Kalles med ny value når brukeren velger |
 | `required` | `boolean` | Nei | `false` | Setter `required` på alle inputs |
 | `disabled` | `boolean` | Nei | `false` | Deaktiverer hele gruppen |

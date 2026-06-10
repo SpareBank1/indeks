@@ -21,6 +21,7 @@ declare module 'react' {
                 class?: string;
             };
             'ix-radio-group': React.DetailedHTMLProps<React.HTMLAttributes<IxRadioGroup>, IxRadioGroup> & {
+                name?: string;
                 class?: string;
                 disabled?: boolean | '';
                 readonly?: boolean | '';

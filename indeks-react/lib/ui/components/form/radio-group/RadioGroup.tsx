@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { type JSX, type ReactNode } from 'react';
+import { type JSX, type ReactNode, useState } from 'react';
 import { ValidationMessage } from '../validation-message/ValidationMessage';
 import { RadioButton } from './RadioButton';
 import { RadioGroupContext } from './RadioGroupContext';
@@ -15,6 +15,7 @@ export type RadioGroupProps = {
     errorMessage?: string;
     name?: string;
     value?: string;
+    defaultValue?: string;
     onChange?: (value: string) => void;
     required?: boolean;
     disabled?: boolean;
@@ -35,7 +36,8 @@ export function RadioGroup({
     description,
     errorMessage,
     name,
-    value,
+    value: controlledValue,
+    defaultValue,
     onChange,
     required,
     disabled,
@@ -46,6 +48,17 @@ export function RadioGroup({
     options,
     children,
 }: RadioGroupProps): JSX.Element {
+    const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+    const isControlled = controlledValue !== undefined;
+    const value = isControlled ? controlledValue : uncontrolledValue;
+
+    function handleChange(newValue: string) {
+        if (!isControlled) {
+            setUncontrolledValue(newValue);
+        }
+        onChange?.(newValue);
+    }
+
     const dataState = errorMessage ? 'error' : readOnly ? 'readonly' : disabled ? 'disabled' : undefined;
     const renderedChildren = options
         ? options.map((option) => (
@@ -55,6 +68,7 @@ export function RadioGroup({
 
     return (
         <ix-radio-group
+            name={name}
             class={clsx(className) || undefined}
             data-orientation={orientation !== 'vertical' ? orientation : undefined}
             data-state={dataState}
@@ -68,7 +82,7 @@ export function RadioGroup({
             </span>
             {description && <p data-field="description">{description}</p>}
             <div data-field="items">
-                <RadioGroupContext.Provider value={{ name, value, onChange }}>
+                <RadioGroupContext.Provider value={{ name, value, onChange: handleChange }}>
                     {renderedChildren}
                 </RadioGroupContext.Provider>
             </div>

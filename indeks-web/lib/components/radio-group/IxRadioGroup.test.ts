@@ -172,6 +172,46 @@ describe('IxRadioGroup', () => {
             expect(names[0]).toBe(names[1]);
         });
 
+        it('propagerer name fra host til alle inputs', () => {
+            const el = mount(`
+                <ix-radio-group name="kundetype">
+                    <span data-field="legend">Velg</span>
+                    <div class="ix-radio-button">
+                        <input type="radio" value="a" />
+                        <label>A</label>
+                    </div>
+                    <div class="ix-radio-button">
+                        <input type="radio" value="b" />
+                        <label>B</label>
+                    </div>
+                    <span data-field="error"></span>
+                </ix-radio-group>
+            `);
+            const inputs = el.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            expect(inputs[0].name).toBe('kundetype');
+            expect(inputs[1].name).toBe('kundetype');
+        });
+
+        it('host name har prioritet over input name', () => {
+            const el = mount(`
+                <ix-radio-group name="host-name">
+                    <span data-field="legend">Velg</span>
+                    <div class="ix-radio-button">
+                        <input type="radio" name="input-name" value="a" />
+                        <label>A</label>
+                    </div>
+                    <div class="ix-radio-button">
+                        <input type="radio" value="b" />
+                        <label>B</label>
+                    </div>
+                    <span data-field="error"></span>
+                </ix-radio-group>
+            `);
+            const inputs = el.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            expect(inputs[0].name).toBe('host-name');
+            expect(inputs[1].name).toBe('host-name');
+        });
+
         it('propagerer eksisterende name til alle inputs', () => {
             const el = mount(`
                 <ix-radio-group>

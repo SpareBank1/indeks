@@ -26,6 +26,7 @@ declare global {
         interface IntrinsicElements {
             'ix-field': { [key: string]: unknown; class?: string; children?: unknown };
             'ix-radio-group': {
+                name?: string;
                 disabled?: boolean | '';
                 readonly?: boolean | '';
                 required?: boolean | '';

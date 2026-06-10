@@ -24,8 +24,7 @@
  * 5. Synkroniserer name-attributt på alle inputs — name er mekanismen
  *    nettleseren bruker for mutual exclusivity (ett valg av gangen) og
  *    ArrowKey-navigasjon mellom alternativene. Alle inputs i gruppen må ha
- *    samme name. Hvis ingen input har name, genereres et stabilt gruppe-name.
- *    Hvis én har name, propageres den til de øvrige.
+ *    samme name. Prioritet: name på host > name på input > auto-generert.
  *
  * 6. Setter aria-live="polite" på [data-field="error"] og observerer
  *    textContent-endringer: ikke-tomt innhold → aria-invalid="true" på host;
@@ -73,7 +72,7 @@ export class IxRadioGroup extends HTMLElement {
     private _ownDisabled: WeakMap<HTMLInputElement, boolean> = new WeakMap();
 
     static get observedAttributes(): string[] {
-        return ['disabled', 'readonly', 'required'];
+        return ['disabled', 'readonly', 'required', 'name'];
     }
 
     connectedCallback(): void {
@@ -93,13 +92,16 @@ export class IxRadioGroup extends HTMLElement {
         this._keydownListener = null;
     }
 
-    attributeChangedCallback(name: string, _oldValue: string | null, _newValue: string | null): void {
+    attributeChangedCallback(attr: string, _oldValue: string | null, _newValue: string | null): void {
         if (!this.isConnected) return;
-        if (name === 'disabled' || name === 'readonly') {
+        if (attr === 'disabled' || attr === 'readonly') {
             this._syncHostStateToInputs();
         }
-        if (name === 'required') {
+        if (attr === 'required') {
             this._syncRequired();
+        }
+        if (attr === 'name') {
+            this._wireInputs();
         }
     }
 
@@ -178,17 +180,34 @@ export class IxRadioGroup extends HTMLElement {
         // Når forfatteren legger til en ny <input type="radio"> etter mount
         // (typisk i React conditional rendering), må den wires med samme
         // ID/name/htmlFor/disabled-logikk som ved mount.
+        //
+        // Observerer også attributter på subtree: React kan fjerne name-attributt
+        // ved re-render (f.eks. name={undefined}), så vi må resette name når
+        // det skjer.
         this._childObserver = new MutationObserver((mutations) => {
             const hasInputChange = mutations.some((m) =>
                 Array.from(m.addedNodes).some((n) => this._containsRadioInput(n)) ||
                 Array.from(m.removedNodes).some((n) => this._containsRadioInput(n))
             );
-            if (hasInputChange) {
+            const hasNameRemoval = mutations.some(
+                (m) =>
+                    m.type === 'attributes' &&
+                    m.attributeName === 'name' &&
+                    m.target instanceof HTMLInputElement &&
+                    m.target.type === 'radio' &&
+                    !m.target.name
+            );
+            if (hasInputChange || hasNameRemoval) {
                 this._wireInputs();
                 this._syncRequired();
             }
         });
-        this._childObserver.observe(this, { childList: true, subtree: true });
+        this._childObserver.observe(this, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['name'],
+        });
     }
 
     private _containsRadioInput(node: Node): boolean {
@@ -221,11 +240,14 @@ export class IxRadioGroup extends HTMLElement {
             }
         }
 
-        // name-synkronisering
+        // name-synkronisering: host name → input name → auto-generert
+        // Host name har alltid prioritet — sikrer at alle inputs i gruppen
+        // har samme name selv om forfatteren setter name på én input.
+        const hostName = this.getAttribute('name');
         const existingName = inputs.find((i) => i.name)?.name;
-        const groupName = existingName ?? `ix-radio-group-name-${this._instanceId}`;
+        const groupName = hostName || existingName || `ix-radio-group-name-${this._instanceId}`;
         for (const input of inputs) {
-            if (!input.name) input.name = groupName;
+            if (hostName || !input.name) input.name = groupName;
         }
 
         this._syncHostStateToInputs();
