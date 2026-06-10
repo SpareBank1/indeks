@@ -158,6 +158,13 @@
     --ii-radio-bg: var(--ix-color-fill-danger-subtle);
 }
 
+/* ── Active ───────────────────────────────────────────────────────────────── */
+
+:where(ix-radio-group, .ix-radio-group) input[type='radio']:not(:disabled):not([aria-disabled='true']) + label:active,
+:where(.ix-radio-button__input:not(:disabled):not([aria-disabled='true'])) + :where(.ix-radio-button__label:active) {
+    --ii-radio-bg: var(--ix-color-fill-interactive-active);
+}
+
 /* ── Focus ───────────────────────────────────────────────────────────────── */
 
 :where(ix-radio-group, .ix-radio-group) input[type='radio']:focus-visible + label,
@@ -173,7 +180,6 @@
 :where(.ix-radio-button__input:checked) + :where(.ix-radio-button__label) {
     --ii-radio-outer-color: var(--ix-color-fill-main-default);
     --ii-radio-inner-color: var(--ix-color-fill-main-default);
-    --ii-radio-bg: var(--ix-color-fill-main-subtle);
 }
 
 :where(ix-radio-group, .ix-radio-group) input[type='radio']:checked + label::before,
