@@ -21,10 +21,10 @@
         "ui"
     ],
     "main": "dist/main.js",
-    "types": "dist/main.d.ts",
+    "types": "dist/lib/main.d.ts",
     "exports": {
         ".": {
-            "types": "./dist/main.d.ts",
+            "types": "./dist/lib/main.d.ts",
             "import": "./dist/main.js"
         }
     },
