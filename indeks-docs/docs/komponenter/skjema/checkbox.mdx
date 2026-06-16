@@ -36,11 +36,7 @@ Checkbox lar brukeren velge én eller flere alternativer fra en liste. Hvert val
 ```jsx live
 <label className="ix-checkbox">
   <input type="checkbox" className="ix-checkbox__input" name="terms" />
-  <span className="ix-checkbox__box">
-    <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  </span>
+  <span className="ix-checkbox__box" />
   <span className="ix-checkbox__label">Jeg godtar vilkårene</span>
 </label>
 ```
@@ -70,11 +66,7 @@ Checkbox lar brukeren velge én eller flere alternativer fra en liste. Hvert val
 <ix-field>
   <label className="ix-checkbox">
     <input type="checkbox" className="ix-checkbox__input" name="newsletter" />
-    <span className="ix-checkbox__box">
-      <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
+    <span className="ix-checkbox__box" />
     <span className="ix-checkbox__label">Send meg nyhetsbrev</span>
   </label>
   <span data-field="description">Du kan når som helst melde deg av</span>
@@ -105,11 +97,7 @@ Checkbox lar brukeren velge én eller flere alternativer fra en liste. Hvert val
 <ix-field>
   <label className="ix-checkbox">
     <input type="checkbox" className="ix-checkbox__input" name="terms" aria-invalid="true" />
-    <span className="ix-checkbox__box">
-      <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
+    <span className="ix-checkbox__box" />
     <span className="ix-checkbox__label">Jeg godtar vilkårene</span>
   </label>
   <span data-field="error">Du må godta vilkårene for å fortsette</span>
@@ -142,14 +130,7 @@ function IndeterminateCheckbox() {
   return (
     <label className="ix-checkbox">
       <input ref={ref} type="checkbox" className="ix-checkbox__input" name="select-all" />
-      <span className="ix-checkbox__box">
-        <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        <svg className="ix-checkbox__icon ix-checkbox__icon--indeterminate" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-      </span>
+      <span className="ix-checkbox__box" />
       <span className="ix-checkbox__label">Velg alle</span>
     </label>
   );
@@ -180,20 +161,12 @@ I HTML må `indeterminate` settes via JavaScript: `checkbox.indeterminate = true
 <>
   <label className="ix-checkbox ix-checkbox--disabled">
     <input type="checkbox" className="ix-checkbox__input" disabled />
-    <span className="ix-checkbox__box">
-      <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
+    <span className="ix-checkbox__box" />
     <span className="ix-checkbox__label">Ikke tilgjengelig</span>
   </label>
   <label className="ix-checkbox ix-checkbox--disabled">
     <input type="checkbox" className="ix-checkbox__input" disabled defaultChecked />
-    <span className="ix-checkbox__box">
-      <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
+    <span className="ix-checkbox__box" />
     <span className="ix-checkbox__label">Allerede godtatt</span>
   </label>
 </>
@@ -231,29 +204,17 @@ I HTML må `indeterminate` settes via JavaScript: `checkbox.indeterminate = true
   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
     <label className="ix-checkbox">
       <input type="checkbox" className="ix-checkbox__input" name="contact" value="email" />
-      <span className="ix-checkbox__box">
-        <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </span>
+      <span className="ix-checkbox__box" />
       <span className="ix-checkbox__label">E-post</span>
     </label>
     <label className="ix-checkbox">
       <input type="checkbox" className="ix-checkbox__input" name="contact" value="sms" />
-      <span className="ix-checkbox__box">
-        <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </span>
+      <span className="ix-checkbox__box" />
       <span className="ix-checkbox__label">SMS</span>
     </label>
     <label className="ix-checkbox">
       <input type="checkbox" className="ix-checkbox__input" name="contact" value="phone" />
-      <span className="ix-checkbox__box">
-        <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </span>
+      <span className="ix-checkbox__box" />
       <span className="ix-checkbox__label">Telefon</span>
     </label>
   </div>

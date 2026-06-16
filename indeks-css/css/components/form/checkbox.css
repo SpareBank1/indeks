@@ -38,19 +38,17 @@
     transform: translateY(-50%);
 }
 
-:where(.ix-checkbox__icon) {
+:where(.ix-checkbox__box)::after {
+    content: '';
     display: none;
     width: 16px;
     height: 16px;
-    color: var(--ix-color-foreground-on-action);
-}
-
-:where(.ix-checkbox__icon--check) {
-    display: none;
-}
-
-:where(.ix-checkbox__icon--indeterminate) {
-    display: none;
+    background-color: var(--ix-color-foreground-inverse-default);
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
 :where(.ix-checkbox__label) {
@@ -75,9 +73,10 @@
     border-color: transparent;
 }
 
-:where(.ix-checkbox__input:checked) + .ix-checkbox__box .ix-checkbox__icon--check {
+:where(.ix-checkbox__input:checked) + .ix-checkbox__box::after {
     display: block;
-    color: var(--ix-color-foreground-inverse-default);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M13.5 4.5L6 12L2.5 8.5' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 :where(.ix-checkbox__input:indeterminate) + .ix-checkbox__box {
@@ -85,9 +84,10 @@
     border-color: transparent;
 }
 
-:where(.ix-checkbox__input:indeterminate) + .ix-checkbox__box .ix-checkbox__icon--indeterminate {
+:where(.ix-checkbox__input:indeterminate) + .ix-checkbox__box::after {
     display: block;
-    color: var(--ix-color-foreground-inverse-default);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3 8H13' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
 :where(.ix-checkbox:hover) .ix-checkbox__input:checked + .ix-checkbox__box {
@@ -127,4 +127,9 @@
     background-color: var(--ix-color-fill-danger-default);
     border-color: var(--ix-color-fill-danger-default);
     box-shadow: none;
+}
+
+/* Legacy support: hide SVG icons if present in markup (backwards compatibility) */
+:where(.ix-checkbox__icon) {
+    display: none;
 }

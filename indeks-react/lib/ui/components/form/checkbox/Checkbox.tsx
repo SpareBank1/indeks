@@ -61,14 +61,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
                 aria-label={ariaLabel}
                 aria-invalid={errorMessage?.trim() ? 'true' : undefined}
             />
-            <span className="ix-checkbox__box">
-                <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <svg className="ix-checkbox__icon ix-checkbox__icon--indeterminate" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-            </span>
+            <span className="ix-checkbox__box" />
             <span className="ix-checkbox__label">{label}</span>
         </label>
     );

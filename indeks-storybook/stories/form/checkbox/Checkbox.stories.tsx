@@ -92,11 +92,7 @@ export const HTML: Story = {
         <ix-field>
             <label className="ix-checkbox">
                 <input type="checkbox" className="ix-checkbox__input" name="terms" />
-                <span className="ix-checkbox__box">
-                    <svg className="ix-checkbox__icon ix-checkbox__icon--check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </span>
+                <span className="ix-checkbox__box"></span>
                 <span className="ix-checkbox__label">Jeg godtar vilkårene</span>
             </label>
             <span data-field="description">Les vilkårene før du godtar</span>
