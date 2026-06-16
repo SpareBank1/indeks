@@ -1,5 +1,11 @@
 # @sb1/indeks-css
 
+## 0.8.0
+
+### Minor Changes
+
+-   8a3159e: Ny komponent - checkbox
+
 ## 0.7.0
 
 ### Minor Changes
