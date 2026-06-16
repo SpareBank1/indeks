@@ -23,7 +23,7 @@ export const SubMenu: React.FC<SubMenuProps> = ({ menuItems, basePath }) => {
     });
 
     return (
-        <HStack justifyContent="center" fullWidth>
+        <HStack className="ix-justify-center ix-w-full">
             {menuItems.map(({ path, label }) => {
                 const fullPath = `${basePath}/${path}`;
                 return (

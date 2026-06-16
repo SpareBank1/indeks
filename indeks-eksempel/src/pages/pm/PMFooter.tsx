@@ -3,8 +3,8 @@ import React from 'react';
 
 const PMFooter: React.FC = () => (
     <footer className="ix-color-background-tinted">
-        <HStack justifyContent="space-between" alignItems="center" padding="md" gap="md" paddingX='xl'>
-            <HStack gap="sm" alignItems="center">
+        <HStack className="ix-justify-between ix-p-md ix-px-xl" gap="md">
+            <HStack gap="sm">
                 <Text>SpareBank1 Østlandet</Text>
                 <HStack gap="sm">
                     <Text size="sm">915 07040</Text>

@@ -1,0 +1,374 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable from '@site/src/components/AccessibilityTable';
+import a11yData from '../accessibility/stack.json';
+
+# Stack
+
+Stack er en layout-primitiv for å stable innhold i én dimensjon — vertikalt eller horisontalt. Den fungerer både som custom element (`<ix-stack>`) og som CSS-klasse (`.ix-stack`).
+
+## Egnet til
+
+- Stable seksjoner, kort eller elementer loddrett med jevnt mellomrom
+- Plassere ikoner, etiketter og knapper side om side horisontalt
+- Bygge opp sammensatte layout-strukturer ved å neste stacks
+
+## Uegnet til
+
+- Todimensjonal layout — bruk CSS Grid og [grid-utilities](../../utility-klasser/oversikt#grid)
+- Komplekst innholdsoppsett som artikler og dashboard-views
+
+## Kom i gang
+
+`ix-stack` har `md` gap som standard. Bruk `gap`-attributtet (eller prop) for å overstyre.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 1</div>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 2</div>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 3</div>
+</VStack>
+```
+
+```tsx live
+<HStack>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 1</div>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 2</div>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 3</div>
+</HStack>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+Stack finnes i to bruksformer i HTML:
+
+| Form | Eksempel | Styring |
+|------|---------|---------|
+| **Custom element** | `<ix-stack horizontal gap="md">` | Attributter direkte på elementet |
+| **CSS-klasse** | `<div class="ix-stack-horizontal ix-gap-md">` | Modifier-klasser — attributter virker ikke her |
+
+`<ix-stack>` bruker attributter:
+
+```jsx live
+<ix-stack>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 1</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 2</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 3</div>
+</ix-stack>
+```
+
+```jsx live
+<ix-stack horizontal>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 1</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 2</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 3</div>
+</ix-stack>
+```
+
+På vanlige elementer bruker du CSS-klasser — se [CSS-klasser](#css-klasser) i API-seksjonen.
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Vertikal — align
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="lg">
+  <VStack gap="sm" align="start">
+    <strong>start (standard)</strong>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+    <div className="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+  </VStack>
+  <VStack gap="sm" align="center">
+    <strong>center</strong>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+    <div className="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+  </VStack>
+  <VStack gap="sm" align="end">
+    <strong>end</strong>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+    <div className="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+  </VStack>
+</HStack>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack gap="sm">
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+  <div class="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+</ix-stack>
+```
+
+```jsx live
+<ix-stack vertical="center" gap="sm">
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+  <div class="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+</ix-stack>
+```
+
+```jsx live
+<ix-stack vertical="end" gap="sm">
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+  <div class="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+</ix-stack>
+```
+
+</TabItem>
+</Tabs>
+
+### Horisontal — align
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="lg">
+  <div>
+    <strong>center (standard)</strong>
+    <HStack gap="sm" align="center">
+      <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+      <div className="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
+      <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+    </HStack>
+  </div>
+  <div>
+    <strong>start</strong>
+    <HStack gap="sm" align="start">
+      <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+      <div className="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
+      <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+    </HStack>
+  </div>
+  <div>
+    <strong>end</strong>
+    <HStack gap="sm" align="end">
+      <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+      <div className="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
+      <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+    </HStack>
+  </div>
+</VStack>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack horizontal gap="sm">
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+</ix-stack>
+```
+
+```jsx live
+<ix-stack horizontal="start" gap="sm">
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+</ix-stack>
+```
+
+```jsx live
+<ix-stack horizontal="end" gap="sm">
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+</ix-stack>
+```
+
+</TabItem>
+</Tabs>
+
+### Gap
+
+Standard gap er `md`. Bruk `gap`-prop/-attributt for å overstyre.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="lg">
+  <HStack gap="xs">
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+  </HStack>
+  <HStack>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+  </HStack>
+  <HStack gap="xl">
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+  </HStack>
+  <HStack gap="none">
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+  </HStack>
+</VStack>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+</ix-stack>
+```
+
+```jsx live
+<ix-stack gap="xl">
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+</ix-stack>
+```
+
+```jsx live
+<ix-stack gap="none">
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+</ix-stack>
+```
+
+Tilgjengelige størrelser for `gap`-attributt: `none`, `2xs`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`, `4xl`
+
+</TabItem>
+</Tabs>
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Bruk semantiske elementer når konteksten krever det** — `ix-stack` er et ukjent HTML-element uten semantisk rolle. Nettleseren behandler det som generisk blokkinnhold, på samme måte som `<div>`. Bruk `as`-prop i React (f.eks. `<HStack as="nav">`) eller CSS-klasser direkte på et native element når innholdet krever semantikk.
+
+På native elementer (ikke `<ix-stack>`) virker **ikke** attributter — bruk modifier-klasser:
+
+```html
+<!-- CSS-klasse på semantisk element — modifier-klasser styrer retning og gap -->
+<section class="ix-stack ix-gap-md">
+  <h2>Seksjonstittel</h2>
+  <p>Innhold her.</p>
+</section>
+
+<!-- Tilsvarende med <ix-stack> — her bruker du attributter i stedet for klasser -->
+<ix-stack gap="md">...</ix-stack>
+```
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+### HStack
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `as` | `ElementType` | | Rendrer et native element med CSS-klasser i stedet for `<ix-stack>` med attributter. Bruk for semantikk — f.eks. `as="nav"`. |
+| `align` | `'start' \| 'center' \| 'end'` | `'center'` | Kryssaksejustering av barn |
+| `gap` | `GapSize` | `'md'` | Avstand mellom barn |
+| `className` | `string` | | Ekstra CSS-klasser |
+| `ref` | `Ref<HTMLElement>` | | Ref til rotelementet |
+
+Støtter alle standard HTML-attributter for det rendrede elementet (`id`, `style`, `data-*` osv.).
+
+### VStack
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `as` | `ElementType` | | Rendrer et native element med CSS-klasser i stedet for `<ix-stack>` med attributter. Bruk for semantikk — f.eks. `as="ul"`. |
+| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Kryssaksejustering av barn |
+| `gap` | `GapSize` | `'md'` | Avstand mellom barn |
+| `className` | `string` | | Ekstra CSS-klasser |
+| `ref` | `Ref<HTMLElement>` | | Ref til rotelementet |
+
+Støtter alle standard HTML-attributter for det rendrede elementet (`id`, `style`, `data-*` osv.).
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+### `<ix-stack>` — attributter
+
+Attributter kan bare brukes på `<ix-stack>`-elementet, ikke på vanlige `<div>`-er.
+
+| Attributt | Verdi | Beskrivelse |
+|-----------|-------|-------------|
+| `horizontal` | *(ingen verdi)* eller `"center"` | Horisontal retning, barn midtstilt |
+| `horizontal` | `"start"` | Horisontal retning, barn toppjustert |
+| `horizontal` | `"end"` | Horisontal retning, barn bunnjustert |
+| `vertical` | *(ingen verdi)* | Vertikal retning, barn startjustert (eksplisitt) |
+| `vertical` | `"center"` | Vertikal retning, barn midtstilt |
+| `vertical` | `"end"` | Vertikal retning, barn bunnjustert |
+| `gap` | `none` \| `2xs` \| `xs` \| `sm` \| `md` \| `lg` \| `xl` \| `2xl` \| `3xl` \| `4xl` | Avstand mellom barn. Standard: `md` |
+| `reverse` | *(ingen verdi)* | Reverserer retningen |
+| `nowrap` | *(ingen verdi)* | Hindrer linjebryting |
+
+### CSS-klasser
+
+Klasser fungerer på både `<ix-stack>` og vanlige elementer som `<div>`.
+
+| Klasse | Beskrivelse |
+|--------|-------------|
+| `ix-stack` | Vertikal stack, barn justert til start |
+| `ix-stack-vertical` | Eksplisitt vertikal, tilsvarende `ix-stack` |
+| `ix-stack-vertical-center` | Vertikal, barn midtstilt |
+| `ix-stack-vertical-end` | Vertikal, barn høyrejustert |
+| `ix-stack-horizontal` | Horisontal, barn midtstilt (center) |
+| `ix-stack-horizontal-center` | Horisontal, barn midtstilt (eksplisitt) |
+| `ix-stack-horizontal-start` | Horisontal, barn toppjustert |
+| `ix-stack-horizontal-end` | Horisontal, barn bunnjustert |
+| `ix-stack-reverse` | Reverserer retningen. Kombiner med retningsklasse |
+| `ix-stack-nowrap` | Hindrer linjebryting |
+
+Standard gap er `md`. Bruk `gap`-attributtet på `<ix-stack>` eller `ix-gap-*` utility-klasser på andre elementer for å overstyre.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Stack-komponentene har ingen egne CSS custom properties. Bruk `ix-justify-*` og `ix-items-*` utility-klasser for ytterligere tilpasning:
+
+```html
+<ix-stack horizontal gap="md" class="ix-justify-between">
+  <div>Venstre</div>
+  <div>Høyre</div>
+</ix-stack>
+```
+
+## Relatert
+
+- [Flex utility-klasser](../../utility-klasser/oversikt#flex) — `ix-justify-*`, `ix-items-*`, `ix-flex-*`
+- [Gap utility-klasser](../../utility-klasser/oversikt#gap) — `ix-gap-*`, `ix-row-gap-*`, `ix-col-gap-*`
+- [Spacing tokens](../../grunnleggende/tokens/spacing) — størrelser tilgjengelig for gap
+- [Layout-mønstre](../../monstre-og-maler/layout) — overordnet veiledning om Flex vs Grid
