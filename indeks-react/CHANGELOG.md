@@ -1,5 +1,14 @@
 # @sb1/indeks-react
 
+## 0.7.0
+
+### Minor Changes
+
+-   2acdfbd: Button viser nå en spinner ved `loading=true`. Spinneren skalerer automatisk
+    med knappens font-size og erstatter eventuelle ikoner i `children`. Ved bruk
+    direkte i HTML må konsumenten selv plassere `<span class="ix-spinner" aria-hidden>`
+    inni knappen og sette `disabled` + `data-loading="true"`.
+
 ## 0.6.0
 
 ### Minor Changes
