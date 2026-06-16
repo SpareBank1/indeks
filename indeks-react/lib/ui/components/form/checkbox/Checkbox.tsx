@@ -1,42 +1,87 @@
-import clsx from 'clsx';
-import { useId, type JSX } from 'react';
-import { useFocus } from '../../../../hooks/useFocus';
-import type { ComponentSize } from '../../../../types/types';
+import { forwardRef, useId, useEffect, useRef, type ReactNode } from 'react';
+import { Field } from '../field/Field';
 
-export type CheckboxProps = {
+type CheckboxOwnProps = {
+    label: ReactNode;
+    ariaLabel?: string;
     className?: string;
-    size?: ComponentSize;
-    label: string;
-    inputId?: string;
-    inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+    description?: string;
+    errorMessage?: string;
+    indeterminate?: boolean;
+    tooltip?: string;
+    tooltipLabel?: string;
+    tooltipPlacement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
 };
 
-export function Checkbox(props: CheckboxProps): JSX.Element {
-    const { size, className, inputId, label, inputProps, ...restProps } = {
-        ...props,
-    };
+export type CheckboxProps = CheckboxOwnProps &
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, keyof CheckboxOwnProps | 'type'>;
+
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
+    {
+        label,
+        ariaLabel,
+        className,
+        id,
+        description,
+        errorMessage,
+        indeterminate,
+        disabled,
+        tooltip,
+        tooltipLabel,
+        tooltipPlacement,
+        ...inputAttrs
+    },
+    forwardedRef
+) {
     const generatedId = useId();
-    const id = inputId ?? generatedId;
+    const inputId = id ?? generatedId;
 
-    const { ref, getFocusClasses } = useFocus<HTMLInputElement>();
+    const internalRef = useRef<HTMLInputElement>(null);
+    const inputRef = (forwardedRef ?? internalRef) as React.RefObject<HTMLInputElement>;
 
-    return (
-        <>
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.indeterminate = indeterminate ?? false;
+        }
+    }, [indeterminate, inputRef]);
+
+    const hasFieldWrapper = description || errorMessage || tooltip;
+
+    const modifierClasses = disabled ? 'ix-checkbox--disabled' : '';
+
+    const checkboxContent = (
+        <label className={`ix-checkbox${modifierClasses ? ` ${modifierClasses}` : ''}`}>
             <input
+                ref={inputRef}
+                {...inputAttrs}
                 type="checkbox"
-                id={id}
-                ref={ref}
+                id={inputId}
                 className="ix-checkbox__input"
-                {...inputProps}
+                disabled={disabled}
+                aria-label={ariaLabel}
+                aria-invalid={errorMessage?.trim() ? 'true' : undefined}
             />
-            <label
-                htmlFor={id}
-                data-size={size}
-                className={clsx('ix-checkbox', className, getFocusClasses('form'))}
-                {...restProps}
-            >
-                {label}
-            </label>
-        </>
+            <span className="ix-checkbox__box" />
+            <span className="ix-checkbox__label">{label}</span>
+        </label>
     );
-}
+
+    if (hasFieldWrapper) {
+        return (
+            <Field
+                inputId={inputId}
+                className={className}
+                description={description}
+                errorMessage={errorMessage}
+                disabled={disabled}
+                tooltip={tooltip}
+                tooltipLabel={tooltipLabel}
+                tooltipPlacement={tooltipPlacement}
+            >
+                {checkboxContent}
+            </Field>
+        );
+    }
+
+    return checkboxContent;
+});

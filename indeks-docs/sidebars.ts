@@ -92,6 +92,7 @@ const sidebars: SidebarsConfig = {
                     label: 'Skjema',
                     collapsed: false,
                     items: [
+                        'komponenter/skjema/checkbox',
                         'komponenter/skjema/label',
                         'komponenter/skjema/select',
                         'komponenter/skjema/textfield',
