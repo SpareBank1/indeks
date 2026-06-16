@@ -1,48 +1,92 @@
 import clsx from 'clsx';
-import { Fragment, useId, type JSX } from 'react';
-import { useFocus } from '../../../../hooks/useFocus';
+import { type JSX, type ReactNode, useState } from 'react';
+import { ValidationMessage } from '../validation-message/ValidationMessage';
+import { RadioButton } from './RadioButton';
+import { RadioGroupContext } from './RadioGroupContext';
 
-export type RadioGroupProps = {
-    className?: string;
-    legend: string;
-    description?: string;
-    inputprops?: React.InputHTMLAttributes<HTMLInputElement>;
-    options: { value: string; label: string }[];
+export type RadioOption = {
+    value: string;
+    label: string;
 };
 
-export function RadioGroup(props: RadioGroupProps): JSX.Element {
-    const { className, legend, inputprops, description, options, ...restProps } = {
-        ...props,
-    };
+export type RadioGroupProps = {
+    legend: string;
+    description?: string;
+    errorMessage?: string;
+    name?: string;
+    value?: string;
+    defaultValue?: string;
+    onChange?: (value: string) => void;
+    required?: boolean;
+    disabled?: boolean;
+    readOnly?: boolean;
+    orientation?: 'vertical' | 'horizontal';
+    hideLegend?: boolean;
+    className?: string;
+    options?: RadioOption[];
+    children?: ReactNode;
+};
 
-    const generatedId = useId();
-    const idOrName = inputprops?.name ?? generatedId;
+// React-laget er tynt: ix-radio-group (WC) eier id, name, htmlFor, aria-*-koblinger,
+// aria-invalid, aria-required, og disabled-propagering til barn-inputs. React-laget
+// eksponerer kun props-API, kontrollert state (value/onChange) og presentasjons-
+// attributter (data-state/data-orientation/className).
+export function RadioGroup({
+    legend,
+    description,
+    errorMessage,
+    name,
+    value: controlledValue,
+    defaultValue,
+    onChange,
+    required,
+    disabled,
+    readOnly,
+    orientation,
+    hideLegend,
+    className,
+    options,
+    children,
+}: RadioGroupProps): JSX.Element {
+    const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+    const isControlled = controlledValue !== undefined;
+    const value = isControlled ? controlledValue : uncontrolledValue;
 
-    const { ref, getFocusClasses } = useFocus<HTMLInputElement>();
+    function handleChange(newValue: string) {
+        if (!isControlled) {
+            setUncontrolledValue(newValue);
+        }
+        onChange?.(newValue);
+    }
+
+    const dataState = errorMessage ? 'error' : readOnly ? 'readonly' : disabled ? 'disabled' : undefined;
+    const renderedChildren = options
+        ? options.map((option) => (
+              <RadioButton key={option.value} value={option.value} label={option.label} />
+          ))
+        : children;
 
     return (
-        <fieldset className={clsx('ix-radio-group', className)} {...restProps}>
-            <legend>{legend}</legend>
-            <p>{description}</p>
-            {options.map((option) => (
-                <Fragment key={option.value}>
-                    <input
-                        id={`${idOrName}-${option.value}`}
-                        type="radio"
-                        name={idOrName}
-                        value={option.value}
-                        className="ix-radio__input"
-                        ref={ref}
-                        {...inputprops}
-                    />
-                    <label
-                        className={clsx('ix-radio__label', getFocusClasses('form'))}
-                        htmlFor={`${idOrName}-${option.value}`}
-                    >
-                        {option.label}
-                    </label>
-                </Fragment>
-            ))}
-        </fieldset>
+        <ix-radio-group
+            name={name}
+            class={clsx(className) || undefined}
+            data-orientation={orientation !== 'vertical' ? orientation : undefined}
+            data-state={dataState}
+            disabled={disabled || undefined}
+            readonly={readOnly || undefined}
+            required={required || undefined}
+        >
+            <span data-field="legend" className={hideLegend ? 'ix-sr-only' : undefined}>
+                {readOnly && <ix-icon materialdesignname="lock" />}
+                {legend}
+            </span>
+            {description && <p data-field="description">{description}</p>}
+            <div data-field="items">
+                <RadioGroupContext.Provider value={{ name, value, onChange: handleChange }}>
+                    {renderedChildren}
+                </RadioGroupContext.Provider>
+            </div>
+            <ValidationMessage>{errorMessage}</ValidationMessage>
+        </ix-radio-group>
     );
 }

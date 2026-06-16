@@ -12,6 +12,7 @@ import {
     Label,
     LinkText,
     ListElement,
+    RadioButton,
     RadioGroup,
     Select,
     Spinner,
@@ -20,6 +21,7 @@ import {
     Text,
     TextArea,
     TextField,
+    ValidationMessage,
     VStack,
 } from '@sb1/indeks-react';
 
@@ -43,6 +45,7 @@ const ReactLiveScope = {
     Label,
     LinkText,
     ListElement,
+    RadioButton,
     RadioGroup,
     Select,
     Spinner,
@@ -51,6 +54,7 @@ const ReactLiveScope = {
     Text,
     TextArea,
     TextField,
+    ValidationMessage,
     VStack,
 };
 

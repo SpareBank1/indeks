@@ -1,0 +1,150 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/validation-message.json';
+
+# ValidationMessage
+
+ValidationMessage viser en feilmelding knyttet til et skjemafelt eller en feltgruppe.
+
+## Egnet til
+
+- Feilmelding under et inputfelt eller en feltgruppe (f.eks. RadioGroup)
+- Korte, handlingsrettede meldinger om hva som må rettes
+
+## Uegnet til
+
+- Generelle informasjonsmeldinger som ikke er feil
+- Suksess- eller advarselsmeldinger som ikke trenger rød styling
+
+## Kom i gang
+
+ValidationMessage rendrer et `<span data-field="error">` som styles av Indeks-CSS. Når elementet ligger inne i en `<ix-field>` eller `<ix-radio-group>`, kobles det automatisk til input via `aria-describedby` og setter `aria-invalid="true"` på inputen når meldingen har innhold.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<span data-field="error">Du må velge et alternativ</span>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ValidationMessage>Du må velge et alternativ</ValidationMessage>
+```
+
+</TabItem>
+</Tabs>
+
+## Bruk inne i ix-field
+
+`<ix-field>` finner automatisk elementer med `data-field="error"` og kobler dem til inputen via `aria-describedby`. Hold elementet i DOM hele tiden (også når det er tomt) — `<ix-field>` setter `aria-live="polite"` slik at skjermlesere fanger opp endringer.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="email-error">E-postadresse</label>
+  <div class="ix-text-field">
+    <input id="email-error" type="email" />
+  </div>
+  <span data-field="error">Du må oppgi en gyldig e-postadresse</span>
+</ix-field>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField
+  label="E-postadresse"
+  type="email"
+  errorMessage="Du må oppgi en gyldig e-postadresse"
+/>
+```
+
+I React-komponenter som `TextField` og `Select` er `errorMessage`-propen den foretrukne måten — den rendrer `<ValidationMessage>` internt. Bruk `<ValidationMessage>` direkte når du komponerer felt manuelt eller jobber med gruppe-komponenter som `<RadioGroup>`.
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Vær konkret om hva som må rettes
+
+Beskriv hva brukeren må gjøre, ikke hva som er feil i abstrakte termer.
+
+| Gjør dette | Ikke dette |
+|------------|------------|
+| Du må fylle ut kontonummer | Ugyldig verdi |
+| Beløpet må være større enn 0 | Ugyldig beløp |
+| Velg en kundetype | Påkrevd felt |
+
+### Hold meldingen kort
+
+Én setning er nok. Detaljerte krav hører hjemme i `description`, ikke i feilmeldingen.
+
+### Hold elementet i DOM
+
+Når du veksler mellom feil og ingen feil, behold `<span data-field="error">` i DOM og endre kun innholdet. Hvis elementet legges til/fjernes dynamisk, kan skjermleseren miste oppdateringen — `aria-live`-regioner må være i DOM før innholdet endres.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Skriv konkret feilmeldingstekst** — beskriv hva brukeren må gjøre, ikke bare at noe er feil
+- **Hold elementet i DOM** — ikke fjern det når feilmeldingen er borte. Sett innholdet til en tom streng i stedet, slik at `aria-live` kan kunngjøre framtidige endringer
+- **Plasser den nær feltet** — feilmeldingen skal stå i nærheten av input-elementet i DOM-rekkefølgen, så koblingen blir tydelig både visuelt og for skjermlesere
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### `[data-field="error"]`
+
+Et element med `data-field="error"` styles automatisk av Indeks-CSS som en feilmelding (rød tekst, riktig spacing). Inne i `<ix-field>` eller `<ix-radio-group>` kobles det også til input via `aria-describedby`, og inputen får `aria-invalid="true"` når elementet har innhold.
+
+```html
+<span data-field="error">Du må velge et alternativ</span>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+### ValidationMessageProps
+
+| Prop | Type | Påkrevd | Beskrivelse |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | Nei | Feilmeldingsteksten |
+| `id` | `string` | Nei | ID på elementet — nødvendig hvis du kobler manuelt med `aria-describedby` |
+| `className` | `string` | Nei | Ekstra CSS-klasser |
+| `ref` | `Ref<HTMLSpanElement>` | Nei | Ref videresendes til `<span>`-elementet |
+
+I tillegg støttes alle standard HTML-attributter på span.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+ValidationMessage styles av globale regler på `[data-field="error"]`. Det finnes ingen egne CSS-variabler for komponenten — typografi og farge arves fra token-systemet:
+
+| Egenskap | Token |
+|----------|-------|
+| Skriftstørrelse | `--ix-font-size-md` |
+| Farge | `--ix-color-foreground-danger-default` |
+
+## Relatert
+
+- [Label](./label) — ledeteksten til et skjemafelt
+- [TextField](./textfield) — feltstruktur med label, input, hjelpetekst og feilmelding
