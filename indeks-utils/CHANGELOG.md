@@ -1,5 +1,11 @@
 # @sb1/indeks-utils
 
+## 0.5.0
+
+### Minor Changes
+
+-   8a3159e: Ny komponent - checkbox
+
 ## 0.4.0
 
 ### Minor Changes
