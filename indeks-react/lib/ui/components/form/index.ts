@@ -2,6 +2,7 @@ export { Field } from './field/Field';
 export { Label } from './label/Label';
 export { Form } from './form/Form';
 export { Checkbox } from './checkbox/Checkbox';
+export type { CheckboxProps } from './checkbox/Checkbox';
 export { RadioGroup } from './radio-group/RadioGroup';
 export type { RadioGroupProps, RadioOption } from './radio-group/RadioGroup';
 export { RadioButton } from './radio-group/RadioButton';

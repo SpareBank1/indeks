@@ -1,6 +1,6 @@
 {
   "component": "Button",
-  "lastReviewed": "2026-05-08",
+  "lastReviewed": "2026-05-29",
   "consumerResponsibilities": [
     {
       "summary": "Sett aria-label på ikonknapper",
@@ -45,7 +45,7 @@
     { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab." },
     { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
     { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med outline-token." },
-    { "id": "2.5.8", "notes": "Minimumsstørrelse md oppfyller 24x24px klikkflate (padding + innhold)." },
+    { "id": "2.5.8", "notes": "Minimumsstørrelse md oppfyller 24×24 px klikkflate. iconOnly bruker aspect-ratio: 1/1 og lik padding på alle sider — klikkflaten er alltid kvadratisk." },
     { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
     { "id": "1.4.3", "notes": "Tekst- og ikonfarge i alle varianter bruker --ix-color-component-button-*-foreground-* tokens mot sine respektive fill-tokens. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG." },
     { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button. Tilgjengelig navn fra innhold eller aria-label. Native disabled settes ved loading." }

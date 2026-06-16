@@ -9,6 +9,7 @@ import type {
     ReactNode,
     RefAttributes,
 } from 'react';
+import { Spinner } from '../spinner/Spinner';
 
 type LoadingProps =
     | { loading?: false; loadingLabel?: string }
@@ -24,6 +25,8 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
         size?: 'sm' | 'md' | 'lg';
         /** @default "auto" */
         width?: 'full' | 'auto';
+        /** Gjør knappen rund — bruk kun når innholdet er et enkelt ikon. Krever aria-label. */
+        iconOnly?: boolean;
         children?: ReactNode;
         /** Render som annet element eller komponent, f.eks. "a". */
         as?: ElementType;
@@ -49,6 +52,7 @@ export const Button: OverridableComponent<ButtonProps, HTMLButtonElement> = forw
         loadingLabel,
         size = 'md',
         width = 'auto',
+        iconOnly = false,
         type = 'button',
         disabled,
         className,
@@ -66,12 +70,20 @@ export const Button: OverridableComponent<ButtonProps, HTMLButtonElement> = forw
             data-size={size !== 'md' ? size : undefined}
             data-danger={danger ? 'true' : undefined}
             data-loading={loading ? 'true' : undefined}
+            data-icon-only={iconOnly ? '' : undefined}
             aria-label={loading ? loadingLabel : ariaLabel}
             disabled={loading ? true : disabled}
             type={type}
             {...props}
         >
-            {loading ? loadingLabel : children}
+            {loading ? (
+                <>
+                    <Spinner aria-hidden />
+                    {loadingLabel}
+                </>
+            ) : (
+                children
+            )}
         </Component>
     );
 });

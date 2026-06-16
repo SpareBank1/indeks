@@ -1,0 +1,90 @@
+{
+  "component": "Checkbox",
+  "lastReviewed": "2026-05-27",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv beskrivende labeltekst",
+      "details": "Labelen skal forklare hva brukeren samtykker til eller velger. \"Jeg godtar vilkårene\" er bedre enn bare \"Godta\". Alle checkboxer må ha en label.",
+      "wcag": ["2.4.6", "3.3.2"]
+    },
+    {
+      "summary": "Håndter indeterminate-tilstand programmatisk",
+      "details": "Indeterminate-tilstanden kan ikke settes via HTML-attributt — den må settes via JavaScript (inputRef.indeterminate = true). Bruk denne tilstanden kun for \"velg alle\"-checkboxer der noen, men ikke alle, underliggende valg er krysset av.",
+      "wcag": ["4.1.2"]
+    },
+    {
+      "summary": "Grupper relaterte checkboxer",
+      "details": "Når flere checkboxer hører sammen (f.eks. \"Velg interesser\"), bør de grupperes med fieldset og legend for å gi kontekst til skjermleserbrukere.",
+      "wcag": ["1.3.1"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Label kobles til checkbox via for/id. Ved bruk av Field kobles description og error via aria-describedby." },
+    { "id": "1.3.2", "notes": "Checkbox, label og hjelpetekst følger naturlig rekkefølge i DOM." },
+    { "id": "1.3.3", "notes": "Checked-tilstand kommuniseres visuelt (hake-ikon) og semantisk (checked-attributt)." },
+    { "id": "1.4.1", "notes": "Tilstand kommuniseres med ikon (hake/strek) i tillegg til farge." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
+    { "id": "1.4.11", "notes": "Checkbox-ramme og fokusindikator oppfyller 3:1 kontrastkrav." },
+    { "id": "2.1.1", "notes": "Fullt opererbart med tastatur. Tab for fokus, Space for å toggle." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab. Ingen tastaturfelle." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator med god kontrast." },
+    { "id": "2.5.8", "notes": "Klikkflate er minimum 44x44px." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
+    { "id": "3.2.2", "notes": "Toggle trigger ingen automatisk kontekstendring." },
+    { "id": "4.1.2", "notes": "Native checkbox med implisitt rolle. Tilgjengelig navn fra label. Checked, indeterminate og disabled eksponeres korrekt." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Hake-ikonet er dekorativt — tilstanden kommuniseres via checked-attributt." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Checkbox er ikke et felt for personlig informasjon." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.12", "reason": "Labeltekst tåler økt spacing, men checkbox-boksen er fast størrelse." },
+    { "id": "1.4.13" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native checkbox — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1", "reason": "Checkbox har ikke innebygd validering — feilhåndtering styres av konsumenten." },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Ingen statusmeldinger utover feilmelding som håndteres via aria-live." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til checkboxen" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Space", "action": "Toggler checked-tilstand" }
+  ],
+  "screenReader": [
+    "Ved fokus: \"[label], avkryssingsboks, ikke avkrysset\"",
+    "Når avkrysset: \"[label], avkryssingsboks, avkrysset\"",
+    "Indeterminate: \"[label], avkryssingsboks, delvis avkrysset\"",
+    "Ved feil: \"[label], avkryssingsboks, ugyldig, [feilmelding]\"",
+    "Med description: \"[label], avkryssingsboks, [tilstand], [description]\""
+  ]
+}
