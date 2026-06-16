@@ -1,5 +1,6 @@
 /* Padding Utilities */
 
+.ix-p-none,
 .ix-p-0 {
     padding: 0;
 }
@@ -42,6 +43,7 @@
 
 /* Padding top */
 
+.ix-pt-none,
 .ix-pt-0 {
     padding-top: 0;
 }
@@ -84,6 +86,7 @@
 
 /* Padding bottom */
 
+.ix-pb-none,
 .ix-pb-0 {
     padding-bottom: 0;
 }
@@ -126,6 +129,7 @@
 
 /* Padding right */
 
+.ix-pr-none,
 .ix-pr-0 {
     padding-right: 0;
 }
@@ -168,6 +172,7 @@
 
 /* Padding left */
 
+.ix-pl-none,
 .ix-pl-0 {
     padding-left: 0;
 }
@@ -210,6 +215,7 @@
 
 /* Padding horizontal */
 
+.ix-px-none,
 .ix-px-0 {
     padding-inline: 0;
 }
@@ -252,6 +258,7 @@
 
 /* Padding vertical */
 
+.ix-py-none,
 .ix-py-0 {
     padding-block: 0;
 }
@@ -293,6 +300,7 @@
 }
 
 @media (min-width: 768px) {
+    .ix-sm-p-none,
     .ix-sm-p-0 {
         padding: 0;
     }
@@ -335,6 +343,7 @@
 
     /* Padding top */
 
+    .ix-sm-pt-none,
     .ix-sm-pt-0 {
         padding-top: 0;
     }
@@ -377,6 +386,7 @@
 
     /* Padding bottom */
 
+    .ix-sm-pb-none,
     .ix-sm-pb-0 {
         padding-bottom: 0;
     }
@@ -419,6 +429,7 @@
 
     /* Padding right */
 
+    .ix-sm-pr-none,
     .ix-sm-pr-0 {
         padding-right: 0;
     }
@@ -461,6 +472,7 @@
 
     /* Padding left */
 
+    .ix-sm-pl-none,
     .ix-sm-pl-0 {
         padding-left: 0;
     }
@@ -503,6 +515,7 @@
 
     /* Padding horizontal */
 
+    .ix-sm-px-none,
     .ix-sm-px-0 {
         padding-inline: 0;
     }
@@ -545,6 +558,7 @@
 
     /* Padding vertical */
 
+    .ix-sm-py-none,
     .ix-sm-py-0 {
         padding-block: 0;
     }
@@ -587,6 +601,7 @@
 }
 
 @media (min-width: 1024px) {
+    .ix-md-p-none,
     .ix-md-p-0 {
         padding: 0;
     }
@@ -629,6 +644,7 @@
 
     /* Padding top */
 
+    .ix-md-pt-none,
     .ix-md-pt-0 {
         padding-top: 0;
     }
@@ -671,6 +687,7 @@
 
     /* Padding bottom */
 
+    .ix-md-pb-none,
     .ix-md-pb-0 {
         padding-bottom: 0;
     }
@@ -713,6 +730,7 @@
 
     /* Padding right */
 
+    .ix-md-pr-none,
     .ix-md-pr-0 {
         padding-right: 0;
     }
@@ -755,6 +773,7 @@
 
     /* Padding left */
 
+    .ix-md-pl-none,
     .ix-md-pl-0 {
         padding-left: 0;
     }
@@ -797,6 +816,7 @@
 
     /* Padding horizontal */
 
+    .ix-md-px-none,
     .ix-md-px-0 {
         padding-inline: 0;
     }
@@ -839,6 +859,7 @@
 
     /* Padding vertical */
 
+    .ix-md-py-none,
     .ix-md-py-0 {
         padding-block: 0;
     }
@@ -881,6 +902,7 @@
 }
 
 @media (min-width: 1280px) {
+    .ix-lg-p-none,
     .ix-lg-p-0 {
         padding: 0;
     }
@@ -923,6 +945,7 @@
 
     /* Padding top */
 
+    .ix-lg-pt-none,
     .ix-lg-pt-0 {
         padding-top: 0;
     }
@@ -965,6 +988,7 @@
 
     /* Padding bottom */
 
+    .ix-lg-pb-none,
     .ix-lg-pb-0 {
         padding-bottom: 0;
     }
@@ -1007,6 +1031,7 @@
 
     /* Padding right */
 
+    .ix-lg-pr-none,
     .ix-lg-pr-0 {
         padding-right: 0;
     }
@@ -1049,6 +1074,7 @@
 
     /* Padding left */
 
+    .ix-lg-pl-none,
     .ix-lg-pl-0 {
         padding-left: 0;
     }
@@ -1091,6 +1117,7 @@
 
     /* Padding horizontal */
 
+    .ix-lg-px-none,
     .ix-lg-px-0 {
         padding-inline: 0;
     }
@@ -1133,6 +1160,7 @@
 
     /* Padding vertical */
 
+    .ix-lg-py-none,
     .ix-lg-py-0 {
         padding-block: 0;
     }
@@ -1175,6 +1203,7 @@
 }
 
 @media (min-width: 1600px) {
+    .ix-xl-p-none,
     .ix-xl-p-0 {
         padding: 0;
     }
@@ -1217,6 +1246,7 @@
 
     /* Padding top */
 
+    .ix-xl-pt-none,
     .ix-xl-pt-0 {
         padding-top: 0;
     }
@@ -1259,6 +1289,7 @@
 
     /* Padding bottom */
 
+    .ix-xl-pb-none,
     .ix-xl-pb-0 {
         padding-bottom: 0;
     }
@@ -1301,6 +1332,7 @@
 
     /* Padding right */
 
+    .ix-xl-pr-none,
     .ix-xl-pr-0 {
         padding-right: 0;
     }
@@ -1343,6 +1375,7 @@
 
     /* Padding left */
 
+    .ix-xl-pl-none,
     .ix-xl-pl-0 {
         padding-left: 0;
     }
@@ -1385,6 +1418,7 @@
 
     /* Padding horizontal */
 
+    .ix-xl-px-none,
     .ix-xl-px-0 {
         padding-inline: 0;
     }
@@ -1427,6 +1461,7 @@
 
     /* Padding vertical */
 
+    .ix-xl-py-none,
     .ix-xl-py-0 {
         padding-block: 0;
     }

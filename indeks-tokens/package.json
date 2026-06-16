@@ -39,7 +39,6 @@
         "dev": "echo not implemented",
         "build": "rm -rf ./dist ./.build && pnpm run build:tokens:css && pnpm run build:colors:web && pnpm run build:colors:figma && pnpm run build:bundle",
         "prepublishOnly": "pnpm run build",
-        "build:spacing": "node ./scripts/build-spacing-tokens.cjs",
         "sync-tokens": "tsx scripts/figma-api/sync_figma_to_tokens.ts",
         "test": "vitest buildThemeColors.test.ts",
         "build:colors:web": "tsx ./scripts/build-colors/index platform=web path=./.build/css",

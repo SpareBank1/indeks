@@ -23,9 +23,11 @@ Eksempler på egenskaper som kan legges til med utility-klasser er spacing (marg
 
 ## Spacing
 
-Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. Baseverdien er responsiv og varierer mellom 16px og 18px basert på skjermstørrelse. Alle spacing-verdier beregnes som multipler av baseverdien, og kan overstyres av `density`-modifierne.
+Spacing i Indeks er basert på en skala med faste verdier fra `none` til `4xl`. Verdiene tilpasser seg skjermstørrelse (telefon vs. tablet og oppover) og `density`-modifieren. Se [spacing-tokens](/docs/grunnleggende/tokens/spacing) for de konkrete verdiene.
 
 `margin`, `padding` og `gap` bruker variablene fra skalaen, og har tilsvarende klassenavn. For eksempel gir klassen `.ix-p-2xs` padding lik verdien av `--ix-spacing-2xs`.
+
+Klassene for ingen spacing heter `.ix-*-0` (f.eks. `.ix-p-0`). `.ix-*-none` finnes også som alias.
 
 ### Padding
 
@@ -391,11 +393,10 @@ Responsiv padding og gap følger samme mønster som responsiv margin.
 
 ## Density modifiers
 
-| Attributt                      | Beskrivelse                                                       |
-| ------------------------------ | ----------------------------------------------------------------- |
-| `data-density="default"`       | Standard density                                                  |
-| `data-density="compact"`       | Kompakt density (verdiene i spacing-skalaen er 1 steg lavere)     |
-| `data-density="comfortable"`   | Komfortabel density (verdiene i spacing-skalaen er 1 steg høyere) |
+| Attributt                | Beskrivelse                                                                  |
+| ------------------------ | ---------------------------------------------------------------------------- |
+| `data-density="default"` | Standard density                                                             |
+| `data-density="compact"` | Kompakt density med reduserte spacing-verdier (gjelder kun tablet og oppover) |
 
 ## Flex
 
