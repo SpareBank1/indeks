@@ -4,4 +4,6 @@ Edge >= 100
 Firefox >= 100
 Safari >= 15.4
 ios_saf >= 15.4
+and_chr >= 100
+and_ff >= 100
 samsung >= 17
