@@ -138,3 +138,18 @@
     cursor: wait;
     pointer-events: none;
 }
+
+/* Ikon-only (rund) */
+:where(.ix-button[data-icon-only]) {
+    aspect-ratio: 1 / 1;
+    padding: var(--ix-spacing-xs);
+    border-radius: 50%;
+}
+
+:where(.ix-button[data-size='sm'][data-icon-only]) {
+    padding: var(--ix-spacing-2xs);
+}
+
+:where(.ix-button[data-size='lg'][data-icon-only]) {
+    padding: var(--ix-spacing-sm);
+}
