@@ -49,9 +49,9 @@
         "@sb1/indeks-utils": "workspace:*",
         "autoprefixer": "^10.5.0",
         "cssnano": "^7.1.9",
-        "postcss": "^8.5.14",
+        "postcss": "^8.5.15",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^16.1.1",
-        "postcss-preset-env": "^11.2.1"
+        "postcss-preset-env": "^11.3.0"
     }
 }
