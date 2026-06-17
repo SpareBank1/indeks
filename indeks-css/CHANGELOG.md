@@ -1,5 +1,11 @@
 # @sb1/indeks-css
 
+## 0.9.1
+
+### Patch Changes
+
+-   d2ab9f9: `ix-icon` viser ikke lenger en farget boks før web-componenten laster. Masken har nå en gjennomsiktig fallback (`--ii-icon-url` ikke satt), så ikonet er usynlig til `<ix-icon>` oppgraderes og setter ikon-URL-en.
+
 ## 0.9.0
 
 ### Minor Changes
