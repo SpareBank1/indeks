@@ -45,6 +45,15 @@ const config: Config = {
 
     headTags: [
         {
+            // Koble til CDN tidlig — ikon-SVG-er (/icons/*.svg) og fonter hentes derfra ved runtime.
+            tagName: 'link',
+            attributes: {
+                rel: 'preconnect',
+                href: 'https://cdn.sparebank1.no',
+                crossorigin: 'anonymous',
+            },
+        },
+        {
             tagName: 'link',
             attributes: {
                 rel: 'alternate',

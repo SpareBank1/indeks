@@ -6,6 +6,11 @@
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Indeks Eksempelapp</title>
+  <!-- Koble til CDN tidlig — gjelder både web components-scriptet og ikon-SVG-ene (samme origin). -->
+  <link rel="preconnect" href="https://cdn.sparebank1.no" crossorigin />
+  <!-- Forhåndslast web components-modulen så ix-* oppgraderes så tidlig som mulig (kortere FOUC). -->
+  <link rel="modulepreload" href="https://cdn.sparebank1.no/indeks/web/0.9.0/index.js" />
+  <script type="module" src="https://cdn.sparebank1.no/indeks/web/0.9.0/index.js"></script>
 </head>
 
 <body>
