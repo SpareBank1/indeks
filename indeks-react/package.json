@@ -67,7 +67,7 @@
         "@types/react-dom": "^19.2.3",
         "@vitejs/plugin-react": "^6.0.2",
         "@vitest/browser": "^4.1.8",
-        "eslint-plugin-react-refresh": "^0.5.2",
+        "eslint-plugin-react-refresh": "^0.5.3",
         "jsdom": "^29.1.1",
         "plop": "^4.0.5",
         "react": "^19.2.7",
