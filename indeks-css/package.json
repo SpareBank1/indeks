@@ -1,6 +1,6 @@
 {
     "name": "@sb1/indeks-css",
-    "version": "0.8.0",
+    "version": "0.9.1",
     "description": "CSS library for Indeks design system",
     "main": "dist/npm/index.css",
     "type": "module",
@@ -52,6 +52,6 @@
         "postcss": "^8.5.15",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^16.1.1",
-        "postcss-preset-env": "^11.3.0"
+        "postcss-preset-env": "^11.3.1"
     }
 }

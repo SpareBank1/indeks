@@ -22,12 +22,9 @@ const Header: React.FC<Props> = ({ activeArea, setActiveArea }) => {
     return (
         <>
             <VStack
-                fullWidth={true}
-                justifyContent="start"
-                alignItems="center"
-                paddingBottom="md"
                 gap="md"
-                className="ix-color-foreground-main-subtle"
+                align="center"
+                className="ix-w-full ix-justify-start ix-pb-md ix-color-foreground-main-subtle"
             >
                 <a href="#">
                     <svg viewBox="0 0 182 40" xmlns="http://www.w3.org/2000/svg" style={{ height: '30px' }}>

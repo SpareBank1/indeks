@@ -107,6 +107,12 @@ const sidebars: SidebarsConfig = {
                         'komponenter/skjema/validation-message',
                     ],
                 },
+                {
+                    type: 'category',
+                    label: 'Primitiver',
+                    collapsed: false,
+                    items: ['komponenter/primitives/stack'],
+                },
             ],
         },
     ],

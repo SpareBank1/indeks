@@ -163,6 +163,25 @@ Ikonet skal kommunisere gjennom form, ikke farge alene. Brukere med fargeblindhe
 </TabItem>
 </Tabs>
 
+## Unngå "blink" før web componenten laster
+
+Ikonet tegnes av CSS via `mask-image: var(--ii-icon-url)`. Det er web componenten som setter `--ii-icon-url` i sin `connectedCallback`. Frem til den kjører er variabelen ikke satt, og CSS faller tilbake til en gjennomsiktig maske — ikonet er da usynlig, ikke en farget boks.
+
+I React har dette ingen praktisk betydning: web componenten er allerede lastet når komponentene rendres. Men i ren HTML uten rammeverk — særlig sider som vises før `indeks-web`-scriptet er ferdig lastet fra CDN — kan ikonet blinke inn et lite øyeblikk etterpå.
+
+Du kan fjerne blinket helt ved å sette `--ii-icon-url` inline selv. Da tegnes ikonet umiddelbart, og web componenten overtar variabelen (og legger til aria) når den laster:
+
+```html live
+<ix-icon
+  name="hjem"
+  style="--ii-icon-url: url('https://cdn.sparebank1.no/icons/home.svg')"
+></ix-icon>
+```
+
+:::note Hacky, men trygt som fallback
+`--ii-icon-url` er en intern variabel (`--ii-`-prefiks). Den er ikke et offisielt API og kan i teorien endres. Bruk dette kun som en bevisst optimalisering for ikke-React-sider der blinket er et problem — for `name`-aliaser må du selv slå opp Material Design-filnavnet (f.eks. `hjem` → `home.svg`), mens `materialdesignname`-verdien er filnavnet direkte.
+:::
+
 ## Tilpasning med CSS
 
 Ikonets farge arves fra omgivende tekst via `color: inherit`. For å endre farge, sett `color` på et overordnet element.

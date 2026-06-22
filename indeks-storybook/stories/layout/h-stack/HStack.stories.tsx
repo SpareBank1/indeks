@@ -6,22 +6,53 @@ const meta = {
   title: "Layout/HStack",
   component: HStack,
   tags: ["autodocs"],
-  args: { children: "Tekst" },
+  args: {
+    gap: "md",
+    children: (
+      <>
+        <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 1</div>
+        <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 2</div>
+        <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 3</div>
+      </>
+    ),
+  },
 } satisfies Meta<typeof HStack>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Standard: Story = {};
 
-export const EgendefinertBarn: Story = {
-  args: {},
-  render: (args) => {
-    return (
-      <HStack {...args}>
-        <p>Jeg er et egedefinert barn</p>
-      </HStack>
-    );
-  },
+export const AlignStart: Story = {
+  args: { align: "start" },
+  render: (args) => (
+    <HStack {...args}>
+      <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Lav</div>
+      <div className="ix-color-surface-info-default ix-px-md ix-py-lg">Høy</div>
+      <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Lav</div>
+    </HStack>
+  ),
+};
+
+export const AlignEnd: Story = {
+  args: { align: "end" },
+  render: (args) => (
+    <HStack {...args}>
+      <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Lav</div>
+      <div className="ix-color-surface-info-default ix-px-md ix-py-lg">Høy</div>
+      <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Lav</div>
+    </HStack>
+  ),
+};
+
+export const HTML: Story = {
+  render: () => (
+    <div dangerouslySetInnerHTML={{ __html: `
+      <ix-stack horizontal gap="md">
+        <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 1</div>
+        <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 2</div>
+        <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Element 3</div>
+      </ix-stack>
+    `}} />
+  ),
 };
