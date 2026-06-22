@@ -7,6 +7,7 @@ const BodyContent: React.FC = () => {
     const { updateSpacing } = useSpacing();
     const [fontSize, setFontSize] = React.useState(16);
     const [nativeMode, setNativeMode] = React.useState(false);
+    const [density, setDensity] = React.useState('default');
 
     useEffect(() => {
         if (nativeMode) {
@@ -26,6 +27,7 @@ const BodyContent: React.FC = () => {
     const handleDensityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const bodyDiv = document.getElementsByClassName('ix-body')[0];
         const selectedDensity = event.target.value;
+        setDensity(selectedDensity);
         if (selectedDensity) {
             (bodyDiv as HTMLElement)?.setAttribute('data-density', selectedDensity);
         } else {
@@ -52,6 +54,7 @@ const BodyContent: React.FC = () => {
                 onFontSizeChange={handleFontSizeChange}
                 onThemeChange={handleThemeChange}
                 onNativeChange={setNativeMode}
+                density={density}
                 fontSize={fontSize}
                 nativeMode={nativeMode}
             />

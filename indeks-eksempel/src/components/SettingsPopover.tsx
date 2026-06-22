@@ -6,6 +6,7 @@ interface SettingsPopoverProps {
     onFontSizeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onThemeChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
     onNativeChange: (enabled: boolean) => void;
+    density: string;
     fontSize: number;
     nativeMode: boolean;
 }
@@ -15,6 +16,7 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
     onFontSizeChange,
     onThemeChange,
     onNativeChange,
+    density,
     fontSize,
     nativeMode,
 }) => {
@@ -51,12 +53,11 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
                             <select
                                 id="sizeDropdown"
                                 className="ix-border-default"
-                                defaultValue="default"
+                                value={density}
                                 onChange={onDensityChange}
                             >
                                 <option value="compact">Compact</option>
                                 <option value="default">Default</option>
-                                <option value="comfortable">Comfortable</option>
                             </select>
                         </label>
 
