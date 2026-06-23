@@ -101,8 +101,9 @@
 
 /* <details> er flex-rot via .ix-message, men summary + expanded skal stables
    vertikalt. Padding flyttes fra roten ned på summary/expanded slik at summary-
-   hover-flaten spenner kant-til-kant. overflow:hidden klipper flaten til de
-   avrundede hjørnene (fokusring tegnes utenfor og klippes ikke). */
+   hover-flaten spenner kant-til-kant. Summary runder av sine egne hjørner (se
+   under) slik at hover-flaten følger rotens runde hjørner — ingen overflow:hidden,
+   så den utvendige fokusringen ikke klippes. */
 :where(.ix-message[data-expandable]) {
     flex-direction: column;
     /* align-items:stretch overstyrer rotens flex-start slik at summary og
@@ -110,7 +111,6 @@
     align-items: stretch;
     gap: 0;
     padding: 0;
-    overflow: hidden;
 }
 
 :where(.ix-message__summary) {
@@ -122,6 +122,18 @@
     min-height: 44px;
     cursor: pointer;
     list-style: none;
+    /* Rund av topphjørnene så hover-/active-flaten følger rotens runde hjørner
+       (erstatter overflow:hidden på roten). Konsentrisk indre radius: rotens
+       radius minus border-bredden, så kurven flukter med ytterkanten. I åpen
+       tilstand grenser bunnen mot det ekspanderte innholdet og skal være rett;
+       sammenfoldet rundes alle fire hjørner (se under). */
+    border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
+        calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) 0 0;
+}
+
+/* Sammenfoldet er summary hele den synlige flaten — rund av alle fire hjørner. */
+:where(.ix-message[data-expandable]:not([open]) .ix-message__summary) {
+    border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default));
 }
 
 /* Summary er klikkflaten. Standard er status-`surface` (samme som body); ved
@@ -136,12 +148,12 @@
     background-color: var(--ix-color-status-surface-active);
 }
 
-/* Fokusring kun på selve summary (headeren), ikke rundt hele expandable. */
+/* Fokusring kun på selve summary (headeren), ikke rundt hele expandable.
+   Utvendig ring (som lukkeknappen og resten av systemet) — summary sine runde
+   hjørner gir ringen runde hjørner, og uten overflow:hidden klippes den ikke. */
 :where(.ix-message__summary:focus-visible) {
     outline: var(--ix-outline-default);
-    /* Negativ offset så ringen tegnes innenfor kanten og ikke klippes av
-       rotens overflow:hidden. */
-    outline-offset: calc(var(--ix-outline-offset-default) * -1);
+    outline-offset: var(--ix-outline-offset-default);
 }
 
 /* Skjul native details-marker i alle nettlesere */
