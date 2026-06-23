@@ -1,4 +1,5 @@
 export { Button } from './button/Button';
+export { Message } from './message/Message';
 export { Tag } from './tag/Tag';
 
 export { ListElement } from './list-element/ListElement';
