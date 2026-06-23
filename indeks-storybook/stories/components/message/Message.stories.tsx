@@ -1,11 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { LinkText, Message } from '@sb1/indeks-react';
+import { LinkText, Message, MessageRegion } from '@sb1/indeks-react';
 
 const meta = {
     title: 'Components/Message',
     component: Message,
     tags: ['autodocs'],
+    // Message må ligge i en MessageRegion for å annonseres for skjermlesere.
+    // Regionen rendrer ingenting synlig — den eier de stabile live-regionene.
+    decorators: [
+        (Story) => (
+            <MessageRegion>
+                <Story />
+            </MessageRegion>
+        ),
+    ],
     args: {
         status: 'info',
         children: 'Vi har mottatt søknaden din og behandler den nå',

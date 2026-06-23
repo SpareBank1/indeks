@@ -1,11 +1,21 @@
 {
   "component": "Message",
-  "lastReviewed": "2026-06-22",
+  "lastReviewed": "2026-06-23",
   "consumerResponsibilities": [
+    {
+      "summary": "Pakk Message i en MessageRegion",
+      "details": "For at meldinger skal annonseres pålitelig for skjermlesere må <Message> ligge inni en <MessageRegion>. Regionen eier de stabile, alltid-tilstedeværende ARIA-live-regionene som annonseringen skriver til. Det synlige Message-elementet har bevisst ingen role/aria-live, fordi en live-region som settes inn samtidig med innholdet annonseres upålitelig. En Message uten region rendres visuelt, men annonseres ikke (og logger en advarsel i utviklingsmodus).",
+      "wcag": ["4.1.3"]
+    },
     {
       "summary": "Beskrivende tekst er påkrevd og må stå alene",
       "details": "Message skal aldri brukes uten brødtekst. Teksten må formidle budskapet uten å være avhengig av ikon eller farge. For varianten danger/warning bør teksten også forklare konsekvensen eller hva brukeren bør gjøre videre.",
       "wcag": ["1.4.1", "1.1.1"]
+    },
+    {
+      "summary": "Sett announceOnPageLoad for meldinger til stede ved sidelast",
+      "details": "Meldinger som settes inn dynamisk (etter en handling) annonseres automatisk via MessageRegion. En melding som allerede er til stede ved første sidelast er stille som standard, slik at en side full av meldinger ikke leser seg selv opp. Sett announceOnPageLoad=true for meldinger som er til stede ved sidelast og likevel skal leses opp — typisk server-rendret success/feil etter en redirect tilbake fra en tredjepart.",
+      "wcag": ["4.1.3"]
     },
     {
       "summary": "Gi lukkeknappen et tilgjengelig navn via closeLabel",
@@ -28,8 +38,8 @@
       "wcag": ["4.1.3"]
     },
     {
-      "summary": "Sett role/aria-live selv ved ren HTML-bruk",
-      "details": "React-laget setter role=\"alert\" for danger/warning og aria-live=\"polite\" for info/success automatisk. Bruker du ren HTML uten React må du sette dette selv på rot-elementet, slik at meldinger som dukker opp dynamisk blir annonsert med riktig prioritet.",
+      "summary": "Sett opp stabile live-regioner selv ved ren HTML-bruk",
+      "details": "MessageRegion-automatikken finnes kun i React. Bruker du ren HTML må du selv legge to stabile, tomme live-regioner i DOM ved sidelast — én role=\"status\" aria-live=\"polite\" (info/success) og én role=\"alert\" aria-live=\"assertive\" (danger/warning) — og skrive meldingsteksten inn i riktig region når meldingen settes inn. Regionene må eksistere før teksten settes inn for at skjermlesere skal fange opp endringen.",
       "wcag": ["4.1.3"]
     }
   ],
@@ -49,7 +59,7 @@
     { "id": "2.5.8", "notes": "Lukkeknapp og summary har min. 44×44 px touch-mål." },
     { "id": "3.2.1", "notes": "Ingen kontekstendring ved fokus. Containeren er ikke klikkbar og har ingen hover-state." },
     { "id": "4.1.2", "notes": "Native <button> for lukk (rolle button, navn fra aria-label). Native <details>/<summary> gir aria-expanded og utvid/skjul-rolle automatisk." },
-    { "id": "4.1.3", "notes": "role=\"alert\" (danger/warning) og aria-live=\"polite\" (info/success) settes av React-laget slik at dynamisk innsatte meldinger annonseres med riktig prioritet." }
+    { "id": "4.1.3", "notes": "Annonsering skjer via stabile, alltid-tilstedeværende live-regioner i <MessageRegion> — én polite (info/success) og én assertive (danger/warning). Det synlige elementet har ingen role/aria-live; teksten skrives til riktig region etter at den er montert, slik at dynamisk innsatte meldinger annonseres pålitelig med riktig prioritet. Meldinger til stede ved sidelast er stille med mindre announceOnPageLoad er satt." }
   ],
   "notRelevant": [
     { "id": "1.1.1", "reason": "Statusikonet er en dekorativ <ix-icon data-badge> (sirkel + glyf via mask-image). Den er rent dekorativ og merkes aria-hidden=\"true\", så den eksponeres ikke for skjermlesere; varianten formidles av tekst. Derfor er ingen alt-tekst nødvendig." },
@@ -72,7 +82,6 @@
     { "id": "2.4.1" },
     { "id": "2.4.2" },
     { "id": "2.4.5" },
-    { "id": "2.4.6" },
     { "id": "2.4.11", "reason": "Native <details>/<summary> og <button> dekkes ikke av andre elementer ved fokus." },
     { "id": "2.5.1", "reason": "Ingen gestbaserte interaksjoner — enkelt klikk/tap." },
     { "id": "2.5.2", "reason": "Native elementer — nettleseren håndterer pekerinteraksjon (pointer-cancel)." },
@@ -99,8 +108,9 @@
     { "key": "Space", "action": "Veksler expandable mellom åpen/lukket når summary har fokus, eller aktiverer lukkeknappen" }
   ],
   "screenReader": [
-    "Ved innsetting (info/success): meldingen annonseres høflig via aria-live=\"polite\" når brukeren er ledig",
-    "Ved innsetting (danger/warning): meldingen annonseres umiddelbart via role=\"alert\"",
+    "Dynamisk innsetting (info/success): teksten skrives til MessageRegion sin stabile polite-region (role=\"status\") og annonseres høflig når brukeren er ledig",
+    "Dynamisk innsetting (danger/warning): teksten skrives til MessageRegion sin stabile assertive-region (role=\"alert\") og annonseres umiddelbart",
+    "Til stede ved sidelast: stille som standard — annonseres kun hvis announceOnPageLoad er satt",
     "Expandable ved fokus: \"[sammendrag], skjult/vist\" (native <summary> annonserer utvid-tilstand)",
     "Expandable ved aktivering: tilstanden oppdateres til \"vist\" / \"skjult\"",
     "Lukkeknapp ved fokus: \"[closeLabel], knapp\""

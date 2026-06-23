@@ -11,6 +11,10 @@ import a11yData from './accessibility/message.json';
 
 Message formidler status eller resultatet av en handling — informasjon, suksess, advarsel eller feil — uten å avbryte flyten. Komponenten brukes inline, tett på innholdet den forklarer, og kan gjøres utvidbar for å vise mer informasjon ved behov.
 
+:::warning Message må ligge i en MessageRegion
+For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` ligge inni en [`<MessageRegion>`](#messageregion). Regionen eier de stabile ARIA-live-regionene som annonseringen skriver til. En `<Message>` uten region rendres visuelt, men annonseres ikke (og logger en advarsel i utviklingsmodus).
+:::
+
 ## Egnet til
 
 - Vise informasjon som gir kontekst eller forklaring
@@ -47,9 +51,11 @@ Message formidler status eller resultatet av en handling — informasjon, sukses
 <TabItem value="react" label="React">
 
 ```tsx live
-<Message status="info">
-  Vi har mottatt søknaden din og behandler den nå
-</Message>
+<MessageRegion>
+  <Message status="info">
+    Vi har mottatt søknaden din og behandler den nå
+  </Message>
+</MessageRegion>
 ```
 
 </TabItem>
@@ -89,12 +95,14 @@ Velg status ut fra budskapet: `info` for nøytral informasjon, `success` for bek
 <TabItem value="react" label="React">
 
 ```tsx live
-<VStack gap="md">
-  <Message status="info">Vi behandler søknaden din</Message>
-  <Message status="success">Endringene dine er lagret</Message>
-  <Message status="warning">Det er kort tid til fristen for å svare</Message>
-  <Message status="danger">Vi klarte ikke å gjennomføre betalingen</Message>
-</VStack>
+<MessageRegion>
+  <VStack gap="md">
+    <Message status="info">Vi behandler søknaden din</Message>
+    <Message status="success">Endringene dine er lagret</Message>
+    <Message status="warning">Det er kort tid til fristen for å svare</Message>
+    <Message status="danger">Vi klarte ikke å gjennomføre betalingen</Message>
+  </VStack>
+</MessageRegion>
 ```
 
 </TabItem>
@@ -121,9 +129,11 @@ En kort, forklarende tittel kan gjøre budskapet lettere å skanne. Brødteksten
 <TabItem value="react" label="React">
 
 ```tsx live
-<Message status="info" title="Behandling pågår">
-  Vi har mottatt søknaden din og behandler den nå
-</Message>
+<MessageRegion>
+  <Message status="info" title="Behandling pågår">
+    Vi har mottatt søknaden din og behandler den nå
+  </Message>
+</MessageRegion>
 ```
 
 </TabItem>
@@ -151,10 +161,12 @@ En lenke kan peke videre til mer informasjon. Lenken er ikke en egen prop — de
 <TabItem value="react" label="React">
 
 ```tsx live
-<Message status="info" title="Behandling pågår">
-  <p>Vi har mottatt søknaden din og behandler den nå</p>
-  <LinkText href="#">Les mer om saksbehandling</LinkText>
-</Message>
+<MessageRegion>
+  <Message status="info" title="Behandling pågår">
+    <p>Vi har mottatt søknaden din og behandler den nå</p>
+    <LinkText href="#">Les mer om saksbehandling</LinkText>
+  </Message>
+</MessageRegion>
 ```
 
 </TabItem>
@@ -182,13 +194,15 @@ En valgfri lukkeknapp lar brukeren skjule meldingen. Den brukes kun i ikke-utvid
 <TabItem value="react" label="React">
 
 ```tsx live
-<Message
-  status="success"
-  title="Endringene er lagret"
-  closeLabel="Lukk melding"
->
-  Du kan trygt lukke denne meldingen
-</Message>
+<MessageRegion>
+  <Message
+    status="success"
+    title="Endringene er lagret"
+    closeLabel="Lukk melding"
+  >
+    Du kan trygt lukke denne meldingen
+  </Message>
+</MessageRegion>
 ```
 
 </TabItem>
@@ -223,18 +237,20 @@ Sett `expandable` for å skjule sekundær informasjon bak en utvidingskontroll. 
 <TabItem value="react" label="React">
 
 ```tsx live
-<Message
-  status="warning"
-  expandable
-  title="Nye vilkår for kontoen"
-  summary="Vi har oppdatert vilkårene. Trykk for å lese hva som er endret."
->
-  <ul>
-    <li>Renten justeres fra 1. juli.</li>
-    <li>Gebyret for papirfaktura fjernes.</li>
-    <li>Du kan når som helst endre varslingsinnstillingene dine.</li>
-  </ul>
-</Message>
+<MessageRegion>
+  <Message
+    status="warning"
+    expandable
+    title="Nye vilkår for kontoen"
+    summary="Vi har oppdatert vilkårene. Trykk for å lese hva som er endret."
+  >
+    <ul>
+      <li>Renten justeres fra 1. juli.</li>
+      <li>Gebyret for papirfaktura fjernes.</li>
+      <li>Du kan når som helst endre varslingsinnstillingene dine.</li>
+    </ul>
+  </Message>
+</MessageRegion>
 ```
 
 </TabItem>
@@ -274,16 +290,18 @@ Ikonet støtter forståelsen av budskapet, men skal aldri være eneste informasj
 
 ### Hva du selv må sørge for
 
+- **Pakk meldinger i en `<MessageRegion>`** — regionen eier de stabile ARIA-live-regionene som annonseringen skriver til. Uten den annonseres ikke meldingen. Se [MessageRegion](#messageregion).
 - **Skriv alltid beskrivende tekst** — Message skal aldri brukes uten brødtekst, og teksten må stå alene uten å være avhengig av ikon eller farge.
 - **Gi lukkeknappen et tilgjengelig navn** — send inn `closeLabel` (React) eller `aria-label` (HTML), f.eks. «Lukk melding». Konsumenten er ansvarlig for riktig språk; det finnes ingen hardkodet fallback.
 - **Skriv meningsfull lenketekst** — lenketeksten skal beskrive målet og gi mening lest alene, ikke «klikk her».
 - **La sammendraget bære hovedpoenget i utvidbar modus** — kritisk eller oppsummerende informasjon skal stå i det alltid synlige sammendraget, ikke skjules bak utvidingskontrollen.
-- **Sett `role`/`aria-live` selv ved ren HTML-bruk** — i React settes dette automatisk ut fra variant; i ren HTML må du sette `role="alert"` (danger/warning) eller `aria-live="polite"` (info/success) selv.
+- **Sett `announceOnPageLoad` for meldinger som er til stede ved sidelast** — meldinger som settes inn dynamisk (etter en handling) annonseres automatisk, men en melding som allerede er der ved sidelast er stille som standard. Sett `announceOnPageLoad` for f.eks. server-rendret success/feil etter en redirect.
+- **Sett opp egne live-regioner ved ren HTML-bruk** — `MessageRegion`-automatikken finnes kun i React. I ren HTML må du selv ha to stabile, tomme regioner i DOM (`role="status"` for info/success, `role="alert"` for danger/warning) og skrive meldingsteksten inn i riktig region når meldingen settes inn.
 
 ### Hva komponenten gjør automatisk
 
-- **`role="alert"`** settes for `danger` og `warning` slik at meldingen annonseres umiddelbart (assertive).
-- **`aria-live="polite"`** settes for `info` og `success` slik at meldingen annonseres høflig.
+- **Annonsering via `<MessageRegion>`** — det synlige Message-elementet har bevisst *ingen* `role`/`aria-live`. I stedet skriver komponenten meldingsteksten til en stabil, skjult live-region i `<MessageRegion>` (polite for `info`/`success`, assertive for `warning`/`danger`). Stabile regioner er det som gjør annonsering pålitelig — en region som settes inn samtidig med innholdet annonseres ofte ikke. Politeness utledes automatisk fra `status`.
+- **Stille ved sidelast** — meldinger som finnes ved første sidelast leses ikke opp automatisk (så en side full av meldinger ikke leser seg selv opp). Bruk `announceOnPageLoad` for å overstyre. Meldinger som settes inn senere annonseres automatisk.
 - **Statusikon** rendres som en dekorativ `<ix-icon data-badge materialdesignname="…" aria-hidden="true">` — en sirkel i status-`fill` (følger `data-status`) med en lys glyf oppå (`info_i`, `check` eller `priority_high` per status). `aria-hidden="true"` holder den ute av tilgjengelighetstreet; varianten formidles av teksten.
 - **`aria-expanded`, tastaturstøtte og åpne/lukke-tilstand** følger gratis med native `<details>`/`<summary>` i utvidbar modus. Skjult innhold er ikke fokuserbart når det er kollapset.
 - **Fokusindikator** tegnes på selve summary i utvidbar modus (`:focus-visible`). I ikke-utvidbar modus får meldingen ingen ring rundt seg selv — kun lukkeknappen har sin egen `:focus-visible`-ring. Lenker bruker `:focus-visible`.
@@ -302,7 +320,7 @@ Utvidbar Message bruker native `<details>`/`<summary>`. Relasjonen mellom kontro
 
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
-| `status` | `'info' \| 'success' \| 'warning' \| 'danger'` | | Status; styrer farge, ikon og ARIA. Settes som `data-status` slik at fargevariablene kobles automatisk. Påkrevd |
+| `status` | `'info' \| 'success' \| 'warning' \| 'danger'` | | Status; styrer farge, ikon og hvilken live-region meldingen annonseres i (info/success → polite, warning/danger → assertive). Settes som `data-status` slik at fargevariablene kobles automatisk. Påkrevd |
 | `title` | `string` | | Valgfri tittel |
 | `children` | `ReactNode` | | Innhold: brødtekst (ikke-utvidbar) eller utvidet innhold (utvidbar). Rendres rått — skriv selv `<p>` og evt. en lenke med `LinkText` |
 | `closeLabel` | `string` | | `aria-label` på lukkeknappen. Lukkeknappen vises kun når denne er satt, og kun i ikke-utvidbar modus |
@@ -310,7 +328,45 @@ Utvidbar Message bruker native `<details>`/`<summary>`. Relasjonen mellom kontro
 | `expandable` | `boolean` | `false` | Aktiverer utvidbar modus (native `<details>`) |
 | `summary` | `string` | | Alltid synlig sammendrag. Brukes kun når `expandable` |
 | `defaultOpen` | `boolean` | `false` | Start utvidet. Brukes kun når `expandable` |
+| `announceOnPageLoad` | `boolean` | `false` | Annonser meldingen selv om den er til stede ved første sidelast. Krever en omsluttende `<MessageRegion>` |
+| `announceText` | `string` | | Overstyr teksten som leses opp. Standard er den synlige teksten (tittel + sammendrag/brødtekst). Bruk for å lese opp noe kortere ved rikt innhold |
 | `className` | `string` | | Ekstra CSS-klasser på rot-elementet |
+
+## MessageRegion
+
+`MessageRegion` er en obligatorisk wrapper rundt React-meldinger. Den rendrer ingenting synlig selv — den legger to stabile, skjulte ARIA-live-regioner i DOM (én `polite` for `info`/`success`, én `assertive` for `warning`/`danger`) som meldingene annonseres gjennom. Uten en omsluttende `MessageRegion` rendres `<Message>` visuelt, men annonseres ikke for skjermlesere (og logger en advarsel i utviklingsmodus).
+
+Stabile, alltid-tilstedeværende regioner er det som gjør annonseringen pålitelig: en live-region som settes inn i DOM samtidig med innholdet rekker ofte ikke å bli registrert før teksten er der, og annonseres da ikke. `MessageRegion` har derfor regionene klare fra start og skriver kun teksten inn ved behov.
+
+Du kan ha én felles `MessageRegion` rundt et helt skjema eller en hel side, eller én rundt hver melding — begge fungerer. Det enkleste er å plassere én region høyt i treet og la alle meldinger ligge inni den.
+
+```tsx live
+<MessageRegion>
+  <Message status="success" title="Endringene er lagret">
+    Innstillingene dine er oppdatert
+  </Message>
+</MessageRegion>
+```
+
+### Annonsering ved sidelast
+
+Meldinger som settes inn **dynamisk** (etter at siden er ferdig lastet — f.eks. som svar på en handling) annonseres automatisk. Meldinger som allerede er til stede **ved første sidelast** er stille som standard, slik at en side full av meldinger ikke leser seg selv opp ved innlasting.
+
+Når en melding er server-rendret eller til stede ved sidelast og *likevel* skal leses opp — typisk en success- eller feilmelding etter en redirect tilbake fra en tredjepart — setter du `announceOnPageLoad` på selve `<Message>`:
+
+```tsx
+<MessageRegion>
+  <Message status="success" announceOnPageLoad>
+    Betalingen er gjennomført
+  </Message>
+</MessageRegion>
+```
+
+### MessageRegion Props / API
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `children` | `ReactNode` | | Innholdet regionen omslutter, typisk én eller flere `<Message>`. Regionen rendrer i tillegg to skjulte live-regioner |
 
 ## Tilpasning med CSS
 
@@ -332,6 +388,21 @@ Trenger du `ix-message`-stylingen på HTML du setter sammen selv — uten React-
 | Utvidet innhold | `.ix-message__expanded` |
 
 Statusikonet skrives som `<ix-icon data-badge materialdesignname="…" aria-hidden="true">` som første barn av `.ix-message` (eller `.ix-message__summary` i utvidbar modus). `data-badge` gir sirkelen, som følger status-`fill` via `data-status` på meldingen; glyfen settes med `materialdesignname` (`info_i`, `check` eller `priority_high`).
+
+### Annonsering for skjermlesere uten React
+
+React-komponenten annonserer via en `<MessageRegion>` (stabile, skjulte live-regioner). I ren HTML finnes ikke denne automatikken — du må sette opp regionene selv. Den pålitelige oppskriften:
+
+1. Legg to **stabile, tomme** live-regioner i DOM ved sidelast (de må eksistere *før* du skriver tekst inn i dem):
+
+```html
+<div class="ix-sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+<div class="ix-sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
+```
+
+2. Når du setter inn en melding dynamisk, skriv den opplest teksten inn i riktig region — `polite` for `info`/`success`, `assertive` for `warning`/`danger`.
+
+Den enkle varianten — å sette `role`/`aria-live` rett på `.ix-message`-elementet (som i eksempelet under) — fungerer rimelig for `role="alert"` ved dynamisk innsetting, men er upålitelig for `aria-live="polite"` og annonserer ingenting for meldinger som er til stede ved sidelast.
 
 ### Eksempel: ren HTML
 

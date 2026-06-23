@@ -1,8 +1,33 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen, act } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Message } from './Message';
+import { MessageRegion } from '../message-region/MessageRegion';
+
+/** Vent ut requestAnimationFrame slik at MessageRegion sin clear-then-set fullføres. */
+async function flushFrame(): Promise<void> {
+    await act(async () => {
+        await new Promise((resolve) => requestAnimationFrame(() => resolve(undefined)));
+    });
+}
+
+function getPolite(container: HTMLElement): HTMLElement | null {
+    return container.querySelector('[aria-live="polite"]');
+}
+
+function getAssertive(container: HTMLElement): HTMLElement | null {
+    return container.querySelector('[aria-live="assertive"]');
+}
 
 describe('Message', () => {
+    // <Message> uten <MessageRegion> advarer i dev — demp støy i de fleste testene.
+    let warnSpy: ReturnType<typeof vi.spyOn>;
+    beforeEach(() => {
+        warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+    afterEach(() => {
+        warnSpy.mockRestore();
+    });
+
     it('rendrer body-tekst og ix-message-klasse', () => {
         const { container } = render(<Message status="info">Hei verden</Message>);
         const root = container.firstElementChild;
@@ -60,21 +85,16 @@ describe('Message', () => {
         expect(container.firstElementChild?.classList.contains('custom')).toBe(true);
     });
 
-    it('bruker role=alert for warning og danger', () => {
-        const { container: warning } = render(<Message status="warning">Tekst</Message>);
-        expect(warning.firstElementChild?.getAttribute('role')).toBe('alert');
-
-        const { container: danger } = render(<Message status="danger">Tekst</Message>);
-        expect(danger.firstElementChild?.getAttribute('role')).toBe('alert');
+    it('setter ikke role/aria-live på det synlige elementet (annonsering skjer via MessageRegion)', () => {
+        const { container } = render(<Message status="danger">Tekst</Message>);
+        const root = container.firstElementChild;
+        expect(root?.hasAttribute('role')).toBe(false);
+        expect(root?.hasAttribute('aria-live')).toBe(false);
     });
 
-    it('bruker aria-live=polite for info og success', () => {
-        const { container: info } = render(<Message status="info">Tekst</Message>);
-        expect(info.firstElementChild?.getAttribute('aria-live')).toBe('polite');
-        expect(info.firstElementChild?.hasAttribute('role')).toBe(false);
-
-        const { container: success } = render(<Message status="success">Tekst</Message>);
-        expect(success.firstElementChild?.getAttribute('aria-live')).toBe('polite');
+    it('advarer i dev når Message ikke ligger i en MessageRegion', () => {
+        render(<Message status="info">Tekst</Message>);
+        expect(warnSpy).toHaveBeenCalled();
     });
 
     it('rendrer tittel når title er satt', () => {
@@ -111,6 +131,59 @@ describe('Message', () => {
         expect(screen.getByText('Tekst')).toBeTruthy();
         fireEvent.click(screen.getByRole('button', { name: 'Lukk melding' }));
         expect(screen.queryByText('Tekst')).toBeNull();
+    });
+
+    describe('annonsering via MessageRegion', () => {
+        it('annonserer den synlige teksten i polite-regionen for info/success (med announceOnPageLoad)', async () => {
+            const { container } = render(
+                <MessageRegion>
+                    <Message status="success" announceOnPageLoad>
+                        Endringene er lagret
+                    </Message>
+                </MessageRegion>,
+            );
+            await flushFrame();
+            expect(getPolite(container)?.textContent).toBe('Endringene er lagret');
+        });
+
+        it('annonserer i assertive-regionen for warning/danger', async () => {
+            const { container } = render(
+                <MessageRegion>
+                    <Message status="danger" announceOnPageLoad>
+                        Betalingen feilet
+                    </Message>
+                </MessageRegion>,
+            );
+            await flushFrame();
+            expect(getAssertive(container)?.textContent).toBe('Betalingen feilet');
+        });
+
+        it('er stille ved sidelast uten announceOnPageLoad', async () => {
+            const { container } = render(
+                <MessageRegion>
+                    <Message status="info">Standing content</Message>
+                </MessageRegion>,
+            );
+            await flushFrame();
+            expect(getPolite(container)?.textContent).toBe('');
+        });
+
+        it('announceText overstyrer den synlige teksten', async () => {
+            const { container } = render(
+                <MessageRegion>
+                    <Message status="danger" announceOnPageLoad announceText="Betalingen feilet">
+                        <p>Vi klarte ikke å gjennomføre betalingen.</p>
+                    </Message>
+                </MessageRegion>,
+            );
+            await flushFrame();
+            expect(getAssertive(container)?.textContent).toBe('Betalingen feilet');
+        });
+
+        it('annonserer ikke når Message ikke ligger i en MessageRegion', () => {
+            // Ingen region → ingen kast, bare console.warn (dempet i beforeEach).
+            expect(() => render(<Message status="info">Tekst</Message>)).not.toThrow();
+        });
     });
 
     describe('expandable', () => {
@@ -165,6 +238,18 @@ describe('Message', () => {
             const root = container.firstElementChild;
             expect(root?.hasAttribute('role')).toBe(false);
             expect(root?.hasAttribute('aria-live')).toBe(false);
+        });
+
+        it('annonserer kun sammendraget, ikke det skjulte innholdet', async () => {
+            const { container } = render(
+                <MessageRegion>
+                    <Message status="warning" expandable summary="Nye vilkår" announceOnPageLoad>
+                        <p>Mye skjult detaljtekst som ikke skal leses opp</p>
+                    </Message>
+                </MessageRegion>,
+            );
+            await flushFrame();
+            expect(getAssertive(container)?.textContent).toBe('Nye vilkår');
         });
     });
 });

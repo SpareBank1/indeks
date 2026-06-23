@@ -1,12 +1,15 @@
 import clsx from 'clsx';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { JSX, ReactNode } from 'react';
+import { useMessageRegion } from '../message-region/MessageRegionContext';
 
 export type MessageStatus = 'info' | 'success' | 'warning' | 'danger';
 
 export type MessageProps = {
-    /** Status; styrer farge, ikon og ARIA. Settes som `data-status` slik at
-     *  fargevariablene (`--ix-color-status-*`) kobles automatisk. */
+    /** Status; styrer farge, ikon og hvilken live-region meldingen annonseres i
+     *  (info/success → polite, warning/danger → assertive). Settes som
+     *  `data-status` slik at fargevariablene (`--ix-color-status-*`) kobles
+     *  automatisk. */
     status: MessageStatus;
     /** Valgfri tittel. */
     title?: string;
@@ -24,6 +27,20 @@ export type MessageProps = {
     summary?: string;
     /** Start ekspandert. Brukes kun når `expandable`. @default false */
     defaultOpen?: boolean;
+    /**
+     * Annonser meldingen for skjermlesere også når den er til stede ved første
+     * sidelast. Normalt annonseres kun meldinger som settes inn *etter* at siden
+     * er ferdig lastet (slik at en side full av meldinger ikke leser seg selv
+     * opp). Sett `true` for f.eks. SSR-rendret success/feil etter en redirect.
+     * Krever at meldingen ligger i en `<MessageRegion>`. @default false
+     */
+    announceOnPageLoad?: boolean;
+    /**
+     * Overstyr teksten som leses opp av skjermlesere. Standard er den synlige
+     * teksten (tittel + sammendrag/brødtekst). Bruk denne for å lese opp noe
+     * kortere enn det som vises, f.eks. når innholdet er rikt (liste, lenker).
+     */
+    announceText?: string;
     className?: string;
 };
 
@@ -35,17 +52,6 @@ const STATUS_ICON: Record<MessageStatus, string> = {
     danger: 'priority_high',
 };
 
-/** ARIA: feil/advarsel er assertive, info/suksess er polite. */
-function ariaAttributes(status: MessageStatus): {
-    role?: 'alert';
-    'aria-live'?: 'polite';
-} {
-    if (status === 'warning' || status === 'danger') {
-        return { role: 'alert' };
-    }
-    return { 'aria-live': 'polite' };
-}
-
 export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
     {
         status,
@@ -56,11 +62,34 @@ export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
         expandable = false,
         summary,
         defaultOpen = false,
+        announceOnPageLoad = false,
+        announceText,
         className,
     },
     ref,
 ): JSX.Element | null {
     const [closed, setClosed] = useState(false);
+    const bodyRef = useRef<HTMLDivElement>(null);
+    const region = useMessageRegion();
+
+    // Annonser via den stabile live-regionen i <MessageRegion>. Selve det synlige
+    // elementet har bevisst ingen role/aria-live — en region som settes inn samtidig
+    // med innholdet annonseres upålitelig (se MessageRegion).
+    useEffect(() => {
+        if (closed) {
+            return;
+        }
+        if (!region) {
+            if (import.meta.env.DEV) {
+                console.warn(
+                    '<Message> bør ligge i en <MessageRegion> for at meldingen skal annonseres for skjermlesere.',
+                );
+            }
+            return;
+        }
+        const text = announceText ?? bodyRef.current?.textContent ?? '';
+        region.announce(text, status, announceOnPageLoad);
+    }, [region, status, announceOnPageLoad, announceText, title, summary, children, closed]);
 
     if (closed) {
         return null;
@@ -84,7 +113,7 @@ export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
                     {/* Dekorativt statusikon — sirkel (status-`fill` via CSS) +
                         glyf (materialdesignname per status). */}
                     <ix-icon data-badge="" materialdesignname={STATUS_ICON[status]} aria-hidden="true" />
-                    <div className="ix-message__body">
+                    <div ref={bodyRef} className="ix-message__body">
                         {title && <strong className="ix-message__title">{title}</strong>}
                         {summary && <p>{summary}</p>}
                     </div>
@@ -99,12 +128,11 @@ export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
             ref={ref as React.Ref<HTMLDivElement>}
             className={clsx('ix-message', className)}
             data-status={status}
-            {...ariaAttributes(status)}
         >
             {/* Dekorativt statusikon — sirkel (status-`fill` via CSS) +
                 glyf (materialdesignname per status). */}
             <ix-icon data-badge="" materialdesignname={STATUS_ICON[status]} aria-hidden="true" />
-            <div className="ix-message__body">
+            <div ref={bodyRef} className="ix-message__body">
                 {title && <strong className="ix-message__title">{title}</strong>}
                 {children}
             </div>
