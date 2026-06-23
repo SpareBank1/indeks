@@ -1,0 +1,238 @@
+---
+title: SystemMessage
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/system-message.json';
+
+# SystemMessage
+
+SystemMessage brukes til å formidle viktig informasjon til bruker om status, endringer i systemet, bekreftelser, advarsler eller feil – enten midlertidig eller mer vedvarende. Komponenten er ment å være tydelig, lett å skanne og ikke blokkere brukerens videre flyt unødvendig.
+
+:::warning Annonsering krever en MessageRegion (eller critical)
+Ikke-kritiske meldinger annonseres for skjermlesere gjennom en [`<MessageRegion>`](./message#messageregion) — samme stabile, skjulte live-region som [Message](./message) bruker. Kritiske meldinger (`critical`) får `role="alert"` på selve elementet og trenger ikke regionen. En ikke-kritisk `<SystemMessage>` uten region rendres visuelt, men annonseres ikke (og logger en advarsel i utviklingsmodus).
+:::
+
+## Egnet til
+
+- Informere om systemstatus (for eksempel vedlikehold, driftsmeldinger)
+- Bekrefte at en handling er gjennomført
+- Varsle om noe brukeren bør være oppmerksom på
+- Gi ikke-kritiske feilmeldinger eller advarsler
+- Kommunisere informasjon som gjelder flere brukere eller en hel flate
+- Påpeke endringer som påvirker brukerens videre arbeid
+
+## Uegnet til
+
+- Når brukeren må ta et valg for å komme videre — bruk modal eller dialog
+- Når meldingen er direkte knyttet til et enkelt skjemafelt — bruk feltvalidering
+- Når informasjonen er sekundær eller kan løses med hjelpetekst
+- Når det er behov for komplekse handlinger eller flere CTA-er
+- Når innholdet kun gjelder én konkret handling i øyeblikket (for eksempel inline error)
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div className="ix-system-message" data-status="warning" data-placement="inline" aria-live="polite">
+  <ix-icon data-badge materialdesignname="priority_high" aria-hidden="true"></ix-icon>
+  <div className="ix-system-message__body">
+    <p>Vi jobber med en teknisk feil. Du kan oppleve ustabilitet i nettbanken.</p>
+  </div>
+  <button className="ix-system-message__close" type="button" aria-label="Lukk melding"></button>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<MessageRegion>
+  <SystemMessage status="warning" closeLabel="Lukk melding">
+    Vi jobber med en teknisk feil. Du kan oppleve ustabilitet i nettbanken.
+  </SystemMessage>
+</MessageRegion>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Varianter
+
+SystemMessage finnes i fire varianter som signaliserer alvorlighetsgrad: `info` (nøytral informasjon), `success` (bekreftelse på vellykket handling), `warning` (noe brukeren bør være oppmerksom på) og `danger` (kritisk informasjon eller feil). Velg alltid lavest mulig alvorlighetsgrad som dekker behovet. Fargene kobles via `data-status`, som setter `--ix-color-status-*`-variablene.
+
+```tsx live
+<MessageRegion>
+  <VStack gap="md">
+    <SystemMessage status="info" closeLabel="Lukk melding">
+      Nettbanken er utilgjengelig fra fredag kl. 18 til søndag kl. 06 på grunn av sammenslåing av banker.
+    </SystemMessage>
+    <SystemMessage status="success" closeLabel="Lukk melding">
+      Sammenslåingen er fullført – nettbanken er tilgjengelig igjen.
+    </SystemMessage>
+    <SystemMessage status="warning" closeLabel="Lukk melding">
+      Vi gjennomfører vedlikehold i kveld. Tjenesten kan være ustabil.
+    </SystemMessage>
+    <SystemMessage status="danger" closeLabel="Lukk melding">
+      Vi jobber med en teknisk feil i nettbanken.
+    </SystemMessage>
+  </VStack>
+</MessageRegion>
+```
+
+### Med lenke
+
+SystemMessage kan inneholde én enkel lenke eller handling, tydelig relatert til meldingen. Bruk lenketekst som beskriver hva som skjer — ikke «Les mer» alene.
+
+```tsx live
+<MessageRegion>
+  <SystemMessage status="info" closeLabel="Lukk melding">
+    Vi har oppdatert nettbanken. <LinkText href="#">Se hva som er nytt</LinkText>
+  </SystemMessage>
+</MessageRegion>
+```
+
+### Avbrytbarhet
+
+Meldingen kan være avbrytbar (bruker kan lukke) eller ikke-avbrytbar. Send inn `closeLabel` for å vise lukkeknappen, slik eksemplene over gjør. En systemkritisk melding (`critical`) bør være ikke-avbrytbar — da utelater du `closeLabel`. Hvis meldingen kan lukkes, må den ikke dukke opp igjen unødvendig i samme kontekst — det er konsumentens ansvar.
+
+### Toppmelding
+
+`placement="top"` gir en full-bredde banner som ligger flush øverst på en side eller seksjon — uten runde hjørner og sidekanter. Standard (`inline`) er et avrundet kort i innholdet.
+
+```tsx live
+<MessageRegion>
+  <SystemMessage status="warning" placement="top" closeLabel="Lukk melding">
+    Vi gjennomfører vedlikehold i kveld. Tjenesten kan være utilgjengelig.
+  </SystemMessage>
+</MessageRegion>
+```
+
+### Kritisk (assertiv)
+
+En systemkritisk melding settes med `critical`. Den får `role="alert"` og annonseres umiddelbart (assertivt) av skjermlesere, men stjeler ikke fokus. Bruk dette kun for kritisk informasjon som krever umiddelbar oppmerksomhet — for alt annet annonseres meldingen høflig (køet) via `MessageRegion`.
+
+```tsx live
+<SystemMessage status="danger" critical>
+  Nettbanken er nede. Vi jobber med å rette feilen.
+</SystemMessage>
+```
+
+## Retningslinjer
+
+### Innhold og formulering
+
+- Start alltid med det viktigste først.
+- Bruk enkelt og konkret språk i SpareBank 1-stil.
+- Meldingen skal kunne forstås uten annen kontekst.
+- Unngå interne faguttrykk eller tekniske forklaringer.
+- Hold teksten kort – helst én setning, maks to.
+
+> «Vi jobber med en teknisk feil. Du kan oppleve ustabilitet i nettbanken.»
+
+### Velg lavest mulig alvorlighetsgrad
+
+Bruk den varianten som akkurat dekker behovet. En `danger`-melding mister effekt hvis den brukes på noe som egentlig er en `warning` eller `info`.
+
+### Varighet og plassering
+
+SystemMessage kan brukes både inline i innhold og som toppmelding på en side eller seksjon. Den skal ikke brukes som erstatning for dialoger eller bekreftelsesskjermer.
+
+### Unngå overdreven bruk
+
+Mange meldinger samtidig reduserer effekten av hver enkelt. Vis kun det som er relevant her og nå.
+
+### Bruk ikon med omtanke
+
+Ikonet støtter forståelsen av budskapet, men skal aldri være eneste informasjonsbærer. Teksten er alltid viktigst.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Pakk ikke-kritiske meldinger i en `<MessageRegion>`** — regionen eier den stabile ARIA-live-regionen som annonseringen skriver til. Kritiske meldinger (`critical`) bruker `role="alert"` og trenger den ikke.
+- **Bruk `critical` kun for systemkritisk informasjon** — det setter `role="alert"` (assertiv) og avbryter skjermleseren. For alt annet: velg lavest mulig alvorlighetsgrad og la meldingen annonseres høflig.
+- **Skriv alltid beskrivende tekst** — teksten må stå alene uten å være avhengig av ikon eller farge, og bør være kort.
+- **Gi lukkeknappen et tilgjengelig navn** — send inn `closeLabel` (React) eller `aria-label` (HTML). Konsumenten er ansvarlig for riktig språk; det finnes ingen hardkodet fallback.
+- **Sørg for at en lukket melding ikke dukker opp igjen unødvendig** — persistens er konsumentens ansvar.
+- **Skriv meningsfull lenketekst** — lenketeksten skal beskrive målet og gi mening lest alene.
+- **Sett `announceOnPageLoad` for ikke-kritiske meldinger til stede ved sidelast** — en melding som allerede er der ved sidelast er ellers stille som standard.
+
+### Hva komponenten gjør automatisk
+
+- **Annonsering** — ikke-kritiske meldinger annonseres høflig (køet) via `<MessageRegion>`, akkurat som Message. Det synlige elementet har da ingen `role`/`aria-live`. Kritiske meldinger får `role="alert"` på selve elementet og annonseres umiddelbart, uten å stjele fokus.
+- **Stille ved sidelast** — ikke-kritiske meldinger som finnes ved første sidelast leses ikke opp automatisk. Bruk `announceOnPageLoad` for å overstyre.
+- **Statusikon** rendres som en dekorativ `<ix-icon data-badge materialdesignname="…" aria-hidden="true">` — en sirkel i status-`fill` (følger `data-status`) med en lys glyf oppå. `aria-hidden="true"` holder den ute av tilgjengelighetstreet; varianten formidles av teksten.
+- **Fokusindikator** tegnes kun på lukkeknappen (`:focus-visible`). Meldingen får ingen ring rundt seg selv, og flytter aldri fokus.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `status` | `'info' \| 'success' \| 'warning' \| 'danger'` | | Status/alvorlighetsgrad; styrer farge og ikon. Settes som `data-status` slik at fargevariablene kobles automatisk. Påkrevd |
+| `children` | `ReactNode` | | Meldingsteksten og evt. én enkel lenke med `LinkText`. Hold teksten kort — helst på én linje, maks to setninger. SystemMessage har bevisst ingen tittel |
+| `placement` | `'inline' \| 'top'` | `'inline'` | `'top'` gir en full-bredde banner flush øverst på en side eller seksjon |
+| `closeLabel` | `string` | | `aria-label` på lukkeknappen. Lukkeknappen vises kun når denne er satt (avbrytbar melding) |
+| `onClose` | `() => void` | | Kalles etter at meldingen er skjult ved klikk på lukkeknappen. Komponenten skjuler seg selv; persistens er konsumentens ansvar |
+| `critical` | `boolean` | `false` | Systemkritisk melding. Setter `role="alert"` (assertiv) på elementet — annonseres umiddelbart uten å stjele fokus |
+| `announceOnPageLoad` | `boolean` | `false` | Annonser meldingen selv om den er til stede ved første sidelast. Krever en omsluttende `<MessageRegion>`. Ignoreres når `critical` er satt |
+| `announceText` | `string` | | Overstyr teksten som leses opp. Standard er den synlige teksten (tittel + brødtekst) |
+| `className` | `string` | | Ekstra CSS-klasser på rot-elementet |
+
+## Tilpasning med CSS
+
+Trenger du `ix-system-message`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte. Det finnes ingen web component for SystemMessage; rotklassen `.ix-system-message` brukes på et `<div>`.
+
+### Tilgjengelige klasser og attributter
+
+| Element/tilstand | Selektor / attributt |
+|------------------|----------------------|
+| Rot (melding) | `.ix-system-message` |
+| Status | `data-status="info"` / `"success"` / `"warning"` / `"danger"` (kobler `--ix-color-status-*` automatisk) |
+| Plassering | `data-placement="inline"` (standard) / `"top"` (full-bredde banner) |
+| Statusikon | `<ix-icon data-badge materialdesignname="…" aria-hidden="true">` (første barn — sirkel følger `data-status`, glyf via `materialdesignname`) |
+| Tekstblokk | `.ix-system-message__body` |
+| Lenke | `.ix-link-text` (vanlig Indeks-lenke — ingen system-message-spesifikk klasse) |
+| Lukkeknapp | `.ix-system-message__close` |
+
+### Annonsering for skjermlesere uten React
+
+I ren HTML setter du ARIA selv:
+
+- **Kritiske meldinger:** sett `role="alert"` direkte på `.ix-system-message`-elementet. Da annonseres teksten umiddelbart (assertivt) når elementet settes inn.
+- **Ikke-kritiske meldinger:** bruk en stabil, tom `role="status"`-region (`aria-live="polite"`, `aria-atomic="false"`) i DOM ved sidelast, og legg meldingsteksten til som en egen node i den når meldingen settes inn (samme oppskrift som [Message](./message#tilpasning-med-css)).
+
+### Eksempel: ren HTML
+
+```html
+<div class="ix-system-message" data-status="info" data-placement="inline" aria-live="polite">
+  <ix-icon data-badge materialdesignname="info_i" aria-hidden="true"></ix-icon>
+  <div class="ix-system-message__body">
+    <p>Vi har oppdatert nettbanken. <a class="ix-link-text" href="/nyheter">Se hva som er nytt</a></p>
+  </div>
+  <button class="ix-system-message__close" type="button" aria-label="Lukk melding"></button>
+</div>
+
+<div class="ix-system-message" data-status="danger" data-placement="top" role="alert">
+  <ix-icon data-badge materialdesignname="priority_high" aria-hidden="true"></ix-icon>
+  <div class="ix-system-message__body">
+    <p>Nettbanken er nede. Vi jobber med å rette feilen.</p>
+  </div>
+</div>
+```
+
+## Relatert
+
+- [Message](./message) — inline-melding tett på innholdet, med utvidbar variant. SystemMessage deler status-systemet, men er for system-/flate-nivå.

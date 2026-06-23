@@ -80,6 +80,7 @@ const sidebars: SidebarsConfig = {
             items: [
                 'komponenter/button',
                 'komponenter/message',
+                'komponenter/system-message',
                 'komponenter/spinner',
                 'komponenter/typografi',
                 {

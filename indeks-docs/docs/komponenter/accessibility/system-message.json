@@ -1,0 +1,115 @@
+{
+  "component": "SystemMessage",
+  "lastReviewed": "2026-06-23",
+  "consumerResponsibilities": [
+    {
+      "summary": "Pakk ikke-kritiske meldinger i en MessageRegion",
+      "details": "Ikke-kritiske SystemMessage annonseres via en <MessageRegion> (samme stabile, skjulte polite live-region som Message bruker). Uten en omsluttende region rendres meldingen visuelt, men annonseres ikke (og logger en advarsel i utviklingsmodus). Kritiske meldinger (critical) bruker role=\"alert\" på selve elementet og trenger ikke regionen.",
+      "wcag": ["4.1.3"]
+    },
+    {
+      "summary": "Bruk critical kun for systemkritisk informasjon",
+      "details": "critical setter role=\"alert\" (assertiv) på det synlige elementet, slik at skjermlesere avbryter pågående opplesning og leser meldingen umiddelbart. Det er et bevisst unntak fra prosjektets ellers polite-only-annonsering, og skal kun brukes når informasjonen krever umiddelbar oppmerksomhet (f.eks. nedetid). For alt annet: velg lavest mulig alvorlighetsgrad og la meldingen annonseres høflig via MessageRegion. critical flytter aldri fokus.",
+      "wcag": ["4.1.3"]
+    },
+    {
+      "summary": "Beskrivende tekst er påkrevd og må stå alene",
+      "details": "SystemMessage skal aldri brukes uten tekst. Teksten må formidle budskapet uten å være avhengig av ikon eller farge, og bør være kort — helst én setning, maks to. Start med det viktigste, bruk enkelt og konkret språk, og unngå interne faguttrykk.",
+      "wcag": ["1.4.1", "1.1.1"]
+    },
+    {
+      "summary": "Gi lukkeknappen et tilgjengelig navn via closeLabel",
+      "details": "Lukkeknappen vises kun når closeLabel er satt (avbrytbar melding), og har kun et dekorativt ikon. Send inn closeLabel (React) eller aria-label (HTML), f.eks. «Lukk melding». Uten dette hører skjermleserbrukeren bare «knapp». Konsumenten er ansvarlig for riktig språk — komponenten har ingen hardkodet fallback. En systemkritisk melding bør være ikke-avbrytbar.",
+      "wcag": ["4.1.2", "2.4.6"]
+    },
+    {
+      "summary": "Sørg for at en lukket melding ikke dukker opp igjen unødvendig",
+      "details": "Komponenten skjuler seg selv ved klikk på lukkeknappen og kaller onClose. Persistens er konsument-ansvar: hvis meldingen kan lukkes, må den ikke dukke opp igjen unødvendig i samme kontekst (f.eks. ved å huske valget i lagret tilstand).",
+      "wcag": ["4.1.3"]
+    },
+    {
+      "summary": "Skriv meningsfull lenketekst",
+      "details": "SystemMessage kan inneholde én enkel lenke eller handling, tydelig relatert til meldingen. Lenken skrives som en del av innholdet med den vanlige Indeks-lenken LinkText (React) eller .ix-link-text (HTML). Lenketeksten skal beskrive hva som skjer og gi mening lest alene — ikke «Les mer» alene. Lenketeksten er aldri hardkodet.",
+      "wcag": ["2.4.4", "2.4.9"]
+    },
+    {
+      "summary": "Sett announceOnPageLoad for ikke-kritiske meldinger til stede ved sidelast",
+      "details": "Ikke-kritiske meldinger som settes inn dynamisk annonseres automatisk via MessageRegion. En melding som allerede er til stede ved første sidelast er stille som standard. Sett announceOnPageLoad=true for meldinger som er til stede ved sidelast og likevel skal leses opp (f.eks. en toppbanner om vedlikehold som er server-rendret). Ignoreres når critical er satt.",
+      "wcag": ["4.1.3"]
+    },
+    {
+      "summary": "Sett opp ARIA selv ved ren HTML-bruk",
+      "details": "MessageRegion-automatikken finnes kun i React. I ren HTML setter du ARIA selv: for kritiske meldinger settes role=\"alert\" direkte på elementet; for ikke-kritiske bruker du en stabil, tom role=\"status\" aria-live=\"polite\" aria-atomic=\"false\"-region som du legger meldingsteksten til som en egen node i når meldingen settes inn.",
+      "wcag": ["4.1.3"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Semantisk struktur: brødtekst i <p>. SystemMessage har bevisst ingen tittel — den er enklere enn Message. Statusikonet er dekorativt og merket aria-hidden." },
+    { "id": "1.3.2", "notes": "Innhold følger naturlig leserekkefølge i DOM: ikon, tekst, evt. lenke, og lukkeknapp til slutt." },
+    { "id": "1.4.1", "notes": "Variant kommuniseres med ikon + tekst i tillegg til farge — farge er aldri eneste signal." },
+    { "id": "1.4.3", "notes": "Tekst bruker --ix-color-foreground-main-default på status-surface, som oppfyller kontrastkravet for alle statuser i både light og dark mode (arvet fra delt Message-styling)." },
+    { "id": "1.4.4", "notes": "Relative enheter (font-size-tokens) — tekst skalerer korrekt ved 200 % zoom uten at innhold brytes." },
+    { "id": "1.4.10", "notes": "Mobile-first uten faste bredder — reflower korrekt ned til 320px viewport uten horisontal scroll. Toppbanner (data-placement=top) spenner full bredde." },
+    { "id": "1.4.11", "notes": "Fokusindikator oppfyller 3:1 kontrastkrav via --ix-outline-default. Kun lukkeknappen har en fokusring (:focus-visible) — meldingen ringes ikke rundt seg selv." },
+    { "id": "2.1.1", "notes": "Lukkeknapp er native <button>, fokuserbar og aktiveres med Enter/Space. Fullt opererbart med tastatur." },
+    { "id": "2.1.2", "notes": "Ingen tastaturfeller — fokus navigeres fritt ut med Tab/Shift+Tab." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator på lukkeknappen (:focus-visible). Lenker bruker :focus-visible." },
+    { "id": "2.5.8", "notes": "Lukkeknapp har min. 44×44 px touch-mål." },
+    { "id": "3.2.1", "notes": "Ingen kontekstendring ved fokus. Containeren er ikke klikkbar og har ingen hover-state. critical flytter ikke fokus." },
+    { "id": "4.1.2", "notes": "Native <button> for lukk (rolle button, navn fra aria-label)." },
+    { "id": "4.1.3", "notes": "Ikke-kritiske meldinger annonseres via en stabil polite live-region i <MessageRegion> (køet, avbryter ikke). Kritiske meldinger (critical) får role=\"alert\" på det synlige elementet og annonseres umiddelbart (assertivt) uten å stjele fokus. Meldinger til stede ved sidelast er stille med mindre announceOnPageLoad er satt." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Statusikonet er en dekorativ <ix-icon data-badge> (sirkel + glyf via mask-image). Det er rent dekorativt og merkes aria-hidden=\"true\"; varianten formidles av tekst. Ingen alt-tekst nødvendig." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Formidler ikke instruksjoner basert på sensoriske egenskaper." },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt som ber om personlig informasjon." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.12" },
+    { "id": "1.4.13" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.5" },
+    { "id": "2.5.1", "reason": "Ingen gestbaserte interaksjoner — enkelt klikk/tap på lukkeknappen." },
+    { "id": "2.5.2", "reason": "Native <button> — nettleseren håndterer pekerinteraksjon (pointer-cancel)." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.2", "reason": "Ingen automatisk kontekstendring ved fokus eller input." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1" },
+    { "id": "3.3.2" },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til lenke og/eller lukkeknapp i meldingen" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Enter", "action": "Følger en fokusert lenke, eller lukker meldingen når lukkeknappen har fokus" },
+    { "key": "Space", "action": "Aktiverer lukkeknappen når den har fokus" }
+  ],
+  "screenReader": [
+    "Ikke-kritisk, dynamisk innsetting: teksten legges til som en egen node i MessageRegion sin stabile polite-region (role=\"status\") og annonseres høflig når skjermleseren er ledig",
+    "Kritisk (critical): role=\"alert\" gjør at meldingen annonseres umiddelbart (assertivt) og avbryter pågående opplesning, uten å flytte fokus",
+    "Til stede ved sidelast (ikke-kritisk): stille som standard — annonseres kun hvis announceOnPageLoad er satt",
+    "Lukkeknapp ved fokus: \"[closeLabel], knapp\""
+  ]
+}

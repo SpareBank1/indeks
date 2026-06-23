@@ -1,9 +1,11 @@
 import clsx from 'clsx';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { JSX, ReactNode } from 'react';
+import type { Status } from '../../../types/types';
 import { useMessageRegion } from '../message-region/MessageRegionContext';
 
-export type MessageStatus = 'info' | 'success' | 'warning' | 'danger';
+/** Status/alvorlighetsgrad — delt på tvers av komponenter. @see {@link Status} */
+export type MessageStatus = Status;
 
 export type MessageProps = {
     /** Status; styrer farge og ikon. Settes som `data-status` slik at

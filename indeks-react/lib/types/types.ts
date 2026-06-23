@@ -1,6 +1,16 @@
 import clsx from 'clsx';
 
 export type SurfaceColor = 'main' | 'accent' | 'info' | 'success' | 'warning' | 'danger' | 'interactive';
+
+/**
+ * Status/alvorlighetsgrad delt på tvers av komponenter (Message, SystemMessage,
+ * …). Verdiene settes som `data-status` og kobler `--ix-color-status-*`-
+ * variablene automatisk via status-colors-utility-klassene (se
+ * `@sb1/indeks-utils/css/status-colors.css`). `data-status` støtter i tillegg
+ * `default`, men komponenter som krever en eksplisitt alvorlighetsgrad bruker
+ * dette firetrinns-settet.
+ */
+export type Status = 'info' | 'success' | 'warning' | 'danger';
 export type Border = 'default' | 'dashed';
 export type Size = '0' | '4xs' | '3xs' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 export type GapSize = 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
