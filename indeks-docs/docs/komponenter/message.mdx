@@ -296,11 +296,11 @@ Ikonet støtter forståelsen av budskapet, men skal aldri være eneste informasj
 - **Skriv meningsfull lenketekst** — lenketeksten skal beskrive målet og gi mening lest alene, ikke «klikk her».
 - **La sammendraget bære hovedpoenget i utvidbar modus** — kritisk eller oppsummerende informasjon skal stå i det alltid synlige sammendraget, ikke skjules bak utvidingskontrollen.
 - **Sett `announceOnPageLoad` for meldinger som er til stede ved sidelast** — meldinger som settes inn dynamisk (etter en handling) annonseres automatisk, men en melding som allerede er der ved sidelast er stille som standard. Sett `announceOnPageLoad` for f.eks. server-rendret success/feil etter en redirect.
-- **Sett opp egne live-regioner ved ren HTML-bruk** — `MessageRegion`-automatikken finnes kun i React. I ren HTML må du selv ha to stabile, tomme regioner i DOM (`role="status"` for info/success, `role="alert"` for danger/warning) og skrive meldingsteksten inn i riktig region når meldingen settes inn.
+- **Sett opp egen live-region ved ren HTML-bruk** — `MessageRegion`-automatikken finnes kun i React. I ren HTML må du selv ha en stabil, tom `role="status"`-region (`aria-live="polite"`, `aria-atomic="false"`) i DOM og legge meldingsteksten til som en egen node når meldingen settes inn.
 
 ### Hva komponenten gjør automatisk
 
-- **Annonsering via `<MessageRegion>`** — det synlige Message-elementet har bevisst *ingen* `role`/`aria-live`. I stedet skriver komponenten meldingsteksten til en stabil, skjult live-region i `<MessageRegion>` (polite for `info`/`success`, assertive for `warning`/`danger`). Stabile regioner er det som gjør annonsering pålitelig — en region som settes inn samtidig med innholdet annonseres ofte ikke. Politeness utledes automatisk fra `status`.
+- **Annonsering via `<MessageRegion>`** — det synlige Message-elementet har bevisst *ingen* `role`/`aria-live`. I stedet legger komponenten meldingsteksten til som en egen node i en stabil, skjult `polite` live-region i `<MessageRegion>`. Stabile regioner er det som gjør annonsering pålitelig — en region som settes inn samtidig med innholdet annonseres ofte ikke. Hver melding blir en egen node (`aria-atomic="false"`), slik at flere meldinger som dukker opp tett etter hverandre alle leses opp fortløpende i tur, uten å avbryte hverandre.
 - **Stille ved sidelast** — meldinger som finnes ved første sidelast leses ikke opp automatisk (så en side full av meldinger ikke leser seg selv opp). Bruk `announceOnPageLoad` for å overstyre. Meldinger som settes inn senere annonseres automatisk.
 - **Statusikon** rendres som en dekorativ `<ix-icon data-badge materialdesignname="…" aria-hidden="true">` — en sirkel i status-`fill` (følger `data-status`) med en lys glyf oppå (`info_i`, `check` eller `priority_high` per status). `aria-hidden="true"` holder den ute av tilgjengelighetstreet; varianten formidles av teksten.
 - **`aria-expanded`, tastaturstøtte og åpne/lukke-tilstand** følger gratis med native `<details>`/`<summary>` i utvidbar modus. Skjult innhold er ikke fokuserbart når det er kollapset.
@@ -320,7 +320,7 @@ Utvidbar Message bruker native `<details>`/`<summary>`. Relasjonen mellom kontro
 
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
-| `status` | `'info' \| 'success' \| 'warning' \| 'danger'` | | Status; styrer farge, ikon og hvilken live-region meldingen annonseres i (info/success → polite, warning/danger → assertive). Settes som `data-status` slik at fargevariablene kobles automatisk. Påkrevd |
+| `status` | `'info' \| 'success' \| 'warning' \| 'danger'` | | Status; styrer farge og ikon. Settes som `data-status` slik at fargevariablene kobles automatisk. Påkrevd |
 | `title` | `string` | | Valgfri tittel |
 | `children` | `ReactNode` | | Innhold: brødtekst (ikke-utvidbar) eller utvidet innhold (utvidbar). Rendres rått — skriv selv `<p>` og evt. en lenke med `LinkText` |
 | `closeLabel` | `string` | | `aria-label` på lukkeknappen. Lukkeknappen vises kun når denne er satt, og kun i ikke-utvidbar modus |
@@ -334,9 +334,13 @@ Utvidbar Message bruker native `<details>`/`<summary>`. Relasjonen mellom kontro
 
 ## MessageRegion
 
-`MessageRegion` er en obligatorisk wrapper rundt React-meldinger. Den rendrer ingenting synlig selv — den legger to stabile, skjulte ARIA-live-regioner i DOM (én `polite` for `info`/`success`, én `assertive` for `warning`/`danger`) som meldingene annonseres gjennom. Uten en omsluttende `MessageRegion` rendres `<Message>` visuelt, men annonseres ikke for skjermlesere (og logger en advarsel i utviklingsmodus).
+`MessageRegion` er en obligatorisk wrapper rundt React-meldinger. Den rendrer ingenting synlig selv — den legger én stabil, skjult ARIA-live-region (`polite`) i DOM som meldingene annonseres gjennom. Uten en omsluttende `MessageRegion` rendres `<Message>` visuelt, men annonseres ikke for skjermlesere (og logger en advarsel i utviklingsmodus).
 
-Stabile, alltid-tilstedeværende regioner er det som gjør annonseringen pålitelig: en live-region som settes inn i DOM samtidig med innholdet rekker ofte ikke å bli registrert før teksten er der, og annonseres da ikke. `MessageRegion` har derfor regionene klare fra start og skriver kun teksten inn ved behov.
+Stabile, alltid-tilstedeværende regioner er det som gjør annonseringen pålitelig: en live-region som settes inn i DOM samtidig med innholdet rekker ofte ikke å bli registrert før teksten er der, og annonseres da ikke. `MessageRegion` har derfor regionen klar fra start og legger kun teksten til ved behov. Hver melding legges til som en egen node, slik at flere meldinger leses opp fortløpende i tur i stedet for at den siste overskriver de andre.
+
+:::note Hvorfor `polite` og ikke `assertive`?
+Det er bevisst valgt at *alle* meldinger leses opp fortløpende (køet i én `polite`-region) fremfor at en melding avbryter en annen. Message brukes typisk som tilbakemelding på skjema eller andre brukerhandlinger, og som regel er det bare én melding av gangen — men når flere dukker opp samtidig prioriterer vi at alt blir lest fremfor at noe hoppes over. Det betyr at `status` (info/success/warning/danger) kun styrer farge og ikon, **ikke** annonseringsprioritet; selv en `danger`-melding leses høflig i kø, ikke avbrytende.
+:::
 
 Du kan ha én felles `MessageRegion` rundt et helt skjema eller en hel side, eller én rundt hver melding — begge fungerer. Det enkleste er å plassere én region høyt i treet og la alle meldinger ligge inni den.
 
@@ -366,7 +370,7 @@ Når en melding er server-rendret eller til stede ved sidelast og *likevel* skal
 
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
-| `children` | `ReactNode` | | Innholdet regionen omslutter, typisk én eller flere `<Message>`. Regionen rendrer i tillegg to skjulte live-regioner |
+| `children` | `ReactNode` | | Innholdet regionen omslutter, typisk én eller flere `<Message>`. Regionen rendrer i tillegg én skjult live-region |
 
 ## Tilpasning med CSS
 
@@ -391,16 +395,15 @@ Statusikonet skrives som `<ix-icon data-badge materialdesignname="…" aria-hidd
 
 ### Annonsering for skjermlesere uten React
 
-React-komponenten annonserer via en `<MessageRegion>` (stabile, skjulte live-regioner). I ren HTML finnes ikke denne automatikken — du må sette opp regionene selv. Den pålitelige oppskriften:
+React-komponenten annonserer via en `<MessageRegion>` (en stabil, skjult live-region). I ren HTML finnes ikke denne automatikken — du må sette opp regionen selv. Den pålitelige oppskriften:
 
-1. Legg to **stabile, tomme** live-regioner i DOM ved sidelast (de må eksistere *før* du skriver tekst inn i dem):
+1. Legg en **stabil, tom** live-region i DOM ved sidelast (den må eksistere *før* du skriver tekst inn i den):
 
 ```html
-<div class="ix-sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
-<div class="ix-sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
+<div class="ix-sr-only" role="status" aria-live="polite" aria-atomic="false"></div>
 ```
 
-2. Når du setter inn en melding dynamisk, skriv den opplest teksten inn i riktig region — `polite` for `info`/`success`, `assertive` for `warning`/`danger`.
+2. Når du setter inn en melding dynamisk, legg den opplest teksten til som en *egen* node i regionen (i stedet for å erstatte innholdet). Med `aria-atomic="false"` leses kun den nye noden, slik at flere meldinger som dukker opp tett etter hverandre alle leses opp fortløpende i tur. Fjern gjerne noden igjen etter et lite øyeblikk; det avbryter ikke opplesningen og hindrer at gammel tekst leses på nytt ved navigasjon.
 
 Den enkle varianten — å sette `role`/`aria-live` rett på `.ix-message`-elementet (som i eksempelet under) — fungerer rimelig for `role="alert"` ved dynamisk innsetting, men er upålitelig for `aria-live="polite"` og annonserer ingenting for meldinger som er til stede ved sidelast.
 

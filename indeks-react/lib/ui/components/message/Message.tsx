@@ -6,10 +6,8 @@ import { useMessageRegion } from '../message-region/MessageRegionContext';
 export type MessageStatus = 'info' | 'success' | 'warning' | 'danger';
 
 export type MessageProps = {
-    /** Status; styrer farge, ikon og hvilken live-region meldingen annonseres i
-     *  (info/success → polite, warning/danger → assertive). Settes som
-     *  `data-status` slik at fargevariablene (`--ix-color-status-*`) kobles
-     *  automatisk. */
+    /** Status; styrer farge og ikon. Settes som `data-status` slik at
+     *  fargevariablene (`--ix-color-status-*`) kobles automatisk. */
     status: MessageStatus;
     /** Valgfri tittel. */
     title?: string;
@@ -88,7 +86,7 @@ export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
             return;
         }
         const text = announceText ?? bodyRef.current?.textContent ?? '';
-        region.announce(text, status, announceOnPageLoad);
+        region.announce(text, announceOnPageLoad);
     }, [region, status, announceOnPageLoad, announceText, title, summary, children, closed]);
 
     if (closed) {

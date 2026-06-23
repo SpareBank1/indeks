@@ -1,12 +1,10 @@
 import { createContext, useContext } from 'react';
 
-/** Status styrer hvilken live-region (polite/assertive) en melding annonseres i. */
-export type MessageAnnounceStatus = 'info' | 'success' | 'warning' | 'danger';
-
 export type MessageRegionContextValue = {
     /**
-     * Annonser `text` i riktig live-region ut fra `status` (info/success →
-     * polite, warning/danger → assertive).
+     * Annonser `text` i live-regionen. Hver melding legges til som en egen node
+     * og leses fortløpende etter hverandre (køet), slik at flere meldinger som
+     * dukker opp samtidig alle blir lest opp i tur.
      *
      * `announceOnPageLoad` overstyrer stille-ved-sidelast: normalt annonseres
      * kun meldinger som settes inn *etter* at siden er ferdig lastet, slik at en
@@ -14,7 +12,7 @@ export type MessageRegionContextValue = {
      * som er til stede ved første sidelast og likevel skal leses opp (f.eks.
      * SSR-rendret success/feil etter en redirect).
      */
-    announce: (text: string, status: MessageAnnounceStatus, announceOnPageLoad: boolean) => void;
+    announce: (text: string, announceOnPageLoad: boolean) => void;
 };
 
 export const MessageRegionContext = createContext<MessageRegionContextValue | null>(null);

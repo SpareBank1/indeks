@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { JSX, ReactNode } from 'react';
-import {
-    MessageRegionContext,
-    type MessageAnnounceStatus,
-    type MessageRegionContextValue,
-} from './MessageRegionContext';
+import { MessageRegionContext, type MessageRegionContextValue } from './MessageRegionContext';
 
 export type MessageRegionProps = {
     /** Meldingene (og annet innhold) som skal kunne annonseres. */
@@ -12,19 +8,29 @@ export type MessageRegionProps = {
 };
 
 /**
- * MessageRegion eier to alltid-tilstedeværende, visuelt skjulte ARIA-live-regioner
- * — én `polite` (info/success) og én `assertive` (warning/danger) — og deler ut en
- * `announce`-funksjon til `<Message>`-barn via context. Den rendrer ikke noe eget
- * synlig wrapper-element; barna rendres uendret.
+ * MessageRegion eier én alltid-tilstedeværende, visuelt skjult ARIA-live-region
+ * (`polite`) og deler ut en `announce`-funksjon til `<Message>`-barn via context.
+ * Den rendrer ikke noe eget synlig wrapper-element; barna rendres uendret.
  *
  * ## Hvorfor en wrapper?
  *
  * En live-region annonserer kun *endringer* i en region som allerede eksisterte i
  * DOM. Setter man regionen og innholdet inn samtidig (slik en `role`/`aria-live`
  * direkte på meldingen gjør), rekker mange skjermlesere ikke å registrere regionen
- * før innholdet er der — annonseringen blir upålitelig. Ved å holde to *tomme*
- * regioner montert fra start, og skrive tekst inn i dem etterpå, fanges endringen
+ * før innholdet er der — annonseringen blir upålitelig. Ved å holde en *tom*
+ * region montert fra start, og skrive tekst inn i den etterpå, fanges endringen
  * pålitelig. Samme prinsipp som `<ix-field>` sin `[data-field="error"]`-region.
+ *
+ * ## Fortløpende opplesning av flere meldinger
+ *
+ * Hver melding legges til som en *egen* node i regionen (ikke som erstatning av
+ * innholdet). Med `aria-atomic="false"` leser skjermleseren kun den tillagte
+ * noden, og `polite` køer opplesningene slik at flere meldinger som dukker opp
+ * tett etter hverandre alle leses opp i tur — uten å avbryte hverandre. Hver
+ * node fjernes igjen etter et lite øyeblikk; det avbryter ikke pågående
+ * opplesning (teksten er allerede køet hos skjermleseren) og fjerningen
+ * annonseres ikke (default `aria-relevant` leser kun tillegg). Oppryddingen
+ * hindrer ubegrenset DOM-vekst og at gammel tekst leses på nytt ved navigasjon.
  *
  * ## Stille ved sidelast
  *
@@ -34,8 +40,7 @@ export type MessageRegionProps = {
  * `announceOnPageLoad`). Meldinger som mountes senere ser `true` og annonseres.
  */
 export function MessageRegion({ children }: MessageRegionProps): JSX.Element {
-    const politeRef = useRef<HTMLDivElement>(null);
-    const assertiveRef = useRef<HTMLDivElement>(null);
+    const regionRef = useRef<HTMLDivElement>(null);
     const readyRef = useRef(false);
     // Holder rydde-timere så de kan kanselleres ved unmount.
     const timersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
@@ -53,7 +58,7 @@ export function MessageRegion({ children }: MessageRegionProps): JSX.Element {
     }, []);
 
     const announce = useCallback<MessageRegionContextValue['announce']>(
-        (text, status: MessageAnnounceStatus, announceOnPageLoad) => {
+        (text, announceOnPageLoad) => {
             if (!text) {
                 return;
             }
@@ -62,26 +67,22 @@ export function MessageRegion({ children }: MessageRegionProps): JSX.Element {
             if (!readyRef.current && !announceOnPageLoad) {
                 return;
             }
-            const region =
-                status === 'warning' || status === 'danger' ? assertiveRef.current : politeRef.current;
+            const region = regionRef.current;
             if (!region) {
                 return;
             }
-            // Clear-then-set i neste frame slik at identisk tekst også annonseres
-            // på nytt (skjermlesere hopper ellers over uendret textContent).
-            region.textContent = '';
-            requestAnimationFrame(() => {
-                region.textContent = text;
-                // Rydd regionen etter et lite øyeblikk så gammel tekst ikke ligger
-                // igjen og blir lest ved neste navigasjon i enkelte skjermlesere.
-                const timer = setTimeout(() => {
-                    if (region.textContent === text) {
-                        region.textContent = '';
-                    }
-                    timersRef.current.delete(timer);
-                }, 1000);
-                timersRef.current.add(timer);
-            });
+            // Legg meldingen til som en egen node slik at den leses fortløpende
+            // i tillegg til ev. andre meldinger som allerede ligger i køen.
+            const node = document.createElement('div');
+            node.textContent = text;
+            region.appendChild(node);
+            // Fjern denne noden etter et lite øyeblikk. Avbryter ikke opplesning
+            // (teksten er allerede køet) og hindrer DOM-vekst / gjenlesing.
+            const timer = setTimeout(() => {
+                node.remove();
+                timersRef.current.delete(timer);
+            }, 1000);
+            timersRef.current.add(timer);
         },
         [],
     );
@@ -91,16 +92,15 @@ export function MessageRegion({ children }: MessageRegionProps): JSX.Element {
     return (
         <MessageRegionContext.Provider value={value}>
             {children}
-            {/* Stabile, tomme live-regioner. Må ligge i DOM fra start for at
-                annonsering skal være pålitelig. aria-atomic leser hele meldingen
-                som én enhet. */}
-            <div ref={politeRef} className="ix-sr-only" role="status" aria-live="polite" aria-atomic="true" />
+            {/* Stabil, tom live-region. Må ligge i DOM fra start for at
+                annonsering skal være pålitelig. aria-atomic="false" gjør at kun
+                den tillagte noden leses, slik at meldinger køes og leses i tur. */}
             <div
-                ref={assertiveRef}
+                ref={regionRef}
                 className="ix-sr-only"
-                role="alert"
-                aria-live="assertive"
-                aria-atomic="true"
+                role="status"
+                aria-live="polite"
+                aria-atomic="false"
             />
         </MessageRegionContext.Provider>
     );

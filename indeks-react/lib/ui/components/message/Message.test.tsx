@@ -1,21 +1,10 @@
-import { fireEvent, render, screen, act } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Message } from './Message';
 import { MessageRegion } from '../message-region/MessageRegion';
 
-/** Vent ut requestAnimationFrame slik at MessageRegion sin clear-then-set fullføres. */
-async function flushFrame(): Promise<void> {
-    await act(async () => {
-        await new Promise((resolve) => requestAnimationFrame(() => resolve(undefined)));
-    });
-}
-
-function getPolite(container: HTMLElement): HTMLElement | null {
+function getRegion(container: HTMLElement): HTMLElement | null {
     return container.querySelector('[aria-live="polite"]');
-}
-
-function getAssertive(container: HTMLElement): HTMLElement | null {
-    return container.querySelector('[aria-live="assertive"]');
 }
 
 describe('Message', () => {
@@ -134,7 +123,7 @@ describe('Message', () => {
     });
 
     describe('annonsering via MessageRegion', () => {
-        it('annonserer den synlige teksten i polite-regionen for info/success (med announceOnPageLoad)', async () => {
+        it('annonserer den synlige teksten i live-regionen (med announceOnPageLoad)', () => {
             const { container } = render(
                 <MessageRegion>
                     <Message status="success" announceOnPageLoad>
@@ -142,11 +131,10 @@ describe('Message', () => {
                     </Message>
                 </MessageRegion>,
             );
-            await flushFrame();
-            expect(getPolite(container)?.textContent).toBe('Endringene er lagret');
+            expect(getRegion(container)?.textContent).toBe('Endringene er lagret');
         });
 
-        it('annonserer i assertive-regionen for warning/danger', async () => {
+        it('annonserer også warning/danger i samme live-region', () => {
             const { container } = render(
                 <MessageRegion>
                     <Message status="danger" announceOnPageLoad>
@@ -154,21 +142,19 @@ describe('Message', () => {
                     </Message>
                 </MessageRegion>,
             );
-            await flushFrame();
-            expect(getAssertive(container)?.textContent).toBe('Betalingen feilet');
+            expect(getRegion(container)?.textContent).toBe('Betalingen feilet');
         });
 
-        it('er stille ved sidelast uten announceOnPageLoad', async () => {
+        it('er stille ved sidelast uten announceOnPageLoad', () => {
             const { container } = render(
                 <MessageRegion>
                     <Message status="info">Standing content</Message>
                 </MessageRegion>,
             );
-            await flushFrame();
-            expect(getPolite(container)?.textContent).toBe('');
+            expect(getRegion(container)?.textContent).toBe('');
         });
 
-        it('announceText overstyrer den synlige teksten', async () => {
+        it('announceText overstyrer den synlige teksten', () => {
             const { container } = render(
                 <MessageRegion>
                     <Message status="danger" announceOnPageLoad announceText="Betalingen feilet">
@@ -176,8 +162,7 @@ describe('Message', () => {
                     </Message>
                 </MessageRegion>,
             );
-            await flushFrame();
-            expect(getAssertive(container)?.textContent).toBe('Betalingen feilet');
+            expect(getRegion(container)?.textContent).toBe('Betalingen feilet');
         });
 
         it('annonserer ikke når Message ikke ligger i en MessageRegion', () => {
@@ -240,7 +225,7 @@ describe('Message', () => {
             expect(root?.hasAttribute('aria-live')).toBe(false);
         });
 
-        it('annonserer kun sammendraget, ikke det skjulte innholdet', async () => {
+        it('annonserer kun sammendraget, ikke det skjulte innholdet', () => {
             const { container } = render(
                 <MessageRegion>
                     <Message status="warning" expandable summary="Nye vilkår" announceOnPageLoad>
@@ -248,8 +233,7 @@ describe('Message', () => {
                     </Message>
                 </MessageRegion>,
             );
-            await flushFrame();
-            expect(getAssertive(container)?.textContent).toBe('Nye vilkår');
+            expect(getRegion(container)?.textContent).toBe('Nye vilkår');
         });
     });
 });

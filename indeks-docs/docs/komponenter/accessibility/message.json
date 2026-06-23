@@ -34,12 +34,12 @@
     },
     {
       "summary": "Ikke bruk expandable for kritiske danger-meldinger",
-      "details": "Utvidbar Message (native <details>) får bevisst hverken role=\"alert\" eller aria-live — assertiv annonsering av et kollapset panel gir liten nytte og ville uansett bare lest det synlige sammendraget. Bruk derfor expandable primært for info eller valgfritt innhold. En kritisk danger/warning som krever umiddelbar oppmerksomhet skal være ikke-utvidbar slik at den annonseres med riktig prioritet.",
+      "details": "Utvidbar Message (native <details>) får bevisst hverken role eller aria-live på det synlige elementet — annonsering av et kollapset panel gir liten nytte og ville uansett bare lest det synlige sammendraget. Bruk derfor expandable primært for info eller valgfritt innhold. En kritisk danger/warning som krever umiddelbar oppmerksomhet bør være ikke-utvidbar slik at hele meldingen leses opp.",
       "wcag": ["4.1.3"]
     },
     {
-      "summary": "Sett opp stabile live-regioner selv ved ren HTML-bruk",
-      "details": "MessageRegion-automatikken finnes kun i React. Bruker du ren HTML må du selv legge to stabile, tomme live-regioner i DOM ved sidelast — én role=\"status\" aria-live=\"polite\" (info/success) og én role=\"alert\" aria-live=\"assertive\" (danger/warning) — og skrive meldingsteksten inn i riktig region når meldingen settes inn. Regionene må eksistere før teksten settes inn for at skjermlesere skal fange opp endringen.",
+      "summary": "Sett opp en stabil live-region selv ved ren HTML-bruk",
+      "details": "MessageRegion-automatikken finnes kun i React. Bruker du ren HTML må du selv legge én stabil, tom live-region i DOM ved sidelast — role=\"status\" aria-live=\"polite\" aria-atomic=\"false\" — og legge meldingsteksten til som en egen node når meldingen settes inn. Regionen må eksistere før teksten settes inn for at skjermlesere skal fange opp endringen, og aria-atomic=\"false\" gjør at flere meldinger leses fortløpende i tur i stedet for at den siste overskriver de andre.",
       "wcag": ["4.1.3"]
     }
   ],
@@ -59,7 +59,7 @@
     { "id": "2.5.8", "notes": "Lukkeknapp og summary har min. 44×44 px touch-mål." },
     { "id": "3.2.1", "notes": "Ingen kontekstendring ved fokus. Containeren er ikke klikkbar og har ingen hover-state." },
     { "id": "4.1.2", "notes": "Native <button> for lukk (rolle button, navn fra aria-label). Native <details>/<summary> gir aria-expanded og utvid/skjul-rolle automatisk." },
-    { "id": "4.1.3", "notes": "Annonsering skjer via stabile, alltid-tilstedeværende live-regioner i <MessageRegion> — én polite (info/success) og én assertive (danger/warning). Det synlige elementet har ingen role/aria-live; teksten skrives til riktig region etter at den er montert, slik at dynamisk innsatte meldinger annonseres pålitelig med riktig prioritet. Meldinger til stede ved sidelast er stille med mindre announceOnPageLoad er satt." }
+    { "id": "4.1.3", "notes": "Annonsering skjer via én stabil, alltid-tilstedeværende polite live-region i <MessageRegion>. Det synlige elementet har ingen role/aria-live; hver melding legges til som en egen node (aria-atomic=\"false\") etter at regionen er montert, slik at dynamisk innsatte meldinger annonseres pålitelig og flere meldinger leses fortløpende i tur uten å avbryte hverandre. Meldinger til stede ved sidelast er stille med mindre announceOnPageLoad er satt." }
   ],
   "notRelevant": [
     { "id": "1.1.1", "reason": "Statusikonet er en dekorativ <ix-icon data-badge> (sirkel + glyf via mask-image). Den er rent dekorativ og merkes aria-hidden=\"true\", så den eksponeres ikke for skjermlesere; varianten formidles av tekst. Derfor er ingen alt-tekst nødvendig." },
@@ -108,8 +108,8 @@
     { "key": "Space", "action": "Veksler expandable mellom åpen/lukket når summary har fokus, eller aktiverer lukkeknappen" }
   ],
   "screenReader": [
-    "Dynamisk innsetting (info/success): teksten skrives til MessageRegion sin stabile polite-region (role=\"status\") og annonseres høflig når brukeren er ledig",
-    "Dynamisk innsetting (danger/warning): teksten skrives til MessageRegion sin stabile assertive-region (role=\"alert\") og annonseres umiddelbart",
+    "Dynamisk innsetting: teksten legges til som en egen node i MessageRegion sin stabile polite-region (role=\"status\") og annonseres høflig når skjermleseren er ledig",
+    "Flere meldinger samtidig: hver melding blir en egen node og leses fortløpende i tur (aria-atomic=\"false\"), uten at den siste overskriver eller avbryter de andre",
     "Til stede ved sidelast: stille som standard — annonseres kun hvis announceOnPageLoad er satt",
     "Expandable ved fokus: \"[sammendrag], skjult/vist\" (native <summary> annonserer utvid-tilstand)",
     "Expandable ved aktivering: tilstanden oppdateres til \"vist\" / \"skjult\"",
