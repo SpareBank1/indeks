@@ -17,7 +17,7 @@ const meta = {
     ],
     args: {
         status: 'info',
-        title: 'Vi har mottatt søknaden din og behandler den nå',
+        children: 'Vi har mottatt søknaden din og behandler den nå',
     },
 } satisfies Meta<typeof Message>;
 
@@ -29,26 +29,26 @@ export const Standard: Story = {};
 export const Success: Story = {
     args: {
         status: 'success',
-        title: 'Endringene dine er lagret',
+        children: 'Endringene dine er lagret',
     },
 };
 
 export const Warning: Story = {
     args: {
         status: 'warning',
-        title: 'Det er kort tid til fristen for å svare',
+        children: 'Det er kort tid til fristen for å svare',
     },
 };
 
 export const Danger: Story = {
     args: {
         status: 'danger',
-        title: 'Vi klarte ikke å gjennomføre betalingen',
+        children: 'Vi klarte ikke å gjennomføre betalingen',
     },
 };
 
-export const MedBrodtekst: Story = {
-    name: 'Med brødtekst',
+export const MedTittel: Story = {
+    name: 'Med tittel',
     args: {
         status: 'info',
         title: 'Behandling pågår',
@@ -80,32 +80,18 @@ export const MedLukkeknapp: Story = {
     },
 };
 
-export const Expandable: Story = {
-    args: {
-        status: 'warning',
-        expandable: true,
-        title: 'Nye vilkår for kontoen',
-        summary: 'Vi har oppdatert vilkårene. Trykk for å lese hva som er endret.',
-        defaultOpen: false,
-        children: (
-            <ul>
-                <li>Renten justeres fra 1. juli.</li>
-                <li>Gebyret for papirfaktura fjernes.</li>
-                <li>Du kan når som helst endre varslingsinnstillingene dine.</li>
-            </ul>
-        ),
-    },
-};
-
 /**
- * Utvidbar i åpen tilstand. Headeren (summary) bruker status-`surface` som body,
- * og tones til `surface-hover` ved hover.
+ * Full bredde. Meldingen strekker seg til full bredde av forelderen i stedet
+ * for å krympe til innholdsbredden (slik den ellers gjør i en vertikal stack).
+ * Kombineres ofte med en lukkeknapp.
  */
-export const ExpandableOpen: Story = {
-    name: 'Utvidbar (åpen)',
+export const FullWidth: Story = {
+    name: 'Full bredde',
     args: {
-        ...Expandable.args,
-        defaultOpen: true,
+        status: 'info',
+        children: 'Vi oppdaterer nettbanken i natt mellom 02 og 04',
+        closeLabel: 'Lukk melding',
+        fullWidth: true,
     },
 };
 
@@ -130,21 +116,13 @@ export const HTML: Story = {
                 <button className="ix-message__close" type="button" aria-label="Lukk melding" />
             </div>
 
-            <details className="ix-message" data-status="warning" data-expandable open>
-                <summary className="ix-message__summary">
-                    <ix-icon data-badge="" name="utropstegn" aria-hidden="true" />
-                    <div className="ix-message__body">
-                        <strong className="ix-message__title">Nye vilkår for kontoen</strong>
-                        <p>Vi har oppdatert vilkårene. Trykk for å lese hva som er endret.</p>
-                    </div>
-                </summary>
-                <div className="ix-message__expanded">
-                    <ul>
-                        <li>Renten justeres fra 1. juli.</li>
-                        <li>Gebyret for papirfaktura fjernes.</li>
-                    </ul>
+            <div className="ix-message" data-status="info" data-full-width aria-live="polite">
+                <ix-icon data-badge="" name="info" aria-hidden="true" />
+                <div className="ix-message__body">
+                    <p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p>
                 </div>
-            </details>
+                <button className="ix-message__close" type="button" aria-label="Lukk melding" />
+            </div>
         </ix-stack>
     ),
 };

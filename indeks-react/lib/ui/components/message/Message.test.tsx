@@ -49,17 +49,6 @@ describe('Message', () => {
         expect(icon?.getAttribute('aria-hidden')).toBe('true');
     });
 
-    it('rendrer statusikon inne i summary i utvidbar modus', () => {
-        const { container } = render(
-            <Message status="warning" expandable summary="Sammendrag">
-                Detaljer
-            </Message>,
-        );
-        const icon = container.querySelector('.ix-message__summary > ix-icon[data-badge]');
-        expect(icon).not.toBeNull();
-        expect(icon?.getAttribute('aria-hidden')).toBe('true');
-    });
-
     it('setter data-status', () => {
         const { container } = render(<Message status="success">Tekst</Message>);
         expect(container.firstElementChild?.getAttribute('data-status')).toBe('success');
@@ -171,69 +160,28 @@ describe('Message', () => {
         });
     });
 
-    describe('expandable', () => {
-        it('rendrer som details med summary og ekspandert innhold', () => {
-            const { container } = render(
-                <Message status="warning" expandable summary="Kort sammendrag">
-                    <p>Lang tekst</p>
-                </Message>,
-            );
-            const root = container.firstElementChild as HTMLDetailsElement;
-            expect(root.tagName).toBe('DETAILS');
-            expect(root.getAttribute('data-expandable')).toBe('');
-            expect(root.querySelector('summary')).toBeTruthy();
-            expect(screen.getByText('Kort sammendrag')).toBeTruthy();
-            expect(screen.getByText('Lang tekst')).toBeTruthy();
+    describe('full bredde', () => {
+        it('setter ikke data-full-width som standard', () => {
+            const { container } = render(<Message status="info">Tekst</Message>);
+            expect(container.firstElementChild?.hasAttribute('data-full-width')).toBe(false);
         });
 
-        it('er lukket som standard', () => {
+        it('setter data-full-width når fullWidth er satt', () => {
             const { container } = render(
-                <Message status="info" expandable summary="Sammendrag">
-                    Innhold
+                <Message status="info" fullWidth>
+                    Tekst
                 </Message>,
             );
-            expect((container.firstElementChild as HTMLDetailsElement).open).toBe(false);
+            expect(container.firstElementChild?.getAttribute('data-full-width')).toBe('');
         });
 
-        it('starter åpen når defaultOpen er satt', () => {
-            const { container } = render(
-                <Message status="info" expandable summary="Sammendrag" defaultOpen>
-                    Innhold
+        it('viser lukkeknapp også i full bredde', () => {
+            render(
+                <Message status="info" fullWidth closeLabel="Lukk melding">
+                    Tekst
                 </Message>,
             );
-            expect((container.firstElementChild as HTMLDetailsElement).open).toBe(true);
-        });
-
-        it('viser ikke lukkeknapp i utvidbar modus selv med closeLabel', () => {
-            const { container } = render(
-                <Message status="warning" expandable summary="Sammendrag" closeLabel="Lukk melding">
-                    Innhold
-                </Message>,
-            );
-            expect(screen.queryByRole('button', { name: 'Lukk melding' })).toBeNull();
-            expect(container.querySelector('.ix-message__close')).toBeNull();
-        });
-
-        it('setter ikke role/aria-live på details-roten', () => {
-            const { container } = render(
-                <Message status="danger" expandable summary="Sammendrag">
-                    Innhold
-                </Message>,
-            );
-            const root = container.firstElementChild;
-            expect(root?.hasAttribute('role')).toBe(false);
-            expect(root?.hasAttribute('aria-live')).toBe(false);
-        });
-
-        it('annonserer kun sammendraget, ikke det skjulte innholdet', () => {
-            const { container } = render(
-                <MessageRegion>
-                    <Message status="warning" expandable summary="Nye vilkår" announceOnPageLoad>
-                        <p>Mye skjult detaljtekst som ikke skal leses opp</p>
-                    </Message>
-                </MessageRegion>,
-            );
-            expect(getRegion(container)?.textContent).toBe('Nye vilkår');
+            expect(screen.getByRole('button', { name: 'Lukk melding' })).toBeTruthy();
         });
     });
 });

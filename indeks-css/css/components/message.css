@@ -3,8 +3,7 @@
        @sb1/indeks-utils/css/status-colors.css). Bakgrunnen bruker `surface`
        (lyseste status-flate). Statusikonet rendres som en <ix-icon data-badge>
        (sirkel + glyf) — se badge-koblingen lenger ned. */
-    /* Badge-diameter (fast 32px per design). Brukes til innrykk av ekspandert
-       innhold (skal flukte med tittel/tekst), derfor en lokal variabel. */
+    /* Badge-diameter (fast 32px per design). Lokal variabel for ev. gjenbruk. */
     --ix-message-icon-size: 32px;
 
     display: flex;
@@ -20,9 +19,17 @@
     border-radius: var(--ix-border-radius-md);
 }
 
-/* Ikke-utvidbar Message får ingen ring rundt hele meldingen — kun lukkeknappen
-   har sin egen fokusring (se .ix-message__close:focus-visible). Utvidbar Message
-   ringes på selve summary (se lenger ned). */
+/* Message får ingen ring rundt hele meldingen — kun lukkeknappen har sin egen
+   fokusring (se .ix-message__close:focus-visible). */
+
+/* Full bredde: strekk meldingen til full bredde av forelderen. En vertikal
+   ix-stack (og andre flex-kolonner) har `align-items: flex-start`, så en
+   melding krymper ellers til innholdsbredden; `align-self: stretch` overstyrer
+   det. `width: 100%` dekker block-kontekster utenfor flex. Radius beholdes. */
+:where(.ix-message[data-full-width]) {
+    align-self: stretch;
+    width: 100%;
+}
 
 /* Statusikon-badge: <ix-icon data-badge> rendrer sirkel + glyf (se icon.css).
    Sirkelen bruker status-`fill`; glyfen settes med `name` på selve
@@ -68,14 +75,8 @@
     min-height: 44px;
     cursor: pointer;
     border-radius: var(--ix-border-radius-sm);
-}
-
-/* Ikke-utvidbar: lukkeknappen er direkte barn og er siste element. Negativ
-   margin trekker det store touch-målet inn så ikonet flukter med toppkanten
-   uten å øke høyden unødig. (I utvidbar modus ligger knappen inne i summary
-   foran chevronen og skal ikke ha negativ margin.) */
-:where(.ix-message > .ix-message__close) {
-    /* Hold lukkeknappen ved toppen (roten sentrerer ellers alt vertikalt). */
+    /* Lukkeknappen er siste barn. Negativ margin trekker det store touch-målet
+       inn så ikonet flukter med toppkanten uten å øke høyden unødig. */
     align-self: flex-start;
     margin: calc(var(--ix-spacing-sm) * -1) calc(var(--ix-spacing-sm) * -1) 0 0;
 }
@@ -100,108 +101,4 @@
 :where(.ix-message__close:focus-visible) {
     outline: var(--ix-outline-default);
     outline-offset: var(--ix-outline-offset-default);
-}
-
-/* ── Expandable (native <details>) ───────────────────────────────────────── */
-
-/* <details> er flex-rot via .ix-message, men summary + expanded skal stables
-   vertikalt. Padding flyttes fra roten ned på summary/expanded slik at summary-
-   hover-flaten spenner kant-til-kant. Summary runder av sine egne hjørner (se
-   under) slik at hover-flaten følger rotens runde hjørner — ingen overflow:hidden,
-   så den utvendige fokusringen ikke klippes. */
-:where(.ix-message[data-expandable]) {
-    flex-direction: column;
-    /* align-items:stretch overstyrer rotens flex-start slik at summary og
-       ekspandert innhold spenner full bredde av komponenten. */
-    align-items: stretch;
-    gap: 0;
-    padding: 0;
-}
-
-:where(.ix-message__summary) {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--ix-spacing-sm);
-    padding: var(--ix-spacing-md);
-    /* Touch-mål: hele summary er klikkflaten, høyde sikres av padding + innhold */
-    min-height: 44px;
-    cursor: pointer;
-    list-style: none;
-    /* Rund av topphjørnene så hover-/active-flaten følger rotens runde hjørner
-       (erstatter overflow:hidden på roten). Konsentrisk indre radius: rotens
-       radius minus border-bredden, så kurven flukter med ytterkanten. I åpen
-       tilstand grenser bunnen mot det ekspanderte innholdet og skal være rett;
-       sammenfoldet rundes alle fire hjørner (se under). */
-    border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) 0 0;
-}
-
-/* Sammenfoldet er summary hele den synlige flaten — rund av alle fire hjørner. */
-:where(.ix-message[data-expandable]:not([open]) .ix-message__summary) {
-    border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default));
-}
-
-/* Summary er klikkflaten. Standard er status-`surface` (samme som body); ved
-   hover tones den til status-`surface-hover`, og ved trykk til
-   status-`surface-active`. Forgrunnen forblir --ix-color-foreground-main-default
-   (tilstrekkelig kontrast på alle trinn). */
-:where(.ix-message__summary:hover) {
-    background-color: var(--ix-color-status-surface-hover);
-}
-
-:where(.ix-message__summary:active) {
-    background-color: var(--ix-color-status-surface-active);
-}
-
-/* Fokusring kun på selve summary (headeren), ikke rundt hele expandable.
-   Utvendig ring (som lukkeknappen og resten av systemet) — summary sine runde
-   hjørner gir ringen runde hjørner, og uten overflow:hidden klippes den ikke. */
-:where(.ix-message__summary:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: var(--ix-outline-offset-default);
-}
-
-/* Skjul native details-marker i alle nettlesere */
-:where(.ix-message__summary)::-webkit-details-marker {
-    display: none;
-}
-
-/* Chevron som indikerer expandert/sammenfoldet tilstand. Et flex-barn til høyre
-   (margin-inline-start:auto skyver den ut), så badge-ikonet og innholdet ligger
-   til venstre. */
-:where(.ix-message__summary)::after {
-    content: '';
-    flex: 0 0 auto;
-    margin-inline-start: auto;
-    width: var(--ix-font-size-xl);
-    height: var(--ix-font-size-xl);
-    background-color: var(--ix-color-foreground-main-default);
-    transition: var(--ix-transition-all);
-    /* stylelint-disable plugin/no-unsupported-browser-features */
-    mask-size: cover;
-    -webkit-mask-size: cover;
-    mask-position: center;
-    -webkit-mask-position: center;
-    mask-repeat: no-repeat;
-    -webkit-mask-repeat: no-repeat;
-    mask-image: url(https://cdn.sparebank1.no/icons/keyboard_arrow_down.svg);
-    -webkit-mask-image: url(https://cdn.sparebank1.no/icons/keyboard_arrow_down.svg);
-    /* stylelint-enable plugin/no-unsupported-browser-features */
-}
-
-:where(.ix-message[data-expandable][open]) .ix-message__summary::after {
-    transform: rotate(180deg);
-}
-
-/* Ekspandert innhold. Padding gjenopprettes her (roten har padding:0 i
-   expandable-modus). Innrykk fra venstre tilsvarer badge-bredde + gap slik at
-   teksten flukter med tittel/sammendrag, ikke ligger under badgen. */
-:where(.ix-message__expanded) {
-    padding: var(--ix-spacing-md);
-    padding-inline-start: calc(var(--ix-spacing-md) + var(--ix-message-icon-size) + var(--ix-spacing-sm));
-}
-
-@media (prefers-reduced-motion: reduce) {
-    :where(.ix-message__summary)::after {
-        transition: none;
-    }
 }

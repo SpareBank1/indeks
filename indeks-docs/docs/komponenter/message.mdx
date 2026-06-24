@@ -9,7 +9,7 @@ import a11yData from './accessibility/message.json';
 
 # Message
 
-Message formidler status eller resultatet av en handling — informasjon, suksess, advarsel eller feil — uten å avbryte flyten. Komponenten brukes inline, tett på innholdet den forklarer, og kan gjøres utvidbar for å vise mer informasjon ved behov.
+Message formidler status eller resultatet av en handling — informasjon, suksess, advarsel eller feil — uten å avbryte flyten. Komponenten brukes inline, tett på innholdet den forklarer, og kan strekkes til full bredde av forelderen.
 
 :::warning Message må ligge i en MessageRegion
 For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` ligge inni en [`<MessageRegion>`](#messageregion). Regionen eier de stabile ARIA-live-regionene som annonseringen skriver til. En `<Message>` uten region rendres visuelt, men annonseres ikke (og logger en advarsel i utviklingsmodus).
@@ -22,7 +22,6 @@ For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` lig
 - Gjøre brukeren oppmerksom på noe viktig
 - Vise advarsler eller feil som ikke stopper flyten
 - Forklare konsekvenser eller neste steg
-- Skjule detaljer som ikke alle trenger å lese, men som bør være tilgjengelige
 
 ## Uegnet til
 
@@ -30,7 +29,6 @@ For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` lig
 - Midlertidige bekreftelser — bruk toast
 - Situasjoner som krever aktiv bekreftelse — bruk modal
 - Globale systembeskjeder — bruk SystemMessage
-- Innhold som alltid bør være synlig
 - Lange eller komplekse forklaringer som krever egen side
 
 ## Kom i gang
@@ -42,7 +40,7 @@ For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` lig
 <div className="ix-message" data-status="info" aria-live="polite">
   <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
   <div className="ix-message__body">
-    <strong className="ix-message__title">Vi har mottatt søknaden din og behandler den nå</strong>
+    <p>Vi har mottatt søknaden din og behandler den nå</p>
   </div>
 </div>
 ```
@@ -52,7 +50,7 @@ For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` lig
 
 ```tsx live
 <MessageRegion>
-  <Message status="info" title="Vi har mottatt søknaden din og behandler den nå" />
+  <Message status="info">Vi har mottatt søknaden din og behandler den nå</Message>
 </MessageRegion>
 ```
 
@@ -72,19 +70,19 @@ Velg status ut fra budskapet: `info` for nøytral informasjon, `success` for bek
 <ix-stack>
   <div className="ix-message" data-status="info" aria-live="polite">
     <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
-    <div className="ix-message__body"><strong className="ix-message__title">Vi behandler søknaden din</strong></div>
+    <div className="ix-message__body"><p>Vi behandler søknaden din</p></div>
   </div>
   <div className="ix-message" data-status="success" aria-live="polite">
     <ix-icon data-badge name="hake" aria-hidden="true"></ix-icon>
-    <div className="ix-message__body"><strong className="ix-message__title">Endringene dine er lagret</strong></div>
+    <div className="ix-message__body"><p>Endringene dine er lagret</p></div>
   </div>
   <div className="ix-message" data-status="warning" role="alert">
     <ix-icon data-badge name="utropstegn" aria-hidden="true"></ix-icon>
-    <div className="ix-message__body"><strong className="ix-message__title">Det er kort tid til fristen for å svare</strong></div>
+    <div className="ix-message__body"><p>Det er kort tid til fristen for å svare</p></div>
   </div>
   <div className="ix-message" data-status="danger" role="alert">
     <ix-icon data-badge name="utropstegn" aria-hidden="true"></ix-icon>
-    <div className="ix-message__body"><strong className="ix-message__title">Vi klarte ikke å gjennomføre betalingen</strong></div>
+    <div className="ix-message__body"><p>Vi klarte ikke å gjennomføre betalingen</p></div>
   </div>
 </ix-stack>
 ```
@@ -95,10 +93,10 @@ Velg status ut fra budskapet: `info` for nøytral informasjon, `success` for bek
 ```tsx live
 <MessageRegion>
   <VStack gap="md">
-    <Message status="info" title="Vi behandler søknaden din" />
-    <Message status="success" title="Endringene dine er lagret" />
-    <Message status="warning" title="Det er kort tid til fristen for å svare" />
-    <Message status="danger" title="Vi klarte ikke å gjennomføre betalingen" />
+    <Message status="info">Vi behandler søknaden din</Message>
+    <Message status="success">Endringene dine er lagret</Message>
+    <Message status="warning">Det er kort tid til fristen for å svare</Message>
+    <Message status="danger">Vi klarte ikke å gjennomføre betalingen</Message>
   </VStack>
 </MessageRegion>
 ```
@@ -106,9 +104,9 @@ Velg status ut fra budskapet: `info` for nøytral informasjon, `success` for bek
 </TabItem>
 </Tabs>
 
-### Med brødtekst
+### Med tittel
 
-Tittelen er alltid med og bærer hovedbudskapet. Trenger du å utdype, kan du legge til brødtekst under tittelen — brødteksten er valgfri. En kort melding klarer seg ofte med bare tittelen.
+Budskapet (children) er alltid med og bærer innholdet. Trenger meldingen en overskrift, kan du legge til en valgfri `title` over budskapet — den løfter fram hovedpoenget når meldingen er lengre. En kort melding klarer seg ofte uten tittel.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -172,7 +170,7 @@ En lenke kan peke videre til mer informasjon. Lenken er ikke en egen prop — de
 
 ### Med lukkeknapp
 
-En valgfri lukkeknapp lar brukeren skjule meldingen. Den brukes kun i ikke-utvidbar modus — utvidbar Message har ingen lukkeknapp. I React skjuler komponenten seg selv når brukeren klikker på krysset; `onClose` kalles i tillegg hvis du trenger å rydde opp egen tilstand. I ren HTML må du fjerne eller skjule elementet selv. Lukkeknappen må ha et tilgjengelig navn (`closeLabel` / `aria-label`).
+En valgfri lukkeknapp lar brukeren skjule meldingen. I React skjuler komponenten seg selv når brukeren klikker på krysset; `onClose` kalles i tillegg hvis du trenger å rydde opp egen tilstand. I ren HTML må du fjerne eller skjule elementet selv. Lukkeknappen må ha et tilgjengelig navn (`closeLabel` / `aria-label`).
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -206,29 +204,25 @@ En valgfri lukkeknapp lar brukeren skjule meldingen. Den brukes kun i ikke-utvid
 </TabItem>
 </Tabs>
 
-### Utvidbar
+### Full bredde
 
-Sett `expandable` for å skjule sekundær informasjon bak en utvidingskontroll. Det alltid synlige sammendraget (`summary`) skal alene gi nok informasjon til å forstå hovedpoenget. Bruk utvidbar kun når innholdet er valgfritt — ikke når det er kritisk for videre handling. Utvidbar bruker native `<details>`/`<summary>`, som gir `aria-expanded`, tastaturstøtte og åpne/lukke-tilstand uten ekstra JavaScript. Headeren (`summary`) spenner full bredde av komponenten, bruker status-`surface` som standard, tones til status-`surface-hover` ved hover og status-`surface-active` ved trykk for å vise at den er klikkbar. Utvidbar Message har ingen lukkeknapp — bruk den ikke-utvidbare varianten hvis brukeren skal kunne lukke meldingen.
+Sett `fullWidth` (React) / `data-full-width` (HTML) for at meldingen skal strekke seg til full bredde av forelderen. I en vertikal `VStack` / `ix-stack` (`align-items: flex-start`) krymper en melding ellers til innholdsbredden; `fullWidth` overstyrer det så den fyller bredden. Avrundede hjørner beholdes. Full bredde kombineres ofte med en lukkeknapp.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<details className="ix-message" data-status="warning" data-expandable>
-  <summary className="ix-message__summary">
-    <ix-icon data-badge name="utropstegn" aria-hidden="true"></ix-icon>
-    <div className="ix-message__body">
-      <strong className="ix-message__title">Nye vilkår for kontoen</strong>
-      <p>Vi har oppdatert vilkårene. Trykk for å lese hva som er endret.</p>
-    </div>
-  </summary>
-  <div className="ix-message__expanded">
-    <ul>
-      <li>Renten justeres fra 1. juli.</li>
-      <li>Gebyret for papirfaktura fjernes.</li>
-    </ul>
+<ix-stack>
+  <div className="ix-message" data-status="info" aria-live="polite">
+    <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+    <div className="ix-message__body"><p>Krymper til innholdsbredden</p></div>
   </div>
-</details>
+  <div className="ix-message" data-status="info" data-full-width aria-live="polite">
+    <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+    <div className="ix-message__body"><p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p></div>
+    <button className="ix-message__close" type="button" aria-label="Lukk melding" />
+  </div>
+</ix-stack>
 ```
 
 </TabItem>
@@ -236,18 +230,12 @@ Sett `expandable` for å skjule sekundær informasjon bak en utvidingskontroll. 
 
 ```tsx live
 <MessageRegion>
-  <Message
-    status="warning"
-    expandable
-    title="Nye vilkår for kontoen"
-    summary="Vi har oppdatert vilkårene. Trykk for å lese hva som er endret."
-  >
-    <ul>
-      <li>Renten justeres fra 1. juli.</li>
-      <li>Gebyret for papirfaktura fjernes.</li>
-      <li>Du kan når som helst endre varslingsinnstillingene dine.</li>
-    </ul>
-  </Message>
+  <VStack gap="md">
+    <Message status="info">Krymper til innholdsbredden</Message>
+    <Message status="info" fullWidth closeLabel="Lukk melding">
+      Vi oppdaterer nettbanken i natt mellom 02 og 04
+    </Message>
+  </VStack>
 </MessageRegion>
 ```
 
@@ -260,17 +248,17 @@ Sett `expandable` for å skjule sekundær informasjon bak en utvidingskontroll. 
 
 Statusen skal reflektere alvorlighetsgrad og forventet reaksjon. `info` gir nøytral kontekst, `success` bekrefter en vellykket handling, `warning` gjør brukeren oppmerksom på noe, og `danger` signaliserer at noe har gått galt og bør følges opp.
 
-### Bruk utvidbar når innholdet er valgfritt
+### Bruk full bredde når meldingen skal fylle bredden
 
-Utvidbar Message passer når informasjonen er nyttig, men ikke nødvendig for alle, og detaljer kan forstyrre flyten hvis de alltid vises. Det sammenfoldede sammendraget skal alene formidle hovedpoenget. Unngå utvidbar når innholdet er kritisk for videre handling, når brukeren forventes å lese hele meldingen, eller når det bare er én kort setning.
+Full bredde passer når meldingen ligger i en kolonne-layout (f.eks. en vertikal `VStack`/`ix-stack`) og skal fylle bredden i stedet for å krympe til innholdsbredden — typisk en melding som gjelder hele seksjonen den står i. La meldingen krympe til innholdsbredden når den hører til et smalt, avgrenset innhold.
 
 ### Plasser meldingen i riktig kontekst
 
-Message skal stå nær innholdet den forklarer eller støtter. Utvidbar Message hører naturlig hjemme der ekstra informasjon hører til — for eksempel under et felt, et valg eller et sammendrag.
+Message skal stå nær innholdet den forklarer eller støtter. En melding i full bredde hører naturlig hjemme der budskapet gjelder hele seksjonen eller kolonnen den ligger i.
 
 ### Hold tekst og innhold kort og tydelig
 
-Bruk korte, forklarende titler og konsis brødtekst. Unngå teknisk språk. I utvidbar Message skal sammendraget være kort og detaljene tydelig avgrenset.
+Bruk korte, forklarende titler og konsis brødtekst. Unngå teknisk språk.
 
 ### Ikke avslutt tittel eller enkeltsetning med punktum
 
@@ -278,7 +266,7 @@ Titler avsluttes aldri med punktum. Når selve meldingen er én enkelt setning, 
 
 ### Unngå overbruk
 
-For mange Message-komponenter på samme side kan oppleves som støy. Det samme gjelder for mange utvidbare varianter — bruk dem bevisst.
+For mange Message-komponenter på samme side kan oppleves som støy. Bruk dem bevisst.
 
 ### Bruk ikon med omtanke
 
@@ -289,10 +277,9 @@ Ikonet støtter forståelsen av budskapet, men skal aldri være eneste informasj
 ### Hva du selv må sørge for
 
 - **Pakk meldinger i en `<MessageRegion>`** — regionen eier de stabile ARIA-live-regionene som annonseringen skriver til. Uten den annonseres ikke meldingen. Se [MessageRegion](#messageregion).
-- **Skriv alltid beskrivende tekst** — Message skal alltid ha en tittel som bærer budskapet (brødtekst er valgfri), og teksten må stå alene uten å være avhengig av ikon eller farge.
+- **Skriv alltid beskrivende tekst** — Message skal alltid ha et budskap (children) som bærer innholdet (tittel er en valgfri overskrift), og teksten må stå alene uten å være avhengig av ikon eller farge.
 - **Gi lukkeknappen et tilgjengelig navn** — send inn `closeLabel` (React) eller `aria-label` (HTML), f.eks. «Lukk melding». Konsumenten er ansvarlig for riktig språk; det finnes ingen hardkodet fallback.
 - **Skriv meningsfull lenketekst** — lenketeksten skal beskrive målet og gi mening lest alene, ikke «klikk her».
-- **La sammendraget bære hovedpoenget i utvidbar modus** — kritisk eller oppsummerende informasjon skal stå i det alltid synlige sammendraget, ikke skjules bak utvidingskontrollen.
 - **Sett `announceOnPageLoad` for meldinger som er til stede ved sidelast** — meldinger som settes inn dynamisk (etter en handling) annonseres automatisk, men en melding som allerede er der ved sidelast er stille som standard. Sett `announceOnPageLoad` for f.eks. server-rendret success/feil etter en redirect.
 - **Sett opp egen live-region ved ren HTML-bruk** — `MessageRegion`-automatikken finnes kun i React. I ren HTML må du selv ha en stabil, tom `role="status"`-region (`aria-live="polite"`, `aria-atomic="false"`) i DOM og legge meldingsteksten til som en egen node når meldingen settes inn.
 
@@ -301,12 +288,7 @@ Ikonet støtter forståelsen av budskapet, men skal aldri være eneste informasj
 - **Annonsering via `<MessageRegion>`** — det synlige Message-elementet har bevisst *ingen* `role`/`aria-live`. I stedet legger komponenten meldingsteksten til som en egen node i en stabil, skjult `polite` live-region i `<MessageRegion>`. Stabile regioner er det som gjør annonsering pålitelig — en region som settes inn samtidig med innholdet annonseres ofte ikke. Hver melding blir en egen node (`aria-atomic="false"`), slik at flere meldinger som dukker opp tett etter hverandre alle leses opp fortløpende i tur, uten å avbryte hverandre.
 - **Stille ved sidelast** — meldinger som finnes ved første sidelast leses ikke opp automatisk (så en side full av meldinger ikke leser seg selv opp). Bruk `announceOnPageLoad` for å overstyre. Meldinger som settes inn senere annonseres automatisk.
 - **Statusikon** rendres som en dekorativ `<ix-icon data-badge name="…" aria-hidden="true">` — en sirkel i status-`fill` (følger `data-status`) med en lys glyf oppå (`info`, `hake` eller `utropstegn` per status). `aria-hidden="true"` holder den ute av tilgjengelighetstreet; varianten formidles av teksten.
-- **`aria-expanded`, tastaturstøtte og åpne/lukke-tilstand** følger gratis med native `<details>`/`<summary>` i utvidbar modus. Skjult innhold er ikke fokuserbart når det er kollapset.
-- **Fokusindikator** tegnes på selve summary i utvidbar modus (`:focus-visible`). I ikke-utvidbar modus får meldingen ingen ring rundt seg selv — kun lukkeknappen har sin egen `:focus-visible`-ring. Lenker bruker `:focus-visible`.
-
-:::info aria-controls er ikke i bruk
-Utvidbar Message bruker native `<details>`/`<summary>`. Relasjonen mellom kontrollen og det utvidede panelet er implisitt via DOM-strukturen (panelet er et søsken inne i samme `<details>`), så `aria-controls` er verken nødvendig eller korrekt her — `<summary>` annonserer utvid-tilstanden selv.
-:::
+- **Fokusindikator** — meldingen får ingen ring rundt seg selv; kun lukkeknappen har sin egen `:focus-visible`-ring. Lenker bruker `:focus-visible`.
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -319,15 +301,13 @@ Utvidbar Message bruker native `<details>`/`<summary>`. Relasjonen mellom kontro
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
 | `status` | `'info' \| 'success' \| 'warning' \| 'danger'` | | Status; styrer farge og ikon. Settes som `data-status` slik at fargevariablene kobles automatisk. Påkrevd |
-| `title` | `string` | | Tittel som bærer budskapet. Bør alltid settes |
-| `children` | `ReactNode` | | Valgfritt innhold under tittelen: brødtekst (ikke-utvidbar) eller utvidet innhold (utvidbar). Rendres rått — skriv selv `<p>` og evt. en lenke med `LinkText` |
-| `closeLabel` | `string` | | `aria-label` på lukkeknappen. Lukkeknappen vises kun når denne er satt, og kun i ikke-utvidbar modus |
+| `title` | `string` | | Valgfri overskrift over budskapet |
+| `children` | `ReactNode` | | Budskapet — påkrevd. Rendres rått — skriv selv `<p>` og evt. en lenke med `LinkText`. Påkrevd |
+| `closeLabel` | `string` | | `aria-label` på lukkeknappen. Lukkeknappen vises kun når denne er satt |
 | `onClose` | `() => void` | | Kalles etter at meldingen er skjult ved klikk på lukkeknappen. Komponenten skjuler seg selv; `onClose` er kun for ev. opprydding |
-| `expandable` | `boolean` | `false` | Aktiverer utvidbar modus (native `<details>`) |
-| `summary` | `string` | | Alltid synlig sammendrag. Brukes kun når `expandable` |
-| `defaultOpen` | `boolean` | `false` | Start utvidet. Brukes kun når `expandable` |
+| `fullWidth` | `boolean` | `false` | Strekk meldingen til full bredde av forelderen (i stedet for å krympe til innholdsbredden i en vertikal stack). Settes som `data-full-width` |
 | `announceOnPageLoad` | `boolean` | `false` | Annonser meldingen selv om den er til stede ved første sidelast. Krever en omsluttende `<MessageRegion>` |
-| `announceText` | `string` | | Overstyr teksten som leses opp. Standard er den synlige teksten (tittel + sammendrag/brødtekst). Bruk for å lese opp noe kortere ved rikt innhold |
+| `announceText` | `string` | | Overstyr teksten som leses opp. Standard er den synlige teksten (tittel + brødtekst). Bruk for å lese opp noe kortere ved rikt innhold |
 | `className` | `string` | | Ekstra CSS-klasser på rot-elementet |
 
 ## MessageRegion
@@ -372,7 +352,7 @@ Når en melding er server-rendret eller til stede ved sidelast og *likevel* skal
 
 ## Tilpasning med CSS
 
-Trenger du `ix-message`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte på elementene dine. Det finnes ingen web component for Message; rotklassen `.ix-message` brukes på `<div>` (ikke-utvidbar) og `<details>` (utvidbar).
+Trenger du `ix-message`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte på elementene dine. Det finnes ingen web component for Message; rotklassen `.ix-message` brukes på en `<div>`.
 
 ### Tilgjengelige klasser og attributter
 
@@ -385,11 +365,9 @@ Trenger du `ix-message`-stylingen på HTML du setter sammen selv — uten React-
 | Tittel | `.ix-message__title` |
 | Lenke | `.ix-link-text` (vanlig Indeks-lenke — ingen message-spesifikk klasse) |
 | Lukkeknapp | `.ix-message__close` |
-| Utvidbar rot | `<details class="ix-message" data-expandable>` |
-| Utvidingskontroll | `.ix-message__summary` (på `<summary>`) |
-| Utvidet innhold | `.ix-message__expanded` |
+| Full bredde | `data-full-width` (strekker meldingen til full bredde av forelderen) |
 
-Statusikonet skrives som `<ix-icon data-badge name="…" aria-hidden="true">` som første barn av `.ix-message` (eller `.ix-message__summary` i utvidbar modus). `data-badge` gir sirkelen, som følger status-`fill` via `data-status` på meldingen; glyfen settes med `name` (`info`, `hake` eller `utropstegn`).
+Statusikonet skrives som `<ix-icon data-badge name="…" aria-hidden="true">` som første barn av `.ix-message`. `data-badge` gir sirkelen, som følger status-`fill` via `data-status` på meldingen; glyfen settes med `name` (`info`, `hake` eller `utropstegn`).
 
 ### Annonsering for skjermlesere uten React
 
@@ -418,21 +396,13 @@ Den enkle varianten — å sette `role`/`aria-live` rett på `.ix-message`-eleme
   <button class="ix-message__close" type="button" aria-label="Lukk melding"></button>
 </div>
 
-<details class="ix-message" data-status="warning" data-expandable>
-  <summary class="ix-message__summary">
-    <ix-icon data-badge name="utropstegn" aria-hidden="true"></ix-icon>
-    <div class="ix-message__body">
-      <strong class="ix-message__title">Nye vilkår for kontoen</strong>
-      <p>Vi har oppdatert vilkårene. Trykk for å lese hva som er endret.</p>
-    </div>
-  </summary>
-  <div class="ix-message__expanded">
-    <ul>
-      <li>Renten justeres fra 1. juli.</li>
-      <li>Gebyret for papirfaktura fjernes.</li>
-    </ul>
+<div class="ix-message" data-status="info" data-full-width aria-live="polite">
+  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <div class="ix-message__body">
+    <p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p>
   </div>
-</details>
+  <button class="ix-message__close" type="button" aria-label="Lukk melding"></button>
+</div>
 ```
 
 ## Relatert

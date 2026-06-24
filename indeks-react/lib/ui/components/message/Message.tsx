@@ -10,22 +10,21 @@ export type MessageProps = {
     /** Status; styrer farge og ikon. Settes som `data-status` slik at
      *  fargevariablene (`--ix-color-status-*`) kobles automatisk. */
     status: MessageStatus;
-    /** Valgfri tittel. */
+    /** Valgfri overskrift over budskapet. */
     title?: string;
-    /** Body-tekst (ikke-expandable) / ekspandert innhold (expandable). Lenker
-     *  skrives som children med Indeks-lenken `LinkText`. */
-    children?: ReactNode;
-    /** aria-label på lukkeknappen. Lukkeknappen vises kun når denne er satt, og
-     *  kun i ikke-utvidbar modus (utvidbar Message har ingen lukkeknapp). */
+    /** Budskapet — alltid påkrevd. Lenker skrives som children med Indeks-lenken
+     *  `LinkText`. */
+    children: ReactNode;
+    /** aria-label på lukkeknappen. Lukkeknappen vises kun når denne er satt. */
     closeLabel?: string;
     /** Kalles når brukeren klikker på lukkeknappen, etter at meldingen er skjult. */
     onClose?: () => void;
-    /** Aktiverer expandable-modus (native `<details>`). */
-    expandable?: boolean;
-    /** Alltid synlig sammendrag. Brukes kun når `expandable`. */
-    summary?: string;
-    /** Start ekspandert. Brukes kun når `expandable`. @default false */
-    defaultOpen?: boolean;
+    /**
+     * Full bredde: meldingen strekker seg til full bredde av forelderen i
+     * stedet for å krympe til innholdsbredden (f.eks. i en vertikal `VStack`/
+     * `ix-stack`). Settes som `data-full-width`. @default false
+     */
+    fullWidth?: boolean;
     /**
      * Annonser meldingen for skjermlesere også når den er til stede ved første
      * sidelast. Normalt annonseres kun meldinger som settes inn *etter* at siden
@@ -36,8 +35,8 @@ export type MessageProps = {
     announceOnPageLoad?: boolean;
     /**
      * Overstyr teksten som leses opp av skjermlesere. Standard er den synlige
-     * teksten (tittel + sammendrag/brødtekst). Bruk denne for å lese opp noe
-     * kortere enn det som vises, f.eks. når innholdet er rikt (liste, lenker).
+     * teksten (tittel + brødtekst). Bruk denne for å lese opp noe kortere enn
+     * det som vises, f.eks. når innholdet er rikt (liste, lenker).
      */
     announceText?: string;
     className?: string;
@@ -51,16 +50,14 @@ const STATUS_ICON: Record<MessageStatus, IconName> = {
     danger: 'utropstegn',
 };
 
-export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
+export const Message = forwardRef<HTMLDivElement, MessageProps>(function Message(
     {
         status,
         title,
         children,
         closeLabel,
         onClose,
-        expandable = false,
-        summary,
-        defaultOpen = false,
+        fullWidth = false,
         announceOnPageLoad = false,
         announceText,
         className,
@@ -88,7 +85,7 @@ export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
         }
         const text = announceText ?? bodyRef.current?.textContent ?? '';
         region.announce(text, announceOnPageLoad);
-    }, [region, status, announceOnPageLoad, announceText, title, summary, children, closed]);
+    }, [region, status, announceOnPageLoad, announceText, title, children, closed]);
 
     if (closed) {
         return null;
@@ -99,34 +96,12 @@ export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
         onClose?.();
     }
 
-    if (expandable) {
-        return (
-            <details
-                ref={ref as React.Ref<HTMLDetailsElement>}
-                className={clsx('ix-message', className)}
-                data-status={status}
-                data-expandable=""
-                open={defaultOpen || undefined}
-            >
-                <summary className="ix-message__summary">
-                    {/* Dekorativt statusikon — sirkel (status-`fill` via CSS) +
-                        glyf (semantisk navn per status). */}
-                    <ix-icon data-badge="" name={STATUS_ICON[status]} aria-hidden="true" />
-                    <div ref={bodyRef} className="ix-message__body">
-                        {title && <strong className="ix-message__title">{title}</strong>}
-                        {summary && <p>{summary}</p>}
-                    </div>
-                </summary>
-                <div className="ix-message__expanded">{children}</div>
-            </details>
-        );
-    }
-
     return (
         <div
-            ref={ref as React.Ref<HTMLDivElement>}
+            ref={ref}
             className={clsx('ix-message', className)}
             data-status={status}
+            data-full-width={fullWidth ? '' : undefined}
         >
             {/* Dekorativt statusikon — sirkel (status-`fill` via CSS) +
                 glyf (semantisk navn per status). */}
