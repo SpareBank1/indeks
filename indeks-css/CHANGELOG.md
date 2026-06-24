@@ -1,5 +1,50 @@
 # @sb1/indeks-css
 
+## 0.10.0
+
+### Minor Changes
+
+-   abb20ac: Ny `data-badge`-variant på `ix-icon`
+
+    `<ix-icon data-badge>` rendrer ikonet som en badge — en glyf på en farget sirkel.
+    Selve elementet blir sirkelen, og glyfen flyttes til `::before` (to paint-lag fordi
+    ett `mask-image` kun gir ett lag). Variabler for tilpasning:
+    `--ix-icon-badge-background` (sirkel, default `currentColor`),
+    `--ix-icon-badge-foreground` (glyf, default `--ix-color-foreground-inverse-default`),
+    `--ix-icon-badge-size` (default 32px) og `--ix-icon-badge-glyph-size`
+    (default `--ix-font-size-lg`). Glyfen leser `--ii-icon-url`, så badgen virker både
+    navn/web-component-drevet og rent CSS-drevet. Settes `data-status` på elementet,
+    bruker sirkelen statusfargen (`--ix-color-status-fill`) automatisk.
+
+-   abb20ac: Ny komponent: Message
+
+    Message formidler status eller resultatet av en handling (info, success, warning, danger) inline, tett på relevant innhold. Komponenten støtter valgfri tittel og lukkeknapp, og kan strekkes til full bredde av forelderen.
+
+    -   HTML-først og CSS-drevet — fullt brukbar uten React via `.ix-message`-klassen (ingen web component).
+    -   Status settes med `status`-prop / `data-status`, som kobler fargevariablene (`--ix-color-status-*`) automatisk; meldingsflaten bruker status-`surface`. Statusikon injiseres av CSS per `data-status`; farge er aldri eneste signal.
+    -   Statusikonet vises som en `ix-icon`-badge (`data-badge`): en sirkel i status-`fill` med en lys glyf oppå. Sirkelfargen følger `data-status`, og glyfen settes med det semantiske navnet `name` (`info`, `hake`, `utropstegn`).
+    -   Full bredde (`fullWidth` / `data-full-width`): meldingen strekker seg til full bredde av forelderen i stedet for å krympe til innholdsbredden (f.eks. i en vertikal `VStack`/`ix-stack`). Avrundede hjørner beholdes.
+    -   Annonsering for skjermlesere skjer via den obligatoriske `MessageRegion`-wrapperen (se eget changeset) — det synlige elementet har ingen `role`/`aria-live`.
+    -   React skjuler meldingen selv når lukkeknappen klikkes; `onClose` kalles i tillegg for ev. opprydding.
+    -   Innhold (inkl. lenker via Indeks-lenken `LinkText`) skrives som children; tittelen bruker «headline xs»-typografi og samme tekstfarge som brødteksten.
+
+### Patch Changes
+
+-   abb20ac: Fiks lenkefarge i `.ix-link-text`
+
+    `.ix-link-text` pekte på et udefinert token (`--ix-color-foreground-interactive-link`) og
+    arvet derfor brødtekstfargen i stedet for lenkefargen. Bruker nå
+    `--ix-color-foreground-link-default` (og `--ix-color-foreground-link-active` for `--active`),
+    og legger til en `:hover`-regel med `--ix-color-foreground-link-hover`.
+
+-   abb20ac: Sentrer Message-innhold vertikalt mot statusikonet
+
+    `.ix-message` brukte `align-items: flex-start`, så en kort melding (kun tittel
+    eller én linje) ble toppjustert mens det 32px høye statusikonet stakk ut under.
+    Roten sentrerer nå innholdet vertikalt (`align-items: center`), mens statusikonet
+    og lukkeknappen selv-justerer til toppen (`align-self: flex-start`) slik at de
+    fortsatt flukter med tittelen når meldingen går over flere linjer.
+
 ## 0.9.1
 
 ### Patch Changes
