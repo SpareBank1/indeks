@@ -22,6 +22,48 @@
     height: var(--ix-font-size-lg);
 }
 
+/* Badge: glyf på en farget sirkel. Selve elementet blir sirkelen (umaskert),
+   glyfen flyttes til ::before (maskert) — to paint-lag fordi ett mask-image kun
+   gir ett lag. Glyfen leser --ii-icon-url (samme variabel som base-ikonet), så
+   badgen virker både CSS-drevet (variabel satt direkte) og navn/WC-drevet. */
+:where(ix-icon[data-badge], .ix-icon[data-badge]) {
+    display: inline-grid;
+    place-items: center;
+    width: var(--ix-icon-badge-size, 32px);
+    height: var(--ix-icon-badge-size, 32px);
+    background-color: var(--ix-icon-badge-background, currentColor);
+    border-radius: var(--ix-border-radius-circle);
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    /* Nullstill base-maska — elementet er nå sirkelen, ikke glyfen. */
+    mask-image: none;
+    -webkit-mask-image: none;
+    /* stylelint-enable plugin/no-unsupported-browser-features */
+}
+
+/* Når badgen har en status (data-status kobler --ix-color-status-* via
+   @sb1/indeks-utils), bruker sirkelen statusfargen automatisk. */
+:where(ix-icon[data-badge][data-status], .ix-icon[data-badge][data-status]) {
+    --ix-icon-badge-background: var(--ix-color-status-fill);
+}
+
+:where(ix-icon[data-badge], .ix-icon[data-badge])::before {
+    content: '';
+    width: var(--ix-icon-badge-glyph-size, var(--ix-font-size-lg));
+    height: var(--ix-icon-badge-glyph-size, var(--ix-font-size-lg));
+    background-color: var(--ix-icon-badge-foreground, var(--ix-color-foreground-inverse-default));
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    mask-size: cover;
+    -webkit-mask-size: cover;
+    mask-position: center;
+    -webkit-mask-position: center;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    /* FOUC-fallback: gjennomsiktig maske før --ii-icon-url er satt → kun sirkelen vises. */
+    mask-image: var(--ii-icon-url, linear-gradient(#0000, #0000));
+    -webkit-mask-image: var(--ii-icon-url, linear-gradient(#0000, #0000));
+    /* stylelint-enable plugin/no-unsupported-browser-features */
+}
+
 :where(ix-icon[data-size="lg"], .ix-icon[data-size="lg"]) {
     width: var(--ix-font-size-2xl);
     height: var(--ix-font-size-2xl);

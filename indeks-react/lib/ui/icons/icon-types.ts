@@ -16,12 +16,13 @@ export const ICON_NAMES = {
     'pil-ned': 'keyboard_arrow_down',
     'e-post': 'mail',
     betaling: 'payments',
-    info: 'info',
+    info: 'info_i',
     sok: 'search',
     innstillinger: 'settings',
     bil: 'directions_car',
     'pil-venstre': 'chevron_left',
     feil: 'error',
+    utropstegn: 'priority_high',
 } as const;
 
 export type IconValue = (typeof ICON_NAMES)[keyof typeof ICON_NAMES];
