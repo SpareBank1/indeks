@@ -1,5 +1,18 @@
 # @sb1/indeks-utils
 
+## 0.5.1
+
+### Patch Changes
+
+-   abb20ac: Legg til hover- og active-trinn for status-`surface`
+
+    `data-status` kobler nå også `--ix-color-status-surface-hover` og
+    `--ix-color-status-surface-active` (med tilhørende
+    `.ix-color-status-surface-hover`- og `.ix-color-status-surface-active`-utilities)
+    for hver status, slik at komponenter kan bruke hover-/active-trinnet av
+    status-`surface` uten å mappe det selv. Additiv endring — eksisterende variabler
+    er uendret.
+
 ## 0.5.0
 
 ### Minor Changes
