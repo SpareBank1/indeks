@@ -1,0 +1,158 @@
+/* Accordion — gruppe av native <details>-seksjoner som vises/skjules.
+ *
+ * Accordion bygger på native <details>/<summary>. All semantikk og tastatur
+ * kommer gratis fra native elementer — ingen JavaScript er nødvendig. Seksjonene
+ * er uavhengige (flere kan stå åpne samtidig).
+ *
+ * Stylingen treffer <details>/<summary> direkte inni et element med klassen
+ * .ix-accordion, så seksjonene trenger ikke egne klasser for å virke. Klassene
+ * (.ix-accordion__item/__header/__content) finnes likevel som eksplisitte kroker
+ * for tilfeller der man vil style en struktur uten direkte <details>-barn.
+ *
+ * Struktur:
+ *   <div class="ix-accordion">
+ *     <details>
+ *       <summary>Tittel</summary>
+ *       <div>Innhold</div>
+ *     </details>
+ *     …
+ *   </div>
+ */
+
+/* Container: vertikal stabling av seksjoner i et avrundet, kantet kort. */
+:where(.ix-accordion) {
+    display: block;
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-md);
+    /* Klipp barna til de avrundede hjørnene slik at hover-/active-flaten på
+     * summary ikke flyter ut over rammen i toppen/bunnen. */
+    overflow: hidden;
+    background-color: var(--ix-color-surface-main-default);
+    color: var(--ix-color-foreground-main-default);
+    /* Lar block-size animeres mellom 0 og `auto` på ::details-content (se
+     * @supports-blokken nederst). Ignoreres trygt der det ikke støttes. */
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    interpolate-size: allow-keywords;
+}
+
+/* Hver seksjon = <details>. Skillelinje mellom seksjoner (ikke over den første). */
+:where(.ix-accordion) > details,
+:where(.ix-accordion__item) {
+    border-top: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+}
+
+:where(.ix-accordion) > details:first-child,
+:where(.ix-accordion__item:first-child) {
+    border-top: 0;
+}
+
+/* Header = <summary>: hele klikkflaten. Tittel (+ ev. prefiks-ikon) til venstre,
+ * chevron til høyre (margin-inline-start:auto). */
+:where(.ix-accordion) summary,
+:where(.ix-accordion__header) {
+    display: flex;
+    align-items: center;
+    gap: var(--ix-spacing-sm);
+    padding: var(--ix-spacing-md);
+    /* Touch-mål min. 44 px (WCAG 2.5.8) — sikres av padding + innhold. */
+    min-height: 44px;
+    font-size: var(--ix-font-size-md);
+    font-weight: var(--ix-font-weight-medium);
+    cursor: pointer;
+    /* Skjul native disclosure-marker (trekant) i alle nettlesere. */
+    list-style: none;
+}
+
+:where(.ix-accordion) summary::-webkit-details-marker,
+:where(.ix-accordion__header)::-webkit-details-marker {
+    display: none;
+}
+
+/* Default/Hover/Active — tydelige states på klikkflaten. */
+:where(.ix-accordion) summary:hover,
+:where(.ix-accordion__header:hover) {
+    background-color: var(--ix-color-surface-main-hover);
+}
+
+:where(.ix-accordion) summary:active,
+:where(.ix-accordion__header:active) {
+    background-color: var(--ix-color-surface-main-active);
+}
+
+/* Focus — synlig, konsistent ring (samme som resten av systemet). */
+:where(.ix-accordion) summary:focus-visible,
+:where(.ix-accordion__header:focus-visible) {
+    outline: var(--ix-outline-default);
+    outline-offset: calc(var(--ix-outline-offset-default) * -1);
+}
+
+/* Chevron som indikerer åpen/lukket tilstand. Flex-barn skjøvet helt til høyre. */
+:where(.ix-accordion) summary::after,
+:where(.ix-accordion__header)::after {
+    content: '';
+    flex: 0 0 auto;
+    margin-inline-start: auto;
+    width: var(--ix-font-size-xl);
+    height: var(--ix-font-size-xl);
+    background-color: var(--ix-color-foreground-main-default);
+    transition: var(--ix-transition-all);
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    mask-size: cover;
+    -webkit-mask-size: cover;
+    mask-position: center;
+    -webkit-mask-position: center;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: url(https://cdn.sparebank1.no/icons/keyboard_arrow_down.svg);
+    -webkit-mask-image: url(https://cdn.sparebank1.no/icons/keyboard_arrow_down.svg);
+    /* stylelint-enable plugin/no-unsupported-browser-features */
+}
+
+/* Expanded: chevron peker opp. */
+:where(.ix-accordion) > details[open] summary::after,
+:where(.ix-accordion__item[open]) .ix-accordion__header::after {
+    transform: rotate(180deg);
+}
+
+/* Innholdsområde = alt i <details> som ikke er <summary>. Luft over (mellom header
+ * og innhold), på sidene og under — ingen skillelinje mot headeren. */
+:where(.ix-accordion) > details > :not(summary),
+:where(.ix-accordion__content) {
+    padding: var(--ix-spacing-md);
+}
+
+:where(.ix-accordion) > details > :not(summary) > :first-child,
+:where(.ix-accordion__content) > :first-child {
+    margin-top: 0;
+}
+
+:where(.ix-accordion) > details > :not(summary) > :last-child,
+:where(.ix-accordion__content) > :last-child {
+    margin-bottom: 0;
+}
+
+/* Myk åpne/lukke-animasjon som progressiv enhancement. Krever interpolate-size +
+ * ::details-content + transition-behavior:allow-discrete (Chrome/Edge 129+,
+ * Safari 17.2+). Nettlesere uten støtte hopper bare åpent/lukket — fortsatt fullt
+ * funksjonelt. */
+/* stylelint-disable plugin/no-unsupported-browser-features */
+@supports (interpolate-size: allow-keywords) {
+    :where(.ix-accordion) > details::details-content {
+        block-size: 0;
+        overflow: hidden;
+        transition:
+            block-size var(--ix-transition-duration) var(--ix-transition-animation),
+            content-visibility var(--ix-transition-duration) allow-discrete;
+    }
+
+    :where(.ix-accordion) > details[open]::details-content {
+        block-size: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        :where(.ix-accordion) > details::details-content {
+            transition: none;
+        }
+    }
+}
+/* stylelint-enable plugin/no-unsupported-browser-features */

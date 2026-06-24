@@ -78,6 +78,7 @@ const sidebars: SidebarsConfig = {
             label: 'Komponenter',
             collapsed: true,
             items: [
+                'komponenter/accordion',
                 'komponenter/button',
                 'komponenter/spinner',
                 'komponenter/typografi',

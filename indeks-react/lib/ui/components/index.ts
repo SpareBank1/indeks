@@ -1,3 +1,10 @@
+export { Accordion } from './accordion/Accordion';
+export type {
+    AccordionProps,
+    AccordionItemProps,
+    AccordionHeaderProps,
+    AccordionContentProps,
+} from './accordion/Accordion';
 export { Button } from './button/Button';
 export { Tag } from './tag/Tag';
 
