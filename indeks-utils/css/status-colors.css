@@ -5,6 +5,8 @@
 .ix-light-mode,
 .regard-color-scheme-preference {
     --ix-color-status-surface: var(--ix-color-surface-main-default);
+    --ix-color-status-surface-hover: var(--ix-color-surface-main-hover);
+    --ix-color-status-surface-active: var(--ix-color-surface-main-active);
     --ix-color-status-border: var(--ix-color-border-main-default);
     --ix-color-status-fill: var(--ix-color-fill-main-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-main-subtle);
@@ -12,6 +14,14 @@
 
 .ix-color-status-surface {
     background-color: var(--ix-color-status-surface);
+}
+
+.ix-color-status-surface-hover {
+    background-color: var(--ix-color-status-surface-hover);
+}
+
+.ix-color-status-surface-active {
+    background-color: var(--ix-color-status-surface-active);
 }
 
 .ix-color-status-border {
@@ -28,6 +38,8 @@
 
 [data-status="info"] {
     --ix-color-status-surface: var(--ix-color-surface-info-default);
+    --ix-color-status-surface-hover: var(--ix-color-surface-info-hover);
+    --ix-color-status-surface-active: var(--ix-color-surface-info-active);
     --ix-color-status-border: var(--ix-color-border-info-default);
     --ix-color-status-fill: var(--ix-color-fill-info-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-info-subtle);
@@ -35,6 +47,8 @@
 
 [data-status="success"] {
     --ix-color-status-surface: var(--ix-color-surface-success-default);
+    --ix-color-status-surface-hover: var(--ix-color-surface-success-hover);
+    --ix-color-status-surface-active: var(--ix-color-surface-success-active);
     --ix-color-status-border: var(--ix-color-border-success-default);
     --ix-color-status-fill: var(--ix-color-fill-success-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-success-subtle);
@@ -42,6 +56,8 @@
 
 [data-status="warning"] {
     --ix-color-status-surface: var(--ix-color-surface-warning-default);
+    --ix-color-status-surface-hover: var(--ix-color-surface-warning-hover);
+    --ix-color-status-surface-active: var(--ix-color-surface-warning-active);
     --ix-color-status-border: var(--ix-color-border-warning-default);
     --ix-color-status-fill: var(--ix-color-fill-warning-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-warning-subtle);
@@ -49,6 +65,8 @@
 
 [data-status="danger"] {
     --ix-color-status-surface: var(--ix-color-surface-danger-default);
+    --ix-color-status-surface-hover: var(--ix-color-surface-danger-hover);
+    --ix-color-status-surface-active: var(--ix-color-surface-danger-active);
     --ix-color-status-border: var(--ix-color-border-danger-default);
     --ix-color-status-fill: var(--ix-color-fill-danger-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-danger-subtle);

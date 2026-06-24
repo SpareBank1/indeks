@@ -89,6 +89,39 @@ Bruk `ariaLabel` når ikonet formidler informasjon som ikke er tilgjengelig andr
 </TabItem>
 </Tabs>
 
+### Badge
+
+Sett `data-badge` for å vise ikonet som en glyf på en farget sirkel. Selve elementet blir sirkelen, og glyfen tegnes oppå. Standardstørrelsen er 32&nbsp;px. Glyfen bruker den inverse forgrunnsfargen. Setter du i tillegg `data-status`, bruker sirkelen statusfargen automatisk (`--ix-color-status-fill` kobles av `data-status`). Brukes blant annet av statusikonet i [Message](./message).
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack alignItems="center">
+  <Icon name="info" data-badge data-status="info" />
+  <Icon name="hake" data-badge data-status="success" />
+  <Icon name="utropstegn" data-badge data-status="warning" />
+  <Icon name="utropstegn" data-badge data-status="danger" />
+</HStack>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html live
+<div class="ix-hstack ix-items-center">
+  <ix-icon name="info" data-badge data-status="info"></ix-icon>
+  <ix-icon name="hake" data-badge data-status="success"></ix-icon>
+  <ix-icon name="utropstegn" data-badge data-status="warning"></ix-icon>
+  <ix-icon name="utropstegn" data-badge data-status="danger"></ix-icon>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+Badge-glyfen er dekorativ på samme måte som ellers — bruk `aria-label` kun når den formidler informasjon uten tilstøtende tekst.
+
 ## Retningslinjer
 
 ### Bruk ikon sammen med tekst der det er mulig
@@ -145,6 +178,7 @@ Ikonet skal kommunisere gjennom form, ikke farge alene. Brukere med fargeblindhe
 | `materialDesignName` | `string` | Nei* | | Material Design-ikonnavn (f.eks. `"arrow_forward"`). Gjensidig utelukkende med `name` |
 | `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | Nei | `'md'` | Størrelse på ikonet |
 | `ariaLabel` | `string` | Nei | | Tilgjengelig navn for semantiske ikoner. Når satt: `role="img"` legges til, `aria-hidden` fjernes |
+| `data-badge` | `boolean` | Nei | | Viser ikonet som en glyf på en farget sirkel (badge). Settes som attributt og videresendes til `<ix-icon>` |
 | `as` | `ElementType` | Nei | `'ix-icon'` | HTML-element eller komponent som rendres |
 | `className` | `string` | Nei | | Ekstra CSS-klasser |
 
@@ -158,6 +192,7 @@ Ikonet skal kommunisere gjennom form, ikke farge alene. Brukere med fargeblindhe
 | `name` | `IconName` | | Norsk alias for SpareBank 1-ikoner (`hjem`, `meny`, `sparing`). Web componenten mapper til riktig SVG-filnavn. |
 | `materialdesignname` | `string` | | Material Design-ikonnavn |
 | `data-size` | `sm \| md \| lg \| xl` | `md` | Størrelse på ikonet |
+| `data-badge` | (flagg) | | Viser ikonet som en glyf på en farget sirkel (badge) |
 | `aria-label` | `string` | | Tilgjengelig navn for semantiske ikoner |
 
 </TabItem>
@@ -194,3 +229,14 @@ Størrelsesstegene er knyttet til typografitokens:
 | `md` (standard) | `--ix-font-size-xl` |
 | `lg` | `--ix-font-size-2xl` |
 | `xl` | `--ix-font-size-3xl` |
+
+### Badge
+
+Med `data-badge` styres badgen av disse variablene:
+
+| Variabel | Standard | Beskrivelse |
+|----------|----------|-------------|
+| `--ix-icon-badge-background` | `currentColor` | Sirkelens farge. Settes automatisk til `--ix-color-status-fill` når `data-status` er på elementet |
+| `--ix-icon-badge-foreground` | `--ix-color-foreground-inverse-default` | Glyfens farge |
+| `--ix-icon-badge-size` | `32px` | Sirkelens diameter |
+| `--ix-icon-badge-glyph-size` | `--ix-font-size-lg` | Glyfens størrelse |

@@ -1,0 +1,412 @@
+---
+title: Message
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/message.json';
+
+# Message
+
+Message formidler status eller resultatet av en handling — informasjon, suksess, advarsel eller feil — uten å avbryte flyten. Komponenten brukes inline, tett på innholdet den forklarer, og kan strekkes til full bredde av forelderen.
+
+:::warning Message må ligge i en MessageRegion
+For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` ligge inni en [`<MessageRegion>`](#messageregion). Regionen eier de stabile ARIA-live-regionene som annonseringen skriver til. En `<Message>` uten region rendres visuelt, men annonseres ikke (og logger en advarsel i utviklingsmodus).
+:::
+
+## Egnet til
+
+- Vise informasjon som gir kontekst eller forklaring
+- Bekrefte at noe har gått bra
+- Gjøre brukeren oppmerksom på noe viktig
+- Vise advarsler eller feil som ikke stopper flyten
+- Forklare konsekvenser eller neste steg
+
+## Uegnet til
+
+- Kritiske feil som stopper videre fremdrift
+- Midlertidige bekreftelser — bruk toast
+- Situasjoner som krever aktiv bekreftelse — bruk modal
+- Globale systembeskjeder — bruk SystemMessage
+- Lange eller komplekse forklaringer som krever egen side
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div className="ix-message" data-status="info" aria-live="polite">
+  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <div className="ix-message__body">
+    <p>Vi har mottatt søknaden din og behandler den nå</p>
+  </div>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<MessageRegion>
+  <Message status="info">Vi har mottatt søknaden din og behandler den nå</Message>
+</MessageRegion>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Varianter
+
+Velg status ut fra budskapet: `info` for nøytral informasjon, `success` for bekreftelse, `warning` for noe brukeren bør være oppmerksom på, og `danger` for noe som har gått galt og bør følges opp. Hver status har et fast statusikon som rendres automatisk. Fargene kobles via `data-status`, som setter `--ix-color-status-*`-variablene — meldingsflaten bruker `surface`-fargen for sin status.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack>
+  <div className="ix-message" data-status="info" aria-live="polite">
+    <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+    <div className="ix-message__body"><p>Vi behandler søknaden din</p></div>
+  </div>
+  <div className="ix-message" data-status="success" aria-live="polite">
+    <ix-icon data-badge name="hake" aria-hidden="true"></ix-icon>
+    <div className="ix-message__body"><p>Endringene dine er lagret</p></div>
+  </div>
+  <div className="ix-message" data-status="warning" role="alert">
+    <ix-icon data-badge name="utropstegn" aria-hidden="true"></ix-icon>
+    <div className="ix-message__body"><p>Det er kort tid til fristen for å svare</p></div>
+  </div>
+  <div className="ix-message" data-status="danger" role="alert">
+    <ix-icon data-badge name="utropstegn" aria-hidden="true"></ix-icon>
+    <div className="ix-message__body"><p>Vi klarte ikke å gjennomføre betalingen</p></div>
+  </div>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<MessageRegion>
+  <VStack gap="md">
+    <Message status="info">Vi behandler søknaden din</Message>
+    <Message status="success">Endringene dine er lagret</Message>
+    <Message status="warning">Det er kort tid til fristen for å svare</Message>
+    <Message status="danger">Vi klarte ikke å gjennomføre betalingen</Message>
+  </VStack>
+</MessageRegion>
+```
+
+</TabItem>
+</Tabs>
+
+### Med tittel
+
+Budskapet (children) er alltid med og bærer innholdet. Trenger meldingen en overskrift, kan du legge til en valgfri `title` over budskapet — den løfter fram hovedpoenget når meldingen er lengre. En kort melding klarer seg ofte uten tittel.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div className="ix-message" data-status="info" aria-live="polite">
+  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <div className="ix-message__body">
+    <strong className="ix-message__title">Behandling pågår</strong>
+    <p>Vi har mottatt søknaden din og behandler den nå</p>
+  </div>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<MessageRegion>
+  <Message status="info" title="Behandling pågår">
+    Vi har mottatt søknaden din og behandler den nå
+  </Message>
+</MessageRegion>
+```
+
+</TabItem>
+</Tabs>
+
+### Med lenke
+
+En lenke kan peke videre til mer informasjon. Lenken er ikke en egen prop — den skrives som en del av innholdet med den vanlige Indeks-lenken `LinkText` (React) / `.ix-link-text` (HTML). Det er ingenting message-spesifikt ved lenken. Lenketeksten skal beskrive målet og være meningsfull lest alene.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div className="ix-message" data-status="info" aria-live="polite">
+  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <div className="ix-message__body">
+    <strong className="ix-message__title">Behandling pågår</strong>
+    <p>Vi har mottatt søknaden din og behandler den nå</p>
+    <a className="ix-link-text" href="#">Les mer om saksbehandling</a>
+  </div>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<MessageRegion>
+  <Message status="info" title="Behandling pågår">
+    <p>Vi har mottatt søknaden din og behandler den nå</p>
+    <LinkText href="#">Les mer om saksbehandling</LinkText>
+  </Message>
+</MessageRegion>
+```
+
+</TabItem>
+</Tabs>
+
+### Med lukkeknapp
+
+En valgfri lukkeknapp lar brukeren skjule meldingen. I React skjuler komponenten seg selv når brukeren klikker på krysset; `onClose` kalles i tillegg hvis du trenger å rydde opp egen tilstand. I ren HTML må du fjerne eller skjule elementet selv. Lukkeknappen må ha et tilgjengelig navn (`closeLabel` / `aria-label`).
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div className="ix-message" data-status="success" aria-live="polite">
+  <ix-icon data-badge name="hake" aria-hidden="true"></ix-icon>
+  <div className="ix-message__body">
+    <strong className="ix-message__title">Endringene er lagret</strong>
+    <p>Du kan trygt lukke denne meldingen</p>
+  </div>
+  <button className="ix-message__close" type="button" aria-label="Lukk melding" />
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<MessageRegion>
+  <Message
+    status="success"
+    title="Endringene er lagret"
+    closeLabel="Lukk melding"
+  >
+    Du kan trygt lukke denne meldingen
+  </Message>
+</MessageRegion>
+```
+
+</TabItem>
+</Tabs>
+
+### Full bredde
+
+Sett `fullWidth` (React) / `data-full-width` (HTML) for at meldingen skal strekke seg til full bredde av forelderen. I en vertikal `VStack` / `ix-stack` (`align-items: flex-start`) krymper en melding ellers til innholdsbredden; `fullWidth` overstyrer det så den fyller bredden. Avrundede hjørner beholdes. Full bredde kombineres ofte med en lukkeknapp.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack>
+  <div className="ix-message" data-status="info" aria-live="polite">
+    <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+    <div className="ix-message__body"><p>Krymper til innholdsbredden</p></div>
+  </div>
+  <div className="ix-message" data-status="info" data-full-width aria-live="polite">
+    <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+    <div className="ix-message__body"><p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p></div>
+    <button className="ix-message__close" type="button" aria-label="Lukk melding" />
+  </div>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<MessageRegion>
+  <VStack gap="md">
+    <Message status="info">Krymper til innholdsbredden</Message>
+    <Message status="info" fullWidth closeLabel="Lukk melding">
+      Vi oppdaterer nettbanken i natt mellom 02 og 04
+    </Message>
+  </VStack>
+</MessageRegion>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Velg riktig variant basert på budskap
+
+Statusen skal reflektere alvorlighetsgrad og forventet reaksjon. `info` gir nøytral kontekst, `success` bekrefter en vellykket handling, `warning` gjør brukeren oppmerksom på noe, og `danger` signaliserer at noe har gått galt og bør følges opp.
+
+### Bruk full bredde når meldingen skal fylle bredden
+
+Full bredde passer når meldingen ligger i en kolonne-layout (f.eks. en vertikal `VStack`/`ix-stack`) og skal fylle bredden i stedet for å krympe til innholdsbredden — typisk en melding som gjelder hele seksjonen den står i. La meldingen krympe til innholdsbredden når den hører til et smalt, avgrenset innhold.
+
+### Plasser meldingen i riktig kontekst
+
+Message skal stå nær innholdet den forklarer eller støtter. En melding i full bredde hører naturlig hjemme der budskapet gjelder hele seksjonen eller kolonnen den ligger i.
+
+### Hold tekst og innhold kort og tydelig
+
+Bruk korte, forklarende titler og konsis brødtekst. Unngå teknisk språk.
+
+### Ikke avslutt tittel eller enkeltsetning med punktum
+
+Titler avsluttes aldri med punktum. Når selve meldingen er én enkelt setning, sløyfer du også punktumet — det leses som en kort beskjed, ikke en tekstblokk. Først når brødteksten består av flere setninger setter du punktum som normalt.
+
+### Unngå overbruk
+
+For mange Message-komponenter på samme side kan oppleves som støy. Bruk dem bevisst.
+
+### Bruk ikon med omtanke
+
+Ikonet støtter forståelsen av budskapet, men skal aldri være eneste informasjonsbærer. Teksten er alltid viktigst, og containeren skal verken være klikkbar eller ha hover-state.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Pakk meldinger i en `<MessageRegion>`** — regionen eier de stabile ARIA-live-regionene som annonseringen skriver til. Uten den annonseres ikke meldingen. Se [MessageRegion](#messageregion).
+- **Skriv alltid beskrivende tekst** — Message skal alltid ha et budskap (children) som bærer innholdet (tittel er en valgfri overskrift), og teksten må stå alene uten å være avhengig av ikon eller farge.
+- **Gi lukkeknappen et tilgjengelig navn** — send inn `closeLabel` (React) eller `aria-label` (HTML), f.eks. «Lukk melding». Konsumenten er ansvarlig for riktig språk; det finnes ingen hardkodet fallback.
+- **Skriv meningsfull lenketekst** — lenketeksten skal beskrive målet og gi mening lest alene, ikke «klikk her».
+- **Sett `announceOnPageLoad` for meldinger som er til stede ved sidelast** — meldinger som settes inn dynamisk (etter en handling) annonseres automatisk, men en melding som allerede er der ved sidelast er stille som standard. Sett `announceOnPageLoad` for f.eks. server-rendret success/feil etter en redirect.
+- **Sett opp egen live-region ved ren HTML-bruk** — `MessageRegion`-automatikken finnes kun i React. I ren HTML må du selv ha en stabil, tom `role="status"`-region (`aria-live="polite"`, `aria-atomic="false"`) i DOM og legge meldingsteksten til som en egen node når meldingen settes inn.
+
+### Hva komponenten gjør automatisk
+
+- **Annonsering via `<MessageRegion>`** — det synlige Message-elementet har bevisst *ingen* `role`/`aria-live`. I stedet legger komponenten meldingsteksten til som en egen node i en stabil, skjult `polite` live-region i `<MessageRegion>`. Stabile regioner er det som gjør annonsering pålitelig — en region som settes inn samtidig med innholdet annonseres ofte ikke. Hver melding blir en egen node (`aria-atomic="false"`), slik at flere meldinger som dukker opp tett etter hverandre alle leses opp fortløpende i tur, uten å avbryte hverandre.
+- **Stille ved sidelast** — meldinger som finnes ved første sidelast leses ikke opp automatisk (så en side full av meldinger ikke leser seg selv opp). Bruk `announceOnPageLoad` for å overstyre. Meldinger som settes inn senere annonseres automatisk.
+- **Statusikon** rendres som en dekorativ `<ix-icon data-badge name="…" aria-hidden="true">` — en sirkel i status-`fill` (følger `data-status`) med en lys glyf oppå (`info`, `hake` eller `utropstegn` per status). `aria-hidden="true"` holder den ute av tilgjengelighetstreet; varianten formidles av teksten.
+- **Fokusindikator** — meldingen får ingen ring rundt seg selv; kun lukkeknappen har sin egen `:focus-visible`-ring. Lenker bruker `:focus-visible`.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `status` | `'info' \| 'success' \| 'warning' \| 'danger'` | | Status; styrer farge og ikon. Settes som `data-status` slik at fargevariablene kobles automatisk. Påkrevd |
+| `title` | `string` | | Valgfri overskrift over budskapet |
+| `children` | `ReactNode` | | Budskapet — påkrevd. Rendres rått — skriv selv `<p>` og evt. en lenke med `LinkText`. Påkrevd |
+| `closeLabel` | `string` | | `aria-label` på lukkeknappen. Lukkeknappen vises kun når denne er satt |
+| `onClose` | `() => void` | | Kalles etter at meldingen er skjult ved klikk på lukkeknappen. Komponenten skjuler seg selv; `onClose` er kun for ev. opprydding |
+| `fullWidth` | `boolean` | `false` | Strekk meldingen til full bredde av forelderen (i stedet for å krympe til innholdsbredden i en vertikal stack). Settes som `data-full-width` |
+| `announceOnPageLoad` | `boolean` | `false` | Annonser meldingen selv om den er til stede ved første sidelast. Krever en omsluttende `<MessageRegion>` |
+| `announceText` | `string` | | Overstyr teksten som leses opp. Standard er den synlige teksten (tittel + brødtekst). Bruk for å lese opp noe kortere ved rikt innhold |
+| `className` | `string` | | Ekstra CSS-klasser på rot-elementet |
+
+## MessageRegion
+
+`MessageRegion` er en obligatorisk wrapper rundt React-meldinger. Den rendrer ingenting synlig selv — den legger én stabil, skjult ARIA-live-region (`polite`) i DOM som meldingene annonseres gjennom. Uten en omsluttende `MessageRegion` rendres `<Message>` visuelt, men annonseres ikke for skjermlesere (og logger en advarsel i utviklingsmodus).
+
+Stabile, alltid-tilstedeværende regioner er det som gjør annonseringen pålitelig: en live-region som settes inn i DOM samtidig med innholdet rekker ofte ikke å bli registrert før teksten er der, og annonseres da ikke. `MessageRegion` har derfor regionen klar fra start og legger kun teksten til ved behov. Hver melding legges til som en egen node, slik at flere meldinger leses opp fortløpende i tur i stedet for at den siste overskriver de andre.
+
+:::note Hvorfor `polite` og ikke `assertive`?
+Det er bevisst valgt at *alle* meldinger leses opp fortløpende (køet i én `polite`-region) fremfor at en melding avbryter en annen. Message brukes typisk som tilbakemelding på skjema eller andre brukerhandlinger, og som regel er det bare én melding av gangen — men når flere dukker opp samtidig prioriterer vi at alt blir lest fremfor at noe hoppes over. Det betyr at `status` (info/success/warning/danger) kun styrer farge og ikon, **ikke** annonseringsprioritet; selv en `danger`-melding leses høflig i kø, ikke avbrytende.
+:::
+
+Du kan ha én felles `MessageRegion` rundt et helt skjema eller en hel side, eller én rundt hver melding — begge fungerer. Det enkleste er å plassere én region høyt i treet og la alle meldinger ligge inni den.
+
+```tsx live
+<MessageRegion>
+  <Message status="success" title="Endringene er lagret">
+    Innstillingene dine er oppdatert
+  </Message>
+</MessageRegion>
+```
+
+### Annonsering ved sidelast
+
+Meldinger som settes inn **dynamisk** (etter at siden er ferdig lastet — f.eks. som svar på en handling) annonseres automatisk. Meldinger som allerede er til stede **ved første sidelast** er stille som standard, slik at en side full av meldinger ikke leser seg selv opp ved innlasting.
+
+Når en melding er server-rendret eller til stede ved sidelast og *likevel* skal leses opp — typisk en success- eller feilmelding etter en redirect tilbake fra en tredjepart — setter du `announceOnPageLoad` på selve `<Message>`:
+
+```tsx
+<MessageRegion>
+  <Message status="success" announceOnPageLoad>
+    Betalingen er gjennomført
+  </Message>
+</MessageRegion>
+```
+
+### MessageRegion Props / API
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `children` | `ReactNode` | | Innholdet regionen omslutter, typisk én eller flere `<Message>`. Regionen rendrer i tillegg én skjult live-region |
+
+## Tilpasning med CSS
+
+Trenger du `ix-message`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte på elementene dine. Det finnes ingen web component for Message; rotklassen `.ix-message` brukes på en `<div>`.
+
+### Tilgjengelige klasser og attributter
+
+| Element/tilstand | Selektor / attributt |
+|------------------|----------------------|
+| Rot (melding) | `.ix-message` |
+| Status | `data-status="info"` / `"success"` / `"warning"` / `"danger"` (kobler `--ix-color-status-*` automatisk) |
+| Statusikon | `<ix-icon data-badge name="…" aria-hidden="true">` (første barn — sirkel følger `data-status`, glyf via `name`) |
+| Tekstblokk | `.ix-message__body` |
+| Tittel | `.ix-message__title` |
+| Lenke | `.ix-link-text` (vanlig Indeks-lenke — ingen message-spesifikk klasse) |
+| Lukkeknapp | `.ix-message__close` |
+| Full bredde | `data-full-width` (strekker meldingen til full bredde av forelderen) |
+
+Statusikonet skrives som `<ix-icon data-badge name="…" aria-hidden="true">` som første barn av `.ix-message`. `data-badge` gir sirkelen, som følger status-`fill` via `data-status` på meldingen; glyfen settes med `name` (`info`, `hake` eller `utropstegn`).
+
+### Annonsering for skjermlesere uten React
+
+React-komponenten annonserer via en `<MessageRegion>` (en stabil, skjult live-region). I ren HTML finnes ikke denne automatikken — du må sette opp regionen selv. Den pålitelige oppskriften:
+
+1. Legg en **stabil, tom** live-region i DOM ved sidelast (den må eksistere *før* du skriver tekst inn i den):
+
+```html
+<div class="ix-sr-only" role="status" aria-live="polite" aria-atomic="false"></div>
+```
+
+2. Når du setter inn en melding dynamisk, legg den opplest teksten til som en *egen* node i regionen (i stedet for å erstatte innholdet). Med `aria-atomic="false"` leses kun den nye noden, slik at flere meldinger som dukker opp tett etter hverandre alle leses opp fortløpende i tur. Fjern gjerne noden igjen etter et lite øyeblikk; det avbryter ikke opplesningen og hindrer at gammel tekst leses på nytt ved navigasjon.
+
+Den enkle varianten — å sette `role`/`aria-live` rett på `.ix-message`-elementet (som i eksempelet under) — fungerer rimelig for `role="alert"` ved dynamisk innsetting, men er upålitelig for `aria-live="polite"` og annonserer ingenting for meldinger som er til stede ved sidelast.
+
+### Eksempel: ren HTML
+
+```html
+<div class="ix-message" data-status="info" aria-live="polite">
+  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <div class="ix-message__body">
+    <strong class="ix-message__title">Behandling pågår</strong>
+    <p>Vi har mottatt søknaden din og behandler den nå</p>
+    <a class="ix-link-text" href="/saksbehandling">Les mer om saksbehandling</a>
+  </div>
+  <button class="ix-message__close" type="button" aria-label="Lukk melding"></button>
+</div>
+
+<div class="ix-message" data-status="info" data-full-width aria-live="polite">
+  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <div class="ix-message__body">
+    <p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p>
+  </div>
+  <button class="ix-message__close" type="button" aria-label="Lukk melding"></button>
+</div>
+```
+
+## Relatert
+
+- [Farger](../retningslinjer/farger) — fargetokens for varianter
+- [Spacing](../grunnleggende/tokens/spacing) — padding- og gap-tokens
+- [Button](./button) — for handlinger knyttet til en melding
