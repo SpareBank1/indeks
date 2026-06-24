@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { JSX, ReactNode } from 'react';
 import { useMessageRegion } from '../message-region/MessageRegionContext';
+import type { IconName } from '../../icons/icon-types';
 
 export type MessageStatus = 'info' | 'success' | 'warning' | 'danger';
 
@@ -42,12 +43,12 @@ export type MessageProps = {
     className?: string;
 };
 
-/** Material Design-ikon per status (sendes til badge-ikonet). */
-const STATUS_ICON: Record<MessageStatus, string> = {
-    info: 'info_i',
-    success: 'check',
-    warning: 'priority_high',
-    danger: 'priority_high',
+/** Semantisk ikonnavn per status (sendes til badge-ikonet). */
+const STATUS_ICON: Record<MessageStatus, IconName> = {
+    info: 'info',
+    success: 'hake',
+    warning: 'utropstegn',
+    danger: 'utropstegn',
 };
 
 export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
@@ -109,8 +110,8 @@ export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
             >
                 <summary className="ix-message__summary">
                     {/* Dekorativt statusikon — sirkel (status-`fill` via CSS) +
-                        glyf (materialdesignname per status). */}
-                    <ix-icon data-badge="" materialdesignname={STATUS_ICON[status]} aria-hidden="true" />
+                        glyf (semantisk navn per status). */}
+                    <ix-icon data-badge="" name={STATUS_ICON[status]} aria-hidden="true" />
                     <div ref={bodyRef} className="ix-message__body">
                         {title && <strong className="ix-message__title">{title}</strong>}
                         {summary && <p>{summary}</p>}
@@ -128,8 +129,8 @@ export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
             data-status={status}
         >
             {/* Dekorativt statusikon — sirkel (status-`fill` via CSS) +
-                glyf (materialdesignname per status). */}
-            <ix-icon data-badge="" materialdesignname={STATUS_ICON[status]} aria-hidden="true" />
+                glyf (semantisk navn per status). */}
+            <ix-icon data-badge="" name={STATUS_ICON[status]} aria-hidden="true" />
             <div ref={bodyRef} className="ix-message__body">
                 {title && <strong className="ix-message__title">{title}</strong>}
                 {children}

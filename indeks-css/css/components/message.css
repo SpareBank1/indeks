@@ -8,10 +8,12 @@
     --ix-message-icon-size: 32px;
 
     display: flex;
-    align-items: flex-start;
+    /* Innholdet sentreres vertikalt mot statusikonet ved kort melding (kun
+       tittel / én linje). Ikon og lukkeknapp selv-justerer til toppen
+       (align-self: flex-start) så de flukter med tittelen når meldingen er høy. */
+    align-items: center;
     gap: var(--ix-spacing-sm);
-    padding: var(--ix-spacing-md);
-    font-size: var(--ix-font-size-md);
+    padding: var(--ix-spacing-sm);
     color: var(--ix-color-foreground-main-default);
     background-color: var(--ix-color-status-surface);
     border: var(--ix-border-width-default) solid var(--ix-color-status-border);
@@ -23,10 +25,13 @@
    ringes på selve summary (se lenger ned). */
 
 /* Statusikon-badge: <ix-icon data-badge> rendrer sirkel + glyf (se icon.css).
-   Sirkelen bruker status-`fill`; glyfen settes med `materialdesignname` på selve
-   ikonet (per status — info_i, check, priority_high), ikke via CSS. */
+   Sirkelen bruker status-`fill`; glyfen settes med `name` på selve
+   ikonet (per status — info, hake, utropstegn), ikke via CSS. */
 :where(.ix-message ix-icon[data-badge]) {
     flex: 0 0 auto;
+    /* Hold ikonet ved toppen/tittelen når meldingen går over flere linjer
+       (roten sentrerer ellers alt vertikalt). */
+    align-self: flex-start;
     --ix-icon-badge-size: var(--ix-message-icon-size);
     --ix-icon-badge-background: var(--ix-color-status-fill);
 }
@@ -39,15 +44,13 @@
     min-width: 0;
 }
 
-:where(.ix-message__body) > p {
+:where(.ix-message__body)>p {
     margin: 0;
 }
 
 /* Tittel: «headline xs»-typografi (matcher .ix-heading[data-size="xs"]).
    Arver tekstfarge fra roten — tittelen skal ikke ha egen farge. */
 :where(.ix-message__title) {
-    font-family: var(--ix-font-family-normal);
-    font-size: var(--ix-font-size-md);
     font-weight: var(--ix-font-weight-medium);
     line-height: 1.2;
 }
@@ -72,6 +75,8 @@
    uten å øke høyden unødig. (I utvidbar modus ligger knappen inne i summary
    foran chevronen og skal ikke ha negativ margin.) */
 :where(.ix-message > .ix-message__close) {
+    /* Hold lukkeknappen ved toppen (roten sentrerer ellers alt vertikalt). */
+    align-self: flex-start;
     margin: calc(var(--ix-spacing-sm) * -1) calc(var(--ix-spacing-sm) * -1) 0 0;
 }
 
@@ -127,8 +132,7 @@
        radius minus border-bredden, så kurven flukter med ytterkanten. I åpen
        tilstand grenser bunnen mot det ekspanderte innholdet og skal være rett;
        sammenfoldet rundes alle fire hjørner (se under). */
-    border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
-        calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) 0 0;
+    border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) 0 0;
 }
 
 /* Sammenfoldet er summary hele den synlige flaten — rund av alle fire hjørner. */

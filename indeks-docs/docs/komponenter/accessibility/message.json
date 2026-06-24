@@ -1,6 +1,6 @@
 {
   "component": "Message",
-  "lastReviewed": "2026-06-23",
+  "lastReviewed": "2026-06-24",
   "consumerResponsibilities": [
     {
       "summary": "Pakk Message i en MessageRegion",
@@ -9,7 +9,7 @@
     },
     {
       "summary": "Beskrivende tekst er påkrevd og må stå alene",
-      "details": "Message skal aldri brukes uten brødtekst. Teksten må formidle budskapet uten å være avhengig av ikon eller farge. For varianten danger/warning bør teksten også forklare konsekvensen eller hva brukeren bør gjøre videre.",
+      "details": "Message skal alltid ha en tittel som bærer budskapet (brødtekst er valgfri). Teksten må formidle budskapet uten å være avhengig av ikon eller farge. For varianten danger/warning bør teksten også forklare konsekvensen eller hva brukeren bør gjøre videre.",
       "wcag": ["1.4.1", "1.1.1"]
     },
     {

@@ -17,7 +17,7 @@ const meta = {
     ],
     args: {
         status: 'info',
-        children: 'Vi har mottatt søknaden din og behandler den nå',
+        title: 'Vi har mottatt søknaden din og behandler den nå',
     },
 } satisfies Meta<typeof Message>;
 
@@ -29,26 +29,26 @@ export const Standard: Story = {};
 export const Success: Story = {
     args: {
         status: 'success',
-        children: 'Endringene dine er lagret',
+        title: 'Endringene dine er lagret',
     },
 };
 
 export const Warning: Story = {
     args: {
         status: 'warning',
-        children: 'Det er kort tid til fristen for å svare',
+        title: 'Det er kort tid til fristen for å svare',
     },
 };
 
 export const Danger: Story = {
     args: {
         status: 'danger',
-        children: 'Vi klarte ikke å gjennomføre betalingen',
+        title: 'Vi klarte ikke å gjennomføre betalingen',
     },
 };
 
-export const MedTittel: Story = {
-    name: 'Med tittel',
+export const MedBrodtekst: Story = {
+    name: 'Med brødtekst',
     args: {
         status: 'info',
         title: 'Behandling pågår',
@@ -113,13 +113,13 @@ export const ExpandableOpen: Story = {
  * Ren HTML uten React-wrapper. Status velges med `data-status`, som også kobler
  * fargevariablene (`--ix-color-status-*`) automatisk. ARIA (`role="alert"` eller
  * `aria-live="polite"`) settes manuelt av konsumenten. Statusikonet skrives som
- * `<ix-icon data-badge materialdesignname="…" aria-hidden="true">`; sirkelfargen følger `data-status`.
+ * `<ix-icon data-badge name="…" aria-hidden="true">`; sirkelfargen følger `data-status`.
  */
 export const HTML: Story = {
     render: () => (
         <ix-stack>
             <div className="ix-message" data-status="info" aria-live="polite">
-                <ix-icon data-badge="" materialdesignname="info_i" aria-hidden="true" />
+                <ix-icon data-badge="" name="info" aria-hidden="true" />
                 <div className="ix-message__body">
                     <strong className="ix-message__title">Behandling pågår</strong>
                     <p>Vi har mottatt søknaden din og behandler den nå</p>
@@ -132,7 +132,7 @@ export const HTML: Story = {
 
             <details className="ix-message" data-status="warning" data-expandable open>
                 <summary className="ix-message__summary">
-                    <ix-icon data-badge="" materialdesignname="priority_high" aria-hidden="true" />
+                    <ix-icon data-badge="" name="utropstegn" aria-hidden="true" />
                     <div className="ix-message__body">
                         <strong className="ix-message__title">Nye vilkår for kontoen</strong>
                         <p>Vi har oppdatert vilkårene. Trykk for å lese hva som er endret.</p>
