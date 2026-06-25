@@ -111,7 +111,7 @@ const sidebars: SidebarsConfig = {
                     type: 'category',
                     label: 'Primitiver',
                     collapsed: false,
-                    items: ['komponenter/primitives/stack'],
+                    items: ['komponenter/primitives/grid', 'komponenter/primitives/stack'],
                 },
             ],
         },
