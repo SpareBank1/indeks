@@ -1,0 +1,201 @@
+---
+title: InteractiveIcon
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/interactive-icon.json';
+
+# InteractiveIcon
+
+InteractiveIcon er en klikkbar ikon-flate — en kompakt knapp som bare viser et ikon. Den gir tydelig visuell tilbakemelding ved pekehvil, trykk og fokus, med en fargetone som kan styres av en status.
+
+## Egnet til
+
+- Kompakte handlinger der et ikon er nok til å forklare hva som skjer (rediger, slett, lukk)
+- Verktøylinjer og rader der plassen er knapp
+- Handlinger som gjentas mange ganger og der etablerte ikoner er godt forstått
+
+## Uegnet til
+
+- Primære handlinger i en visning — bruk en knapp med tekst
+- Handlinger der ikonet alene er tvetydig — bruk en knapp med synlig tekst
+- Navigasjon til en ny side uten at noe utføres — bruk en lenke
+
+## Kom i gang
+
+En InteractiveIcon må alltid ha en tilgjengelig label som beskriver handlingen.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button type="button" class="ix-interactive-icon" aria-label="Rediger">
+  <ix-icon name="rediger" aria-hidden="true" class="ix-icon"></ix-icon>
+</button>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<InteractiveIcon name="rediger" aria-label="Rediger" />
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Statuser
+
+`status` styrer fargetonen som vises ved pekehvil og trykk. `default` bruker en nøytral farge; `info`, `success`, `warning` og `danger` gir hver sin status-farge. Fargen er kun en visuell forsterkning — handlingen må fremgå av `aria-label`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <button type="button" class="ix-interactive-icon" aria-label="Standard">
+    <ix-icon name="hjem" aria-hidden="true" class="ix-icon"></ix-icon>
+  </button>
+  <button type="button" class="ix-interactive-icon" data-status="info" aria-label="Info">
+    <ix-icon name="info" aria-hidden="true" class="ix-icon"></ix-icon>
+  </button>
+  <button type="button" class="ix-interactive-icon" data-status="success" aria-label="Suksess">
+    <ix-icon name="hake" aria-hidden="true" class="ix-icon"></ix-icon>
+  </button>
+  <button type="button" class="ix-interactive-icon" data-status="warning" aria-label="Advarsel">
+    <ix-icon name="utropstegn" aria-hidden="true" class="ix-icon"></ix-icon>
+  </button>
+  <button type="button" class="ix-interactive-icon" data-status="danger" aria-label="Slett">
+    <ix-icon name="slett" aria-hidden="true" class="ix-icon"></ix-icon>
+  </button>
+</>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <InteractiveIcon name="hjem" aria-label="Standard" />
+  <InteractiveIcon name="info" aria-label="Info" status="info" />
+  <InteractiveIcon name="hake" aria-label="Suksess" status="success" />
+  <InteractiveIcon name="utropstegn" aria-label="Advarsel" status="warning" />
+  <InteractiveIcon name="slett" aria-label="Slett" status="danger" />
+</>
+```
+
+</TabItem>
+</Tabs>
+
+### Størrelser
+
+`size` følger ikonets størrelsesskala (`sm`, `md`, `lg`, `xl`). Klikkflaten holder seg minst 44×44 px uansett ikonstørrelse.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <button type="button" class="ix-interactive-icon" aria-label="Liten">
+    <ix-icon name="rediger" data-size="sm" aria-hidden="true" class="ix-icon"></ix-icon>
+  </button>
+  <button type="button" class="ix-interactive-icon" aria-label="Medium">
+    <ix-icon name="rediger" aria-hidden="true" class="ix-icon"></ix-icon>
+  </button>
+  <button type="button" class="ix-interactive-icon" aria-label="Stor">
+    <ix-icon name="rediger" data-size="lg" aria-hidden="true" class="ix-icon"></ix-icon>
+  </button>
+  <button type="button" class="ix-interactive-icon" aria-label="Ekstra stor">
+    <ix-icon name="rediger" data-size="xl" aria-hidden="true" class="ix-icon"></ix-icon>
+  </button>
+</>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <InteractiveIcon name="rediger" aria-label="Liten" size="sm" />
+  <InteractiveIcon name="rediger" aria-label="Medium" />
+  <InteractiveIcon name="rediger" aria-label="Stor" size="lg" />
+  <InteractiveIcon name="rediger" aria-label="Ekstra stor" size="xl" />
+</>
+```
+
+</TabItem>
+</Tabs>
+
+:::warning Ikonknapp uten aria-label
+En knapp med bare ikon og ingen `aria-label` er usynlig for skjermlesere. Brukeren hører bare "knapp" — ingen beskrivelse av hva den gjør.
+:::
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **`aria-label` er påkrevd** — beskriv handlingen, ikke ikonet: `aria-label="Slett melding"`, ikke `aria-label="Søppelkasse-ikon"`. Det finnes ingen hardkodet fallback; send inn riktig tekst for brukerens språk.
+- **Ikke stol på farge alene** — `status`-fargen vises bare ved pekehvil/trykk og eksponeres ikke for skjermlesere. Har status betydning, må det fremgå av `aria-label` eller konteksten rundt.
+- **Bekreft destruktive handlinger** — når `status="danger"` brukes for sletting eller andre irreversible handlinger, bør handlingen kreve en ekstra bekreftelse.
+
+### Hva komponenten gjør automatisk
+
+- **Native `<button>`** — gir tastaturstøtte (Enter/Space), fokuserbarhet og rolle uten ekstra ARIA.
+- **`type="button"`** settes som standard så knappen ikke sender inn skjema utilsiktet.
+- **Ikonet er `aria-hidden`** — knappens navn kommer utelukkende fra `aria-label`, så skjermlesere annonserer ikke ikonet to ganger.
+- **Klikkflate ≥ 44×44 px** via `min-width`/`min-height` — godt over WCAG-minstekravet på 24×24 px.
+- **Fokusindikator** via `:focus-visible` — synlig for tastaturbrukere, ikke for mus. Samme fokusstil uavhengig av status.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `name` | `IconName` | | Ikonet som vises. Påkrevd |
+| `aria-label` | `string` | | Tilgjengelig navn som beskriver handlingen. Påkrevd, og må oversettes (i18n) |
+| `status` | `'default' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `'default'` | Fargetema for pekehvil og trykk |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Størrelse på ikonet |
+
+I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `disabled`, `type`, `form`, `name`, `value`, `tabIndex` osv.) og settes direkte på `<button>`-elementet.
+
+## Tilpasning med CSS
+
+Trenger du `ix-interactive-icon`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassen direkte på et `<button>`-element som wrapper et `<ix-icon>`.
+
+### Tilgjengelige klasser og attributter
+
+| Element/tilstand | Selektor / attributt |
+|------------------|----------------------|
+| Knapp | `.ix-interactive-icon` |
+| Status | `data-status="info"` / `"success"` / `"warning"` / `"danger"` |
+| Pekehvil-farge | intern variabel `--ii-interactive-icon-fill-hover` |
+| Trykk-farge | intern variabel `--ii-interactive-icon-fill-active` |
+
+Variablene med `--ii-`-prefiks er interne implementasjonsdetaljer og er ikke en del av det offentlige API-et.
+
+### Eksempel: ren HTML
+
+```html
+<button type="button" class="ix-interactive-icon" aria-label="Rediger">
+  <ix-icon name="rediger" aria-hidden="true" class="ix-icon"></ix-icon>
+</button>
+
+<button type="button" class="ix-interactive-icon" data-status="danger" aria-label="Slett">
+  <ix-icon name="slett" aria-hidden="true" class="ix-icon"></ix-icon>
+</button>
+```
+
+## Relatert
+
+- [Button](./button) — knapp med synlig tekst for primære og sekundære handlinger
+- [Icon](./icon) — ikonet som vises inni InteractiveIcon
+- [Farger](../retningslinjer/farger) — fargetokens for status-variantene

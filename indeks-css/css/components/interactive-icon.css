@@ -1,0 +1,47 @@
+:where(.ix-interactive-icon) {
+    --ii-interactive-icon-fill-hover: var(--ix-color-component-button-secondary-fill-default-hover);
+    --ii-interactive-icon-fill-active: var(--ix-color-component-button-secondary-fill-default-active);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--ix-border-radius-sm);
+    padding: var(--ix-spacing-xs);
+    min-width: 44px;
+    min-height: 44px;
+    color: inherit;
+    transition: var(--ix-transition-all);
+}
+
+:where(.ix-interactive-icon:hover) {
+    background-color: var(--ii-interactive-icon-fill-hover);
+}
+
+:where(.ix-interactive-icon:active) {
+    background-color: var(--ii-interactive-icon-fill-active);
+}
+
+:where(.ix-interactive-icon:focus-visible) {
+    outline: var(--ix-outline-default);
+    outline-offset: var(--ix-outline-offset-default);
+}
+
+/*
+ * Uten data-status bruker fyllet secondary-button-fargene (se rotselektoren).
+ * Når data-status settes (info/success/warning/danger), kobler status-colors.css
+ * (@sb1/indeks-utils) inn riktig subtle status-farge automatisk — derfor trengs
+ * ingen status-spesifikke override-blokker, bare denne ene koblingen.
+ */
+:where(.ix-interactive-icon[data-status]:not([data-status='default'])) {
+    --ii-interactive-icon-fill-hover: var(--ix-color-status-fill-subtle-hover);
+    --ii-interactive-icon-fill-active: var(--ix-color-status-fill-subtle-active);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :where(.ix-interactive-icon) {
+        transition: none;
+    }
+}

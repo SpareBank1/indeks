@@ -1,0 +1,91 @@
+{
+  "component": "InteractiveIcon",
+  "lastReviewed": "2026-06-26",
+  "consumerResponsibilities": [
+    {
+      "summary": "Sett aria-label som beskriver handlingen",
+      "details": "InteractiveIcon har bare et ikon og ingen synlig tekst. Uten aria-label er knappen meningsløs for skjermlesere. Labelen skal beskrive handlingen, ikke ikonet: aria-label=\"Rediger profil\", ikke aria-label=\"Blyant-ikon\". aria-label er påkrevd og har ingen hardkodet fallback — konsumenten må sende inn riktig tekst for brukerens språk (bokmål, nynorsk, engelsk).",
+      "wcag": ["4.1.2", "2.4.6"]
+    },
+    {
+      "summary": "Ikke bruk farge alene til å formidle status",
+      "details": "status-fargen (info/success/warning/danger) er kun en visuell forsterkning som vises ved hover/pressed. Den eksponeres ikke semantisk for skjermlesere. Hvis status har betydning for handlingen, må det også fremgå av aria-label eller kontekst rundt knappen.",
+      "wcag": ["1.4.1"]
+    },
+    {
+      "summary": "Bekreft destruktive handlinger",
+      "details": "Når status=\"danger\" brukes for handlinger som sletter eller endrer data permanent, bør handlingen kreve en ekstra bekreftelse (f.eks. en modal). Ikke stol på at fargen alene kommuniserer alvorlighetsgraden.",
+      "wcag": ["3.3.4"]
+    }
+  ],
+  "handled": [
+    { "id": "1.3.1", "notes": "Native <button>-element med implisitt rolle=button. aria-label gir tilgjengelig navn." },
+    { "id": "1.4.1", "notes": "Status-farge er kun visuell forsterkning ved hover/pressed — handlingen kommuniseres via aria-label, ikke farge alene." },
+    { "id": "1.4.10", "notes": "Knappen har fast 44×44 px klikkflate og reflower korrekt ned til 320 px viewport." },
+    { "id": "1.4.11", "notes": "Fokusindikator via :focus-visible oppfyller 3:1 kontrastkrav mot bakgrunnen." },
+    { "id": "2.1.1", "notes": "Native <button> aktiveres med Enter og Space. Fullt opererbart med tastatur." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab — ingen tastaturfelle." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med --ix-outline-default." },
+    { "id": "2.5.8", "notes": "min-width og min-height på 44 px gir klikkflate godt over minstekravet på 24×24 px." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
+    { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button. Tilgjengelig navn fra påkrevd aria-label. Ikonet er aria-hidden og bidrar ikke til navnet." }
+  ],
+  "issues": [],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Ikonet er dekorativt og skjules med aria-hidden — knappens navn kommer fra aria-label." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.2", "reason": "Enkeltstående knapp uten lese-rekkefølge-avhengig innhold." },
+    { "id": "1.3.3", "reason": "Knappen formidler ikke instruksjoner — den utfører en handling." },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt som ber om personlig informasjon." },
+    { "id": "1.4.2" },
+    { "id": "1.4.3", "reason": "Ikonet er en ensfarget glyf på transparent/lys bakgrunn; konsumenten styrer ikonfarge via context. Ingen tekst i komponenten." },
+    { "id": "1.4.4", "reason": "Skalerer med ikonstørrelsen; ingen tekst som kan klippes ved zoom." },
+    { "id": "1.4.5" },
+    { "id": "1.4.12" },
+    { "id": "1.4.13" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4" },
+    { "id": "2.4.5" },
+    { "id": "2.4.6" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native button-element — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.2", "reason": "Knappen trigger ingen automatisk kontekstendring ved fokus." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1" },
+    { "id": "3.3.2" },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Knappen genererer ingen statusmeldinger selv." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til knappen" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Enter", "action": "Aktiverer knappen" },
+    { "key": "Space", "action": "Aktiverer knappen" }
+  ],
+  "screenReader": [
+    "Ved fokus: \"[aria-label], knapp\"",
+    "Status-variant: ingen ekstra annonsering — status-fargen er kun visuell. Konteksten rundt knappen må forklare betydningen."
+  ]
+}
