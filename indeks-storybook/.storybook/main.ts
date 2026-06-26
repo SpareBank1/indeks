@@ -8,7 +8,11 @@ const __dirname = dirname(__filename);
 
 const config: StorybookConfig = {
     stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-    addons: [getAbsolutePath("@storybook/addon-docs"), getAbsolutePath("@storybook/addon-a11y")],
+    addons: [
+        getAbsolutePath("@storybook/addon-docs"),
+        getAbsolutePath("@storybook/addon-a11y"),
+        getAbsolutePath("storybook-addon-pseudo-states"),
+    ],
     framework: {
         name: getAbsolutePath("@storybook/react-vite"),
         options: {},
