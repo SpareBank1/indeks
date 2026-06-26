@@ -130,6 +130,31 @@ En InteractiveIcon må alltid ha en tilgjengelig label som beskriver handlingen.
 </TabItem>
 </Tabs>
 
+### Med tooltip
+
+Tooltip kan brukes for å gi ekstra kontekst til handlingen, spesielt når ikonets betydning ikke er åpenbar. For velkjente ikoner i en tydelig kontekst, som «Lukk» i en modal, er tooltip vanligvis ikke nødvendig. Komponenten skal alltid ha et tilgjengelig navn for skjermlesere — `aria-label` er påkrevd uavhengig av om det finnes en tooltip.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button type="button" class="ix-interactive-icon" aria-label="Rediger" data-tooltip="Rediger profil">
+  <ix-icon name="rediger" aria-hidden="true" class="ix-icon"></ix-icon>
+</button>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<InteractiveIcon name="rediger" aria-label="Rediger" data-tooltip="Rediger profil" />
+```
+
+</TabItem>
+</Tabs>
+
+Tooltip-teksten er ren tekst og må, som `aria-label`, sendes inn på brukerens språk (i18n).
+
 :::warning Ikonknapp uten aria-label
 En knapp med bare ikon og ingen `aria-label` er usynlig for skjermlesere. Brukeren hører bare "knapp" — ingen beskrivelse av hva den gjør.
 :::
@@ -198,4 +223,5 @@ Variablene med `--ii-`-prefiks er interne implementasjonsdetaljer og er ikke en 
 
 - [Button](./button) — knapp med synlig tekst for primære og sekundære handlinger
 - [Icon](./icon) — ikonet som vises inni InteractiveIcon
+- [Tooltip](./skjema/tooltip) — gi ekstra kontekst til handlingen ved pekehvil/fokus
 - [Farger](../retningslinjer/farger) — fargetokens for status-variantene
