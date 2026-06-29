@@ -1,0 +1,75 @@
+# Designvalg for CheckboxGroup
+
+Denne siden forklarer *hvorfor* CheckboxGroup er bygget som den er. Den er ment for de som er nysgjerrige på avveiningene bak komponenten — du trenger den ikke for å bruke den. For bruk og API, se [CheckboxGroup](./checkbox-group).
+
+CheckboxGroup speiler [RadioGroup](./radio-group-designvalg) der det gir mening — samme WC-eier-ARIA-mønster, samme compound-API, samme observer-baserte ARIA-synk. Denne siden legger vekt på der checkbox bevisst skiller seg fra radio.
+
+## WC eier ARIA og DOM-synk; React-laget er bevisst tynt
+
+Hele ARIA-koblingsapparatet — id-generering, `htmlFor`, `name`-propagering, `aria-labelledby`/`describedby`/`invalid`, disabled-propagering og readonly-tastaturblokk — ligger i `<ix-checkbox-group>`. React-wrapperen eksponerer kun props-API, kontrollert state og presentasjons-attributter (`data-state`, `className`).
+
+*Hvorfor:* HTML- og React-bruk får identisk a11y-oppførsel uten duplisering. Samme begrunnelse som for RadioGroup.
+
+## `<div role="group">`, ikke `<fieldset>` — og ikke `radiogroup`
+
+Komponenten bruker en host-`<div>` (gjennom custom element `<ix-checkbox-group>`) med `role="group"` istedenfor native `<fieldset>` + `<legend>`.
+
+*Hvorfor `group` og ikke `fieldset`:* Safari har kjente bugs med `<fieldset>` kombinert med `flex`/`grid`-layout, og DigDir anbefaler ARIA-varianten. Detaljene står i `_strategier/accessibility-cross-cutting-concerns.md` §9.6.
+
+*Hvorfor `group` og ikke `radiogroup`:* det finnes ingen «checkboxgroup»-rolle i ARIA. `radiogroup` er feil — den signaliserer gjensidig utelukkende valg og piltast-navigasjon. `group` er den korrekte generiske rollen for en samling relaterte kontroller.
+
+## `value` er et array — flervalg, ikke mutex
+
+Der RadioGroup har `value: string` (ett valg), har CheckboxGroup `value: string[]`. `onChange` kalles med hele det oppdaterte arrayet, og `handleChange(value, checked)` legger til eller fjerner verdien.
+
+*Hvorfor:* checkbox-semantikken er at flere valg kan være aktive samtidig og uavhengig. Et array er den naturlige modellen — `value.includes(v)` avgjør om en enkelt checkbox er avkrysset.
+
+## Ingen `name`-auto-generering
+
+RadioGroup genererer et `name` hvis forfatteren utelater det, fordi radioknapper *må* dele `name` for å fungere som en mutex-gruppe. CheckboxGroup gjør ikke dette: `name` propageres kun når forfatteren har satt det på gruppen.
+
+*Hvorfor:* checkboxer trenger ikke felles `name` for å fungere — hver er en uavhengig av/på-kontroll. Et auto-generert `name` ville ikke gitt noen oppførselsforskjell, bare et tilfeldig attributt på inputs. Setter du `name` på gruppen, propageres det til alle inputs så valgene følger med i et skjema.
+
+## Ingen piltast-mutex — hver checkbox er eget tab-stopp
+
+RadioGroup arver radioens native piltast-navigasjon (gruppen er ett tab-stopp, piltaster bytter valg). CheckboxGroup har ingen slik logikk: hver checkbox er et eget tab-stopp, og Space toggler den fokuserte.
+
+*Hvorfor:* det er native checkbox-oppførsel og det riktige for uavhengige valg. Vi legger ikke til noe — native `<input type="checkbox">` gir alt gratis.
+
+*Eneste unntak:* `readonly` blokkeres i en `keydown`-listener (kun Space) fordi `readOnly` er en no-op på checkbox-input per HTML-spec. Checkbox har ingen piltaster å blokkere. `pointer-events: none` i CSS dekker mus og touch.
+
+## Ingen `required`-triks
+
+RadioGroup setter `required` på *kun første* input (for å unngå duplikate Safari-valideringsbobler siden alle deler `name`). CheckboxGroup har ingen `required`-prop på gruppenivå.
+
+*Hvorfor:* for checkbox betyr «påkrevd» som regel «denne spesifikke boksen må krysses» (f.eks. samtykke), ikke «minst én i gruppen». Det settes per input der det trengs, ikke som et gruppe-triks. «Minst N av gruppen»-validering er konsumentens ansvar via `errorMessage`.
+
+## `aria-invalid` settes kun på host, ikke på hver input
+
+Error-elementet ligger alltid i DOM. En MutationObserver setter `aria-invalid="true"` på `<ix-checkbox-group>` så snart error-noden får innhold, og fjerner attributten igjen når den tømmes. I motsetning til RadioGroup propageres den *ikke* ned til hver input.
+
+*Hvorfor:* gruppens validitet er det som teller for skjermlesere. Per-input `aria-invalid` på en checkbox-gruppe ville antydet at hver enkelt boks er ugyldig, noe som sjelden stemmer — det er kombinasjonen/utvalget som er feil. Vil du markere én spesifikk boks som ugyldig, sett `aria-invalid` på den inputen selv (checkbox-CSS-en styler den).
+
+## `childList`-observer wirer dynamisk lagt til inputs
+
+En MutationObserver lytter etter at nye `<input type="checkbox">` legges til etter mount (typisk via React conditional rendering) og kjører ID-/name-/htmlFor-/disabled-wiring på dem. Den lytter også etter at `name` fjernes fra en input (React kan sette `name={undefined}` ved re-render) og reparerer da koblingen.
+
+*Hvorfor:* a11y må fungere ved dynamiske gruppestørrelser uten at forfatteren manuelt må kalle noe. Identisk med RadioGroup.
+
+## `disabled` bevart per knapp via `WeakMap`
+
+Web component-en snapshotter hver inputs egen `disabled` i en `WeakMap` første gang gruppe-`disabled` toggles på, og restorer verdien når gruppe-`disabled` toggles av igjen.
+
+*Hvorfor:* per-knapp `disabled` (satt av forfatteren på en enkelt CheckboxButton) må overleve at hele gruppen blir deaktivert og reaktivert. *Vurdert:* enkel overskriving av `input.disabled` — ville mistet per-knapp-info ved første gruppe-toggle. Samme mekanisme som RadioGroup.
+
+## Indikatoren tegnes med pseudo-elementer, ikke spans
+
+Hver checkbox er `<div class="ix-checkbox"><input><label></label></div>` — input og label er søsken, og selve boksen + haken/streken tegnes med `label::before`/`label::after` i CSS, togglet av nabo-kombinatoren `input:checked`/`:indeterminate + label`.
+
+*Hvorfor:* ingen dekorative spans i markupen, og full strukturell konsistens med RadioGroup som bruker samme modell. *Vurdert:* `:has()` for å style wrapperen basert på input-tilstand — utenfor browserslist-baselinen, så nabo-kombinatoren brukes i stedet.
+
+## Ingen egen web component for `CheckboxButton`
+
+`indeks-web` har bare `<ix-checkbox-group>`. En enkelt checkbox er CSS rundt en native `<input type="checkbox">` og har ingen logikk som krever JavaScript.
+
+*Vurdert:* `<ix-checkbox-button>` for symmetri med gruppen, men det ville bare wrappet et input uten å gi noe.

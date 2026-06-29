@@ -1,45 +1,75 @@
+/* Checkbox.
+ * Naken input + label (søsken) inni .ix-checkbox. Indikatoren tegnes med
+ * label::before (boksen) + label::after (hake/strek via mask-image) og toggles
+ * av nabo-kombinatoren input:checked / input:indeterminate + label. Ingen
+ * dekorative spans — samme modell som radio-group.css.
+ *
+ * Dual-targeting: styler både naken markup (.ix-checkbox > input + label) OG
+ * BEM-hooks (.ix-checkbox__input / .ix-checkbox__label) for forfattere som vil
+ * ha eksplisitte selektorer. BEM-klassene er valgfrie. */
+
 :where(.ix-checkbox) {
     display: flex;
-    align-items: center;
-    gap: var(--ix-spacing-xs);
-    position: relative;
-    cursor: pointer;
+    flex-direction: column;
 }
 
+/* Skjul native input visuelt, men hold det i DOM for tastatur og skjermleser */
+:where(.ix-checkbox) input[type='checkbox'],
 :where(.ix-checkbox__input) {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
     margin: 0;
-    padding: 0;
+    pointer-events: none;
 }
 
-:where(.ix-checkbox__box) {
-    flex-shrink: 0;
-    display: flex;
+/* Label = klikkflate. Indikatoren får plass via padding-left. */
+:where(.ix-checkbox) label,
+:where(.ix-checkbox__label) {
+    --ii-checkbox-size: 24px;
+    --ii-checkbox-box-bg: var(--ix-color-fill-interactive-default);
+    --ii-checkbox-box-border: var(--ix-color-border-main-default);
+
+    position: relative;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    margin-top: 2px;
-    background-color: var(--ix-color-fill-interactive-default);
-    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    gap: var(--ix-spacing-xs);
+    padding-left: calc(var(--ii-checkbox-size) + var(--ix-spacing-xs));
+    min-height: var(--ii-checkbox-size);
+    cursor: pointer;
+    font-size: var(--ix-font-size-md);
+    line-height: 1.5;
+    color: var(--ix-color-foreground-main-default);
+    user-select: none;
+    transition: var(--ix-transition-all);
+}
+
+/* Boksen */
+:where(.ix-checkbox) label::before,
+:where(.ix-checkbox__label)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    box-sizing: border-box;
+    width: var(--ii-checkbox-size);
+    height: var(--ii-checkbox-size);
+    background-color: var(--ii-checkbox-box-bg);
+    border: var(--ix-border-width-default) solid var(--ii-checkbox-box-border);
     border-radius: var(--ix-border-radius-xs);
     transition: var(--ix-transition-all);
 }
 
-:where(.ix-checkbox__box)::before {
+/* Glyfen (hake eller strek) — skjult til checked/indeterminate slår den på */
+:where(.ix-checkbox) label::after,
+:where(.ix-checkbox__label)::after {
     content: '';
     position: absolute;
-    inset: 50% auto auto 0;
-    width: 44px;
-    height: 44px;
+    left: calc((var(--ii-checkbox-size) - 16px) / 2);
+    top: 50%;
     transform: translateY(-50%);
-}
-
-:where(.ix-checkbox__box)::after {
-    content: '';
     display: none;
     width: 16px;
     height: 16px;
@@ -51,65 +81,84 @@
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
-:where(.ix-checkbox__label) {
-    font-size: var(--ix-font-size-md);
-    color: var(--ix-color-foreground-main-default);
-    line-height: 1.5;
-    padding-top: 2px;
+/* ── Hover ───────────────────────────────────────────────────────────────── */
+
+:where(.ix-checkbox) input[type='checkbox']:not(:disabled) + label:hover,
+:where(.ix-checkbox__input:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-interactive-hover);
+    --ii-checkbox-box-border: var(--ix-color-border-main-hover);
 }
 
-:where(.ix-checkbox:hover) .ix-checkbox__box {
-    background-color: var(--ix-color-fill-interactive-hover);
-    border-color: var(--ix-color-border-main-hover);
-}
+/* ── Focus ───────────────────────────────────────────────────────────────── */
 
-:where(.ix-checkbox__input:focus-visible) + .ix-checkbox__box {
+:where(.ix-checkbox) input[type='checkbox']:focus-visible + label::before,
+:where(.ix-checkbox__input:focus-visible) + :where(.ix-checkbox__label)::before {
     outline: var(--ix-outline-default);
     outline-offset: var(--ix-outline-offset-default);
 }
 
-:where(.ix-checkbox__input:checked) + .ix-checkbox__box {
-    background-color: var(--ix-color-fill-main-default);
-    border-color: transparent;
+/* ── Checked ─────────────────────────────────────────────────────────────── */
+
+:where(.ix-checkbox) input[type='checkbox']:checked + label,
+:where(.ix-checkbox__input:checked) + :where(.ix-checkbox__label) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-main-default);
+    --ii-checkbox-box-border: transparent;
 }
 
-:where(.ix-checkbox__input:checked) + .ix-checkbox__box::after {
+:where(.ix-checkbox) input[type='checkbox']:checked + label::after,
+:where(.ix-checkbox__input:checked) + :where(.ix-checkbox__label)::after {
     display: block;
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M13.5 4.5L6 12L2.5 8.5' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
-:where(.ix-checkbox__input:indeterminate) + .ix-checkbox__box {
-    background-color: var(--ix-color-fill-main-default);
-    border-color: transparent;
+/* Hover på valgt boks */
+:where(.ix-checkbox) input[type='checkbox']:checked:not(:disabled) + label:hover,
+:where(.ix-checkbox__input:checked:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-main-default-hover);
+    --ii-checkbox-box-border: transparent;
 }
 
-:where(.ix-checkbox__input:indeterminate) + .ix-checkbox__box::after {
+/* ── Indeterminate (delvis valgt) ────────────────────────────────────────── */
+
+:where(.ix-checkbox) input[type='checkbox']:indeterminate + label,
+:where(.ix-checkbox__input:indeterminate) + :where(.ix-checkbox__label) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-main-default);
+    --ii-checkbox-box-border: transparent;
+}
+
+:where(.ix-checkbox) input[type='checkbox']:indeterminate + label::after,
+:where(.ix-checkbox__input:indeterminate) + :where(.ix-checkbox__label)::after {
     display: block;
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3 8H13' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
-:where(.ix-checkbox:hover) .ix-checkbox__input:checked + .ix-checkbox__box {
-    background-color: var(--ix-color-fill-main-default-hover);
-    border-color: transparent;
+/* ── Feil (aria-invalid) ─────────────────────────────────────────────────── */
+
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true'] + label,
+:where(.ix-checkbox__input[aria-invalid='true']) + :where(.ix-checkbox__label) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);
+    --ii-checkbox-box-border: var(--ix-color-border-danger-default);
+}
+
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true'] + label::before,
+:where(.ix-checkbox__input[aria-invalid='true']) + :where(.ix-checkbox__label)::before {
+    box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
+}
+
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked + label,
+:where(.ix-checkbox__input[aria-invalid='true']:checked) + :where(.ix-checkbox__label) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-default);
+    --ii-checkbox-box-border: var(--ix-color-fill-danger-default);
+}
+
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked + label::before,
+:where(.ix-checkbox__input[aria-invalid='true']:checked) + :where(.ix-checkbox__label)::before {
     box-shadow: none;
 }
 
-:where(.ix-checkbox--disabled) {
-    opacity: var(--ix-opacity-disabled);
-}
-
-:where(.ix-checkbox__input:disabled:indeterminate) + .ix-checkbox__box {
-    background-color: var(--ix-color-fill-main-disabled);
-    border-color: var(--ix-color-fill-main-disabled);
-}
-
-:where(.ix-checkbox__input:disabled) ~ .ix-checkbox__label {
-    color: var(--ix-color-foreground-main-readonly);
-    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
-    cursor: not-allowed;
-}
+/* ── Disabled ────────────────────────────────────────────────────────────── */
 
 :where(.ix-checkbox--disabled) {
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
@@ -117,19 +166,62 @@
     pointer-events: none;
 }
 
-:where(.ix-checkbox__input[aria-invalid="true"]) + .ix-checkbox__box {
-    background-color: var(--ix-color-fill-danger-subtle);
-    border-color: var(--ix-color-border-danger-default);
-    box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
+:where(.ix-checkbox) input[type='checkbox']:disabled + label,
+:where(.ix-checkbox__input:disabled) + :where(.ix-checkbox__label) {
+    opacity: var(--ix-opacity-disabled);
+    color: var(--ix-color-foreground-main-read-only);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    cursor: not-allowed;
 }
 
-:where(.ix-checkbox__input[aria-invalid="true"]:checked) + .ix-checkbox__box {
-    background-color: var(--ix-color-fill-danger-default);
-    border-color: var(--ix-color-fill-danger-default);
-    box-shadow: none;
+:where(.ix-checkbox) input[type='checkbox']:disabled:indeterminate + label,
+:where(.ix-checkbox__input:disabled:indeterminate) + :where(.ix-checkbox__label) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-main-disabled);
+    --ii-checkbox-box-border: var(--ix-color-fill-main-disabled);
 }
 
-/* Legacy support: hide SVG icons if present in markup (backwards compatibility) */
-:where(.ix-checkbox__icon) {
-    display: none;
+/* ── prefers-reduced-motion ──────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    :where(.ix-checkbox) label,
+    :where(.ix-checkbox) label::before,
+    :where(.ix-checkbox) label::after,
+    :where(.ix-checkbox__label),
+    :where(.ix-checkbox__label)::before,
+    :where(.ix-checkbox__label)::after {
+        transition: none;
+    }
+}
+
+/* ── forced-colors (Windows høykontrast) ─────────────────────────────────────
+ * Boks og glyf bygger på background-color, som forsvinner i forced-colors.
+ * Vi bytter til system-farger: CanvasText-kant på boksen, Highlight på valgt,
+ * og HighlightText på glyfen så haken/streken er synlig mot Highlight-boksen.
+ */
+@media (forced-colors: active) {
+    :where(.ix-checkbox) label::before,
+    :where(.ix-checkbox__label)::before {
+        border-color: CanvasText;
+        background-color: Canvas;
+    }
+
+    :where(.ix-checkbox) input[type='checkbox']:checked + label::before,
+    :where(.ix-checkbox) input[type='checkbox']:indeterminate + label::before,
+    :where(.ix-checkbox__input:checked) + :where(.ix-checkbox__label)::before,
+    :where(.ix-checkbox__input:indeterminate) + :where(.ix-checkbox__label)::before {
+        border-color: Highlight;
+        background-color: Highlight;
+    }
+
+    :where(.ix-checkbox) input[type='checkbox']:checked + label::after,
+    :where(.ix-checkbox) input[type='checkbox']:indeterminate + label::after,
+    :where(.ix-checkbox__input:checked) + :where(.ix-checkbox__label)::after,
+    :where(.ix-checkbox__input:indeterminate) + :where(.ix-checkbox__label)::after {
+        background-color: HighlightText;
+    }
+
+    :where(.ix-checkbox) input[type='checkbox']:focus-visible + label::before,
+    :where(.ix-checkbox__input:focus-visible) + :where(.ix-checkbox__label)::before {
+        outline-color: Highlight;
+    }
 }

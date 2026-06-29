@@ -1,6 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Chip, RadioChip, RadioChipGroup, RemovableChip } from '@sb1/indeks-react';
+import {
+    CheckboxChip,
+    CheckboxChipGroup,
+    Chip,
+    RadioChip,
+    RadioChipGroup,
+    RemovableChip,
+} from '@sb1/indeks-react';
 
 const meta = {
     title: 'Components/Chip',
@@ -138,5 +145,51 @@ export const RadioChipHTML: Story = {
             </div>
             <span data-field="error" aria-live="polite"></span>
         </ix-radio-group>
+    ),
+};
+
+export const CheckboxChipGruppe: Story = {
+    name: 'Checkbox chip – gruppe',
+    render: () => (
+        <CheckboxChipGroup legend="Velg interesser" name="interesser" defaultValue={['sport']}>
+            <CheckboxChip value="sport" label="Sport" />
+            <CheckboxChip value="musikk" label="Musikk" />
+            <CheckboxChip value="reise" label="Reise" />
+        </CheckboxChipGroup>
+    ),
+};
+
+export const CheckboxChipLiten: Story = {
+    name: 'Checkbox chip – liten',
+    render: () => (
+        <CheckboxChipGroup legend="Velg interesser" name="interesser-sm" size="sm" defaultValue={['sport']}>
+            <CheckboxChip value="sport" label="Sport" />
+            <CheckboxChip value="musikk" label="Musikk" />
+            <CheckboxChip value="reise" label="Reise" />
+        </CheckboxChipGroup>
+    ),
+};
+
+export const CheckboxChipHTML: Story = {
+    name: 'Checkbox chip – HTML',
+    render: () => (
+        <ix-checkbox-group data-variant="chip" name="interesser-html">
+            <span data-field="legend">Velg interesser</span>
+            <div data-field="items">
+                <div className="ix-checkbox">
+                    <input type="checkbox" id="int-sport" value="sport" defaultChecked />
+                    <label htmlFor="int-sport">Sport</label>
+                </div>
+                <div className="ix-checkbox">
+                    <input type="checkbox" id="int-musikk" value="musikk" />
+                    <label htmlFor="int-musikk">Musikk</label>
+                </div>
+                <div className="ix-checkbox">
+                    <input type="checkbox" id="int-reise" value="reise" />
+                    <label htmlFor="int-reise">Reise</label>
+                </div>
+            </div>
+            <span data-field="error" aria-live="polite"></span>
+        </ix-checkbox-group>
     ),
 };

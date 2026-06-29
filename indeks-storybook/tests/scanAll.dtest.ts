@@ -11,6 +11,7 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Form/ValidationMessage',
   'Form/RadioGroup',
   'Form/Checkbox',
+  'Form/CheckboxGroup',
   'Icons/Icon',
   'Components/Accordion',
   'Components/Button',
