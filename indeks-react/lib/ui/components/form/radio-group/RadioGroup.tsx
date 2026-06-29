@@ -25,6 +25,10 @@ export type RadioGroupProps = {
     className?: string;
     options?: RadioOption[];
     children?: ReactNode;
+    /** Visuell variant. `'chip'` styler hvert valg som en pill — brukes av RadioChipGroup. Standard er vanlig radioknapp. */
+    variant?: 'chip';
+    /** Størrelse — kun relevant for `variant="chip"`. @default "md" */
+    size?: 'sm' | 'md';
 };
 
 // React-laget er tynt: ix-radio-group (WC) eier id, name, htmlFor, aria-*-koblinger,
@@ -47,6 +51,8 @@ export function RadioGroup({
     className,
     options,
     children,
+    variant,
+    size = 'md',
 }: RadioGroupProps): JSX.Element {
     const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
     const isControlled = controlledValue !== undefined;
@@ -70,6 +76,8 @@ export function RadioGroup({
         <ix-radio-group
             name={name}
             class={clsx(className) || undefined}
+            data-variant={variant}
+            data-size={variant === 'chip' && size !== 'md' ? size : undefined}
             data-orientation={orientation !== 'vertical' ? orientation : undefined}
             data-state={dataState}
             disabled={disabled || undefined}
