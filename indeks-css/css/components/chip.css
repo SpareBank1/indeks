@@ -3,10 +3,10 @@
    Felles grunnmur (.ix-chip): pill-form, størrelser (sm / md), passive/hover/active.
 
    Typer (settes via riktig HTML-element / web component oppå .ix-chip):
-   - Button chip   → <button class="ix-chip">                (default-only, denne fila)
-   - Removable chip → <button class="ix-chip"> + .ix-chip__remove
-   - Radio chip    → radio web component med .ix-chip-styling
-   - Checkbox chip → checkbox web component med .ix-chip-styling */
+   - Button chip    → <button class="ix-chip">                          (default-only)
+   - Removable chip → <button class="ix-chip" data-removable>            (selected-only; kryss via ::after, ingen ekstra markup)
+   - Radio chip     → radio web component med .ix-chip-styling
+   - Checkbox chip  → checkbox web component med .ix-chip-styling */
 
 :where(.ix-chip) {
     /* layout */
@@ -50,6 +50,48 @@
 :where(.ix-chip:active) {
     background-color: var(--ix-color-fill-interactive-active);
     border-color: var(--ix-color-border-main-active);
+}
+
+/* Removable chip — kun Selected. Hele chipen er fjern-knappen; krysset (::after)
+   er dekorativt. Fylt aksentfarge med lys tekst, jf. designets Selected Passive. */
+:where(.ix-chip[data-removable]) {
+    background-color: var(--ix-color-fill-main-default);
+    color: var(--ix-color-foreground-inverse-default);
+    border-color: transparent;
+}
+
+:where(.ix-chip[data-removable]:hover) {
+    background-color: var(--ix-color-fill-main-default-hover);
+    border-color: transparent;
+}
+
+:where(.ix-chip[data-removable]:active) {
+    background-color: var(--ix-color-fill-main-default-active);
+    border-color: transparent;
+}
+
+/* Dekorativt kryss — CSS-maske, ingen markup. currentColor følger den lyse teksten. */
+:where(.ix-chip[data-removable])::after {
+    content: '';
+    flex: 0 0 auto;
+    width: var(--ix-font-size-md);
+    height: var(--ix-font-size-md);
+    background-color: currentColor;
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    mask-size: cover;
+    -webkit-mask-size: cover;
+    mask-position: center;
+    -webkit-mask-position: center;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: url(https://cdn.sparebank1.no/icons/close.svg);
+    -webkit-mask-image: url(https://cdn.sparebank1.no/icons/close.svg);
+    /* stylelint-enable plugin/no-unsupported-browser-features */
+}
+
+:where(.ix-chip[data-removable][data-size='sm'])::after {
+    width: var(--ix-font-size-sm);
+    height: var(--ix-font-size-sm);
 }
 
 /* Focus */

@@ -23,6 +23,11 @@
       "wcag": ["4.1.2"]
     },
     {
+      "summary": "Gi removable chip et tilgjengelig fjern-navn",
+      "details": "Removable chip fjernes ved klikk på hele chipen, og krysset er kun et dekorativt CSS-ikon. Send removeLabel (React) eller sett hele aria-label (HTML), f.eks. «Sparing fjern». Uten det hører skjermleserbrukeren bare «Sparing, knapp» og vet ikke at aktivering fjerner chipen. Konsumenten er ansvarlig for riktig språk (bokmål «fjern», nynorsk «fjern», engelsk «remove») — komponenten har ingen hardkodet fallback.",
+      "wcag": ["4.1.2", "2.4.6"]
+    },
+    {
       "summary": "Unngå disabled som standard",
       "details": "En disabled chip forteller ikke brukeren hva som mangler. Der det er mulig, la chipen være aktiv og forklar i konteksten hvorfor et valg ev. ikke er tilgjengelig.",
       "wcag": ["3.3.1"]
@@ -42,7 +47,8 @@
     { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med outline-token." },
     { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
     { "id": "1.4.3", "notes": "Tekstfarge bruker --ix-color-foreground-main-default mot fill-main-tokens i alle interaksjonstilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG." },
-    { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button. Tilgjengelig navn fra tekst-innhold. Native disabled-attributt eksponeres til hjelpemidler." }
+    { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button. Tilgjengelig navn fra tekst-innhold (button chip) eller fra aria-label «[label] [removeLabel]» (removable chip). Native disabled-attributt eksponeres til hjelpemidler." },
+    { "id": "2.5.3", "notes": "For removable chip inngår den synlige label-teksten i det tilgjengelige navnet («[label] [removeLabel]»)." }
   ],
   "notRelevant": [
     { "id": "1.1.1", "reason": "Chipen har ingen ikke-tekstlig innhold som bilder — ev. ikon er dekorativt og skjules med aria-hidden." },
@@ -66,7 +72,6 @@
     { "id": "2.4.2" },
     { "id": "2.4.4", "reason": "Lenke-chips (as=\"a\") må ha meningsfull tekst — det er konsumentens ansvar." },
     { "id": "2.4.5" },
-    { "id": "2.4.6" },
     { "id": "2.4.11" },
     { "id": "2.5.1" },
     { "id": "2.5.2", "reason": "Native button-element — nettleseren håndterer pekerinteraksjon." },
@@ -97,6 +102,7 @@
   "screenReader": [
     "Ved fokus: \"[chip-tekst], knapp\"",
     "Som lenke (as=\"a\"): \"[chip-tekst], lenke\"",
+    "Removable chip ved fokus: \"[label] [removeLabel], knapp\" (f.eks. «Sparing fjern, knapp»)",
     "Deaktivert: \"[chip-tekst], knapp, deaktivert\""
   ]
 }

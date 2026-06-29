@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Chip } from '@sb1/indeks-react';
+import { Chip, RemovableChip } from '@sb1/indeks-react';
 
 const meta = {
     title: 'Components/Chip',
@@ -47,6 +47,50 @@ export const HTML: Story = {
     render: () => (
         <button type="button" className="ix-chip">
             Chip label
+        </button>
+    ),
+};
+
+export const Removable: Story = {
+    name: 'Removable chip',
+    render: () => (
+        <RemovableChip removeLabel="fjern" onRemove={() => {}}>
+            Sparing
+        </RemovableChip>
+    ),
+};
+
+export const RemovableLiten: Story = {
+    name: 'Removable chip – liten',
+    render: () => (
+        <RemovableChip size="sm" removeLabel="fjern" onRemove={() => {}}>
+            Sparing
+        </RemovableChip>
+    ),
+};
+
+export const RemovableGruppe: Story = {
+    name: 'Removable chip – gruppe',
+    render: () => (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
+            <RemovableChip removeLabel="fjern" onRemove={() => {}}>
+                Sparing
+            </RemovableChip>
+            <RemovableChip removeLabel="fjern" onRemove={() => {}}>
+                Lån
+            </RemovableChip>
+            <RemovableChip removeLabel="fjern" onRemove={() => {}}>
+                Forsikring
+            </RemovableChip>
+        </div>
+    ),
+};
+
+export const RemovableHTML: Story = {
+    name: 'Removable chip – HTML',
+    render: () => (
+        <button type="button" className="ix-chip" data-removable="" aria-label="Sparing fjern">
+            Sparing
         </button>
     ),
 };

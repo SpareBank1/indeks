@@ -11,7 +11,7 @@ import a11yData from './accessibility/chip.json';
 
 Chip er små, interaktive komponenter som lar brukeren gjøre raske valg, filtrere innhold eller trigge handlinger. Chips brukes ofte i grupper og gir en kompakt og oversiktlig måte å presentere valg på.
 
-Denne siden dokumenterer **button chip** — en chip som fungerer som en knapp og trigger en handling. Den har ingen vedvarende valgt tilstand.
+Denne siden dokumenterer **button chip** — en chip som fungerer som en knapp og trigger en handling uten vedvarende valgt tilstand — og **removable chip** — en chip som representerer et aktivt valg og kan fjernes.
 
 ## Egnet til
 
@@ -156,6 +156,62 @@ Bruk `as="a"` når chipen navigerer til en URL. Den beholder chip-styling, men r
 </TabItem>
 </Tabs>
 
+## Removable chip
+
+En removable chip representerer et aktivt valg eller en verdi som brukeren kan fjerne — for eksempel et valgt filter. Den finnes kun i valgt tilstand (den eksisterer ikke før den er valgt) og vises med fylt aksentfarge og et kryss til høyre.
+
+**Hele chipen er fjern-knappen.** Et klikk hvor som helst på chipen — eller Enter/Mellomrom når den har fokus — fjerner den. Krysset er et dekorativt CSS-ikon uten eget fokus, så det blir kun ett tab-stopp per chip. Dette følger mønsteret i Aksel og Designsystemet.
+
+Det tilgjengelige navnet settes sammen av label og et fjern-suffiks, f.eks. «Sparing fjern». I React sender du suffikset via `removeLabel`; i ren HTML setter du hele `aria-label` selv. Suffikset må være på brukerens språk — komponenten har ingen hardkodet fallback.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button class="ix-chip" data-removable aria-label="Sparing fjern">
+  Sparing
+</button>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<RemovableChip removeLabel="fjern" onRemove={() => {}}>
+  Sparing
+</RemovableChip>
+```
+
+</TabItem>
+</Tabs>
+
+### Gruppe av removable chips
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
+  <button class="ix-chip" data-removable aria-label="Sparing fjern">Sparing</button>
+  <button class="ix-chip" data-removable aria-label="Lån fjern">Lån</button>
+  <button class="ix-chip" data-removable aria-label="Forsikring fjern">Forsikring</button>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
+  <RemovableChip removeLabel="fjern" onRemove={() => {}}>Sparing</RemovableChip>
+  <RemovableChip removeLabel="fjern" onRemove={() => {}}>Lån</RemovableChip>
+  <RemovableChip removeLabel="fjern" onRemove={() => {}}>Forsikring</RemovableChip>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
 ## Retningslinjer
 
 ### Bruk chip for raske og enkle valg
@@ -186,14 +242,16 @@ Ikoner kan støtte forståelsen, men skal ikke erstatte tekst. Tekst er alltid d
 - **Bruk chips i grupper** — en enkeltstående chip gir lite kontekst. Presenter relaterte chips sammen.
 - **Ikke stol på farge alene** — teksten må alltid være den primære informasjonsbæreren.
 - **Bruk riktig element** — `<button>` (standard) for handlinger og `as="a"` / `<a>` for navigasjon. Ikke legg click-handlers på `<div>` eller `<span>`.
+- **Gi removable chip et tilgjengelig fjern-navn** — send `removeLabel` (React) eller sett hele `aria-label` (HTML), f.eks. «Sparing fjern». Uten det hører skjermleserbrukeren bare «Sparing, knapp» og vet ikke at klikk fjerner den. Bruk riktig språk (bokmål «fjern», nynorsk «fjern», engelsk «remove») — ingen hardkodet fallback.
 - **Unngå disabled som standard** — en disabled chip sier ikke hva som mangler. La heller chipen være aktiv og forklar konteksten.
 
 ### Hva komponenten gjør automatisk
 
 - **`type="button"`** settes som standard på `<button>`-elementer så chipen ikke sender inn skjema utilsiktet.
-- **Tilgjengelig navn** hentes fra tekst-innholdet i chipen.
+- **Tilgjengelig navn** hentes fra tekst-innholdet i chipen. For removable chip settes `aria-label` til «[label] [removeLabel]».
 - **Fokusindikator** via `:focus-visible` — synlig for tastaturbrukere, ikke for mus.
 - **Tilstand med fyll og kant** — hover og active kommuniseres med mer enn farge.
+- **Fjern-krysset er dekorativt** — det rendres med CSS (`::after`) og ligger ikke i tilgjengelighetstreet. Hele removable-chipen er fjern-knappen, så det blir kun ett tab-stopp.
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -203,10 +261,22 @@ Ikoner kan støtte forståelsen, men skal ikke erstatte tekst. Tekst er alltid d
 
 ## Props / API
 
+### `Chip` (button chip)
+
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
 | `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
 | `as` | `ElementType` | `'button'` | Render som annet element, f.eks. `'a'` for lenke-chips |
+| `disabled` | `boolean` | | Deaktiverer chipen (nativ HTML-attributt) |
+
+### `RemovableChip`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `children` | `string` | | Etiketten på chipen. Inngår i det tilgjengelige navnet |
+| `removeLabel` | `string` | | **Påkrevd.** Suffiks i det tilgjengelige navnet, f.eks. `"fjern"` gir «Sparing fjern». i18n — ingen fallback |
+| `onRemove` | `() => void` | | Kalles når chipen fjernes (klikk / Enter / Mellomrom) |
+| `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
 | `disabled` | `boolean` | | Deaktiverer chipen (nativ HTML-attributt) |
 
 I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `type`, `name`, `value`, `tabIndex` osv.) og settes direkte på elementet.
@@ -221,6 +291,8 @@ Trenger du `ix-chip`-stylingen på HTML du setter sammen selv — uten React-kom
 |-----------------|----------------------|
 | Chip | `.ix-chip` |
 | Liten størrelse | `data-size="sm"` |
+| Removable chip (valgt) | `data-removable` |
+| Fjern-kryss | `.ix-chip[data-removable]::after` (dekorativt, ingen markup) |
 | Hover / active | `:hover` / `:active` (automatisk) |
 | Fokus | `:focus-visible` (automatisk) |
 | Deaktivert | `disabled` eller `aria-disabled="true"` |
@@ -239,6 +311,10 @@ Trenger du `ix-chip`-stylingen på HTML du setter sammen selv — uten React-kom
 <a class="ix-chip" href="/sparing">
   Sparing
 </a>
+
+<button class="ix-chip" data-removable aria-label="Sparing fjern">
+  Sparing
+</button>
 ```
 
 ## Relatert
