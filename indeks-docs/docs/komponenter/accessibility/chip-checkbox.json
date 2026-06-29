@@ -1,0 +1,96 @@
+{
+  "component": "Checkbox chip",
+  "lastReviewed": "2026-06-29",
+  "consumerResponsibilities": [
+    {
+      "summary": "Gi checkbox chip-gruppen en beskrivende legend",
+      "details": "Checkbox chip-gruppen får sitt tilgjengelige navn fra legend (React: legend-prop; HTML: [data-field=\"legend\"]). Uten legend annonseres gruppen uten navn, og brukeren vet ikke hva valgene gjelder. Legend er påkrevd og må være på brukerens språk — komponenten har ingen hardkodet fallback.",
+      "wcag": ["1.3.1", "3.3.2", "4.1.2"]
+    },
+    {
+      "summary": "Bruk checkbox chip når flere valg kan kombineres",
+      "details": "Checkbox chip er for uavhengige valg der null, ett eller flere kan være aktive samtidig. Skal brukeren kun kunne velge ett alternativ, er det feil semantikk — bruk radio chip i stedet. Hver CheckboxChip må ha en kort, beskrivende label.",
+      "wcag": ["4.1.2", "1.3.1"]
+    },
+    {
+      "summary": "Gi hvert valg en kort og tydelig label",
+      "details": "Label-teksten på hver CheckboxChip er det tilgjengelige navnet for valget. Den skal være kort og enkel å skanne — f.eks. «Sport». i18n: komponenten har ingen hardkodet fallback.",
+      "wcag": ["2.4.6", "1.3.1"]
+    },
+    {
+      "summary": "Ikke stol på farge alene for valgt tilstand",
+      "details": "Valgt tilstand kommuniseres med tre samtidige signaler (fylt firkant-indikator med hake, aksent-kant og lys fyll på pillen) — ikke kun farge. Ikke overstyr dette slik at kun fargen skiller valgt fra ikke-valgt.",
+      "wcag": ["1.4.1"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Gruppen får role=group og navn fra legend via aria-labelledby. Hvert valg er native <input type=checkbox> med label koblet via for/id." },
+    { "id": "1.3.2", "notes": "Innholdet følger naturlig lesrekkefølge i DOM." },
+    { "id": "1.4.1", "notes": "Valgt tilstand kommuniseres med fylt firkant-indikator (hake), aksent-kant og fyll — ikke farge alene." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Chips wrapper og reflower korrekt ned til 320px viewport." },
+    { "id": "1.4.11", "notes": "Fokusindikator og indikator-kant oppfyller 3:1 kontrastkrav." },
+    { "id": "2.1.1", "notes": "Native <input type=checkbox> er fullt opererbart med tastatur: Tab flytter fokus til hver chip, Space toggler valgt tilstand." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut av gruppen med Tab og Shift+Tab. Ingen tastaturfelle." },
+    { "id": "2.4.3", "notes": "Hver chip er et eget tab-stopp i naturlig DOM-rekkefølge (ingen piltast-mutex — i motsetning til radio chip)." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible som følger pill-formen." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
+    { "id": "3.2.2", "notes": "Å toggle en chip endrer kun gruppens verdi, ikke kontekst — ingen uventet navigasjon eller innsending." },
+    { "id": "1.4.3", "notes": "Tekstfarge mot fill-tokens i alle tilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG." },
+    { "id": "3.3.2", "notes": "Gruppens legend fungerer som instruksjon/etikett for valgene." },
+    { "id": "4.1.2", "notes": "<ix-checkbox-group> setter role=group på gruppen (navn fra legend via aria-labelledby), og native <input type=checkbox> gir rolle og valgt/ikke-valgt-tilstand (aria-checked). Native disabled-attributt eksponeres til hjelpemidler." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Firkant-/hake-indikatoren er rent dekorativ CSS uten egen markup; tilstanden formidles av native checkbox-input." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Chipen formidler ikke instruksjoner utover label/legend." },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt som ber om personlig informasjon." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.12" },
+    { "id": "1.4.13" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4" },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native checkbox-input — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.3", "reason": "Den synlige label-teksten er det tilgjengelige navnet på hvert valg." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "2.5.8", "reason": "Klikkflaten avhenger av størrelse og layout; verifiseres i kontekst." },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1" },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Checkbox chip genererer ingen statusmeldinger selv; en ev. feilmelding settes av konsumenten via errorMessage." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til neste chip i gruppen" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige chip" },
+    { "key": "Space", "action": "Toggler valgt tilstand på chipen som har fokus" }
+  ],
+  "screenReader": [
+    "Gruppe ved fokus: \"[legend], gruppe\"",
+    "Hvert valg: \"[label], avkryssingsboks, avkrysset/ikke avkrysset\"",
+    "Deaktivert valg: \"[label], avkryssingsboks, deaktivert\""
+  ]
+}

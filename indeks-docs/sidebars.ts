@@ -87,7 +87,7 @@ const sidebars: SidebarsConfig = {
                         'komponenter/chip/button',
                         'komponenter/chip/removable',
                         'komponenter/chip/radio',
-                        // 'komponenter/chip/checkbox',  ← legges til i Fase 4
+                        'komponenter/chip/checkbox',
                     ],
                 },
                 'komponenter/message',
@@ -105,6 +105,12 @@ const sidebars: SidebarsConfig = {
                     collapsed: false,
                     items: [
                         'komponenter/skjema/checkbox',
+                        {
+                            type: 'category',
+                            label: 'CheckboxGroup',
+                            link: { type: 'doc', id: 'komponenter/skjema/checkbox-group' },
+                            items: ['komponenter/skjema/checkbox-group-designvalg'],
+                        },
                         'komponenter/skjema/label',
                         {
                             type: 'category',

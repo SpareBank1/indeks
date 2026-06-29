@@ -1,0 +1,511 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/checkbox-group.json';
+
+# CheckboxGroup
+
+CheckboxGroup samler flere relaterte checkboxer i én gruppe der brukeren kan velge ett eller flere alternativer samtidig. Hvert valg er uavhengig av de andre.
+
+## Egnet til
+
+- Når brukeren skal kunne velge flere alternativer samtidig
+- Filtrering der flere valg kan kombineres
+- Samtykker eller preferanser der hvert valg er uavhengig
+- Kortere lister med tydelige forskjeller mellom alternativene
+
+## Uegnet til
+
+- Når brukeren kun skal velge ett alternativ (bruk `RadioGroup`)
+- Lange lister med mange alternativer (vurder `Select`)
+- Situasjoner der valgene er gjensidig utelukkende
+- En enkeltstående checkbox uten gruppe-kontekst (bruk `Checkbox`)
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-checkbox-group name="kontakt-html">
+  <span data-field="legend">Hvordan vil du bli kontaktet?</span>
+  <div data-field="items">
+    <div class="ix-checkbox">
+      <input type="checkbox" value="epost" defaultChecked />
+      <label>E-post</label>
+    </div>
+    <div class="ix-checkbox">
+      <input type="checkbox" value="sms" />
+      <label>SMS</label>
+    </div>
+    <div class="ix-checkbox">
+      <input type="checkbox" value="telefon" />
+      <label>Telefon</label>
+    </div>
+  </div>
+  <span data-field="error"></span>
+</ix-checkbox-group>
+```
+
+`<ix-checkbox-group>` genererer `id` på hver input og kobler `for`/`id` mellom label og input automatisk, setter opp `role="group"`, `aria-labelledby` til legend og `aria-describedby` til description og error. Hver checkbox wrappes i `<div class="ix-checkbox">` med input og label som søsken — indikatoren tegnes som CSS-pseudo-element. Error-elementet skal alltid ligge i DOM. Tomt betyr ingen feil.
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<CheckboxGroup
+  legend="Hvordan vil du bli kontaktet?"
+  name="kontakt"
+  defaultValue={['epost']}
+  options={[
+    { value: 'epost', label: 'E-post' },
+    { value: 'sms', label: 'SMS' },
+    { value: 'telefon', label: 'Telefon' },
+  ]}
+/>
+```
+
+For enkle lister er `options`-propen den raskeste veien — på samme måte som `Select`. Hver option har `value` og `label`.
+
+I praksis vil du som regel holde valgte verdier i state og koble dem via `value`/`onChange`. Merk at `value` er et **array** — flere kan være valgt samtidig:
+
+```tsx
+const [kontakt, setKontakt] = useState<string[]>(['epost']);
+
+<CheckboxGroup
+  legend="Hvordan vil du bli kontaktet?"
+  name="kontakt"
+  value={kontakt}
+  onChange={setKontakt}
+  options={[
+    { value: 'epost', label: 'E-post' },
+    { value: 'sms', label: 'SMS' },
+    { value: 'telefon', label: 'Telefon' },
+  ]}
+/>
+```
+
+Trenger du mer — deaktiverte alternativer, custom `id`-er eller ref — bruk `CheckboxButton`-barn i stedet:
+
+```tsx live
+<CheckboxGroup legend="Hvordan vil du bli kontaktet?" name="kontakt-children" defaultValue={['epost']}>
+  <CheckboxButton value="epost" label="E-post" />
+  <CheckboxButton value="sms" label="SMS" />
+  <CheckboxButton value="telefon" label="Telefon" />
+</CheckboxGroup>
+```
+
+Komponenten håndterer name-propagering og ARIA-kobling automatisk. Hver CheckboxButton må ha en unik value innenfor gruppen. Hvis både `options` og children er satt, vinner `options`.
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Med beskrivelse
+
+Bruk `description` for å gi ekstra kontekst til hele gruppen.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-checkbox-group name="interesser-html">
+  <span data-field="legend">Velg interesser</span>
+  <p data-field="description">Du kan velge flere</p>
+  <div data-field="items">
+    <div class="ix-checkbox">
+      <input type="checkbox" value="sport" defaultChecked />
+      <label>Sport</label>
+    </div>
+    <div class="ix-checkbox">
+      <input type="checkbox" value="musikk" />
+      <label>Musikk</label>
+    </div>
+  </div>
+  <span data-field="error"></span>
+</ix-checkbox-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<CheckboxGroup
+  legend="Velg interesser"
+  description="Du kan velge flere"
+  name="interesser"
+  defaultValue={['sport']}
+  options={[
+    { value: 'sport', label: 'Sport' },
+    { value: 'musikk', label: 'Musikk' },
+  ]}
+/>
+```
+
+</TabItem>
+</Tabs>
+
+### Med feilmelding
+
+Når validering feiler, vis en feilmelding som forklarer hva som er galt og hva brukeren skal gjøre. `<ix-checkbox-group>` setter `aria-invalid="true"` på gruppen automatisk når error-elementet har innhold.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-checkbox-group name="vilkar-html" data-state="error">
+  <span data-field="legend">Bekreft før du fortsetter</span>
+  <div data-field="items">
+    <div class="ix-checkbox">
+      <input type="checkbox" value="vilkar" aria-invalid="true" />
+      <label>Jeg godtar vilkårene</label>
+    </div>
+    <div class="ix-checkbox">
+      <input type="checkbox" value="personvern" aria-invalid="true" />
+      <label>Jeg godtar personvernerklæringen</label>
+    </div>
+  </div>
+  <span data-field="error">
+    <ix-icon materialdesignname="dangerous"></ix-icon>
+    Du må godta begge før du kan fortsette
+  </span>
+</ix-checkbox-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<CheckboxGroup
+  legend="Bekreft før du fortsetter"
+  name="vilkar"
+  errorMessage="Du må godta begge før du kan fortsette"
+  options={[
+    { value: 'vilkar', label: 'Jeg godtar vilkårene' },
+    { value: 'personvern', label: 'Jeg godtar personvernerklæringen' },
+  ]}
+/>
+```
+
+</TabItem>
+</Tabs>
+
+### Skjult legend
+
+I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan legend skjules visuelt. Den skal fortsatt være meningsfull — skjermlesere leser den.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-checkbox-group name="rad-1-html">
+  <span data-field="legend" class="ix-sr-only">Velg tilvalg for rad 1</span>
+  <div data-field="items">
+    <div class="ix-checkbox">
+      <input type="checkbox" value="a" defaultChecked />
+      <label>Tilvalg A</label>
+    </div>
+    <div class="ix-checkbox">
+      <input type="checkbox" value="b" />
+      <label>Tilvalg B</label>
+    </div>
+  </div>
+  <span data-field="error"></span>
+</ix-checkbox-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<CheckboxGroup
+  legend="Velg tilvalg for rad 1"
+  name="rad-1"
+  hideLegend
+  defaultValue={['a']}
+  options={[
+    { value: 'a', label: 'Tilvalg A' },
+    { value: 'b', label: 'Tilvalg B' },
+  ]}
+/>
+```
+
+</TabItem>
+</Tabs>
+
+### Skrivebeskyttet og deaktivert
+
+`readOnly` viser valgene men hindrer endring. `disabled` gjør hele gruppen inaktiv. Vurder om disabled er riktig — alternativet kan ofte heller skjules eller forklares.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <ix-checkbox-group name="ro-html" readonly data-state="readonly">
+    <span data-field="legend">
+      <ix-icon materialdesignname="lock"></ix-icon>
+      Skrivebeskyttet
+    </span>
+    <div data-field="items">
+      <div class="ix-checkbox">
+        <input type="checkbox" value="a" defaultChecked />
+        <label>Alternativ A</label>
+      </div>
+      <div class="ix-checkbox">
+        <input type="checkbox" value="b" />
+        <label>Alternativ B</label>
+      </div>
+    </div>
+    <span data-field="error"></span>
+  </ix-checkbox-group>
+  <ix-checkbox-group name="dis-html" disabled data-state="disabled">
+    <span data-field="legend">Deaktivert</span>
+    <div data-field="items">
+      <div class="ix-checkbox">
+        <input type="checkbox" value="a" defaultChecked />
+        <label>Alternativ A</label>
+      </div>
+      <div class="ix-checkbox">
+        <input type="checkbox" value="b" />
+        <label>Alternativ B</label>
+      </div>
+    </div>
+    <span data-field="error"></span>
+  </ix-checkbox-group>
+</>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <CheckboxGroup
+    legend="Skrivebeskyttet"
+    name="ro"
+    readOnly
+    defaultValue={['a']}
+    options={[
+      { value: 'a', label: 'Alternativ A' },
+      { value: 'b', label: 'Alternativ B' },
+    ]}
+  />
+  <CheckboxGroup
+    legend="Deaktivert"
+    name="dis"
+    disabled
+    defaultValue={['a']}
+    options={[
+      { value: 'a', label: 'Alternativ A' },
+      { value: 'b', label: 'Alternativ B' },
+    ]}
+  />
+</>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Tydelige labels gir forutsigbarhet
+
+Hver CheckboxButton skal ha en synlig og beskrivende label. Labelen skal beskrive hva alternativet er, ikke hva brukeren skal gjøre.
+
+| Gjør dette | Ikke dette |
+|------------|------------|
+| Motta nyhetsbrev | Meld meg på nyhetsbrev |
+| E-post | Velg e-post |
+
+### Bruk gruppe når flere checkboxer hører sammen
+
+Når flere checkboxer gjelder samme spørsmål, samles de i en gruppe med en legend som forklarer hva valget gjelder. Det gjør det tydelig at brukeren kan velge ett eller flere alternativer. En enkeltstående checkbox (f.eks. «Jeg godtar vilkårene») bruker `Checkbox` i stedet.
+
+### Vertikal liste gir best skannbarhet
+
+Alternativene vises vertikalt, én under den andre. Det gjør det enklere å skanne listen og sammenligne valgene, og fungerer bedre ved zoom og smale skjermer.
+
+### Rekkefølgen påvirker hvor lett det er å finne frem
+
+Sorter alternativene logisk eller alfabetisk. I lengre lister kan det være riktig å prioritere de mest brukte valgene øverst — vær bevisst på at det påvirker brukerens beslutning.
+
+### Bruk checkbox når valgene er uavhengige
+
+Checkbox signaliserer at flere valg kan kombineres fritt. Er valgene gjensidig utelukkende, bruk `RadioGroup` i stedet.
+
+### Hele raden er klikkbar
+
+Både checkboxen og labelen er klikkbar. Det gir en stor trefflate og fungerer godt på mobil og for brukere med nedsatt motorikk.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Beskrivende legend** — komponenten kobler legend til gruppen, men du må skrive god tekst
+- **Beskrivende labels** — hver CheckboxButton må ha en label som forklarer hva alternativet er
+- **Konkret feilmelding** — `errorMessage` viser feilen, men teksten er ditt ansvar
+- **Vurder `disabled` med omtanke** — et deaktivert alternativ er ofte vanskelig å forstå
+- **Bruk checkbox kun for uavhengige valg** — er valgene gjensidig utelukkende, bruk `RadioGroup`
+
+### Hva komponenten gjør automatisk
+
+Når du bruker `<ix-checkbox-group>` eller React-komponenten, settes dette opp for deg:
+
+- **`role="group"`** på containeren slik at skjermlesere annonserer gruppen riktig (det finnes ingen egen «checkboxgroup»-rolle)
+- **`aria-labelledby`** til legend-elementet — gruppens tilgjengelige navn
+- **`aria-describedby`** til description og error — leses etter legend
+- **`aria-live="polite"`** på error-elementet slik at endringer kunngjøres uten å avbryte
+- **`aria-invalid`** på containeren synkroniseres med error-innholdet via MutationObserver
+- **`htmlFor`/`id`** mellom hver label og input — klikk på label toggler alternativet
+- **Felles `name`** propageres til alle inputs når du setter `name` på gruppen — slik at alle valgene sendes med i skjemaet
+- **`disabled`/`readonly`** propagerer fra container til alle inputs (readonly blokkerer Space via tastatur, siden `readOnly` er en no-op på checkbox)
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### `<ix-checkbox-group>` web component
+
+`<ix-checkbox-group>` er en wrapper som setter opp ARIA-koblinger automatisk. Strukturen under viser hvor hver del plasseres:
+
+```html
+<ix-checkbox-group>                               ← wrapper, role="group" settes automatisk
+  <span data-field="legend">Velg interesser</span> ← gruppens label, aria-labelledby kobles automatisk
+  <p data-field="description">...</p>             ← valgfri hjelpetekst
+  <div data-field="items">                        ← container for checkboxene
+    <div class="ix-checkbox">                     ← wrapper rundt input + label
+      <input type="checkbox" value="..." />        ← id genereres av WC, name propageres fra host
+      <label>Label</label>                        ← for-attributt kobles av WC
+    </div>
+    ...
+  </div>
+  <span data-field="error">...</span>             ← alltid i DOM, tomt = ingen feil
+</ix-checkbox-group>
+```
+
+| Attributt | Verdier | Beskrivelse |
+|-----------|---------|-------------|
+| `name` | streng | Propagerer `name` til alle inputs i gruppen |
+| `disabled` | flagg | Propagerer `disabled` til alle inputs i gruppen |
+| `readonly` | flagg | Skrivebeskytter gruppen. Blokkerer Space via tastatur |
+| `data-state` | `error` \| `readonly` \| `disabled` | Visuell tilstand. Settes vanligvis av React-laget |
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `<span data-field="legend">` | Ja | Gruppe-label. Kobles via `aria-labelledby` |
+| `<p data-field="description">` | Nei | Hjelpetekst for hele gruppen |
+| `<div data-field="items">` | Ja | Container for checkboxene |
+| `<div class="ix-checkbox">` | Ja | Wrapper rundt én input + label. Holder dem som direkte søsken og gir indikator-styling |
+| `<input type="checkbox">` | Ja | Selve checkbox-elementet. `name` propageres automatisk fra host |
+| `<label>` | Ja | Synlig labeltekst. `for`/`id` kobles automatisk |
+| `<span data-field="error">` | Ja | Feilmelding. Alltid i DOM. Tomt = ingen feil |
+
+### Tilstand via native attributter
+
+`disabled` og `readonly` på `<ix-checkbox-group>` håndteres automatisk. `disabled` propageres til alle inputs; `readonly` blokkeres på tastatur fordi det er en no-op på `<input type="checkbox">`.
+
+</TabItem>
+<TabItem value="react" label="React">
+
+### CheckboxGroupProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `legend` | `string` | Ja | | Gruppens label. Vises og leses opp av skjermlesere |
+| `description` | `string` | Nei | | Hjelpetekst for hele gruppen |
+| `errorMessage` | `string` | Nei | | Feilmelding. Trigger `aria-invalid` automatisk når satt |
+| `name` | `string` | Nei | | `name`-attributtet på alle inputs. Propageres til hver input når satt |
+| `value` | `string[]` | Nei | | Kontrollert modus: hvilke alternativer som er valgt. Bruk sammen med `onChange` |
+| `defaultValue` | `string[]` | Nei | `[]` | Ukontrollert modus: initielt valgte verdier. Brukeren kan endre fritt |
+| `onChange` | `(values: string[]) => void` | Nei | | Kalles med hele det oppdaterte arrayet når brukeren toggler et valg |
+| `disabled` | `boolean` | Nei | `false` | Deaktiverer hele gruppen |
+| `readOnly` | `boolean` | Nei | `false` | Skrivebeskytter hele gruppen |
+| `hideLegend` | `boolean` | Nei | `false` | Skjuler legend visuelt — leses fortsatt av skjermlesere |
+| `className` | `string` | Nei | | CSS-klasse på `<ix-checkbox-group>`-rotelementet |
+| `options` | `CheckboxOption[]` | Nei* | | Liste med alternativer. Snarvei for enkle lister — alternativ til `children` |
+| `children` | `ReactNode` | Nei* | | CheckboxButton-elementer. Brukes når du trenger mer kontroll enn `options` gir |
+
+*Enten `options` eller `children` må være satt. Hvis begge er satt, vinner `options`.
+
+### CheckboxOption
+
+| Felt | Type | Påkrevd | Beskrivelse |
+|------|------|---------|-------------|
+| `value` | `string` | Ja | Verdien som settes på input |
+| `label` | `string` | Ja | Synlig labeltekst |
+
+### CheckboxButtonProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `value` | `string` | Ja | | Verdien som settes på input. Identifiserer alternativet i gruppens `value`-array |
+| `label` | `string` | Ja | | Synlig labeltekst |
+| `disabled` | `boolean` | Nei | `false` | Deaktiverer denne enkelt-knappen (kommer i tillegg til gruppe-disabled) |
+| `className` | `string` | Nei | | CSS-klasse på wrapper-div |
+| `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet |
+
+I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocus`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten — de sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
+
+:::note
+`CheckboxButton` er designet for bruk inni `CheckboxGroup`. `onChange` er ikke tilgjengelig som prop fordi endringshåndteringen skjer via gruppen. For en enkeltstående checkbox, bruk `Checkbox`.
+:::
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Inni `<ix-checkbox-group>` styles `<input type="checkbox">` og `<label>` (inni `.ix-checkbox`) automatisk — indikatoren tegnes som pseudo-element på labelen, så du trenger ingen ekstra markup.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Gruppe-wrapper | `.ix-checkbox-group` (eller tagnavn `ix-checkbox-group`) |
+| Legend | `[data-field="legend"]` |
+| Description | `[data-field="description"]` |
+| Items-container | `[data-field="items"]` |
+| Checkbox-wrapper | `.ix-checkbox` |
+| Input — visuelt skjult (valgfri hook) | `.ix-checkbox__input` |
+| Label med indikator (valgfri hook) | `.ix-checkbox__label` |
+| Feilmelding | `[data-field="error"]` |
+| Skjult legend | `.ix-sr-only` |
+
+### Eksempel: bruk i egen HTML-struktur
+
+Inni `<ix-checkbox-group>` trengs ingen `id` eller `for` — komponenten kobler input og label automatisk:
+
+```html
+<ix-checkbox-group name="interesser">
+  <span data-field="legend">Velg interesser</span>
+  <div data-field="items">
+    <div class="ix-checkbox">
+      <input type="checkbox" value="sport" />
+      <label>Sport</label>
+    </div>
+  </div>
+  <span data-field="error"></span>
+</ix-checkbox-group>
+```
+
+## Designvalg
+
+Bak komponenten ligger en rekke tekniske valg — om hvorfor vi bruker `role="group"` istedenfor `<fieldset>`, hvordan `value` er et array, hvorfor `aria-invalid` kun settes på gruppen, og hvordan CheckboxGroup skiller seg fra RadioGroup.
+
+Se [Designvalg for CheckboxGroup](./checkbox-group-designvalg) hvis du er nysgjerrig på avveiningene.
+
+## Relatert
+
+- [Checkbox](./checkbox) — en enkeltstående checkbox
+- [RadioGroup](./radio-group) — når kun ett alternativ kan velges
+- [ValidationMessage](./validation-message) — feilmeldingsteksten
+- [Designvalg for CheckboxGroup](./checkbox-group-designvalg) — tekniske avveininger

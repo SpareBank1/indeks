@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import type { IxField, IxIcon, IxRadioGroup } from '@sb1/indeks-web';
+import type { IxCheckboxGroup, IxField, IxIcon, IxRadioGroup } from '@sb1/indeks-web';
 import type { IconName } from './ui/icons/icon-types';
 
 declare module 'react' {
@@ -27,6 +27,13 @@ declare module 'react' {
                 readonly?: boolean | '';
                 required?: boolean | '';
                 'data-orientation'?: 'vertical' | 'horizontal';
+                'data-state'?: 'error' | 'readonly' | 'disabled';
+            };
+            'ix-checkbox-group': React.DetailedHTMLProps<React.HTMLAttributes<IxCheckboxGroup>, IxCheckboxGroup> & {
+                name?: string;
+                class?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
                 'data-state'?: 'error' | 'readonly' | 'disabled';
             };
             'ix-stack': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {

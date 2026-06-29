@@ -34,12 +34,16 @@ Checkbox lar brukeren velge én eller flere alternativer fra en liste. Hvert val
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<label className="ix-checkbox">
-  <input type="checkbox" className="ix-checkbox__input" name="terms" />
-  <span className="ix-checkbox__box" />
-  <span className="ix-checkbox__label">Jeg godtar vilkårene</span>
-</label>
+<div class="ix-checkbox">
+  <input type="checkbox" id="terms" name="terms" />
+  <label for="terms">Jeg godtar vilkårene</label>
+</div>
 ```
+
+Strukturen er en naken `<input type="checkbox">` med en `<label>` som søsken inni
+`.ix-checkbox`. Selve avkrysningsboksen og haken tegnes som CSS-pseudo-element på
+labelen — du trenger ingen ekstra markup for indikatoren. Koble label til input med
+`for`/`id` så hele raden blir klikkbar.
 
 </TabItem>
 </Tabs>
@@ -64,11 +68,10 @@ Checkbox lar brukeren velge én eller flere alternativer fra en liste. Hvert val
 
 ```jsx live
 <ix-field>
-  <label className="ix-checkbox">
-    <input type="checkbox" className="ix-checkbox__input" name="newsletter" />
-    <span className="ix-checkbox__box" />
-    <span className="ix-checkbox__label">Send meg nyhetsbrev</span>
-  </label>
+  <div class="ix-checkbox">
+    <input type="checkbox" id="newsletter" name="newsletter" />
+    <label for="newsletter">Send meg nyhetsbrev</label>
+  </div>
   <span data-field="description">Du kan når som helst melde deg av</span>
   <span data-field="error"></span>
 </ix-field>
@@ -95,11 +98,10 @@ Checkbox lar brukeren velge én eller flere alternativer fra en liste. Hvert val
 
 ```jsx live
 <ix-field>
-  <label className="ix-checkbox">
-    <input type="checkbox" className="ix-checkbox__input" name="terms" aria-invalid="true" />
-    <span className="ix-checkbox__box" />
-    <span className="ix-checkbox__label">Jeg godtar vilkårene</span>
-  </label>
+  <div class="ix-checkbox">
+    <input type="checkbox" id="terms-invalid" name="terms" aria-invalid="true" />
+    <label for="terms-invalid">Jeg godtar vilkårene</label>
+  </div>
   <span data-field="error">Du må godta vilkårene for å fortsette</span>
 </ix-field>
 ```
@@ -128,11 +130,10 @@ function IndeterminateCheckbox() {
     if (ref.current) ref.current.indeterminate = true;
   }, []);
   return (
-    <label className="ix-checkbox">
-      <input ref={ref} type="checkbox" className="ix-checkbox__input" name="select-all" />
-      <span className="ix-checkbox__box" />
-      <span className="ix-checkbox__label">Velg alle</span>
-    </label>
+    <div class="ix-checkbox">
+      <input ref={ref} type="checkbox" id="select-all" name="select-all" />
+      <label for="select-all">Velg alle</label>
+    </div>
   );
 }
 ```
@@ -159,16 +160,14 @@ I HTML må `indeterminate` settes via JavaScript: `checkbox.indeterminate = true
 
 ```jsx live
 <>
-  <label className="ix-checkbox ix-checkbox--disabled">
-    <input type="checkbox" className="ix-checkbox__input" disabled />
-    <span className="ix-checkbox__box" />
-    <span className="ix-checkbox__label">Ikke tilgjengelig</span>
-  </label>
-  <label className="ix-checkbox ix-checkbox--disabled">
-    <input type="checkbox" className="ix-checkbox__input" disabled defaultChecked />
-    <span className="ix-checkbox__box" />
-    <span className="ix-checkbox__label">Allerede godtatt</span>
-  </label>
+  <div class="ix-checkbox ix-checkbox--disabled">
+    <input type="checkbox" id="disabled-1" disabled />
+    <label for="disabled-1">Ikke tilgjengelig</label>
+  </div>
+  <div class="ix-checkbox ix-checkbox--disabled">
+    <input type="checkbox" id="disabled-2" disabled checked />
+    <label for="disabled-2">Allerede godtatt</label>
+  </div>
 </>
 ```
 
@@ -177,48 +176,48 @@ I HTML må `indeterminate` settes via JavaScript: `checkbox.indeterminate = true
 
 ### Gruppe med flere checkboxer
 
+Når flere checkboxer hører sammen, bruk `CheckboxGroup` med `CheckboxButton`-barn. Gruppen
+rendres som `<ix-checkbox-group>` med `role="group"` (ikke `<fieldset>`, som har kjente
+layout-bugger i Safari) og kobler legend, hjelpetekst og feilmelding til gruppen automatisk.
+`value` er et array — flere kan være valgt samtidig.
+
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ```tsx live
-<fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
-  <legend style={{ fontWeight: 'var(--ix-font-weight-medium)', marginBottom: '8px' }}>
-    Hvordan vil du bli kontaktet?
-  </legend>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <Checkbox label="E-post" name="contact" value="email" />
-    <Checkbox label="SMS" name="contact" value="sms" />
-    <Checkbox label="Telefon" name="contact" value="phone" />
-  </div>
-</fieldset>
+<CheckboxGroup
+  legend="Hvordan vil du bli kontaktet?"
+  name="contact"
+  defaultValue={['email']}
+>
+  <CheckboxButton value="email" label="E-post" />
+  <CheckboxButton value="sms" label="SMS" />
+  <CheckboxButton value="phone" label="Telefon" />
+</CheckboxGroup>
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
-  <legend style={{ fontWeight: 'var(--ix-font-weight-medium)', marginBottom: '8px' }}>
-    Hvordan vil du bli kontaktet?
-  </legend>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <label className="ix-checkbox">
-      <input type="checkbox" className="ix-checkbox__input" name="contact" value="email" />
-      <span className="ix-checkbox__box" />
-      <span className="ix-checkbox__label">E-post</span>
-    </label>
-    <label className="ix-checkbox">
-      <input type="checkbox" className="ix-checkbox__input" name="contact" value="sms" />
-      <span className="ix-checkbox__box" />
-      <span className="ix-checkbox__label">SMS</span>
-    </label>
-    <label className="ix-checkbox">
-      <input type="checkbox" className="ix-checkbox__input" name="contact" value="phone" />
-      <span className="ix-checkbox__box" />
-      <span className="ix-checkbox__label">Telefon</span>
-    </label>
+<ix-checkbox-group name="contact">
+  <span data-field="legend">Hvordan vil du bli kontaktet?</span>
+  <div data-field="items">
+    <div class="ix-checkbox">
+      <input type="checkbox" value="email" checked />
+      <label>E-post</label>
+    </div>
+    <div class="ix-checkbox">
+      <input type="checkbox" value="sms" />
+      <label>SMS</label>
+    </div>
+    <div class="ix-checkbox">
+      <input type="checkbox" value="phone" />
+      <label>Telefon</label>
+    </div>
   </div>
-</fieldset>
+  <span data-field="error" aria-live="polite"></span>
+</ix-checkbox-group>
 ```
 
 </TabItem>
@@ -284,7 +283,7 @@ Dersom listen blir lang, bør man vurdere å dele opp innholdet, bruke filtrerin
 
 Checkbox skal implementeres med korrekt HTML (`<input type="checkbox">`) og ha en programmessig koblet label. Dette gjør at skjermlesere kan formidle hva valget gjelder og hvilken tilstand det har.
 
-Når flere checkboxer hører sammen, skal de grupperes med `fieldset` og `legend`. Dette gir nødvendig kontekst og gjør det tydelig hva valgene gjelder.
+Når flere checkboxer hører sammen, skal de grupperes med `CheckboxGroup` (rendres som `<ix-checkbox-group>` med `role="group"` og en legend koblet via `aria-labelledby`). Dette gir nødvendig kontekst og gjør det tydelig hva valgene gjelder. Vi bruker `role="group"` framfor `<fieldset>` fordi `<fieldset>` har kjente layout-bugger i Safari kombinert med flex/grid.
 
 ### Label og legend må være tilgjengelige
 
