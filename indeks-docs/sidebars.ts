@@ -103,7 +103,17 @@ const sidebars: SidebarsConfig = {
                 },
                  'komponenter/accordion',
                 'komponenter/card',
-                'komponenter/chip',
+                {
+                    type: 'category',
+                    label: 'Chip',
+                    link: { type: 'doc', id: 'komponenter/chip' },
+                    items: [
+                        'komponenter/chip/button',
+                        'komponenter/chip/removable',
+                        'komponenter/chip/radio',
+                        // 'komponenter/chip/checkbox',  ← legges til i Fase 4
+                    ],
+                },
                 'komponenter/message',
                 {
                     type: 'category',
