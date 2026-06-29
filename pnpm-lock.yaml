@@ -299,6 +299,9 @@ importers:
       storybook:
         specifier: ^10.4.4
         version: 10.4.4(@testing-library/dom@10.4.1)(@types/react@19.2.17)(prettier@2.8.8)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      storybook-addon-pseudo-states:
+        specifier: 10.4.4
+        version: 10.4.4(storybook@10.4.4(@testing-library/dom@10.4.1)(@types/react@19.2.17)(prettier@2.8.8)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
@@ -8186,6 +8189,11 @@ packages:
   std-env@4.1.0:
     resolution: {integrity: sha512-Rq7ybcX2RuC55r9oaPVEW7/xu3tj8u4GeBYHBWCychFtzMIr86A7e3PPEBPT37sHStKX3+TiX/Fr/ACmJLVlLQ==}
 
+  storybook-addon-pseudo-states@10.4.4:
+    resolution: {integrity: sha512-AoZy3g3Lxzr0qfCT+xB6GgCHBcvReVyFOHbyU8B3apW8YoB7cxkj32y3+P63LbPSqAe61gK9B/FQFQ/2UAxw0Q==}
+    peerDependencies:
+      storybook: ^10.4.4
+
   storybook@10.4.4:
     resolution: {integrity: sha512-Nn0qFRxU5fyABa6dGRftfL3lz0Y+HkKOaAkfytF8S4Q2K6Szwwq7TwPAEs3Wsj8hBQbYhsobrKADcPsyXQpJaA==}
     hasBin: true
@@ -10903,7 +10911,7 @@ snapshots:
       '@babel/preset-env': 7.29.3(@babel/core@7.29.7)
       '@babel/preset-react': 7.28.5(@babel/core@7.29.7)
       '@babel/preset-typescript': 7.28.5(@babel/core@7.29.7)
-      '@babel/runtime': 7.29.2
+      '@babel/runtime': 7.29.7
       '@babel/traverse': 7.29.7
       '@docusaurus/logger': 3.10.1
       '@docusaurus/utils': 3.10.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -17968,19 +17976,19 @@ snapshots:
 
   react-loadable-ssr-addon-v5-slorber@1.0.3(@docusaurus/react-loadable@6.0.0(react@19.2.7))(webpack@5.106.2):
     dependencies:
-      '@babel/runtime': 7.29.2
+      '@babel/runtime': 7.29.7
       react-loadable: '@docusaurus/react-loadable@6.0.0(react@19.2.7)'
       webpack: 5.106.2
 
   react-router-config@5.1.1(react-router@5.3.4(react@19.2.7))(react@19.2.7):
     dependencies:
-      '@babel/runtime': 7.29.2
+      '@babel/runtime': 7.29.7
       react: 19.2.7
       react-router: 5.3.4(react@19.2.7)
 
   react-router-dom@5.3.4(react@19.2.7):
     dependencies:
-      '@babel/runtime': 7.29.2
+      '@babel/runtime': 7.29.7
       history: 4.10.1
       loose-envify: 1.4.0
       prop-types: 15.8.1
@@ -17997,7 +18005,7 @@ snapshots:
 
   react-router@5.3.4(react@19.2.7):
     dependencies:
-      '@babel/runtime': 7.29.2
+      '@babel/runtime': 7.29.7
       history: 4.10.1
       hoist-non-react-statics: 3.3.2
       loose-envify: 1.4.0
@@ -18614,6 +18622,10 @@ snapshots:
   std-env@3.10.0: {}
 
   std-env@4.1.0: {}
+
+  storybook-addon-pseudo-states@10.4.4(storybook@10.4.4(@testing-library/dom@10.4.1)(@types/react@19.2.17)(prettier@2.8.8)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)):
+    dependencies:
+      storybook: 10.4.4(@testing-library/dom@10.4.1)(@types/react@19.2.17)(prettier@2.8.8)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
 
   storybook@10.4.4(@testing-library/dom@10.4.1)(@types/react@19.2.17)(prettier@2.8.8)(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
