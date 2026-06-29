@@ -1,4 +1,6 @@
 export { Button } from './button/Button';
+export { Chip } from './chip/Chip';
+export type { ChipProps } from './chip/Chip';
 export { Message } from './message/Message';
 export type { MessageProps, MessageStatus } from './message/Message';
 export { MessageRegion } from './message-region/MessageRegion';

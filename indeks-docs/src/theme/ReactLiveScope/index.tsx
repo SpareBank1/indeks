@@ -3,6 +3,7 @@ import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 import {
     Button,
     Card,
+    Chip,
     Checkbox,
     Field,
     Form,
@@ -38,6 +39,7 @@ const ReactLiveScope = {
     ...React,
     Button,
     Card,
+    Chip,
     Checkbox,
     Field,
     Form,

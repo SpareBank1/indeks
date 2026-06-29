@@ -1,0 +1,67 @@
+/* Chip — liten interaktiv komponent for raske valg, filtrering og handlinger.
+   Chip er en CSS-klasse med varianter, ikke en egen web component.
+   Felles grunnmur (.ix-chip): pill-form, størrelser (sm / md), passive/hover/active.
+
+   Typer (settes via riktig HTML-element / web component oppå .ix-chip):
+   - Button chip   → <button class="ix-chip">                (default-only, denne fila)
+   - Removable chip → <button class="ix-chip"> + .ix-chip__remove
+   - Radio chip    → radio web component med .ix-chip-styling
+   - Checkbox chip → checkbox web component med .ix-chip-styling */
+
+:where(.ix-chip) {
+    /* layout */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ix-spacing-xs);
+
+    /* typografi */
+    font-size: var(--ix-font-size-md);
+    font-weight: var(--ix-font-weight-button);
+    color: var(--ix-color-foreground-main-default);
+    white-space: nowrap;
+
+    /* boks — pill-form, lys flate med tydelig kant (Default Passive) */
+    padding: var(--ix-spacing-xs) var(--ix-spacing-md);
+    width: auto;
+    height: fit-content;
+    background-color: var(--ix-color-fill-interactive-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-pill);
+
+    /* interaksjon */
+    cursor: pointer;
+    transition: var(--ix-transition-all);
+}
+
+/* Størrelse: Small (Medium er default uten attributt) */
+:where(.ix-chip[data-size='sm']) {
+    font-size: var(--ix-font-size-sm);
+    padding: var(--ix-spacing-2xs) var(--ix-spacing-sm);
+}
+
+/* Default Hover — svak fylt aksent-bakgrunn, kant beholdes */
+:where(.ix-chip:hover) {
+    background-color: var(--ix-color-fill-interactive-hover);
+    border-color: var(--ix-color-border-main-hover);
+}
+
+/* Default Active — noe mørkere fylt aksent-bakgrunn enn hover */
+:where(.ix-chip:active) {
+    background-color: var(--ix-color-fill-interactive-active);
+    border-color: var(--ix-color-border-main-active);
+}
+
+/* Focus */
+:where(.ix-chip:focus-visible) {
+    outline: var(--ix-outline-default);
+    outline-offset: var(--ix-outline-offset-default);
+}
+
+/* Disabled */
+:where(.ix-chip[aria-disabled='true'], .ix-chip:disabled) {
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.4;
+}

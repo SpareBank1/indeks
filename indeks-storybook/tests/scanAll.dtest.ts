@@ -13,6 +13,7 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Form/Checkbox',
   'Icons/Icon',
   'Components/Button',
+  'Components/Chip',
   'Components/Message',
   'Components/Spinner',
   'Layout/HStack',
