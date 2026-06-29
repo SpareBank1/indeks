@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Chip, RemovableChip } from '@sb1/indeks-react';
+import { Chip, RadioChip, RadioChipGroup, RemovableChip } from '@sb1/indeks-react';
 
 const meta = {
     title: 'Components/Chip',
@@ -92,5 +92,51 @@ export const RemovableHTML: Story = {
         <button type="button" className="ix-chip" data-removable="" aria-label="Sparing fjern">
             Sparing
         </button>
+    ),
+};
+
+export const RadioChipGruppe: Story = {
+    name: 'Radio chip – gruppe',
+    render: () => (
+        <RadioChipGroup legend="Velg periode" name="periode" defaultValue="3m">
+            <RadioChip value="1m" label="1 måned" />
+            <RadioChip value="3m" label="3 måneder" />
+            <RadioChip value="12m" label="12 måneder" />
+        </RadioChipGroup>
+    ),
+};
+
+export const RadioChipLiten: Story = {
+    name: 'Radio chip – liten',
+    render: () => (
+        <RadioChipGroup legend="Velg periode" name="periode-sm" size="sm" defaultValue="3m">
+            <RadioChip value="1m" label="1 måned" />
+            <RadioChip value="3m" label="3 måneder" />
+            <RadioChip value="12m" label="12 måneder" />
+        </RadioChipGroup>
+    ),
+};
+
+export const RadioChipHTML: Story = {
+    name: 'Radio chip – HTML',
+    render: () => (
+        <ix-radio-group data-variant="chip" name="periode-html">
+            <span data-field="legend">Velg periode</span>
+            <div data-field="items">
+                <div className="ix-radio-button">
+                    <input type="radio" id="periode-1m" value="1m" />
+                    <label htmlFor="periode-1m">1 måned</label>
+                </div>
+                <div className="ix-radio-button">
+                    <input type="radio" id="periode-3m" value="3m" defaultChecked />
+                    <label htmlFor="periode-3m">3 måneder</label>
+                </div>
+                <div className="ix-radio-button">
+                    <input type="radio" id="periode-12m" value="12m" />
+                    <label htmlFor="periode-12m">12 måneder</label>
+                </div>
+            </div>
+            <span data-field="error" aria-live="polite"></span>
+        </ix-radio-group>
     ),
 };
