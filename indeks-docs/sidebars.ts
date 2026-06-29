@@ -103,6 +103,7 @@ const sidebars: SidebarsConfig = {
                 },
                  'komponenter/accordion',
                 'komponenter/card',
+                'komponenter/chip',
                 'komponenter/message',
                 {
                     type: 'category',

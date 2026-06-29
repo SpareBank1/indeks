@@ -1,0 +1,102 @@
+{
+  "component": "Chip",
+  "lastReviewed": "2026-06-29",
+  "consumerResponsibilities": [
+    {
+      "summary": "Gi chipen en kort og tydelig label",
+      "details": "Teksten i chipen er det tilgjengelige navnet. Den skal være kort og beskrive valget eller handlingen — f.eks. «Sparing» eller «Vis flere». Unngå lange tekster; chips er ment for raske valg, ikke forklaringer.",
+      "wcag": ["2.4.6", "1.3.1"]
+    },
+    {
+      "summary": "Bruk chips i grupper, ikke alene",
+      "details": "En enkeltstående chip gir lite mening for brukeren. Presenter button chips sammen i en gruppe slik at det er tydelig at de hører sammen og at det finnes flere valg. Enkeltstående bruk er primært aktuelt for å trigge én handling.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Ikke stol på farge alene for å skille chips",
+      "details": "Forskjeller mellom chips må ikke kun kommuniseres med farge. Teksten må alltid være den primære informasjonsbæreren. Bruk ev. ikon som støtte — ikke som erstatning for tekst.",
+      "wcag": ["1.4.1"]
+    },
+    {
+      "summary": "Bruk semantisk element basert på funksjon",
+      "details": "Button chip skal være et <button>-element (standard) eller <a> (via as=\"a\") når den navigerer. Ikke bruk <div> eller <span> som chip — det bryter nativ tastaturnavigasjon og skjermleser-annonsering. Button chip trigger en handling og skal ikke ha vedvarende valgt tilstand.",
+      "wcag": ["4.1.2"]
+    },
+    {
+      "summary": "Unngå disabled som standard",
+      "details": "En disabled chip forteller ikke brukeren hva som mangler. Der det er mulig, la chipen være aktiv og forklar i konteksten hvorfor et valg ev. ikke er tilgjengelig.",
+      "wcag": ["3.3.1"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Native <button>-element med implisitt rolle. Tekst-innhold gir tilgjengelig navn automatisk." },
+    { "id": "1.3.2", "notes": "Innholdet følger naturlig lesrekkefølge i DOM." },
+    { "id": "1.4.1", "notes": "Tilstand (hover/active) kommuniseres med fyll og kant i tillegg til farge — ikke farge alene." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
+    { "id": "1.4.11", "notes": "Fokusindikator oppfyller 3:1 kontrastkrav." },
+    { "id": "2.1.1", "notes": "Native <button> aktiveres med Enter og Space. Fullt opererbart med tastatur." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med outline-token." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
+    { "id": "1.4.3", "notes": "Tekstfarge bruker --ix-color-foreground-main-default mot fill-main-tokens i alle interaksjonstilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG." },
+    { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button. Tilgjengelig navn fra tekst-innhold. Native disabled-attributt eksponeres til hjelpemidler." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Chipen har ingen ikke-tekstlig innhold som bilder — ev. ikon er dekorativt og skjules med aria-hidden." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Chipen formidler ikke instruksjoner — den utfører et valg eller en handling." },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt som ber om personlig informasjon." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.12" },
+    { "id": "1.4.13" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Lenke-chips (as=\"a\") må ha meningsfull tekst — det er konsumentens ansvar." },
+    { "id": "2.4.5" },
+    { "id": "2.4.6" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native button-element — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "2.5.8", "reason": "Klikkflaten avhenger av størrelse og konsumentens layout; chips brukes i grupper med tilstrekkelig avstand. Verifiseres i kontekst." },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.2", "reason": "Chipen trigger ingen automatisk kontekstendring ved fokus." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1" },
+    { "id": "3.3.2" },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Button chip genererer ingen statusmeldinger selv." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til chipen" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Enter", "action": "Aktiverer chipen" },
+    { "key": "Space", "action": "Aktiverer chipen" }
+  ],
+  "screenReader": [
+    "Ved fokus: \"[chip-tekst], knapp\"",
+    "Som lenke (as=\"a\"): \"[chip-tekst], lenke\"",
+    "Deaktivert: \"[chip-tekst], knapp, deaktivert\""
+  ]
+}
