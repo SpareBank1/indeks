@@ -10,6 +10,8 @@
     --ix-color-status-border: var(--ix-color-border-main-default);
     --ix-color-status-fill: var(--ix-color-fill-main-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-main-subtle);
+    --ix-color-status-fill-subtle-hover: var(--ix-color-fill-main-subtle-hover);
+    --ix-color-status-fill-subtle-active: var(--ix-color-fill-main-subtle-active);
 }
 
 .ix-color-status-surface {
@@ -43,6 +45,8 @@
     --ix-color-status-border: var(--ix-color-border-info-default);
     --ix-color-status-fill: var(--ix-color-fill-info-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-info-subtle);
+    --ix-color-status-fill-subtle-hover: var(--ix-color-fill-info-subtle-hover);
+    --ix-color-status-fill-subtle-active: var(--ix-color-fill-info-subtle-active);
 }
 
 [data-status="success"] {
@@ -52,6 +56,8 @@
     --ix-color-status-border: var(--ix-color-border-success-default);
     --ix-color-status-fill: var(--ix-color-fill-success-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-success-subtle);
+    --ix-color-status-fill-subtle-hover: var(--ix-color-fill-success-subtle-hover);
+    --ix-color-status-fill-subtle-active: var(--ix-color-fill-success-subtle-active);
 }
 
 [data-status="warning"] {
@@ -61,6 +67,8 @@
     --ix-color-status-border: var(--ix-color-border-warning-default);
     --ix-color-status-fill: var(--ix-color-fill-warning-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-warning-subtle);
+    --ix-color-status-fill-subtle-hover: var(--ix-color-fill-warning-subtle-hover);
+    --ix-color-status-fill-subtle-active: var(--ix-color-fill-warning-subtle-active);
 }
 
 [data-status="danger"] {
@@ -70,4 +78,6 @@
     --ix-color-status-border: var(--ix-color-border-danger-default);
     --ix-color-status-fill: var(--ix-color-fill-danger-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-danger-subtle);
+    --ix-color-status-fill-subtle-hover: var(--ix-color-fill-danger-subtle-hover);
+    --ix-color-status-fill-subtle-active: var(--ix-color-fill-danger-subtle-active);
 }

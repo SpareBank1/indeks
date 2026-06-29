@@ -15,6 +15,7 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Icons/Icon',
   'Components/Button',
   'Components/Chip',
+  'Components/InteractiveIcon',
   'Components/Message',
   'Components/Spinner',
   'Layout/HStack',

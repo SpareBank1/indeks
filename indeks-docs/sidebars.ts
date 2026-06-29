@@ -90,6 +90,7 @@ const sidebars: SidebarsConfig = {
                         'komponenter/chip/checkbox',
                     ],
                 },
+                'komponenter/interactive-icon',
                 'komponenter/message',
                 'komponenter/spinner',
                 'komponenter/typografi',
