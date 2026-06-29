@@ -2,267 +2,44 @@
 title: Chip
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
-import a11yData from './accessibility/chip.json';
-
 # Chip
 
 Chip er små, interaktive komponenter som lar brukeren gjøre raske valg, filtrere innhold eller trigge handlinger. Chips brukes ofte i grupper og gir en kompakt og oversiktlig måte å presentere valg på.
 
-Denne siden dokumenterer **button chip** — en chip som fungerer som en knapp og trigger en handling uten vedvarende valgt tilstand — **removable chip** — en chip som representerer et aktivt valg og kan fjernes — og **radio chip** — en gruppe der brukeren velger nøyaktig ett alternativ.
+Alle chips deler samme visuelle grunnmur — pill-form, to størrelser (`md`/`sm`), fokusindikator og tilstandsfarger — men semantikk og oppførsel velges ut fra hvilken type du bruker.
 
 ## Egnet til
 
-- Hurtigvalg og enkle handlinger
-- Forslag brukeren kan trykke på (f.eks. forslag til søk eller beløp)
+- Filtrering av innhold (f.eks. kategorier eller søkefilter)
+- Hurtigvalg og enkle beslutninger
+- Vise aktive valg som kan fjernes
 - Handlinger med lav kompleksitet, presentert kompakt
-- Grupper av relaterte handlinger
 
 ## Uegnet til
 
-- Vedvarende valg der flere alternativer kan velges samtidig — bruk checkbox-chip (kommer)
+- Komplekse valg med mye informasjon — bruk checkbox eller select
 - Kritiske eller irreversible handlinger — bruk en tydelig knapp med bekreftelse
 - Lange tekster eller forklaringer
-- Den primære handlingen i en visning — bruk Button
+- Situasjoner der brukeren må ta gjennomtenkte valg
 
-## Kom i gang
+## De fire typene
 
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
+Velg type ut fra hva brukeren skal gjøre. Hver type har egen dokumentasjon med eksempler, API og tilgjengelighet.
 
-```jsx live
-<button class="ix-chip" type="button">
-  Chip label
-</button>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<Chip>Chip label</Chip>
-```
-
-</TabItem>
-</Tabs>
-
-## Eksempler
-
-### Gruppe
-
-Button chips gir mest verdi i grupper. Da blir det tydelig at de hører sammen og at det finnes flere valg.
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
-  <button class="ix-chip" type="button">Alle</button>
-  <button class="ix-chip" type="button">Sparing</button>
-  <button class="ix-chip" type="button">Lån</button>
-  <button class="ix-chip" type="button">Forsikring</button>
-</div>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
-  <Chip>Alle</Chip>
-  <Chip>Sparing</Chip>
-  <Chip>Lån</Chip>
-  <Chip>Forsikring</Chip>
-</div>
-```
-
-</TabItem>
-</Tabs>
-
-### Størrelser
-
-Chip finnes i to størrelser: `md` (standard) og `sm`.
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<div style={{ display: 'flex', alignItems: 'center', gap: 'var(--ix-spacing-sm)' }}>
-  <button class="ix-chip" data-size="sm" type="button">Small</button>
-  <button class="ix-chip" type="button">Medium (standard)</button>
-</div>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<div style={{ display: 'flex', alignItems: 'center', gap: 'var(--ix-spacing-sm)' }}>
-  <Chip size="sm">Small</Chip>
-  <Chip>Medium (standard)</Chip>
-</div>
-```
-
-</TabItem>
-</Tabs>
-
-### Deaktivert
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<button class="ix-chip" type="button" disabled>
-  Chip label
-</button>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<Chip disabled>Chip label</Chip>
-```
-
-</TabItem>
-</Tabs>
-
-Vurder om brukeren i stedet bør se en forklaring på hvorfor valget ikke er tilgjengelig.
-
-### Som lenke
-
-Bruk `as="a"` når chipen navigerer til en URL. Den beholder chip-styling, men rendres som `<a>`.
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<a class="ix-chip" href="https://www.sparebank1.no">
-  Gå til sparebank1.no
-</a>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<Chip as="a" href="https://www.sparebank1.no">
-  Gå til sparebank1.no
-</Chip>
-```
-
-</TabItem>
-</Tabs>
-
-## Removable chip
-
-En removable chip representerer et aktivt valg eller en verdi som brukeren kan fjerne — for eksempel et valgt filter. Den finnes kun i valgt tilstand (den eksisterer ikke før den er valgt) og vises med fylt aksentfarge og et kryss til høyre.
-
-**Hele chipen er fjern-knappen.** Et klikk hvor som helst på chipen — eller Enter/Mellomrom når den har fokus — fjerner den. Krysset er et dekorativt CSS-ikon uten eget fokus, så det blir kun ett tab-stopp per chip. Dette følger mønsteret i Aksel og Designsystemet.
-
-Det tilgjengelige navnet settes sammen av label og et fjern-suffiks, f.eks. «Sparing fjern». I React sender du suffikset via `removeLabel`; i ren HTML setter du hele `aria-label` selv. Suffikset må være på brukerens språk — komponenten har ingen hardkodet fallback.
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<button class="ix-chip" data-removable aria-label="Sparing fjern">
-  Sparing
-</button>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<RemovableChip removeLabel="fjern" onRemove={() => {}}>
-  Sparing
-</RemovableChip>
-```
-
-</TabItem>
-</Tabs>
-
-### Gruppe av removable chips
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
-  <button class="ix-chip" data-removable aria-label="Sparing fjern">Sparing</button>
-  <button class="ix-chip" data-removable aria-label="Lån fjern">Lån</button>
-  <button class="ix-chip" data-removable aria-label="Forsikring fjern">Forsikring</button>
-</div>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
-  <RemovableChip removeLabel="fjern" onRemove={() => {}}>Sparing</RemovableChip>
-  <RemovableChip removeLabel="fjern" onRemove={() => {}}>Lån</RemovableChip>
-  <RemovableChip removeLabel="fjern" onRemove={() => {}}>Forsikring</RemovableChip>
-</div>
-```
-
-</TabItem>
-</Tabs>
-
-## Radio chip
-
-En radio chip er en gruppe chips der brukeren velger **nøyaktig ett** alternativ — som en kompakt segment-velger eller filtervalg. Å velge én chip fjerner automatisk valget på den forrige.
-
-Hver chip har en indikator til venstre for teksten: en tom sirkel når den ikke er valgt, og en fylt sirkel med prikk når den er valgt. I tillegg fylles den valgte pillen med en lys aksentfarge og får aksent-kant, slik at valgt tilstand kommuniseres med mer enn farge.
-
-Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`, og pil-tastene flytter valget mellom alternativene. Gi alltid gruppen en beskrivende `legend`.
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<ix-radio-group data-variant="chip" name="periode">
-  <span data-field="legend">Velg periode</span>
-  <div data-field="items">
-    <div class="ix-radio-button">
-      <input type="radio" id="periode-1m" value="1m" />
-      <label for="periode-1m">1 måned</label>
-    </div>
-    <div class="ix-radio-button">
-      <input type="radio" id="periode-3m" value="3m" checked />
-      <label for="periode-3m">3 måneder</label>
-    </div>
-    <div class="ix-radio-button">
-      <input type="radio" id="periode-12m" value="12m" />
-      <label for="periode-12m">12 måneder</label>
-    </div>
-  </div>
-  <span data-field="error" aria-live="polite"></span>
-</ix-radio-group>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<RadioChipGroup legend="Velg periode" name="periode" defaultValue="3m">
-  <RadioChip value="1m" label="1 måned" />
-  <RadioChip value="3m" label="3 måneder" />
-  <RadioChip value="12m" label="12 måneder" />
-</RadioChipGroup>
-```
-
-</TabItem>
-</Tabs>
+- **[Button chip](./chip/button)** — trigger en handling eller et hurtigvalg. Ingen vedvarende valgt tilstand.
+- **[Removable chip](./chip/removable)** — representerer et aktivt valg eller en verdi som kan fjernes (f.eks. et valgt filter).
+- **[Radio chip](./chip/radio)** — en gruppe der brukeren velger nøyaktig ett alternativ.
+- **Checkbox chip** _(kommer)_ — en gruppe der brukeren kan velge flere alternativer samtidig.
 
 ## Retningslinjer
 
 ### Bruk chip for raske og enkle valg
 
 Chips egner seg for enkle interaksjoner der brukeren raskt skal kunne velge, filtrere eller utføre en handling. De fungerer best når valgene er korte, tydelige og enkle å forstå.
+
+### Velg riktig type chip basert på behov
+
+Valg av type påvirker både hvordan komponenten oppfører seg og hvordan brukeren forstår den. Bruk radio chip for ett valg, checkbox chip for flere, removable chip for aktive valg som kan fjernes, og button chip for å trigge en handling.
 
 ### Teksten skal være kort og tydelig
 
@@ -280,94 +57,21 @@ Store mengder chips kan bli vanskelig å skanne og bruke. Dersom det er mange va
 
 Ikoner kan støtte forståelsen, men skal ikke erstatte tekst. Tekst er alltid den viktigste informasjonsbæreren.
 
-## Universell utforming
-
-### Hva du selv må sørge for
-
-- **Gi chipen en kort og tydelig label** — teksten er det tilgjengelige navnet. Den skal beskrive valget eller handlingen.
-- **Bruk chips i grupper** — en enkeltstående chip gir lite kontekst. Presenter relaterte chips sammen.
-- **Ikke stol på farge alene** — teksten må alltid være den primære informasjonsbæreren.
-- **Bruk riktig element** — `<button>` (standard) for handlinger og `as="a"` / `<a>` for navigasjon. Ikke legg click-handlers på `<div>` eller `<span>`.
-- **Gi removable chip et tilgjengelig fjern-navn** — send `removeLabel` (React) eller sett hele `aria-label` (HTML), f.eks. «Sparing fjern». Uten det hører skjermleserbrukeren bare «Sparing, knapp» og vet ikke at klikk fjerner den. Bruk riktig språk (bokmål «fjern», nynorsk «fjern», engelsk «remove») — ingen hardkodet fallback.
-- **Gi radio chip-gruppen en beskrivende `legend`** — det er gruppens tilgjengelige navn. Bruk riktig språk; ingen hardkodet fallback. Bruk radio chip kun når brukeren skal velge nøyaktig ett alternativ.
-- **Unngå disabled som standard** — en disabled chip sier ikke hva som mangler. La heller chipen være aktiv og forklar konteksten.
-
-### Hva komponenten gjør automatisk
-
-- **`type="button"`** settes som standard på `<button>`-elementer så chipen ikke sender inn skjema utilsiktet.
-- **Tilgjengelig navn** hentes fra tekst-innholdet i chipen. For removable chip settes `aria-label` til «[label] [removeLabel]».
-- **Fokusindikator** via `:focus-visible` — synlig for tastaturbrukere, ikke for mus.
-- **Tilstand med fyll og kant** — hover og active kommuniseres med mer enn farge.
-- **Fjern-krysset er dekorativt** — det rendres med CSS (`::after`) og ligger ikke i tilgjengelighetstreet. Hele removable-chipen er fjern-knappen, så det blir kun ett tab-stopp.
-- **Radiogruppe-semantikk** — radio chip bygger på `<ix-radio-group>`, som setter `role="radiogroup"`, kobler `legend` som tilgjengelig navn, synkroniserer `name` på alle valg og lar piltastene flytte valget. Gruppen er ett tab-stopp.
-
-<KeyboardAndScreenReader data={a11yData} />
-
-### WCAG-kriterier
-
-<AccessibilityTable data={a11yData} />
-
-## Props / API
-
-### `Chip` (button chip)
-
-| Prop | Type | Standard | Beskrivelse |
-|------|------|----------|-------------|
-| `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
-| `as` | `ElementType` | `'button'` | Render som annet element, f.eks. `'a'` for lenke-chips |
-| `disabled` | `boolean` | | Deaktiverer chipen (nativ HTML-attributt) |
-
-### `RemovableChip`
-
-| Prop | Type | Standard | Beskrivelse |
-|------|------|----------|-------------|
-| `children` | `string` | | Etiketten på chipen. Inngår i det tilgjengelige navnet |
-| `removeLabel` | `string` | | **Påkrevd.** Suffiks i det tilgjengelige navnet, f.eks. `"fjern"` gir «Sparing fjern». i18n — ingen fallback |
-| `onRemove` | `() => void` | | Kalles når chipen fjernes (klikk / Enter / Mellomrom) |
-| `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
-| `disabled` | `boolean` | | Deaktiverer chipen (nativ HTML-attributt) |
-
-I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `type`, `name`, `value`, `tabIndex` osv.) og settes direkte på elementet.
-
-### `RadioChipGroup`
-
-| Prop | Type | Standard | Beskrivelse |
-|------|------|----------|-------------|
-| `legend` | `string` | | **Påkrevd.** Tilgjengelig navn for gruppen. i18n — ingen fallback |
-| `name` | `string` | | Felles `name` for alle radioknappene. Genereres automatisk hvis utelatt |
-| `value` | `string` | | Valgt verdi (kontrollert) |
-| `defaultValue` | `string` | | Valgt verdi (ukontrollert) |
-| `onChange` | `(value: string) => void` | | Kalles med valgt verdi når brukeren bytter |
-| `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
-| `description` | `string` | | Hjelpetekst over alternativene |
-| `errorMessage` | `string` | | Feilmelding — setter `aria-invalid` på gruppen |
-| `disabled` | `boolean` | | Deaktiverer hele gruppen |
-| `hideLegend` | `boolean` | | Skjuler legend visuelt, men beholder den for skjermlesere |
-
-### `RadioChip`
-
-| Prop | Type | Standard | Beskrivelse |
-|------|------|----------|-------------|
-| `value` | `string` | | **Påkrevd.** Verdien dette valget representerer |
-| `label` | `string` | | **Påkrevd.** Synlig etikett. i18n — ingen fallback |
-| `disabled` | `boolean` | | Deaktiverer dette enkeltvalget |
-
 ## Tilpasning med CSS
 
-Trenger du `ix-chip`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassen direkte på elementene dine.
+Alle chip-typer bygger på den delte `.ix-chip`-klassen. Den gir pill-form, størrelser, tilstandsfarger og fokusindikator. Trenger du stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassen direkte på elementene dine.
 
-### Tilgjengelige klasser og attributter
+### Felles klasser og attributter
 
 | Element/tilstand | Selektor / attributt |
 |-----------------|----------------------|
 | Chip | `.ix-chip` |
 | Liten størrelse | `data-size="sm"` |
-| Removable chip (valgt) | `data-removable` |
-| Fjern-kryss | `.ix-chip[data-removable]::after` (dekorativt, ingen markup) |
-| Radio chip (gruppe) | `ix-radio-group[data-variant="chip"]` — styler hver `<label>` som pill |
 | Hover / active | `:hover` / `:active` (automatisk) |
 | Fokus | `:focus-visible` (automatisk) |
 | Deaktivert | `disabled` eller `aria-disabled="true"` |
+
+Type-spesifikke kroker (f.eks. `data-removable` for removable chip og `ix-radio-group[data-variant="chip"]` for radio chip) er dokumentert på hver undertype-side.
 
 ### Eksempel: ren HTML
 
@@ -379,18 +83,11 @@ Trenger du `ix-chip`-stylingen på HTML du setter sammen selv — uten React-kom
 <button class="ix-chip" data-size="sm" type="button">
   Liten chip
 </button>
-
-<a class="ix-chip" href="/sparing">
-  Sparing
-</a>
-
-<button class="ix-chip" data-removable aria-label="Sparing fjern">
-  Sparing
-</button>
 ```
 
 ## Relatert
 
 - [Button](./button) — for primære og sekundære handlinger i en visning
+- [RadioGroup](./skjema/radio-group) — standard radiogruppe uten chip-styling
 - [Typografi](../grunnleggende/typografi) — skriftstørrelser brukt i chips
 - [Spacing](../grunnleggende/tokens/spacing) — padding-tokens for sm/md
