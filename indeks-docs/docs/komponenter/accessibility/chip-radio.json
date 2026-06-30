@@ -39,6 +39,7 @@
     { "id": "3.2.2", "notes": "Å velge en chip endrer kun gruppens verdi, ikke kontekst — ingen uventet navigasjon eller innsending." },
     { "id": "1.4.3", "notes": "Tekstfarge mot fill-tokens i alle tilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG." },
     { "id": "3.3.2", "notes": "Gruppens legend fungerer som instruksjon/etikett for valget." },
+    { "id": "2.5.8", "notes": "Hele pillen er klikkflate for valget. md-størrelsen gir mål godt over 24×24px. sm-størrelsen (padding-block spacing-2xs + font-size-sm) er nær minimumet; chips wrapper i en gruppe med gap mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." },
     { "id": "4.1.2", "notes": "<ix-radio-group> setter role=radiogroup på gruppen (navn fra legend via aria-labelledby), og native <input type=radio> gir rolle og valgt/ikke-valgt-tilstand (aria-checked). Native disabled-attributt eksponeres til hjelpemidler." }
   ],
   "notRelevant": [
@@ -70,7 +71,6 @@
     { "id": "2.5.4" },
     { "id": "2.5.6" },
     { "id": "2.5.7" },
-    { "id": "2.5.8", "reason": "Klikkflaten avhenger av størrelse og layout; verifiseres i kontekst." },
     { "id": "3.1.1" },
     { "id": "3.1.2" },
     { "id": "3.2.3" },

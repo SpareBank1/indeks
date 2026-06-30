@@ -93,6 +93,15 @@ export const RemovableGruppe: Story = {
     ),
 };
 
+export const RemovableDeaktivert: Story = {
+    name: 'Removable chip – deaktivert',
+    render: () => (
+        <RemovableChip disabled removeLabel="fjern" onRemove={() => {}}>
+            Sparing
+        </RemovableChip>
+    ),
+};
+
 export const RemovableHTML: Story = {
     name: 'Removable chip – HTML',
     render: () => (
@@ -117,6 +126,43 @@ export const RadioChipLiten: Story = {
     name: 'Radio chip – liten',
     render: () => (
         <RadioChipGroup legend="Velg periode" name="periode-sm" size="sm" defaultValue="3m">
+            <RadioChip value="1m" label="1 måned" />
+            <RadioChip value="3m" label="3 måneder" />
+            <RadioChip value="12m" label="12 måneder" />
+        </RadioChipGroup>
+    ),
+};
+
+export const RadioChipDeaktivert: Story = {
+    name: 'Radio chip – deaktivert',
+    render: () => (
+        <RadioChipGroup legend="Velg periode" name="periode-disabled" defaultValue="3m" disabled>
+            <RadioChip value="1m" label="1 måned" />
+            <RadioChip value="3m" label="3 måneder" />
+            <RadioChip value="12m" label="12 måneder" />
+        </RadioChipGroup>
+    ),
+};
+
+export const RadioChipFeilmelding: Story = {
+    name: 'Radio chip – feilmelding',
+    render: () => (
+        <RadioChipGroup
+            legend="Velg periode"
+            name="periode-error"
+            errorMessage="Du må velge en periode"
+        >
+            <RadioChip value="1m" label="1 måned" />
+            <RadioChip value="3m" label="3 måneder" />
+            <RadioChip value="12m" label="12 måneder" />
+        </RadioChipGroup>
+    ),
+};
+
+export const RadioChipKunLesing: Story = {
+    name: 'Radio chip – skrivebeskyttet',
+    render: () => (
+        <RadioChipGroup legend="Velg periode" name="periode-readonly" defaultValue="3m" readOnly>
             <RadioChip value="1m" label="1 måned" />
             <RadioChip value="3m" label="3 måneder" />
             <RadioChip value="12m" label="12 måneder" />

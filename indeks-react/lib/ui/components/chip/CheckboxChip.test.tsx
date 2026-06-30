@@ -83,4 +83,38 @@ describe('CheckboxChipGroup', () => {
             expect(input.disabled).toBe(true);
         }
     });
+
+    it('per-chip disabled deaktiverer kun den ene chipen og merker wrapperen', () => {
+        const { container } = render(
+            <CheckboxChipGroup legend="Velg interesser">
+                <CheckboxChip value="sport" label="Sport" disabled />
+                <CheckboxChip value="musikk" label="Musikk" />
+                <CheckboxChip value="reise" label="Reise" />
+            </CheckboxChipGroup>
+        );
+        const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+        expect(inputs[0].disabled).toBe(true);
+        expect(inputs[1].disabled).toBe(false);
+        expect(inputs[2].disabled).toBe(false);
+        expect(inputs[0].closest('.ix-checkbox')?.classList.contains('ix-checkbox--disabled')).toBe(
+            true
+        );
+        expect(inputs[1].closest('.ix-checkbox')?.classList.contains('ix-checkbox--disabled')).toBe(
+            false
+        );
+    });
+
+    it('readOnly setter readonly-attributt og data-state="readonly" på gruppen', () => {
+        const { container } = renderGroup({ readOnly: true });
+        const host = container.querySelector('ix-checkbox-group');
+        expect(host?.hasAttribute('readonly')).toBe(true);
+        expect(host?.getAttribute('data-state')).toBe('readonly');
+    });
+
+    it('errorMessage setter data-state="error" og rendrer meldingen', () => {
+        const { container, getByText } = renderGroup({ errorMessage: 'Du må velge minst ett' });
+        const host = container.querySelector('ix-checkbox-group');
+        expect(host?.getAttribute('data-state')).toBe('error');
+        expect(getByText('Du må velge minst ett')).not.toBeNull();
+    });
 });
