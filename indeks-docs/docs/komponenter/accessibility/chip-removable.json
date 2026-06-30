@@ -38,7 +38,8 @@
     { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
     { "id": "1.4.3", "notes": "Tekstfarge mot fill-main-tokens i alle interaksjonstilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG." },
     { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button og navn fra aria-label «[label] [removeLabel]». Native disabled-attributt eksponeres til hjelpemidler." },
-    { "id": "2.5.3", "notes": "Den synlige label-teksten inngår i det tilgjengelige navnet («[label] [removeLabel]»)." }
+    { "id": "2.5.3", "notes": "Den synlige label-teksten inngår i det tilgjengelige navnet («[label] [removeLabel]»)." },
+    { "id": "2.5.8", "notes": "Hele chipen er fjern-knappen. md-størrelsen gir klikkflate godt over 24×24px. sm-størrelsen (padding-block spacing-2xs + font-size-sm) er nær minimumet; chips presenteres i grupper med gap mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." }
   ],
   "notRelevant": [
     { "id": "1.1.1", "reason": "Krysset er et dekorativt CSS-ikon (::after) uten egen markup og ligger ikke i tilgjengelighetstreet." },
@@ -68,7 +69,6 @@
     { "id": "2.5.4" },
     { "id": "2.5.6" },
     { "id": "2.5.7" },
-    { "id": "2.5.8", "reason": "Klikkflaten avhenger av størrelse og konsumentens layout; chips brukes i grupper med tilstrekkelig avstand. Verifiseres i kontekst." },
     { "id": "3.1.1" },
     { "id": "3.1.2" },
     { "id": "3.2.2", "reason": "Chipen trigger ingen automatisk kontekstendring ved fokus." },

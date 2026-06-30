@@ -42,6 +42,7 @@
     { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med outline-token." },
     { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
     { "id": "1.4.3", "notes": "Tekstfarge bruker --ix-color-foreground-main-default mot fill-main-tokens i alle interaksjonstilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG." },
+    { "id": "2.5.8", "notes": "md-størrelsen (padding-block spacing-xs + font-size-md) gir klikkflate godt over 24×24px. sm-størrelsen (padding-block spacing-2xs + font-size-sm) er nær minimumet; chips presenteres i grupper med gap (spacing) mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." },
     { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button og navn fra tekst-innhold. Native disabled-attributt eksponeres til hjelpemidler." }
   ],
   "notRelevant": [
@@ -73,7 +74,6 @@
     { "id": "2.5.4" },
     { "id": "2.5.6" },
     { "id": "2.5.7" },
-    { "id": "2.5.8", "reason": "Klikkflaten avhenger av størrelse og konsumentens layout; chips brukes i grupper med tilstrekkelig avstand. Verifiseres i kontekst." },
     { "id": "3.1.1" },
     { "id": "3.1.2" },
     { "id": "3.2.2", "reason": "Chipen trigger ingen automatisk kontekstendring ved fokus." },
