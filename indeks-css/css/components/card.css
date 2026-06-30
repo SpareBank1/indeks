@@ -1,13 +1,74 @@
 :where(.ix-card) {
+    /* Lokal skygge — Indeks har ingen elevation-token ennå. Erstatt med
+       --ix-shadow-* når et elevation-skala-token kommer på plass. */
+    --ix-card-shadow: 0 2px 6px rgb(0 0 0 / 14%), 0 1px 2px rgb(0 0 0 / 10%);
+    --ix-card-shadow-hover: 0 10px 24px rgb(0 0 0 / 18%), 0 4px 8px rgb(0 0 0 / 10%);
+
     border: var(--ix-border-default);
     border-radius: var(--ix-border-radius-md);
     display: flex;
     flex-direction: column;
 }
 
-:where(.ix-card--clickable:hover) {
+/* Klikkbart kort. Affordansen er synlig i hviletilstand (skygge + chevron),
+   ikke kun på :hover — slik at klikkbarhet også er tydelig på touch. */
+:where(.ix-card--clickable) {
+    position: relative;
     cursor: pointer;
-    box-shadow: 0 0 2px black;
+    box-shadow: var(--ix-card-shadow);
+    color: inherit;
+    text-decoration: none;
+    transition: var(--ix-transition-all);
+}
+
+/* Chevron som permanent «dette gjør noe»-signal. */
+:where(.ix-card--clickable)::after {
+    content: '›';
+    position: absolute;
+    inset-block-end: var(--ix-spacing-sm);
+    inset-inline-end: var(--ix-spacing-md);
+    line-height: 1;
+    font-size: 1.75em;
+    font-weight: var(--ix-font-weight-button);
+    color: var(--ix-color-foreground-link-default, currentcolor);
+    transition: var(--ix-transition-all);
+    pointer-events: none;
+}
+
+/* Desktop-bonus: kortet løftes fysisk og chevronen glir mot bevegelsesretningen. */
+:where(.ix-card--clickable:hover) {
+    box-shadow: var(--ix-card-shadow-hover);
+    border-color: var(--ix-color-border-main-hover);
+    transform: translateY(-2px);
+}
+
+:where(.ix-card--clickable:hover)::after {
+    transform: translateX(3px);
+}
+
+/* Pressed-feedback — bekrefter klikket på touch der :hover ikke finnes. */
+:where(.ix-card--clickable:active) {
+    background-color: var(--ix-color-fill-interactive-active);
+    box-shadow: var(--ix-card-shadow);
+    transform: scale(0.98);
+}
+
+:where(.ix-card--clickable:focus-visible) {
+    outline: var(--ix-outline-default);
+    outline-offset: var(--ix-outline-offset-default);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :where(.ix-card--clickable),
+    :where(.ix-card--clickable)::after {
+        transition: none;
+    }
+
+    :where(.ix-card--clickable:hover),
+    :where(.ix-card--clickable:hover)::after,
+    :where(.ix-card--clickable:active) {
+        transform: none;
+    }
 }
 
 :where(.ix-card--success) {
