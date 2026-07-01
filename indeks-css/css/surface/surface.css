@@ -1,0 +1,11 @@
+/* Surface — en enkel visuell flate for gruppering av innhold.
+   Styling (surface-farge, border, radius, spacing, flex) kommer fra
+   utility-klasser; basen holder kun det som er felles for alle Surface. */
+:where(.ix-surface) {
+    display: flex;
+    flex-direction: column;
+}
+
+:where(.ix-full-width) {
+    width: 100%;
+}

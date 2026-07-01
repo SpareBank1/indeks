@@ -44,4 +44,50 @@ describe('Card', () => {
         expect(card.getAttribute('data-test')).toBe('verdi');
         expect(card.getAttribute('id')).toBe('kort-1');
     });
+
+    it('skal ikke ha dashed-klasse som standard (border kommer fra base .ix-card)', () => {
+        render(<Card>Innhold</Card>);
+        expect(screen.getByText('Innhold').classList).not.toContain('ix-card--dashed');
+    });
+
+    it('skal gi ix-card--dashed når border="dashed"', () => {
+        render(<Card border="dashed">Innhold</Card>);
+        expect(screen.getByText('Innhold').classList).toContain('ix-card--dashed');
+    });
+
+    it('skal sette data-status for statustema', () => {
+        render(<Card status="info">Innhold</Card>);
+        expect(screen.getByText('Innhold').getAttribute('data-status')).toBe('info');
+    });
+
+    it('skal ikke sette data-status for status="default"', () => {
+        render(<Card status="default">Innhold</Card>);
+        expect(screen.getByText('Innhold').hasAttribute('data-status')).toBe(false);
+    });
+
+    it('skal ikke sette data-status uten status-prop', () => {
+        render(<Card>Innhold</Card>);
+        expect(screen.getByText('Innhold').hasAttribute('data-status')).toBe(false);
+    });
+
+    it('skal ikke rendre chevron-ikon på statisk kort', () => {
+        const { container } = render(<Card>Statisk</Card>);
+        expect(container.querySelector('.ix-card__chevron')).toBeNull();
+    });
+
+    it('skal rendre chevron-ikon med pil-hoyre som standard når klikkbart', () => {
+        const { container } = render(<Card href="https://example.com">Lenke</Card>);
+        const chevron = container.querySelector('ix-icon.ix-card__chevron');
+        expect(chevron).not.toBeNull();
+        expect(chevron?.getAttribute('name')).toBe('pil-hoyre');
+    });
+
+    it('skal kunne overstyre chevron-ikonet via chevronIcon', () => {
+        const { container } = render(
+            <Card onClick={() => {}} chevronIcon="pil-venstre">
+                Handling
+            </Card>
+        );
+        expect(container.querySelector('ix-icon.ix-card__chevron')?.getAttribute('name')).toBe('pil-venstre');
+    });
 });

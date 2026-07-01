@@ -1,56 +1,68 @@
 :where(.ix-card) {
-    /* Lokal skygge — Indeks har ingen elevation-token ennå. Erstatt med
-       --ix-shadow-* når et elevation-skala-token kommer på plass. */
+    /* Lokal skygge — kun brukt av skygge-varianten (.ix-card--chevron-shadow).
+       Indeks har ingen elevation-token ennå; erstatt med --ix-shadow-* når et
+       elevation-skala-token kommer på plass. */
     --ix-card-shadow: 0 2px 6px rgb(0 0 0 / 14%), 0 1px 2px rgb(0 0 0 / 10%);
     --ix-card-shadow-hover: 0 10px 24px rgb(0 0 0 / 18%), 0 4px 8px rgb(0 0 0 / 10%);
 
+    /* Kort har alltid en kantlinje — også i ren HTML uten ekstra klasser.
+       `border`-propen styrer kun stilen: default (solid) vs dashed. Dashed
+       overstyres via .ix-card--dashed lenger ned (kun border-style), som lastes
+       etter denne regelen ⇒ vinner. Vi bruker bevisst ikke .ix-border-dashed-
+       utilityen her: den lastes før card.css og hadde tapt mot denne base-borderen. */
     border: var(--ix-border-default);
     border-radius: var(--ix-border-radius-md);
     display: flex;
     flex-direction: column;
 }
 
-/* Klikkbart kort. Affordansen er synlig i hviletilstand (skygge + chevron),
-   ikke kun på :hover — slik at klikkbarhet også er tydelig på touch. */
+/* Stiplet kantlinje via `border="dashed"`. Overstyrer kun stilen, så farge/bredde
+   (inkl. statusfarge fra data-status) bevares. */
+.ix-card--dashed {
+    border-style: dashed;
+}
+
+/* Klikkbart kort. Affordansen er synlig i hviletilstand (chevron), ikke kun på
+   :hover — slik at klikkbarhet også er tydelig på touch. Standard er flatt:
+   ingen skygge, hover gir bakgrunns-tint. */
 :where(.ix-card--clickable) {
     position: relative;
     cursor: pointer;
-    box-shadow: var(--ix-card-shadow);
     color: inherit;
     text-decoration: none;
     transition: var(--ix-transition-all);
 }
 
-/* Chevron som permanent «dette gjør noe»-signal. */
-:where(.ix-card--clickable)::after {
-    content: '›';
+/* Chevron som permanent «dette gjør noe»-signal — et ekte ix-icon (byttbart via
+   `chevronIcon`-propen), vertikalt sentrert mot høyre kant. */
+:where(.ix-card--clickable) > .ix-card__chevron {
     position: absolute;
-    inset-block-end: var(--ix-spacing-sm);
+    inset-block: 0;
     inset-inline-end: var(--ix-spacing-md);
-    line-height: 1;
-    font-size: 1.75em;
-    font-weight: var(--ix-font-weight-button);
+    margin-block: auto;
     color: var(--ix-color-foreground-link-default, currentcolor);
     transition: var(--ix-transition-all);
     pointer-events: none;
 }
 
-/* Desktop-bonus: kortet løftes fysisk og chevronen glir mot bevegelsesretningen. */
-:where(.ix-card--clickable:hover) {
-    box-shadow: var(--ix-card-shadow-hover);
-    border-color: var(--ix-color-border-main-hover);
-    transform: translateY(-2px);
+/* Reserver en gutter til høyre slik at innhold ikke legger seg under chevronen.
+   Bevisst uten :where() — da vinner regelen over ix-p-*-utility (samme
+   spesifisitet, men komponent-CSS importeres etter utils), slik at
+   chevron-kolonnen holdes klar uansett hvilken padding som velges.
+   Gutteren = posisjonsgapet (--ix-spacing-md) + plass til selve glyfen. */
+.ix-card--clickable {
+    padding-inline-end: calc(var(--ix-spacing-md) + 1.5em);
 }
 
-:where(.ix-card--clickable:hover)::after {
-    transform: translateX(3px);
+/* Flat hover-feedback: bakgrunns-tint i stedet for skygge/løft. */
+:where(.ix-card--clickable:hover) {
+    background-color: var(--ix-color-surface-main-hover);
+    border-color: var(--ix-color-border-main-hover);
 }
 
 /* Pressed-feedback — bekrefter klikket på touch der :hover ikke finnes. */
 :where(.ix-card--clickable:active) {
     background-color: var(--ix-color-fill-interactive-active);
-    box-shadow: var(--ix-card-shadow);
-    transform: scale(0.98);
 }
 
 :where(.ix-card--clickable:focus-visible) {
@@ -58,31 +70,64 @@
     outline-offset: var(--ix-outline-offset-default);
 }
 
+/* Variant — skygge (dagens uttrykk): kortet «løftes» permanent med skygge,
+   og løftes ytterligere på hover. Beholdt for sammenligning. */
+:where(.ix-card--clickable.ix-card--chevron-shadow) {
+    box-shadow: var(--ix-card-shadow);
+}
+
+:where(.ix-card--clickable.ix-card--chevron-shadow:hover) {
+    background-color: transparent;
+    box-shadow: var(--ix-card-shadow-hover);
+    transform: translateY(-2px);
+}
+
+:where(.ix-card--clickable.ix-card--chevron-shadow:hover) > .ix-card__chevron {
+    transform: translateX(3px);
+}
+
+:where(.ix-card--clickable.ix-card--chevron-shadow:active) {
+    background-color: var(--ix-color-fill-interactive-active);
+    box-shadow: var(--ix-card-shadow);
+    transform: scale(0.98);
+}
+
 @media (prefers-reduced-motion: reduce) {
     :where(.ix-card--clickable),
-    :where(.ix-card--clickable)::after {
+    :where(.ix-card--clickable) > .ix-card__chevron {
         transition: none;
     }
 
-    :where(.ix-card--clickable:hover),
-    :where(.ix-card--clickable:hover)::after,
-    :where(.ix-card--clickable:active) {
+    :where(.ix-card--clickable.ix-card--chevron-shadow:hover),
+    :where(.ix-card--clickable.ix-card--chevron-shadow:hover) > .ix-card__chevron,
+    :where(.ix-card--clickable.ix-card--chevron-shadow:active) {
         transform: none;
     }
 }
 
-:where(.ix-card--success) {
-    border: var(--ix-border-width-default) solid var(--ix-color-border-success-default);
+/* Statustema via data-status (samme system som InteractiveIcon/Message):
+   @sb1/indeks-utils kobler --ix-color-status-* per status, så vi trenger bare
+   å peke fyll og kant på de variablene. Ett attributt gir hele det koherente
+   uttrykket — fyll + kant + hover + active.
+
+   Bevisst uten :where() på border-color: Card emitterer alltid .ix-border-default
+   (0,1,0), så en :where()-regel (0,0,0) hadde tapt. Lik spesifisitet + card.css
+   lastes etter utils ⇒ denne vinner. At vi kun overstyrer border-color bevarer
+   stilen fra `border`-propen (også `dashed`). */
+:where(.ix-card[data-status]) {
+    background-color: var(--ix-color-status-surface);
 }
 
-:where(.ix-card--warning) {
-    border: var(--ix-border-width-default) solid var(--ix-color-border-warning-default);
+.ix-card[data-status] {
+    border-color: var(--ix-color-status-border);
 }
 
-:where(.ix-card--info) {
-    border: var(--ix-border-width-default) solid var(--ix-color-border-info-default);
+/* Klikkbart statuskort: hover/active følger statusfargen i stedet for main-tinten
+   over. Høyere spesifisitet enn de generelle klikk-reglene ⇒ vinner. */
+:where(.ix-card--clickable[data-status]:hover) {
+    background-color: var(--ix-color-status-surface-hover);
 }
 
-:where(.ix-card--danger) {
-    border: var(--ix-border-width-default) solid var(--ix-color-border-danger-default);
+:where(.ix-card--clickable[data-status]:active) {
+    background-color: var(--ix-color-status-surface-active);
 }

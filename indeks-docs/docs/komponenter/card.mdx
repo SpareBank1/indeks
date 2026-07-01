@@ -27,13 +27,14 @@ Et klikkbart kort må se annerledes ut enn et statisk kort **uten** at man treng
 På desktop kan klikkbarhet antydes med hover, men hover finnes ikke på touch. Derfor bærer det
 klikkbare kortet sin affordanse i hviletilstand:
 
-- **Skygge** — kortet «løftes» permanent, noe statiske kort ikke gjør.
-- **Chevron (›)** — et eksplisitt «dette gjør noe»-signal, synlig hele tiden.
-- **Pressed-state** — ved trykk får kortet en tint og krymper litt, som bekrefter klikket på touch.
+- **Chevron (›)** — et eksplisitt «dette gjør noe»-signal, synlig hele tiden. Dette er
+  hovedsignalet: en form, ikke bare en farge, så det holder også kontrastkravet.
+- **Hover** — på desktop får kortet en bakgrunns-tint når du peker på det.
+- **Pressed-state** — ved trykk får kortet en tint, som bekrefter klikket på touch.
 - **Fokusring** — synlig for tastaturbrukere via `:focus-visible`.
 
 Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `onClick` (handling →
-`<button>`). Skygge og chevron legges på automatisk.
+`<button>`). Chevronen legges på automatisk.
 
 ## Kom i gang
 
@@ -51,7 +52,7 @@ Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `on
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<div className="ix-card ix-p-md">
+<div class="ix-card ix-p-md">
   <h3>Statisk kort</h3>
   <p>Et kort uten interaktivitet er bare en beholder.</p>
 </div>
@@ -64,7 +65,7 @@ Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `on
 
 ### Statisk vs. klikkbart side om side
 
-Legg merke til at det klikkbare kortet har skygge og en chevron allerede i hviletilstand — du
+Legg merke til at det klikkbare kortet har en chevron allerede i hviletilstand — du
 trenger ikke peke på det for å forstå at det kan trykkes.
 
 <Tabs groupId="variant">
@@ -78,7 +79,7 @@ trenger ikke peke på det for å forstå at det kan trykkes.
   </Card>
   <Card padding="md" href="https://www.sparebank1.no">
     <Heading as="h3" size="sm">Klikkbart</Heading>
-    <Text>Skygge + chevron, helt uten hover.</Text>
+    <Text>Chevron i hviletilstand, helt uten hover.</Text>
   </Card>
 </HStack>
 ```
@@ -88,13 +89,57 @@ trenger ikke peke på det for å forstå at det kan trykkes.
 
 ```jsx live
 <div style={{ display: 'flex', gap: '1rem' }}>
-  <div className="ix-card ix-p-md">
+  <div class="ix-card ix-p-md">
     <h3>Statisk</h3>
     <p>Flat, ingen chevron.</p>
   </div>
-  <a className="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
+  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
     <h3>Klikkbart</h3>
-    <p>Skygge + chevron, helt uten hover.</p>
+    <p>Chevron i hviletilstand, helt uten hover.</p>
+    <ix-icon class="ix-card__chevron" name="pil-hoyre" data-size="lg" aria-hidden="true"></ix-icon>
+  </a>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+### Chevron-varianter — til vurdering
+
+Vi vurderer hvordan det klikkbare kortet skal signalisere affordanse. Standard (uten ekstra
+klasse) er **flat med en sentrert chevron**. Klassen `ix-card--chevron-shadow` viser
+skygge-alternativet.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="md">
+  <Card padding="md" href="https://www.sparebank1.no">
+    <Heading as="h3" size="sm">Flat (standard)</Heading>
+    <Text>Sentrert, litt større chevron. Ingen skygge.</Text>
+  </Card>
+  <Card padding="md" href="https://www.sparebank1.no" className="ix-card--chevron-shadow">
+    <Heading as="h3" size="sm">Skygge</Heading>
+    <Text>Dagens uttrykk, med løft.</Text>
+  </Card>
+</HStack>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div style={{ display: 'flex', gap: '1rem' }}>
+  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
+    <h3>Flat (standard)</h3>
+    <p>Sentrert, litt større chevron. Ingen skygge.</p>
+    <ix-icon class="ix-card__chevron" name="pil-hoyre" data-size="lg" aria-hidden="true"></ix-icon>
+  </a>
+  <a class="ix-card ix-card--clickable ix-card--chevron-shadow ix-p-md" href="https://www.sparebank1.no">
+    <h3>Skygge</h3>
+    <p>Dagens uttrykk, med løft.</p>
+    <ix-icon class="ix-card__chevron" name="pil-hoyre" data-size="lg" aria-hidden="true"></ix-icon>
   </a>
 </div>
 ```
@@ -126,24 +171,48 @@ Sett `onClick` når kortet utfører en handling. Det rendres som `<button>`.
 
 ### Statusvarianter
 
-Farget kantlinje fremhever status. Disse kan kombineres med klikkbart kort.
+Sett `status` for å gi kortet et statustema — farget fyll og kantlinje. Følger samme
+status-system som `InteractiveIcon` og `Message`. Kan kombineres med klikkbart kort.
 
 ```tsx live
 <VStack gap="md">
-  <Card padding="md" className="ix-card--info">Info</Card>
-  <Card padding="md" className="ix-card--success">Suksess</Card>
-  <Card padding="md" className="ix-card--warning">Advarsel</Card>
-  <Card padding="md" className="ix-card--danger">Fare</Card>
+  <Card padding="md" status="info">Info</Card>
+  <Card padding="md" status="success">Suksess</Card>
+  <Card padding="md" status="warning">Advarsel</Card>
+  <Card padding="md" status="danger">Fare</Card>
 </VStack>
+```
+
+### Stiplet kantlinje
+
+Sett `border="dashed"` for en stiplet kantlinje — nyttig f.eks. for tomme tilstander
+eller «legg til»-flater.
+
+```tsx live
+<Card padding="md" border="dashed">
+  <Text>Kort med stiplet kantlinje</Text>
+</Card>
+```
+
+### Eget chevron-ikon
+
+Klikkbart kort viser `pil-hoyre` som standard. Sett `chevronIcon` for å bytte ikon.
+
+```tsx live
+<Card padding="md" href="https://www.sparebank1.no" chevronIcon="apne-ekstern">
+  <Heading as="h3" size="sm">Åpner i ny fane</Heading>
+  <Text>Chevronen er byttet til et eksternt-lenke-ikon.</Text>
+</Card>
 ```
 
 ## Retningslinjer
 
 ### Skill statisk og klikkbart tydelig
 
-Et klikkbart kort skal alltid bære skygge og chevron — ikke gjør et statisk kort trykkbart uten å
-gi det disse signalene. Skill aldri klikkbart fra statisk kun på farge eller kantlinje; det er for
-svakt på touch og bryter med kontrastkrav.
+Et klikkbart kort skal alltid bære en chevron — ikke gjør et statisk kort trykkbart uten å gi det
+dette signalet. Skill aldri klikkbart fra statisk kun på farge eller kantlinje; det er for svakt
+på touch og bryter med kontrastkrav. Chevronen er en form, ikke bare en farge, og holder derfor
+kontrastkravet.
 
 ### Bruk riktig semantikk: navigasjon vs. handling
 
@@ -171,7 +240,7 @@ på touch (sikt mot minst 44×44 px).
 - **Gi kortet et meningsfylt navn** — innholdet blir det tilgjengelige navnet. Rent visuelle kort
   trenger `aria-label`.
 - **Ikke nøst interaktive elementer** inni et klikkbart kort.
-- **Ikke skill klikkbart fra statisk kun med farge** — skygge og chevron gjør jobben, og må ikke
+- **Ikke skill klikkbart fra statisk kun med farge** — chevronen gjør jobben, og må ikke
   fjernes.
 
 ### Hva komponenten gjør automatisk
@@ -179,7 +248,7 @@ på touch (sikt mot minst 44×44 px).
 - **Semantisk element** — `<a>` ved `href`, `<button>` ved `onClick`, ellers `<div>`.
 - **Tastaturstøtte** — native element gir Enter/Space-aktivering og tab-rekkefølge gratis.
 - **Fokusindikator** via `:focus-visible` — synlig for tastatur, ikke for mus.
-- **Touch-synlig affordanse** — skygge og chevron i hviletilstand, pressed-state ved `:active`.
+- **Touch-synlig affordanse** — chevron i hviletilstand, pressed-state ved `:active`.
 - **Redusert bevegelse** — transition og skalering deaktiveres ved `prefers-reduced-motion`.
 
 <KeyboardAndScreenReader data={a11yData} />
@@ -194,10 +263,11 @@ på touch (sikt mot minst 44×44 px).
 |------|------|----------|-------------|
 | `href` | `string` | | Gjør kortet til en lenke (`<a>`) for navigasjon. Aktiverer klikkbar styling |
 | `onClick` | `(e) => void` | | Gjør kortet til en knapp (`<button>`) for handling. Aktiverer klikkbar styling |
-| `surfaceColor` | `SurfaceColor` | | Bakgrunns- og tekstfarge for overflaten |
+| `status` | `'default' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `'default'` | Statustema — farget fyll og kant. Settes som `data-status` |
 | `border` | `'default' \| 'dashed'` | `'default'` | Kantlinjestil |
+| `chevronIcon` | `IconName` | `'pil-hoyre'` | Ikon for affordanse-chevronen på klikkbart kort |
 | `padding` | `Size` | | Indre luft via `ix-p-*`-klasse |
-| `className` | `string` | | Ekstra klasser, f.eks. statusvariant `ix-card--info` |
+| `className` | `string` | | Ekstra klasser |
 
 I tillegg støttes standard HTML-attributter, som settes direkte på det rendrede elementet
 (`<a>`, `<button>` eller `<div>`). `Card.Action` brukes for en egen handlingsflate inni kortet.
@@ -212,9 +282,16 @@ bruke klassene direkte. Husk at klikkbart kort skal være et `<a>` eller `<butto
 | Element/tilstand | Selektor |
 |-----------------|----------|
 | Kort | `.ix-card` |
-| Klikkbart kort (skygge + chevron) | `.ix-card--clickable` |
-| Status | `.ix-card--info` / `--success` / `--warning` / `--danger` |
-| Skygge-variabel | `--ix-card-shadow` (overstyrbar) |
+| Klikkbart kort (flat, sentrert chevron) | `.ix-card--clickable` |
+| Chevron-ikon | `.ix-card__chevron` (et `ix-icon`) |
+| Stiplet kantlinje | `.ix-card--dashed` |
+| Chevron med skygge/løft | `.ix-card--chevron-shadow` |
+| Status | `data-status="info"` / `success` / `warning` / `danger` |
+| Skygge-variabel (kun `--chevron-shadow`) | `--ix-card-shadow` (overstyrbar) |
+
+`.ix-card` har kantlinje som standard — ingen ekstra klasse trengs. Legg til `.ix-card--dashed`
+for stiplet stil. Klikkbart kort trenger et chevron-ikon som siste barn: `<ix-icon
+class="ix-card__chevron" name="pil-hoyre" aria-hidden="true">`.
 
 ### Eksempel: ren HTML
 
@@ -229,6 +306,7 @@ bruke klassene direkte. Husk at klikkbart kort skal være et `<a>` eller `<butto
 <a class="ix-card ix-card--clickable ix-p-md" href="/konto">
   <h3>Sparekonto</h3>
   <p>Se saldo</p>
+  <ix-icon class="ix-card__chevron" name="pil-hoyre" data-size="lg" aria-hidden="true"></ix-icon>
 </a>
 ```
 

@@ -7,14 +7,26 @@ import {
     type HTMLAttributes,
     type ReactNode,
 } from 'react';
-import { type Border, type LimitedSpacingProps, type SurfaceColor } from '../../../types/types';
+import { type Border, type LimitedSpacingProps } from '../../../types/types';
+import { Icon, type IconName } from '../../icons';
+
+/**
+ * Statustema for Card. Følger samme status-system som `InteractiveIcon` og
+ * `Message`: verdien settes som `data-status`, og CSS kobler hele det koherente
+ * uttrykket (fyll + kant + hover/active) via `--ix-color-status-*`. `"default"`
+ * gir nøytralt kort (ingen `data-status`).
+ */
+export type CardStatus = 'default' | 'info' | 'success' | 'warning' | 'danger';
 
 export interface CardProps extends HTMLAttributes<HTMLElement>, LimitedSpacingProps {
     children?: ReactNode;
     className?: string;
-    surfaceColor?: SurfaceColor;
+    /** Statusfarge; styrer fyll og kant. Settes som `data-status`. @default "default" */
+    status?: CardStatus;
     border?: Border;
     href?: string;
+    /** Ikon for affordanse-chevronen på klikkbart kort. @default "pil-hoyre" */
+    chevronIcon?: IconName;
 }
 
 export interface ActionProps extends HTMLAttributes<HTMLDivElement> {
@@ -42,7 +54,7 @@ const Action = ({ href, children, className, onClick, ...rest }: ActionProps) =>
 };
 
 export const Card = forwardRef<HTMLElement, CardProps>(
-    ({ children, className, surfaceColor, border = 'default', href, onClick, ...rest }, ref) => {
+    ({ children, className, status = 'default', border = 'default', href, onClick, chevronIcon = 'pil-hoyre', ...rest }, ref) => {
         const isClickable = Boolean(href || onClick);
 
         const getSpacingClassName = () => {
@@ -53,14 +65,21 @@ export const Card = forwardRef<HTMLElement, CardProps>(
 
         const cardClass = clsx(
             'ix-card',
-            `ix-card--${surfaceColor}`,
-            `ix-border-${border}`,
-            `ix-color-foreground-${surfaceColor === 'accent' ? 'accent' : 'main'}-default`,
-            { [`ix-color-surface-${surfaceColor}-default`]: surfaceColor },
+            { 'ix-card--dashed': border === 'dashed' },
             getSpacingClassName(),
             className,
             isClickable && 'ix-card--clickable'
         );
+
+        // Statustema kobles via data-status (som InteractiveIcon/Message): CSS leser
+        // --ix-color-status-* og setter fyll + kant + hover/active koherent.
+        const dataStatus = status !== 'default' ? status : undefined;
+
+        // Chevronen bæres av et ekte ix-icon (ikke et CSS-tegn) slik at den kan
+        // byttes ut via `chevronIcon`. Dekorativt → aria-hidden.
+        const chevron = isClickable ? (
+            <Icon name={chevronIcon} size="lg" className="ix-card__chevron" aria-hidden />
+        ) : null;
 
         // Ekte semantisk element gir tastatur, fokus og rolle gratis:
         // <a> for navigasjon, <button> for handling, <div> for statisk kort.
@@ -69,11 +88,13 @@ export const Card = forwardRef<HTMLElement, CardProps>(
                 <a
                     href={href}
                     className={cardClass}
+                    data-status={dataStatus}
                     ref={ref as React.Ref<HTMLAnchorElement>}
                     onClick={onClick}
                     {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}
                 >
                     {children}
+                    {chevron}
                 </a>
             );
         }
@@ -83,17 +104,19 @@ export const Card = forwardRef<HTMLElement, CardProps>(
                 <button
                     type="button"
                     className={cardClass}
+                    data-status={dataStatus}
                     ref={ref as React.Ref<HTMLButtonElement>}
                     onClick={onClick}
                     {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}
                 >
                     {children}
+                    {chevron}
                 </button>
             );
         }
 
         return (
-            <div className={cardClass} ref={ref as React.Ref<HTMLDivElement>} {...rest}>
+            <div className={cardClass} data-status={dataStatus} ref={ref as React.Ref<HTMLDivElement>} {...rest}>
                 {children}
             </div>
         );
