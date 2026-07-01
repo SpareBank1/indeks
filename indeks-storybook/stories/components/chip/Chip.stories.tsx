@@ -170,6 +170,16 @@ export const RadioChipKunLesing: Story = {
     ),
 };
 
+export const RadioChipJaNei: Story = {
+    name: 'Radio chip – ja/nei',
+    render: () => (
+        <RadioChipGroup legend="Ønsker du nyhetsbrev?" name="nyhetsbrev">
+            <RadioChip value="ja" label="Ja" />
+            <RadioChip value="nei" label="Nei" />
+        </RadioChipGroup>
+    ),
+};
+
 export const RadioChipHTML: Story = {
     name: 'Radio chip – HTML',
     render: () => (
