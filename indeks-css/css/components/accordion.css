@@ -24,8 +24,8 @@
     display: block;
     border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
     border-radius: var(--ix-border-radius-md);
-    /* Klipp barna til de avrundede hjørnene slik at hover-/active-flaten på
-     * summary ikke flyter ut over rammen i toppen/bunnen. */
+    /* Klipp barna til de avrundede hjørnene slik at hover-flaten på summary
+     * ikke flyter ut over rammen i toppen/bunnen. */
     overflow: hidden;
     background-color: var(--ix-color-surface-main-default);
     color: var(--ix-color-foreground-main-default);
@@ -61,9 +61,6 @@
     cursor: pointer;
     /* Skjul native disclosure-marker (trekant) i alle nettlesere. */
     list-style: none;
-    /* Myk overgang på bakgrunnen slik at hover/active tones inn i stedet for å
-     * blinke hardt på mousedown/-up. */
-    transition: background-color var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
 :where(.ix-accordion) summary::-webkit-details-marker,
@@ -71,15 +68,11 @@
     display: none;
 }
 
-/* Default/Hover/Active — tydelige states på klikkflaten. */
+/* Hover — tydelig state på klikkflaten. Ingen egen active-state: den ga en
+ * synlig flash på trykk (mousedown→open→mouseup) uten å tilføre verdi. */
 :where(.ix-accordion) summary:hover,
 :where(.ix-accordion__header:hover) {
     background-color: var(--ix-color-surface-main-hover);
-}
-
-:where(.ix-accordion) summary:active,
-:where(.ix-accordion__header:active) {
-    background-color: var(--ix-color-surface-main-active);
 }
 
 /* Focus — synlig, konsistent ring (samme som resten av systemet). */
