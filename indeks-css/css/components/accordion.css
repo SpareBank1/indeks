@@ -61,6 +61,9 @@
     cursor: pointer;
     /* Skjul native disclosure-marker (trekant) i alle nettlesere. */
     list-style: none;
+    /* Myk overgang på bakgrunnen slik at hover/active tones inn i stedet for å
+     * blinke hardt på mousedown/-up. */
+    transition: background-color var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
 :where(.ix-accordion) summary::-webkit-details-marker,
