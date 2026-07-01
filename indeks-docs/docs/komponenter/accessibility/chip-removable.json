@@ -1,0 +1,96 @@
+{
+  "component": "Removable chip",
+  "lastReviewed": "2026-06-29",
+  "consumerResponsibilities": [
+    {
+      "summary": "Gi removable chip et tilgjengelig fjern-navn",
+      "details": "Removable chip fjernes ved klikk på hele chipen, og krysset er kun et dekorativt CSS-ikon. Send removeLabel (React) eller sett hele aria-label (HTML), f.eks. «Sparing fjern». Uten det hører skjermleserbrukeren bare «Sparing, knapp» og vet ikke at aktivering fjerner chipen. Konsumenten er ansvarlig for riktig språk (bokmål «fjern», nynorsk «fjern», engelsk «remove») — komponenten har ingen hardkodet fallback.",
+      "wcag": ["4.1.2", "2.4.6", "2.5.3"]
+    },
+    {
+      "summary": "Gi chipen en kort og tydelig label",
+      "details": "Label-teksten beskriver verdien chipen representerer — f.eks. «Sparing» eller et valgt filter. Den inngår i det tilgjengelige navnet sammen med fjern-suffikset. Unngå lange tekster.",
+      "wcag": ["2.4.6", "1.3.1"]
+    },
+    {
+      "summary": "Bruk chips i grupper, ikke alene",
+      "details": "Removable chips viser aktive valg eller filtre og gir mest mening presentert sammen i en gruppe. En enkeltstående removable chip gir lite kontekst.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Ikke stol på farge alene for å skille chips",
+      "details": "Forskjeller mellom chips må ikke kun kommuniseres med farge. Teksten må alltid være den primære informasjonsbæreren. Krysset (dekorativt) signaliserer at chipen kan fjernes.",
+      "wcag": ["1.4.1"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Native <button>-element med implisitt rolle. Tekst-innhold gir tilgjengelig navn automatisk." },
+    { "id": "1.3.2", "notes": "Innholdet følger naturlig lesrekkefølge i DOM." },
+    { "id": "1.4.1", "notes": "Tilstand (hover/active) kommuniseres med fyll og kant i tillegg til farge — ikke farge alene." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
+    { "id": "1.4.11", "notes": "Fokusindikator oppfyller 3:1 kontrastkrav." },
+    { "id": "2.1.1", "notes": "Native <button> aktiveres med Enter og Space. Fullt opererbart med tastatur." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM. Krysset er et dekorativt CSS-ikon uten eget fokus, så hver removable chip er ett tab-stopp." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med outline-token." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
+    { "id": "1.4.3", "notes": "Tekstfarge mot fill-main-tokens i alle interaksjonstilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG." },
+    { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button og navn fra aria-label «[label] [removeLabel]». Native disabled-attributt eksponeres til hjelpemidler." },
+    { "id": "2.5.3", "notes": "Den synlige label-teksten inngår i det tilgjengelige navnet («[label] [removeLabel]»)." },
+    { "id": "2.5.8", "notes": "Hele chipen er fjern-knappen. md-størrelsen gir klikkflate godt over 24×24px. sm-størrelsen (padding-block spacing-2xs + font-size-sm) er nær minimumet; chips presenteres i grupper med gap mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Krysset er et dekorativt CSS-ikon (::after) uten egen markup og ligger ikke i tilgjengelighetstreet." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Chipen formidler ikke instruksjoner — den representerer et valg som kan fjernes." },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt som ber om personlig informasjon." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.12" },
+    { "id": "1.4.13" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4" },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native button-element — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.2", "reason": "Chipen trigger ingen automatisk kontekstendring ved fokus." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1" },
+    { "id": "3.3.2" },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Removable chip genererer ingen statusmeldinger selv; konsumenten varsler ev. om at et valg er fjernet." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til chipen" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Enter", "action": "Fjerner chipen" },
+    { "key": "Space", "action": "Fjerner chipen" }
+  ],
+  "screenReader": [
+    "Ved fokus: \"[label] [removeLabel], knapp\" (f.eks. «Sparing fjern, knapp»)",
+    "Deaktivert: \"[label] [removeLabel], knapp, deaktivert\""
+  ]
+}

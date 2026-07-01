@@ -1,6 +1,6 @@
 {
   "component": "Checkbox",
-  "lastReviewed": "2026-05-27",
+  "lastReviewed": "2026-06-29",
   "consumerResponsibilities": [
     {
       "summary": "Skriv beskrivende labeltekst",
@@ -14,7 +14,7 @@
     },
     {
       "summary": "Grupper relaterte checkboxer",
-      "details": "Når flere checkboxer hører sammen (f.eks. \"Velg interesser\"), bør de grupperes med fieldset og legend for å gi kontekst til skjermleserbrukere.",
+      "details": "Når flere checkboxer hører sammen (f.eks. \"Velg interesser\"), bør de grupperes med CheckboxGroup. Den rendres som <ix-checkbox-group> med role=\"group\" og kobler legend via aria-labelledby — det gir kontekst til skjermleserbrukere uten Safari-layoutbuggene som følger med <fieldset>.",
       "wcag": ["1.3.1"]
     }
   ],

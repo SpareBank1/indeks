@@ -1,0 +1,224 @@
+---
+title: Radio chip
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from '../accessibility/chip-radio.json';
+
+# Radio chip
+
+En radio chip er en gruppe chips der brukeren velger **nøyaktig ett** alternativ — som en kompakt segment-velger eller filtervalg. Å velge én chip fjerner automatisk valget på den forrige.
+
+Hver chip har en indikator til venstre for teksten: en tom sirkel når den ikke er valgt, og en fylt sirkel med prikk når den er valgt. I tillegg fylles den valgte pillen med en lys aksentfarge og får aksent-kant, slik at valgt tilstand kommuniseres med mer enn farge.
+
+Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`, og pil-tastene flytter valget mellom alternativene. Gi alltid gruppen en beskrivende `legend`.
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-radio-group data-variant="chip" name="periode">
+  <span data-field="legend">Velg periode</span>
+  <div data-field="items">
+    <div class="ix-radio-button">
+      <input type="radio" id="periode-1m" value="1m" />
+      <label for="periode-1m">1 måned</label>
+    </div>
+    <div class="ix-radio-button">
+      <input type="radio" id="periode-3m" value="3m" checked />
+      <label for="periode-3m">3 måneder</label>
+    </div>
+    <div class="ix-radio-button">
+      <input type="radio" id="periode-12m" value="12m" />
+      <label for="periode-12m">12 måneder</label>
+    </div>
+  </div>
+  <span data-field="error" aria-live="polite"></span>
+</ix-radio-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<RadioChipGroup legend="Velg periode" name="periode" defaultValue="3m">
+  <RadioChip value="1m" label="1 måned" />
+  <RadioChip value="3m" label="3 måneder" />
+  <RadioChip value="12m" label="12 måneder" />
+</RadioChipGroup>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Liten størrelse
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-radio-group data-variant="chip" data-size="sm" name="periode-liten">
+  <span data-field="legend">Velg periode</span>
+  <div data-field="items">
+    <div class="ix-radio-button">
+      <input type="radio" id="liten-1m" value="1m" />
+      <label for="liten-1m">1 måned</label>
+    </div>
+    <div class="ix-radio-button">
+      <input type="radio" id="liten-3m" value="3m" checked />
+      <label for="liten-3m">3 måneder</label>
+    </div>
+    <div class="ix-radio-button">
+      <input type="radio" id="liten-12m" value="12m" />
+      <label for="liten-12m">12 måneder</label>
+    </div>
+  </div>
+  <span data-field="error" aria-live="polite"></span>
+</ix-radio-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<RadioChipGroup legend="Velg periode" name="periode-liten" size="sm" defaultValue="3m">
+  <RadioChip value="1m" label="1 måned" />
+  <RadioChip value="3m" label="3 måneder" />
+  <RadioChip value="12m" label="12 måneder" />
+</RadioChipGroup>
+```
+
+</TabItem>
+</Tabs>
+
+### Ja/nei – alternativ til checkbox
+
+Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn én checkbox. En checkbox har en implisitt standardtilstand (av), mens to radio chips tvinger brukeren til å ta et eksplisitt valg — ingen av dem er forhåndsvalgt. Bruk dette når du vil unngå at «ingen handling» tolkes som et svar, for eksempel ved samtykke.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-radio-group data-variant="chip" name="nyhetsbrev">
+  <span data-field="legend">Ønsker du nyhetsbrev?</span>
+  <div data-field="items">
+    <div class="ix-radio-button">
+      <input type="radio" id="nyhetsbrev-ja" value="ja" />
+      <label for="nyhetsbrev-ja">Ja</label>
+    </div>
+    <div class="ix-radio-button">
+      <input type="radio" id="nyhetsbrev-nei" value="nei" />
+      <label for="nyhetsbrev-nei">Nei</label>
+    </div>
+  </div>
+  <span data-field="error" aria-live="polite"></span>
+</ix-radio-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<RadioChipGroup legend="Ønsker du nyhetsbrev?" name="nyhetsbrev">
+  <RadioChip value="ja" label="Ja" />
+  <RadioChip value="nei" label="Nei" />
+</RadioChipGroup>
+```
+
+</TabItem>
+</Tabs>
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Gi radio chip-gruppen en beskrivende `legend`** — det er gruppens tilgjengelige navn. Bruk riktig språk; ingen hardkodet fallback.
+- **Bruk radio chip kun når brukeren skal velge nøyaktig ett alternativ** — skal flere kunne velges samtidig, er det feil semantikk. Bruk checkbox-chip i stedet.
+- **Gi hvert valg en kort og tydelig label** — label-teksten er det tilgjengelige navnet for valget.
+- **Ikke stol på farge alene** — ikke overstyr stylingen slik at kun fargen skiller valgt fra ikke-valgt.
+
+### Hva komponenten gjør automatisk
+
+- **Radiogruppe-semantikk** — radio chip bygger på `<ix-radio-group>`, som setter `role="radiogroup"`, kobler `legend` som tilgjengelig navn, synkroniserer `name` på alle valg og lar piltastene flytte valget. Gruppen er ett tab-stopp.
+- **Valgt tilstand** kommuniseres med fylt sirkel-indikator, aksent-kant og fyll — ikke farge alene — og eksponeres programmatisk via native `aria-checked`.
+- **Fokusindikator** via `:focus-visible` som følger pill-formen.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+### `RadioChipGroup`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `legend` | `string` | | **Påkrevd.** Tilgjengelig navn for gruppen. i18n — ingen fallback |
+| `name` | `string` | | Felles `name` for alle radioknappene. Genereres automatisk hvis utelatt |
+| `value` | `string` | | Valgt verdi (kontrollert) |
+| `defaultValue` | `string` | | Valgt verdi (ukontrollert) |
+| `onChange` | `(value: string) => void` | | Kalles med valgt verdi når brukeren bytter |
+| `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
+| `description` | `string` | | Hjelpetekst over alternativene |
+| `errorMessage` | `string` | | Feilmelding — setter `aria-invalid` på gruppen |
+| `disabled` | `boolean` | | Deaktiverer hele gruppen |
+| `hideLegend` | `boolean` | | Skjuler legend visuelt, men beholder den for skjermlesere |
+
+### `RadioChip`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `value` | `string` | | **Påkrevd.** Verdien dette valget representerer |
+| `label` | `string` | | **Påkrevd.** Synlig etikett. i18n — ingen fallback |
+| `disabled` | `boolean` | | Deaktiverer dette enkeltvalget |
+
+## Tilpasning med CSS
+
+Radio chip gjenbruker `ix-radio-group`-web componenten med chip-styling aktivert via `data-variant="chip"` på host-elementet. Trenger du stylingen på HTML du setter sammen selv, kan du bruke markupen under.
+
+### Tilgjengelige klasser og attributter
+
+| Element/tilstand | Selektor / attributt |
+|-----------------|----------------------|
+| Radio chip (gruppe) | `ix-radio-group[data-variant="chip"]` — styler hver `<label>` som pill |
+| Liten størrelse | `ix-radio-group[data-variant="chip"][data-size="sm"]` |
+| Legend | `[data-field="legend"]` |
+| Alternativer | `[data-field="items"]` |
+| Enkeltvalg | `.ix-radio-button` med `<input type="radio">` + `<label>` |
+| Valgt tilstand | `input:checked + label` (automatisk) |
+| Fokus | `input:focus-visible + label` (automatisk) |
+| Feilmelding | `[data-field="error"]` |
+
+### Eksempel: ren HTML
+
+```html
+<ix-radio-group data-variant="chip" name="periode">
+  <span data-field="legend">Velg periode</span>
+  <div data-field="items">
+    <div class="ix-radio-button">
+      <input type="radio" id="periode-1m" value="1m" />
+      <label for="periode-1m">1 måned</label>
+    </div>
+    <div class="ix-radio-button">
+      <input type="radio" id="periode-3m" value="3m" checked />
+      <label for="periode-3m">3 måneder</label>
+    </div>
+  </div>
+  <span data-field="error" aria-live="polite"></span>
+</ix-radio-group>
+```
+
+## Relatert
+
+- [Chip](../chip) — oversikt over chip-familien og felles retningslinjer
+- [Button chip](./button) — chip som trigger en handling
+- [Removable chip](./removable) — chip som representerer et aktivt valg og kan fjernes
+- [RadioGroup](../skjema/radio-group) — standard radiogruppe uten chip-styling
