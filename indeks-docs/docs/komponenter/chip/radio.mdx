@@ -97,6 +97,43 @@ Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`,
 </TabItem>
 </Tabs>
 
+### Ja/nei – alternativ til checkbox
+
+Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn én checkbox. En checkbox har en implisitt standardtilstand (av), mens to radio chips tvinger brukeren til å ta et eksplisitt valg — ingen av dem er forhåndsvalgt. Bruk dette når du vil unngå at «ingen handling» tolkes som et svar, for eksempel ved samtykke.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-radio-group data-variant="chip" name="nyhetsbrev">
+  <span data-field="legend">Ønsker du nyhetsbrev?</span>
+  <div data-field="items">
+    <div class="ix-radio-button">
+      <input type="radio" id="nyhetsbrev-ja" value="ja" />
+      <label for="nyhetsbrev-ja">Ja</label>
+    </div>
+    <div class="ix-radio-button">
+      <input type="radio" id="nyhetsbrev-nei" value="nei" />
+      <label for="nyhetsbrev-nei">Nei</label>
+    </div>
+  </div>
+  <span data-field="error" aria-live="polite"></span>
+</ix-radio-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<RadioChipGroup legend="Ønsker du nyhetsbrev?" name="nyhetsbrev">
+  <RadioChip value="ja" label="Ja" />
+  <RadioChip value="nei" label="Nei" />
+</RadioChipGroup>
+```
+
+</TabItem>
+</Tabs>
+
 ## Universell utforming
 
 ### Hva du selv må sørge for
