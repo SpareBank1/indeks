@@ -1,6 +1,7 @@
 import React from 'react';
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 import {
+    Accordion,
     Button,
     Card,
     Checkbox,
@@ -37,6 +38,7 @@ if (ExecutionEnvironment.canUseDOM) {
 const ReactLiveScope = {
     React,
     ...React,
+    Accordion,
     Button,
     Card,
     Checkbox,
