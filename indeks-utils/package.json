@@ -1,6 +1,6 @@
 {
     "name": "@sb1/indeks-utils",
-    "version": "0.5.1",
+    "version": "0.6.0",
     "description": "CSS utility classes for Indeks design system",
     "main": "dist/index.css",
     "type": "module",
