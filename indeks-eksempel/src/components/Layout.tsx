@@ -20,6 +20,7 @@ export default function Layout() {
         { path: 'spacing-eksempler', label: 'Spacing-eksempler' },
         { path: 'responsiv-layout', label: 'Responsiv layout' },
         { path: 'spacing-responsiv', label: 'Responsiv spacing' },
+        { path: 'grid-komponent', label: 'Grid-komponent' },
         { path: 'typografi-eksempler', label: 'Typografi-eksempler' },
         { path: 'fargeskalaer-eksempler', label: 'Fargeskalaer' },
     ];

@@ -1,0 +1,437 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable from '@site/src/components/AccessibilityTable';
+import a11yData from '../accessibility/grid.json';
+
+# Grid
+
+Grid er en layout-primitiv for å stable innhold i to dimensjoner — vertikalt og horisontalt. Den fungerer både som custom element (`<ix-grid>`) og som CSS-klasse (`.ix-grid`).
+
+## Egnet til
+
+- Layout i to dimensjoner — vertikalt og horisontalt samtidig
+- Responsiv layout med automatisk tilpasning til tilgjengelig plass (`auto-fit`, `auto-fill`)
+- Jevnt fordelte kolonner med kontrollert mellomrom
+- Layout både på sidenivå og internt i komponenter eller seksjoner
+
+## Uegnet til
+
+- Layout i kun én dimensjon — bruk [Stack](./stack) i stedet
+- Kompleks layout der du trenger ulik kolonnestørrelse per rad
+
+## Kom i gang
+
+`ix-grid` har 12 kolonner og `md` gap som standard. Bruk `cols`- og `gap`-attributtene (eller props) for å overstyre.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+Grid finnes i to bruksformer i HTML:
+
+| Form | Eksempel | Styring |
+|------|---------|---------|
+| **Custom element** | `<ix-grid cols="3" gap="md">` | Attributter direkte på elementet |
+| **CSS-klasse** | `<div class="ix-grid ix-grid-cols-3 ix-gap-md">` | Modifier-klasser — attributter virker ikke her |
+
+`<ix-grid>` bruker attributter:
+
+```jsx live
+<ix-grid cols="3">
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">1</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">2</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">3</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">4</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">5</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">6</div>
+</ix-grid>
+```
+
+På vanlige elementer bruker du CSS-klasser — se [CSS-klasser for containeren](#css-klasser-for-containeren) i API-seksjonen.
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Grid cols={3}>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">1</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">2</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">3</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">4</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">5</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">6</div>
+</Grid>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Kolonner
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-grid cols="2" gap="sm">
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">1</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">2</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">3</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">4</div>
+</ix-grid>
+```
+
+```jsx live
+<ix-grid cols="4" gap="sm">
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">1</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">2</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">3</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">4</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">5</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">6</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">7</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">8</div>
+</ix-grid>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="lg">
+  <Grid cols={2} gap="sm">
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">1</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">2</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">3</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">4</div>
+  </Grid>
+  <Grid cols={4} gap="sm">
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">1</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">2</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">3</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">4</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">5</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">6</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">7</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">8</div>
+  </Grid>
+</VStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Auto-fit — responsiv layout
+
+`auto-fit` tilpasser antall kolonner til tilgjengelig plass og strekker cellene for å fylle hele bredden.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-grid cols="auto-fit-md" gap="sm">
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Auto 1</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Auto 2</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Auto 3</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Auto 4</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Auto 5</div>
+</ix-grid>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Grid cols="auto-fit-md" gap="sm">
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Auto 1</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Auto 2</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Auto 3</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Auto 4</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Auto 5</div>
+</Grid>
+```
+
+</TabItem>
+</Tabs>
+
+### Auto-fill — behold cellestørrelse
+
+`auto-fill` tilpasser antall kolonner, men beholder cellestørrelsen i stedet for å strekke dem.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-grid cols="auto-fill-sm" gap="sm">
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Fill 1</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Fill 2</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Fill 3</div>
+</ix-grid>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Grid cols="auto-fill-sm" gap="sm">
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Fill 1</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Fill 2</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Fill 3</div>
+</Grid>
+```
+
+</TabItem>
+</Tabs>
+
+### Col-span — ulik bredde per celle
+
+Bruk `colspan`-attributt eller `Grid.Item` for å la celler spenne over flere kolonner. Kombiner med 12-kolonners grid for fleksibel layout.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-grid cols="12" gap="sm">
+  <div colspan="4" class="ix-color-surface-info-default ix-px-md ix-py-2xs">4 kolonner</div>
+  <div colspan="8" class="ix-color-surface-info-default ix-px-md ix-py-2xs">8 kolonner</div>
+  <div colspan="6" class="ix-color-surface-info-default ix-px-md ix-py-2xs">6 kolonner</div>
+  <div colspan="6" class="ix-color-surface-info-default ix-px-md ix-py-2xs">6 kolonner</div>
+  <div colspan="full" class="ix-color-surface-info-default ix-px-md ix-py-2xs">Full bredde</div>
+</ix-grid>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Grid cols={12} gap="sm">
+  <Grid.Item colspan={4} className="ix-color-surface-info-default ix-px-md ix-py-2xs">4 kolonner</Grid.Item>
+  <Grid.Item colspan={8} className="ix-color-surface-info-default ix-px-md ix-py-2xs">8 kolonner</Grid.Item>
+  <Grid.Item colspan={6} className="ix-color-surface-info-default ix-px-md ix-py-2xs">6 kolonner</Grid.Item>
+  <Grid.Item colspan={6} className="ix-color-surface-info-default ix-px-md ix-py-2xs">6 kolonner</Grid.Item>
+  <Grid.Item colspan="full" className="ix-color-surface-info-default ix-px-md ix-py-2xs">Full bredde</Grid.Item>
+</Grid>
+```
+
+</TabItem>
+</Tabs>
+
+### Gap
+
+Standard gap er `md`. Bruk `gap`-prop/-attributt for å overstyre.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-grid cols="3" gap="lg">
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">1</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">2</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">3</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">4</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">5</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">6</div>
+</ix-grid>
+```
+
+```jsx live
+<ix-grid cols="3" gap="none">
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">1</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">2</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">3</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">4</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">5</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">6</div>
+</ix-grid>
+```
+
+Tilgjengelige størrelser for `gap`-attributt: `none`, `2xs`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`, `4xl`
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="lg">
+  <Grid cols={3} gap="lg">
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">1</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">2</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">3</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">4</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">5</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">6</div>
+  </Grid>
+  <Grid cols={3} gap="none">
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">1</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">2</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">3</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">4</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">5</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">6</div>
+  </Grid>
+</VStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Align — vertikal justering av innhold
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-grid cols="3" align="center" gap="sm" style={{ height: '120px' }}>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Kort</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-xl">Høy</div>
+  <div class="ix-color-surface-info-default ix-px-md ix-py-2xs">Kort</div>
+</ix-grid>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Grid cols={3} align="center" gap="sm" style={{ height: '120px' }}>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Kort</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-xl">Høy</div>
+  <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Kort</div>
+</Grid>
+```
+
+</TabItem>
+</Tabs>
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Bruk semantiske elementer når konteksten krever det** — `ix-grid` er et ukjent HTML-element uten semantisk rolle. Nettleseren behandler det som generisk blokkinnhold, på samme måte som `<div>`. Bruk `as`-prop i React (f.eks. `<Grid as="section">`) eller CSS-klasser direkte på et native element når innholdet krever semantikk.
+- **Pass på DOM-rekkefølgen** — CSS Grid kan endre visuell rekkefølge uten å endre DOM-rekkefølgen. Skjermlesere og tastaturnavigasjon følger DOM. Sørg for at DOM-rekkefølgen gir mening uavhengig av visuell presentasjon.
+
+På native elementer (ikke `<ix-grid>`) virker **ikke** attributter — bruk modifier-klasser:
+
+```html
+<!-- CSS-klasse på semantisk element — modifier-klasser styrer kolonner og gap -->
+<section class="ix-grid ix-grid-cols-3 ix-gap-md">
+  <article>Artikkel 1</article>
+  <article>Artikkel 2</article>
+  <article>Artikkel 3</article>
+</section>
+
+<!-- Tilsvarende med <ix-grid> — her bruker du attributter i stedet for klasser -->
+<ix-grid cols="3" gap="md">...</ix-grid>
+```
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### `<ix-grid>` — attributter
+
+Attributter kan bare brukes på `<ix-grid>`-elementet, ikke på vanlige `<div>`-er.
+
+| Attributt | Verdi | Beskrivelse |
+|-----------|-------|-------------|
+| `cols` | `1` ... `12` | Fast antall kolonner |
+| `cols` | `auto-fit-xs` \| `auto-fit-sm` \| `auto-fit-md` \| `auto-fit-lg` | Responsivt antall kolonner, celler strekkes |
+| `cols` | `auto-fill-xs` \| `auto-fill-sm` \| `auto-fill-md` \| `auto-fill-lg` | Responsivt antall kolonner, cellestørrelse beholdes |
+| `rows` | `1` \| `2` \| `3` \| `4` | Fast antall rader |
+| `gap` | `none` \| `2xs` \| `xs` \| `sm` \| `md` \| `lg` \| `xl` \| `2xl` \| `3xl` \| `4xl` | Avstand mellom celler. Standard: `md` |
+| `align` | `start` \| `end` \| `center` \| `stretch` | Vertikal justering av innhold i celler |
+| `justify` | `start` \| `end` \| `center` \| `stretch` | Horisontal justering av innhold i celler |
+| `inline` | *(ingen verdi)* | Gjør grid til inline-grid |
+
+### CSS-klasser for containeren
+
+Klasser fungerer på både `<ix-grid>` og vanlige elementer som `<div>`.
+
+| Klasse | Beskrivelse |
+|--------|-------------|
+| `ix-grid` | Aktiverer grid-layout med standard gap (`md`) |
+| `ix-grid-cols-1` ... `ix-grid-cols-12` | Fast antall kolonner (1-12) |
+| `ix-grid-auto-fit-xs` ... `ix-grid-auto-fit-lg` | Responsivt antall kolonner, celler strekkes |
+| `ix-grid-auto-fill-xs` ... `ix-grid-auto-fill-lg` | Responsivt antall kolonner, cellestørrelse beholdes |
+| `ix-grid-rows-1` ... `ix-grid-rows-4` | Fast antall rader |
+| `ix-grid-align-start` ... `ix-grid-align-stretch` | Vertikal justering |
+| `ix-grid-justify-start` ... `ix-grid-justify-stretch` | Horisontal justering |
+| `ix-inline-grid` | Inline-grid |
+
+### Attributter for barn (colspan, rowspan)
+
+Settes på barna inne i grid-containeren for å kontrollere hvor mange kolonner/rader de spenner over.
+
+| Attributt | Verdi | Beskrivelse |
+|-----------|-------|-------------|
+| `colspan` | `1` ... `12` \| `full` | Antall kolonner cellen spenner over |
+| `rowspan` | `1` ... `4` \| `full` | Antall rader cellen spenner over |
+
+### CSS-klasser for barn
+
+Alternativt kan du bruke CSS-klasser i stedet for attributter.
+
+| Klasse | Beskrivelse |
+|--------|-------------|
+| `ix-col-span-1` ... `ix-col-span-12` | Antall kolonner cellen spenner over |
+| `ix-col-span-full` | Spenner over alle kolonner |
+| `ix-row-span-1` ... `ix-row-span-4` | Antall rader cellen spenner over |
+| `ix-row-span-full` | Spenner over alle rader |
+| `ix-col-start-1` ... `ix-col-start-13` | Start-kolonne |
+| `ix-col-end-1` ... `ix-col-end-13` | Slutt-kolonne |
+
+Standard gap er `md`. Bruk `gap`-attributtet på `<ix-grid>` eller `ix-gap-*` utility-klasser på andre elementer for å overstyre.
+
+</TabItem>
+<TabItem value="react" label="React">
+
+### Grid
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `as` | `ElementType` | | Rendrer et native element med CSS-klasser i stedet for `<ix-grid>` med attributter. Bruk for semantikk — f.eks. `as="section"`. |
+| `cols` | `1` ... `12` \| `'auto-fit-xs'` \| `'auto-fit-sm'` \| `'auto-fit-md'` \| `'auto-fit-lg'` \| `'auto-fill-xs'` \| `'auto-fill-sm'` \| `'auto-fill-md'` \| `'auto-fill-lg'` | | Antall kolonner (1-12) eller responsivt mønster |
+| `rows` | `1 \| 2 \| 3 \| 4` | | Antall rader |
+| `gap` | `GapSize` | `'md'` | Avstand mellom celler |
+| `align` | `'start' \| 'end' \| 'center' \| 'stretch'` | | Vertikal justering av innhold i celler |
+| `justify` | `'start' \| 'end' \| 'center' \| 'stretch'` | | Horisontal justering av innhold i celler |
+| `inline` | `boolean` | | Gjør grid til inline-grid |
+| `className` | `string` | | Ekstra CSS-klasser |
+| `ref` | `Ref<HTMLElement>` | | Ref til rotelementet |
+
+Støtter alle standard HTML-attributter for det rendrede elementet (`id`, `style`, `data-*` osv.).
+
+### Grid.Item
+
+Wrapper for grid-barn som trenger colspan eller rowspan.
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `as` | `ElementType` | `'div'` | Rendrer som annet element |
+| `colspan` | `1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 \| 11 \| 12 \| 'full'` | | Antall kolonner cellen spenner over |
+| `rowspan` | `1 \| 2 \| 3 \| 4 \| 'full'` | | Antall rader cellen spenner over |
+| `className` | `string` | | Ekstra CSS-klasser |
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Grid-komponentene har ingen egne CSS custom properties. Bruk utility-klasser for ytterligere tilpasning:
+
+```html
+<ix-grid cols="3" gap="md" class="ix-justify-items-center">
+  <div>Sentrert</div>
+  <div>Sentrert</div>
+  <div>Sentrert</div>
+</ix-grid>
+```
+
+## Relatert
+
+- [Stack](./stack) — layout i én dimensjon
+- [Gap utility-klasser](../../utility-klasser/oversikt#gap) — `ix-gap-*`, `ix-row-gap-*`, `ix-col-gap-*`
+- [Spacing tokens](../../grunnleggende/tokens/spacing) — størrelser tilgjengelig for gap
