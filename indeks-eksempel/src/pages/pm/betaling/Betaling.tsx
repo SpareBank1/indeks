@@ -8,7 +8,7 @@ export default function PMBetaling() {
                 <Heading as="h1" addRecommendedSpacing>
                     Betaling
                 </Heading>
-                <Card surfaceColor="info" padding="md">
+                <Card status="info" padding="md">
                     <div
                         className={`ix-color-fill-info-subtle ix-color-foreground-info-default ix-mb-md`}
                         style={{
@@ -29,7 +29,7 @@ export default function PMBetaling() {
                 </Card>
             </div>
             <VStack align="center" className="ix-items-center ix-p-sm">
-                <Card surfaceColor="main" className="ix-m-sm ix-mb-xl ix-w-full ix-max-w-sm ">
+                <Card className="ix-m-sm ix-mb-xl ix-w-full ix-max-w-sm ">
                     <BetalingListelement
                         iconName="account_balance_wallet"
                         cardName="Betal"
@@ -60,7 +60,7 @@ export default function PMBetaling() {
                         description="Betal til utenlandske mottakere"
                     />
                 </Card>
-                <Card surfaceColor="main" className="ix-m-sm ix-mb-xl ix-w-full ix-max-w-sm ">
+                <Card className="ix-m-sm ix-mb-xl ix-w-full ix-max-w-sm ">
                     <BetalingListelement
                         iconName="compare_arrows"
                         cardName="Overfør"
@@ -79,7 +79,7 @@ export default function PMBetaling() {
                         description="Oversikt over dine mottakere"
                     />
                 </Card>
-                <Card surfaceColor="main" className="ix-m-sm ix-mb-xl ix-w-full ix-max-w-sm ">
+                <Card className="ix-m-sm ix-mb-xl ix-w-full ix-max-w-sm ">
                     <BetalingListelement
                         iconName="event_upcoming"
                         cardName="Forfallsoversikt"
@@ -92,7 +92,7 @@ export default function PMBetaling() {
                         description="Oversikt over tidligere betalinger og overføringer"
                     />
                 </Card>
-                <Card surfaceColor="main" className="ix-mt-xl ix-w-full ix-items-center ix-p-xl ix-gap-lg ix-max-w-sm ">
+                <Card className="ix-mt-xl ix-w-full ix-items-center ix-p-xl ix-gap-lg ix-max-w-sm ">
                     Hva synes du om denne siden?
                     <HStack gap="xs">
                         <Button variant="secondary">

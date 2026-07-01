@@ -12,6 +12,9 @@
        utilityen her: den lastes før card.css og hadde tapt mot denne base-borderen. */
     border: var(--ix-border-default);
     border-radius: var(--ix-border-radius-md);
+    /* Nøytralt kort = main-surface (default = main). data-status overstyrer via
+       --ix-color-status-surface lenger ned (samme spesifisitet, lastes etter). */
+    background-color: var(--ix-color-surface-main-default);
     display: flex;
     flex-direction: column;
 }
