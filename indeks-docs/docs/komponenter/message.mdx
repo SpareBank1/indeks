@@ -38,7 +38,7 @@ For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` lig
 
 ```jsx live
 <div className="ix-message" data-status="info" aria-live="polite">
-  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
   <div className="ix-message__body">
     <p>Vi har mottatt søknaden din og behandler den nå</p>
   </div>
@@ -113,7 +113,7 @@ Budskapet (children) er alltid med og bærer innholdet. Trenger meldingen en ove
 
 ```jsx live
 <div className="ix-message" data-status="info" aria-live="polite">
-  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
   <div className="ix-message__body">
     <strong className="ix-message__title">Behandling pågår</strong>
     <p>Vi har mottatt søknaden din og behandler den nå</p>
@@ -144,7 +144,7 @@ En lenke kan peke videre til mer informasjon. Lenken er ikke en egen prop — de
 
 ```jsx live
 <div className="ix-message" data-status="info" aria-live="polite">
-  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
   <div className="ix-message__body">
     <strong className="ix-message__title">Behandling pågår</strong>
     <p>Vi har mottatt søknaden din og behandler den nå</p>
@@ -214,11 +214,11 @@ Sett `fullWidth` (React) / `data-full-width` (HTML) for at meldingen skal strekk
 ```jsx live
 <ix-stack>
   <div className="ix-message" data-status="info" aria-live="polite">
-    <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+    <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
     <div className="ix-message__body"><p>Krymper til innholdsbredden</p></div>
   </div>
   <div className="ix-message" data-status="info" data-full-width aria-live="polite">
-    <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+    <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
     <div className="ix-message__body"><p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p></div>
     <button className="ix-message__close" type="button" aria-label="Lukk melding" />
   </div>
@@ -387,7 +387,7 @@ Den enkle varianten — å sette `role`/`aria-live` rett på `.ix-message`-eleme
 
 ```html
 <div class="ix-message" data-status="info" aria-live="polite">
-  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
   <div class="ix-message__body">
     <strong class="ix-message__title">Behandling pågår</strong>
     <p>Vi har mottatt søknaden din og behandler den nå</p>
@@ -397,7 +397,7 @@ Den enkle varianten — å sette `role`/`aria-live` rett på `.ix-message`-eleme
 </div>
 
 <div class="ix-message" data-status="info" data-full-width aria-live="polite">
-  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
   <div class="ix-message__body">
     <p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p>
   </div>
