@@ -13,7 +13,6 @@ Card grupperer relatert innhold i en avgrenset flate. Et kort kan være rent sta
 - Gruppere relatert innhold i en visuelt avgrenset enhet
 - Klikkbare inngangsporter til detaljsider (f.eks. en konto, et produkt)
 - Lister av likeverdige valg der hele flaten skal være trykkbar
-- Statusmeldinger eller fremheving av innhold med farget kantlinje
 
 ## Uegnet til
 
@@ -104,49 +103,6 @@ trenger ikke peke på det for å forstå at det kan trykkes.
 </TabItem>
 </Tabs>
 
-### Chevron-varianter — til vurdering
-
-Vi vurderer hvordan det klikkbare kortet skal signalisere affordanse. Standard (uten ekstra
-klasse) er **flat med en sentrert chevron**. Klassen `ix-card--chevron-shadow` viser
-skygge-alternativet.
-
-<Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<HStack gap="md">
-  <Card padding="md" href="https://www.sparebank1.no">
-    <Heading as="h3" size="sm">Flat (standard)</Heading>
-    <Text>Sentrert, litt større chevron. Ingen skygge.</Text>
-  </Card>
-  <Card padding="md" href="https://www.sparebank1.no" className="ix-card--chevron-shadow">
-    <Heading as="h3" size="sm">Skygge</Heading>
-    <Text>Dagens uttrykk, med løft.</Text>
-  </Card>
-</HStack>
-```
-
-</TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<div style={{ display: 'flex', gap: '1rem' }}>
-  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
-    <h3>Flat (standard)</h3>
-    <p>Sentrert, litt større chevron. Ingen skygge.</p>
-    <ix-icon class="ix-card__chevron" name="pil-hoyre" data-size="lg" aria-hidden="true"></ix-icon>
-  </a>
-  <a class="ix-card ix-card--clickable ix-card--chevron-shadow ix-p-md" href="https://www.sparebank1.no">
-    <h3>Skygge</h3>
-    <p>Dagens uttrykk, med løft.</p>
-    <ix-icon class="ix-card__chevron" name="pil-hoyre" data-size="lg" aria-hidden="true"></ix-icon>
-  </a>
-</div>
-```
-
-</TabItem>
-</Tabs>
-
 ### Som lenke (navigasjon)
 
 Sett `href` når kortet navigerer til en URL. Det rendres som `<a>` og får riktig lenke-semantikk.
@@ -166,31 +122,6 @@ Sett `onClick` når kortet utfører en handling. Det rendres som `<button>`.
 <Card padding="md" onClick={() => alert('Kort klikket')}>
   <Heading as="h3" size="sm">Vis detaljer</Heading>
   <Text>Åpner et panel</Text>
-</Card>
-```
-
-### Statusvarianter
-
-Sett `status` for å gi kortet et statustema — farget fyll og kantlinje. Følger samme
-status-system som `InteractiveIcon` og `Message`. Kan kombineres med klikkbart kort.
-
-```tsx live
-<VStack gap="md">
-  <Card padding="md" status="info">Info</Card>
-  <Card padding="md" status="success">Suksess</Card>
-  <Card padding="md" status="warning">Advarsel</Card>
-  <Card padding="md" status="danger">Fare</Card>
-</VStack>
-```
-
-### Stiplet kantlinje
-
-Sett `border="dashed"` for en stiplet kantlinje — nyttig f.eks. for tomme tilstander
-eller «legg til»-flater.
-
-```tsx live
-<Card padding="md" border="dashed">
-  <Text>Kort med stiplet kantlinje</Text>
 </Card>
 ```
 
@@ -263,8 +194,6 @@ på touch (sikt mot minst 44×44 px).
 |------|------|----------|-------------|
 | `href` | `string` | | Gjør kortet til en lenke (`<a>`) for navigasjon. Aktiverer klikkbar styling |
 | `onClick` | `(e) => void` | | Gjør kortet til en knapp (`<button>`) for handling. Aktiverer klikkbar styling |
-| `status` | `'default' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `'default'` | Statustema — farget fyll og kant. Settes som `data-status` |
-| `border` | `'default' \| 'dashed'` | `'default'` | Kantlinjestil |
 | `chevronIcon` | `IconName` | `'pil-hoyre'` | Ikon for affordanse-chevronen på klikkbart kort |
 | `padding` | `Size` | | Indre luft via `ix-p-*`-klasse |
 | `className` | `string` | | Ekstra klasser |
@@ -284,14 +213,10 @@ bruke klassene direkte. Husk at klikkbart kort skal være et `<a>` eller `<butto
 | Kort | `.ix-card` |
 | Klikkbart kort (flat, sentrert chevron) | `.ix-card--clickable` |
 | Chevron-ikon | `.ix-card__chevron` (et `ix-icon`) |
-| Stiplet kantlinje | `.ix-card--dashed` |
-| Chevron med skygge/løft | `.ix-card--chevron-shadow` |
-| Status | `data-status="info"` / `success` / `warning` / `danger` |
-| Skygge-variabel (kun `--chevron-shadow`) | `--ix-card-shadow` (overstyrbar) |
 
-`.ix-card` har kantlinje som standard — ingen ekstra klasse trengs. Legg til `.ix-card--dashed`
-for stiplet stil. Klikkbart kort trenger et chevron-ikon som siste barn: `<ix-icon
-class="ix-card__chevron" name="pil-hoyre" aria-hidden="true">`.
+`.ix-card` har kantlinje som standard — ingen ekstra klasse trengs. Klikkbart kort trenger et
+chevron-ikon som siste barn: `<ix-icon class="ix-card__chevron" name="pil-hoyre"
+aria-hidden="true">`.
 
 ### Eksempel: ren HTML
 

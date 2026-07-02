@@ -1,32 +1,14 @@
 :where(.ix-card) {
-    /* Lokal skygge — kun brukt av skygge-varianten (.ix-card--chevron-shadow).
-       Indeks har ingen elevation-token ennå; erstatt med --ix-shadow-* når et
-       elevation-skala-token kommer på plass. */
-    --ix-card-shadow: 0 2px 6px rgb(0 0 0 / 14%), 0 1px 2px rgb(0 0 0 / 10%);
-    --ix-card-shadow-hover: 0 10px 24px rgb(0 0 0 / 18%), 0 4px 8px rgb(0 0 0 / 10%);
-
-    /* Kort har alltid en kantlinje — også i ren HTML uten ekstra klasser.
-       `border`-propen styrer kun stilen: default (solid) vs dashed. Dashed
-       overstyres via .ix-card--dashed lenger ned (kun border-style), som lastes
-       etter denne regelen ⇒ vinner. Vi bruker bevisst ikke .ix-border-dashed-
-       utilityen her: den lastes før card.css og hadde tapt mot denne base-borderen. */
+    /* Kort har alltid en solid kantlinje — også i ren HTML uten ekstra klasser. */
     border: var(--ix-border-default);
     border-radius: var(--ix-border-radius-md);
-    /* Nøytralt kort = main-surface (default = main). data-status overstyrer via
-       --ix-color-status-surface lenger ned (samme spesifisitet, lastes etter). */
     background-color: var(--ix-color-surface-main-default);
     display: flex;
     flex-direction: column;
 }
 
-/* Stiplet kantlinje via `border="dashed"`. Overstyrer kun stilen, så farge/bredde
-   (inkl. statusfarge fra data-status) bevares. */
-.ix-card--dashed {
-    border-style: dashed;
-}
-
 /* Klikkbart kort. Affordansen er synlig i hviletilstand (chevron), ikke kun på
-   :hover — slik at klikkbarhet også er tydelig på touch. Standard er flatt:
+   :hover — slik at klikkbarhet også er tydelig på touch. Kortet er flatt:
    ingen skygge, hover gir bakgrunns-tint. */
 :where(.ix-card--clickable) {
     position: relative;
@@ -73,64 +55,9 @@
     outline-offset: var(--ix-outline-offset-default);
 }
 
-/* Variant — skygge (dagens uttrykk): kortet «løftes» permanent med skygge,
-   og løftes ytterligere på hover. Beholdt for sammenligning. */
-:where(.ix-card--clickable.ix-card--chevron-shadow) {
-    box-shadow: var(--ix-card-shadow);
-}
-
-:where(.ix-card--clickable.ix-card--chevron-shadow:hover) {
-    background-color: transparent;
-    box-shadow: var(--ix-card-shadow-hover);
-    transform: translateY(-2px);
-}
-
-:where(.ix-card--clickable.ix-card--chevron-shadow:hover) > .ix-card__chevron {
-    transform: translateX(3px);
-}
-
-:where(.ix-card--clickable.ix-card--chevron-shadow:active) {
-    background-color: var(--ix-color-fill-interactive-active);
-    box-shadow: var(--ix-card-shadow);
-    transform: scale(0.98);
-}
-
 @media (prefers-reduced-motion: reduce) {
     :where(.ix-card--clickable),
     :where(.ix-card--clickable) > .ix-card__chevron {
         transition: none;
     }
-
-    :where(.ix-card--clickable.ix-card--chevron-shadow:hover),
-    :where(.ix-card--clickable.ix-card--chevron-shadow:hover) > .ix-card__chevron,
-    :where(.ix-card--clickable.ix-card--chevron-shadow:active) {
-        transform: none;
-    }
-}
-
-/* Statustema via data-status (samme system som InteractiveIcon/Message):
-   @sb1/indeks-utils kobler --ix-color-status-* per status, så vi trenger bare
-   å peke fyll og kant på de variablene. Ett attributt gir hele det koherente
-   uttrykket — fyll + kant + hover + active.
-
-   Bevisst uten :where() på border-color: Card emitterer alltid .ix-border-default
-   (0,1,0), så en :where()-regel (0,0,0) hadde tapt. Lik spesifisitet + card.css
-   lastes etter utils ⇒ denne vinner. At vi kun overstyrer border-color bevarer
-   stilen fra `border`-propen (også `dashed`). */
-:where(.ix-card[data-status]) {
-    background-color: var(--ix-color-status-surface);
-}
-
-.ix-card[data-status] {
-    border-color: var(--ix-color-status-border);
-}
-
-/* Klikkbart statuskort: hover/active følger statusfargen i stedet for main-tinten
-   over. Høyere spesifisitet enn de generelle klikk-reglene ⇒ vinner. */
-:where(.ix-card--clickable[data-status]:hover) {
-    background-color: var(--ix-color-status-surface-hover);
-}
-
-:where(.ix-card--clickable[data-status]:active) {
-    background-color: var(--ix-color-status-surface-active);
 }

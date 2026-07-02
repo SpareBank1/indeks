@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Button, Tag, HStack, VStack, Heading, Card } from '@sb1/indeks-react';
+import { Button, Tag, HStack, Heading, Card } from '@sb1/indeks-react';
 
 const meta = {
     title: 'Layout/Card',
@@ -19,32 +19,6 @@ export const Default: Story = {
             <Card padding="md" {...args}>
                 <p>Statisk kort</p>
             </Card>
-        );
-    },
-};
-
-export const Dashed: Story = {
-    args: { border: 'dashed' },
-    render: (args) => {
-        return (
-            <Card padding="md" {...args}>
-                <p>Kort med stiplet kantlinje</p>
-            </Card>
-        );
-    },
-};
-
-export const Statusvarianter: Story = {
-    args: {},
-    render: () => {
-        return (
-            <VStack gap="md">
-                {(['info', 'success', 'warning', 'danger'] as const).map((status) => (
-                    <Card key={status} padding="md" status={status}>
-                        {status}
-                    </Card>
-                ))}
-            </VStack>
         );
     },
 };
@@ -72,20 +46,14 @@ export const CustomChevron: Story = {
     },
 };
 
-export const ClickableVariants: Story = {
-    args: {},
-    render: () => {
+export const Clickable: Story = {
+    args: { href: 'https://example.com' },
+    render: (args) => {
         return (
-            <HStack gap="md">
-                <Card padding="md" href="https://example.com">
-                    <Heading as="h3">Flat (standard)</Heading>
-                    <p>Sentrert, litt større chevron. Ingen skygge.</p>
-                </Card>
-                <Card padding="md" href="https://example.com" className="ix-card--chevron-shadow">
-                    <Heading as="h3">Skygge</Heading>
-                    <p>Dagens uttrykk, med løft.</p>
-                </Card>
-            </HStack>
+            <Card padding="md" {...args}>
+                <Heading as="h3">Klikkbart kort</Heading>
+                <p>Flat med sentrert chevron som affordanse.</p>
+            </Card>
         );
     },
 };

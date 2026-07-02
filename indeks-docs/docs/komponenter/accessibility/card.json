@@ -4,7 +4,7 @@
   "consumerResponsibilities": [
     {
       "summary": "Gjør klikkbarhet synlig uten hover",
-      "details": "På touch finnes ikke :hover. Et klikkbart kort må derfor signalisere klikkbarhet i hviletilstand — komponenten gir skygge og chevron automatisk via .ix-card--clickable. Ikke skjul klikkbarhet bak hover alene.",
+      "details": "På touch finnes ikke :hover. Et klikkbart kort må derfor signalisere klikkbarhet i hviletilstand — komponenten gir en chevron automatisk via .ix-card--clickable. Ikke skjul klikkbarhet bak hover alene.",
       "wcag": ["1.4.1", "1.3.1"]
     },
     {
@@ -32,7 +32,7 @@
   "handled": [
     { "id": "1.3.1", "notes": "Klikkbart kort bruker native <a> eller <button> med implisitt rolle. Statisk kort er en <div> uten interaktiv semantikk." },
     { "id": "1.3.2", "notes": "Innholdet følger naturlig leserekkefølge i DOM." },
-    { "id": "1.4.1", "notes": "Klikkbarhet kommuniseres med skygge og chevron, ikke farge alene — synlig også på touch uten hover." },
+    { "id": "1.4.1", "notes": "Klikkbarhet kommuniseres med chevron, ikke farge alene — synlig også på touch uten hover." },
     { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
     { "id": "1.4.11", "notes": "Fokusindikator oppfyller 3:1 kontrastkrav via outline-token." },
     { "id": "2.1.1", "notes": "Native <a>/<button> aktiveres med Enter (og Space for button). Fullt opererbart med tastatur." },

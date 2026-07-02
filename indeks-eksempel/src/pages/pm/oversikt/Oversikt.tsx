@@ -139,10 +139,7 @@ export default function PMOversikt() {
                                 <Divider />
                                 <AccountRow amount={25000} accountName="Konto for barn" accountNumber="22 334 45 566" />
                             </Card>
-                            <Card
-                                className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm"
-                                border="dashed"
-                            >
+                            <Card className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm ix-border-dashed">
                                 <Icon materialDesignName="add_circle" size="xl" />
                                 <div>
                                     <Heading as="h3" size="sm" addRecommendedSpacing>
@@ -225,10 +222,7 @@ export default function PMOversikt() {
                             <Divider />
                             <AccountRow amount={300} accountName="Loan account" accountNumber="Account number" />
                         </Card>
-                        <Card
-                            className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm"
-                            border="dashed"
-                        >
+                        <Card className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm ix-border-dashed">
                             <Icon materialDesignName="add_circle" size="xl" />
                             <div>
                                 <Heading as="h3" size="sm" addRecommendedSpacing>

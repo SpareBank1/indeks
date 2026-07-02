@@ -8,7 +8,7 @@ export default function PMBetaling() {
                 <Heading as="h1" addRecommendedSpacing>
                     Betaling
                 </Heading>
-                <Card status="info" padding="md">
+                <Card padding="md">
                     <div
                         className={`ix-color-fill-info-subtle ix-color-foreground-info-default ix-mb-md`}
                         style={{

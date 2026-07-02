@@ -99,7 +99,7 @@ const sidebars: SidebarsConfig = {
                     type: 'category',
                     label: 'Layout',
                     collapsed: false,
-                    items: ['komponenter/surface', 'komponenter/primitives/stack'],
+                    items: ['komponenter/primitives/stack'],
                 },
                 'komponenter/card',
                 'komponenter/message',
