@@ -22,17 +22,17 @@ Ikon-komponenten viser SVG-ikoner fra SpareBank 1s CDN ved hjelp av CSS `mask-im
 <TabItem value="react" label="React">
 
 ```tsx live
-<Icon name="hjem" />
+<Icon name="home" />
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
 ```html live
-<ix-icon name="hjem"></ix-icon>
+<ix-icon name="home"></ix-icon>
 ```
 
-Web componenten og React-komponenten bruker de samme norske aliasene (`hjem`, `meny`, `sparing`). Web componenten mapper til riktig SVG-filnavn automatisk.
+`name` er Material Design-ikonnavnet direkte (uten `.svg`) — det samme for både web componenten og React-komponenten.
 
 </TabItem>
 </Tabs>
@@ -46,10 +46,10 @@ Web componenten og React-komponenten bruker de samme norske aliasene (`hjem`, `m
 
 ```tsx live
 <HStack alignItems="center">
-  <Icon name="hjem" size="sm" />
-  <Icon name="hjem" size="md" />
-  <Icon name="hjem" size="lg" />
-  <Icon name="hjem" size="xl" />
+  <Icon name="home" size="sm" />
+  <Icon name="home" size="md" />
+  <Icon name="home" size="lg" />
+  <Icon name="home" size="xl" />
 </HStack>
 ```
 
@@ -58,10 +58,10 @@ Web componenten og React-komponenten bruker de samme norske aliasene (`hjem`, `m
 
 ```html live
 <div class="ix-hstack ix-items-center">
-  <ix-icon name="hjem" data-size="sm"></ix-icon>
-  <ix-icon name="hjem"></ix-icon>
-  <ix-icon name="hjem" data-size="lg"></ix-icon>
-  <ix-icon name="hjem" data-size="xl"></ix-icon>
+  <ix-icon name="home" data-size="sm"></ix-icon>
+  <ix-icon name="home"></ix-icon>
+  <ix-icon name="home" data-size="lg"></ix-icon>
+  <ix-icon name="home" data-size="xl"></ix-icon>
 </div>
 ```
 
@@ -76,14 +76,14 @@ Bruk `ariaLabel` når ikonet formidler informasjon som ikke er tilgjengelig andr
 <TabItem value="react" label="React">
 
 ```tsx live
-<Icon name="hjem" ariaLabel="Gå til forsiden" />
+<Icon name="home" ariaLabel="Gå til forsiden" />
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
 ```html live
-<ix-icon name="hjem" aria-label="Gå til forsiden"></ix-icon>
+<ix-icon name="home" aria-label="Gå til forsiden"></ix-icon>
 ```
 
 </TabItem>
@@ -99,9 +99,9 @@ Sett `data-badge` for å vise ikonet som en glyf på en farget sirkel. Selve ele
 ```tsx live
 <HStack alignItems="center">
   <Icon name="info" data-badge data-status="info" />
-  <Icon name="hake" data-badge data-status="success" />
-  <Icon name="utropstegn" data-badge data-status="warning" />
-  <Icon name="utropstegn" data-badge data-status="danger" />
+  <Icon name="check" data-badge data-status="success" />
+  <Icon name="priority_high" data-badge data-status="warning" />
+  <Icon name="priority_high" data-badge data-status="danger" />
 </HStack>
 ```
 
@@ -111,9 +111,9 @@ Sett `data-badge` for å vise ikonet som en glyf på en farget sirkel. Selve ele
 ```html live
 <div class="ix-hstack ix-items-center">
   <ix-icon name="info" data-badge data-status="info"></ix-icon>
-  <ix-icon name="hake" data-badge data-status="success"></ix-icon>
-  <ix-icon name="utropstegn" data-badge data-status="warning"></ix-icon>
-  <ix-icon name="utropstegn" data-badge data-status="danger"></ix-icon>
+  <ix-icon name="check" data-badge data-status="success"></ix-icon>
+  <ix-icon name="priority_high" data-badge data-status="warning"></ix-icon>
+  <ix-icon name="priority_high" data-badge data-status="danger"></ix-icon>
 </div>
 ```
 
@@ -174,23 +174,19 @@ Ikonet skal kommunisere gjennom form, ikke farge alene. Brukere med fargeblindhe
 
 | Prop | Type | Påkrevd | Standard | Beskrivelse |
 |------|------|---------|----------|-------------|
-| `name` | `IconName` | Nei* | | Norsk alias for SpareBank 1-ikoner (`hjem`, `meny`, `sparing`). Gjensidig utelukkende med `materialDesignName` |
-| `materialDesignName` | `string` | Nei* | | Material Design-ikonnavn (f.eks. `"arrow_forward"`). Gjensidig utelukkende med `name` |
+| `name` | `IconName` | Ja | | Material Design-ikonnavn (f.eks. `"home"`, `"arrow_forward"`). Vanlige SB1-ikoner autofullføres; alle andre MD-navn godtas også |
 | `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | Nei | `'md'` | Størrelse på ikonet |
 | `ariaLabel` | `string` | Nei | | Tilgjengelig navn for semantiske ikoner. Når satt: `role="img"` legges til, `aria-hidden` fjernes |
 | `data-badge` | `boolean` | Nei | | Viser ikonet som en glyf på en farget sirkel (badge). Settes som attributt og videresendes til `<ix-icon>` |
 | `as` | `ElementType` | Nei | `'ix-icon'` | HTML-element eller komponent som rendres |
 | `className` | `string` | Nei | | Ekstra CSS-klasser |
 
-\* Én av `name` eller `materialDesignName` må settes.
-
 </TabItem>
 <TabItem value="html" label="HTML">
 
 | Attributt | Type | Standard | Beskrivelse |
 |-----------|------|----------|-------------|
-| `name` | `IconName` | | Norsk alias for SpareBank 1-ikoner (`hjem`, `meny`, `sparing`). Web componenten mapper til riktig SVG-filnavn. |
-| `materialdesignname` | `string` | | Material Design-ikonnavn |
+| `name` | `IconName` | | Material Design-ikonnavn (f.eks. `"home"`). Brukes direkte som SVG-filnavn. |
 | `data-size` | `sm \| md \| lg \| xl` | `md` | Størrelse på ikonet |
 | `data-badge` | (flagg) | | Viser ikonet som en glyf på en farget sirkel (badge) |
 | `aria-label` | `string` | | Tilgjengelig navn for semantiske ikoner |
@@ -208,13 +204,13 @@ Du kan fjerne blinket helt ved å sette `--ii-icon-url` inline selv. Da tegnes i
 
 ```html live
 <ix-icon
-  name="hjem"
+  name="home"
   style="--ii-icon-url: url('https://cdn.sparebank1.no/icons/home.svg')"
 ></ix-icon>
 ```
 
 :::note Hacky, men trygt som fallback
-`--ii-icon-url` er en intern variabel (`--ii-`-prefiks). Den er ikke et offisielt API og kan i teorien endres. Bruk dette kun som en bevisst optimalisering for ikke-React-sider der blinket er et problem — for `name`-aliaser må du selv slå opp Material Design-filnavnet (f.eks. `hjem` → `home.svg`), mens `materialdesignname`-verdien er filnavnet direkte.
+`--ii-icon-url` er en intern variabel (`--ii-`-prefiks). Den er ikke et offisielt API og kan i teorien endres. Bruk dette kun som en bevisst optimalisering for ikke-React-sider der blinket er et problem. `name` er Material Design-filnavnet direkte, så URL-en er `.../{name}.svg` (f.eks. `home` → `home.svg`).
 :::
 
 ## Tilpasning med CSS

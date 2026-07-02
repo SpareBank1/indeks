@@ -19,7 +19,7 @@ export const WithIcon: Story = {
     render: (args) => {
         return (
             <Tag {...args}>
-                <Icon size="sm" name="sparing" />
+                <Icon size="sm" name="savings" />
                 Pålogget
             </Tag>
         );

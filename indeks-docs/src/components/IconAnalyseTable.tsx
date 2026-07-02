@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Icon, type MaterialDesignIconName } from '@sb1/indeks-react';
+import { Icon } from '@sb1/indeks-react';
 import { ikoner, type IconEntry } from '../data/iconAnalyseData';
 
 const tierLabel: Record<number, string> = {
@@ -14,26 +14,44 @@ const tierColor: Record<number, string> = {
     3: 'var(--ix-color-foreground-main-subtle)',
 };
 
-function IconPreview({ mdNavn }: { mdNavn: string }) {
-    return <Icon materialDesignName={mdNavn as MaterialDesignIconName} />;
-}
+function CopyableName({ mdNavn }: { mdNavn: string }) {
+    const [copied, setCopied] = useState(false);
 
-function MergeTag({ mergeMed }: { mergeMed: string }) {
+    async function copy() {
+        if (!navigator.clipboard) return;
+        await navigator.clipboard.writeText(mdNavn);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1200);
+    }
+
     return (
-        <span
+        <button
+            type="button"
+            onClick={copy}
+            aria-label={`Kopier ${mdNavn}`}
             style={{
-                display: 'inline-block',
-                fontSize: 'var(--ix-font-size-xs)',
-                padding: '0 0.35em',
-                borderRadius: '3px',
-                background: 'var(--ix-color-background-warning-subtle)',
-                color: 'var(--ix-color-foreground-warning-default)',
-                border: '1px solid var(--ix-color-border-warning-default)',
-                whiteSpace: 'nowrap',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4em',
+                border: 'none',
+                background: 'none',
+                padding: '0.15em 0.3em',
+                margin: '-0.15em -0.3em',
+                borderRadius: 'var(--ix-border-radius-sm)',
+                cursor: 'pointer',
+                color: 'inherit',
+                font: 'inherit',
             }}
         >
-            slå sammen → {mergeMed}
-        </span>
+            <code style={{ fontSize: 'var(--ix-font-size-sm)', wordBreak: 'break-all' }}>{mdNavn}</code>
+            {copied ? (
+                <span style={{ fontSize: 'var(--ix-font-size-xs)', color: 'var(--ix-color-foreground-success-default)' }}>
+                    Kopiert!
+                </span>
+            ) : (
+                <Icon name="content_copy" size="sm" aria-hidden style={{ opacity: 0.5 }} />
+            )}
+        </button>
     );
 }
 
@@ -41,53 +59,15 @@ function IconRow({ entry }: { entry: IconEntry }) {
     return (
         <tr>
             <td style={{ width: '2.5rem', textAlign: 'center' }}>
-                <IconPreview mdNavn={entry.mdNavn} />
+                <Icon name={entry.mdNavn} />
             </td>
             <td>
-                <code style={{ fontSize: 'var(--ix-font-size-sm)', wordBreak: 'break-all' }}>{entry.mdNavn}</code>
-            </td>
-            <td>
-                {entry.norskNavn ? (
-                    <code style={{ fontSize: 'var(--ix-font-size-sm)', fontWeight: 'bold' }}>{entry.norskNavn}</code>
-                ) : (
-                    <span style={{ color: 'var(--ix-color-foreground-main-subtle)', fontSize: 'var(--ix-font-size-sm)' }}>
-                        —
-                    </span>
-                )}
-            </td>
-            <td style={{ fontSize: 'var(--ix-font-size-sm)' }}>
-                {entry.aliaser?.map((a) => (
-                    <code
-                        key={a}
-                        style={{
-                            display: 'inline-block',
-                            marginRight: '0.3em',
-                            marginBottom: '0.2em',
-                            padding: '0 0.3em',
-                            background: 'var(--ix-color-background-neutral-subtle)',
-                            borderRadius: '3px',
-                            wordBreak: 'break-all',
-                        }}
-                    >
-                        {a}
-                    </code>
-                ))}
+                <CopyableName mdNavn={entry.mdNavn} />
             </td>
             <td style={{ textAlign: 'center' }}>
                 <span style={{ color: tierColor[entry.tier], fontSize: 'var(--ix-font-size-sm)' }}>
                     {entry.appAntall}
                 </span>
-            </td>
-            <td style={{ fontSize: 'var(--ix-font-size-sm)', color: 'var(--ix-color-foreground-main-subtle)' }}>
-                {entry.kontekstbruk?.map((k, i) => (
-                    <span key={i} style={{ display: 'block' }}>{k}</span>
-                ))}
-            </td>
-            <td style={{ fontSize: 'var(--ix-font-size-sm)' }}>
-                {entry.mergeMed && <MergeTag mergeMed={entry.mergeMed} />}
-                {entry.notat && (
-                    <span style={{ color: 'var(--ix-color-foreground-main-subtle)', display: entry.mergeMed ? 'block' : 'inline', marginTop: entry.mergeMed ? '0.3em' : undefined }}>{entry.notat}</span>
-                )}
             </td>
         </tr>
     );
@@ -96,21 +76,15 @@ function IconRow({ entry }: { entry: IconEntry }) {
 export default function IconAnalyseTable() {
     const [sok, setSok] = useState('');
     const [visTier, setVisTier] = useState<Set<number>>(new Set([1, 2, 3]));
-    const [visBareFletting, setVisBareFletting] = useState(false);
 
     const filtrerte = useMemo(() => {
         const q = sok.toLowerCase().trim();
         return ikoner.filter((e) => {
             if (!visTier.has(e.tier)) return false;
-            if (visBareFletting && !e.mergeMed) return false;
             if (!q) return true;
-            return (
-                e.mdNavn.includes(q) ||
-                (e.norskNavn?.includes(q) ?? false) ||
-                (e.aliaser?.some((a) => a.includes(q)) ?? false)
-            );
+            return e.mdNavn.includes(q);
         });
-    }, [sok, visTier, visBareFletting]);
+    }, [sok, visTier]);
 
     function toggleTier(t: number) {
         setVisTier((prev) => {
@@ -124,8 +98,6 @@ export default function IconAnalyseTable() {
         });
     }
 
-    const antallMedFletting = ikoner.filter((e) => e.mergeMed).length;
-
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ix-spacing-md)' }}>
             <div
@@ -138,7 +110,7 @@ export default function IconAnalyseTable() {
             >
                 <input
                     type="search"
-                    placeholder="Søk på MD-navn, norsk navn eller alias…"
+                    placeholder="Søk på Material Design-navn…"
                     value={sok}
                     onChange={(e) => setSok(e.target.value)}
                     style={{
@@ -172,27 +144,11 @@ export default function IconAnalyseTable() {
                             {tierLabel[t]}
                         </label>
                     ))}
-                    <label
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.3em',
-                            cursor: 'pointer',
-                            fontSize: 'var(--ix-font-size-sm)',
-                        }}
-                    >
-                        <input
-                            type="checkbox"
-                            checked={visBareFletting}
-                            onChange={() => setVisBareFletting((p) => !p)}
-                        />
-                        Bare kandidater for sammenslåing ({antallMedFletting})
-                    </label>
                 </div>
             </div>
 
             <p style={{ margin: 0, fontSize: 'var(--ix-font-size-sm)', color: 'var(--ix-color-foreground-main-subtle)' }}>
-                Viser {filtrerte.length} av {ikoner.length} ikoner
+                Viser {filtrerte.length} av {ikoner.length} ikoner. Klikk på et navn for å kopiere det.
             </p>
 
             <div style={{ overflowX: 'auto' }}>
@@ -200,12 +156,8 @@ export default function IconAnalyseTable() {
                     <thead>
                         <tr style={{ borderBottom: '2px solid var(--ix-color-border-main-default)' }}>
                             <th style={{ padding: '0.5em', width: '2.5rem' }}></th>
-                            <th style={{ padding: '0.5em', textAlign: 'left', width: '8rem' }}>MD-navn</th>
-                            <th style={{ padding: '0.5em', textAlign: 'left', width: '7rem' }}>Norsk navn</th>
-                            <th style={{ padding: '0.5em', textAlign: 'left', width: '7rem' }}>Aliaser</th>
-                            <th style={{ padding: '0.5em', textAlign: 'center' }}>Apper</th>
-                            <th style={{ padding: '0.5em', textAlign: 'left' }}>Faktisk bruk i kildekoden</th>
-                            <th style={{ padding: '0.5em', textAlign: 'left' }}>Notat</th>
+                            <th style={{ padding: '0.5em', textAlign: 'left' }}>Material Design-navn</th>
+                            <th style={{ padding: '0.5em', textAlign: 'center', width: '5rem' }}>Apper</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -215,7 +167,7 @@ export default function IconAnalyseTable() {
                         {filtrerte.length === 0 && (
                             <tr>
                                 <td
-                                    colSpan={7}
+                                    colSpan={3}
                                     style={{
                                         padding: 'var(--ix-spacing-lg)',
                                         textAlign: 'center',

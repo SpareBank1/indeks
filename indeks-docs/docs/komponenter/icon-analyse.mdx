@@ -2,7 +2,9 @@ import IconAnalyseTable from '@site/src/components/IconAnalyseTable';
 
 # Ikonbruk
 
-Oversikt over alle Material Design-ikoner brukt i SB1-apper, med forslag til semantiske norske navn. Basert på bruksdata fra SpareBank 1-apper.
+Oversikt over alle Material Design-ikoner brukt i SB1-apper, med hvor mange apper som bruker hvert ikon. Basert på bruksdata fra SpareBank 1-apper.
+
+Ikonnavnet du bruker i `<Icon name="…" />` er Material Design-navnet direkte. De mest brukte ikonene (Tier 1) er typedefinert i `COMMON_ICON_NAMES` og autofullføres i editoren — alle andre MD-navn godtas også.
 
 ## Tierinndeling
 
@@ -14,27 +16,10 @@ Ikoner er delt i tre tier basert på hvor mange apper som bruker dem:
 | **Tier 2** | 2 apper | 45 |
 | **Tier 3** | 1 app | 165 |
 
-Vi starter med å tilby semantiske navn for **Tier 1**. Tier 2 og 3 er med i tabellen for referanse.
-
-## Sammenslåingskandidater
-
-Flere Material Design-ikoner dekker samme semantikk og bør peke til ett kanonisk navn:
-
-- **Piler høyre**: `chevron_right`, `arrow_right`, `keyboard_arrow_right`, `arrow_right_alt` — felles: `pil-hoyre`
-- **Piler venstre**: `chevron_left`, `arrow_back`, `arrow_left_alt` — felles: `pil-venstre`
-- **Hjem/bolig**: `home`, `house`, `home_filled` — vurder `hjem` vs `bolig`
-- **Hytte**: `cabin`, `cottage` — felles: `hytte`
-- **Lommebok**: `wallet`, `account_balance_wallet` — felles: `lommebok`
-- **Gruppe**: `group`, `groups`, `people`, `diversity_2` — felles: `gruppe`
-- **Telefon**: `call`, `phone` — felles: `telefon`
-- **Utropstegn**: `exclamation`, `priority_high` — felles: `utropstegn` (tilbys)
-- **Info**: `info`, `info_i` — felles: `info` (tilbys, peker på `info_i`-glyfen)
-- **Kalender**: `calendar_month`, `event` — vurder om de er ulike nok
-
-Kolonnen **Notat** i tabellen markerer alle sammenslåingskandidater.
+Tier 1 er typedefinert (autocomplete). Tier 2 og 3 er med i tabellen for referanse.
 
 ## Alle ikoner
 
-Bruk søk og filter for å utforske. Klikk «Bare kandidater for sammenslåing» for å se hvilke ikoner som overlapper.
+Bruk søk og filter for å utforske. Klikk på et Material Design-navn for å kopiere det.
 
 <IconAnalyseTable />

@@ -4,7 +4,7 @@
   "consumerResponsibilities": [
     {
       "summary": "Legg til aria-label for semantiske ikoner",
-      "details": "Ikoner er dekorative som standard og skjules for skjermlesere. Når et ikon formidler informasjon som ikke er tilgjengelig andre steder, må du sette aria-label på ix-icon eller Icon-komponenten.\n\nEksempel: `<Icon name=\"sparing\" ariaLabel=\"Sparekonto\" />`",
+      "details": "Ikoner er dekorative som standard og skjules for skjermlesere. Når et ikon formidler informasjon som ikke er tilgjengelig andre steder, må du sette aria-label på ix-icon eller Icon-komponenten.\n\nEksempel: `<Icon name=\"savings\" ariaLabel=\"Sparekonto\" />`",
       "wcag": ["1.1.1"]
     },
     {
@@ -14,7 +14,7 @@
     },
     {
       "summary": "Ikon i knapp: sett aria-label på knappen, ikke ikonet",
-      "details": "Når et ikon brukes inne i en knapp uten synlig tekst, skal aria-label settes på selve knapp-elementet — ikke på ikonet. Ikonet skal da ha aria-hidden=\"true\" (som er standard).\n\nEksempel:\n```html\n<button aria-label=\"Gå til forsiden\">\n  <ix-icon name=\"hjem\"></ix-icon>\n</button>\n```",
+      "details": "Når et ikon brukes inne i en knapp uten synlig tekst, skal aria-label settes på selve knapp-elementet — ikke på ikonet. Ikonet skal da ha aria-hidden=\"true\" (som er standard).\n\nEksempel:\n```html\n<button aria-label=\"Gå til forsiden\">\n  <ix-icon name=\"home\"></ix-icon>\n</button>\n```",
       "wcag": ["4.1.2", "2.4.6"]
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "summary": "Bruk aria-labelledby for å referere til eksisterende synlig tekst",
-      "details": "Når ikonets navn allerede finnes som synlig tekst i DOM-en, kan du bruke aria-labelledby i stedet for aria-label for å unngå duplisering.\n\nEksempel: `<ix-icon name=\"hjem\" aria-labelledby=\"tittel-id\"></ix-icon>`",
+      "details": "Når ikonets navn allerede finnes som synlig tekst i DOM-en, kan du bruke aria-labelledby i stedet for aria-label for å unngå duplisering.\n\nEksempel: `<ix-icon name=\"home\" aria-labelledby=\"tittel-id\"></ix-icon>`",
       "wcag": ["4.1.2"]
     }
   ],

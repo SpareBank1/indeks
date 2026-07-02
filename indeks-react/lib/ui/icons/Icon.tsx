@@ -8,18 +8,9 @@ export type IconProps<As extends ElementType> = {
     ariaLabel?: React.ComponentProps<'span'>['aria-label'];
 
     size?: 'sm' | 'md' | 'lg' | 'xl';
-} & (
-    | {
-          /** Navn på ikonet med bruk av fellesbetegnelser for SpareBank1. Gjensidig utelukkende med `materialDesignName`. */
-          name: IconName;
-          materialDesignName?: never;
-      }
-    | {
-          name?: never;
-          /** Navn på Material Design-ikonet. Gjensidig utelukkende med `name`. */
-          materialDesignName: string;
-      }
-);
+    /** Material Design-ikonnavn (f.eks. `"home"`). Vanlige SB1-ikoner autofullføres; alle andre MD-navn godtas også. */
+    name: IconName;
+};
 
 export function Icon<As extends ElementType = 'ix-icon'>(props: IconProps<As>): JSX.Element {
     const {
@@ -27,7 +18,6 @@ export function Icon<As extends ElementType = 'ix-icon'>(props: IconProps<As>): 
         className,
         ariaLabel,
         name,
-        materialDesignName,
         size = 'md',
         ...restProps
     } = props;
@@ -37,7 +27,6 @@ export function Icon<As extends ElementType = 'ix-icon'>(props: IconProps<As>): 
             aria-label={ariaLabel}
             {...restProps}
             name={name}
-            materialdesignname={materialDesignName}
             data-size={size !== 'md' ? size : undefined}
             className={clsx('ix-icon', className)}
         />

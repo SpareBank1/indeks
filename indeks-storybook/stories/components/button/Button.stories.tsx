@@ -31,7 +31,7 @@ export const TertiaryWithIcon: Story = {
     name: 'Tertiær med ikon',
     render: (args) => (
         <Button {...args}>
-            <Icon size={args.size} name="hjem" />
+            <Icon size={args.size} name="home" />
             Rediger
         </Button>
     ),
@@ -91,7 +91,7 @@ export const WithIcon: Story = {
     name: 'Med ikon',
     render: (args) => (
         <Button {...args}>
-            <Icon size={args.size} name="sparing" />
+            <Icon size={args.size} name="savings" />
             Pålogget
         </Button>
     ),
@@ -110,7 +110,7 @@ export const IconOnly: Story = {
     name: 'Ikonknapp',
     render: (args) => (
         <Button {...args}>
-            <Icon size={args.size} name="sparing" />
+            <Icon size={args.size} name="savings" />
         </Button>
     ),
 };
