@@ -44,10 +44,10 @@ export type MessageProps = {
 
 /** Semantisk ikonnavn per status (sendes til badge-ikonet). */
 const STATUS_ICON: Record<MessageStatus, IconName> = {
-    info: 'info',
-    success: 'hake',
-    warning: 'utropstegn',
-    danger: 'utropstegn',
+    info: 'info_i',
+    success: 'check',
+    warning: 'priority_high',
+    danger: 'priority_high',
 };
 
 export const Message = forwardRef<HTMLDivElement, MessageProps>(function Message(

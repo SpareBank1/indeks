@@ -10,7 +10,7 @@ const meta = {
     component: InteractiveIcon,
     tags: ['autodocs'],
     args: {
-        name: 'hjem',
+        name: 'home',
         'aria-label': 'Hjem',
         onClick: fn(),
     },
@@ -118,7 +118,7 @@ export const Tilstander: Story = {
 export const HTML: Story = {
     render: () => (
         <button type="button" className="ix-interactive-icon" data-status="info" aria-label="Info">
-            <ix-icon name="info" aria-hidden="true" class="ix-icon"></ix-icon>
+            <ix-icon name="info_i" aria-hidden="true" class="ix-icon"></ix-icon>
         </button>
     ),
 };

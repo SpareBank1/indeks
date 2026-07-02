@@ -14,15 +14,15 @@ export default function PMOversikt() {
                     <Heading as="h1">Min oversikt</Heading>
                     <HStack gap="sm">
                         <Button variant="secondary">
-                            <Icon materialDesignName="account_balance_wallet" />
+                            <Icon name="account_balance_wallet" />
                             Betal
                         </Button>
                         <Button variant="secondary">
-                            <Icon materialDesignName="swap_horiz" />
+                            <Icon name="swap_horiz" />
                             Overfør
                         </Button>
                         <Button variant="secondary">
-                            <Icon materialDesignName="event" />
+                            <Icon name="event" />
                             Forfall
                         </Button>
                     </HStack>
@@ -39,11 +39,11 @@ export default function PMOversikt() {
                         </HStack>
                         <HStack className="ix-justify-center ix-my-sm">
                             <Tag variant="info" size="sm" type="subtle">
-                                <Icon size="sm" name="bankkonto" />
+                                <Icon size="sm" name="account_balance" />
                                 Regningskonto
                             </Tag>
                             <Tag variant="danger" size="sm" type="subtle">
-                                <Icon size="sm" materialDesignName="calendar_month" />I dag
+                                <Icon size="sm" name="calendar_month" />I dag
                             </Tag>
                         </HStack>
                         <HStack className="ix-justify-between">
@@ -66,7 +66,7 @@ export default function PMOversikt() {
                             </Heading>
                             <div className="ix-absolute ix-top-0 ix-right-0">
                                 <Button variant="tertiary" size="sm">
-                                    <Icon materialDesignName="add_circle" />
+                                    <Icon name="add_circle" />
                                     Legg til
                                 </Button>
                             </div>
@@ -115,7 +115,7 @@ export default function PMOversikt() {
                                 </Heading>
                                 <div className="ix-absolute ix-top-0 ix-right-0">
                                     <Button variant="tertiary" size="sm">
-                                        <Icon materialDesignName="tune" />
+                                        <Icon name="tune" />
                                         Tilpass
                                     </Button>
                                 </div>
@@ -143,7 +143,7 @@ export default function PMOversikt() {
                                 className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm"
                                 border="dashed"
                             >
-                                <Icon materialDesignName="add_circle" size="xl" />
+                                <Icon name="add_circle" size="xl" />
                                 <div>
                                     <Heading as="h3" size="sm" addRecommendedSpacing>
                                         HeadingText
@@ -199,7 +199,7 @@ export default function PMOversikt() {
                             </Heading>
                             <div className="ix-absolute ix-top-0 ix-right-0">
                                 <Button variant="tertiary" size="sm">
-                                    <Icon materialDesignName="tune" />
+                                    <Icon name="tune" />
                                     Tilpass
                                 </Button>
                             </div>
@@ -229,7 +229,7 @@ export default function PMOversikt() {
                             className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm"
                             border="dashed"
                         >
-                            <Icon materialDesignName="add_circle" size="xl" />
+                            <Icon name="add_circle" size="xl" />
                             <div>
                                 <Heading as="h3" size="sm" addRecommendedSpacing>
                                     HeadingText

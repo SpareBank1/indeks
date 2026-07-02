@@ -1,29 +1,41 @@
-export const ICON_NAMES = {
-    hjem: 'home',
-    meny: 'menu',
-    sparing: 'savings',
-    lukk: 'close',
-    'pil-hoyre': 'chevron_right',
-    'legg-til': 'add',
-    hake: 'check',
-    'apne-ekstern': 'open_in_new',
-    bankkonto: 'account_balance',
-    rediger: 'edit',
-    betalingskort: 'credit_card',
-    slett: 'delete',
-    'last-ned': 'download',
-    person: 'person',
-    'pil-ned': 'keyboard_arrow_down',
-    'e-post': 'mail',
-    betaling: 'payments',
-    info: 'info_i',
-    sok: 'search',
-    innstillinger: 'settings',
-    bil: 'directions_car',
-    'pil-venstre': 'chevron_left',
-    feil: 'error',
-    utropstegn: 'priority_high',
-} as const;
+// Ikonnavn er Material Design-filnavnet direkte. `COMMON_ICON_NAMES` er de mest brukte ikonene
+// i SB1-apper (3+ apper) og gir autocomplete på `name`. Alle andre MD-navn godtas også — se
+// `IconName` under.
+//
+// VIKTIG: Denne listen dupliseres bevisst med indeks-web (IxIcon.ts) og holdes i synk via
+// icon-types.sync.test.ts. IKKE importer fra @sb1/indeks-web i library-kode — web lastes fra
+// CDN som en separat pakke, og en import ville dratt web-bundelen inn i React-bundelen.
+export const COMMON_ICON_NAMES = [
+    'close', 'chevron_right', 'add', 'check', 'open_in_new', 'account_balance', 'edit',
+    'credit_card', 'delete', 'savings', 'download', 'person', 'keyboard_arrow_down', 'mail',
+    'payments', 'info', 'search', 'settings', 'directions_car', 'chevron_left', 'error',
+    'check_circle', 'content_copy', 'expand_more', 'face', 'add_circle', 'cancel',
+    'celebration', 'description', 'school', 'shopping_cart', 'arrow_downward', 'arrow_upward',
+    'healing', 'local_gas_station', 'account_balance_wallet', 'calendar_month', 'exclamation',
+    'group', 'nutrition', 'potted_plant', 'thumb_down', 'thumb_up', 'tune', 'wallet',
+    'apparel', 'bolt', 'book_2', 'call', 'chair', 'check_circle_filled', 'coffee', 'cottage',
+    'diversity_2', 'eyeglasses', 'favorite', 'flights_and_hotels', 'flightsmode', 'garage',
+    'groups', 'handyman', 'health_and_beauty', 'hotel', 'laptop_chromebook', 'live_tv',
+    'local_bar', 'local_taxi', 'luggage', 'medication', 'oven_gen', 'palette', 'pedal_bike',
+    'person_play', 'pets', 'phone_iphone', 'playing_cards', 'restaurant', 'shopping_bag',
+    'spa', 'sports_tennis', 'steps', 'stethoscope', 'stroller', 'support_agent',
+    'theater_comedy', 'train', 'tv', 'arrow_back', 'autorenew', 'blender', 'build', 'cabin',
+    'car_repair', 'currency_bitcoin', 'dentistry', 'detector_alarm', 'devices', 'diamond',
+    'exercise', 'fastfood', 'featured_seasonal_and_gifts', 'house', 'icecream',
+    'import_contacts', 'local_car_wash', 'local_pizza', 'menu_book', 'monitoring',
+    'photo_camera', 'priority_high', 'question_mark', 'redeem', 'restaurant_menu',
+    'sports_and_outdoors', 'stadia_controller', 'swap_horiz', 'things_to_do',
+    'tools_power_drill', 'toys', 'add_card', 'apartment', 'arrow_right', 'article', 'contract',
+    'handshake', 'home', 'info_i', 'logout', 'money_bag', 'motorcycle', 'notifications',
+    'phone', 'print', 'real_estate_agent', 'receipt', 'remove', 'agriculture',
+    'arrow_right_alt', 'bookmark', 'calculate', 'circle', 'event', 'exit_to_app', 'help',
+    'keyboard_arrow_right', 'keyboard_arrow_up', 'lock', 'more_vert', 'people', 'schedule',
+    'sync_alt', 'warning',
+] as const;
 
-export type IconValue = (typeof ICON_NAMES)[keyof typeof ICON_NAMES];
-export type IconName = keyof typeof ICON_NAMES;
+export type CommonIconName = (typeof COMMON_ICON_NAMES)[number];
+
+// `CommonIconName | (string & {})`: `(string & {})` beholder literalene i autocomplete samtidig
+// som enhver string godtas. `CommonIconName | string` ville kollapset til bare `string` og
+// drept autocomplete. Merk: gir INGEN validering — 'hjem' kompilerer fint og gir 403 på runtime.
+export type IconName = CommonIconName | (string & {});

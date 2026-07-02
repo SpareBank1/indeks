@@ -21,7 +21,7 @@ const StateKort: React.FC = () => {
             data-status={status}
         >
             <div className="ikon-sirkel ix-color-status-fill ix-color-foreground-inverse ix-color-status-border">
-                <Icon name="hjem" size="lg" className=" ix-color-foreground-inverse" />
+                <Icon name="home" size="lg" className=" ix-color-foreground-inverse" />
             </div>
             <div>
                 <Heading as="h2" size="sm" className="ix-color-foreground" addRecommendedSpacing>
@@ -48,7 +48,7 @@ const StateKort: React.FC = () => {
                 </select>
             </label>
             <Button>
-                <Icon name="hake" />
+                <Icon name="check" />
                 Primary
             </Button>
         </VStack>

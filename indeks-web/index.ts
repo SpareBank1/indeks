@@ -11,8 +11,8 @@ customElements.define('ix-radio-group', IxRadioGroup);
 export { IxField };
 export { IxIcon };
 export { IxRadioGroup };
-export { ICON_NAMES } from './lib/components/icon/IxIcon.js';
-export type { IconName, IconValue } from './lib/components/icon/IxIcon.js';
+export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
+export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
 
 declare global {
     interface HTMLElementTagNameMap {
@@ -37,7 +37,6 @@ declare global {
             };
             'ix-icon': {
                 name?: IconName;
-                materialdesignname?: string;
                 'data-size'?: 'sm' | 'md' | 'lg' | 'xl';
                 'aria-label'?: string;
                 'aria-labelledby'?: string;

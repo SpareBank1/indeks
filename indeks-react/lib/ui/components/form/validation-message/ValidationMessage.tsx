@@ -13,7 +13,7 @@ export const ValidationMessage = forwardRef<HTMLSpanElement, ValidationMessagePr
     const hasContent = children !== undefined && children !== null && children !== '' && children !== false;
     return (
         <span ref={ref} {...restProps} data-field="error" className={clsx(className)}>
-            {hasContent && <ix-icon materialdesignname="dangerous" />}
+            {hasContent && <ix-icon name="dangerous" />}
             {children}
         </span>
     );

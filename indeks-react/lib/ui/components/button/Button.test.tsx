@@ -150,7 +150,7 @@ describe('Button med ikon', () => {
     it('skal rendre ikon inne i knappen', () => {
         render(
             <Button>
-                <Icon name="hjem" />
+                <Icon name="home" />
                 Primary Button
             </Button>
         );

@@ -5,27 +5,27 @@ const ButtonStack: React.FC = () => {
     return (
         <HStack>
             <Button>
-                <Icon name="meny" />
+                <Icon name="menu" />
                 Primary
             </Button>
             <Button variant="secondary">
-                <Icon name="meny" />
+                <Icon name="menu" />
                 Secondary
             </Button>
             <Button variant="tertiary">
-                <Icon name="meny" />
+                <Icon name="menu" />
                 Tertiary
             </Button>
             <Button danger>
-                <Icon name="meny" />
+                <Icon name="menu" />
                 Primary
             </Button>
             <Button variant="secondary" danger>
-                <Icon name="meny" />
+                <Icon name="menu" />
                 Secondary
             </Button>
             <Button variant="tertiary" danger>
-                <Icon name="meny" />
+                <Icon name="menu" />
                 Tertiary
             </Button>
         </HStack>
