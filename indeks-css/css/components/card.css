@@ -1,27 +1,63 @@
 :where(.ix-card) {
+    /* Kort har alltid en solid kantlinje — også i ren HTML uten ekstra klasser. */
     border: var(--ix-border-default);
     border-radius: var(--ix-border-radius-md);
+    background-color: var(--ix-color-surface-main-default);
     display: flex;
     flex-direction: column;
 }
 
-:where(.ix-card--clickable:hover) {
+/* Klikkbart kort. Affordansen er synlig i hviletilstand (chevron), ikke kun på
+   :hover — slik at klikkbarhet også er tydelig på touch. Kortet er flatt:
+   ingen skygge, hover gir bakgrunns-tint. */
+:where(.ix-card--clickable) {
+    position: relative;
     cursor: pointer;
-    box-shadow: 0 0 2px black;
+    color: inherit;
+    text-decoration: none;
+    transition: var(--ix-transition-all);
 }
 
-:where(.ix-card--success) {
-    border: var(--ix-border-width-default) solid var(--ix-color-border-success-default);
+/* Chevron som permanent «dette gjør noe»-signal — et ekte ix-icon (byttbart via
+   `chevronIcon`-propen), vertikalt sentrert mot høyre kant. */
+:where(.ix-card--clickable) > .ix-card__chevron {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: var(--ix-spacing-md);
+    margin-block: auto;
+    color: var(--ix-color-foreground-link-default, currentcolor);
+    transition: var(--ix-transition-all);
+    pointer-events: none;
 }
 
-:where(.ix-card--warning) {
-    border: var(--ix-border-width-default) solid var(--ix-color-border-warning-default);
+/* Reserver en gutter til høyre slik at innhold ikke legger seg under chevronen.
+   Bevisst uten :where() — da vinner regelen over ix-p-*-utility (samme
+   spesifisitet, men komponent-CSS importeres etter utils), slik at
+   chevron-kolonnen holdes klar uansett hvilken padding som velges.
+   Gutteren = posisjonsgapet (--ix-spacing-md) + plass til selve glyfen. */
+.ix-card--clickable {
+    padding-inline-end: calc(var(--ix-spacing-md) + 1.5em);
 }
 
-:where(.ix-card--info) {
-    border: var(--ix-border-width-default) solid var(--ix-color-border-info-default);
+/* Flat hover-feedback: bakgrunns-tint i stedet for skygge/løft. */
+:where(.ix-card--clickable:hover) {
+    background-color: var(--ix-color-surface-main-hover);
+    border-color: var(--ix-color-border-main-hover);
 }
 
-:where(.ix-card--danger) {
-    border: var(--ix-border-width-default) solid var(--ix-color-border-danger-default);
+/* Pressed-feedback — bekrefter klikket på touch der :hover ikke finnes. */
+:where(.ix-card--clickable:active) {
+    background-color: var(--ix-color-fill-interactive-active);
+}
+
+:where(.ix-card--clickable:focus-visible) {
+    outline: var(--ix-outline-default);
+    outline-offset: var(--ix-outline-offset-default);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :where(.ix-card--clickable),
+    :where(.ix-card--clickable) > .ix-card__chevron {
+        transition: none;
+    }
 }
