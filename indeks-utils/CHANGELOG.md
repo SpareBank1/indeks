@@ -1,5 +1,11 @@
 # @sb1/indeks-utils
 
+## 0.7.0
+
+### Minor Changes
+
+-   a73dbc2: Nye `ix-radius-*`-utility-klasser (`xs`/`sm`/`md`/`lg`/`xl`/`pill`/`circle`) i `@sb1/indeks-utils`, basert på de eksisterende border-radius-tokenene.
+
 ## 0.6.0
 
 ### Minor Changes

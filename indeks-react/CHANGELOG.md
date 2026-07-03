@@ -1,5 +1,19 @@
 # @sb1/indeks-react
 
+## 0.14.0
+
+### Minor Changes
+
+-   a73dbc2: Card: byttbart chevron-ikon på klikkbart kort.
+
+    -   **`chevronIcon`-prop** lar deg bytte ut chevronen som viser at kortet er klikkbart.
+        Chevronen er et ekte `ix-icon` (klassen `.ix-card__chevron`) med `pil-hoyre` som standard,
+        i stedet for et hardkodet tegn.
+
+-   a73dbc2: Gjør det tydelig at et `Card` er klikkbart, også på touch. Før viste `.ix-card--clickable` at kortet var klikkbart kun ved `:hover` — men hover finnes ikke på mobil, så et klikkbart kort så helt likt ut som et statisk. Nå har klikkbart kort alltid en synlig chevron som viser at det kan trykkes. Kortet er flatt (ingen skygge): `:hover` gir en bakgrunnstone, `:active` viser at kortet trykkes (viktig på touch, der `:hover` mangler), og `:focus-visible` gir en fokusring. Hover-overgangen er konsistent for alle klikkbare varianter — også `<a>` — uavhengig av global anker-styling (f.eks. en `a { transition: color }`-regel fra en CSS-reset). `prefers-reduced-motion` respekteres.
+
+    React-wrapperen `<Card>` rendrer nå et ekte semantisk element — `<a>` ved `href`, `<button>` ved `onClick`, ellers `<div>` — i stedet for en `<div>` med `role`/`onClick`/`window.location.href`. Dette gir korrekt rolle, tastaturstøtte og fokus gratis, og fjerner den tidligere `javascript:`-XSS-risikoen.
+
 ## 0.13.0
 
 ### Minor Changes
