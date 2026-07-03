@@ -1,19 +1,21 @@
 import clsx from 'clsx';
 import {
     type AnchorHTMLAttributes,
+    type ButtonHTMLAttributes,
     forwardRef,
     type ForwardRefExoticComponent,
     type HTMLAttributes,
     type ReactNode,
 } from 'react';
-import { type Border, type LimitedSpacingProps, type SurfaceColor } from '../../../types/types';
+import { type LimitedSpacingProps } from '../../../types/types';
+import { Icon, type IconName } from '../../icons';
 
-export interface CardProps extends HTMLAttributes<HTMLDivElement>, LimitedSpacingProps {
+export interface CardProps extends HTMLAttributes<HTMLElement>, LimitedSpacingProps {
     children?: ReactNode;
     className?: string;
-    surfaceColor?: SurfaceColor;
-    border?: Border;
     href?: string;
+    /** Ikon for affordanse-chevronen på klikkbart kort. @default "pil-hoyre" */
+    chevronIcon?: IconName;
 }
 
 export interface ActionProps extends HTMLAttributes<HTMLDivElement> {
@@ -40,29 +42,9 @@ const Action = ({ href, children, className, onClick, ...rest }: ActionProps) =>
     );
 };
 
-export const Card = forwardRef<HTMLDivElement, CardProps>(
-    ({ children, className, surfaceColor, border = 'default', href, onClick, ...rest }, ref) => {
+export const Card = forwardRef<HTMLElement, CardProps>(
+    ({ children, className, href, onClick, chevronIcon = 'pil-hoyre', ...rest }, ref) => {
         const isClickable = Boolean(href || onClick);
-
-        // TODO: Legg til URL-validering for href for å hindre javascript:-protokoll XSS
-        const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-            if (href) {
-                window.location.href = href;
-            } else if (onClick) {
-                onClick(e);
-            }
-        };
-
-        const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                if (href) {
-                    window.location.href = href;
-                }
-                // For onClick from keyboard, we'll just trigger the href or ignore
-                // since mixing onClick with keyboard events can be complex
-            }
-        };
 
         const getSpacingClassName = () => {
             const { padding } = rest as LimitedSpacingProps;
@@ -72,32 +54,56 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
 
         const cardClass = clsx(
             'ix-card',
-            `ix-card--${surfaceColor}`,
-            `ix-border-${border}`,
-            `ix-color-foreground-${surfaceColor === 'accent' ? 'accent' : 'main'}-default`,
-            { [`ix-color-surface-${surfaceColor}-default`]: surfaceColor },
             getSpacingClassName(),
             className,
             isClickable && 'ix-card--clickable'
         );
 
+        // Chevronen bæres av et ekte ix-icon (ikke et CSS-tegn) slik at den kan
+        // byttes ut via `chevronIcon`. Dekorativt → aria-hidden.
+        const chevron = isClickable ? (
+            <Icon name={chevronIcon} size="lg" className="ix-card__chevron" aria-hidden />
+        ) : null;
+
+        // Ekte semantisk element gir tastatur, fokus og rolle gratis:
+        // <a> for navigasjon, <button> for handling, <div> for statisk kort.
+        if (href) {
+            return (
+                <a
+                    href={href}
+                    className={cardClass}
+                    ref={ref as React.Ref<HTMLAnchorElement>}
+                    onClick={onClick}
+                    {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}
+                >
+                    {children}
+                    {chevron}
+                </a>
+            );
+        }
+
+        if (onClick) {
+            return (
+                <button
+                    type="button"
+                    className={cardClass}
+                    ref={ref as React.Ref<HTMLButtonElement>}
+                    onClick={onClick}
+                    {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}
+                >
+                    {children}
+                    {chevron}
+                </button>
+            );
+        }
+
         return (
-            <div
-                className={cardClass}
-                ref={ref}
-                {...(isClickable && {
-                    tabIndex: 0,
-                    role: href ? 'link' : 'button',
-                    onClick: handleClick,
-                    onKeyDown: handleKeyDown,
-                })}
-                {...rest}
-            >
+            <div className={cardClass} ref={ref as React.Ref<HTMLDivElement>} {...rest}>
                 {children}
             </div>
         );
     }
-) as ForwardRefExoticComponent<CardProps> & {
+) as ForwardRefExoticComponent<CardProps & React.RefAttributes<HTMLElement>> & {
     Action: typeof Action;
 };
 

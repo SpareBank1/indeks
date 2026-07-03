@@ -1,0 +1,242 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/card.json';
+
+# Card
+
+Card grupperer relatert innhold i en avgrenset flate. Et kort kan være rent statisk
+(en beholder for innhold) eller klikkbart (navigerer til en side eller utfører en handling).
+
+## Egnet til
+
+- Gruppere relatert innhold i en visuelt avgrenset enhet
+- Klikkbare inngangsporter til detaljsider (f.eks. en konto, et produkt)
+- Lister av likeverdige valg der hele flaten skal være trykkbar
+
+## Uegnet til
+
+- Som erstatning for en knapp i et skjema — bruk [Button](./button)
+- Dypt nøstede interaktive elementer inni et klikkbart kort (ugyldig HTML)
+- Når innholdet ikke hører naturlig sammen — da skaper kortet falsk gruppering
+
+## Statisk vs. klikkbart — og hvorfor det er synlig på mobil
+
+Et klikkbart kort må se annerledes ut enn et statisk kort **uten** at man trenger å peke på det.
+På desktop kan klikkbarhet antydes med hover, men hover finnes ikke på touch. Derfor bærer det
+klikkbare kortet sin affordanse i hviletilstand:
+
+- **Chevron (›)** — et eksplisitt «dette gjør noe»-signal, synlig hele tiden. Dette er
+  hovedsignalet: en form, ikke bare en farge, så det holder også kontrastkravet.
+- **Hover** — på desktop får kortet en bakgrunns-tint når du peker på det.
+- **Pressed-state** — ved trykk får kortet en tint, som bekrefter klikket på touch.
+- **Fokusring** — synlig for tastaturbrukere via `:focus-visible`.
+
+Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `onClick` (handling →
+`<button>`). Chevronen legges på automatisk.
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Card padding="md">
+  <Heading as="h3" size="sm">Statisk kort</Heading>
+  <Text>Et kort uten href eller onClick er bare en beholder.</Text>
+</Card>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-card ix-p-md">
+  <h3>Statisk kort</h3>
+  <p>Et kort uten interaktivitet er bare en beholder.</p>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Statisk vs. klikkbart side om side
+
+Legg merke til at det klikkbare kortet har en chevron allerede i hviletilstand — du
+trenger ikke peke på det for å forstå at det kan trykkes.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="md">
+  <Card padding="md">
+    <Heading as="h3" size="sm">Statisk</Heading>
+    <Text>Flat, ingen chevron.</Text>
+  </Card>
+  <Card padding="md" href="https://www.sparebank1.no">
+    <Heading as="h3" size="sm">Klikkbart</Heading>
+    <Text>Chevron i hviletilstand, helt uten hover.</Text>
+  </Card>
+</HStack>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div style={{ display: 'flex', gap: '1rem' }}>
+  <div class="ix-card ix-p-md">
+    <h3>Statisk</h3>
+    <p>Flat, ingen chevron.</p>
+  </div>
+  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
+    <h3>Klikkbart</h3>
+    <p>Chevron i hviletilstand, helt uten hover.</p>
+    <ix-icon class="ix-card__chevron" name="pil-hoyre" data-size="lg" aria-hidden="true"></ix-icon>
+  </a>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+### Som lenke (navigasjon)
+
+Sett `href` når kortet navigerer til en URL. Det rendres som `<a>` og får riktig lenke-semantikk.
+
+```tsx live
+<Card padding="md" href="https://www.sparebank1.no">
+  <Heading as="h3" size="sm">Sparekonto</Heading>
+  <Text>Se saldo og renter</Text>
+</Card>
+```
+
+### Som knapp (handling)
+
+Sett `onClick` når kortet utfører en handling. Det rendres som `<button>`.
+
+```tsx live
+<Card padding="md" onClick={() => alert('Kort klikket')}>
+  <Heading as="h3" size="sm">Vis detaljer</Heading>
+  <Text>Åpner et panel</Text>
+</Card>
+```
+
+### Eget chevron-ikon
+
+Klikkbart kort viser `pil-hoyre` som standard. Sett `chevronIcon` for å bytte ikon.
+
+```tsx live
+<Card padding="md" href="https://www.sparebank1.no" chevronIcon="apne-ekstern">
+  <Heading as="h3" size="sm">Åpner i ny fane</Heading>
+  <Text>Chevronen er byttet til et eksternt-lenke-ikon.</Text>
+</Card>
+```
+
+## Retningslinjer
+
+### Skill statisk og klikkbart tydelig
+
+Et klikkbart kort skal alltid bære en chevron — ikke gjør et statisk kort trykkbart uten å gi det
+dette signalet. Skill aldri klikkbart fra statisk kun på farge eller kantlinje; det er for svakt
+på touch og bryter med kontrastkrav. Chevronen er en form, ikke bare en farge, og holder derfor
+kontrastkravet.
+
+### Bruk riktig semantikk: navigasjon vs. handling
+
+Bruk `href` når kortet fører brukeren til en ny side, og `onClick` når kortet utfører en handling
+i grensesnittet. Dette samsvarer med brukerens forventning og gir riktig skjermleser-annonsering
+(«lenke» vs. «knapp»).
+
+### Ikke nøst interaktive elementer
+
+Et klikkbart kort er allerede en lenke eller knapp. Å plassere knapper eller lenker inni gir
+ugyldig, nøstet interaktivt innhold. Trenger du flere handlinger, bruk et statisk kort med egne
+knapper i stedet — ikke gjør hele flaten klikkbar.
+
+### Gi nok klikkflate
+
+Hele kortet er trykkbart. Gi kortet tilstrekkelig `padding` slik at klikkflaten blir komfortabel
+på touch (sikt mot minst 44×44 px).
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Velg `href` eller `onClick` bevisst** — navigasjon skal være `<a>`, handling skal være
+  `<button>`. Komponenten velger element basert på hvilken du gir.
+- **Gi kortet et meningsfylt navn** — innholdet blir det tilgjengelige navnet. Rent visuelle kort
+  trenger `aria-label`.
+- **Ikke nøst interaktive elementer** inni et klikkbart kort.
+- **Ikke skill klikkbart fra statisk kun med farge** — chevronen gjør jobben, og må ikke
+  fjernes.
+
+### Hva komponenten gjør automatisk
+
+- **Semantisk element** — `<a>` ved `href`, `<button>` ved `onClick`, ellers `<div>`.
+- **Tastaturstøtte** — native element gir Enter/Space-aktivering og tab-rekkefølge gratis.
+- **Fokusindikator** via `:focus-visible` — synlig for tastatur, ikke for mus.
+- **Touch-synlig affordanse** — chevron i hviletilstand, pressed-state ved `:active`.
+- **Redusert bevegelse** — transition og skalering deaktiveres ved `prefers-reduced-motion`.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `href` | `string` | | Gjør kortet til en lenke (`<a>`) for navigasjon. Aktiverer klikkbar styling |
+| `onClick` | `(e) => void` | | Gjør kortet til en knapp (`<button>`) for handling. Aktiverer klikkbar styling |
+| `chevronIcon` | `IconName` | `'pil-hoyre'` | Ikon for affordanse-chevronen på klikkbart kort |
+| `padding` | `Size` | | Indre luft via `ix-p-*`-klasse |
+| `className` | `string` | | Ekstra klasser |
+
+I tillegg støttes standard HTML-attributter, som settes direkte på det rendrede elementet
+(`<a>`, `<button>` eller `<div>`). `Card.Action` brukes for en egen handlingsflate inni kortet.
+
+## Tilpasning med CSS
+
+Trenger du `ix-card`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du
+bruke klassene direkte. Husk at klikkbart kort skal være et `<a>` eller `<button>`.
+
+### Tilgjengelige klasser
+
+| Element/tilstand | Selektor |
+|-----------------|----------|
+| Kort | `.ix-card` |
+| Klikkbart kort (flat, sentrert chevron) | `.ix-card--clickable` |
+| Chevron-ikon | `.ix-card__chevron` (et `ix-icon`) |
+
+`.ix-card` har kantlinje som standard — ingen ekstra klasse trengs. Klikkbart kort trenger et
+chevron-ikon som siste barn: `<ix-icon class="ix-card__chevron" name="pil-hoyre"
+aria-hidden="true">`.
+
+### Eksempel: ren HTML
+
+```html
+<!-- Statisk -->
+<div class="ix-card ix-p-md">
+  <h3>Tittel</h3>
+  <p>Innhold</p>
+</div>
+
+<!-- Klikkbart (navigasjon) -->
+<a class="ix-card ix-card--clickable ix-p-md" href="/konto">
+  <h3>Sparekonto</h3>
+  <p>Se saldo</p>
+  <ix-icon class="ix-card__chevron" name="pil-hoyre" data-size="lg" aria-hidden="true"></ix-icon>
+</a>
+```
+
+## Relatert
+
+- [Button](./button) — for handlinger og navigasjon med knappe-styling
+- [Farger](../retningslinjer/farger) — fargetokens for surface og status
+- [Spacing](../grunnleggende/tokens/spacing) — padding-tokens

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 
 export type SurfaceColor = 'main' | 'accent' | 'info' | 'success' | 'warning' | 'danger' | 'interactive';
 export type Border = 'default' | 'dashed';
+export type Radius = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'pill' | 'circle';
 export type Size = '0' | '4xs' | '3xs' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 export type GapSize = 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
 export type ComponentSize = 'sm' | 'md' | 'lg';
