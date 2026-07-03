@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { JSX, ReactNode } from 'react';
 import { useMessageRegion } from '../message-region/MessageRegionContext';
+import { InteractiveIcon } from '../interactive-icon/InteractiveIcon';
 import type { IconName } from '../../icons/icon-types';
 
 export type MessageStatus = 'info' | 'success' | 'warning' | 'danger';
@@ -111,9 +112,10 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(function Message
                 {children}
             </div>
             {closeLabel && (
-                <button
+                <InteractiveIcon
                     className="ix-message__close"
-                    type="button"
+                    name="lukk"
+                    size="sm"
                     aria-label={closeLabel}
                     onClick={handleClose}
                 />

@@ -113,7 +113,13 @@ export const HTML: Story = {
                         Les mer om saksbehandling
                     </a>
                 </div>
-                <button className="ix-message__close" type="button" aria-label="Lukk melding" />
+                <button
+                    className="ix-interactive-icon ix-message__close"
+                    type="button"
+                    aria-label="Lukk melding"
+                >
+                    <ix-icon name="lukk" aria-hidden="true" class="ix-icon" />
+                </button>
             </div>
 
             <div className="ix-message" data-status="info" data-full-width aria-live="polite">
@@ -121,7 +127,13 @@ export const HTML: Story = {
                 <div className="ix-message__body">
                     <p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p>
                 </div>
-                <button className="ix-message__close" type="button" aria-label="Lukk melding" />
+                <button
+                    className="ix-interactive-icon ix-message__close"
+                    type="button"
+                    aria-label="Lukk melding"
+                >
+                    <ix-icon name="lukk" aria-hidden="true" class="ix-icon" />
+                </button>
             </div>
         </ix-stack>
     ),

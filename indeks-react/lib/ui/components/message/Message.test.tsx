@@ -100,6 +100,18 @@ describe('Message', () => {
         expect(onClose).toHaveBeenCalledOnce();
     });
 
+    it('rendrer lukkeknappen som en InteractiveIcon med ix-icon', () => {
+        render(
+            <Message status="info" closeLabel="Lukk melding">
+                Tekst
+            </Message>,
+        );
+        const button = screen.getByRole('button', { name: 'Lukk melding' });
+        expect(button.classList.contains('ix-interactive-icon')).toBe(true);
+        expect(button.classList.contains('ix-message__close')).toBe(true);
+        expect(button.querySelector('ix-icon')).not.toBeNull();
+    });
+
     it('skjuler meldingen når lukkeknappen klikkes', () => {
         render(
             <Message status="info" closeLabel="Lukk melding">

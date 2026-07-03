@@ -52,6 +52,8 @@ En InteractiveIcon må alltid ha en tilgjengelig label som beskriver handlingen.
 
 `status` styrer fargetonen som vises ved pekehvil og trykk. `default` bruker en nøytral farge; `info`, `success`, `warning` og `danger` gir hver sin status-farge. Fargen er kun en visuell forsterkning — handlingen må fremgå av `aria-label`.
 
+Setter du ikke `status`, arver ikonet status fra nærmeste forelder med `data-status` (f.eks. en `Message` eller et status-kort), slik at hover/trykk følger omgivelsene. Uten en slik status-kontekst er ikonet nøytralt. En eksplisitt `status` på ikonet overstyrer alltid arven.
+
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
@@ -187,7 +189,7 @@ En knapp med bare ikon og ingen `aria-label` er usynlig for skjermlesere. Bruker
 |------|------|----------|-------------|
 | `name` | `IconName` | | Ikonet som vises. Påkrevd |
 | `aria-label` | `string` | | Tilgjengelig navn som beskriver handlingen. Påkrevd, og må oversettes (i18n) |
-| `status` | `'default' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `'default'` | Fargetema for pekehvil og trykk |
+| `status` | `'default' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `'default'` | Fargetema for pekehvil og trykk. Uten `status` arves status fra nærmeste `data-status`-forelder; en eksplisitt status overstyrer arven |
 | `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Størrelse på ikonet |
 
 I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `disabled`, `type`, `form`, `name`, `value`, `tabIndex` osv.) og settes direkte på `<button>`-elementet.
@@ -201,7 +203,7 @@ Trenger du `ix-interactive-icon`-stylingen på HTML du setter sammen selv — ut
 | Element/tilstand | Selektor / attributt |
 |------------------|----------------------|
 | Knapp | `.ix-interactive-icon` |
-| Status | `data-status="info"` / `"success"` / `"warning"` / `"danger"` |
+| Status | `data-status="info"` / `"success"` / `"warning"` / `"danger"` (arves fra nærmeste `data-status`-forelder når det ikke settes på knappen) |
 | Pekehvil-farge | intern variabel `--ii-interactive-icon-fill-hover` |
 | Trykk-farge | intern variabel `--ii-interactive-icon-fill-active` |
 
