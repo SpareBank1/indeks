@@ -1,5 +1,19 @@
 # @sb1/indeks-css
 
+## 0.12.0
+
+### Minor Changes
+
+-   16d448a: Ny Grid-komponent for todimensjonal layout
+
+    Grid er en layout-primitiv for å stable innhold i to dimensjoner. Den finnes som:
+
+    -   Custom element: `<ix-grid cols="3" gap="md">`
+    -   CSS-klasse: `.ix-grid` med modifier-klasser
+    -   React-komponent: `<Grid cols={3} gap="md">`
+
+    Støtter faste kolonner (1-12), responsiv layout (auto-fit/auto-fill), align/justify, og colspan/rowspan på barn.
+
 ## 0.11.0
 
 ### Minor Changes
