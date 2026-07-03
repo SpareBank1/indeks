@@ -3,6 +3,6 @@
 "@sb1/indeks-react": minor
 ---
 
-Gjør klikkbart `Card` tydelig på touch. Tidligere signaliserte `.ix-card--clickable` klikkbarhet kun via `:hover`, som ikke finnes på mobil — et klikkbart kort så da identisk ut med et statisk. Nå bærer klikkbart kort affordansen i hviletilstand: permanent skygge (`--ix-card-shadow`) og en chevron, med pressed-feedback på `:active` og fokusring på `:focus-visible`. `prefers-reduced-motion` respekteres.
+Gjør det tydelig at et `Card` er klikkbart, også på touch. Før viste `.ix-card--clickable` at kortet var klikkbart kun ved `:hover` — men hover finnes ikke på mobil, så et klikkbart kort så helt likt ut som et statisk. Nå har klikkbart kort alltid en synlig chevron som viser at det kan trykkes. Kortet er flatt (ingen skygge): `:hover` gir en bakgrunnstone, `:active` viser at kortet trykkes (viktig på touch, der `:hover` mangler), og `:focus-visible` gir en fokusring. Hover-overgangen er konsistent for alle klikkbare varianter — også `<a>` — uavhengig av global anker-styling (f.eks. en `a { transition: color }`-regel fra en CSS-reset). `prefers-reduced-motion` respekteres.
 
 React-wrapperen `<Card>` rendrer nå et ekte semantisk element — `<a>` ved `href`, `<button>` ved `onClick`, ellers `<div>` — i stedet for en `<div>` med `role`/`onClick`/`window.location.href`. Dette gir korrekt rolle, tastaturstøtte og fokus gratis, og fjerner den tidligere `javascript:`-XSS-risikoen.
