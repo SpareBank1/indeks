@@ -50,7 +50,7 @@ export const MedIkon: Story = {
         <Accordion>
             <Accordion.Item>
                 <Accordion.Header>
-                    <Icon name="betalingskort" /> Kort og betaling
+                    <Icon name="credit_card" /> Kort og betaling
                 </Accordion.Header>
                 <Accordion.Content>
                     <p>Administrer kortene dine, sperr kort og se betalinger.</p>
@@ -58,7 +58,7 @@ export const MedIkon: Story = {
             </Accordion.Item>
             <Accordion.Item>
                 <Accordion.Header>
-                    <Icon name="innstillinger" /> Sikkerhet
+                    <Icon name="settings" /> Sikkerhet
                 </Accordion.Header>
                 <Accordion.Content>
                     <p>Endre passord og se påloggingshistorikk.</p>
