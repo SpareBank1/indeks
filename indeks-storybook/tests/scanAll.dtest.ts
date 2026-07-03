@@ -12,10 +12,12 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Form/RadioGroup',
   'Form/Checkbox',
   'Icons/Icon',
+  'Components/Accordion',
   'Components/Button',
   'Components/InteractiveIcon',
   'Components/Message',
   'Components/Spinner',
+  'Layout/Grid',
   'Layout/HStack',
   'Layout/VStack'
 ];

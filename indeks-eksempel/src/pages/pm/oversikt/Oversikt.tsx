@@ -32,7 +32,7 @@ export default function PMOversikt() {
                     <Heading as="h2" size="sm">
                         Til godkjenning
                     </Heading>
-                    <Card className="ix-p-md" surfaceColor="main">
+                    <Card className="ix-p-md">
                         <HStack className="ix-justify-between">
                             <div>Telenor</div>
                             <div>399 kr</div>
@@ -71,7 +71,7 @@ export default function PMOversikt() {
                                 </Button>
                             </div>
                         </HStack>
-                        <Card className="ix-mb-sm" surfaceColor="main">
+                        <Card className="ix-mb-sm">
                             <HStack
                                 className="ix-p-sm ix-justify-end ix-w-full"
                                 gap="2xs"
@@ -121,7 +121,7 @@ export default function PMOversikt() {
                                 </div>
                             </HStack>
                             <ClickableRow accountName="Min sparing" iconName="savings" />
-                            <Card className="ix-mb-sm" surfaceColor="main">
+                            <Card className="ix-mb-sm">
                                 <HStack
                                     className="ix-p-sm ix-justify-end ix-w-full"
                                     gap="2xs"
@@ -139,11 +139,8 @@ export default function PMOversikt() {
                                 <Divider />
                                 <AccountRow amount={25000} accountName="Konto for barn" accountNumber="22 334 45 566" />
                             </Card>
-                            <Card
-                                className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm"
-                                border="dashed"
-                            >
-                                <Icon name="add_circle" size="xl" />
+                            <Card className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm ix-border-dashed">
+                                <Icon materialDesignName="add_circle" size="xl" />
                                 <div>
                                     <Heading as="h3" size="sm" addRecommendedSpacing>
                                         HeadingText
@@ -163,7 +160,7 @@ export default function PMOversikt() {
                                     Mine barn
                                 </Heading>
                             </HStack>
-                            <Card className="ix-mb-lg ix-h-fit" surfaceColor="main">
+                            <Card className="ix-mb-lg ix-h-fit">
                                 <AccountRow amount={12300} accountName="Lise" accountNumber="12 345 67 890" />
                                 <Divider />
                                 <AccountRow amount={300} accountName="Ola" accountNumber="98 765 43 210" />
@@ -179,7 +176,7 @@ export default function PMOversikt() {
                                 </Heading>
                             </HStack>
                             <ClickableRow accountName="Boliglån" iconName="home" />
-                            <Card className="ix-mb-sm ix-h-fit" surfaceColor="main">
+                            <Card className="ix-mb-sm ix-h-fit">
                                 <AccountRow amount={12300} accountName="Boliglån" accountNumber="12 345 67 890" />
                                 <Divider />
                                 <AccountRow amount={300} accountName="Felles" accountNumber="98 765 43 210" />
@@ -205,7 +202,7 @@ export default function PMOversikt() {
                             </div>
                         </HStack>
                         <ClickableRow accountName="Min sparing" iconName="savings" />
-                        <Card className="ix-mb-sm" surfaceColor="main">
+                        <Card className="ix-mb-sm">
                             <AccountRow amount={12300} accountName="Account name" accountNumber="Account number" />
                             <Divider />
                             <AccountRow amount={300} accountName="Account name" accountNumber="Account number" />
@@ -220,16 +217,13 @@ export default function PMOversikt() {
                                 Lån
                             </Heading>
                         </HStack>
-                        <Card className="ix-mb-sm ix-h-fit" surfaceColor="main">
+                        <Card className="ix-mb-sm ix-h-fit">
                             <AccountRow amount={12300} accountName="Loan account" accountNumber="Account number" />
                             <Divider />
                             <AccountRow amount={300} accountName="Loan account" accountNumber="Account number" />
                         </Card>
-                        <Card
-                            className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm"
-                            border="dashed"
-                        >
-                            <Icon name="add_circle" size="xl" />
+                        <Card className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm ix-border-dashed">
+                            <Icon materialDesignName="add_circle" size="xl" />
                             <div>
                                 <Heading as="h3" size="sm" addRecommendedSpacing>
                                     HeadingText

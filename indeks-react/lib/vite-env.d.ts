@@ -36,6 +36,15 @@ declare module 'react' {
                 nowrap?: boolean;
                 gap?: import('./types/types').GapSize;
             };
+            'ix-grid': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+                class?: string;
+                cols?: string;
+                rows?: string;
+                gap?: import('./types/types').GapSize;
+                align?: 'start' | 'end' | 'center' | 'stretch';
+                justify?: 'start' | 'end' | 'center' | 'stretch';
+                inline?: '' | boolean;
+            };
         }
     }
 }

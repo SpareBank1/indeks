@@ -12,7 +12,7 @@
         "docker:clear-snapshots": "docker run --rm -v ./tests:/tests alpine rm -rf /tests/scanAll.dtest.ts-snapshots",
         "docker:run-update-snapshots": "docker compose run --name pw-update playwright --update-snapshots; docker cp pw-update:/repo/indeks-storybook/tests/scanAll.dtest.ts-snapshots tests/ 2>/dev/null; docker rm pw-update",
         "docker:fix-snapshot-ownership": "docker run --rm -v ./tests:/tests alpine chown -R $(id -u) /tests/scanAll.dtest.ts-snapshots",
-        "update-snapshots": "pnpm -w build && pnpm run build-storybook && pnpm run docker:clear-snapshots && pnpm run docker:run-update-snapshots; pnpm run docker:fix-snapshot-ownership",
+        "update-snapshots": "pnpm -w build && pnpm run build-storybook && pnpm run docker:run-update-snapshots; pnpm run docker:fix-snapshot-ownership",
         "lint": "eslint .",
         "update-packages": "npx npm-check-updates --groupBy major && pnpm install"
     },
