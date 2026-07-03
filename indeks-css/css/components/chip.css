@@ -31,6 +31,13 @@
 
     /* interaksjon */
     cursor: pointer;
+}
+
+/* Uten :where() slik at transition vinner over en global bar a{transition:color}
+   (Infima i docs, eller en reset i konsumentapp) — ellers faller background/border
+   ut av transition-settet på <a class="ix-chip">-lenkechipen og hover snapper.
+   Samme spesifisitets-hensyn som .ix-card--clickable. */
+.ix-chip {
     transition: var(--ix-transition-all);
 }
 
