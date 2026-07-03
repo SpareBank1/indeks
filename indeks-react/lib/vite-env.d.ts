@@ -14,7 +14,6 @@ declare module 'react' {
             };
             'ix-icon': React.DetailedHTMLProps<React.HTMLAttributes<IxIcon>, IxIcon> & {
                 name?: IconName;
-                materialdesignname?: string;
                 'data-size'?: 'sm' | 'md' | 'lg' | 'xl';
                 'aria-label'?: string;
                 'aria-labelledby'?: string;

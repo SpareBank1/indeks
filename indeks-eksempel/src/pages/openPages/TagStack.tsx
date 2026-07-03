@@ -5,43 +5,43 @@ const TagStack: React.FC = () => {
     return (
         <HStack>
             <Tag variant="neutral">
-                <Icon name="hjem" />
+                <Icon name="home" />
                 En liten tag
             </Tag>
             <Tag variant="neutral" type="subtle">
-                <Icon name="hjem" />
+                <Icon name="home" />
                 En liten tag
             </Tag>
             <Tag variant="info">
-                <Icon name="hjem" />
+                <Icon name="home" />
                 En liten tag
             </Tag>
             <Tag variant="info" type="subtle">
-                <Icon name="hjem" />
+                <Icon name="home" />
                 En liten tag
             </Tag>
             <Tag variant="success">
-                <Icon name="hjem" />
+                <Icon name="home" />
                 En liten tag
             </Tag>
             <Tag variant="success" type="subtle">
-                <Icon name="hjem" />
+                <Icon name="home" />
                 En liten tag
             </Tag>
             <Tag variant="warning">
-                <Icon name="hjem" />
+                <Icon name="home" />
                 En liten tag
             </Tag>
             <Tag variant="warning" type="subtle">
-                <Icon name="hjem" />
+                <Icon name="home" />
                 En liten tag
             </Tag>
             <Tag variant="danger">
-                <Icon name="hjem" />
+                <Icon name="home" />
                 En liten tag
             </Tag>
             <Tag variant="danger" type="subtle">
-                <Icon name="hjem" />
+                <Icon name="home" />
                 En liten tag
             </Tag>
         </HStack>

@@ -20,7 +20,7 @@ export default function PMBetaling() {
                             alignItems: 'center',
                         }}
                     >
-                        <Icon name="hjem" size="lg" className="" />
+                        <Icon name="home" size="lg" className="" />
                     </div>
                     <Heading as="h2" size="xs" addRecommendedSpacing>
                         Husk at du ikke kan overføre på helligdager
@@ -96,10 +96,10 @@ export default function PMBetaling() {
                     Hva synes du om denne siden?
                     <HStack gap="xs">
                         <Button variant="secondary">
-                            <Icon materialDesignName="thumb_up" />
+                            <Icon name="thumb_up" />
                         </Button>
                         <Button variant="secondary">
-                            <Icon materialDesignName="thumb_down" />
+                            <Icon name="thumb_down" />
                         </Button>
                     </HStack>
                 </Card>

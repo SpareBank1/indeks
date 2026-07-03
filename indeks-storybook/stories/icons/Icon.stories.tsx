@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Icon, ICON_NAMES, availableMaterialDesignIconNames } from '@sb1/indeks-react';
-
-const availableIconNames = Object.keys(ICON_NAMES) as Array<keyof typeof ICON_NAMES>;
+import { Icon, COMMON_ICON_NAMES } from '@sb1/indeks-react';
 
 const meta = {
   title: 'Icons/Icon',
@@ -12,32 +10,22 @@ const meta = {
     docs: {
       description: {
         component:
-          'Ikon-komponent som støtter to gjensidig utelukkende ikonsystemer: Indeks-ikoner/aliaser (name) og Material Design-ikoner (materialDesignName).',
+          'Ikon-komponent. `name` er Material Design-ikonnavnet direkte. Vanlige SB1-ikoner autofullføres; alle andre MD-navn godtas også.',
       },
     },
   },
   argTypes: {
     name: {
-      description: 'Tilpasset Indeks ikonnavn',
+      description: 'Material Design-ikonnavn. Listen viser de vanligste SB1-ikonene — alle MD-navn godtas.',
       control: { type: 'select' },
-      options: [undefined, ...availableIconNames],
+      options: COMMON_ICON_NAMES,
       table: {
         type: { summary: 'IconName' },
-        defaultValue: { summary: 'undefined' },
-      },
-    },
-    materialDesignName: {
-      description: 'Material Design ikonnavn (viser vanlige ikoner - full liste har 3000+ alternativer)',
-      control: { type: 'select' },
-      options: [undefined, ...availableMaterialDesignIconNames],
-      table: {
-        type: { summary: 'MaterialDesignIconName' },
-        defaultValue: { summary: 'undefined' },
       },
     },
   },
   args: {
-    name: 'hjem',
+    name: 'home',
     size: 'md',
   },
 } satisfies Meta<typeof Icon>;
@@ -73,7 +61,7 @@ export const HTML: Story = {
   name: 'HTML (web component)',
   render: () => (
     // @ts-expect-error ix-icon er en custom element — JSX-typer er deklarert i indeks-web
-    <ix-icon name="hjem" aria-label="Hjem" />
+    <ix-icon name="home" aria-label="Hjem" />
   ),
 };
 

@@ -40,7 +40,7 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
                 aria-expanded={open}
                 aria-label="Innstillinger"
             >
-                <Icon name="innstillinger" />
+                <Icon name="settings" />
             </button>
 
             {open && (

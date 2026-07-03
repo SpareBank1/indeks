@@ -105,7 +105,7 @@ export const HTML: Story = {
     render: () => (
         <ix-stack>
             <div className="ix-message" data-status="info" aria-live="polite">
-                <ix-icon data-badge="" name="info" aria-hidden="true" />
+                <ix-icon data-badge="" name="info_i" aria-hidden="true" />
                 <div className="ix-message__body">
                     <strong className="ix-message__title">Behandling pågår</strong>
                     <p>Vi har mottatt søknaden din og behandler den nå</p>
@@ -117,7 +117,7 @@ export const HTML: Story = {
             </div>
 
             <div className="ix-message" data-status="info" data-full-width aria-live="polite">
-                <ix-icon data-badge="" name="info" aria-hidden="true" />
+                <ix-icon data-badge="" name="info_i" aria-hidden="true" />
                 <div className="ix-message__body">
                     <p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p>
                 </div>

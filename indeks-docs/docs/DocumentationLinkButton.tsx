@@ -14,7 +14,7 @@ export const DocumentationLinkButton: React.FC<DocumentationLinkButtonProps> = (
             <div>
                 <Link to={href}>{linkText}</Link>
             </div>
-            <Icon materialDesignName="chevron_forward" size="md" className="ix-ml-sm" />
+            <Icon name="chevron_right" size="md" className="ix-ml-sm" />
         </div>
     );
 };
