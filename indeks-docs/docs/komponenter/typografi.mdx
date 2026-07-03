@@ -48,7 +48,7 @@ import { Heading } from '@sb1/indeks-react';
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<h1 className="ix-heading" data-size="2xl">Renter og betingelser</h1>
+<h1 class="ix-heading" data-size="2xl">Renter og betingelser</h1>
 ```
 
 </TabItem>
@@ -75,8 +75,8 @@ Heading-nivå kan overstyres med `size` hvis det visuelle hierarkiet ikke samsva
 
 ```jsx live
 <>
-    <h1 className="ix-heading" data-size="lg">Renter og betingelser</h1>
-    <h2 className="ix-heading" data-size="md">Effektiv rente</h2>
+    <h1 class="ix-heading" data-size="lg">Renter og betingelser</h1>
+    <h2 class="ix-heading" data-size="md">Effektiv rente</h2>
 </>
 ```
 
@@ -113,8 +113,8 @@ Legg til spacing-klassen som tilsvarer størrelsen:
 
 ```jsx live
 <>
-    <h1 className="ix-heading ix-mb-sm" data-size="2xl">Renter og betingelser</h1>
-    <h2 className="ix-heading ix-mb-xs" data-size="xl">Effektiv rente</h2>
+    <h1 class="ix-heading ix-mb-sm" data-size="2xl">Renter og betingelser</h1>
+    <h2 class="ix-heading ix-mb-xs" data-size="xl">Effektiv rente</h2>
 </>
 ```
 
@@ -174,7 +174,7 @@ import { Text } from '@sb1/indeks-react';
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<p className="ix-text" data-size="md">Kontoen din har en saldo på 12 345,00 kr.</p>
+<p class="ix-text" data-size="md">Kontoen din har en saldo på 12 345,00 kr.</p>
 ```
 
 </TabItem>
@@ -201,8 +201,8 @@ Tekst rendres som standard i en `<p>`. Bruk `as` når elementet ikke er en parag
 
 ```jsx live
 <ul>
-    <li className="ix-text" data-size="md">Brukskonto</li>
-    <li className="ix-text" data-size="md">Sparekonto</li>
+    <li class="ix-text" data-size="md">Brukskonto</li>
+    <li class="ix-text" data-size="md">Sparekonto</li>
 </ul>
 ```
 
@@ -229,7 +229,7 @@ Standard linjehøyde er 1.2. Brødtekst over flere linjer trenger større linjeh
 Legg til `ix-text--long` for økt linjehøyde:
 
 ```jsx live
-<p className="ix-text ix-text--long" data-size="md">
+<p class="ix-text ix-text--long" data-size="md">
     Renten på boliglånet ditt er basert på Nibor pluss et påslag. Den effektive renten inkluderer alle gebyrer og
     kostnader knyttet til lånet, og gir deg et mer realistisk bilde av hva lånet faktisk koster deg per år.
 </p>
@@ -267,10 +267,10 @@ Vil du utheve en hel paragraf uten `<p>`-elementet, bruk `as`:
 
 ```jsx live
 <>
-    <p className="ix-text" data-size="md">
+    <p class="ix-text" data-size="md">
         Saldo: <strong>12 345,00 kr</strong>
     </p>
-    <p className="ix-text" data-size="md">
+    <p class="ix-text" data-size="md">
         Renten er <em>variabel</em> og kan endres.
     </p>
 </>
@@ -332,7 +332,7 @@ import { LinkText } from '@sb1/indeks-react';
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<a className="ix-link-text" href="/konto">
+<a class="ix-link-text" href="/konto">
     Se kontooversikt
 </a>
 ```

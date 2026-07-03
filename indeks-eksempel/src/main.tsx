@@ -16,6 +16,7 @@ import PMBetaling from './pages/pm/betaling/Betaling';
 import PMOversikt from './pages/pm/oversikt/Oversikt';
 import PMRegistrerBetaling from './pages/pm/RegistrerBetaling';
 import PMWrapper from './pages/pm/Wrapper';
+import GridKomponent from './pages/openPages/GridKomponent';
 
 const router = createHashRouter([
     {
@@ -64,6 +65,10 @@ const router = createHashRouter([
                     {
                         path: 'spacing-responsiv',
                         element: <ResponsivSpacing />,
+                    },
+                    {
+                        path: 'grid-komponent',
+                        element: <GridKomponent />,
                     },
                     {
                         path: 'typografi-eksempler',

@@ -1,5 +1,27 @@
 # @sb1/indeks-css
 
+## 0.12.0
+
+### Minor Changes
+
+-   16d448a: Ny Grid-komponent for todimensjonal layout
+
+    Grid er en layout-primitiv for å stable innhold i to dimensjoner. Den finnes som:
+
+    -   Custom element: `<ix-grid cols="3" gap="md">`
+    -   CSS-klasse: `.ix-grid` med modifier-klasser
+    -   React-komponent: `<Grid cols={3} gap="md">`
+
+    Støtter faste kolonner (1-12), responsiv layout (auto-fit/auto-fill), align/justify, og colspan/rowspan på barn.
+
+## 0.11.0
+
+### Minor Changes
+
+-   bae9da7: Legg til InteractiveIcon — en klikkbar ikon-flate (icon button) som wrapper et `ix-icon` i et native `<button>`. Gir visuell feedback ved hover, trykk og fokus, med fargetone styrt av `status` (`default` | `info` | `success` | `warning` | `danger`). Krever `aria-label`. Tilgjengelig som CSS-klasse `.ix-interactive-icon` og React-komponent `<InteractiveIcon>`.
+
+    I tillegg eksponerer status-fargesystemet (`@sb1/indeks-utils`) nå `--ix-color-status-fill-subtle-hover` og `--ix-color-status-fill-subtle-active`, slik at subtle-fyll kan reagere på hover/trykk per status.
+
 ## 0.10.0
 
 ### Minor Changes
