@@ -59,6 +59,8 @@
     font-size: var(--ix-font-size-md);
     font-weight: var(--ix-font-weight-medium);
     cursor: pointer;
+    /* Myk hover-overgang på klikkflaten (samme token som chevron-en under). */
+    transition: var(--ix-transition-all);
     /* Skjul native disclosure-marker (trekant) i alle nettlesere. */
     list-style: none;
 }
