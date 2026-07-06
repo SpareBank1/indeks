@@ -137,10 +137,14 @@
     width: var(--ii-radio-dot-size);
     height: var(--ii-radio-dot-size);
     top: 50%;
-    left: calc((var(--ii-radio-size) - var(--ii-radio-dot-size)) / 2);
+    /* Ankre prikken på ringens senter (radio-size/2 fra ringens venstrekant) og
+       selv-sentrer med translate(-50%). Deler nøyaktig samme sub-pixel-anker som
+       ringen → holder seg konsentrisk uansett device-pixel-avrunding. Unngår
+       (ring − dot)/2-offset som gir halve piksler (f.eks. 4.5px ved 18px chip). */
+    left: calc(var(--ii-radio-size) / 2);
     z-index: 1;
     background-color: var(--ii-radio-inner-color);
-    transform: translateY(-50%) scale(0);
+    transform: translate(-50%, -50%) scale(0);
 }
 
 /* ── Hover ───────────────────────────────────────────────────────────────── */
@@ -184,7 +188,7 @@
 
 :where(ix-radio-group, .ix-radio-group) input[type='radio']:checked + label::before,
 :where(.ix-radio-button__input:checked) + :where(.ix-radio-button__label)::before {
-    transform: translateY(-50%) scale(1);
+    transform: translate(-50%, -50%) scale(1);
 }
 
 /* ── Chip-variant ─────────────────────────────────────────────────────────────
@@ -218,7 +222,7 @@
     left: var(--ix-spacing-md);
 }
 :where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::before {
-    left: calc(var(--ix-spacing-md) + (var(--ii-radio-size) - var(--ii-radio-dot-size)) / 2);
+    left: calc(var(--ix-spacing-md) + var(--ii-radio-size) / 2);
 }
 
 /* Hover — pill-fyll som .ix-chip:hover (kun ikke-disabled). */
@@ -251,7 +255,7 @@
     left: var(--ix-spacing-sm);
 }
 :where(ix-radio-group[data-variant='chip'][data-size='sm'], .ix-radio-group[data-variant='chip'][data-size='sm']) label::before {
-    left: calc(var(--ix-spacing-sm) + (var(--ii-radio-size) - var(--ii-radio-dot-size)) / 2);
+    left: calc(var(--ix-spacing-sm) + var(--ii-radio-size) / 2);
 }
 
 /* ── Error ───────────────────────────────────────────────────────────────── */

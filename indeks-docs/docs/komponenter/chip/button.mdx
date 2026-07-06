@@ -42,24 +42,24 @@ Button chips gir mest verdi i grupper. Da blir det tydelig at de hører sammen o
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
+<ix-stack horizontal gap="sm">
   <button class="ix-chip" type="button">Alle</button>
   <button class="ix-chip" type="button">Sparing</button>
   <button class="ix-chip" type="button">Lån</button>
   <button class="ix-chip" type="button">Forsikring</button>
-</div>
+</ix-stack>
 ```
 
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
-<div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
+<HStack gap="sm">
   <Chip>Alle</Chip>
   <Chip>Sparing</Chip>
   <Chip>Lån</Chip>
   <Chip>Forsikring</Chip>
-</div>
+</HStack>
 ```
 
 </TabItem>
@@ -73,20 +73,20 @@ Chip finnes i to størrelser: `md` (standard) og `sm`.
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<div style={{ display: 'flex', alignItems: 'center', gap: 'var(--ix-spacing-sm)' }}>
+<ix-stack horizontal gap="sm">
   <button class="ix-chip" data-size="sm" type="button">Small</button>
   <button class="ix-chip" type="button">Medium (standard)</button>
-</div>
+</ix-stack>
 ```
 
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
-<div style={{ display: 'flex', alignItems: 'center', gap: 'var(--ix-spacing-sm)' }}>
+<HStack gap="sm">
   <Chip size="sm">Small</Chip>
   <Chip>Medium (standard)</Chip>
-</div>
+</HStack>
 ```
 
 </TabItem>

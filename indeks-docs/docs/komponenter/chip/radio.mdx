@@ -21,7 +21,7 @@ Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`,
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-radio-group data-variant="chip" name="periode">
+<ix-radio-group data-variant="chip" name="periode-html">
   <span data-field="legend">Velg periode</span>
   <div data-field="items">
     <div class="ix-radio-button">
@@ -63,7 +63,7 @@ Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`,
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-radio-group data-variant="chip" data-size="sm" name="periode-liten">
+<ix-radio-group data-variant="chip" data-size="sm" name="periode-liten-html">
   <span data-field="legend">Velg periode</span>
   <div data-field="items">
     <div class="ix-radio-button">
@@ -105,7 +105,7 @@ Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-radio-group data-variant="chip" name="nyhetsbrev">
+<ix-radio-group data-variant="chip" name="nyhetsbrev-html">
   <span data-field="legend">Ønsker du nyhetsbrev?</span>
   <div data-field="items">
     <div class="ix-radio-button">
@@ -200,16 +200,16 @@ Radio chip gjenbruker `ix-radio-group`-web componenten med chip-styling aktivert
 ### Eksempel: ren HTML
 
 ```html
-<ix-radio-group data-variant="chip" name="periode">
+<ix-radio-group data-variant="chip" name="periode-css">
   <span data-field="legend">Velg periode</span>
   <div data-field="items">
     <div class="ix-radio-button">
-      <input type="radio" id="periode-1m" value="1m" />
-      <label for="periode-1m">1 måned</label>
+      <input type="radio" id="periode-css-1m" value="1m" />
+      <label for="periode-css-1m">1 måned</label>
     </div>
     <div class="ix-radio-button">
-      <input type="radio" id="periode-3m" value="3m" checked />
-      <label for="periode-3m">3 måneder</label>
+      <input type="radio" id="periode-css-3m" value="3m" checked />
+      <label for="periode-css-3m">3 måneder</label>
     </div>
   </div>
   <span data-field="error" aria-live="polite"></span>

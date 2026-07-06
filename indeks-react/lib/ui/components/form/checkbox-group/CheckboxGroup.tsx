@@ -86,7 +86,7 @@ export function CheckboxGroup({
             readonly={readOnly || undefined}
         >
             <span data-field="legend" className={hideLegend ? 'ix-sr-only' : undefined}>
-                {readOnly && <ix-icon materialdesignname="lock" />}
+                {readOnly && <ix-icon name="lock" />}
                 {legend}
             </span>
             {description && <p data-field="description">{description}</p>}

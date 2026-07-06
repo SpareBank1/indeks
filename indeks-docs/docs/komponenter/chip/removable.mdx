@@ -46,22 +46,22 @@ Det tilgjengelige navnet settes sammen av label og et fjern-suffiks, f.eks. «Sp
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
+<ix-stack horizontal gap="sm">
   <button class="ix-chip" data-removable aria-label="Sparing fjern">Sparing</button>
   <button class="ix-chip" data-removable aria-label="Lån fjern">Lån</button>
   <button class="ix-chip" data-removable aria-label="Forsikring fjern">Forsikring</button>
-</div>
+</ix-stack>
 ```
 
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
-<div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ix-spacing-sm)' }}>
+<HStack gap="sm">
   <RemovableChip removeLabel="fjern" onRemove={() => {}}>Sparing</RemovableChip>
   <RemovableChip removeLabel="fjern" onRemove={() => {}}>Lån</RemovableChip>
   <RemovableChip removeLabel="fjern" onRemove={() => {}}>Forsikring</RemovableChip>
-</div>
+</HStack>
 ```
 
 </TabItem>
