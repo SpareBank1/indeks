@@ -87,7 +87,7 @@ trenger ikke peke på det for å forstå at det kan trykkes.
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<div style={{ display: 'flex', gap: '1rem' }}>
+<ix-stack horizontal gap="md">
   <div class="ix-card ix-p-md">
     <h3>Statisk</h3>
     <p>Flat, ingen chevron.</p>
@@ -97,7 +97,7 @@ trenger ikke peke på det for å forstå at det kan trykkes.
     <p>Chevron i hviletilstand, helt uten hover.</p>
     <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
   </a>
-</div>
+</ix-stack>
 ```
 
 </TabItem>
@@ -107,6 +107,9 @@ trenger ikke peke på det for å forstå at det kan trykkes.
 
 Sett `href` når kortet navigerer til en URL. Det rendres som `<a>` og får riktig lenke-semantikk.
 
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
 ```tsx live
 <Card padding="md" href="https://www.sparebank1.no">
   <Heading as="h3" size="sm">Sparekonto</Heading>
@@ -114,9 +117,26 @@ Sett `href` når kortet navigerer til en URL. Det rendres som `<a>` og får rikt
 </Card>
 ```
 
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
+  <h3>Sparekonto</h3>
+  <p>Se saldo og renter</p>
+  <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
+</a>
+```
+
+</TabItem>
+</Tabs>
+
 ### Som knapp (handling)
 
-Sett `onClick` når kortet utfører en handling. Det rendres som `<button>`.
+Bruk et `<button>` når kortet utfører en handling. I React rendres `<button>` når du gir `onClick`.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
 
 ```tsx live
 <Card padding="md" onClick={() => alert('Kort klikket')}>
@@ -125,16 +145,50 @@ Sett `onClick` når kortet utfører en handling. Det rendres som `<button>`.
 </Card>
 ```
 
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button type="button" class="ix-card ix-card--clickable ix-p-md">
+  <h3>Vis detaljer</h3>
+  <p>Åpner et panel</p>
+  <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
+</button>
+```
+
+</TabItem>
+</Tabs>
+
 ### Eget chevron-ikon
 
-Klikkbart kort viser `chevron_right` som standard. Sett `chevronIcon` for å bytte ikon.
+Klikkbart kort viser `chevron_right` som standard. Sett `chevronIcon` for å bytte ikon. Skal kortet
+faktisk åpne lenken i ny fane, setter du `openInNewTab` (som gir `target="_blank"`) — og bytter
+chevronen til `open_in_new` som visuelt signal. I ren HTML setter du `target`/`rel` og
+chevron-ikonet selv.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
 
 ```tsx live
-<Card padding="md" href="https://www.sparebank1.no" chevronIcon="open_in_new">
+<Card padding="md" href="https://www.sparebank1.no" openInNewTab chevronIcon="open_in_new">
   <Heading as="h3" size="sm">Åpner i ny fane</Heading>
-  <Text>Chevronen er byttet til et eksternt-lenke-ikon.</Text>
+  <Text>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</Text>
 </Card>
 ```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no" target="_blank" rel="noopener noreferrer">
+  <h3>Åpner i ny fane</h3>
+  <p>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</p>
+  <ix-icon class="ix-card__chevron" name="open_in_new" data-size="lg" aria-hidden="true"></ix-icon>
+</a>
+```
+
+</TabItem>
+</Tabs>
 
 ## Retningslinjer
 
@@ -195,6 +249,7 @@ på touch (sikt mot minst 44×44 px).
 | `href` | `string` | | Gjør kortet til en lenke (`<a>`) for navigasjon. Aktiverer klikkbar styling |
 | `onClick` | `(e) => void` | | Gjør kortet til en knapp (`<button>`) for handling. Aktiverer klikkbar styling |
 | `chevronIcon` | `IconName` | `'chevron_right'` | Ikon for affordanse-chevronen på klikkbart kort |
+| `openInNewTab` | `boolean` | | Åpner `href`-lenken i ny fane (`target="_blank"` + `rel="noopener noreferrer"`). Kun sammen med `href` |
 | `padding` | `Size` | | Indre luft via `ix-p-*`-klasse |
 | `className` | `string` | | Ekstra klasser |
 

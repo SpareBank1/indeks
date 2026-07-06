@@ -65,4 +65,25 @@ describe('Card', () => {
         );
         expect(container.querySelector('ix-icon.ix-card__chevron')?.getAttribute('name')).toBe('chevron_left');
     });
+
+    it('skal åpne i ny fane når openInNewTab er satt sammen med href', () => {
+        render(
+            <Card href="https://example.com" openInNewTab>
+                Ny fane
+            </Card>
+        );
+        const link = screen.getByRole('link', { name: 'Ny fane' });
+        expect(link.getAttribute('target')).toBe('_blank');
+        expect(link.getAttribute('rel')).toBe('noopener noreferrer');
+    });
+
+    it('skal ignorere openInNewTab uten href', () => {
+        render(
+            <Card openInNewTab onClick={() => {}}>
+                Handling
+            </Card>
+        );
+        const button = screen.getByRole('button', { name: 'Handling' });
+        expect(button.getAttribute('target')).toBeNull();
+    });
 });

@@ -16,6 +16,8 @@ export interface CardProps extends HTMLAttributes<HTMLElement>, LimitedSpacingPr
     href?: string;
     /** Ikon for affordanse-chevronen på klikkbart kort. @default "pil-hoyre" */
     chevronIcon?: IconName;
+    /** Åpner href-lenken i ny fane (`target="_blank"` + `rel="noopener noreferrer"`). Kun sammen med `href`. */
+    openInNewTab?: boolean;
 }
 
 export interface ActionProps extends HTMLAttributes<HTMLDivElement> {
@@ -43,7 +45,7 @@ const Action = ({ href, children, className, onClick, ...rest }: ActionProps) =>
 };
 
 export const Card = forwardRef<HTMLElement, CardProps>(
-    ({ children, className, href, onClick, chevronIcon = 'chevron_right', ...rest }, ref) => {
+    ({ children, className, href, onClick, chevronIcon = 'chevron_right', openInNewTab, ...rest }, ref) => {
         const isClickable = Boolean(href || onClick);
 
         const getSpacingClassName = () => {
@@ -74,6 +76,8 @@ export const Card = forwardRef<HTMLElement, CardProps>(
                     className={cardClass}
                     ref={ref as React.Ref<HTMLAnchorElement>}
                     onClick={onClick}
+                    target={openInNewTab ? '_blank' : undefined}
+                    rel={openInNewTab ? 'noopener noreferrer' : undefined}
                     {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}
                 >
                     {children}
