@@ -62,43 +62,15 @@
     line-height: 1.2;
 }
 
-/* Lukkeknapp — valgfri. Ikon via mask-image (close). */
+/* Lukkeknapp — valgfri. Selve knappen er en InteractiveIcon
+   (.ix-interactive-icon) i «sm», som eier touch-mål, ikon (ix-icon «lukk»),
+   hover og fokusring. Her settes kun Message-spesifikk plassering. */
 :where(.ix-message__close) {
-    all: unset;
-    box-sizing: border-box;
     flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    /* Touch-mål min. 44×44 px (WCAG 2.5.8) */
-    min-width: 44px;
-    min-height: 44px;
-    cursor: pointer;
-    border-radius: var(--ix-border-radius-sm);
     /* Lukkeknappen er siste barn. Negativ margin trekker det store touch-målet
-       inn så ikonet flukter med toppkanten uten å øke høyden unødig. */
+       delvis inn så ikonet flukter med toppkanten uten å øke høyden unødig.
+       Vi trekker kun `xs` (ikke hele `sm`-paddingen) inn, slik at det blir litt
+       luft mellom det lille ikonet og meldingens kant. */
     align-self: flex-start;
-    margin: calc(var(--ix-spacing-sm) * -1) calc(var(--ix-spacing-sm) * -1) 0 0;
-}
-
-:where(.ix-message__close)::before {
-    content: '';
-    width: var(--ix-font-size-lg);
-    height: var(--ix-font-size-lg);
-    background-color: var(--ix-color-foreground-main-default);
-    /* stylelint-disable plugin/no-unsupported-browser-features */
-    mask-size: cover;
-    -webkit-mask-size: cover;
-    mask-position: center;
-    -webkit-mask-position: center;
-    mask-repeat: no-repeat;
-    -webkit-mask-repeat: no-repeat;
-    mask-image: url(https://cdn.sparebank1.no/icons/close.svg);
-    -webkit-mask-image: url(https://cdn.sparebank1.no/icons/close.svg);
-    /* stylelint-enable plugin/no-unsupported-browser-features */
-}
-
-:where(.ix-message__close:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: var(--ix-outline-offset-default);
+    margin: calc(var(--ix-spacing-xs) * -1) calc(var(--ix-spacing-xs) * -1) 0 0;
 }

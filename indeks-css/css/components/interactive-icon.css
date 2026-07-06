@@ -30,10 +30,22 @@
 }
 
 /*
- * Uten data-status bruker fyllet secondary-button-fargene (se rotselektoren).
- * Når data-status settes (info/success/warning/danger), kobler status-colors.css
- * (@sb1/indeks-utils) inn riktig subtle status-farge automatisk — derfor trengs
- * ingen status-spesifikke override-blokker, bare denne ene koblingen.
+ * Arv fra omgivelsene: et ikon uten egen status inne i en ikke-default
+ * status-kontekst (f.eks. .ix-message[data-status]) plukker opp de arvede
+ * --ix-color-status-*-variablene, slik at hover/trykk følger konteksten.
+ * Uten status-forelder gjelder basis-regelen (secondary-button) → et nøytralt
+ * ikon er uendret.
+ */
+:where([data-status]:not([data-status='default']) .ix-interactive-icon:not([data-status])) {
+    --ii-interactive-icon-fill-hover: var(--ix-color-status-fill-subtle-hover);
+    --ii-interactive-icon-fill-active: var(--ix-color-status-fill-subtle-active);
+}
+
+/*
+ * Eget data-status på ikonet vinner over arv fra konteksten: en eksplisitt
+ * status settes bevisst og skal styre fargen uansett omgivelser. Når data-status
+ * settes (info/success/warning/danger), kobler status-colors.css
+ * (@sb1/indeks-utils) inn riktig subtle status-farge automatisk.
  */
 :where(.ix-interactive-icon[data-status]:not([data-status='default'])) {
     --ii-interactive-icon-fill-hover: var(--ix-color-status-fill-subtle-hover);

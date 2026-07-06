@@ -35,12 +35,12 @@ export const CardWithAction: Story = {
 };
 
 export const CustomChevron: Story = {
-    args: { href: 'https://example.com', chevronIcon: 'apne-ekstern' },
+    args: { href: 'https://example.com', openInNewTab: true, chevronIcon: 'open_in_new' },
     render: (args) => {
         return (
             <Card padding="md" {...args}>
-                <Heading as="h3">Eget chevron-ikon</Heading>
-                <p>Overstyrt via chevronIcon-propen.</p>
+                <Heading as="h3">Åpner i ny fane</Heading>
+                <p>openInNewTab åpner lenken i ny fane, og chevronen er byttet via chevronIcon-propen.</p>
             </Card>
         );
     },

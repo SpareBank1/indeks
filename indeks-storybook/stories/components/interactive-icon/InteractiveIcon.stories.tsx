@@ -115,6 +115,29 @@ export const Tilstander: Story = {
     },
 };
 
+/**
+ * Arv fra konteksten. Et ikon uten egen `status` plukker opp status fra nærmeste
+ * forelder med `data-status` (f.eks. en Message eller et status-kort), slik at
+ * hover/trykk følger omgivelsene. Uten status-kontekst er ikonet nøytralt, og en
+ * eksplisitt `status` på ikonet overstyrer arven.
+ */
+export const ArvFraKontekst: Story = {
+    name: 'Arv fra kontekst',
+    render: (args) => (
+        <div style={{ display: 'flex', gap: '16px' }}>
+            <div data-status="info" style={{ padding: '8px' }}>
+                <InteractiveIcon {...args} status="default" aria-label="Info-kontekst" />
+            </div>
+            <div data-status="warning" style={{ padding: '8px' }}>
+                <InteractiveIcon {...args} status="default" aria-label="Advarsel-kontekst" />
+            </div>
+            <div data-status="danger" style={{ padding: '8px' }}>
+                <InteractiveIcon {...args} status="default" aria-label="Fare-kontekst" />
+            </div>
+        </div>
+    ),
+};
+
 export const HTML: Story = {
     render: () => (
         <button type="button" className="ix-interactive-icon" data-status="info" aria-label="Info">

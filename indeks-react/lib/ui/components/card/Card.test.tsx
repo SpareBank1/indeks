@@ -54,15 +54,36 @@ describe('Card', () => {
         const { container } = render(<Card href="https://example.com">Lenke</Card>);
         const chevron = container.querySelector('ix-icon.ix-card__chevron');
         expect(chevron).not.toBeNull();
-        expect(chevron?.getAttribute('name')).toBe('pil-hoyre');
+        expect(chevron?.getAttribute('name')).toBe('chevron_right');
     });
 
     it('skal kunne overstyre chevron-ikonet via chevronIcon', () => {
         const { container } = render(
-            <Card onClick={() => {}} chevronIcon="pil-venstre">
+            <Card onClick={() => {}} chevronIcon="chevron_left">
                 Handling
             </Card>
         );
-        expect(container.querySelector('ix-icon.ix-card__chevron')?.getAttribute('name')).toBe('pil-venstre');
+        expect(container.querySelector('ix-icon.ix-card__chevron')?.getAttribute('name')).toBe('chevron_left');
+    });
+
+    it('skal åpne i ny fane når openInNewTab er satt sammen med href', () => {
+        render(
+            <Card href="https://example.com" openInNewTab>
+                Ny fane
+            </Card>
+        );
+        const link = screen.getByRole('link', { name: 'Ny fane' });
+        expect(link.getAttribute('target')).toBe('_blank');
+        expect(link.getAttribute('rel')).toBe('noopener noreferrer');
+    });
+
+    it('skal ignorere openInNewTab uten href', () => {
+        render(
+            <Card openInNewTab onClick={() => {}}>
+                Handling
+            </Card>
+        );
+        const button = screen.getByRole('button', { name: 'Handling' });
+        expect(button.getAttribute('target')).toBeNull();
     });
 });
