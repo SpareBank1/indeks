@@ -24,10 +24,10 @@ const OversiktKort: React.FC<OversiktKortProps> = ({ title, variant = 'default' 
         <VStack className={`eksempel-kort--${variant} ix-border-radius-md ix-p-sm`}>
             <HStack gap="2xs">
                 <div className={`ikon-sirkel ix-color-fill-${variant}-default`}>
-                    <Icon name="hjem" size="lg" className={` ix-color-foreground-main-default`} />
+                    <Icon name="home" size="lg" className={` ix-color-foreground-main-default`} />
                 </div>
                 <div className={`ikon-sirkel ix-color-fill-${variant}-subtle ix-color-foreground-main-default`}>
-                    <Icon name="hjem" size="lg" className={``} />
+                    <Icon name="home" size="lg" className={``} />
                 </div>
             </HStack>
             <div>
@@ -40,7 +40,7 @@ const OversiktKort: React.FC<OversiktKortProps> = ({ title, variant = 'default' 
             </div>
             <TextField label="Fødselsdato" placeholder="Her er en placeholder" />
             <Button>
-                <Icon name="hake" />
+                <Icon name="check" />
                 Primary
             </Button>
         </VStack>

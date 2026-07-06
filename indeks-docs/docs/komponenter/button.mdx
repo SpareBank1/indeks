@@ -34,7 +34,7 @@ Button lar brukeren utføre en handling, som å sende inn et skjema, lagre endri
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<button className="ix-button" data-variant="primary" type="button">
+<button class="ix-button" data-variant="primary" type="button">
   Send inn
 </button>
 ```
@@ -64,9 +64,9 @@ Button lar brukeren utføre en handling, som å sende inn et skjema, lagre endri
 
 ```jsx live
 <>
-  <button className="ix-button" data-variant="primary" type="button">Primary</button>
-  <button className="ix-button" data-variant="secondary" type="button">Secondary</button>
-  <button className="ix-button" data-variant="tertiary" type="button">Tertiary</button>
+  <button class="ix-button" data-variant="primary" type="button">Primary</button>
+  <button class="ix-button" data-variant="secondary" type="button">Secondary</button>
+  <button class="ix-button" data-variant="tertiary" type="button">Tertiary</button>
 </>
 ```
 
@@ -92,10 +92,10 @@ Bruk `danger` for destruktive handlinger som sletting eller avbryt-operasjoner d
 
 ```jsx live
 <>
-  <button className="ix-button" data-variant="primary" data-danger="true" type="button">
+  <button class="ix-button" data-variant="primary" data-danger="true" type="button">
     Slett konto
   </button>
-  <button className="ix-button" data-variant="secondary" data-danger="true" type="button">
+  <button class="ix-button" data-variant="secondary" data-danger="true" type="button">
     Avbryt overføring
   </button>
 </>
@@ -122,9 +122,9 @@ Bruk `danger` for destruktive handlinger som sletting eller avbryt-operasjoner d
 
 ```jsx live
 <>
-  <button className="ix-button" data-variant="primary" data-size="sm" type="button">Liten</button>
-  <button className="ix-button" data-variant="primary" type="button">Medium (standard)</button>
-  <button className="ix-button" data-variant="primary" data-size="lg" type="button">Stor</button>
+  <button class="ix-button" data-variant="primary" data-size="sm" type="button">Liten</button>
+  <button class="ix-button" data-variant="primary" type="button">Medium (standard)</button>
+  <button class="ix-button" data-variant="primary" data-size="lg" type="button">Stor</button>
 </>
 ```
 
@@ -144,7 +144,7 @@ Bruk `danger` for destruktive handlinger som sletting eller avbryt-operasjoner d
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<button className="ix-button ix-w-full" data-variant="primary" type="button">
+<button class="ix-button ix-w-full" data-variant="primary" type="button">
   Fortsett
 </button>
 ```
@@ -161,7 +161,7 @@ Ikon-knapper med tekst trenger ingen ekstra ARIA — teksten er den tilgjengelig
 
 ```tsx live
 <Button>
-  <Icon name="sparing" />
+  <Icon name="savings" />
   Pålogget
 </Button>
 ```
@@ -170,8 +170,8 @@ Ikon-knapper med tekst trenger ingen ekstra ARIA — teksten er den tilgjengelig
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<button className="ix-button" data-variant="primary" type="button">
-  <span className="ix-icon" style={{maskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)", WebkitMaskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)"}} aria-hidden="true" />
+<button class="ix-button" data-variant="primary" type="button">
+  <span class="ix-icon" style={{maskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)", WebkitMaskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)"}} aria-hidden="true" />
   Pålogget
 </button>
 ```
@@ -188,7 +188,7 @@ Knapper med bare ikon **må** ha `aria-label` som beskriver handlingen. Bruk `ic
 
 ```tsx live
 <Button iconOnly aria-label="Gå til sparing">
-  <Icon name="sparing" />
+  <Icon name="savings" />
 </Button>
 ```
 
@@ -196,8 +196,8 @@ Knapper med bare ikon **må** ha `aria-label` som beskriver handlingen. Bruk `ic
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<button className="ix-button" data-variant="primary" data-icon-only type="button" aria-label="Gå til sparing">
-  <span className="ix-icon" style={{maskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)", WebkitMaskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)"}} />
+<button class="ix-button" data-variant="primary" data-icon-only type="button" aria-label="Gå til sparing">
+  <span class="ix-icon" style={{maskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)", WebkitMaskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)"}} />
 </button>
 ```
 
@@ -232,9 +232,9 @@ Spinneren arver knappens tekstfarge, så den får riktig kontrast i alle variant
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<button className="ix-button" data-variant="primary" data-loading="true" type="button"
+<button class="ix-button" data-variant="primary" data-loading="true" type="button"
         disabled aria-label="Sender inn…">
-  <span className="ix-spinner" aria-hidden="true" />
+  <span class="ix-spinner" aria-hidden="true" />
   Sender inn…
 </button>
 ```
@@ -256,7 +256,7 @@ Spinneren arver knappens tekstfarge, så den får riktig kontrast i alle variant
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<button className="ix-button" data-variant="primary" type="button" disabled>
+<button class="ix-button" data-variant="primary" type="button" disabled>
   Deaktivert
 </button>
 ```
@@ -283,7 +283,7 @@ Bruk `as="a"` når knappen navigerer til en URL. Den beholder button-styling, me
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<a className="ix-button" data-variant="primary" href="https://www.sparebank1.no">
+<a class="ix-button" data-variant="primary" href="https://www.sparebank1.no">
   Gå til sparebank1.no
 </a>
 ```

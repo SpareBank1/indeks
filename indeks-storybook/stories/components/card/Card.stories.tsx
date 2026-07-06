@@ -12,27 +12,47 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Emphasis: Story = {
-    args: {
-        surfaceColor: 'main',
-    },
+export const Default: Story = {
+    args: {},
     render: (args) => {
         return (
-            <Card {...args}>
-                <p>Emphasis</p>
+            <Card padding="md" {...args}>
+                <p>Statisk kort</p>
             </Card>
         );
     },
 };
 
 export const CardWithAction: Story = {
-    args: {
-        surfaceColor: 'main',
-    },
+    args: {},
     render: (args) => {
         return (
-            <Card {...args}>
+            <Card padding="md" {...args}>
                 <Card.Action href="https://example.com">Click me</Card.Action>
+            </Card>
+        );
+    },
+};
+
+export const CustomChevron: Story = {
+    args: { href: 'https://example.com', chevronIcon: 'apne-ekstern' },
+    render: (args) => {
+        return (
+            <Card padding="md" {...args}>
+                <Heading as="h3">Eget chevron-ikon</Heading>
+                <p>Overstyrt via chevronIcon-propen.</p>
+            </Card>
+        );
+    },
+};
+
+export const Clickable: Story = {
+    args: { href: 'https://example.com' },
+    render: (args) => {
+        return (
+            <Card padding="md" {...args}>
+                <Heading as="h3">Klikkbart kort</Heading>
+                <p>Flat med sentrert chevron som affordanse.</p>
             </Card>
         );
     },

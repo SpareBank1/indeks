@@ -32,7 +32,7 @@ En InteractiveIcon må alltid ha en tilgjengelig label som beskriver handlingen.
 
 ```jsx live
 <button type="button" class="ix-interactive-icon" aria-label="Rediger">
-  <ix-icon name="rediger" aria-hidden="true" class="ix-icon"></ix-icon>
+  <ix-icon name="edit" aria-hidden="true" class="ix-icon"></ix-icon>
 </button>
 ```
 
@@ -40,7 +40,7 @@ En InteractiveIcon må alltid ha en tilgjengelig label som beskriver handlingen.
 <TabItem value="react" label="React">
 
 ```tsx live
-<InteractiveIcon name="rediger" aria-label="Rediger" />
+<InteractiveIcon name="edit" aria-label="Rediger" />
 ```
 
 </TabItem>
@@ -60,19 +60,19 @@ Setter du ikke `status`, arver ikonet status fra nærmeste forelder med `data-st
 ```jsx live
 <>
   <button type="button" class="ix-interactive-icon" aria-label="Standard">
-    <ix-icon name="hjem" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="home" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
   <button type="button" class="ix-interactive-icon" data-status="info" aria-label="Info">
-    <ix-icon name="info" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="info_i" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
   <button type="button" class="ix-interactive-icon" data-status="success" aria-label="Suksess">
-    <ix-icon name="hake" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="check" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
   <button type="button" class="ix-interactive-icon" data-status="warning" aria-label="Advarsel">
-    <ix-icon name="utropstegn" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="priority_high" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
   <button type="button" class="ix-interactive-icon" data-status="danger" aria-label="Slett">
-    <ix-icon name="slett" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="delete" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
 </>
 ```
@@ -82,11 +82,11 @@ Setter du ikke `status`, arver ikonet status fra nærmeste forelder med `data-st
 
 ```tsx live
 <>
-  <InteractiveIcon name="hjem" aria-label="Standard" />
-  <InteractiveIcon name="info" aria-label="Info" status="info" />
-  <InteractiveIcon name="hake" aria-label="Suksess" status="success" />
-  <InteractiveIcon name="utropstegn" aria-label="Advarsel" status="warning" />
-  <InteractiveIcon name="slett" aria-label="Slett" status="danger" />
+  <InteractiveIcon name="home" aria-label="Standard" />
+  <InteractiveIcon name="info_i" aria-label="Info" status="info" />
+  <InteractiveIcon name="check" aria-label="Suksess" status="success" />
+  <InteractiveIcon name="priority_high" aria-label="Advarsel" status="warning" />
+  <InteractiveIcon name="delete" aria-label="Slett" status="danger" />
 </>
 ```
 
@@ -103,16 +103,16 @@ Setter du ikke `status`, arver ikonet status fra nærmeste forelder med `data-st
 ```jsx live
 <>
   <button type="button" class="ix-interactive-icon" aria-label="Liten">
-    <ix-icon name="rediger" data-size="sm" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="edit" data-size="sm" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
   <button type="button" class="ix-interactive-icon" aria-label="Medium">
-    <ix-icon name="rediger" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="edit" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
   <button type="button" class="ix-interactive-icon" aria-label="Stor">
-    <ix-icon name="rediger" data-size="lg" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="edit" data-size="lg" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
   <button type="button" class="ix-interactive-icon" aria-label="Ekstra stor">
-    <ix-icon name="rediger" data-size="xl" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="edit" data-size="xl" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
 </>
 ```
@@ -122,10 +122,10 @@ Setter du ikke `status`, arver ikonet status fra nærmeste forelder med `data-st
 
 ```tsx live
 <>
-  <InteractiveIcon name="rediger" aria-label="Liten" size="sm" />
-  <InteractiveIcon name="rediger" aria-label="Medium" />
-  <InteractiveIcon name="rediger" aria-label="Stor" size="lg" />
-  <InteractiveIcon name="rediger" aria-label="Ekstra stor" size="xl" />
+  <InteractiveIcon name="edit" aria-label="Liten" size="sm" />
+  <InteractiveIcon name="edit" aria-label="Medium" />
+  <InteractiveIcon name="edit" aria-label="Stor" size="lg" />
+  <InteractiveIcon name="edit" aria-label="Ekstra stor" size="xl" />
 </>
 ```
 
@@ -141,7 +141,7 @@ Tooltip kan brukes for å gi ekstra kontekst til handlingen, spesielt når ikone
 
 ```jsx live
 <button type="button" class="ix-interactive-icon" aria-label="Rediger" data-tooltip="Rediger profil">
-  <ix-icon name="rediger" aria-hidden="true" class="ix-icon"></ix-icon>
+  <ix-icon name="edit" aria-hidden="true" class="ix-icon"></ix-icon>
 </button>
 ```
 
@@ -149,7 +149,7 @@ Tooltip kan brukes for å gi ekstra kontekst til handlingen, spesielt når ikone
 <TabItem value="react" label="React">
 
 ```tsx live
-<InteractiveIcon name="rediger" aria-label="Rediger" data-tooltip="Rediger profil" />
+<InteractiveIcon name="edit" aria-label="Rediger" data-tooltip="Rediger profil" />
 ```
 
 </TabItem>
@@ -213,11 +213,11 @@ Variablene med `--ii-`-prefiks er interne implementasjonsdetaljer og er ikke en 
 
 ```html
 <button type="button" class="ix-interactive-icon" aria-label="Rediger">
-  <ix-icon name="rediger" aria-hidden="true" class="ix-icon"></ix-icon>
+  <ix-icon name="edit" aria-hidden="true" class="ix-icon"></ix-icon>
 </button>
 
 <button type="button" class="ix-interactive-icon" data-status="danger" aria-label="Slett">
-  <ix-icon name="slett" aria-hidden="true" class="ix-icon"></ix-icon>
+  <ix-icon name="delete" aria-hidden="true" class="ix-icon"></ix-icon>
 </button>
 ```
 

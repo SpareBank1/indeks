@@ -103,3 +103,15 @@ body:not(.navigation-with-keyboard) .ix-text-area textarea:focus {
 .ix-button[data-variant='tertiary'][data-danger='true'] {
     color: var(--ix-color-component-button-tertiary-foreground-danger);
 }
+
+/* Klikkbart Card rendres som <a>, og Card sin `color: inherit`/`text-decoration: none`
+   bruker :where() (spesifisitet 0) som taper mot Infima sin `a { color; text-decoration }`
+   (spesifisitet 1). Uten dette blir kortets tekst — inkl. en heading brukt som «header» —
+   blå og understreket i docs. Klasseselektor (spesifisitet 0,1,0) slår Infima.
+   :hover må også overstyres: Infima sin `a:hover` (spesifisitet 0,1,1) gjør teksten blå
+   igjen ved hover, så vi trenger `.ix-card--clickable:hover` (0,2,0) for å vinne. */
+.ix-card--clickable,
+.ix-card--clickable:hover {
+    color: inherit;
+    text-decoration: none;
+}

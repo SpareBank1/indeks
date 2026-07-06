@@ -1,0 +1,29 @@
+/* Border-radius Utilities */
+
+.ix-radius-xs {
+    border-radius: var(--ix-border-radius-xs);
+}
+
+.ix-radius-sm {
+    border-radius: var(--ix-border-radius-sm);
+}
+
+.ix-radius-md {
+    border-radius: var(--ix-border-radius-md);
+}
+
+.ix-radius-lg {
+    border-radius: var(--ix-border-radius-lg);
+}
+
+.ix-radius-xl {
+    border-radius: var(--ix-border-radius-xl);
+}
+
+.ix-radius-pill {
+    border-radius: var(--ix-border-radius-pill);
+}
+
+.ix-radius-circle {
+    border-radius: var(--ix-border-radius-circle);
+}

@@ -38,7 +38,7 @@ For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` lig
 
 ```jsx live
 <div className="ix-message" data-status="info" aria-live="polite">
-  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
   <div className="ix-message__body">
     <p>Vi har mottatt søknaden din og behandler den nå</p>
   </div>
@@ -69,19 +69,19 @@ Velg status ut fra budskapet: `info` for nøytral informasjon, `success` for bek
 ```jsx live
 <ix-stack>
   <div className="ix-message" data-status="info" aria-live="polite">
-    <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+    <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
     <div className="ix-message__body"><p>Vi behandler søknaden din</p></div>
   </div>
   <div className="ix-message" data-status="success" aria-live="polite">
-    <ix-icon data-badge name="hake" aria-hidden="true"></ix-icon>
+    <ix-icon data-badge name="check" aria-hidden="true"></ix-icon>
     <div className="ix-message__body"><p>Endringene dine er lagret</p></div>
   </div>
   <div className="ix-message" data-status="warning" role="alert">
-    <ix-icon data-badge name="utropstegn" aria-hidden="true"></ix-icon>
+    <ix-icon data-badge name="priority_high" aria-hidden="true"></ix-icon>
     <div className="ix-message__body"><p>Det er kort tid til fristen for å svare</p></div>
   </div>
   <div className="ix-message" data-status="danger" role="alert">
-    <ix-icon data-badge name="utropstegn" aria-hidden="true"></ix-icon>
+    <ix-icon data-badge name="priority_high" aria-hidden="true"></ix-icon>
     <div className="ix-message__body"><p>Vi klarte ikke å gjennomføre betalingen</p></div>
   </div>
 </ix-stack>
@@ -113,7 +113,7 @@ Budskapet (children) er alltid med og bærer innholdet. Trenger meldingen en ove
 
 ```jsx live
 <div className="ix-message" data-status="info" aria-live="polite">
-  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
   <div className="ix-message__body">
     <strong className="ix-message__title">Behandling pågår</strong>
     <p>Vi har mottatt søknaden din og behandler den nå</p>
@@ -144,7 +144,7 @@ En lenke kan peke videre til mer informasjon. Lenken er ikke en egen prop — de
 
 ```jsx live
 <div className="ix-message" data-status="info" aria-live="polite">
-  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
   <div className="ix-message__body">
     <strong className="ix-message__title">Behandling pågår</strong>
     <p>Vi har mottatt søknaden din og behandler den nå</p>
@@ -177,7 +177,7 @@ En valgfri lukkeknapp lar brukeren skjule meldingen. I React skjuler komponenten
 
 ```jsx live
 <div className="ix-message" data-status="success" aria-live="polite">
-  <ix-icon data-badge name="hake" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="check" aria-hidden="true"></ix-icon>
   <div className="ix-message__body">
     <strong className="ix-message__title">Endringene er lagret</strong>
     <p>Du kan trygt lukke denne meldingen</p>
@@ -216,11 +216,11 @@ Sett `fullWidth` (React) / `data-full-width` (HTML) for at meldingen skal strekk
 ```jsx live
 <ix-stack>
   <div className="ix-message" data-status="info" aria-live="polite">
-    <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+    <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
     <div className="ix-message__body"><p>Krymper til innholdsbredden</p></div>
   </div>
   <div className="ix-message" data-status="info" data-full-width aria-live="polite">
-    <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+    <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
     <div className="ix-message__body"><p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p></div>
     <button className="ix-interactive-icon ix-message__close" type="button" aria-label="Lukk melding">
       <ix-icon name="lukk" aria-hidden="true" className="ix-icon"></ix-icon>
@@ -291,9 +291,9 @@ Ikonet støtter forståelsen av budskapet, men skal aldri være eneste informasj
 
 - **Annonsering via `<MessageRegion>`** — det synlige Message-elementet har bevisst *ingen* `role`/`aria-live`. I stedet legger komponenten meldingsteksten til som en egen node i en stabil, skjult `polite` live-region i `<MessageRegion>`. Stabile regioner er det som gjør annonsering pålitelig — en region som settes inn samtidig med innholdet annonseres ofte ikke. Hver melding blir en egen node (`aria-atomic="false"`), slik at flere meldinger som dukker opp tett etter hverandre alle leses opp fortløpende i tur, uten å avbryte hverandre.
 - **Stille ved sidelast** — meldinger som finnes ved første sidelast leses ikke opp automatisk (så en side full av meldinger ikke leser seg selv opp). Bruk `announceOnPageLoad` for å overstyre. Meldinger som settes inn senere annonseres automatisk.
-- **Statusikon** rendres som en dekorativ `<ix-icon data-badge name="…" aria-hidden="true">` — en sirkel i status-`fill` (følger `data-status`) med en lys glyf oppå (`info`, `hake` eller `utropstegn` per status). `aria-hidden="true"` holder den ute av tilgjengelighetstreet; varianten formidles av teksten.
-- **Fokusindikator** — meldingen får ingen ring rundt seg selv; kun lukkeknappen har sin egen `:focus-visible`-ring (fra `InteractiveIcon`). Lenker bruker `:focus-visible`.
-- **Lukkeknappen følger meldingens status** — lukkeknappen er en `InteractiveIcon` uten egen `status`, og arver derfor meldingens `data-status`. Pekehvil/trykk på krysset vises i meldingens status-farge automatisk.
+- **Statusikon** rendres som en dekorativ `<ix-icon data-badge name="…" aria-hidden="true">` — en sirkel i status-`fill` (følger `data-status`) med en lys glyf oppå (`info_i`, `check` eller `priority_high` per status). `aria-hidden="true"` holder den ute av tilgjengelighetstreet; varianten formidles av teksten.
+- **Fokusindikator** — meldingen får ingen ring rundt seg selv; kun lukkeknappen har sin egen `:focus-visible`-ring. Lenker bruker `:focus-visible`.
+
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -372,7 +372,7 @@ Trenger du `ix-message`-stylingen på HTML du setter sammen selv — uten React-
 | Lukkeknapp | `.ix-interactive-icon` (+ `.ix-message__close` for plassering) med `<ix-icon name="lukk">` |
 | Full bredde | `data-full-width` (strekker meldingen til full bredde av forelderen) |
 
-Statusikonet skrives som `<ix-icon data-badge name="…" aria-hidden="true">` som første barn av `.ix-message`. `data-badge` gir sirkelen, som følger status-`fill` via `data-status` på meldingen; glyfen settes med `name` (`info`, `hake` eller `utropstegn`).
+Statusikonet skrives som `<ix-icon data-badge name="…" aria-hidden="true">` som første barn av `.ix-message`. `data-badge` gir sirkelen, som følger status-`fill` via `data-status` på meldingen; glyfen settes med `name` (`info_i`, `check` eller `priority_high`).
 
 ### Annonsering for skjermlesere uten React
 
@@ -392,7 +392,7 @@ Den enkle varianten — å sette `role`/`aria-live` rett på `.ix-message`-eleme
 
 ```html
 <div class="ix-message" data-status="info" aria-live="polite">
-  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
   <div class="ix-message__body">
     <strong class="ix-message__title">Behandling pågår</strong>
     <p>Vi har mottatt søknaden din og behandler den nå</p>
@@ -404,7 +404,7 @@ Den enkle varianten — å sette `role`/`aria-live` rett på `.ix-message`-eleme
 </div>
 
 <div class="ix-message" data-status="info" data-full-width aria-live="polite">
-  <ix-icon data-badge name="info" aria-hidden="true"></ix-icon>
+  <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
   <div class="ix-message__body">
     <p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p>
   </div>

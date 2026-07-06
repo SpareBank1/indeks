@@ -35,10 +35,10 @@ const StatusExample: React.FC = () => {
                 <div className="ix-border-radius-md ix-border-width-default ix-p-sm ix-color-status-surface">
                     <HStack gap="2xs">
                         <div className="ikon-sirkel ix-color-status-fill">
-                            <Icon name="hake" size="lg" className="ix-color-foreground-inverse-default" />
+                            <Icon name="check" size="lg" className="ix-color-foreground-inverse-default" />
                         </div>
                         <div className="ikon-sirkel ix-color-status-fill-subtle ix-color-foreground-main-default">
-                            <Icon name="hake" size="lg" />
+                            <Icon name="check" size="lg" />
                         </div>
                     </HStack>
                     <Heading as="h1" size="sm" className="ix-color-foreground-main-default" addRecommendedSpacing>

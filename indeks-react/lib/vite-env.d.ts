@@ -14,7 +14,6 @@ declare module 'react' {
             };
             'ix-icon': React.DetailedHTMLProps<React.HTMLAttributes<IxIcon>, IxIcon> & {
                 name?: IconName;
-                materialdesignname?: string;
                 'data-size'?: 'sm' | 'md' | 'lg' | 'xl';
                 'aria-label'?: string;
                 'aria-labelledby'?: string;
@@ -36,6 +35,15 @@ declare module 'react' {
                 reverse?: boolean;
                 nowrap?: boolean;
                 gap?: import('./types/types').GapSize;
+            };
+            'ix-grid': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+                class?: string;
+                cols?: string;
+                rows?: string;
+                gap?: import('./types/types').GapSize;
+                align?: 'start' | 'end' | 'center' | 'stretch';
+                justify?: 'start' | 'end' | 'center' | 'stretch';
+                inline?: '' | boolean;
             };
         }
     }

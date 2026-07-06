@@ -1,0 +1,256 @@
+---
+title: Accordion
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/accordion.json';
+
+# Accordion
+
+Accordion viser og skjuler innhold i seksjoner. Den er nyttig når mye innhold skal gjøres oversiktlig: brukeren ser overskriftene og åpner kun det som er relevant. Komponenten bygger på native `<details>`/`<summary>`, så tastatur og skjermleser fungerer uten ekstra oppsett.
+
+## Egnet til
+
+- Vanlige spørsmål (FAQ) og hjelpeinnhold
+- Lange skjemaer eller innstillinger delt i logiske bolker
+- Sekundær informasjon som ikke alle trenger samtidig
+- Å gjøre tett innhold skannbart uten å skjule det helt
+
+## Uegnet til
+
+- Innhold brukeren må se for å komme videre — vis det åpent
+- Én enkelt seksjon — bruk heller en vanlig overskrift + tekst
+- Navigasjon mellom sider — bruk lenker eller meny
+- Når alt innholdet uansett må leses i rekkefølge
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Accordion>
+  <Accordion.Item defaultOpen>
+    <Accordion.Header>Hvordan logger jeg inn?</Accordion.Header>
+    <Accordion.Content>
+      <p>Du logger inn med BankID eller BankID på mobil øverst til høyre.</p>
+    </Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item>
+    <Accordion.Header>Hvordan endrer jeg passord?</Accordion.Header>
+    <Accordion.Content>
+      <p>Gå til Innstillinger → Sikkerhet og velg «Endre passord».</p>
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-accordion">
+  <details class="ix-accordion__item" open>
+    <summary class="ix-accordion__header">Hvordan logger jeg inn?</summary>
+    <div class="ix-accordion__content">
+      <p>Du logger inn med BankID eller BankID på mobil øverst til høyre.</p>
+    </div>
+  </details>
+  <details class="ix-accordion__item">
+    <summary class="ix-accordion__header">Hvordan endrer jeg passord?</summary>
+    <div class="ix-accordion__content">
+      <p>Gå til Innstillinger → Sikkerhet og velg «Endre passord».</p>
+    </div>
+  </details>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Default-åpne seksjoner
+
+Seksjonene er uavhengige — flere kan stå åpne samtidig. Marker de seksjonene som bør være åpne ved start med `defaultOpen`.
+
+```tsx live
+<Accordion>
+  <Accordion.Item defaultOpen>
+    <Accordion.Header>Første seksjon</Accordion.Header>
+    <Accordion.Content>
+      <p>Denne er åpen som standard.</p>
+    </Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item defaultOpen>
+    <Accordion.Header>Andre seksjon</Accordion.Header>
+    <Accordion.Content>
+      <p>Denne er også åpen — begge kan stå åpne samtidig.</p>
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion>
+```
+
+### Med prefiks-ikon
+
+`Accordion.Header` tar `ReactNode`, så du kan sette et ikon foran tittelen. Teksten er alltid hovedbæreren — ikonet er kun støtte.
+
+```tsx live
+<Accordion>
+  <Accordion.Item>
+    <Accordion.Header>
+      <Icon name="credit_card" /> Kort og betaling
+    </Accordion.Header>
+    <Accordion.Content>
+      <p>Administrer kortene dine, sperr kort og se betalinger.</p>
+    </Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item>
+    <Accordion.Header>
+      <Icon name="settings" /> Sikkerhet
+    </Accordion.Header>
+    <Accordion.Content>
+      <p>Endre passord og se påloggingshistorikk.</p>
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion>
+```
+
+### Rikt innhold
+
+Innholdet kan bestå av tekst, lister, lenker og andre komponenter.
+
+```tsx live
+<Accordion>
+  <Accordion.Item defaultOpen>
+    <Accordion.Header>Hva er inkludert?</Accordion.Header>
+    <Accordion.Content>
+      <p>Avtalen inkluderer blant annet:</p>
+      <ListElement as="ul">
+        <li>Nettbank og mobilbank</li>
+        <li>Gratis kortbruk i Norge</li>
+        <li>Varsling på SMS</li>
+      </ListElement>
+      <p>
+        Les mer i <LinkText href="#">vilkårene</LinkText>.
+      </p>
+    </Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item>
+    <Accordion.Header>Hva koster det?</Accordion.Header>
+    <Accordion.Content>
+      <p>Se gjeldende priser i prislisten.</p>
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion>
+```
+
+## Retningslinjer
+
+### Innhold og formulering
+
+- Skriv korte, beskrivende headere som gir mening lest alene.
+- Start med det viktigste ordet i headeren — den skal være lett å skanne.
+- Unngå at brukeren må åpne seksjoner for å forstå hva de inneholder.
+
+### Unngå overdreven nøsting
+
+Accordion i accordion blir fort uoversiktlig. Vurder å dele opp innholdet på en annen måte hvis du trenger flere nivåer.
+
+### Default-åpne seksjoner
+
+Marker den eller de viktigste seksjonene med `defaultOpen` slik at brukeren ser noe innhold med en gang. Seksjonene er uavhengige, så du kan starte flere åpne samtidig.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Skriv kort og beskrivende header-tekst** — headeren er klikkflaten og må gi mening alene. Et valgfritt prefiks-ikon støtter, men teksten er alltid hovedbæreren.
+- **Plasser `Accordion.Header` først** i hver `Accordion.Item` — native `<details>` krever at `<summary>` er første barn.
+- **Bruk overskriftsnivå ved behov** — inngår headerne i en dokumentstruktur, kan du legge en `<Heading>`/`<h3>` inni `Accordion.Header` for korrekt overskriftshierarki.
+
+### Hva komponenten gjør automatisk
+
+- **Disclosure-semantikk** — header er en native `<summary>`: fokuserbar med Tab, åpnes/lukkes med Enter og Space, og åpen/lukket-tilstand annonseres av skjermlesere. Ingen ekstra ARIA er nødvendig.
+- **Programmessig kobling** — innholdet ligger inne i samme `<details>` som headeren, så de er knyttet sammen uten `aria-controls`/`id`.
+- **Tilstandsindikator** — en chevron roterer for å vise åpen/lukket. Animasjonen er kort og respekterer `prefers-reduced-motion`.
+- **Fokusindikator** — tydelig fokusring på header (`:focus-visible`).
+
+:::note Avvik fra akseptansekriteriene: `<summary>` framfor `<button>`
+Kriteriene beskriver en button-basert accordion (`<button aria-expanded aria-controls>` + panel med matchende `id`). Vi bygger i stedet på native `<details>`/`<summary>`, som oppfyller samme intensjon — fokuserbar disclosure-knapp, Enter/Space og åpen/lukket-tilstand annonsert av skjermlesere — uten eksplisitt `aria-expanded`/`aria-controls`. Innholdet er programmessig knyttet til headeren ved å ligge inne i samme `<details>`, så aria-koblingen er overflødig. Dette er enklere, har bred innebygd støtte og følger samme native-tilnærming som Digdir/Designsystemet.
+:::
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+### `Accordion`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `children` | `ReactNode` | | `Accordion.Item`-seksjoner |
+| `className` | `string` | | Ekstra CSS-klasser på rot-elementet (`<div class="ix-accordion">`) |
+
+### `Accordion.Item`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `children` | `ReactNode` | | En `Accordion.Header` (først) og en `Accordion.Content` |
+| `defaultOpen` | `boolean` | `false` | Start seksjonen åpen. Speiler native `<details open>` |
+| `className` | `string` | | Ekstra CSS-klasser på `<details>` |
+
+### `Accordion.Header`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `children` | `ReactNode` | | Tittel (kort og beskrivende), kan inkludere et prefiks-ikon |
+| `className` | `string` | | Ekstra CSS-klasser på `<summary>` |
+
+### `Accordion.Content`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `children` | `ReactNode` | | Innholdet — tekst, lister eller andre komponenter |
+| `className` | `string` | | Ekstra CSS-klasser på innholds-`<div>` |
+
+## Tilpasning med CSS
+
+Trenger du `ix-accordion`-stylingen på HTML du setter sammen selv, kan du bruke klassene direkte. Native `<details>`/`<summary>` gir semantikk og tastatur — ingen JavaScript er nødvendig.
+
+### Tilgjengelige klasser
+
+| Element/tilstand | Selektor / attributt |
+|------------------|----------------------|
+| Rot (gruppe) | `.ix-accordion` på et container-element (f.eks. `<div>`) |
+| Seksjon | `.ix-accordion__item` på `<details>` |
+| Åpen seksjon | `[open]` på `<details>` (native) |
+| Header | `.ix-accordion__header` på `<summary>` (første barn) |
+| Innhold | `.ix-accordion__content` på `<div>` (etter header) |
+
+### Eksempel: ren HTML
+
+```html
+<div class="ix-accordion">
+  <details class="ix-accordion__item" open>
+    <summary class="ix-accordion__header">Første seksjon</summary>
+    <div class="ix-accordion__content">
+      <p>Innhold i første seksjon.</p>
+    </div>
+  </details>
+  <details class="ix-accordion__item">
+    <summary class="ix-accordion__header">Andre seksjon</summary>
+    <div class="ix-accordion__content">
+      <p>Innhold i andre seksjon.</p>
+    </div>
+  </details>
+</div>
+```
+
+Seksjonene er uavhengige native `<details>` — flere kan stå åpne samtidig. Den myke åpne/lukke-animasjonen er en progressiv CSS-enhancement; nettlesere uten støtte hopper bare åpent/lukket.
+

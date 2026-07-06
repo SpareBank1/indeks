@@ -1,5 +1,49 @@
 # @sb1/indeks-css
 
+## 0.15.0
+
+## 0.14.0
+
+### Minor Changes
+
+-   a73dbc2: Card: byttbart chevron-ikon på klikkbart kort.
+
+    -   **`chevronIcon`-prop** lar deg bytte ut chevronen som viser at kortet er klikkbart.
+        Chevronen er et ekte `ix-icon` (klassen `.ix-card__chevron`) med `pil-hoyre` som standard,
+        i stedet for et hardkodet tegn.
+
+-   a73dbc2: Gjør det tydelig at et `Card` er klikkbart, også på touch. Før viste `.ix-card--clickable` at kortet var klikkbart kun ved `:hover` — men hover finnes ikke på mobil, så et klikkbart kort så helt likt ut som et statisk. Nå har klikkbart kort alltid en synlig chevron som viser at det kan trykkes. Kortet er flatt (ingen skygge): `:hover` gir en bakgrunnstone, `:active` viser at kortet trykkes (viktig på touch, der `:hover` mangler), og `:focus-visible` gir en fokusring. Hover-overgangen er konsistent for alle klikkbare varianter — også `<a>` — uavhengig av global anker-styling (f.eks. en `a { transition: color }`-regel fra en CSS-reset). `prefers-reduced-motion` respekteres.
+
+    React-wrapperen `<Card>` rendrer nå et ekte semantisk element — `<a>` ved `href`, `<button>` ved `onClick`, ellers `<div>` — i stedet for en `<div>` med `role`/`onClick`/`window.location.href`. Dette gir korrekt rolle, tastaturstøtte og fokus gratis, og fjerner den tidligere `javascript:`-XSS-risikoen.
+
+## 0.13.0
+
+### Minor Changes
+
+-   3e5f688: Ny komponent: Accordion
+
+    Accordion viser og skjuler innhold i seksjoner. Den bygger på native `<details>`/`<summary>`, så tastatur (Tab, Enter/Space) og skjermleser-semantikk (disclosure med åpen/lukket-tilstand) fungerer uten ekstra ARIA — og uten JavaScript.
+
+    -   Ren CSS: ingen web-komponent. Seksjonene er uavhengige (flere kan stå åpne samtidig). Den myke åpne/lukke-animasjonen er en progressiv CSS-enhancement (`interpolate-size` + `::details-content`); nettlesere uten støtte hopper bare åpent/lukket, fortsatt fullt funksjonelt.
+    -   React-laget er et tynt, compound-API: `Accordion` (en `<div class="ix-accordion">`) med `Accordion.Item` (→ `<details>`), `Accordion.Header` (→ `<summary>`) og `Accordion.Content`. `defaultOpen` på `Accordion.Item` speiler native `<details open>`.
+    -   Fullt brukbar uten React via klassene `.ix-accordion`, `.ix-accordion__item`, `.ix-accordion__header` og `.ix-accordion__content` på native `<details>`/`<summary>`.
+    -   Visuelle states (default, hover, active, focus, expanded) er definert; en chevron roterer for å vise tilstand, og animasjonen respekterer `prefers-reduced-motion`. Fokusring kun på header.
+    -   Bevisst avvik fra akseptansekriteriene: header er `<summary>` framfor `<button aria-expanded aria-controls>`. Native disclosure oppfyller samme intensjon (fokuserbar knapp, Enter/Space, annonsert tilstand) uten eksplisitt aria-kobling, siden innholdet ligger inne i samme `<details>`. Dokumentert i tilgjengelighets-tabellen.
+
+## 0.12.0
+
+### Minor Changes
+
+-   16d448a: Ny Grid-komponent for todimensjonal layout
+
+    Grid er en layout-primitiv for å stable innhold i to dimensjoner. Den finnes som:
+
+    -   Custom element: `<ix-grid cols="3" gap="md">`
+    -   CSS-klasse: `.ix-grid` med modifier-klasser
+    -   React-komponent: `<Grid cols={3} gap="md">`
+
+    Støtter faste kolonner (1-12), responsiv layout (auto-fit/auto-fill), align/justify, og colspan/rowspan på barn.
+
 ## 0.11.0
 
 ### Minor Changes

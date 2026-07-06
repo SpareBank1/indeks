@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { ICON_NAMES as ICON_NAMES_REACT } from './icon-types';
-import { ICON_NAMES as ICON_NAMES_WEB } from '@sb1/indeks-web';
+import { COMMON_ICON_NAMES as COMMON_REACT } from './icon-types';
+import { COMMON_ICON_NAMES as COMMON_WEB } from '@sb1/indeks-web';
 
-describe('ICON_NAMES sync', () => {
-    it('indeks-react og indeks-web har identiske ICON_NAMES', () => {
-        expect(ICON_NAMES_REACT).toStrictEqual(ICON_NAMES_WEB);
+// COMMON_ICON_NAMES dupliseres bevisst i indeks-react og indeks-web (React skal ikke importere
+// web-modulen i library-kode). Denne testen — som er den ene tillatte web-importen — verifiserer
+// at de to listene holdes i synk.
+describe('COMMON_ICON_NAMES sync', () => {
+    it('indeks-react og indeks-web har identiske COMMON_ICON_NAMES', () => {
+        expect(COMMON_REACT).toStrictEqual(COMMON_WEB);
     });
 });
