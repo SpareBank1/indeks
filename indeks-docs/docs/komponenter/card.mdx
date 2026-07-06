@@ -95,7 +95,7 @@ trenger ikke peke på det for å forstå at det kan trykkes.
   <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
     <h3>Klikkbart</h3>
     <p>Chevron i hviletilstand, helt uten hover.</p>
-    <ix-icon class="ix-card__chevron" name="pil-hoyre" data-size="lg" aria-hidden="true"></ix-icon>
+    <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
   </a>
 </div>
 ```
@@ -127,10 +127,10 @@ Sett `onClick` når kortet utfører en handling. Det rendres som `<button>`.
 
 ### Eget chevron-ikon
 
-Klikkbart kort viser `pil-hoyre` som standard. Sett `chevronIcon` for å bytte ikon.
+Klikkbart kort viser `chevron_right` som standard. Sett `chevronIcon` for å bytte ikon.
 
 ```tsx live
-<Card padding="md" href="https://www.sparebank1.no" chevronIcon="apne-ekstern">
+<Card padding="md" href="https://www.sparebank1.no" chevronIcon="open_in_new">
   <Heading as="h3" size="sm">Åpner i ny fane</Heading>
   <Text>Chevronen er byttet til et eksternt-lenke-ikon.</Text>
 </Card>
@@ -194,7 +194,7 @@ på touch (sikt mot minst 44×44 px).
 |------|------|----------|-------------|
 | `href` | `string` | | Gjør kortet til en lenke (`<a>`) for navigasjon. Aktiverer klikkbar styling |
 | `onClick` | `(e) => void` | | Gjør kortet til en knapp (`<button>`) for handling. Aktiverer klikkbar styling |
-| `chevronIcon` | `IconName` | `'pil-hoyre'` | Ikon for affordanse-chevronen på klikkbart kort |
+| `chevronIcon` | `IconName` | `'chevron_right'` | Ikon for affordanse-chevronen på klikkbart kort |
 | `padding` | `Size` | | Indre luft via `ix-p-*`-klasse |
 | `className` | `string` | | Ekstra klasser |
 
@@ -215,7 +215,7 @@ bruke klassene direkte. Husk at klikkbart kort skal være et `<a>` eller `<butto
 | Chevron-ikon | `.ix-card__chevron` (et `ix-icon`) |
 
 `.ix-card` har kantlinje som standard — ingen ekstra klasse trengs. Klikkbart kort trenger et
-chevron-ikon som siste barn: `<ix-icon class="ix-card__chevron" name="pil-hoyre"
+chevron-ikon som siste barn: `<ix-icon class="ix-card__chevron" name="chevron_right"
 aria-hidden="true">`.
 
 ### Eksempel: ren HTML
@@ -231,7 +231,7 @@ aria-hidden="true">`.
 <a class="ix-card ix-card--clickable ix-p-md" href="/konto">
   <h3>Sparekonto</h3>
   <p>Se saldo</p>
-  <ix-icon class="ix-card__chevron" name="pil-hoyre" data-size="lg" aria-hidden="true"></ix-icon>
+  <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
 </a>
 ```
 

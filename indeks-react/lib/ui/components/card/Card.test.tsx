@@ -54,15 +54,15 @@ describe('Card', () => {
         const { container } = render(<Card href="https://example.com">Lenke</Card>);
         const chevron = container.querySelector('ix-icon.ix-card__chevron');
         expect(chevron).not.toBeNull();
-        expect(chevron?.getAttribute('name')).toBe('pil-hoyre');
+        expect(chevron?.getAttribute('name')).toBe('chevron_right');
     });
 
     it('skal kunne overstyre chevron-ikonet via chevronIcon', () => {
         const { container } = render(
-            <Card onClick={() => {}} chevronIcon="pil-venstre">
+            <Card onClick={() => {}} chevronIcon="chevron_left">
                 Handling
             </Card>
         );
-        expect(container.querySelector('ix-icon.ix-card__chevron')?.getAttribute('name')).toBe('pil-venstre');
+        expect(container.querySelector('ix-icon.ix-card__chevron')?.getAttribute('name')).toBe('chevron_left');
     });
 });

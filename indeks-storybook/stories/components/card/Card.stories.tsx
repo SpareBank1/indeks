@@ -35,7 +35,7 @@ export const CardWithAction: Story = {
 };
 
 export const CustomChevron: Story = {
-    args: { href: 'https://example.com', chevronIcon: 'apne-ekstern' },
+    args: { href: 'https://example.com', chevronIcon: 'open_in_new' },
     render: (args) => {
         return (
             <Card padding="md" {...args}>

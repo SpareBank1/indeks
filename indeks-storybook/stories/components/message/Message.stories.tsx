@@ -118,7 +118,7 @@ export const HTML: Story = {
                     type="button"
                     aria-label="Lukk melding"
                 >
-                    <ix-icon name="lukk" aria-hidden="true" class="ix-icon" />
+                    <ix-icon name="close" aria-hidden="true" class="ix-icon" />
                 </button>
             </div>
 
@@ -132,7 +132,7 @@ export const HTML: Story = {
                     type="button"
                     aria-label="Lukk melding"
                 >
-                    <ix-icon name="lukk" aria-hidden="true" class="ix-icon" />
+                    <ix-icon name="close" aria-hidden="true" class="ix-icon" />
                 </button>
             </div>
         </ix-stack>

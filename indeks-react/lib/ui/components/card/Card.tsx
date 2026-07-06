@@ -43,7 +43,7 @@ const Action = ({ href, children, className, onClick, ...rest }: ActionProps) =>
 };
 
 export const Card = forwardRef<HTMLElement, CardProps>(
-    ({ children, className, href, onClick, chevronIcon = 'pil-hoyre', ...rest }, ref) => {
+    ({ children, className, href, onClick, chevronIcon = 'chevron_right', ...rest }, ref) => {
         const isClickable = Boolean(href || onClick);
 
         const getSpacingClassName = () => {

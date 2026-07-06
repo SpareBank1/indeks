@@ -183,7 +183,7 @@ En valgfri lukkeknapp lar brukeren skjule meldingen. I React skjuler komponenten
     <p>Du kan trygt lukke denne meldingen</p>
   </div>
   <button className="ix-interactive-icon ix-message__close" type="button" aria-label="Lukk melding">
-    <ix-icon name="lukk" aria-hidden="true" className="ix-icon"></ix-icon>
+    <ix-icon name="close" aria-hidden="true" className="ix-icon"></ix-icon>
   </button>
 </div>
 ```
@@ -223,7 +223,7 @@ Sett `fullWidth` (React) / `data-full-width` (HTML) for at meldingen skal strekk
     <ix-icon data-badge name="info_i" aria-hidden="true"></ix-icon>
     <div className="ix-message__body"><p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p></div>
     <button className="ix-interactive-icon ix-message__close" type="button" aria-label="Lukk melding">
-      <ix-icon name="lukk" aria-hidden="true" className="ix-icon"></ix-icon>
+      <ix-icon name="close" aria-hidden="true" className="ix-icon"></ix-icon>
     </button>
   </div>
 </ix-stack>
@@ -369,7 +369,7 @@ Trenger du `ix-message`-stylingen på HTML du setter sammen selv — uten React-
 | Tekstblokk | `.ix-message__body` |
 | Tittel | `.ix-message__title` |
 | Lenke | `.ix-link-text` (vanlig Indeks-lenke — ingen message-spesifikk klasse) |
-| Lukkeknapp | `.ix-interactive-icon` (+ `.ix-message__close` for plassering) med `<ix-icon name="lukk">` |
+| Lukkeknapp | `.ix-interactive-icon` (+ `.ix-message__close` for plassering) med `<ix-icon name="close">` |
 | Full bredde | `data-full-width` (strekker meldingen til full bredde av forelderen) |
 
 Statusikonet skrives som `<ix-icon data-badge name="…" aria-hidden="true">` som første barn av `.ix-message`. `data-badge` gir sirkelen, som følger status-`fill` via `data-status` på meldingen; glyfen settes med `name` (`info_i`, `check` eller `priority_high`).
@@ -399,7 +399,7 @@ Den enkle varianten — å sette `role`/`aria-live` rett på `.ix-message`-eleme
     <a class="ix-link-text" href="/saksbehandling">Les mer om saksbehandling</a>
   </div>
   <button class="ix-interactive-icon ix-message__close" type="button" aria-label="Lukk melding">
-    <ix-icon name="lukk" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="close" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
 </div>
 
@@ -409,7 +409,7 @@ Den enkle varianten — å sette `role`/`aria-live` rett på `.ix-message`-eleme
     <p>Vi oppdaterer nettbanken i natt mellom 02 og 04</p>
   </div>
   <button class="ix-interactive-icon ix-message__close" type="button" aria-label="Lukk melding">
-    <ix-icon name="lukk" aria-hidden="true" class="ix-icon"></ix-icon>
+    <ix-icon name="close" aria-hidden="true" class="ix-icon"></ix-icon>
   </button>
 </div>
 ```
