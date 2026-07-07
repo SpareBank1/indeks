@@ -25,7 +25,7 @@ export type RadioGroupProps = {
     className?: string;
     options?: RadioOption[];
     children?: ReactNode;
-    /** Visuell variant. `'chip'` styler hvert valg som en pill — brukes av RadioChipGroup. Standard er vanlig radioknapp. */
+    /** Visuell variant. `'chip'` styler hvert valg som en pill (chip). Standard er vanlig radioknapp. */
     variant?: 'chip';
     /** Størrelse — kun relevant for `variant="chip"`. @default "md" */
     size?: 'sm' | 'md';

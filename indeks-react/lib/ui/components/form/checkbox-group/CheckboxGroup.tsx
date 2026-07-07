@@ -23,7 +23,7 @@ export type CheckboxGroupProps = {
     className?: string;
     options?: CheckboxOption[];
     children?: ReactNode;
-    /** Visuell variant. `'chip'` styler hvert valg som en pill — brukes av CheckboxChipGroup. Standard er vanlig checkbox. */
+    /** Visuell variant. `'chip'` styler hvert valg som en pill (chip). Standard er vanlig checkbox. */
     variant?: 'chip';
     /** Størrelse — kun relevant for `variant="chip"`. @default "md" */
     size?: 'sm' | 'md';

@@ -45,11 +45,11 @@ Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`,
 <TabItem value="react" label="React">
 
 ```tsx live
-<RadioChipGroup legend="Velg periode" name="periode" defaultValue="3m">
-  <RadioChip value="1m" label="1 måned" />
-  <RadioChip value="3m" label="3 måneder" />
-  <RadioChip value="12m" label="12 måneder" />
-</RadioChipGroup>
+<RadioGroup variant="chip" legend="Velg periode" name="periode" defaultValue="3m">
+  <RadioButton value="1m" label="1 måned" />
+  <RadioButton value="3m" label="3 måneder" />
+  <RadioButton value="12m" label="12 måneder" />
+</RadioGroup>
 ```
 
 </TabItem>
@@ -87,11 +87,11 @@ Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`,
 <TabItem value="react" label="React">
 
 ```tsx live
-<RadioChipGroup legend="Velg periode" name="periode-liten" size="sm" defaultValue="3m">
-  <RadioChip value="1m" label="1 måned" />
-  <RadioChip value="3m" label="3 måneder" />
-  <RadioChip value="12m" label="12 måneder" />
-</RadioChipGroup>
+<RadioGroup variant="chip" legend="Velg periode" name="periode-liten" size="sm" defaultValue="3m">
+  <RadioButton value="1m" label="1 måned" />
+  <RadioButton value="3m" label="3 måneder" />
+  <RadioButton value="12m" label="12 måneder" />
+</RadioGroup>
 ```
 
 </TabItem>
@@ -125,10 +125,10 @@ Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn
 <TabItem value="react" label="React">
 
 ```tsx live
-<RadioChipGroup legend="Ønsker du nyhetsbrev?" name="nyhetsbrev">
-  <RadioChip value="ja" label="Ja" />
-  <RadioChip value="nei" label="Nei" />
-</RadioChipGroup>
+<RadioGroup variant="chip" legend="Ønsker du nyhetsbrev?" name="nyhetsbrev">
+  <RadioButton value="ja" label="Ja" />
+  <RadioButton value="nei" label="Nei" />
+</RadioGroup>
 ```
 
 </TabItem>
@@ -157,22 +157,25 @@ Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn
 
 ## Props / API
 
-### `RadioChipGroup`
+Radio chip er `RadioGroup` med `variant="chip"`. Se [RadioGroup](../skjema/radio-group) for full API — tabellene under viser propsene som er relevante for chip-varianten.
+
+### `RadioGroup`
 
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
+| `variant` | `'chip'` | | Sett til `'chip'` for chip-styling |
 | `legend` | `string` | | **Påkrevd.** Tilgjengelig navn for gruppen. i18n — ingen fallback |
 | `name` | `string` | | Felles `name` for alle radioknappene. Genereres automatisk hvis utelatt |
 | `value` | `string` | | Valgt verdi (kontrollert) |
 | `defaultValue` | `string` | | Valgt verdi (ukontrollert) |
 | `onChange` | `(value: string) => void` | | Kalles med valgt verdi når brukeren bytter |
-| `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
+| `size` | `'sm' \| 'md'` | `'md'` | Størrelse — kun relevant for `variant="chip"` |
 | `description` | `string` | | Hjelpetekst over alternativene |
 | `errorMessage` | `string` | | Feilmelding — setter `aria-invalid` på gruppen |
 | `disabled` | `boolean` | | Deaktiverer hele gruppen |
 | `hideLegend` | `boolean` | | Skjuler legend visuelt, men beholder den for skjermlesere |
 
-### `RadioChip`
+### `RadioButton`
 
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|

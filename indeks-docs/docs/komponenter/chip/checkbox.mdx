@@ -45,11 +45,11 @@ Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"
 <TabItem value="react" label="React">
 
 ```tsx live
-<CheckboxChipGroup legend="Velg interesser" name="interesser" defaultValue={['sport']}>
-  <CheckboxChip value="sport" label="Sport" />
-  <CheckboxChip value="musikk" label="Musikk" />
-  <CheckboxChip value="reise" label="Reise" />
-</CheckboxChipGroup>
+<CheckboxGroup variant="chip" legend="Velg interesser" name="interesser" defaultValue={['sport']}>
+  <CheckboxButton value="sport" label="Sport" />
+  <CheckboxButton value="musikk" label="Musikk" />
+  <CheckboxButton value="reise" label="Reise" />
+</CheckboxGroup>
 ```
 
 </TabItem>
@@ -87,11 +87,11 @@ Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"
 <TabItem value="react" label="React">
 
 ```tsx live
-<CheckboxChipGroup legend="Velg interesser" name="interesser-liten" size="sm" defaultValue={['sport']}>
-  <CheckboxChip value="sport" label="Sport" />
-  <CheckboxChip value="musikk" label="Musikk" />
-  <CheckboxChip value="reise" label="Reise" />
-</CheckboxChipGroup>
+<CheckboxGroup variant="chip" legend="Velg interesser" name="interesser-liten" size="sm" defaultValue={['sport']}>
+  <CheckboxButton value="sport" label="Sport" />
+  <CheckboxButton value="musikk" label="Musikk" />
+  <CheckboxButton value="reise" label="Reise" />
+</CheckboxGroup>
 ```
 
 </TabItem>
@@ -120,22 +120,25 @@ Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"
 
 ## Props / API
 
-### `CheckboxChipGroup`
+Checkbox chip er `CheckboxGroup` med `variant="chip"`. Se [CheckboxGroup](../skjema/checkbox-group) for full API — tabellene under viser propsene som er relevante for chip-varianten.
+
+### `CheckboxGroup`
 
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
+| `variant` | `'chip'` | | Sett til `'chip'` for chip-styling |
 | `legend` | `string` | | **Påkrevd.** Tilgjengelig navn for gruppen. i18n — ingen fallback |
 | `name` | `string` | | Felles `name` for alle checkboxene. Propageres når satt |
 | `value` | `string[]` | | Valgte verdier (kontrollert) |
 | `defaultValue` | `string[]` | | Valgte verdier (ukontrollert) |
 | `onChange` | `(values: string[]) => void` | | Kalles med hele det oppdaterte arrayet når brukeren toggler |
-| `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
+| `size` | `'sm' \| 'md'` | `'md'` | Størrelse — kun relevant for `variant="chip"` |
 | `description` | `string` | | Hjelpetekst over alternativene |
 | `errorMessage` | `string` | | Feilmelding — setter `aria-invalid` på gruppen |
 | `disabled` | `boolean` | | Deaktiverer hele gruppen |
 | `hideLegend` | `boolean` | | Skjuler legend visuelt, men beholder den for skjermlesere |
 
-### `CheckboxChip`
+### `CheckboxButton`
 
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|

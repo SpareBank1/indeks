@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import {
-    CheckboxChip,
-    CheckboxChipGroup,
+    CheckboxButton,
+    CheckboxGroup,
     Chip,
-    RadioChip,
-    RadioChipGroup,
+    RadioButton,
+    RadioGroup,
     RemovableChip,
 } from '@sb1/indeks-react';
 
@@ -114,69 +114,70 @@ export const RemovableHTML: Story = {
 export const RadioChipGruppe: Story = {
     name: 'Radio chip – gruppe',
     render: () => (
-        <RadioChipGroup legend="Velg periode" name="periode" defaultValue="3m">
-            <RadioChip value="1m" label="1 måned" />
-            <RadioChip value="3m" label="3 måneder" />
-            <RadioChip value="12m" label="12 måneder" />
-        </RadioChipGroup>
+        <RadioGroup variant="chip" legend="Velg periode" name="periode" defaultValue="3m">
+            <RadioButton value="1m" label="1 måned" />
+            <RadioButton value="3m" label="3 måneder" />
+            <RadioButton value="12m" label="12 måneder" />
+        </RadioGroup>
     ),
 };
 
 export const RadioChipLiten: Story = {
     name: 'Radio chip – liten',
     render: () => (
-        <RadioChipGroup legend="Velg periode" name="periode-sm" size="sm" defaultValue="3m">
-            <RadioChip value="1m" label="1 måned" />
-            <RadioChip value="3m" label="3 måneder" />
-            <RadioChip value="12m" label="12 måneder" />
-        </RadioChipGroup>
+        <RadioGroup variant="chip" legend="Velg periode" name="periode-sm" size="sm" defaultValue="3m">
+            <RadioButton value="1m" label="1 måned" />
+            <RadioButton value="3m" label="3 måneder" />
+            <RadioButton value="12m" label="12 måneder" />
+        </RadioGroup>
     ),
 };
 
 export const RadioChipDeaktivert: Story = {
     name: 'Radio chip – deaktivert',
     render: () => (
-        <RadioChipGroup legend="Velg periode" name="periode-disabled" defaultValue="3m" disabled>
-            <RadioChip value="1m" label="1 måned" />
-            <RadioChip value="3m" label="3 måneder" />
-            <RadioChip value="12m" label="12 måneder" />
-        </RadioChipGroup>
+        <RadioGroup variant="chip" legend="Velg periode" name="periode-disabled" defaultValue="3m" disabled>
+            <RadioButton value="1m" label="1 måned" />
+            <RadioButton value="3m" label="3 måneder" />
+            <RadioButton value="12m" label="12 måneder" />
+        </RadioGroup>
     ),
 };
 
 export const RadioChipFeilmelding: Story = {
     name: 'Radio chip – feilmelding',
     render: () => (
-        <RadioChipGroup
+        <RadioGroup
+            variant="chip"
             legend="Velg periode"
             name="periode-error"
             errorMessage="Du må velge en periode"
         >
-            <RadioChip value="1m" label="1 måned" />
-            <RadioChip value="3m" label="3 måneder" />
-            <RadioChip value="12m" label="12 måneder" />
-        </RadioChipGroup>
+            <RadioButton value="1m" label="1 måned" />
+            <RadioButton value="3m" label="3 måneder" />
+            <RadioButton value="12m" label="12 måneder" />
+        </RadioGroup>
     ),
 };
 
 export const RadioChipKunLesing: Story = {
     name: 'Radio chip – skrivebeskyttet',
     render: () => (
-        <RadioChipGroup legend="Velg periode" name="periode-readonly" defaultValue="3m" readOnly>
-            <RadioChip value="1m" label="1 måned" />
-            <RadioChip value="3m" label="3 måneder" />
-            <RadioChip value="12m" label="12 måneder" />
-        </RadioChipGroup>
+        <RadioGroup variant="chip" legend="Velg periode" name="periode-readonly" defaultValue="3m" readOnly>
+            <RadioButton value="1m" label="1 måned" />
+            <RadioButton value="3m" label="3 måneder" />
+            <RadioButton value="12m" label="12 måneder" />
+        </RadioGroup>
     ),
 };
 
 export const RadioChipJaNei: Story = {
     name: 'Radio chip – ja/nei',
     render: () => (
-        <RadioChipGroup legend="Ønsker du nyhetsbrev?" name="nyhetsbrev">
-            <RadioChip value="ja" label="Ja" />
-            <RadioChip value="nei" label="Nei" />
-        </RadioChipGroup>
+        <RadioGroup variant="chip" legend="Ønsker du nyhetsbrev?" name="nyhetsbrev">
+            <RadioButton value="ja" label="Ja" />
+            <RadioButton value="nei" label="Nei" />
+        </RadioGroup>
     ),
 };
 
@@ -207,22 +208,22 @@ export const RadioChipHTML: Story = {
 export const CheckboxChipGruppe: Story = {
     name: 'Checkbox chip – gruppe',
     render: () => (
-        <CheckboxChipGroup legend="Velg interesser" name="interesser" defaultValue={['sport']}>
-            <CheckboxChip value="sport" label="Sport" />
-            <CheckboxChip value="musikk" label="Musikk" />
-            <CheckboxChip value="reise" label="Reise" />
-        </CheckboxChipGroup>
+        <CheckboxGroup variant="chip" legend="Velg interesser" name="interesser" defaultValue={['sport']}>
+            <CheckboxButton value="sport" label="Sport" />
+            <CheckboxButton value="musikk" label="Musikk" />
+            <CheckboxButton value="reise" label="Reise" />
+        </CheckboxGroup>
     ),
 };
 
 export const CheckboxChipLiten: Story = {
     name: 'Checkbox chip – liten',
     render: () => (
-        <CheckboxChipGroup legend="Velg interesser" name="interesser-sm" size="sm" defaultValue={['sport']}>
-            <CheckboxChip value="sport" label="Sport" />
-            <CheckboxChip value="musikk" label="Musikk" />
-            <CheckboxChip value="reise" label="Reise" />
-        </CheckboxChipGroup>
+        <CheckboxGroup variant="chip" legend="Velg interesser" name="interesser-sm" size="sm" defaultValue={['sport']}>
+            <CheckboxButton value="sport" label="Sport" />
+            <CheckboxButton value="musikk" label="Musikk" />
+            <CheckboxButton value="reise" label="Reise" />
+        </CheckboxGroup>
     ),
 };
 

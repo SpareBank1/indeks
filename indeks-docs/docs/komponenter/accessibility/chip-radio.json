@@ -9,12 +9,12 @@
     },
     {
       "summary": "Bruk radio chip kun når nøyaktig ett valg er gyldig",
-      "details": "Radio chip er for gjensidig utelukkende valg (én-av-mange). Skal brukeren kunne velge flere samtidig, er det feil semantikk — bruk checkbox-chip i stedet. Hvert RadioChip må ha en kort, beskrivende label.",
+      "details": "Radio chip er for gjensidig utelukkende valg (én-av-mange). Skal brukeren kunne velge flere samtidig, er det feil semantikk — bruk checkbox-chip i stedet. Hvert valg må ha en kort, beskrivende label.",
       "wcag": ["4.1.2", "1.3.1"]
     },
     {
       "summary": "Gi hvert valg en kort og tydelig label",
-      "details": "Label-teksten på hvert RadioChip er det tilgjengelige navnet for valget. Den skal være kort og enkel å skanne — f.eks. «1 måned». i18n: komponenten har ingen hardkodet fallback.",
+      "details": "Label-teksten på hvert valg er det tilgjengelige navnet for valget. Den skal være kort og enkel å skanne — f.eks. «1 måned». i18n: komponenten har ingen hardkodet fallback.",
       "wcag": ["2.4.6", "1.3.1"]
     },
     {

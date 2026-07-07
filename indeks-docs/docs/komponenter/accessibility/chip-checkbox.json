@@ -9,12 +9,12 @@
     },
     {
       "summary": "Bruk checkbox chip når flere valg kan kombineres",
-      "details": "Checkbox chip er for uavhengige valg der null, ett eller flere kan være aktive samtidig. Skal brukeren kun kunne velge ett alternativ, er det feil semantikk — bruk radio chip i stedet. Hver CheckboxChip må ha en kort, beskrivende label.",
+      "details": "Checkbox chip er for uavhengige valg der null, ett eller flere kan være aktive samtidig. Skal brukeren kun kunne velge ett alternativ, er det feil semantikk — bruk radio chip i stedet. Hvert valg må ha en kort, beskrivende label.",
       "wcag": ["4.1.2", "1.3.1"]
     },
     {
       "summary": "Gi hvert valg en kort og tydelig label",
-      "details": "Label-teksten på hver CheckboxChip er det tilgjengelige navnet for valget. Den skal være kort og enkel å skanne — f.eks. «Sport». i18n: komponenten har ingen hardkodet fallback.",
+      "details": "Label-teksten på hvert valg er det tilgjengelige navnet for valget. Den skal være kort og enkel å skanne — f.eks. «Sport». i18n: komponenten har ingen hardkodet fallback.",
       "wcag": ["2.4.6", "1.3.1"]
     },
     {
