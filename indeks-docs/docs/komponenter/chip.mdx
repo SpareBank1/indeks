@@ -1,0 +1,93 @@
+---
+title: Chip
+---
+
+# Chip
+
+Chip er små, interaktive komponenter som lar brukeren gjøre raske valg, filtrere innhold eller trigge handlinger. Chips brukes ofte i grupper og gir en kompakt og oversiktlig måte å presentere valg på.
+
+Alle chips deler samme visuelle grunnmur — pill-form, to størrelser (`md`/`sm`), fokusindikator og tilstandsfarger — men semantikk og oppførsel velges ut fra hvilken type du bruker.
+
+## Egnet til
+
+- Filtrering av innhold (f.eks. kategorier eller søkefilter)
+- Hurtigvalg og enkle beslutninger
+- Vise aktive valg som kan fjernes
+- Handlinger med lav kompleksitet, presentert kompakt
+
+## Uegnet til
+
+- Komplekse valg med mye informasjon — bruk checkbox eller select
+- Kritiske eller irreversible handlinger — bruk en tydelig knapp med bekreftelse
+- Lange tekster eller forklaringer
+- Situasjoner der brukeren må ta gjennomtenkte valg
+
+## De fire typene
+
+Velg type ut fra hva brukeren skal gjøre. Hver type har egen dokumentasjon med eksempler, API og tilgjengelighet.
+
+- **[Button chip](./chip/button)** — trigger en handling eller et hurtigvalg. Ingen vedvarende valgt tilstand.
+- **[Removable chip](./chip/removable)** — representerer et aktivt valg eller en verdi som kan fjernes (f.eks. et valgt filter).
+- **[Radio chip](./chip/radio)** — en gruppe der brukeren velger nøyaktig ett alternativ.
+- **[Checkbox chip](./chip/checkbox)** — en gruppe der brukeren kan velge flere alternativer samtidig.
+
+## Retningslinjer
+
+### Bruk chip for raske og enkle valg
+
+Chips egner seg for enkle interaksjoner der brukeren raskt skal kunne velge, filtrere eller utføre en handling. De fungerer best når valgene er korte, tydelige og enkle å forstå.
+
+### Velg riktig type chip basert på behov
+
+Valg av type påvirker både hvordan komponenten oppfører seg og hvordan brukeren forstår den. Bruk radio chip for ett valg, checkbox chip for flere, removable chip for aktive valg som kan fjernes, og button chip for å trigge en handling.
+
+### Teksten skal være kort og tydelig
+
+Chips skal ha korte labels som er enkle å skanne. Unngå lange tekster — chips er ment for raske valg, ikke forklaringer.
+
+### Chips bør brukes i grupper
+
+Chips gir mest verdi når de presenteres sammen i en gruppe. Enkeltstående chips kan brukes, men da primært som button chip for å trigge en handling.
+
+### Unngå for mange chips samtidig
+
+Store mengder chips kan bli vanskelig å skanne og bruke. Dersom det er mange valg, bør de grupperes eller presenteres på en annen måte.
+
+### Bruk ikon med omtanke
+
+Ikoner kan støtte forståelsen, men skal ikke erstatte tekst. Tekst er alltid den viktigste informasjonsbæreren.
+
+## Tilpasning med CSS
+
+Alle chip-typer bygger på den delte `.ix-chip`-klassen. Den gir pill-form, størrelser, tilstandsfarger og fokusindikator. Trenger du stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassen direkte på elementene dine.
+
+### Felles klasser og attributter
+
+| Element/tilstand | Selektor / attributt |
+|-----------------|----------------------|
+| Chip | `.ix-chip` |
+| Liten størrelse | `data-size="sm"` |
+| Hover / active | `:hover` / `:active` (automatisk) |
+| Fokus | `:focus-visible` (automatisk) |
+| Deaktivert | `disabled` eller `aria-disabled="true"` |
+
+Type-spesifikke kroker (f.eks. `data-removable` for removable chip og `ix-radio-group[data-variant="chip"]` for radio chip) er dokumentert på hver undertype-side.
+
+### Eksempel: ren HTML
+
+```html
+<button class="ix-chip" type="button">
+  Chip label
+</button>
+
+<button class="ix-chip" data-size="sm" type="button">
+  Liten chip
+</button>
+```
+
+## Relatert
+
+- [Button](./button) — for primære og sekundære handlinger i en visning
+- [RadioGroup](./skjema/radio-group) — standard radiogruppe uten chip-styling
+- [Typografi](../grunnleggende/typografi) — skriftstørrelser brukt i chips
+- [Spacing](../grunnleggende/tokens/spacing) — padding-tokens for sm/md

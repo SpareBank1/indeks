@@ -1,0 +1,213 @@
+---
+title: Button chip
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from '../accessibility/chip-button.json';
+
+# Button chip
+
+En button chip fungerer som en knapp og trigger en handling — for eksempel et hurtigvalg, et forslag eller et filter brukeren aktiverer. Den har ingen vedvarende valgt tilstand.
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button class="ix-chip" type="button">
+  Chip label
+</button>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Chip>Chip label</Chip>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Gruppe
+
+Button chips gir mest verdi i grupper. Da blir det tydelig at de hører sammen og at det finnes flere valg.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack horizontal gap="sm">
+  <button class="ix-chip" type="button">Alle</button>
+  <button class="ix-chip" type="button">Sparing</button>
+  <button class="ix-chip" type="button">Lån</button>
+  <button class="ix-chip" type="button">Forsikring</button>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="sm">
+  <Chip>Alle</Chip>
+  <Chip>Sparing</Chip>
+  <Chip>Lån</Chip>
+  <Chip>Forsikring</Chip>
+</HStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Størrelser
+
+Chip finnes i to størrelser: `md` (standard) og `sm`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack horizontal gap="sm">
+  <button class="ix-chip" data-size="sm" type="button">Small</button>
+  <button class="ix-chip" type="button">Medium (standard)</button>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="sm">
+  <Chip size="sm">Small</Chip>
+  <Chip>Medium (standard)</Chip>
+</HStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Deaktivert
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button class="ix-chip" type="button" disabled>
+  Chip label
+</button>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Chip disabled>Chip label</Chip>
+```
+
+</TabItem>
+</Tabs>
+
+Vurder om brukeren i stedet bør se en forklaring på hvorfor valget ikke er tilgjengelig.
+
+### Som lenke
+
+Bruk `as="a"` når chipen navigerer til en URL. Den beholder chip-styling, men rendres som `<a>`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<a class="ix-chip" href="https://www.sparebank1.no">
+  Gå til sparebank1.no
+</a>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Chip as="a" href="https://www.sparebank1.no">
+  Gå til sparebank1.no
+</Chip>
+```
+
+</TabItem>
+</Tabs>
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Gi chipen en kort og tydelig label** — teksten er det tilgjengelige navnet. Den skal beskrive handlingen.
+- **Bruk chips i grupper** — en enkeltstående chip gir lite kontekst. Presenter relaterte chips sammen.
+- **Bruk riktig element** — `<button>` (standard) for handlinger og `as="a"` / `<a>` for navigasjon. Ikke legg click-handlers på `<div>` eller `<span>`.
+- **Ikke stol på farge alene** — teksten må alltid være den primære informasjonsbæreren.
+- **Unngå disabled som standard** — en disabled chip sier ikke hva som mangler. La heller chipen være aktiv og forklar konteksten.
+
+### Hva komponenten gjør automatisk
+
+- **`type="button"`** settes som standard på `<button>`-elementer så chipen ikke sender inn skjema utilsiktet.
+- **Tilgjengelig navn** hentes fra tekst-innholdet i chipen.
+- **Fokusindikator** via `:focus-visible` — synlig for tastaturbrukere, ikke for mus.
+- **Tilstand med fyll og kant** — hover og active kommuniseres med mer enn farge.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+### `Chip`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
+| `as` | `ElementType` | `'button'` | Render som annet element, f.eks. `'a'` for lenke-chips |
+| `disabled` | `boolean` | | Deaktiverer chipen (nativ HTML-attributt) |
+
+I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `type`, `name`, `value`, `tabIndex` osv.) og settes direkte på elementet.
+
+## Tilpasning med CSS
+
+Trenger du button chip-stylingen på HTML du setter sammen selv, kan du bruke `.ix-chip`-klassen direkte på elementene dine.
+
+### Tilgjengelige klasser og attributter
+
+| Element/tilstand | Selektor / attributt |
+|-----------------|----------------------|
+| Chip | `.ix-chip` |
+| Liten størrelse | `data-size="sm"` |
+| Hover / active | `:hover` / `:active` (automatisk) |
+| Fokus | `:focus-visible` (automatisk) |
+| Deaktivert | `disabled` eller `aria-disabled="true"` |
+
+### Eksempel: ren HTML
+
+```html
+<button class="ix-chip" type="button">
+  Chip label
+</button>
+
+<button class="ix-chip" data-size="sm" type="button">
+  Liten chip
+</button>
+
+<a class="ix-chip" href="/sparing">
+  Sparing
+</a>
+```
+
+## Relatert
+
+- [Chip](../chip) — oversikt over chip-familien og felles retningslinjer
+- [Removable chip](./removable) — chip som representerer et aktivt valg og kan fjernes
+- [Radio chip](./radio) — gruppe der brukeren velger nøyaktig ett alternativ
+- [Button](../button) — for primære og sekundære handlinger i en visning

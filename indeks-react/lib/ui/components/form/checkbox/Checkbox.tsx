@@ -50,20 +50,18 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
     const modifierClasses = disabled ? 'ix-checkbox--disabled' : '';
 
     const checkboxContent = (
-        <label className={`ix-checkbox${modifierClasses ? ` ${modifierClasses}` : ''}`}>
+        <div className={`ix-checkbox${modifierClasses ? ` ${modifierClasses}` : ''}`}>
             <input
                 ref={inputRef}
                 {...inputAttrs}
                 type="checkbox"
                 id={inputId}
-                className="ix-checkbox__input"
                 disabled={disabled}
                 aria-label={ariaLabel}
                 aria-invalid={errorMessage?.trim() ? 'true' : undefined}
             />
-            <span className="ix-checkbox__box" />
-            <span className="ix-checkbox__label">{label}</span>
-        </label>
+            <label htmlFor={inputId}>{label}</label>
+        </div>
     );
 
     if (hasFieldWrapper) {

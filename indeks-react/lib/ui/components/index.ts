@@ -6,6 +6,10 @@ export type {
     AccordionContentProps,
 } from './accordion/Accordion';
 export { Button } from './button/Button';
+export { Chip } from './chip/Chip';
+export type { ChipProps } from './chip/Chip';
+export { RemovableChip } from './chip/RemovableChip';
+export type { RemovableChipProps } from './chip/RemovableChip';
 export { Message } from './message/Message';
 export type { MessageProps, MessageStatus } from './message/Message';
 export { MessageRegion } from './message-region/MessageRegion';

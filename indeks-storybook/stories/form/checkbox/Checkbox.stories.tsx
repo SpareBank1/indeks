@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Checkbox } from '@sb1/indeks-react';
+import { Checkbox, CheckboxButton, CheckboxGroup } from '@sb1/indeks-react';
 
 const meta = {
     title: 'Form/Checkbox',
@@ -79,22 +79,21 @@ export const MedTooltip: Story = {
 
 export const FlereCheckboxer: Story = {
     render: () => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <Checkbox label="E-post" name="contact" value="email" />
-            <Checkbox label="SMS" name="contact" value="sms" />
-            <Checkbox label="Telefon" name="contact" value="phone" />
-        </div>
+        <CheckboxGroup legend="Hvordan vil du bli kontaktet?" name="contact" defaultValue={['email']}>
+            <CheckboxButton value="email" label="E-post" />
+            <CheckboxButton value="sms" label="SMS" />
+            <CheckboxButton value="phone" label="Telefon" />
+        </CheckboxGroup>
     ),
 };
 
 export const HTML: Story = {
     render: () => (
         <ix-field>
-            <label className="ix-checkbox">
-                <input type="checkbox" className="ix-checkbox__input" name="terms" />
-                <span className="ix-checkbox__box"></span>
-                <span className="ix-checkbox__label">Jeg godtar vilkårene</span>
-            </label>
+            <div className="ix-checkbox">
+                <input type="checkbox" id="terms-html" name="terms" />
+                <label htmlFor="terms-html">Jeg godtar vilkårene</label>
+            </div>
             <span data-field="description">Les vilkårene før du godtar</span>
             <span data-field="error" aria-live="polite"></span>
         </ix-field>

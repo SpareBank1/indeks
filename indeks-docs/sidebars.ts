@@ -103,6 +103,17 @@ const sidebars: SidebarsConfig = {
                 },
                  'komponenter/accordion',
                 'komponenter/card',
+                {
+                    type: 'category',
+                    label: 'Chip',
+                    link: { type: 'doc', id: 'komponenter/chip' },
+                    items: [
+                        'komponenter/chip/button',
+                        'komponenter/chip/removable',
+                        'komponenter/chip/radio',
+                        'komponenter/chip/checkbox',
+                    ],
+                },
                 'komponenter/message',
                 {
                     type: 'category',
@@ -110,6 +121,12 @@ const sidebars: SidebarsConfig = {
                     collapsed: false,
                     items: [
                         'komponenter/skjema/checkbox',
+                        {
+                            type: 'category',
+                            label: 'CheckboxGroup',
+                            link: { type: 'doc', id: 'komponenter/skjema/checkbox-group' },
+                            items: ['komponenter/skjema/checkbox-group-designvalg'],
+                        },
                         'komponenter/skjema/label',
                         {
                             type: 'category',
