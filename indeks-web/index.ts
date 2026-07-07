@@ -3,6 +3,7 @@ import { IxField } from './lib/components/field/IxField.js';
 import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
 import { IxRadioGroup } from './lib/components/radio-group/IxRadioGroup.js';
+import './lib/modal/modal.js';
 import './lib/tooltip/tooltip.js';
 
 customElements.define('ix-field', IxField);

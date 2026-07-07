@@ -1,0 +1,250 @@
+/* Modal — dialogvindu som krever brukerens oppmerksomhet.
+ *
+ * Bygger på native <dialog> åpnet med showModal(). All tung a11y-atferd kommer
+ * gratis fra native elementet: fokus-trap, Escape-lukking, top-layer-rendering
+ * (ingen z-index-styr), fokus-retur til trigger, og aria-modal (innhold utenfor
+ * blir inert for skjermlesere). Det finnes ingen web component — stylingen
+ * treffer <dialog class="ix-modal"> direkte, så selektoren er kun klassen.
+ *
+ * Scroll-lås og backdrop-klikk (det native <dialog> ikke gir) håndteres av
+ * atferds-modulet i @sb1/indeks-web (ren HTML) eller React-wrapperen.
+ *
+ * Struktur:
+ *   <dialog class="ix-modal" data-size="medium" aria-labelledby="…">
+ *     <div class="ix-modal__header">
+ *       <h2 class="ix-modal__title" id="…">Tittel</h2>
+ *       <button class="ix-modal__close" aria-label="Lukk">…</button>
+ *     </div>
+ *     <div class="ix-modal__body">…scrollbart innhold…</div>
+ *     <div class="ix-modal__footer">
+ *       <div class="ix-modal__button-group">…knapper…</div>
+ *     </div>
+ *   </dialog>
+ */
+
+:where(.ix-modal) {
+    /* Scrim-en må være mørk i både lys og mørk modus — en tema-avhengig farge
+     * ville gitt lys scrim på lyst innhold. Named color `black` er
+     * tema-uavhengig; lokal variabel så konsumenter kan overstyre dekkevnen. */
+    --ix-modal-backdrop: color-mix(in srgb, black 50%, transparent);
+
+    /* Sentrering. Native <dialog> sentreres av UA-stilen `margin: auto`, men
+     * verts-CSS (Docusaurus, Storybook) nullstiller ofte margin på alt innhold og
+     * skyver da dialogen ut i et hjørne. Vi gjentar `margin: auto` eksplisitt så
+     * dialogen sentreres uansett vert — horisontalt for inline `open`, både
+     * horisontalt og vertikalt i top-layer (showModal()). */
+    margin: auto;
+
+    /* Mobile first: nær full bredde ved 320 px. max-width skaleres opp via
+     * media query lenger nede, så dialogen aldri gir horisontal scroll
+     * (WCAG 1.4.10). Ingen fast width. */
+    width: calc(100% - 2 * var(--ix-spacing-md));
+    max-width: calc(100% - 2 * var(--ix-spacing-md));
+
+    /* Høydebegrensning slik at lange modaler ikke vokser ut av viewporten —
+     * header/footer står fast, body scroller (se under). */
+    max-height: calc(100% - 2 * var(--ix-spacing-md));
+
+    padding: 0;
+    background-color: var(--ix-color-surface-main-default);
+    color: var(--ix-color-foreground-main-default);
+    border: var(--ix-border-default);
+    border-radius: var(--ix-border-radius-lg);
+    overflow: hidden;
+}
+
+/* Kolonnelayout kun når dialogen er åpen — [open] settes av showModal(). En lukket
+ * <dialog> har display:none fra native styling, og den arven skal bevares. */
+:where(.ix-modal[open]) {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Backdrop = den mørke flaten bak dialogen. Native ::backdrop er ikke en egen
+ * DOM-node; et klikk på den treffer selve <dialog> (håndteres i JS-laget). */
+:where(.ix-modal)::backdrop {
+    background: var(--ix-modal-backdrop);
+}
+
+/* --- Størrelser -----------------------------------------------------------
+ * På mobil er dialogen alltid nær full bredde (regelen over). Fra tablet og opp
+ * begrenses bredden av data-size. Standard (ingen attributt / "medium") = 640px. */
+
+/* matches --ix-breakpoint-sm */
+@media (min-width: 768px) {
+    :where(.ix-modal) {
+        max-width: 640px;
+    }
+
+    :where(.ix-modal[data-size='small']) {
+        max-width: 480px;
+    }
+
+    :where(.ix-modal[data-size='large']) {
+        max-width: 800px;
+    }
+}
+
+/* Fullskjerm — gjelder alle viewporter, ikke bare desktop. */
+:where(.ix-modal[data-size='full']) {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+}
+
+/* --- Header ---------------------------------------------------------------- */
+
+:where(.ix-modal__header) {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ix-spacing-sm);
+    padding: var(--ix-spacing-lg);
+    /* Reserver plass i inline-end så en lang tittel aldri løper under den
+     * absolutt-plasserte lukk-knappen (44 px touch-mål + luft mot teksten). */
+    padding-inline-end: calc(var(--ix-spacing-lg) + 44px);
+    border-bottom: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+}
+
+:where(.ix-modal__title) {
+    margin: 0;
+    font-family: var(--ix-font-family-heading);
+    font-size: var(--ix-font-size-xl);
+    font-weight: var(--ix-font-weight-medium);
+    color: var(--ix-color-foreground-main-default);
+}
+
+/* Valgfri beskrivelse (aria-describedby). Dempet tekst; kan stå i header under
+ * tittelen eller øverst i body. */
+:where(.ix-modal__description) {
+    margin: 0;
+    color: var(--ix-color-foreground-subtle-default);
+}
+
+/* Ikon-knapp for lukking. Absolutt plassert i modalens øvre høyre hjørne (relativt
+ * til <dialog>, som alltid er et posisjonert element), så den står i hjørnet
+ * uansett tittellengde og selv uten header. Touch-mål min. 44×44 px (WCAG 2.5.8). */
+:where(.ix-modal__close) {
+    position: absolute;
+    /* Trekk knappen litt inn så den optiske kanten matcher header-paddingen,
+     * uten å ofre touch-flaten. */
+    inset-block-start: calc(var(--ix-spacing-lg) - var(--ix-spacing-xs));
+    inset-inline-end: calc(var(--ix-spacing-lg) - var(--ix-spacing-xs));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--ix-spacing-xs);
+    color: var(--ix-color-foreground-main-default);
+    background: none;
+    border: 0;
+    border-radius: var(--ix-border-radius-sm);
+    cursor: pointer;
+    transition: var(--ix-transition-all);
+}
+
+:where(.ix-modal__close:hover) {
+    background-color: var(--ix-color-surface-main-hover);
+}
+
+:where(.ix-modal__close:focus-visible) {
+    outline: var(--ix-outline-default);
+    outline-offset: var(--ix-outline-offset-default);
+}
+
+/* --- Body ------------------------------------------------------------------ */
+
+/* Eneste scrollende region — header/footer står fast. */
+:where(.ix-modal__body) {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: var(--ix-spacing-lg);
+}
+
+:where(.ix-modal__body) > :first-child {
+    margin-top: 0;
+}
+
+:where(.ix-modal__body) > :last-child {
+    margin-bottom: 0;
+}
+
+/* --- Footer ---------------------------------------------------------------- */
+
+:where(.ix-modal__footer) {
+    padding: var(--ix-spacing-lg);
+    border-top: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+}
+
+/* Knapperad — brytes til flere linjer på smale skjermer, høyrejustert. */
+:where(.ix-modal__button-group) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--ix-spacing-sm);
+}
+
+/* --- Animasjon (progressiv forbedring) ------------------------------------
+ * Fade + lett scale-in på dialogen og fade på backdrop. Krever @starting-style +
+ * transition-behavior:allow-discrete (Chrome/Edge 116+, Safari 17.4+). Eldre
+ * nettlesere (Safari 15.4) hopper bare rett til synlig — fortsatt fullt
+ * funksjonelt, bare uten toning. */
+/* stylelint-disable plugin/no-unsupported-browser-features */
+@supports (transition-behavior: allow-discrete) {
+    :where(.ix-modal) {
+        opacity: 0;
+        transform: scale(0.98);
+        transition:
+            opacity var(--ix-transition-duration) var(--ix-transition-animation),
+            transform var(--ix-transition-duration) var(--ix-transition-animation),
+            overlay var(--ix-transition-duration) allow-discrete,
+            display var(--ix-transition-duration) allow-discrete;
+    }
+
+    :where(.ix-modal[open]) {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    @starting-style {
+        :where(.ix-modal[open]) {
+            opacity: 0;
+            transform: scale(0.98);
+        }
+    }
+
+    :where(.ix-modal)::backdrop {
+        opacity: 0;
+        transition:
+            opacity var(--ix-transition-duration) var(--ix-transition-animation),
+            overlay var(--ix-transition-duration) allow-discrete,
+            display var(--ix-transition-duration) allow-discrete;
+    }
+
+    :where(.ix-modal[open])::backdrop {
+        opacity: 1;
+    }
+
+    @starting-style {
+        :where(.ix-modal[open])::backdrop {
+            opacity: 0;
+        }
+    }
+
+    /* Deterministiske Playwright-snapshots + WCAG 2.3.3: stabilt endepunkt uten
+     * bevegelse. Dialogen er synlig umiddelbart. */
+    @media (prefers-reduced-motion: reduce) {
+        :where(.ix-modal),
+        :where(.ix-modal)::backdrop {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
+    }
+}
+/* stylelint-enable plugin/no-unsupported-browser-features */

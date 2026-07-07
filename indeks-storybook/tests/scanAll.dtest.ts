@@ -18,6 +18,7 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Components/Chip',
   'Components/InteractiveIcon',
   'Components/Message',
+  'Components/Modal',
   'Components/Spinner',
   'Layout/Grid',
   'Layout/HStack',
@@ -115,7 +116,17 @@ test.describe('Test all components', () => {
 
                     const storiesContainer = page.locator('#stories-container');
                     await storiesContainer.waitFor({ state: 'visible' });
-                    await expect(storiesContainer).toHaveScreenshot();
+
+                    // `top-layer`-stories (f.eks. Modal åpnet med showModal()) males i
+                    // browserens top layer, sentrert i viewporten og utenfor
+                    // #stories-container. Et container-skjermbilde ville ikke fange dem, så
+                    // vi venter på den åpne dialogen og tar skjermbilde av hele siden.
+                    if ((story.tags ?? []).includes('top-layer')) {
+                        await page.locator('dialog.ix-modal[open]').waitFor({ state: 'visible' });
+                        await expect(page).toHaveScreenshot();
+                    } else {
+                        await expect(storiesContainer).toHaveScreenshot();
+                    }
 
                     const accessibilityScanResults = await new AxeBuilder({
                         page,
