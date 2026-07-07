@@ -102,11 +102,12 @@
     display: flex;
     align-items: flex-start;
     gap: var(--ix-spacing-sm);
-    padding: var(--ix-spacing-lg);
+    /* Ingen bunn-padding: header, body og footer flyter sammen som ett kort uten
+     * delelinjer. Vertikal luft mellom seksjonene kommer fra body/footer over. */
+    padding: var(--ix-spacing-lg) var(--ix-spacing-lg) 0;
     /* Reserver plass i inline-end så en lang tittel aldri løper under den
      * absolutt-plasserte lukk-knappen (44 px touch-mål + luft mot teksten). */
     padding-inline-end: calc(var(--ix-spacing-lg) + 44px);
-    border-bottom: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
 }
 
 :where(.ix-modal__title) {
@@ -177,8 +178,9 @@
 /* --- Footer ---------------------------------------------------------------- */
 
 :where(.ix-modal__footer) {
-    padding: var(--ix-spacing-lg);
-    border-top: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    /* Ingen topp-delelinje — footeren flyter sammen med body-en. Body-en har egen
+     * bunn-padding, så knapperaden får luft over seg uten en ekstra topp-padding. */
+    padding: 0 var(--ix-spacing-lg) var(--ix-spacing-lg);
 }
 
 /* Knapperad — brytes til flere linjer på smale skjermer, høyrejustert. */
