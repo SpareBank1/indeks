@@ -140,6 +140,16 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
         if (!dialog) return;
         if (open && !dialog.open) {
             dialog.showModal();
+            // showModal() auto-fokuserer første fokuserbare etterkommer — hos oss
+            // lukk-knappen. Uønsket: modalen skal ikke åpne med fokusring på «Lukk».
+            // Flytt fokus til selve dialogen (tabIndex=-1) så skjermlesere annonserer
+            // «<tittel>, dialog» og Tab går videre naturlig. En konsument som vil
+            // fokusere et bestemt element setter `autofocus` på det — da lar vi
+            // native atferd styre. (React rendrer ikke autoFocus-propen, så vi kan
+            // ikke bruke <dialog autofocus>; programmatisk fokus er nødvendig.)
+            if (!dialog.querySelector('[autofocus]')) {
+                dialog.focus();
+            }
         } else if (!open && dialog.open) {
             dialog.close();
         }
@@ -197,6 +207,9 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
     return (
         <dialog
             ref={setRef}
+            // Gjør dialogen fokuserbar programmatisk (den er ikke natively det) så vi
+            // kan flytte åpningsfokuset hit i stedet for til lukk-knappen.
+            tabIndex={-1}
             className={clsx('ix-modal', className)}
             data-size={SIZE_ATTR[size]}
             data-no-close-on-backdrop={closeOnBackdropClick ? undefined : ''}

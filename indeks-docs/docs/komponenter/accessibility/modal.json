@@ -39,7 +39,7 @@
     { "id": "1.4.13", "notes": "Dialogen viser ikke innhold ved hover/fokus som forsvinner; den er vedvarende til brukeren lukker den." },
     { "id": "2.1.1", "notes": "Fullt tastaturopererbart via native <dialog> åpnet med showModal(): alle handlinger er fokuserbare knapper som aktiveres med Enter/Space." },
     { "id": "2.1.2", "notes": "Ingen tastaturfelle. Fokus-trap inne i dialogen er tilsiktet modal-oppførsel og har en escape-mekanisme: Escape lukker dialogen og frigjør fokus tilbake til triggeren." },
-    { "id": "2.4.3", "notes": "Fokus flyttes inn i dialogen ved åpning (native showModal()) og føres tilbake til triggerknappen ved lukking. Tab-rekkefølgen følger DOM inne i dialogen." },
+    { "id": "2.4.3", "notes": "Fokus flyttes til selve dialogen ved åpning (ikke til lukk-knappen) slik at skjermlesere annonserer «<tittel>, dialog»; Tab går deretter til første interaktive element. Konsumenten kan overstyre med autofocus på et element inni. Fokus føres tilbake til triggerknappen ved lukking. Tab-rekkefølgen følger DOM inne i dialogen." },
     { "id": "2.4.7", "notes": "Tydelig fokusindikator på lukk-knapp og handlingsknapper (:focus-visible)." },
     { "id": "2.4.11", "notes": "Dialogen tegnes i nettleserens top-layer over alt annet innhold, så fokuserte elementer i dialogen blir ikke skjult av annet innhold." },
     { "id": "2.5.8", "notes": "Lukk-knappen har min. 44×44px touch-mål via min-width/min-height." },

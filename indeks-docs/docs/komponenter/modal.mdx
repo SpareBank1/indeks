@@ -411,6 +411,7 @@ Vil du i tillegg ha deklarativ åpning/lukking og scroll-lås uten egen JavaScri
 ### Hva komponenten gjør automatisk
 
 - **Fokus-trap** — mens dialogen er åpen holdes fokus inne i den (native `<dialog>` åpnet med `showModal()`). Tab og Shift+Tab sykler kun mellom elementene i dialogen.
+- **Åpningsfokus på dialogen** — ved åpning settes fokus på selve dialogen, ikke på lukk-knappen. Skjermlesere annonserer da «\<tittel\>, dialog», og Tab flytter videre til første interaktive element. Vil du heller fokusere et bestemt element (f.eks. første felt i et skjema), sett `autofocus` på det elementet inni modalen.
 - **Escape lukker** — Escape ber om lukking (via `onOpenChange` / `data-modal-close`-atferd), som forventet av en modal dialog.
 - **Fokus-retur** — når dialogen lukkes, føres fokus tilbake til elementet som åpnet den.
 - **Inert bakgrunn** — innholdet bak dialogen gjøres utilgjengelig for både mus og skjermleser (`aria-modal`-atferd fra det native elementet).

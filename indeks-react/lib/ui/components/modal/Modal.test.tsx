@@ -240,6 +240,31 @@ describe('Modal', () => {
         expect(dialog.open).toBe(true);
     });
 
+    it('flytter åpningsfokus til selve dialogen, ikke lukk-knappen', () => {
+        const { container } = renderModal();
+        const dialog = container.querySelector('dialog')!;
+        // Fokus skal ligge på dialogen (tabIndex=-1), ikke på «Lukk»-knappen som
+        // ellers ville fått showModal()-auto-fokuset.
+        expect(document.activeElement).toBe(dialog);
+        expect(document.activeElement).not.toBe(screen.getByRole('button', { name: 'Lukk' }));
+    });
+
+    it('stjeler ikke fokus når en etterkommer har autofocus-attributtet', () => {
+        // Bruk det native `autofocus`-attributtet (ikke Reacts `autoFocus`-prop, som
+        // strippes fra DOM og uansett overstyres av showModal() i ekte nettlesere).
+        // Det er dette attributtet showModal()-fokuseringen og vår guard honorerer.
+        render(
+            <Modal open onOpenChange={vi.fn()}>
+                <Modal.Body>
+                    <input {...{ autofocus: '' }} aria-label="Navn" />
+                </Modal.Body>
+            </Modal>,
+        );
+        // Vi flytter ikke fokus til dialogen når en etterkommer ber om autofokus.
+        const dialog = document.querySelector('dialog')!;
+        expect(document.activeElement).not.toBe(dialog);
+    });
+
     it('videresender ref til <dialog>', () => {
         const ref = createRef<HTMLDialogElement>();
         render(

@@ -2,8 +2,9 @@
  *
  * Native <dialog class="ix-modal"> gir all tung a11y-atferd gratis: fokus-trap,
  * Escape-lukking, top-layer, fokus-retur og aria-modal. Denne modulen legger til
- * det <dialog> IKKE gir: deklarativ åpne/lukke-trigger, backdrop-klikk-lukking og
- * scroll-lås på <body>.
+ * det <dialog> IKKE gir: deklarativ åpne/lukke-trigger, backdrop-klikk-lukking,
+ * scroll-lås på <body> og styring av åpningsfokus (til selve dialogen, ikke
+ * lukk-knappen — se handleClick).
  *
  * Deklarativt API (samme delegerings-mønster som tooltip.ts):
  *   <button data-modal-open="min-modal">Åpne</button>       → element.showModal()
@@ -56,6 +57,15 @@ function handleClick(e: Event): void {
         if (dialog instanceof HTMLDialogElement && !dialog.open) {
             dialog.showModal();
             lockScroll();
+            // showModal() auto-fokuserer første fokuserbare etterkommer — typisk
+            // lukk-knappen. Uønsket: flytt fokus til selve dialogen så den ikke
+            // åpner med fokusring på «Lukk». En etterkommer med `autofocus` vinner
+            // (da respekterer vi konsumentens valg). Dialogen er ikke natively
+            // fokuserbar, så vi setter tabindex=-1 selv om den mangler.
+            if (!dialog.querySelector('[autofocus]')) {
+                if (!dialog.hasAttribute('tabindex')) dialog.tabIndex = -1;
+                dialog.focus();
+            }
         }
         return;
     }

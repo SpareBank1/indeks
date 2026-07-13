@@ -69,6 +69,27 @@ describe('modal atferds-modul', () => {
         });
     });
 
+    describe('åpningsfokus', () => {
+        it('flytter fokus til dialogen (ikke lukk-knappen) og setter tabindex', () => {
+            const dialog = createModal({ id: 'm1' });
+            createOpener('m1').click();
+
+            expect(document.activeElement).toBe(dialog);
+            expect(dialog.getAttribute('tabindex')).toBe('-1');
+        });
+
+        it('respekterer etterkommer med autofocus', () => {
+            const dialog = createModal({ id: 'm1' });
+            const input = document.createElement('input');
+            input.setAttribute('autofocus', '');
+            dialog.querySelector('.ix-modal__body')!.appendChild(input);
+            createOpener('m1').click();
+
+            // Vi tar ikke fokus fra dialogen når en etterkommer ber om autofokus.
+            expect(document.activeElement).not.toBe(dialog);
+        });
+    });
+
     describe('lukking', () => {
         it('lukker nærmeste dialog når data-modal-close klikkes', () => {
             const dialog = createModal({ id: 'm1' });
