@@ -127,7 +127,12 @@ const sidebars: SidebarsConfig = {
                             link: { type: 'doc', id: 'komponenter/skjema/checkbox-group' },
                             items: ['komponenter/skjema/checkbox-group-designvalg'],
                         },
-                        'komponenter/skjema/combobox',
+                        {
+                            type: 'category',
+                            label: 'Combobox',
+                            link: { type: 'doc', id: 'komponenter/skjema/combobox' },
+                            items: ['komponenter/skjema/combobox-html'],
+                        },
                         'komponenter/skjema/label',
                         {
                             type: 'category',
