@@ -1,0 +1,81 @@
+{
+  "component": "Surface (ix-surface)",
+  "lastReviewed": "2026-07-08",
+  "consumerResponsibilities": [
+    {
+      "summary": "Bruk semantiske elementer når konteksten krever det",
+      "details": ".ix-surface er som standard en <div> uten semantisk rolle. Sett as-prop i React (eller bruk et semantisk native element med .ix-surface-klassen i HTML) når innholdet krever det — f.eks. as=\"section\" for en seksjon. Standard <div> er korrekt når flaten kun er visuell gruppering.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Ikke kommuniser mening med farge alene",
+      "details": "Statusfargen (data-status=\"neutral|info|success|warning|danger\") er rent dekorativ og kan ikke oppfattes av alle. Innhold som bærer betydning må også ha tekst eller et annet ikke-visuelt signal — ikke stol på flatefargen alene for å formidle status.",
+      "wcag": ["1.4.1"]
+    },
+    {
+      "summary": "Bruk Card for klikkbare flater",
+      "details": "Surface er en ikke-interaktiv container og tilfører verken rolle, tastaturstøtte eller fokusring. Trenger flaten å være klikkbar, er Surface feil verktøy — bruk Card, som gir riktig semantikk (<a>/<button>), tastaturstøtte og fokusring.",
+      "wcag": ["4.1.2", "2.1.1"]
+    }
+  ],
+  "handled": [
+    { "id": "1.3.1", "notes": "Innholdet følger naturlig leserekkefølge i DOM. Standard <div>, eller valgt semantisk element via as-prop." },
+    { "id": "1.3.2", "notes": "Innholdet følger DOM-rekkefølgen; flex-retning endrer ikke leserekkefølgen." },
+    { "id": "1.4.1", "notes": "Statusfargen er dekorativ og formidler ikke informasjon alene — betydning må bæres av innholdet." },
+    { "id": "1.4.4", "notes": "Bruker relative enheter (spacing- og radius-tokens) — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Flex-basert flate uten fast bredde flyter naturlig ved 320 px viewport uten horisontal scroll." }
+  ],
+  "issues": [],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Ingen bilder eller ikke-tekstlig innhold i selve flaten; innhold er konsumentens ansvar." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Ingen sensoriske karakteristikker brukes for å formidle informasjon." },
+    { "id": "1.3.4", "reason": "Ingen orientasjonslåsing." },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt." },
+    { "id": "1.4.2", "reason": "Ingen lyd." },
+    { "id": "1.4.3", "reason": "Ingen egen tekst i flaten; tekstkontrast er innholdets ansvar." },
+    { "id": "1.4.5", "reason": "Ingen bilder av tekst." },
+    { "id": "1.4.11", "reason": "Ikke-interaktiv flate uten UI-komponenter med krav til ikke-tekstlig kontrast." },
+    { "id": "1.4.12", "reason": "Ingen egen tekst i flaten." },
+    { "id": "1.4.13", "reason": "Ingen hover/fokus-innhold." },
+    { "id": "2.1.1", "reason": "Ikke-interaktiv container — ikke fokuserbar." },
+    { "id": "2.1.2", "reason": "Ingen fokus-felle." },
+    { "id": "2.1.4", "reason": "Ingen hurtigtaster." },
+    { "id": "2.2.1", "reason": "Ingen tidsfrister." },
+    { "id": "2.2.2", "reason": "Ingen bevegelig eller autooppdatert innhold." },
+    { "id": "2.3.1", "reason": "Ingen blinking eller flimring." },
+    { "id": "2.4.1", "reason": "Ingen blokker som må hoppes over." },
+    { "id": "2.4.2", "reason": "Ikke en side-komponent." },
+    { "id": "2.4.3", "reason": "Ikke fokuserbar; endrer ikke fokusrekkefølge." },
+    { "id": "2.4.4", "reason": "Ingen lenker i selve flaten." },
+    { "id": "2.4.5", "reason": "Ikke en navigasjonsstruktur." },
+    { "id": "2.4.6", "reason": "Ingen overskrifter eller labeler i selve flaten." },
+    { "id": "2.4.7", "reason": "Ikke fokuserbar." },
+    { "id": "2.4.11", "reason": "Ikke fokuserbar." },
+    { "id": "2.5.1", "reason": "Ingen peker-gester." },
+    { "id": "2.5.2", "reason": "Ingen peker-kanselleringslogikk." },
+    { "id": "2.5.3", "reason": "Ingen synlig label." },
+    { "id": "2.5.4", "reason": "Ingen bevegelsesbasert aktivering." },
+    { "id": "2.5.6", "reason": "Ingen begrensning på input-modalitet." },
+    { "id": "2.5.7", "reason": "Ingen draing-funksjonalitet." },
+    { "id": "2.5.8", "reason": "Ikke et interaktivt mål." },
+    { "id": "3.1.1", "reason": "Ikke en side-komponent." },
+    { "id": "3.1.2", "reason": "Ingen språkendringer." },
+    { "id": "3.2.1", "reason": "Ikke fokuserbar." },
+    { "id": "3.2.2", "reason": "Ingen input." },
+    { "id": "3.2.3", "reason": "Ingen navigasjon." },
+    { "id": "3.2.4", "reason": "Ingen gjentagende komponenter med inkonsistent identifisering." },
+    { "id": "3.2.6", "reason": "Ingen hjelp-funksjonalitet." },
+    { "id": "3.3.1", "reason": "Ingen skjemavalidering." },
+    { "id": "3.3.2", "reason": "Ingen skjemafelt." },
+    { "id": "3.3.3", "reason": "Ingen feilforslag." },
+    { "id": "3.3.4", "reason": "Ingen juridisk forpliktende handlinger." },
+    { "id": "3.3.7", "reason": "Ingen redundant input." },
+    { "id": "3.3.8", "reason": "Ingen tilgjengelighetsautentisering." },
+    { "id": "4.1.3", "reason": "Flaten genererer ingen statusmeldinger selv." }
+  ]
+}

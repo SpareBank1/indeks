@@ -21,7 +21,8 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Components/Spinner',
   'Layout/Grid',
   'Layout/HStack',
-  'Layout/VStack'
+  'Layout/VStack',
+  'Layout/Surface'
 ];
 
 // Profilrotasjon — mobil prioritert. Hver story testes mot 1 profil (stabil via hash).

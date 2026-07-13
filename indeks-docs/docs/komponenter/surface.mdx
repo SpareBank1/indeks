@@ -1,0 +1,267 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Surface
+
+Surface er en enkel visuell flate som grupperer relatert innhold, gjerne med en statusfarge,
+border eller avrundede hjørner. Den er bevisst enkel: en ren beholder for layout og visuell
+gruppering — uten klikk-affordanse eller annen interaktivitet.
+
+Surface bygger i sin helhet på [utility-klasser](../utility-klasser/oversikt), men gir et React-API
+slik at du slipper å forholde deg til klassenavnene direkte.
+
+## Egnet til
+
+- Visuell gruppering av relatert innhold i en flate med farge eller border
+- Seksjoner og paneler i et oppsett (sett `as="section"` for riktig semantikk)
+- Et lett alternativ til `Card` når du ikke trenger et avgrenset, klikkbart innholdskort
+- Rask layout med `gap`, `justifyContent` og `alignItems` uten egen CSS
+
+## Uegnet til
+
+- Klikkbare flater eller navigasjon — bruk [Card](./card) med `href`/`onClick`
+- Innhold som skal fremstå som en avgrenset, klikkbar enhet — bruk [Card](./card)
+- Komplekse layouter med retning og innrykk — vurder [Stack](./primitives/stack)
+
+## Surface vs. Card
+
+Surface og [Card](./card) løser ulike behov:
+
+- **Surface** er en *enkel flate*. Den signaliserer ingen interaktivitet —
+  den grupperer innhold visuelt. Tenk bakgrunn, seksjon eller panel.
+- **Card** er et *innholdskort*. Det kan være klikkbart og bærer chevron når det er det, og
+  fremstår som en avgrenset enhet.
+
+Trenger du at flaten kan trykkes, velg Card. Ellers Surface.
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-surface ix-radius-md ix-p-md ix-gap-2xs" data-status="info">
+  <h3>En enkel flate</h3>
+  <p>Surface grupperer innhold visuelt — uten interaktivitet.</p>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Surface status="info" radius="md" padding="md" gap="2xs">
+  <Heading as="h3" size="sm">En enkel flate</Heading>
+  <Text>Surface grupperer innhold visuelt — uten interaktivitet.</Text>
+</Surface>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Statusfarger
+
+`neutral` er den nøytrale standardflaten, og settes eksplisitt med `data-status="neutral"`
+i HTML og `status="neutral"` i React — det er standardverdien. `.ix-surface` uten `data-status` gir
+også den nøytrale flaten (fallback fra `:root`), men merk at flaten da arver en eventuell `data-status`
+fra en forelder; sett `data-status="neutral"` for å bryte den arven. De andre statusene (`info`,
+`success`, `warning`, `danger`) settes på samme måte — samme status-system som [Card](./card) og
+[Message](./message).
+
+:::note Til diskusjon i teamet: trenger vi både `default` og `neutral`?
+
+`status-colors.css` mapper både `[data-status="default"]` og `[data-status="neutral"]` til den
+samme nøytrale flaten. React-komponentene bruker `neutral` som den kanoniske nøytral-verdien.
+`default` har dermed ingen reell bruk — den peker bare på de samme fargene.
+
+**Spørsmål:** bør vi beholde begge, eller fjerne `default` og kun bruke `neutral` (ett navn, mindre
+forvirring)? Avklares før flere komponenter tar i bruk status-systemet.
+
+**Bredere:** selve token-navnet er fortsatt `--ix-color-surface-main-*` (Figma-synket, i familie med
+`surface-info`/`success`/…). Komponent-API-et bruker nå `neutral`, mens token-tieren heter `main`.
+Samtidig finnes `neutral` allerede som et *eget* begrep andre steder (f.eks. `fill-neutral` ≠
+`fill-main`). Spørsmål til teamet: skal `main`-tieren døpes om til `neutral` på tvers av
+surface/fill/border/foreground (krever Figma-endring og avklaring mot eksisterende `neutral`-farger),
+eller beholder vi `main` som token-navn og lever med at API-verdien heter `neutral`? Ikke løst her.
+:::
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack>
+  <div class="ix-surface ix-radius-md ix-p-md" data-status="neutral">Neutral</div>
+  <div class="ix-surface ix-radius-md ix-p-md" data-status="info">Info</div>
+  <div class="ix-surface ix-radius-md ix-p-md" data-status="success">Suksess</div>
+  <div class="ix-surface ix-radius-md ix-p-md" data-status="warning">Advarsel</div>
+  <div class="ix-surface ix-radius-md ix-p-md" data-status="danger">Fare</div>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="md">
+  <Surface status="neutral" radius="md" padding="md">Neutral</Surface>
+  <Surface status="info" radius="md" padding="md">Info</Surface>
+  <Surface status="success" radius="md" padding="md">Suksess</Surface>
+  <Surface status="warning" radius="md" padding="md">Advarsel</Surface>
+  <Surface status="danger" radius="md" padding="md">Fare</Surface>
+</VStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Avrundede hjørner (radius)
+
+`radius` mapper til `ix-radius-*`-utility og finnes i størrelsene `xs`, `sm`, `md`, `lg`, `xl`,
+`pill` og `circle`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack horizontal>
+  <div class="ix-surface ix-radius-sm ix-p-md" data-status="info">sm</div>
+  <div class="ix-surface ix-radius-md ix-p-md" data-status="info">md</div>
+  <div class="ix-surface ix-radius-lg ix-p-md" data-status="info">lg</div>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="md">
+  <Surface status="info" radius="sm" padding="md">sm</Surface>
+  <Surface status="info" radius="md" padding="md">md</Surface>
+  <Surface status="info" radius="lg" padding="md">lg</Surface>
+</HStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Border
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack horizontal>
+  <div class="ix-surface ix-border-default ix-radius-md ix-p-md">default</div>
+  <div class="ix-surface ix-border-dashed ix-radius-md ix-p-md">dashed</div>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="md">
+  <Surface border="default" radius="md" padding="md">default</Surface>
+  <Surface border="dashed" radius="md" padding="md">dashed</Surface>
+</HStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Layout med flex-props
+
+Surface stables som en kolonne i utgangspunktet. Sett `direction="row"` (HTML: `ix-flex-row`) når
+innholdet skal ligge ved siden av hverandre, og bruk `gap`, `justifyContent` og `alignItems` for
+rask layout uten egen CSS.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-surface ix-border-default ix-radius-md ix-p-md ix-flex-row ix-gap-sm ix-justify-between">
+  <p>Venstre</p>
+  <p>Høyre</p>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Surface
+  border="default"
+  radius="md"
+  padding="md"
+  direction="row"
+  gap="sm"
+  justifyContent="space-between"
+>
+  <Text>Venstre</Text>
+  <Text>Høyre</Text>
+</Surface>
+```
+
+</TabItem>
+</Tabs>
+
+## Props / API
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `as` | `ElementType` | `'div'` | Hvilket HTML-element flaten rendres som (f.eks. `'section'`) |
+| `status` | `Status` | `'neutral'` | Statusfarge; settes som `data-status`. `neutral` gir den nøytrale flaten, ellers `info` / `success` / `warning` / `danger` |
+| `border` | `'default' \| 'dashed'` | | Kantlinjestil |
+| `radius` | `Radius` | | Avrundede hjørner: `xs` / `sm` / `md` / `lg` / `xl` / `pill` / `circle` |
+| `padding` | `Size` | | Indre luft (også `paddingX`/`paddingY`/`paddingTop` osv.) |
+| `margin` | `Size` | | Ytre luft (også `marginX`/`marginY` osv.) |
+| `direction` | `'row' \| 'column'` | `'column'` | Retning på flex-innholdet. Sett `'row'` for innhold ved siden av hverandre |
+| `gap` | `Size` | | Avstand mellom barn (flex) |
+| `justifyContent` | `'start' \| 'end' \| 'center' \| 'space-between'` | | Justering langs hovedaksen |
+| `alignItems` | `'start' \| 'end' \| 'center' \| 'baseline'` | | Justering på tvers |
+| `fullWidth` | `boolean` | `false` | Strekker flaten til full bredde |
+| `className` | `string` | | Ekstra klasser |
+
+I tillegg støttes standard HTML-attributter, som settes direkte på det rendrede elementet.
+
+## Tilpasning med CSS
+
+Trenger du flaten uten React-komponenten, bruk klassene direkte. `.ix-surface` gir den nøytrale flaten alene;
+statusfarge kobles med `data-status`, resten er utility-klasser:
+
+| Egenskap | Klasse / attributt |
+|----------|--------|
+| Flate (base, nøytral) | `.ix-surface` |
+| Statusfarge | `data-status="neutral\|info\|success\|warning\|danger"` |
+| Border | `.ix-border-default` / `.ix-border-dashed` |
+| Radius | `.ix-radius-{xs\|sm\|md\|lg\|xl\|pill\|circle}` |
+| Spacing | `.ix-p-*` / `.ix-m-*` |
+| Retning | `.ix-flex-row` / `.ix-flex-col` |
+| Justering | `.ix-justify-{start\|center\|end\|between}` / `.ix-items-{start\|center\|end\|baseline}` |
+| Gap | `.ix-gap-*` |
+
+```html
+<section class="ix-surface ix-radius-md ix-p-md" data-status="info">
+  <h3>Tittel</h3>
+  <p>Innhold</p>
+</section>
+```
+
+## Universell utforming
+
+Surface er en ikke-interaktiv container og tilfører ingen rolle eller fokus-håndtering selv.
+
+- **Velg semantisk element** med `as` der det er relevant — f.eks. `as="section"` for en seksjon.
+  Standard `<div>` er korrekt når flaten kun er visuell gruppering.
+- **Ikke kommuniser mening med farge alene** — statusfargen er dekorativ. Innhold som bærer
+  betydning må også ha tekst eller annet ikke-visuelt signal.
+- **Trenger flaten å være klikkbar**, er Surface feil verktøy — bruk [Card](./card), som gir
+  riktig semantikk (`<a>`/`<button>`), tastaturstøtte og fokusring.
+
+## Relatert
+
+- [Card](./card) — avgrenset, evt. klikkbart innholdskort
+- [Stack](./primitives/stack) — layout-primitiver for retning og avstand
+- [Utility-klasser](../utility-klasser/oversikt) — klassene Surface bygger på

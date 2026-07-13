@@ -5,6 +5,7 @@ export type {
     AccordionHeaderProps,
     AccordionContentProps,
 } from './accordion/Accordion';
+export type { Status } from '../../types/types';
 export { Button } from './button/Button';
 export { Chip } from './chip/Chip';
 export type { ChipProps } from './chip/Chip';

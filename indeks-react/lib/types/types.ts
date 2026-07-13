@@ -1,6 +1,12 @@
 import clsx from 'clsx';
 
-export type SurfaceColor = 'main' | 'accent' | 'info' | 'success' | 'warning' | 'danger' | 'interactive';
+/**
+ * Statustema som kobles via `data-status` og `--ix-color-status-*`
+ * (se @sb1/indeks-utils/css/status-colors.css). `"neutral"` gir den nøytrale
+ * `main`-flaten. Delt av Surface/Card/InteractiveIcon (Message utleder sin egen
+ * uten `neutral`). Verdien settes som `data-status` direkte på elementet.
+ */
+export type Status = 'neutral' | 'info' | 'success' | 'warning' | 'danger';
 export type Border = 'default' | 'dashed';
 export type Radius = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'pill' | 'circle';
 export type Size = '0' | '4xs' | '3xs' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';

@@ -1,0 +1,11 @@
+/* Surface — en enkel visuell flate for gruppering av innhold.
+   Bakgrunnen kobles via `--ix-color-status-*` (se
+   @sb1/indeks-utils/css/status-colors.css): uten `data-status` faller den
+   tilbake på `main`-flaten, og `data-status="info|success|warning|danger"`
+   bytter til den tilhørende status-flaten — samme mønster som Message/Card.
+   Border, radius, spacing og flex kommer fra utility-klasser. */
+:where(.ix-surface) {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--ix-color-status-surface);
+}
