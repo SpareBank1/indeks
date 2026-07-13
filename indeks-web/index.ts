@@ -1,4 +1,5 @@
 import { IxCheckboxGroup } from './lib/components/checkbox-group/IxCheckboxGroup.js';
+import { IxCombobox } from './lib/components/combobox/IxCombobox.js';
 import { IxField } from './lib/components/field/IxField.js';
 import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
@@ -9,11 +10,13 @@ customElements.define('ix-field', IxField);
 customElements.define('ix-icon', IxIcon);
 customElements.define('ix-radio-group', IxRadioGroup);
 customElements.define('ix-checkbox-group', IxCheckboxGroup);
+customElements.define('ix-combobox', IxCombobox);
 
 export { IxField };
 export { IxIcon };
 export { IxRadioGroup };
 export { IxCheckboxGroup };
+export { IxCombobox };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
 
@@ -23,6 +26,7 @@ declare global {
         'ix-icon': IxIcon;
         'ix-radio-group': IxRadioGroup;
         'ix-checkbox-group': IxCheckboxGroup;
+        'ix-combobox': IxCombobox;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -44,6 +48,17 @@ declare global {
                 disabled?: boolean | '';
                 readonly?: boolean | '';
                 'data-state'?: 'error' | 'readonly' | 'disabled';
+                class?: string;
+                children?: unknown;
+            };
+            'ix-combobox': {
+                name?: string;
+                multiple?: boolean | '';
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                'data-no-hits-text'?: string;
+                'data-arrow-hint-text'?: string;
+                'data-remove-chip-label'?: string;
                 class?: string;
                 children?: unknown;
             };

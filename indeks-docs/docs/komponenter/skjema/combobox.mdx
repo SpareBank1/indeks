@@ -1,0 +1,628 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/combobox.json';
+
+# Combobox
+
+Combobox lar brukeren søke etter og velge ett eller flere alternativer fra en liste. Brukeren skriver for å filtrere, og valgte alternativer vises enten som verdi i feltet (single) eller som chips over feltet (flervalg).
+
+## Egnet til
+
+- Lange lister der brukeren raskt vil filtrere seg frem
+- Valg der søk er raskere enn å skanne alle alternativer (f.eks. land, kommune)
+- Flervalg der valgte alternativer bør vises tydelig som chips
+- Situasjoner der brukeren kjenner navnet på det de leter etter
+
+## Uegnet til
+
+- Korte lister med få alternativer (bruk radio-knapper eller Select)
+- Når brukeren skal skrive inn en fri verdi som ikke finnes i lista
+- Når alle alternativer alltid bør være synlige samtidig
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Combobox
+  label="Land"
+  placeholder="Søk etter land …"
+  noHitsText="Ingen treff"
+  toggleLabel="Vis alternativer"
+  options={[
+    { value: '47', label: 'Norge', description: '+47' },
+    { value: '46', label: 'Sverige', description: '+46' },
+    { value: '45', label: 'Danmark', description: '+45' },
+    { value: '358', label: 'Finland', description: '+358' },
+  ]}
+/>
+```
+
+Prøv å skrive for å filtrere lista. Søket treffer både **label**, **verdi** og **beskrivelse** — så «+47» eller «47» finner Norge like godt som «Norge». Filtreringen er locale-bevisst (norsk collator, æ/ø/å-korrekt og aksent-uavhengig). `noHitsText` og `toggleLabel` er tekster du selv oversetter.
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="land-html">Land</label>
+  <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
+    <div class="ix-text-field">
+      <input id="land-html" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+    </div>
+    <div class="ix-combobox__listbox" hidden>
+      <div class="ix-combobox__option" data-value="47">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Norge</span>
+        <span class="ix-combobox__option-description">+47</span>
+      </div>
+      <div class="ix-combobox__option" data-value="46">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Sverige</span>
+        <span class="ix-combobox__option-description">+46</span>
+      </div>
+      <div class="ix-combobox__option" data-value="45">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Danmark</span>
+        <span class="ix-combobox__option-description">+45</span>
+      </div>
+    </div>
+    <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
+    <select data-field="native" name="land" hidden></select>
+  </ix-combobox>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+`<ix-combobox>` kobler ARIA (role=combobox/listbox/option, aria-activedescendant), håndterer tastatur og filtrering, og synkroniserer valgte verdier til den skjulte `<select>`.
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Forhåndsvalgte verdier
+
+Skal ett eller flere alternativer være valgt når siden lastes, markerer du dem i lista med `aria-selected="true"` på `.ix-combobox__option`. Det er den eneste sanningskilden for startverdi — du trenger **ikke** sette `value` på inputen eller fylle den skjulte `<select>` manuelt. Web-komponenten leser `aria-selected` og synkroniserer resten selv: i single fylles inputteksten, i flervalg **genererer den chipsene**. Du skriver aldri `<data class="ix-chip">` for hånd.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Combobox
+  label="Land"
+  placeholder="Søk etter land …"
+  noHitsText="Ingen treff"
+  toggleLabel="Vis alternativer"
+  defaultValue="47"
+  options={[
+    { value: '47', label: 'Norge', description: '+47' },
+    { value: '46', label: 'Sverige', description: '+46' },
+    { value: '45', label: 'Danmark', description: '+45' },
+  ]}
+/>
+```
+
+I React setter du startverdi med `defaultValue` (ukontrollert) eller `value` (kontrollert) — `'47'` i single, `['47', '46']` i flervalg.
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="land-preselect">Land</label>
+  <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
+    <div class="ix-text-field">
+      <input id="land-preselect" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+    </div>
+    <div class="ix-combobox__listbox" hidden>
+      <div class="ix-combobox__option" data-value="47" aria-selected="true">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Norge</span>
+        <span class="ix-combobox__option-description">+47</span>
+      </div>
+      <div class="ix-combobox__option" data-value="46">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Sverige</span>
+        <span class="ix-combobox__option-description">+46</span>
+      </div>
+    </div>
+    <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
+    <select data-field="native" name="land" hidden></select>
+  </ix-combobox>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+Norge vises i feltet fra start fordi optionen har `aria-selected="true"`. I flervalg gir du flere options `aria-selected="true"` og lar `<div class="ix-combobox__chips" data-field="chips">` stå tom — komponenten fyller den med chips selv.
+
+:::info Skjult `<select>` og forhåndsvalg
+Combobox samarbeider med et skjult `<select data-field="native">`. Det er **dette elementet som sendes med skjemaet**: hver valgte option blir en `<option>` der `value` = optionens `data-value`, og `name` arves fra `<ix-combobox name="…">`. Legger du ikke til selectet selv, oppretter komponenten det automatisk.
+
+Forhåndsvalg i ren HTML gjøres alltid med `aria-selected="true"` på `.ix-combobox__option` — ikke ved å skrive `<option selected>` i den skjulte selecten (den bygges opp på nytt fra `aria-selected` hver gang) eller ved å sette `value` på inputen.
+:::
+
+</TabItem>
+</Tabs>
+
+### Reagere på endringer (ren JS)
+
+Uten React lytter du på `change`-hendelsen på `<ix-combobox>` og leser gjeldende verdi fra det skjulte `<select>`, som allerede er synkronisert når hendelsen fyres.
+
+```js
+const combobox = document.querySelector('ix-combobox');
+const select = combobox.querySelector('select[data-field="native"]');
+
+combobox.addEventListener('change', () => {
+  // Single: én verdi. Flervalg: bruk select.selectedOptions.
+  console.log('Valgt:', select.value);
+});
+```
+
+`change` er et bublende `CustomEvent` uten `detail` — verdien ligger i det skjulte `<select>`, ikke på hendelsen.
+
+### Kontrollert vs. ukontrollert (React)
+
+I React kan feltet være **ukontrollert** eller **kontrollert**:
+
+- **Ukontrollert:** sett `defaultValue` for startverdi. Komponenten eier verdien etter mount, og senere endringer av `defaultValue` ignoreres (som i vanlige React-inputs).
+- **Kontrollert:** sett `value` og oppdater den i `onChange`. Da er React sanningskilden.
+
+Verditypen følger `multiple`: **string** i single, **string[]** i flervalg. I single får `onChange` en tom streng (`''`) når alt fjernes. `onChange` kalles ved valg, avmarkering og fjerning av chip.
+
+```tsx live
+function KontrollertLand() {
+  const [land, setLand] = React.useState('47');
+  return (
+    <>
+      <Combobox
+        label="Land"
+        noHitsText="Ingen treff"
+        toggleLabel="Vis alternativer"
+        value={land}
+        onChange={setLand}
+        options={[
+          { value: '47', label: 'Norge' },
+          { value: '46', label: 'Sverige' },
+          { value: '45', label: 'Danmark' },
+        ]}
+      />
+      <p>Valgt verdi: {land || '(ingen)'}</p>
+    </>
+  );
+}
+```
+
+:::note Filtrering er ikke konfigurerbar
+Søk/filtrering skjer inne i web-komponenten (locale-bevisst, treffer label, verdi og beskrivelse) og kan ikke overstyres med en prop fra React. Ved 0 treff vises `noHitsText` i en `role="status"`-region.
+:::
+
+### Flervalg med chips
+
+I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alternativer vises som chips. Chips nås med piltast og fjernes med Backspace eller klikk.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Combobox
+  label="Land"
+  multiple
+  placeholder="Søk etter land …"
+  noHitsText="Ingen treff"
+  toggleLabel="Vis alternativer"
+  removeChipLabel="fjern"
+  arrowHintText="Bruk piltastene for å navigere mellom valgte alternativer"
+  defaultValue={['47', '46']}
+  options={[
+    { value: '47', label: 'Norge', description: '+47' },
+    { value: '46', label: 'Sverige', description: '+46' },
+    { value: '45', label: 'Danmark', description: '+45' },
+    { value: '358', label: 'Finland', description: '+358' },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label htmlFor="land-multi">Land</label>
+  <ix-combobox
+    class="ix-combobox"
+    multiple
+    data-no-hits-text="Ingen treff"
+    data-remove-chip-label="fjern"
+    data-arrow-hint-text="Bruk piltastene for å navigere mellom valgte alternativer"
+    name="land"
+  >
+    <div class="ix-combobox__chips" data-field="chips"></div>
+    <div class="ix-text-field">
+      <input id="land-multi" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+    </div>
+    <div class="ix-combobox__listbox" hidden>
+      <div class="ix-combobox__option" data-value="47" aria-selected="true">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Norge</span>
+      </div>
+      <div class="ix-combobox__option" data-value="46">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Sverige</span>
+      </div>
+      <div class="ix-combobox__option" data-value="45">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Danmark</span>
+      </div>
+    </div>
+    <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
+    <select data-field="native" name="land" hidden></select>
+  </ix-combobox>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Med hjelpetekst
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Combobox
+  label="Land"
+  description="Søk og velg landet du bor i"
+  placeholder="Søk …"
+  noHitsText="Ingen treff"
+  toggleLabel="Vis alternativer"
+  options={[
+    { value: '47', label: 'Norge' },
+    { value: '46', label: 'Sverige' },
+    { value: '45', label: 'Danmark' },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="land-desc">Land</label>
+  <span data-field="description">Søk og velg landet du bor i</span>
+  <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
+    <div class="ix-text-field">
+      <input id="land-desc" class="ix-text-field__input" placeholder="Søk …" />
+      <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+    </div>
+    <div class="ix-combobox__listbox" hidden>
+      <div class="ix-combobox__option" data-value="47">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Norge</span>
+      </div>
+      <div class="ix-combobox__option" data-value="46">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Sverige</span>
+      </div>
+    </div>
+    <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
+    <select data-field="native" name="land" hidden></select>
+  </ix-combobox>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Med feilmelding
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Combobox
+  label="Land"
+  errorMessage="Du må velge et land for å fortsette"
+  placeholder="Søk …"
+  noHitsText="Ingen treff"
+  toggleLabel="Vis alternativer"
+  options={[
+    { value: '47', label: 'Norge' },
+    { value: '46', label: 'Sverige' },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="land-error">Land</label>
+  <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
+    <div class="ix-text-field">
+      <input id="land-error" class="ix-text-field__input" placeholder="Søk …" aria-invalid="true" />
+      <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+    </div>
+    <div class="ix-combobox__listbox" hidden>
+      <div class="ix-combobox__option" data-value="47">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Norge</span>
+      </div>
+      <div class="ix-combobox__option" data-value="46">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Sverige</span>
+      </div>
+    </div>
+    <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
+    <select data-field="native" name="land" hidden></select>
+  </ix-combobox>
+  <span data-field="error">Du må velge et land for å fortsette</span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Deaktivert
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<Combobox
+  label="Land"
+  disabled
+  defaultValue="47"
+  noHitsText="Ingen treff"
+  toggleLabel="Vis alternativer"
+  options={[
+    { value: '47', label: 'Norge' },
+    { value: '46', label: 'Sverige' },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="land-disabled">Land</label>
+  <ix-combobox class="ix-combobox" disabled data-no-hits-text="Ingen treff" name="land">
+    <div class="ix-text-field">
+      <input id="land-disabled" class="ix-text-field__input" />
+      <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+    </div>
+    <div class="ix-combobox__listbox" hidden>
+      <div class="ix-combobox__option" data-value="47" aria-selected="true">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Norge</span>
+      </div>
+    </div>
+    <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
+    <select data-field="native" name="land" hidden></select>
+  </ix-combobox>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+## Hva ix-combobox gjør med DOM-en
+
+`<ix-combobox>` er en web component som kobler sammen native elementene du skriver i light DOM med korrekt combobox-ARIA, håndterer tastatur og filtrering, posisjonerer lista og synkroniserer valgte verdier til det skjulte `<select>`. Du skriver den semantiske strukturen — komponenten legger på ARIA og IDer. Her er hva som skjer i single-varianten, fra HTML du skriver til DOM etter at komponenten har kjørt.
+
+**Før** (det du skriver):
+
+```html
+<ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
+  <div class="ix-text-field">
+    <input class="ix-text-field__input" aria-label="Land" />
+    <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+  </div>
+  <div class="ix-combobox__listbox">
+    <div class="ix-combobox__option" data-value="47" aria-selected="true">
+      <span class="ix-combobox__option-check" aria-hidden="true"></span>
+      <span class="ix-combobox__option-label">Norge</span>
+    </div>
+  </div>
+  <div class="ix-combobox__no-hits" role="status">Ingen treff</div>
+</ix-combobox>
+```
+
+**Etter** (det som er i DOM etter at `ix-combobox` har kjørt):
+
+```html
+<ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
+  <div class="ix-text-field">
+    <input class="ix-text-field__input" aria-label="Land"
+           id="ix-combobox-input-1" role="combobox" aria-autocomplete="list"
+           autocomplete="off" aria-expanded="false"
+           aria-controls="ix-combobox-listbox-1" />
+    <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer" tabindex="-1"></button>
+  </div>
+  <div class="ix-combobox__listbox" id="ix-combobox-listbox-1"
+       role="listbox" aria-multiselectable="false" hidden>
+    <div class="ix-combobox__option" data-value="47" aria-selected="true"
+         id="ix-combobox-listbox-1-option-0" role="option">
+      <span class="ix-combobox__option-check" aria-hidden="true"></span>
+      <span class="ix-combobox__option-label">Norge</span>
+    </div>
+  </div>
+  <div class="ix-combobox__no-hits" role="status"></div>
+  <!-- Opprettet automatisk, fylt fra aria-selected: -->
+  <select data-field="native" name="land" hidden>
+    <option value="47" selected>Norge</option>
+  </select>
+</ix-combobox>
+```
+
+Fordi Norge-optionen hadde `aria-selected="true"`, satte komponenten i tillegg `input.value = "Norge"` og la til `<option value="47" selected>` i det skjulte selectet.
+
+Hva som ble lagt til:
+
+| Hva | Hvor | Hvorfor |
+|-----|------|---------|
+| `role="combobox"`, `aria-autocomplete="list"` | `<input>` | Gjør feltet til en combobox for skjermlesere |
+| `id` (genereres om den mangler) | `<input>`, `.ix-combobox__listbox`, hver `.ix-combobox__option` | Grunnlag for ARIA-koblinger og virtual focus |
+| `aria-controls` | `<input>` | Peker på listbox-IDen |
+| `aria-expanded` | `<input>` | `true`/`false` når lista åpnes/lukkes |
+| `aria-activedescendant` | `<input>` | Peker på aktivt alternativ under piltast-navigasjon — fokus flyttes aldri fysisk inn i lista |
+| `role="listbox"`, `aria-multiselectable` | `.ix-combobox__listbox` | Semantikk for lista; `true` i flervalg |
+| `role="option"`, `aria-selected` | hver `.ix-combobox__option` | Semantikk og valgt-tilstand (`aria-selected="false"` settes om den mangler) |
+| `tabindex="-1"` | `.ix-combobox__toggle` | Chevron-knappen skal ikke ha eget tab-stopp — feltet betjenes fra inputen |
+| `<select data-field="native">` | inni `<ix-combobox>` | Skjult select for form-innsending. Opprettes automatisk om du ikke skrev den, og fylles fra `aria-selected` |
+
+I flervalg legger komponenten i tillegg til `aria-description` på inputen (fra `data-arrow-hint-text`) og genererer `<data class="ix-chip" data-removable>`-elementer i `[data-field="chips"]` for hvert valgte alternativ.
+
+## Retningslinjer
+
+### Tydelige labels gir forutsigbarhet
+
+Alle combobox-felter skal ha en synlig og beskrivende label. Labelen skal beskrive hvilken informasjon feltet gjelder, ikke handlingen. Skriv "Land" i stedet for "Søk og velg land".
+
+### Bruk combobox når søk er raskere enn å skanne
+
+Combobox egner seg når listen er lang eller vanskelig å skanne. For korte lister gir radio-knapper eller Select bedre oversikt.
+
+### Valgt verdi må alltid være tydelig
+
+I single vises valgt verdi i feltet. I flervalg vises hvert valg som en chip over feltet, og valgte alternativer får en checkmark i lista. Brukeren skal aldri være i tvil om hva som er valgt.
+
+### "Kun velg fra liste"
+
+Komponenten lar brukeren velge blant eksisterende alternativer — ikke skrive inn frie verdier. Trenger du fri tekst, bruk et vanlig tekstfelt.
+
+### Sorter alternativene forutsigbart
+
+Alternativene bør sorteres alfabetisk, eller med de mest relevante øverst i lange lister, slik at brukeren raskt finner frem.
+
+## Tilgjengelighet / universell utforming
+
+### Semantisk struktur og korrekt rolle
+
+Combobox følger [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) sitt combobox-mønster: inputfeltet får `role="combobox"` med `aria-autocomplete="list"`, `aria-expanded` og `aria-controls`. Lista er `role="listbox"` og alternativene `role="option"` med `aria-selected`.
+
+### Virtual focus
+
+DOM-fokus blir alltid på inputfeltet. Aktivt alternativ spores med `aria-activedescendant`, slik at brukeren kan skrive og pil-navigere samtidig uten at fokus flyttes fysisk inn i lista.
+
+### Tydelig fokus og tastaturnavigasjon
+
+Combobox er fullt opererbar med tastatur. Feltet nås med Tab, lista åpnes ved skriving eller piltast, alternativer velges med Enter og lista lukkes med Escape. I flervalg nås chips med piltast og fjernes med Backspace.
+
+### Tilstrekkelig størrelse og klikkeflate
+
+Toggle-knappen og alternativene oppfyller minimum 44×44 px klikkflate.
+
+### i18n — send inn oversatt tekst
+
+Komponenten har ingen innebygde tekster. `noHitsText`, `toggleLabel`, `removeChipLabel` og `arrowHintText` må sendes inn på riktig språk (bokmål, nynorsk, engelsk). Det finnes ingen norsk fallback — det ville smittet over på andre språk.
+
+I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.warn` når en påkrevd tekst mangler: toggle-knappen uten `aria-label` (React: `toggleLabel`), flervalg uten `data-remove-chip-label` (React: `removeChipLabel`), eller input uten tilgjengelig navn. Advarslene fjernes fra produksjonsbygg.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+### ComboboxProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `label` | `string` | Nei* | | Synlig labeltekst. Anbefalt fremfor `ariaLabel` |
+| `ariaLabel` | `string` | Nei* | | Skjult label for skjermlesere. *Enten `label` eller `ariaLabel` må settes |
+| `options` | `ComboboxOption[]` | Ja | | Alternativene i lista |
+| `noHitsText` | `string` | Ja | | Tekst i lista når filteret gir 0 treff (i18n) |
+| `multiple` | `boolean` | Nei | `false` | Flervalg med chips |
+| `value` | `string \| string[]` | Nei | | Kontrollert verdi. `string` i single, `string[]` i multi |
+| `defaultValue` | `string \| string[]` | Nei | | Ukontrollert startverdi. Virker kun ved mount |
+| `onChange` | `(value: string \| string[]) => void` | Nei | | Kalles ved valg/avmarkering/fjerning. Får `string` i single (`''` når tomt), `string[]` i multi |
+| `placeholder` | `string` | Nei | | Placeholder i inputfeltet |
+| `description` | `string` | Nei | | Hjelpetekst under label |
+| `errorMessage` | `string` | Nei | | Feilmelding. Trigger `aria-invalid` når den har innhold |
+| `disabled` | `boolean` | Nei | | Deaktiverer feltet |
+| `readOnly` | `boolean` | Nei | | Skrivebeskyttet felt |
+| `required` | `boolean` | Nei | | Markerer feltet som påkrevd |
+| `toggleLabel` | `string` | Nei | | aria-label på chevron-knappen (i18n) |
+| `removeChipLabel` | `string` | Nei | | Suffiks på chip-ens aria-label, f.eks. "fjern" (i18n, multi) |
+| `arrowHintText` | `string` | Nei | | aria-description som forklarer chip-navigasjon (i18n, multi) |
+| `name` | `string` | Nei | | Navn på skjult `<select>` for form-innsending |
+| `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
+| `ref` | `Ref<IxCombobox>` | Nei | | Ref videresendes til `<ix-combobox>`-elementet |
+
+### ComboboxOption
+
+| Prop | Type | Påkrevd | Beskrivelse |
+|------|------|---------|-------------|
+| `value` | `string` | Ja | Verdien som sendes ved valg |
+| `label` | `string` | Ja | Teksten som vises for alternativet |
+| `description` | `string` | Nei | Valgfri andrelinje under label |
+| `disabled` | `boolean` | Nei | Gjør alternativet utilgjengelig for valg |
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+### `<ix-combobox>`
+
+| Attributt | Påkrevd | Beskrivelse |
+|-----------|---------|-------------|
+| `multiple` | Nei | Flervalg med chips |
+| `disabled` | Nei | Deaktiverer feltet |
+| `readonly` | Nei | Skrivebeskyttet felt |
+| `name` | Nei | Navn på skjult `<select>` for form-innsending |
+| `data-no-hits-text` | Nei | Tekst ved 0 treff |
+| `data-remove-chip-label` | Nei | Suffiks på chip aria-label (multi) |
+| `data-arrow-hint-text` | Nei | aria-description for chip-navigasjon (multi) |
+
+### Delelementer (light DOM)
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `.ix-text-field > input` | Ja | Inputfeltet. Får combobox-ARIA |
+| `.ix-combobox__toggle` | Nei | Chevron-knapp for å åpne/lukke lista |
+| `.ix-combobox__listbox` | Ja | Panelet med alternativer |
+| `.ix-combobox__option[data-value]` | Ja | Ett alternativ. Label i `.ix-combobox__option-label`. Sett `aria-selected="true"` for forhåndsvalg, `aria-disabled="true"` for å deaktivere |
+| `.ix-combobox__option-check` | Nei | Checkmark, vises når valgt |
+| `.ix-combobox__option-description` | Nei | Valgfri andrelinje |
+| `.ix-combobox__no-hits` | Nei | Melding ved 0 treff (`role="status"`) |
+| `[data-field="chips"]` | Kun multi | Tom wrapper du skriver selv. Komponenten fyller den med chips — ikke skriv `<data class="ix-chip">` for hånd |
+| `select[data-field="native"]` | Nei | Skjult select for form-synk. Opprettes automatisk om den mangler |
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Rot | `.ix-combobox` |
+| Chips-wrapper | `.ix-combobox__chips` |
+| Toggle-knapp | `.ix-combobox__toggle` |
+| Listbox | `.ix-combobox__listbox` |
+| Alternativ | `.ix-combobox__option` |
+| Checkmark | `.ix-combobox__option-check` |
+| Ingen treff | `.ix-combobox__no-hits` |
+
+## Relatert
+
+- [Select](./select) — for enkelt valg fra kort/mellomlang liste uten søk
+- [Chip](../chip) — chip-stilen som gjenbrukes for valgte alternativer i flervalg
