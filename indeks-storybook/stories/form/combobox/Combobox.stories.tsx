@@ -22,6 +22,7 @@ const meta = {
         placeholder: 'Søk etter land …',
         noHitsText: 'Ingen treff',
         toggleLabel: 'Vis alternativer',
+        resultsText: '{n} alternativer',
     },
 } satisfies Meta<typeof Combobox>;
 
@@ -46,6 +47,7 @@ export const Flervalg: Story = {
     args: {
         multiple: true,
         removeChipLabel: 'fjern',
+        chipsLabel: 'Valgte alternativer',
         arrowHintText: 'Bruk piltastene for å navigere mellom valgte alternativer',
     },
 };
@@ -54,6 +56,7 @@ export const FlervalgMedForhåndsvalgte: Story = {
     args: {
         multiple: true,
         removeChipLabel: 'fjern',
+        chipsLabel: 'Valgte alternativer',
         arrowHintText: 'Bruk piltastene for å navigere mellom valgte alternativer',
         defaultValue: ['47', '46'],
     },

@@ -45,6 +45,8 @@ declare module 'react' {
                 'data-no-hits-text'?: string;
                 'data-arrow-hint-text'?: string;
                 'data-remove-chip-label'?: string;
+                'data-chips-label'?: string;
+                'data-results-text'?: string;
             };
             'ix-stack': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
                 class?: string;

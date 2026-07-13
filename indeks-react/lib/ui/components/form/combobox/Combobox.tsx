@@ -47,8 +47,15 @@ export type ComboboxProps = {
     toggleLabel?: string;
     /** Suffiks på chip-ens aria-label, f.eks. "fjern" → "Norge, fjern" (i18n, multi). */
     removeChipLabel?: string;
-    /** aria-description på input i multi som forklarer piltast-navigasjon i chips (i18n). */
+    /** aria-label på chip-gruppen (role="group"), f.eks. "Valgte alternativer" (i18n, multi). */
+    chipsLabel?: string;
+    /** Skjult hint (aria-describedby) på input i multi som forklarer piltast-navigasjon i chips (i18n). */
     arrowHintText?: string;
+    /**
+     * Mal for skjermleser-annonsering av antall treff ved filtrering (i18n).
+     * `{n}` byttes ut med antallet, f.eks. "{n} alternativer". Utelates → ingen annonsering.
+     */
+    resultsText?: string;
     /** aria-label på toggle-knappen. */
     id?: string;
 };
@@ -86,7 +93,9 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
         noHitsText,
         toggleLabel,
         removeChipLabel,
+        chipsLabel,
         arrowHintText,
+        resultsText,
         id,
     },
     ref
@@ -109,12 +118,20 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
         const selected = new Set(toValueArray(controlledValue));
         for (const option of host.querySelectorAll<HTMLElement>('.ix-combobox__option')) {
             const optValue = option.getAttribute('data-value') ?? '';
-            option.setAttribute('aria-selected', selected.has(optValue) ? 'true' : 'false');
+            if (selected.has(optValue)) {
+                option.setAttribute('aria-selected', 'true');
+            } else if (multiple) {
+                // Multi: listbox er aria-multiselectable, options beholder "false".
+                option.setAttribute('aria-selected', 'false');
+            } else {
+                // Single (APG): fjern attributtet på uvalgte i stedet for "false".
+                option.removeAttribute('aria-selected');
+            }
         }
         // WC-en re-synker chips/input/skjult select via sin MutationObserver +
         // interne synk når aria-selected endres ved neste interaksjon; for
         // kontrollert visning holder det å sette attributtet før WC leser det.
-    }, [isControlled, controlledValue]);
+    }, [isControlled, controlledValue, multiple]);
 
     // Lytt på WC-ens change-event og rapporter ny verdi til konsumenten.
     useEffect(() => {
@@ -160,6 +177,8 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
                 data-no-hits-text={noHitsText}
                 data-arrow-hint-text={arrowHintText}
                 data-remove-chip-label={removeChipLabel}
+                data-chips-label={chipsLabel}
+                data-results-text={resultsText}
             >
                 {multiple && <div className="ix-combobox__chips" data-field="chips" />}
                 <div className="ix-text-field">
@@ -179,7 +198,12 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
                             key={option.value}
                             className="ix-combobox__option"
                             data-value={option.value}
-                            aria-selected={initialSelected.has(option.value) ? 'true' : 'false'}
+                            // Single (APG): utelat aria-selected på uvalgte (ikke "false") så
+                            // skjermleser ikke leser «ikke valgt» for hvert alternativ. Multi:
+                            // listbox er aria-multiselectable, options bærer true/false.
+                            aria-selected={
+                                initialSelected.has(option.value) ? 'true' : multiple ? 'false' : undefined
+                            }
                             aria-disabled={option.disabled ? 'true' : undefined}
                         >
                             <span className="ix-combobox__option-check" aria-hidden="true" />

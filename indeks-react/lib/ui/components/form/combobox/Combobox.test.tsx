@@ -85,18 +85,26 @@ describe('Combobox', () => {
             multiple: true,
             toggleLabel: 'Vis liste',
             removeChipLabel: 'fjern',
+            chipsLabel: 'Valgte alternativer',
             arrowHintText: 'Bruk piltast',
         });
         const host = container.querySelector('ix-combobox');
         expect(host?.getAttribute('data-remove-chip-label')).toBe('fjern');
+        expect(host?.getAttribute('data-chips-label')).toBe('Valgte alternativer');
         expect(host?.getAttribute('data-arrow-hint-text')).toBe('Bruk piltast');
         expect(container.querySelector('.ix-combobox__toggle')?.getAttribute('aria-label')).toBe('Vis liste');
+    });
+
+    it('sender resultsText til data-results-text', () => {
+        const { container } = renderCombobox({ resultsText: '{n} alternativer' });
+        expect(container.querySelector('ix-combobox')?.getAttribute('data-results-text')).toBe('{n} alternativer');
     });
 
     it('markerer defaultValue som aria-selected (ukontrollert, single)', () => {
         const { container } = renderCombobox({ defaultValue: 'se' });
         expect(container.querySelector('[data-value="se"]')?.getAttribute('aria-selected')).toBe('true');
-        expect(container.querySelector('[data-value="no"]')?.getAttribute('aria-selected')).toBe('false');
+        // Single (APG): uvalgte har ikke aria-selected i det hele tatt.
+        expect(container.querySelector('[data-value="no"]')?.hasAttribute('aria-selected')).toBe(false);
     });
 
     it('markerer value som aria-selected (kontrollert, multi)', () => {
@@ -110,7 +118,8 @@ describe('Combobox', () => {
         const { container, rerender } = renderCombobox({ value: 'no', onChange: () => {} });
         expect(container.querySelector('[data-value="no"]')?.getAttribute('aria-selected')).toBe('true');
         rerender(<Combobox label="Land" options={OPTIONS} noHitsText="x" value="se" onChange={() => {}} />);
-        expect(container.querySelector('[data-value="no"]')?.getAttribute('aria-selected')).toBe('false');
+        // Single (APG): forrige valg mister attributtet (ikke "false").
+        expect(container.querySelector('[data-value="no"]')?.hasAttribute('aria-selected')).toBe(false);
         expect(container.querySelector('[data-value="se"]')?.getAttribute('aria-selected')).toBe('true');
     });
 

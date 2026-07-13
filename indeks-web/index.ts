@@ -59,6 +59,8 @@ declare global {
                 'data-no-hits-text'?: string;
                 'data-arrow-hint-text'?: string;
                 'data-remove-chip-label'?: string;
+                'data-chips-label'?: string;
+                'data-results-text'?: string;
                 class?: string;
                 children?: unknown;
             };

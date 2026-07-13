@@ -149,12 +149,13 @@
 }
 
 /* ── Option (to-linjers list item) ──────────────────────────────────────────
-   Standard = single: kun tekstkolonne. Valgt vises med fetere label og
-   bakgrunn (ikke checkmark) — se aria-selected-reglene under. Flervalg legger
-   til en checkmark-kolonne (se [aria-multiselectable="true"]). */
+   Checkmark-kolonne foran teksten i BÅDE single og multi. Kolonnen opptar
+   plass alltid (checkmark er visibility:hidden når ikke valgt), slik at label
+   ikke hopper når valgt tilstand endres. Valgt vises med checkmark (struktur)
+   + fetere label — ikke farge alene (WCAG 1.4.1). */
 :where(.ix-combobox__option) {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: auto 1fr;
     align-items: center;
     column-gap: var(--ix-spacing-sm);
 
@@ -166,12 +167,6 @@
     color: var(--ix-color-foreground-main-default);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: pointer;
-}
-
-/* Flervalg: checkmark-kolonne foran teksten. Checkmark opptar plass alltid slik
-   at label ikke hopper når valgt tilstand endres. */
-:where(.ix-combobox__listbox[aria-multiselectable='true']) .ix-combobox__option {
-    grid-template-columns: auto 1fr;
 }
 
 /* Aktivt element (aria-activedescendant) markeres med data-active av web
@@ -190,35 +185,30 @@
     pointer-events: none;
 }
 
-/* Tekstkolonne: label over valgfri description. Standard = single (kolonne 1).
-   I flervalg flyttes teksten til kolonne 2 så checkmark-kolonnen får plass. */
+/* Tekstkolonne: label over valgfri description i kolonne 2 (checkmark-kolonnen
+   er kolonne 1 i begge moduser). */
 :where(.ix-combobox__option-label) {
-    grid-column: 1;
+    grid-column: 2;
     font-size: var(--ix-font-size-md);
 }
 
 :where(.ix-combobox__option-description) {
-    grid-column: 1;
+    grid-column: 2;
     font-size: var(--ix-font-size-sm);
     color: var(--ix-color-foreground-main-subtle);
 }
 
-:where(.ix-combobox__listbox[aria-multiselectable='true']) .ix-combobox__option-label,
-:where(.ix-combobox__listbox[aria-multiselectable='true']) .ix-combobox__option-description {
-    grid-column: 2;
-}
-
 /* ── Checkmark ──────────────────────────────────────────────────────────────
    Fast kolonne (grid-column 1, to rader) slik at både én- og to-linjers
-   options får krysset midtstilt. Synlig kun når option er valgt. */
+   options får krysset midtstilt. Kolonnen reserverer plass i begge moduser
+   (visibility: hidden når ikke valgt) så label ikke hopper — krysset gjøres
+   synlig når option er valgt, se regelen under. */
 :where(.ix-combobox__option-check) {
     grid-column: 1;
     grid-row: 1 / -1;
     width: 1.25em;
     height: 1.25em;
-    /* Skjult helt i single (ingen checkmark-kolonne). Flervalg viser den, se
-       regelen under — der reserverer visibility: hidden plass uten å hoppe. */
-    display: none;
+    visibility: hidden;
     background-color: var(--ix-color-foreground-success-default);
     /* stylelint-disable plugin/no-unsupported-browser-features */
     mask-size: contain;
@@ -232,16 +222,8 @@
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
-/* Flervalg: vis kolonnen (reserver plass med visibility: hidden så label ikke
-   hopper), og gjør krysset synlig når option er valgt. */
-:where(.ix-combobox__listbox[aria-multiselectable='true']) .ix-combobox__option-check {
-    display: block;
-    visibility: hidden;
-}
-
-:where(.ix-combobox__listbox[aria-multiselectable='true'])
-    .ix-combobox__option[aria-selected='true']
-    .ix-combobox__option-check {
+/* Valgt option viser krysset (begge moduser). */
+:where(.ix-combobox__option[aria-selected='true']) .ix-combobox__option-check {
     visibility: visible;
 }
 

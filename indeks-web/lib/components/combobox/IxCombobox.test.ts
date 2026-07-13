@@ -35,7 +35,7 @@ function single(extraHostAttrs = ''): IxCombobox {
 
 function multi(extraHostAttrs = ''): IxCombobox {
     return mount(`
-    <ix-combobox multiple data-no-hits-text="Ingen treff" data-remove-chip-label="fjern" data-arrow-hint-text="Bruk piltast" ${extraHostAttrs}>
+    <ix-combobox multiple data-no-hits-text="Ingen treff" data-remove-chip-label="fjern" data-arrow-hint-text="Bruk piltast" data-chips-label="Valgte alternativer" ${extraHostAttrs}>
       <div class="ix-combobox__chips" data-field="chips"></div>
       <div class="ix-text-field">
         <input class="ix-text-field__input" aria-label="Land" />
@@ -87,12 +87,13 @@ describe('IxCombobox', () => {
             expect(listbox(el).id).toMatch(/^ix-combobox-listbox-\d+$/);
         });
 
-        it('gir hver option role og stabil id', () => {
+        it('gir hver option role og stabil id (single: ingen aria-selected på uvalgte)', () => {
             const el = single();
             for (const o of options(el)) {
                 expect(o.getAttribute('role')).toBe('option');
                 expect(o.id).toBeTruthy();
-                expect(o.getAttribute('aria-selected')).toBe('false');
+                // Single (APG): uvalgte options har ikke aria-selected i det hele tatt.
+                expect(o.hasAttribute('aria-selected')).toBe(false);
             }
         });
 
@@ -227,6 +228,8 @@ describe('IxCombobox', () => {
             expect(input(el).value).toBe('Norge');
             expect(listbox(el).hidden).toBe(true);
             expect(options(el)[0].getAttribute('aria-selected')).toBe('true');
+            // Single (APG): øvrige har ikke aria-selected.
+            expect(options(el)[1].hasAttribute('aria-selected')).toBe(false);
         });
 
         it('klikk på option velger den', () => {
@@ -244,6 +247,8 @@ describe('IxCombobox', () => {
             const selected = options(el).filter((o) => o.getAttribute('aria-selected') === 'true');
             expect(selected).toHaveLength(1);
             expect(selected[0].getAttribute('data-value')).toBe('45');
+            // Øvrige har ikke aria-selected (APG single).
+            expect(options(el).filter((o) => o.hasAttribute('aria-selected'))).toHaveLength(1);
         });
 
         it('synker valgt verdi til skjult select', () => {
@@ -268,13 +273,23 @@ describe('IxCombobox', () => {
             expect(input(el).value).toBe('');
         });
 
-        it('chip har removable-attributt og i18n aria-label', () => {
+        it('chip har removable-attributt, role=button og i18n aria-label', () => {
             const el = multi();
             press(el, 'ArrowDown');
             options(el)[0].click();
             const chip = el.querySelector('data.ix-chip')!;
             expect(chip.hasAttribute('data-removable')).toBe(true);
             expect(chip.getAttribute('aria-label')).toBe('Norge, fjern');
+            // Chip er en fjern-knapp, ikke en option (ligger i role=group, ikke listbox).
+            expect(chip.getAttribute('role')).toBe('button');
+            expect(chip.hasAttribute('aria-selected')).toBe(false);
+        });
+
+        it('chips-wrapper er role=group med i18n aria-label i multi', () => {
+            const el = multi();
+            const wrapper = el.querySelector('[data-field="chips"]')!;
+            expect(wrapper.getAttribute('role')).toBe('group');
+            expect(wrapper.getAttribute('aria-label')).toBe('Valgte alternativer');
         });
 
         it('klikk på chip fjerner valget', () => {
@@ -304,9 +319,40 @@ describe('IxCombobox', () => {
             expect(el.querySelectorAll('data.ix-chip')).toHaveLength(0);
         });
 
-        it('setter aria-description (piltast-hint) på input i multi', () => {
-            expect(input(multi()).getAttribute('aria-description')).toBe('Bruk piltast');
-            expect(input(single()).getAttribute('aria-description')).toBeNull();
+        it('kobler piltast-hint via aria-describedby til skjult element i multi', () => {
+            const el = multi();
+            const inp = input(el);
+            const ids = (inp.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean);
+            expect(ids.length).toBeGreaterThan(0);
+            // Minst én av id-ene peker på et .ix-sr-only-element med hint-teksten.
+            const hintEl = ids.map((id) => el.querySelector(`#${id}`)).find((e) => e?.textContent === 'Bruk piltast');
+            expect(hintEl).toBeTruthy();
+            expect(hintEl?.classList.contains('ix-sr-only')).toBe(true);
+            // Ikke lenger aria-description.
+            expect(inp.hasAttribute('aria-description')).toBe(false);
+        });
+
+        it('single har ingen piltast-hint', () => {
+            const inp = input(single());
+            const ids = (inp.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean);
+            expect(ids.some((id) => id.includes('arrow-hint'))).toBe(false);
+        });
+
+        it('aria-describedby merges additivt med eksisterende id (jf. ix-field)', () => {
+            const el = mount(`
+              <ix-combobox multiple data-no-hits-text="Ingen treff" data-remove-chip-label="fjern" data-chips-label="Valgte" data-arrow-hint-text="Bruk piltast">
+                <div class="ix-combobox__chips" data-field="chips"></div>
+                <div class="ix-text-field">
+                  <input class="ix-text-field__input" aria-label="Land" aria-describedby="ekstern-desc" />
+                  <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+                </div>
+                <div class="ix-combobox__listbox">${OPTIONS}</div>
+                <select data-field="native" name="land" hidden></select>
+              </ix-combobox>`);
+            const ids = (input(el).getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean);
+            // Forfatterens id bevares, og hint-id-en er lagt til.
+            expect(ids).toContain('ekstern-desc');
+            expect(ids.some((id) => id.includes('arrow-hint'))).toBe(true);
         });
     });
 
@@ -329,6 +375,66 @@ describe('IxCombobox', () => {
             chip.focus();
             press(el, 'Backspace', chip);
             expect(el.querySelectorAll('data.ix-chip')).toHaveLength(0);
+        });
+    });
+
+    describe('treff-annonsering (skjult live-region)', () => {
+        function withResults(): IxCombobox {
+            return mount(`
+              <ix-combobox data-no-hits-text="Ingen treff" data-results-text="{n} alternativer">
+                <div class="ix-text-field">
+                  <input class="ix-text-field__input" aria-label="Land" />
+                  <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+                </div>
+                <div class="ix-combobox__listbox">${OPTIONS}</div>
+                <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
+                <select data-field="native" hidden></select>
+              </ix-combobox>`);
+        }
+        function resultsEl(el: IxCombobox): HTMLElement {
+            return el.querySelector<HTMLElement>('.ix-sr-only[role="status"]')!;
+        }
+
+        it('annonserer antall treff (n>0) etter debounce', () => {
+            vi.useFakeTimers();
+            const el = withResults();
+            type(el, 'nor'); // treffer kun Norge
+            vi.advanceTimersByTime(300);
+            expect(resultsEl(el).textContent).toBe('1 alternativer');
+            vi.useRealTimers();
+        });
+
+        it('annonserer ikke på nytt når antallet er uendret', () => {
+            vi.useFakeTimers();
+            const el = withResults();
+            type(el, 'a'); // et visst antall
+            vi.advanceTimersByTime(300);
+            const first = resultsEl(el).textContent;
+            resultsEl(el).textContent = 'SENTINEL';
+            type(el, 'a'); // samme query → samme antall, skal ikke re-annonsere
+            vi.advanceTimersByTime(300);
+            expect(resultsEl(el).textContent).toBe('SENTINEL');
+            expect(first).toMatch(/alternativer$/);
+            vi.useRealTimers();
+        });
+
+        it('annonserer ikke ved 0 treff (no-hits eier det)', () => {
+            vi.useFakeTimers();
+            const el = withResults();
+            type(el, 'zzzzz');
+            vi.advanceTimersByTime(300);
+            expect(resultsEl(el).textContent).toBe('');
+            vi.useRealTimers();
+        });
+
+        it('annonserer ikke uten data-results-text', () => {
+            vi.useFakeTimers();
+            const el = single(); // ingen data-results-text
+            type(el, 'nor');
+            vi.advanceTimersByTime(300);
+            const results = el.querySelector<HTMLElement>('.ix-sr-only[role="status"]');
+            expect(results?.textContent ?? '').toBe('');
+            vi.useRealTimers();
         });
     });
 
@@ -455,6 +561,22 @@ describe('IxCombobox', () => {
             // Ingen hardkodet norsk fallback — konsumenten må selv sette teksten.
             expect(toggle.getAttribute('aria-label')).toBeNull();
             expect(spy).toHaveBeenCalled();
+            spy.mockRestore();
+        });
+
+        it('advarer i DEV når data-chips-label mangler i multi', () => {
+            const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+            mount(`
+              <ix-combobox multiple data-no-hits-text="Ingen treff" data-remove-chip-label="fjern">
+                <div class="ix-combobox__chips" data-field="chips"></div>
+                <div class="ix-text-field">
+                  <input class="ix-text-field__input" aria-label="Land" />
+                  <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+                </div>
+                <div class="ix-combobox__listbox">${OPTIONS}</div>
+                <select data-field="native" name="land" hidden></select>
+              </ix-combobox>`);
+            expect(spy).toHaveBeenCalledWith(expect.stringContaining('data-chips-label'));
             spy.mockRestore();
         });
 

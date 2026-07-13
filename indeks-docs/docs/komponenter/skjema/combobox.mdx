@@ -412,7 +412,7 @@ Combobox egner seg når listen er lang eller vanskelig å skanne. For korte list
 
 ### Valgt verdi må alltid være tydelig
 
-I single vises valgt verdi i feltet. I flervalg vises hvert valg som en chip over feltet, og valgte alternativer får en checkmark i lista. Brukeren skal aldri være i tvil om hva som er valgt.
+I single vises valgt verdi i feltet. I flervalg vises hvert valg som en chip over feltet. I begge moduser får valgte alternativer en checkmark i lista (struktur, ikke farge alene). Brukeren skal aldri være i tvil om hva som er valgt.
 
 ### "Kun velg fra liste"
 
@@ -426,7 +426,7 @@ Alternativene bør sorteres alfabetisk, eller med de mest relevante øverst i la
 
 ### Semantisk struktur og korrekt rolle
 
-Combobox følger [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) sitt combobox-mønster: inputfeltet får `role="combobox"` med `aria-autocomplete="list"`, `aria-expanded` og `aria-controls`. Lista er `role="listbox"` og alternativene `role="option"` med `aria-selected`.
+Combobox følger [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) sitt combobox-mønster: inputfeltet får `role="combobox"` med `aria-autocomplete="list"`, `aria-expanded` og `aria-controls`. Lista er `role="listbox"` og alternativene `role="option"`. I single settes `aria-selected="true"` kun på det valgte alternativet (de øvrige har ingen `aria-selected`, så skjermleseren slipper å lese «ikke valgt» for hvert). I flervalg vises valgte verdier som chips med `role="button"` i en `role="group"`-wrapper (`chipsLabel`) — ikke som `option`-er utenfor en listbox.
 
 ### Virtual focus
 
@@ -442,9 +442,9 @@ Toggle-knappen og alternativene oppfyller minimum 44×44 px klikkflate.
 
 ### i18n — send inn oversatt tekst
 
-Komponenten har ingen innebygde tekster. `noHitsText`, `toggleLabel`, `removeChipLabel` og `arrowHintText` må sendes inn på riktig språk (bokmål, nynorsk, engelsk). Det finnes ingen norsk fallback — det ville smittet over på andre språk.
+Komponenten har ingen innebygde tekster. `noHitsText`, `toggleLabel`, `removeChipLabel`, `chipsLabel`, `arrowHintText` og `resultsText` må sendes inn på riktig språk (bokmål, nynorsk, engelsk). Det finnes ingen norsk fallback — det ville smittet over på andre språk.
 
-I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.warn` når en påkrevd tekst mangler: toggle-knappen uten `aria-label` (React: `toggleLabel`), flervalg uten `data-remove-chip-label` (React: `removeChipLabel`), eller input uten tilgjengelig navn. Advarslene fjernes fra produksjonsbygg.
+I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.warn` når en påkrevd tekst mangler: toggle-knappen uten `aria-label` (React: `toggleLabel`), flervalg uten `data-remove-chip-label` (React: `removeChipLabel`) eller uten `data-chips-label` (React: `chipsLabel`), eller input uten tilgjengelig navn. `resultsText` er en forbedring — mangler den, annonseres antall treff ikke (ingen advarsel). Advarslene fjernes fra produksjonsbygg.
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -477,7 +477,9 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 | `required` | `boolean` | Nei | | Markerer feltet som påkrevd |
 | `toggleLabel` | `string` | Nei | | aria-label på chevron-knappen (i18n) |
 | `removeChipLabel` | `string` | Nei | | Suffiks på chip-ens aria-label, f.eks. "fjern" (i18n, multi) |
-| `arrowHintText` | `string` | Nei | | aria-description som forklarer chip-navigasjon (i18n, multi) |
+| `chipsLabel` | `string` | Nei | | aria-label på chip-gruppen (`role="group"`), f.eks. "Valgte alternativer" (i18n, multi) |
+| `arrowHintText` | `string` | Nei | | Skjult hint (aria-describedby) som forklarer chip-navigasjon (i18n, multi) |
+| `resultsText` | `string` | Nei | | Mal for skjermleser-annonsering av antall treff. `{n}` byttes med antallet, f.eks. `"{n} alternativer"` (i18n) |
 | `name` | `string` | Nei | | Navn på skjult `<select>` for form-innsending |
 | `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
 | `ref` | `Ref<IxCombobox>` | Nei | | Ref videresendes til `<ix-combobox>`-elementet |
@@ -504,7 +506,9 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 | `name` | Nei | Navn på skjult `<select>` for form-innsending |
 | `data-no-hits-text` | Nei | Tekst ved 0 treff |
 | `data-remove-chip-label` | Nei | Suffiks på chip aria-label (multi) |
-| `data-arrow-hint-text` | Nei | aria-description for chip-navigasjon (multi) |
+| `data-chips-label` | Nei | aria-label på chip-gruppen `role="group"` (multi) |
+| `data-arrow-hint-text` | Nei | Skjult hint (aria-describedby) for chip-navigasjon (multi) |
+| `data-results-text` | Nei | Mal for annonsering av antall treff, `{n}` = antall |
 
 ### Delelementer (light DOM)
 
