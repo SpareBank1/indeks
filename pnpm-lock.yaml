@@ -312,8 +312,8 @@ importers:
   indeks-tokens:
     devDependencies:
       '@figma/rest-api-spec':
-        specifier: ^0.40.0
-        version: 0.40.0
+        specifier: ^0.41.0
+        version: 0.41.0
       '@types/node':
         specifier: ^25.9.4
         version: 25.9.4
@@ -2235,8 +2235,8 @@ packages:
       '@noble/hashes':
         optional: true
 
-  '@figma/rest-api-spec@0.40.0':
-    resolution: {integrity: sha512-Rg2tPsUWF/TPIDYYvo1ya6q3WU+5chI3MM8yMFZS+ti7NWbVne67oSRIgy5EDUKXc2BdMgEQMB4Sp1Cvya/HOw==}
+  '@figma/rest-api-spec@0.41.0':
+    resolution: {integrity: sha512-v43HkJE+ZRB0G1MXwN85LKhOE65WG1205kSCjGihdzNN2U9DyOz4Hnb7swjv+9dWyhJ+aYSQt76lFKIFqrLGNQ==}
 
   '@hapi/hoek@9.3.0':
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
@@ -11866,7 +11866,7 @@ snapshots:
 
   '@exodus/bytes@1.15.1': {}
 
-  '@figma/rest-api-spec@0.40.0': {}
+  '@figma/rest-api-spec@0.41.0': {}
 
   '@hapi/hoek@9.3.0': {}
 

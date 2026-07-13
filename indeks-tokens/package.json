@@ -54,7 +54,7 @@
     "author": "",
     "license": "MIT",
     "devDependencies": {
-        "@figma/rest-api-spec": "^0.40.0",
+        "@figma/rest-api-spec": "^0.41.0",
         "@types/node": "^25.9.4",
         "autoprefixer": "^10.5.2",
         "colorjs.io": "^0.6.1",
