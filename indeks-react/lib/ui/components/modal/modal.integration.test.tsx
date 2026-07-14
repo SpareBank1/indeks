@@ -2,10 +2,13 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { useState } from 'react';
 import { Modal } from './Modal';
-// Last atferds-modulet slik en ekte React-app gjør (den lastes uansett for
-// <ix-icon>). Modulen registrerer globale document-listeners + en MutationObserver
-// som eier scroll-lås, åpningsfokus og backdrop-lukking for ALLE .ix-modal.
-import '../../../../../indeks-web/lib/modal/modal';
+// Last atferds-modulet slik en ekte React-app gjør: via pakke-inngangen
+// @sb1/indeks-web (den lastes uansett for <ix-icon>). Modulen registrerer globale
+// document-listeners + en MutationObserver som eier scroll-lås, åpningsfokus og
+// backdrop-lukking for ALLE .ix-modal. MÅ være samme spesifikator som testSetup.ts
+// bruker — importeres begge veier én instans deles, ellers får hver kopi sitt eget
+// openModals-Set og scroll-låsen desynker (regresjon #3).
+import '@sb1/indeks-web';
 
 /* jsdom implementerer ikke <dialog>.showModal()/close(). Speil nettleseren:
  * showModal setter open=true, close setter open=false og fyrer et close-event. */
