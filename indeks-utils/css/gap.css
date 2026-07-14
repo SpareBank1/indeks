@@ -40,6 +40,10 @@
     gap: var(--ix-spacing-4xl);
 }
 
+.ix-gap-5xl {
+    gap: var(--ix-spacing-5xl);
+}
+
 .ix-col-gap-0 {
     column-gap: 0;
 }
@@ -80,6 +84,10 @@
     column-gap: var(--ix-spacing-4xl);
 }
 
+.ix-col-gap-5xl {
+    column-gap: var(--ix-spacing-5xl);
+}
+
 .ix-row-gap-0 {
     row-gap: 0;
 }
@@ -118,6 +126,10 @@
 
 .ix-row-gap-4xl {
     row-gap: var(--ix-spacing-4xl);
+}
+
+.ix-row-gap-5xl {
+    row-gap: var(--ix-spacing-5xl);
 }
 
 @media (min-width: 768px) {
@@ -161,6 +173,10 @@
         gap: var(--ix-spacing-4xl);
     }
 
+    .ix-sm-gap-5xl {
+        gap: var(--ix-spacing-5xl);
+    }
+
     .ix-sm-col-gap-0 {
         column-gap: 0;
     }
@@ -201,6 +217,10 @@
         column-gap: var(--ix-spacing-4xl);
     }
 
+    .ix-sm-col-gap-5xl {
+        column-gap: var(--ix-spacing-5xl);
+    }
+
     .ix-sm-row-gap-0 {
         row-gap: 0;
     }
@@ -239,6 +259,10 @@
 
     .ix-sm-row-gap-4xl {
         row-gap: var(--ix-spacing-4xl);
+    }
+
+    .ix-sm-row-gap-5xl {
+        row-gap: var(--ix-spacing-5xl);
     }
 }
 
@@ -283,6 +307,10 @@
         gap: var(--ix-spacing-4xl);
     }
 
+    .ix-md-gap-5xl {
+        gap: var(--ix-spacing-5xl);
+    }
+
     .ix-md-col-gap-0 {
         column-gap: 0;
     }
@@ -323,6 +351,10 @@
         column-gap: var(--ix-spacing-4xl);
     }
 
+    .ix-md-col-gap-5xl {
+        column-gap: var(--ix-spacing-5xl);
+    }
+
     .ix-md-row-gap-0 {
         row-gap: 0;
     }
@@ -361,6 +393,10 @@
 
     .ix-md-row-gap-4xl {
         row-gap: var(--ix-spacing-4xl);
+    }
+
+    .ix-md-row-gap-5xl {
+        row-gap: var(--ix-spacing-5xl);
     }
 }
 
@@ -405,6 +441,10 @@
         gap: var(--ix-spacing-4xl);
     }
 
+    .ix-lg-gap-5xl {
+        gap: var(--ix-spacing-5xl);
+    }
+
     .ix-lg-col-gap-0 {
         column-gap: 0;
     }
@@ -445,6 +485,10 @@
         column-gap: var(--ix-spacing-4xl);
     }
 
+    .ix-lg-col-gap-5xl {
+        column-gap: var(--ix-spacing-5xl);
+    }
+
     .ix-lg-row-gap-0 {
         row-gap: 0;
     }
@@ -483,6 +527,10 @@
 
     .ix-lg-row-gap-4xl {
         row-gap: var(--ix-spacing-4xl);
+    }
+
+    .ix-lg-row-gap-5xl {
+        row-gap: var(--ix-spacing-5xl);
     }
 }
 
@@ -527,6 +575,10 @@
         gap: var(--ix-spacing-4xl);
     }
 
+    .ix-xl-gap-5xl {
+        gap: var(--ix-spacing-5xl);
+    }
+
     .ix-xl-col-gap-0 {
         column-gap: 0;
     }
@@ -567,6 +619,10 @@
         column-gap: var(--ix-spacing-4xl);
     }
 
+    .ix-xl-col-gap-5xl {
+        column-gap: var(--ix-spacing-5xl);
+    }
+
     .ix-xl-row-gap-0 {
         row-gap: 0;
     }
@@ -605,5 +661,9 @@
 
     .ix-xl-row-gap-4xl {
         row-gap: var(--ix-spacing-4xl);
+    }
+
+    .ix-xl-row-gap-5xl {
+        row-gap: var(--ix-spacing-5xl);
     }
 }

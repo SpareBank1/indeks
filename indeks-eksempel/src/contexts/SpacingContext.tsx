@@ -29,6 +29,7 @@ export const spacingVars = [
     'ix-pl-2xl',
     'ix-pl-3xl',
     'ix-pl-4xl',
+    'ix-pl-5xl',
     // General padding
     'ix-p-2xs',
     'ix-p-xs',
@@ -39,6 +40,7 @@ export const spacingVars = [
     'ix-p-2xl',
     'ix-p-3xl',
     'ix-p-4xl',
+    'ix-p-5xl',
     //margin bottom
     'ix-mb-2xs',
     'ix-mb-xs',
@@ -49,6 +51,7 @@ export const spacingVars = [
     'ix-mb-2xl',
     'ix-mb-3xl',
     'ix-mb-4xl',
+    'ix-mb-5xl',
     // gap
     'ix-gap-2xs',
     'ix-gap-xs',
@@ -59,6 +62,7 @@ export const spacingVars = [
     'ix-gap-2xl',
     'ix-gap-3xl',
     'ix-gap-4xl',
+    'ix-gap-5xl',
 ];
 
 interface SpacingProviderProps {

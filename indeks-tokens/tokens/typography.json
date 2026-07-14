@@ -7,8 +7,8 @@
                 "internal": true
             },
             "size": {
-                "value": "clamp(1rem, 1rem + (100vw - 375px) * (18 - 16) / (1024 - 375), 1.125rem)",
-                "description": "Grunnleggende fontstørrelse.",
+                "value": "1rem",
+                "description": "Grunnleggende fontstørrelse (fast 16px).",
                 "internal": true
             }
         },

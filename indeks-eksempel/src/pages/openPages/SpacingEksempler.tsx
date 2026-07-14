@@ -93,7 +93,7 @@ const SpacingEksempler: React.FC = () => {
             <div className="ix-grid ix-grid-cols-3">
                 <VStack>
                     Square
-                    {['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'].map((size) => (
+                    {['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl'].map((size) => (
                         <div key={size} className={`ix-p-${size} ${spacingClasses}`} style={spacingBoxStyle}>
                             <div style={contentBoxStyle}>{resolvedSpacing[`ix-pl-${size}`] || size}</div>
                         </div>
@@ -103,7 +103,7 @@ const SpacingEksempler: React.FC = () => {
             <div className="ix-grid">
                 <Heading as="h1">Margin</Heading>
                 <VStack gap="none">
-                    {['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'].map((size) => (
+                    {['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl'].map((size) => (
                         <div key={size} className={`ix-mb-${size} ${spacingClasses}`} style={marginBoxStyle}>
                             <div style={contentBoxStyle}>
                                 {size} - {resolvedSpacing[`ix-mb-${size}`] || size}
@@ -116,7 +116,7 @@ const SpacingEksempler: React.FC = () => {
             <div className="ix-grid">
                 <Heading as="h1">Gap</Heading>
                 <VStack gap="none">
-                    {['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'].map((size) => (
+                    {['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl'].map((size) => (
                         <div
                             key={size}
                             className={`ix-gap-${size} ix-flex ix-flex-col`}

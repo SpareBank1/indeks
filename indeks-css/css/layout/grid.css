@@ -50,6 +50,7 @@
 :where(ix-grid[gap="2xl"])  { gap: var(--ix-spacing-2xl); }
 :where(ix-grid[gap="3xl"])  { gap: var(--ix-spacing-3xl); }
 :where(ix-grid[gap="4xl"])  { gap: var(--ix-spacing-4xl); }
+:where(ix-grid[gap="5xl"])  { gap: var(--ix-spacing-5xl); }
 
 /* --- Align (align-items) --- */
 
