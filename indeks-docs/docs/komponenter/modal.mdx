@@ -1,0 +1,427 @@
+---
+title: Modal
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/modal.json';
+
+# Modal
+
+Modal brukes til å vise innhold oppå eksisterende side og krever at brukeren forholder seg til innholdet før de kan fortsette. Komponenten fungerer som en tom container som fylles med innhold basert på behov. Den bygger på det native `<dialog>`-elementet, så fokushåndtering, tastatur og skjermleser fungerer uten ekstra oppsett.
+
+## Egnet til
+
+- Kritiske eller viktige handlinger (f.eks. bekreftelser)
+- Skjema eller oppgaver som krever fokus
+- Midlertidig innhold som ikke hører hjemme i hovedflyten
+- Situasjoner der brukeren må ta stilling før de går videre
+
+## Uegnet til
+
+- Ikke-kritisk informasjon (bruk inline innhold eller accordion)
+- Lange eller komplekse prosesser
+- Innhold som brukeren trenger å referere til samtidig som resten av siden
+- Gjentatt bruk i samme flyt (kan skape frustrasjon)
+
+## Kom i gang
+
+En modal kan brukes kontrollert (du styrer `open`) eller ukontrollert (dialogen eier tilstanden selv) — se [Kontrollert og ukontrollert bruk](#kontrollert-og-ukontrollert-bruk). Uansett lukker den seg på Escape, lukk-knapp eller klikk på bakgrunnen. Klikk på bakgrunnen lukker som standard — slå det av for skjemaer og destruktive handlinger. Gi den alltid en tittel som navngir dialogen.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+Trigger-knappen åpner dialogen via `data-modal-open` (peker til dialogens `id`), og lukk-knappene lukker via `data-modal-close`. Klikk på bakgrunnen lukker også dialogen som standard. Atferden kommer fra `@sb1/indeks-web` — ingen egen JavaScript trengs. Klikk på knappen for å prøve.
+
+```jsx live
+<div>
+  <button
+    class="ix-button"
+    data-variant="primary"
+    data-modal-open="demo-detaljer"
+    aria-haspopup="dialog"
+    aria-controls="demo-detaljer"
+  >
+    Vis detaljer
+  </button>
+
+  <dialog
+    class="ix-modal"
+    id="demo-detaljer"
+    aria-labelledby="demo-detaljer-tittel"
+    aria-describedby="demo-detaljer-beskrivelse"
+  >
+    <div class="ix-modal__header">
+      <h2 class="ix-modal__title" id="demo-detaljer-tittel">Om kontoen</h2>
+      <button class="ix-modal__close" aria-label="Lukk" data-modal-close>
+        <ix-icon name="close"></ix-icon>
+      </button>
+    </div>
+    <div class="ix-modal__body">
+      <p id="demo-detaljer-beskrivelse">Brukskontoen din brukes til daglige betalinger og har ingen bindingstid.</p>
+    </div>
+    <div class="ix-modal__footer">
+      <div class="ix-modal__button-group">
+        <button class="ix-button" data-variant="primary" data-modal-close>Lukk</button>
+      </div>
+    </div>
+  </dialog>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+Hold `open` i state og sett den til `false` fra `onOpenChange`. Modalen er satt sammen av underkomponenter i Radix-stil: `Modal.Header`, `Modal.Title`, `Modal.Body`, `Modal.Footer` og `Modal.ButtonGroup`. Klikk på bakgrunnen lukker også dialogen som standard. Klikk på knappen for å prøve.
+
+```tsx live
+function OmKontoen() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button aria-haspopup="dialog" onClick={() => setOpen(true)}>
+        Vis detaljer
+      </Button>
+
+      <Modal open={open} onOpenChange={setOpen}>
+        <Modal.Header>
+          <Modal.Title>Om kontoen</Modal.Title>
+          <Modal.CloseButton label="Lukk" />
+        </Modal.Header>
+        <Modal.Body>
+          <Modal.Description>
+            Brukskontoen din brukes til daglige betalinger og har ingen bindingstid.
+          </Modal.Description>
+        </Modal.Body>
+        <Modal.Footer>
+          <Modal.ButtonGroup>
+            <Button onClick={() => setOpen(false)}>Lukk</Button>
+          </Modal.ButtonGroup>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Kontrollert og ukontrollert bruk
+
+Modalen kan brukes på to måter.
+
+**Kontrollert (React):** du eier åpen-tilstanden selv i `useState` og speiler den inn via `open`. `onOpenChange` kalles når dialogen ber om å bli lukket (Escape, lukk-knapp, bakgrunnsklikk), og du setter `open` til `false` som respons. Dette er én sannhetskilde — bruk det når noe utenfor dialogen skal kunne styre den (åpne fra flere steder, lukke etter et API-kall, speile til URL).
+
+```tsx
+function Kontrollert() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button aria-haspopup="dialog" onClick={() => setOpen(true)}>
+        Åpne
+      </Button>
+
+      <Modal open={open} onOpenChange={setOpen}>
+        <Modal.Header>
+          <Modal.Title>Kontrollert dialog</Modal.Title>
+          <Modal.CloseButton label="Lukk" />
+        </Modal.Header>
+        <Modal.Body>
+          <Modal.Description>Du eier open-tilstanden selv.</Modal.Description>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+}
+```
+
+**Ukontrollert (React):** utelat `open`. Da eier `Modal` tilstanden selv og lukker seg via Escape, lukk-knapp og bakgrunnsklikk uten at du holder noe state. `defaultOpen` styrer startverdien (f.eks. en dialog som skal være åpen med én gang siden lastes), og `onOpenChange` er valgfri — den fungerer da kun som en observatør. Bruk dette når du ikke trenger å åpne dialogen på nytt fra utsiden.
+
+```tsx
+function Ukontrollert() {
+  return (
+    <Modal defaultOpen onOpenChange={(open) => console.log('åpen:', open)}>
+      <Modal.Header>
+        <Modal.Title>Ukontrollert dialog</Modal.Title>
+        <Modal.CloseButton label="Lukk" />
+      </Modal.Header>
+      <Modal.Body>
+        <Modal.Description>
+          Åpen fra start; Modal eier tilstanden og lukker seg selv.
+        </Modal.Description>
+      </Modal.Body>
+    </Modal>
+  );
+}
+```
+
+Skal en trigger-knapp åpne dialogen uten at du holder state, er ren HTML riktig verktøy: det native `<dialog>` åpnes med `showModal()` via `data-modal-open` og eier sin egen tilstand — nettleseren lukker på Escape og bakgrunnsklikk. Se HTML-fanen i «Kom i gang».
+
+:::note Til diskusjon i teamet: bør Escape-lukking kunne slås av?
+Escape lukker alltid dialogen i dag, og det er bevisst: fokus er fanget inne i en modal, og Escape er den forventede rømningsveien (WCAG 2.1.2 — ingen tastaturfelle). Enkelte skjema-flyter ønsker likevel å hindre utilsiktet Escape-lukking (som med bakgrunnsklikk). Det innføres ikke nå, fordi å fjerne Escape uten en annen tydelig rømningsvei svekker tilgjengeligheten. Om behovet melder seg bør teamet avgjøre hvordan det kan gjøres forsvarlig (f.eks. bekreftelses-dialog i stedet for å blokkere tasten).
+:::
+
+### Slå av bakgrunnslukking
+
+Klikk på bakgrunnen lukker dialogen som standard. For skjemaer med ulagrede data og destruktive handlinger vil du slå det av, så et utilsiktet klikk ikke gir datatap. I React setter du `closeOnBackdropClick={false}`; i ren HTML legger du `data-no-close-on-backdrop` på `<dialog>`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div>
+  <button
+    class="ix-button"
+    data-variant="primary"
+    data-modal-open="demo-slett"
+    aria-haspopup="dialog"
+    aria-controls="demo-slett"
+  >
+    Slett element
+  </button>
+
+  <dialog
+    class="ix-modal"
+    id="demo-slett"
+    data-no-close-on-backdrop
+    aria-labelledby="demo-slett-tittel"
+  >
+    <div class="ix-modal__header">
+      <h2 class="ix-modal__title" id="demo-slett-tittel">Bekreft sletting</h2>
+      <button class="ix-modal__close" aria-label="Lukk" data-modal-close>
+        <ix-icon name="close"></ix-icon>
+      </button>
+    </div>
+    <div class="ix-modal__body">
+      <p>Er du sikker på at du vil slette dette elementet? Handlingen kan ikke angres.</p>
+    </div>
+    <div class="ix-modal__footer">
+      <div class="ix-modal__button-group">
+        <button class="ix-button" data-variant="secondary" data-modal-close>Avbryt</button>
+        <button class="ix-button" data-variant="primary" data-modal-close>Slett</button>
+      </div>
+    </div>
+  </dialog>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+function BekreftSletting() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button aria-haspopup="dialog" onClick={() => setOpen(true)}>
+        Slett element
+      </Button>
+
+      <Modal open={open} onOpenChange={setOpen} closeOnBackdropClick={false}>
+        <Modal.Header>
+          <Modal.Title>Bekreft sletting</Modal.Title>
+          <Modal.CloseButton label="Lukk" />
+        </Modal.Header>
+        <Modal.Body>
+          <p>Er du sikker på at du vil slette dette elementet? Handlingen kan ikke angres.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Modal.ButtonGroup>
+            <Button variant="secondary" onClick={() => setOpen(false)}>
+              Avbryt
+            </Button>
+            <Button danger onClick={() => setOpen(false)}>Slett</Button>
+          </Modal.ButtonGroup>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+```
+
+</TabItem>
+</Tabs>
+
+:::warning Slå av bakgrunnslukking for skjemaer og destruktive handlinger
+Et utilsiktet klikk utenfor dialogen lukker den umiddelbart. For skjemaer med ulagrede data eller bekreftelse av noe farlig betyr det tap av arbeid. Sett `closeOnBackdropClick={false}` (React) eller `data-no-close-on-backdrop` (HTML) i disse tilfellene.
+:::
+
+## Retningslinjer
+
+### Bruk modal med omtanke
+
+Modal avbryter brukerens flyt og bør derfor kun brukes når det er nødvendig. Den egner seg best når brukeren må ta stilling til noe før de kan fortsette, eller når det er viktig å redusere distraksjoner.
+
+### Modalen får mening gjennom innholdet
+
+Modal-komponenten er i seg selv kun en container. Det er innholdet som avgjør hvordan den oppleves og brukes. Det er derfor viktig å strukturere innholdet tydelig med tittel, beskrivelse og eventuelle handlinger.
+
+### Gi tydelig kontekst med en gang
+
+Brukeren skal raskt forstå hvorfor modalen vises. En tydelig tittel og eventuell beskrivelse gjør det enklere å ta stilling til innholdet og hva som forventes.
+
+### Unngå overfylte modaler
+
+Modaler bør være fokuserte og inneholde kun det som er nødvendig. For mye innhold kan gjøre det vanskelig å orientere seg og øker kognitiv belastning.
+
+### Handlinger skal være tydelige og få
+
+Modaler inneholder ofte handlinger, og disse bør være enkle å forstå og tydelig prioritert. Som hovedregel bør det være én primær handling, og eventuelt en sekundær handling for å avbryte.
+
+### Gjør det enkelt å lukke modalen
+
+Brukeren skal alltid ha en tydelig måte å lukke modalen på. Dette inkluderer en synlig lukkeknapp, og ofte også støtte for Esc og klikk utenfor.
+
+### Bevar brukerens kontekst
+
+Når modalen lukkes, skal brukeren returnere til samme sted i flyten som de kom fra. Dette gir en forutsigbar opplevelse og gjør det enklere å fortsette.
+
+### Unngå flere modaler samtidig
+
+Flere åpne modaler skaper forvirring og gjør det vanskelig å navigere. Det skal som hovedregel kun være én modal åpen om gangen.
+
+### Tilpass størrelse til innhold
+
+Modalens størrelse bør tilpasses innholdet. For små modaler kan føles trange, mens for store modaler kan oppleves som unødvendig dominerende.
+
+## Props / API
+
+### `Modal`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `open` | `boolean` | | Om dialogen er åpen. Angi for **kontrollert** bruk — speiles til native `showModal()`/`close()`. Utelat for ukontrollert bruk |
+| `defaultOpen` | `boolean` | `false` | Startverdi i **ukontrollert** modus (uten `open`). Ignoreres når `open` er satt |
+| `onOpenChange` | `(open: boolean) => void` | | Kalles når dialogen ber om å bli lukket (Escape, lukk-knapp eller bakgrunnsklikk). I kontrollert modus setter du `open` til `false` som respons; i ukontrollert modus er den valgfri (observatør) |
+| `size` | `'small' \| 'medium' \| 'large' \| 'full'` | `'medium'` | Bredde på større skjermer. Speiles til `data-size` (medium gir ingen attributt) |
+| `closeOnBackdropClick` | `boolean` | `true` | Lukk ved klikk på bakgrunnen. Sett til `false` for skjemaer og destruktive handlinger |
+| `children` | `ReactNode` | | Typisk `Modal.Header`, `Modal.Body` og `Modal.Footer` |
+| `className` | `string` | | Ekstra CSS-klasser på `<dialog>` |
+
+### `Modal.Title`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `children` | `ReactNode` | | Tittelteksten. Rendres som `<h2>` og kobles automatisk til dialogen via `aria-labelledby` |
+| `className` | `string` | | Ekstra CSS-klasser på `<h2>` |
+
+### `Modal.Description`
+
+Valgfri. Kobles automatisk til dialogen via `aria-describedby`, slik at skjermlesere leser beskrivelsen etter tittelen.
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `children` | `ReactNode` | | Beskrivelsesteksten. Rendres som `<p>` og kobles automatisk til dialogen via `aria-describedby` |
+| `className` | `string` | | Ekstra CSS-klasser på `<p>` |
+
+### `Modal.CloseButton`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `label` | `string` | | **Påkrevd.** Tilgjengelig navn (`aria-label`) på lukk-knappen. Skal oversettes til brukerens språk |
+| ...`button`-attributter | | | Alle vanlige `<button>`-props |
+
+### `Modal.Header`, `Modal.Body`, `Modal.Footer`, `Modal.ButtonGroup`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `children` | `ReactNode` | | Innhold. `Modal.ButtonGroup` grupperer handlingsknapper i `Modal.Footer` |
+| `className` | `string` | | Ekstra CSS-klasser på wrapper-elementet (`<div>`) |
+
+## Tilpasning med CSS
+
+Trenger du `ix-modal`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte på et native `<dialog class="ix-modal">`. Åpne det med `dialog.showModal()` for å få fokus-trap, Escape-lukking, dempet bakgrunn (`::backdrop`) og fokus-retur gratis.
+
+Vil du i tillegg ha deklarativ åpning/lukking og scroll-lås uten egen JavaScript, laster du `@sb1/indeks-web` og bruker data-attributtene under.
+
+### Tilgjengelige klasser og selektorer
+
+| Element / tilstand | Selektor / attributt |
+|--------------------|----------------------|
+| Dialog (rot) | `.ix-modal` på `<dialog>` |
+| Størrelse | `[data-size="small\|medium\|large\|full"]` på `<dialog>` |
+| Header (fast topp) | `.ix-modal__header` |
+| Tittel | `.ix-modal__title` (typisk `<h2>`) |
+| Beskrivelse | `.ix-modal__description` (typisk `<p>`) |
+| Lukk-knapp | `.ix-modal__close` |
+| Innhold (scroller) | `.ix-modal__body` |
+| Footer (fast bunn) | `.ix-modal__footer` |
+| Knappegruppe | `.ix-modal__button-group` |
+| Bakgrunn | `.ix-modal::backdrop` |
+
+### Data-attributter for atferd (`@sb1/indeks-web`)
+
+| Attributt | Plassering | Effekt |
+|-----------|------------|--------|
+| `data-modal-open="<id>"` | Trigger-knapp | Åpner dialogen med matchende `id` (`showModal()`) |
+| `data-modal-close` | Knapp inne i dialogen | Lukker nærmeste `<dialog>` |
+| `data-no-close-on-backdrop` | `<dialog>` | Slår av bakgrunnslukking (som ellers er på) |
+
+### Eksempel: ren HTML
+
+```html
+<button
+  class="ix-button"
+  data-variant="primary"
+  data-modal-open="min-dialog"
+  aria-haspopup="dialog"
+  aria-controls="min-dialog"
+>
+  Åpne dialog
+</button>
+
+<dialog class="ix-modal" id="min-dialog" aria-labelledby="min-dialog-tittel">
+  <div class="ix-modal__header">
+    <h2 class="ix-modal__title" id="min-dialog-tittel">Tittel</h2>
+    <button class="ix-modal__close" aria-label="Lukk" data-modal-close>
+      <ix-icon name="close"></ix-icon>
+    </button>
+  </div>
+  <div class="ix-modal__body">
+    <p>Innhold i dialogen.</p>
+  </div>
+  <div class="ix-modal__footer">
+    <div class="ix-modal__button-group">
+      <button class="ix-button" data-variant="secondary" data-modal-close>Avbryt</button>
+      <button class="ix-button" data-variant="primary">Bekreft</button>
+    </div>
+  </div>
+</dialog>
+```
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Gi tydelig tittel og struktur** — bruk `Modal.Title` (eller `aria-label` på `<dialog>` i ren HTML) og gjerne `Modal.Description`. Tittelen navngir dialogen for skjermlesere, og en tydelig struktur med tittel, beskrivelse og handlinger gjør at hjelpemidler forstår at brukeren har gått inn i en ny kontekst. Uten tittel er dialogen unavngitt. Komponenten gir role `dialog` fra det native `<dialog>`-elementet.
+- **Oversett all tekst** — tittel, `label` på lukk-knappen og knappetekster kommer fra deg og må være på brukerens språk (bokmål, nynorsk, engelsk). Komponenten har ingen hardkodet tekst.
+- **Merk triggerknappen** — sett `aria-haspopup="dialog"` på knappen som åpner dialogen (og gjerne `aria-controls` som peker til dialogens `id` i ren HTML), så skjermlesere annonserer at den åpner en dialog.
+- **Ikke stol på farge alene** — viktig informasjon og handlinger i modalen må ikke kommuniseres med farge alene. Det må være tydelig gjennom tekst og struktur.
+- **Sørg for kontrast og lesbarhet** — tekst og bakgrunn du legger inn må ha tilstrekkelig kontrast, og innholdet må være lett å lese og bruke på alle skjermstørrelser. På mindre skjermer kan modalen fylle hele flaten (`size="full"`) for å sikre god brukervennlighet.
+- **Vær varsom med bakgrunnslukking** — bakgrunnslukking er på som standard; slå den av med `closeOnBackdropClick={false}` / `data-no-close-on-backdrop` for skjemaer eller destruktive handlinger der et uhell gir datatap.
+- **Hold det viktigste synlig** — ved fullskjerm eller mye innhold, sørg for at den sentrale informasjonen og handlingene er synlige før brukeren må scrolle.
+
+### Hva komponenten gjør automatisk
+
+- **Fokus-trap** — mens dialogen er åpen holdes fokus inne i den (native `<dialog>` åpnet med `showModal()`). Tab og Shift+Tab sykler kun mellom elementene i dialogen.
+- **Åpningsfokus på dialogen** — ved åpning settes fokus på selve dialogen, ikke på lukk-knappen. Skjermlesere annonserer da «\<tittel\>, dialog», og Tab flytter videre til første interaktive element. Vil du heller fokusere et bestemt element (f.eks. første felt i et skjema), sett `autofocus` på det elementet inni modalen.
+- **Escape lukker** — Escape ber om lukking (via `onOpenChange` / `data-modal-close`-atferd), som forventet av en modal dialog.
+- **Fokus-retur** — når dialogen lukkes, føres fokus tilbake til elementet som åpnet den.
+- **Inert bakgrunn** — innholdet bak dialogen gjøres utilgjengelig for både mus og skjermleser (`aria-modal`-atferd fra det native elementet).
+- **Top-layer** — dialogen tegnes over alt annet innhold uten at du trenger å styre `z-index`.
+- **Fokusindikator** — tydelig fokusring (`:focus-visible`) på lukk-knappen og andre interaktive elementer.
+- **Touch-mål** — lukk-knappen er minst 44 × 44 px.
+- **Dempet bevegelse** — inn-animasjonen er kort og slås av ved `prefers-reduced-motion`.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
