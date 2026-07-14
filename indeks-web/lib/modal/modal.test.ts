@@ -41,8 +41,8 @@ function createOpener(targetId: string): HTMLButtonElement {
 }
 
 afterEach(() => {
-    // Lukk åpne modaler så den delte scroll-lås-telleren i modulen nulles ut
-    // mellom tester (close() dekrementerer openCount).
+    // Lukk åpne modaler så modulens delte sett av åpne modaler tømmes mellom
+    // tester (close() fjerner dialogen fra settet og slipper scroll-låsen).
     document.querySelectorAll<HTMLDialogElement>('dialog.ix-modal').forEach((d) => {
         if (d.open) d.close();
     });
@@ -169,6 +169,21 @@ describe('modal atferds-modul', () => {
             dialog.close();
 
             expect(document.body.style.overflow).toBe('scroll');
+        });
+
+        it('låser via observeren når `open` settes uten klikk (React showModal)', async () => {
+            // React kaller showModal() direkte (ingen data-modal-open-klikk). Da må
+            // MutationObserveren på `open`-attributtet ta scroll-lås + fokus.
+            const dialog = createModal({ id: 'm1' });
+            dialog.showModal(); // setter open=true, ingen klikk
+            // Observeren fyrer som mikrotask.
+            await Promise.resolve();
+
+            expect(document.body.style.overflow).toBe('hidden');
+            expect(document.activeElement).toBe(dialog);
+
+            dialog.close();
+            expect(document.body.style.overflow).toBe('');
         });
     });
 });

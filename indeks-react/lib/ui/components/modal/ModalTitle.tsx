@@ -17,14 +17,17 @@ export const ModalTitle = forwardRef<HTMLHeadingElement, ModalTitleProps>(functi
     ref,
 ): JSX.Element {
     const { titleId, registerTitle } = useModalContext('Modal.Title');
+    // Egen `id` vinner over den genererte; meld den faktiske id-en til `Modal` så
+    // `aria-labelledby` peker hit (ikke på en id som ikke finnes i DOM-en).
+    const effectiveId = id ?? titleId;
 
     useEffect(() => {
-        registerTitle(true);
-        return () => registerTitle(false);
-    }, [registerTitle]);
+        registerTitle(effectiveId);
+        return () => registerTitle(null);
+    }, [registerTitle, effectiveId]);
 
     return (
-        <h2 ref={ref} id={id ?? titleId} className={clsx('ix-modal__title', className)} {...props}>
+        <h2 ref={ref} id={effectiveId} className={clsx('ix-modal__title', className)} {...props}>
             {children}
         </h2>
     );

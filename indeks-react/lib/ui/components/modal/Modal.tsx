@@ -1,13 +1,5 @@
 import clsx from 'clsx';
-import {
-    forwardRef,
-    useCallback,
-    useEffect,
-    useId,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ForwardRefExoticComponent, JSX, ReactNode, RefAttributes } from 'react';
 import { ModalContext } from './ModalContext';
 import type { ModalContextValue } from './ModalContext';
@@ -76,8 +68,16 @@ const SIZE_ATTR: Record<ModalSize, string | undefined> = {
  *
  * Bygger på native `<dialog>` åpnet med `showModal()`. Fokus-trap,
  * Escape-lukking, top-layer-rendering og fokus-retur til triggeren kommer gratis
- * fra nettleseren. Denne komponenten legger til det `<dialog>` ikke gir:
- * kontrollert `open`-state, scroll-lås og backdrop-klikk.
+ * fra nettleseren. Denne wrapperen er bevisst TYNN: den rendrer bare
+ * `<dialog class="ix-modal">`, speiler `open`-propen til `showModal()`/`close()`,
+ * og synker `onClose` tilbake til `onOpenChange`.
+ *
+ * Scroll-lås, åpningsfokus (på dialogen, ikke lukk-knappen) og backdrop-klikk
+ * eies av atferds-modulet i `@sb1/indeks-web` — det observerer enhver
+ * `.ix-modal`s `open`-tilstand, så React og ren HTML deler samme kodevei.
+ * `@sb1/indeks-web` MÅ være lastet (det samme kravet som `Modal.CloseButton`
+ * allerede har for `<ix-icon>`); uten det får dialogen fortsatt native fokus-trap
+ * og Escape, men ikke scroll-lås, tilpasset åpningsfokus eller backdrop-lukking.
  *
  * Sammensatt av underkomponenter (Radix-stil). Gi alltid en `Modal.Title` — den
  * navngir dialogen for skjermlesere via `aria-labelledby` (WCAG 1.3.1).
@@ -114,8 +114,10 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
     const dialogRef = useRef<HTMLDialogElement>(null);
     const generatedTitleId = useId();
     const generatedDescriptionId = useId();
-    const [hasTitle, setHasTitle] = useState(false);
-    const [hasDescription, setHasDescription] = useState(false);
+    // Faktisk id som Title/Description bruker (egen `id` vinner over den genererte),
+    // så aria-labelledby/describedby alltid peker på riktig element. null = ikke montert.
+    const [titleId, setTitleId] = useState<string | null>(null);
+    const [descriptionId, setDescriptionId] = useState<string | null>(null);
 
     // Kontrollert-eller-ukontrollert (samme mønster som RadioGroup): når `open` er
     // gitt eier konsumenten tilstanden, ellers eier `Modal` den selv.
@@ -134,43 +136,22 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
     );
 
     // Speil `open` til de native metodene. showModal() (ikke show()) gir
-    // fokus-trap + top-layer + inert bakgrunn.
+    // fokus-trap + top-layer + inert bakgrunn. Scroll-lås og åpningsfokus følger av
+    // at `open` settes — atferds-modulet i @sb1/indeks-web observerer det og gjør
+    // resten (samme kodevei som ren HTML). Denne wrapperen gjør ikke noe av det selv.
     useEffect(() => {
         const dialog = dialogRef.current;
         if (!dialog) return;
-        if (open && !dialog.open) {
-            dialog.showModal();
-            // showModal() auto-fokuserer første fokuserbare etterkommer — hos oss
-            // lukk-knappen. Uønsket: modalen skal ikke åpne med fokusring på «Lukk».
-            // Flytt fokus til selve dialogen (tabIndex=-1) så skjermlesere annonserer
-            // «<tittel>, dialog» og Tab går videre naturlig. En konsument som vil
-            // fokusere et bestemt element setter `autofocus` på det — da lar vi
-            // native atferd styre. (React rendrer ikke autoFocus-propen, så vi kan
-            // ikke bruke <dialog autofocus>; programmatisk fokus er nødvendig.)
-            if (!dialog.querySelector('[autofocus]')) {
-                dialog.focus();
-            }
-        } else if (!open && dialog.open) {
-            dialog.close();
-        }
+        if (open && !dialog.open) dialog.showModal();
+        else if (!open && dialog.open) dialog.close();
     }, [open]);
 
-    // Scroll-lås på <body> mens dialogen er åpen (det native <dialog> ikke gir).
-    useEffect(() => {
-        if (!open) return;
-        const previous = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = previous;
-        };
-    }, [open]);
-
-    const registerTitle = useCallback((present: boolean) => {
-        setHasTitle(present);
+    const registerTitle = useCallback((id: string | null) => {
+        setTitleId(id);
     }, []);
 
-    const registerDescription = useCallback((present: boolean) => {
-        setHasDescription(present);
+    const registerDescription = useCallback((id: string | null) => {
+        setDescriptionId(id);
     }, []);
 
     const requestClose = useCallback(() => {
@@ -207,28 +188,20 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
     return (
         <dialog
             ref={setRef}
-            // Gjør dialogen fokuserbar programmatisk (den er ikke natively det) så vi
-            // kan flytte åpningsfokuset hit i stedet for til lukk-knappen.
-            tabIndex={-1}
             className={clsx('ix-modal', className)}
             data-size={SIZE_ATTR[size]}
             data-no-close-on-backdrop={closeOnBackdropClick ? undefined : ''}
-            aria-labelledby={hasTitle ? generatedTitleId : undefined}
-            aria-describedby={hasDescription ? generatedDescriptionId : undefined}
-            // Dekker Escape (native) og programmatisk .close() fra CloseButton.
-            onCancel={() => handleOpenChange(false)}
+            aria-labelledby={titleId ?? undefined}
+            aria-describedby={descriptionId ?? undefined}
+            // Eneste tilstands-synk: <dialog> fyrer `close` på ALLE lukke-veier —
+            // Escape (native), CloseButton (.close() via web-modulet) og backdrop-
+            // klikk (web-modulet). `close` bobler ikke, men React-syntetiske onClose
+            // fanger det på elementet selv. Vi speiler tilbake til `open`-state.
             onClose={() => {
-                // onClose fyrer også etter vår egen .close() i useEffect. Kall kun
-                // handleOpenChange når state fortsatt er åpen, så vi ikke looper.
+                // onClose fyrer også etter vår egen .close() i useEffect (open=false
+                // allerede). Kall kun handleOpenChange når state fortsatt er åpen, så
+                // vi ikke looper eller varsler dobbelt.
                 if (open) handleOpenChange(false);
-            }}
-            onClick={(e) => {
-                // Native ::backdrop er ikke en egen node — klikk på den treffer
-                // selve <dialog> (e.target === dialogen). Klikk på innhold treffer
-                // et barn.
-                if (closeOnBackdropClick && e.target === dialogRef.current) {
-                    handleOpenChange(false);
-                }
             }}
         >
             <ModalContext.Provider value={contextValue}>{children}</ModalContext.Provider>

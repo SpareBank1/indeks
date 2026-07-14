@@ -15,16 +15,19 @@ export type ModalDescriptionProps = HTMLAttributes<HTMLParagraphElement>;
 export const ModalDescription = forwardRef<HTMLParagraphElement, ModalDescriptionProps>(
     function ModalDescription({ children, className, id, ...props }, ref): JSX.Element {
         const { descriptionId, registerDescription } = useModalContext('Modal.Description');
+        // Egen `id` vinner over den genererte; meld faktisk id til `Modal` så
+        // `aria-describedby` peker hit.
+        const effectiveId = id ?? descriptionId;
 
         useEffect(() => {
-            registerDescription(true);
-            return () => registerDescription(false);
-        }, [registerDescription]);
+            registerDescription(effectiveId);
+            return () => registerDescription(null);
+        }, [registerDescription, effectiveId]);
 
         return (
             <p
                 ref={ref}
-                id={id ?? descriptionId}
+                id={effectiveId}
                 className={clsx('ix-modal__description', className)}
                 {...props}
             >

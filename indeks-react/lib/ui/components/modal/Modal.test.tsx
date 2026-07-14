@@ -155,22 +155,12 @@ describe('Modal', () => {
         expect(onOpenChange).not.toHaveBeenCalled();
     });
 
-    it('kaller onOpenChange(false) ved Escape (cancel-event)', () => {
+    it('kaller onOpenChange(false) når dialogen fyrer close (Escape m.m.)', () => {
+        // Escape fyrer native cancel→close; lukk-knapp og backdrop kaller .close().
+        // Alle ender i `close`-eventet, som er wrapperens eneste tilstands-synk.
         const { container, onOpenChange } = renderModal();
-        fireEvent(container.querySelector('dialog')!, new Event('cancel'));
+        fireEvent(container.querySelector('dialog')!, new Event('close'));
         expect(onOpenChange).toHaveBeenCalledWith(false);
-    });
-
-    it('låser body-scroll mens den er åpen og slipper ved lukking', () => {
-        const { rerender } = renderModal();
-        expect(document.body.style.overflow).toBe('hidden');
-
-        rerender(
-            <Modal open={false} onOpenChange={vi.fn()}>
-                <Modal.Body>x</Modal.Body>
-            </Modal>,
-        );
-        expect(document.body.style.overflow).toBe('');
     });
 
     it('åpner ukontrollert via defaultOpen (uten open-prop)', () => {
@@ -240,29 +230,36 @@ describe('Modal', () => {
         expect(dialog.open).toBe(true);
     });
 
-    it('flytter åpningsfokus til selve dialogen, ikke lukk-knappen', () => {
-        const { container } = renderModal();
+    // Åpningsfokus og scroll-lås eies nå av @sb1/indeks-web (drevet av dialogens
+    // `open`-tilstand), ikke av denne wrapperen. Se modal.integration.test.tsx for
+    // dekning av det med web-modulet lastet.
+
+    it('kobler aria-labelledby til en EGEN id på Modal.Title (ikke den genererte)', () => {
+        // Regresjon: en egen `id` på tittelen må vinne, ellers peker aria-labelledby
+        // på en generert id som ikke finnes i DOM-en → dialogen mister navnet.
+        const { container } = render(
+            <Modal open onOpenChange={vi.fn()}>
+                <Modal.Header>
+                    <Modal.Title id="min-tittel">Tittel</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>x</Modal.Body>
+            </Modal>,
+        );
         const dialog = container.querySelector('dialog')!;
-        // Fokus skal ligge på dialogen (tabIndex=-1), ikke på «Lukk»-knappen som
-        // ellers ville fått showModal()-auto-fokuset.
-        expect(document.activeElement).toBe(dialog);
-        expect(document.activeElement).not.toBe(screen.getByRole('button', { name: 'Lukk' }));
+        expect(dialog.getAttribute('aria-labelledby')).toBe('min-tittel');
+        expect(container.querySelector('.ix-modal__title')!.id).toBe('min-tittel');
     });
 
-    it('stjeler ikke fokus når en etterkommer har autofocus-attributtet', () => {
-        // Bruk det native `autofocus`-attributtet (ikke Reacts `autoFocus`-prop, som
-        // strippes fra DOM og uansett overstyres av showModal() i ekte nettlesere).
-        // Det er dette attributtet showModal()-fokuseringen og vår guard honorerer.
-        render(
+    it('kobler aria-describedby til en EGEN id på Modal.Description', () => {
+        const { container } = render(
             <Modal open onOpenChange={vi.fn()}>
                 <Modal.Body>
-                    <input {...{ autofocus: '' }} aria-label="Navn" />
+                    <Modal.Description id="min-beskrivelse">Beskrivelse</Modal.Description>
                 </Modal.Body>
             </Modal>,
         );
-        // Vi flytter ikke fokus til dialogen når en etterkommer ber om autofokus.
-        const dialog = document.querySelector('dialog')!;
-        expect(document.activeElement).not.toBe(dialog);
+        const dialog = container.querySelector('dialog')!;
+        expect(dialog.getAttribute('aria-describedby')).toBe('min-beskrivelse');
     });
 
     it('videresender ref til <dialog>', () => {

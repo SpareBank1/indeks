@@ -2,20 +2,27 @@ import { createContext, useContext } from 'react';
 
 export type ModalContextValue = {
     /**
-     * Stabil id som `Modal.Title` bruker på sitt `<h2>`, og som `Modal` kobler
-     * til `<dialog aria-labelledby>`. Slik navngis dialogen automatisk uten at
-     * konsumenten trenger å tenke på ARIA (WCAG 1.3.1 / dialog-mønsteret).
+     * Generert fallback-id som `Modal.Title` bruker på sitt `<h2>` når konsumenten
+     * ikke gir en egen `id`. Slik navngis dialogen automatisk uten at konsumenten
+     * trenger å tenke på ARIA (WCAG 1.3.1 / dialog-mønsteret).
      */
     titleId: string;
-    /** Meld fra at en `Modal.Title` er montert, slik at `aria-labelledby` settes. */
-    registerTitle: (present: boolean) => void;
     /**
-     * Stabil id som `Modal.Description` bruker på sin `<p>`, og som `Modal` kobler
-     * til `<dialog aria-describedby>`. Beskrivelsen er valgfri.
+     * Meld fra hvilken id `Modal.Title` faktisk bruker (egen `id` vinner over
+     * fallback), slik at `<dialog aria-labelledby>` peker på RIKTIG element. `null`
+     * ved avmontering. Uten dette ville en egen `id` på tittelen brutt koblingen.
+     */
+    registerTitle: (id: string | null) => void;
+    /**
+     * Generert fallback-id som `Modal.Description` bruker på sin `<p>` når
+     * konsumenten ikke gir en egen `id`. Beskrivelsen er valgfri.
      */
     descriptionId: string;
-    /** Meld fra at en `Modal.Description` er montert, slik at `aria-describedby` settes. */
-    registerDescription: (present: boolean) => void;
+    /**
+     * Meld fra hvilken id `Modal.Description` faktisk bruker (egen `id` vinner),
+     * slik at `<dialog aria-describedby>` peker riktig. `null` ved avmontering.
+     */
+    registerDescription: (id: string | null) => void;
     /** Lukk dialogen — brukes av `Modal.CloseButton`. */
     requestClose: () => void;
 };
