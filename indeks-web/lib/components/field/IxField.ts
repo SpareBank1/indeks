@@ -77,6 +77,8 @@
  * // → aria-invalid fjernes
  */
 
+import { createPatternFormatter, registerFormat, resolveFormat, type FieldFormatter } from './formats.js';
+
 type NativeControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 type TextControl = HTMLInputElement | HTMLTextAreaElement;
 
@@ -94,13 +96,43 @@ export class IxField extends HTMLElement {
     private _charCountListener: (() => void) | null = null;
     private _charCountControl: TextControl | null = null;
 
+    // ── Formatering (opt-in) ────────────────────────────────────────────────
+    // Aktiv formatter og opprydding for focus/blur/clipboard-lyttere. Null når
+    // ingen formatter er satt — da oppfører ix-field seg nøyaktig som før.
+    private _formatterProp: FieldFormatter | null = null;
+    private _formatTeardown: (() => void) | null = null;
+
+    /**
+     * Registrer en navngitt formatter globalt. Brukes deretter via
+     * `data-format="<navn>"` på et hvilket som helst ix-field.
+     *
+     * @example
+     * IxField.registerFormatter('orgnr', { format, parse });
+     * // <ix-field data-format="orgnr"><input …></ix-field>
+     */
+    static registerFormatter = registerFormat;
+
+    /**
+     * Sett en formatter direkte på instansen (høyest presedens). Lar konsumenten
+     * gi vilkårlig format/parse-logikk som ikke kan uttrykkes som attributt.
+     */
+    set formatter(value: FieldFormatter | null) {
+        this._formatterProp = value;
+        if (this.isConnected) this._wireFormatting();
+    }
+
+    get formatter(): FieldFormatter | null {
+        return this._formatterProp;
+    }
+
     static get observedAttributes(): string[] {
-        return ['tooltip', 'tooltip-label', 'tooltip-placement'];
+        return ['tooltip', 'tooltip-label', 'tooltip-placement', 'data-format', 'data-format-pattern'];
     }
 
     connectedCallback(): void {
         this._wire();
         this._syncTooltip();
+        this._wireFormatting();
     }
 
     disconnectedCallback(): void {
@@ -110,11 +142,15 @@ export class IxField extends HTMLElement {
         this._stateObserver?.disconnect();
         this._stateObserver = null;
         this._teardownCharCount();
+        this._teardownFormatting();
     }
 
     attributeChangedCallback(name: string, _oldValue: string | null, _newValue: string | null): void {
         if (name === 'tooltip' || name === 'tooltip-label' || name === 'tooltip-placement') {
             if (this.isConnected) this._syncTooltip();
+        }
+        if (name === 'data-format' || name === 'data-format-pattern') {
+            if (this.isConnected) this._wireFormatting();
         }
     }
 
@@ -303,6 +339,81 @@ export class IxField extends HTMLElement {
         } else if (min) {
             el.textContent = `${current} tegn (minimum ${min})`;
         }
+    }
+
+    // ── Formatering (opt-in) ─────────────────────────────────────────────────
+    //
+    // Format-on-blur, IKKE live tegn-maske. Prinsippet:
+    //   - Rå verdi er alltid sannheten. Mens feltet har fokus viser vi rå verdi,
+    //     så brukeren skriver og redigerer fritt (ingen caret-hopp, ingen stille
+    //     avvisning av tastetrykk).
+    //   - Når feltet mister fokus formaterer vi visningen (`format(parse(value))`).
+    //   - Ved fokus går vi tilbake til rå form (`parse(value)`).
+    //
+    // Konsekvens: siden feltet viser rå verdi mens det er fokusert, gir kopiering
+    // (som krever fokus/seleksjon) automatisk den rå verdien på utklippstavlen —
+    // f.eks. fødselsnummer uten mellomrom — uten egen copy/cut-håndtering.
+
+    // Løser opp aktiv formatter etter presedens: property → data-format → data-format-pattern.
+    private _resolveFormatter(): FieldFormatter | null {
+        if (this._formatterProp) return this._formatterProp;
+
+        const name = this.getAttribute('data-format');
+        if (name) {
+            const named = resolveFormat(name);
+            if (named) return named;
+            if (import.meta.env.DEV) {
+                console.warn(`[ix-field] Ukjent data-format="${name}". Registrer den med IxField.registerFormatter("${name}", …) eller bruk data-format-pattern.`);
+            }
+        }
+
+        const pattern = this.getAttribute('data-format-pattern');
+        if (pattern) return createPatternFormatter(pattern);
+
+        return null;
+    }
+
+    private _wireFormatting(): void {
+        this._teardownFormatting();
+
+        const formatter = this._resolveFormatter();
+        if (!formatter) return;
+
+        // Kun <input> støttes for formatering (ikke textarea/select).
+        const control = this.querySelector<HTMLInputElement>('input');
+        if (!control) return;
+
+        const applyFormatted = (): void => {
+            control.value = formatter.format(formatter.parse(control.value));
+        };
+        const applyRaw = (): void => {
+            control.value = formatter.parse(control.value);
+        };
+
+        // Ved fokus: vis rå, redigerbar verdi — men ikke for readonly/disabled der
+        // brukeren uansett ikke redigerer; da beholder vi den formaterte visningen.
+        const onFocus = (): void => {
+            if (!control.readOnly && !control.disabled) applyRaw();
+        };
+        const onBlur = (): void => applyFormatted();
+
+        control.addEventListener('focus', onFocus);
+        control.addEventListener('blur', onBlur);
+
+        this._formatTeardown = (): void => {
+            control.removeEventListener('focus', onFocus);
+            control.removeEventListener('blur', onBlur);
+        };
+
+        // Formater eventuell startverdi, med mindre feltet allerede har fokus
+        // (da er brukeren midt i redigering og skal se rå verdi).
+        if (document.activeElement !== control) applyFormatted();
+    }
+
+    private _teardownFormatting(): void {
+        this._formatTeardown?.();
+        this._formatTeardown = null;
+        this._formatControl = null;
     }
 
     // Holder aria-invalid på input synkronisert med om error-elementet har

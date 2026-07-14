@@ -160,6 +160,31 @@ describe('TextField', () => {
         expect(onChange).toHaveBeenCalledTimes(1);
     });
 
+    it('setter data-format paa ix-field naar format er et variant-navn', () => {
+        const { container } = render(<TextField label="Telefon" format="phone" />);
+        const ixField = container.querySelector('ix-field');
+        expect(ixField?.getAttribute('data-format')).toBe('phone');
+    });
+
+    it('setter data-format-pattern paa ix-field naar formatPattern er satt', () => {
+        const { container } = render(<TextField label="Dato" formatPattern="00.00.0000" />);
+        const ixField = container.querySelector('ix-field');
+        expect(ixField?.getAttribute('data-format-pattern')).toBe('00.00.0000');
+    });
+
+    it('setter ikke data-format naar format er et objekt (bruker property via ref)', () => {
+        const formatter = { format: (r: string) => r, parse: (d: string) => d };
+        const { container } = render(<TextField label="Egen" format={formatter} />);
+        const ixField = container.querySelector('ix-field');
+        expect(ixField?.hasAttribute('data-format')).toBe(false);
+    });
+
+    it('lar native pattern-attributt gaa uroert til input (ikke formatPattern)', () => {
+        render(<TextField label="Postnr" pattern="[0-9]{4}" />);
+        const input = screen.getByRole('textbox');
+        expect(input.getAttribute('pattern')).toBe('[0-9]{4}');
+    });
+
     it('className gaar til wrapper (ix-field), ikke til input', () => {
         const { container } = render(<TextField label="Test" className="custom" />);
         const ixField = container.querySelector('ix-field');

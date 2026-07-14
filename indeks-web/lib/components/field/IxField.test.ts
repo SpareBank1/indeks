@@ -562,6 +562,124 @@ describe('IxField', () => {
         });
     });
 
+    describe('formatering', () => {
+        it('formaterer startverdi ved tilkobling (data-format)', () => {
+            const field = createField(`
+                <ix-field data-format="phone">
+                    <label>Telefon</label>
+                    <input value="12345678" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(input.value).toBe('123 45 678');
+        });
+
+        it('viser rå verdi ved fokus, formatert ved blur', () => {
+            const field = createField(`
+                <ix-field data-format="phone">
+                    <label>Telefon</label>
+                    <input value="12345678" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(input.value).toBe('123 45 678');
+
+            input.focus();
+            expect(input.value).toBe('12345678');
+
+            input.blur();
+            expect(input.value).toBe('123 45 678');
+        });
+
+        it('støtter data-format-pattern uten JS', () => {
+            const field = createField(`
+                <ix-field data-format-pattern="00.00.0000">
+                    <label>Dato</label>
+                    <input value="24122026" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(input.value).toBe('24.12.2026');
+        });
+
+        it('formatter-property har høyest presedens', () => {
+            const field = createField(`
+                <ix-field data-format="phone">
+                    <label>Egendefinert</label>
+                    <input />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            input.value = 'abc';
+            field.formatter = {
+                format: (raw) => raw.toUpperCase(),
+                parse: (display) => display.toLowerCase(),
+            };
+            expect(input.value).toBe('ABC');
+        });
+
+        it('fødselsnummer viser rå verdi (uten mellomrom) ved fokus — trygg kopiering', () => {
+            const field = createField(`
+                <ix-field data-format="ssn">
+                    <label>Fødselsnummer</label>
+                    <input value="01019012345" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(input.value).toBe('010190 12345');
+            input.focus();
+            expect(input.value).toBe('01019012345');
+        });
+
+        it('advarer ved ukjent data-format', () => {
+            const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+            createField(`
+                <ix-field data-format="finnes-ikke">
+                    <label>Ukjent</label>
+                    <input value="123" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('Ukjent data-format'));
+            warnSpy.mockRestore();
+        });
+
+        it('gjør ingenting uten formatter (uendret oppførsel)', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Vanlig</label>
+                    <input value="12345678" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(input.value).toBe('12345678');
+            input.focus();
+            input.blur();
+            expect(input.value).toBe('12345678');
+        });
+
+        it('rydder opp focus/blur-lyttere i disconnectedCallback', () => {
+            const field = createField(`
+                <ix-field data-format="phone">
+                    <label>Telefon</label>
+                    <input value="12345678" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tilgang til privat felt for aa teste cleanup
+            expect((field as any)._formatTeardown).not.toBeNull();
+            field.remove();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tilgang til privat felt for aa teste cleanup
+            expect((field as any)._formatTeardown).toBeNull();
+        });
+    });
+
     describe('tooltip-knapp', () => {
         it('injiserer tooltip-knapp naar tooltip-attributt er satt', () => {
             const field = createField(`

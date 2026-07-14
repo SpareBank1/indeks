@@ -200,6 +200,63 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må li
 
 Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for NOK, ikke `prefix`. `prefix` brukes for valutasymboler som plasseres foran beløpet (f.eks. `€`, `$`).
 
+### Formatering av verdien
+
+TextField kan formatere innholdet automatisk. Feltet formateres når det mister fokus, og viser den rå (uformaterte) verdien igjen når det får fokus — slik at brukeren alltid redigerer fritt uten at markøren hopper. Sett `format` til en innebygd variant (`"phone"`, `"amount"`, `"account"`, `"orgnr"`, `"ssn"`, `"date"`), eller bruk `formatPattern` for enkle mønstre.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextField
+    label="Beløp i kroner"
+    format="amount"
+    suffix="kr"
+    inputMode="decimal"
+    defaultValue="1234567"
+  />
+  <TextField
+    label="Kontonummer"
+    description="11 siffer"
+    format="account"
+    inputMode="numeric"
+    defaultValue="12345678903"
+  />
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <ix-field data-format="amount">
+    <label>Beløp i kroner</label>
+    <div class="ix-text-field">
+      <input type="text" inputMode="decimal" value="1234567" />
+      <div data-field="suffix">kr</div>
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field data-format="account">
+    <label>Kontonummer</label>
+    <span data-field="description">11 siffer</span>
+    <div class="ix-text-field">
+      <input type="text" inputMode="numeric" value="12345678903" />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+Klikk i feltet for å se den rå verdien, og klikk ut for å se den formaterte. `format="amount"` gir tusenskille (`1 234 567`), og `format="account"` grupperer kontonummeret (`1234 56 78903`).
+
+Formateringen er kun visuell — verdien du leser av `onChange` er alltid den rå verdien uten separatorer. Se [Formatering](./textfield-formatering) for de tre måtene å definere en formatter på, egne varianter, og tilgjengelighetshensyn.
+
 ### Deaktivert og skrivebeskyttet
 
 <Tabs groupId="variant">
