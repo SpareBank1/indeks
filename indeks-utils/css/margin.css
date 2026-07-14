@@ -44,6 +44,10 @@
     margin: var(--ix-spacing-4xl);
 }
 
+.ix-m-5xl {
+    margin: var(--ix-spacing-5xl);
+}
+
 /* Margin top */
 
 .ix-mt-0 {
@@ -84,6 +88,10 @@
 
 .ix-mt-4xl {
     margin-top: var(--ix-spacing-4xl);
+}
+
+.ix-mt-5xl {
+    margin-top: var(--ix-spacing-5xl);
 }
 
 /* Margin right */
@@ -128,6 +136,10 @@
     margin-right: var(--ix-spacing-4xl);
 }
 
+.ix-mr-5xl {
+    margin-right: var(--ix-spacing-5xl);
+}
+
 /* Margin bottom */
 
 .ix-mb-0 {
@@ -168,6 +180,10 @@
 
 .ix-mb-4xl {
     margin-bottom: var(--ix-spacing-4xl);
+}
+
+.ix-mb-5xl {
+    margin-bottom: var(--ix-spacing-5xl);
 }
 
 /* Margin left */
@@ -212,6 +228,10 @@
     margin-left: var(--ix-spacing-4xl);
 }
 
+.ix-ml-5xl {
+    margin-left: var(--ix-spacing-5xl);
+}
+
 /* Margin block */
 
 .ix-my-2xs {
@@ -248,6 +268,10 @@
 
 .ix-my-4xl {
     margin-block: var(--ix-spacing-4xl);
+}
+
+.ix-my-5xl {
+    margin-block: var(--ix-spacing-5xl);
 }
 
 /* Margin inline */
@@ -296,6 +320,10 @@
     margin-inline: var(--ix-spacing-4xl);
 }
 
+.ix-mx-5xl {
+    margin-inline: var(--ix-spacing-5xl);
+}
+
 @media (min-width: 768px) {
     .ix-sm-m-0 {
         margin: 0;
@@ -341,6 +369,10 @@
         margin: var(--ix-spacing-4xl);
     }
 
+    .ix-sm-m-5xl {
+        margin: var(--ix-spacing-5xl);
+    }
+
     /* Margin top */
 
     .ix-sm-mt-0 {
@@ -381,6 +413,10 @@
 
     .ix-sm-mt-4xl {
         margin-top: var(--ix-spacing-4xl);
+    }
+
+    .ix-sm-mt-5xl {
+        margin-top: var(--ix-spacing-5xl);
     }
 
     /* Margin right */
@@ -425,6 +461,10 @@
         margin-right: var(--ix-spacing-4xl);
     }
 
+    .ix-sm-mr-5xl {
+        margin-right: var(--ix-spacing-5xl);
+    }
+
     /* Margin bottom */
 
     .ix-sm-mb-0 {
@@ -465,6 +505,10 @@
 
     .ix-sm-mb-4xl {
         margin-bottom: var(--ix-spacing-4xl);
+    }
+
+    .ix-sm-mb-5xl {
+        margin-bottom: var(--ix-spacing-5xl);
     }
 
     /* Margin left */
@@ -509,6 +553,10 @@
         margin-left: var(--ix-spacing-4xl);
     }
 
+    .ix-sm-ml-5xl {
+        margin-left: var(--ix-spacing-5xl);
+    }
+
     /* Margin block */
 
     .ix-sm-my-2xs {
@@ -545,6 +593,10 @@
 
     .ix-sm-my-4xl {
         margin-block: var(--ix-spacing-4xl);
+    }
+
+    .ix-sm-my-5xl {
+        margin-block: var(--ix-spacing-5xl);
     }
 
     /* Margin inline */
@@ -591,6 +643,10 @@
 
     .ix-sm-mx-4xl {
         margin-inline: var(--ix-spacing-4xl);
+    }
+
+    .ix-sm-mx-5xl {
+        margin-inline: var(--ix-spacing-5xl);
     }
 }
 
@@ -639,6 +695,10 @@
         margin: var(--ix-spacing-4xl);
     }
 
+    .ix-md-m-5xl {
+        margin: var(--ix-spacing-5xl);
+    }
+
     /* Margin top */
 
     .ix-md-mt-0 {
@@ -679,6 +739,10 @@
 
     .ix-md-mt-4xl {
         margin-top: var(--ix-spacing-4xl);
+    }
+
+    .ix-md-mt-5xl {
+        margin-top: var(--ix-spacing-5xl);
     }
 
     /* Margin right */
@@ -723,6 +787,10 @@
         margin-right: var(--ix-spacing-4xl);
     }
 
+    .ix-md-mr-5xl {
+        margin-right: var(--ix-spacing-5xl);
+    }
+
     /* Margin bottom */
 
     .ix-md-mb-0 {
@@ -763,6 +831,10 @@
 
     .ix-md-mb-4xl {
         margin-bottom: var(--ix-spacing-4xl);
+    }
+
+    .ix-md-mb-5xl {
+        margin-bottom: var(--ix-spacing-5xl);
     }
 
     /* Margin left */
@@ -807,6 +879,10 @@
         margin-left: var(--ix-spacing-4xl);
     }
 
+    .ix-md-ml-5xl {
+        margin-left: var(--ix-spacing-5xl);
+    }
+
     /* Margin block */
 
     .ix-md-my-2xs {
@@ -843,6 +919,10 @@
 
     .ix-md-my-4xl {
         margin-block: var(--ix-spacing-4xl);
+    }
+
+    .ix-md-my-5xl {
+        margin-block: var(--ix-spacing-5xl);
     }
 
     /* Margin inline */
@@ -889,6 +969,10 @@
 
     .ix-md-mx-4xl {
         margin-inline: var(--ix-spacing-4xl);
+    }
+
+    .ix-md-mx-5xl {
+        margin-inline: var(--ix-spacing-5xl);
     }
 }
 
@@ -937,6 +1021,10 @@
         margin: var(--ix-spacing-4xl);
     }
 
+    .ix-lg-m-5xl {
+        margin: var(--ix-spacing-5xl);
+    }
+
     /* Margin top */
 
     .ix-lg-mt-0 {
@@ -977,6 +1065,10 @@
 
     .ix-lg-mt-4xl {
         margin-top: var(--ix-spacing-4xl);
+    }
+
+    .ix-lg-mt-5xl {
+        margin-top: var(--ix-spacing-5xl);
     }
 
     /* Margin right */
@@ -1021,6 +1113,10 @@
         margin-right: var(--ix-spacing-4xl);
     }
 
+    .ix-lg-mr-5xl {
+        margin-right: var(--ix-spacing-5xl);
+    }
+
     /* Margin bottom */
 
     .ix-lg-mb-0 {
@@ -1061,6 +1157,10 @@
 
     .ix-lg-mb-4xl {
         margin-bottom: var(--ix-spacing-4xl);
+    }
+
+    .ix-lg-mb-5xl {
+        margin-bottom: var(--ix-spacing-5xl);
     }
 
     /* Margin left utility classes */
@@ -1104,6 +1204,10 @@
         margin-left: var(--ix-spacing-4xl);
     }
 
+    .ix-lg-ml-5xl {
+        margin-left: var(--ix-spacing-5xl);
+    }
+
     /* Margin block */
 
     .ix-lg-my-2xs {
@@ -1140,6 +1244,10 @@
 
     .ix-lg-my-4xl {
         margin-block: var(--ix-spacing-4xl);
+    }
+
+    .ix-lg-my-5xl {
+        margin-block: var(--ix-spacing-5xl);
     }
 
     /* Margin inline */
@@ -1186,6 +1294,10 @@
 
     .ix-lg-mx-4xl {
         margin-inline: var(--ix-spacing-4xl);
+    }
+
+    .ix-lg-mx-5xl {
+        margin-inline: var(--ix-spacing-5xl);
     }
 }
 
@@ -1234,6 +1346,10 @@
         margin: var(--ix-spacing-4xl);
     }
 
+    .ix-xl-m-5xl {
+        margin: var(--ix-spacing-5xl);
+    }
+
     /* Margin top */
 
     .ix-xl-mt-0 {
@@ -1274,6 +1390,10 @@
 
     .ix-xl-mt-4xl {
         margin-top: var(--ix-spacing-4xl);
+    }
+
+    .ix-xl-mt-5xl {
+        margin-top: var(--ix-spacing-5xl);
     }
 
     /* Margin right */
@@ -1318,6 +1438,10 @@
         margin-right: var(--ix-spacing-4xl);
     }
 
+    .ix-xl-mr-5xl {
+        margin-right: var(--ix-spacing-5xl);
+    }
+
     /* Margin bottom */
 
     .ix-xl-mb-0 {
@@ -1358,6 +1482,10 @@
 
     .ix-xl-mb-4xl {
         margin-bottom: var(--ix-spacing-4xl);
+    }
+
+    .ix-xl-mb-5xl {
+        margin-bottom: var(--ix-spacing-5xl);
     }
 
     /* Margin left */
@@ -1402,6 +1530,10 @@
         margin-left: var(--ix-spacing-4xl);
     }
 
+    .ix-xl-ml-5xl {
+        margin-left: var(--ix-spacing-5xl);
+    }
+
     /* Margin block */
 
     .ix-xl-my-2xs {
@@ -1438,6 +1570,10 @@
 
     .ix-xl-my-4xl {
         margin-block: var(--ix-spacing-4xl);
+    }
+
+    .ix-xl-my-5xl {
+        margin-block: var(--ix-spacing-5xl);
     }
 
     /* Margin inline */
@@ -1484,5 +1620,9 @@
 
     .ix-xl-mx-4xl {
         margin-inline: var(--ix-spacing-4xl);
+    }
+
+    .ix-xl-mx-5xl {
+        margin-inline: var(--ix-spacing-5xl);
     }
 }

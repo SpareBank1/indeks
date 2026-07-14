@@ -1,35 +1,95 @@
+/*
+ * Spacing-tokens med faste px-verdier på tre breakpoints (mobile-first):
+ *   - mobile  (base)
+ *   - tablet  (min-width: 768px)
+ *   - desktop (min-width: 1024px)
+ * 2xs–lg er konstante per density; kun xl–5xl varierer mellom breakpoints.
+ */
+
+/* Default — mobile */
 :where(:root, .ix-body, [data-density="default"]) {
-    --ix-spacing-2xs: var(--ii-spacing-size--10);
-    --ix-spacing-xs: var(--ii-spacing-size--7);
-    --ix-spacing-sm: var(--ii-spacing-size--3);
-    --ix-spacing-md: var(--ii-spacing-size-0);
-    --ix-spacing-lg: var(--ii-spacing-size-3);
-    --ix-spacing-xl: var(--ii-spacing-size-6);
-    --ix-spacing-2xl: var(--ii-spacing-size-9);
-    --ix-spacing-3xl: var(--ii-spacing-size-12);
-    --ix-spacing-4xl: var(--ii-spacing-size-16);
+    --ix-spacing-2xs: 4px;
+    --ix-spacing-xs: 8px;
+    --ix-spacing-sm: 12px;
+    --ix-spacing-md: 16px;
+    --ix-spacing-lg: 24px;
+    --ix-spacing-xl: 32px;
+    --ix-spacing-2xl: 40px;
+    --ix-spacing-3xl: 48px;
+    --ix-spacing-4xl: 64px;
+    --ix-spacing-5xl: 80px;
 }
 
+/* Compact — mobile */
 :where([data-density="compact"]) {
-    --ix-spacing-2xs: var(--ii-spacing-size--12);
-    --ix-spacing-xs: var(--ii-spacing-size--9);
-    --ix-spacing-sm: var(--ii-spacing-size--5);
-    --ix-spacing-md: var(--ii-spacing-size--2);
-    --ix-spacing-lg: var(--ii-spacing-size-1);
-    --ix-spacing-xl: var(--ii-spacing-size-4);
-    --ix-spacing-2xl: var(--ii-spacing-size-7);
-    --ix-spacing-3xl: var(--ii-spacing-size-10);
-    --ix-spacing-4xl: var(--ii-spacing-size-14);
+    --ix-spacing-2xs: 2px;
+    --ix-spacing-xs: 4px;
+    --ix-spacing-sm: 8px;
+    --ix-spacing-md: 12px;
+    --ix-spacing-lg: 16px;
+    --ix-spacing-xl: 24px;
+    --ix-spacing-2xl: 32px;
+    --ix-spacing-3xl: 40px;
+    --ix-spacing-4xl: 48px;
+    --ix-spacing-5xl: 64px;
 }
 
+/* Comfortable — mobile */
 :where([data-density="comfortable"]) {
-    --ix-spacing-2xs: var(--ii-spacing-size--8);
-    --ix-spacing-xs: var(--ii-spacing-size--5);
-    --ix-spacing-sm: var(--ii-spacing-size--1);
-    --ix-spacing-md: var(--ii-spacing-size-2);
-    --ix-spacing-lg: var(--ii-spacing-size-5);
-    --ix-spacing-xl: var(--ii-spacing-size-8);
-    --ix-spacing-2xl: var(--ii-spacing-size-11);
-    --ix-spacing-3xl: var(--ii-spacing-size-14);
-    --ix-spacing-4xl: var(--ii-spacing-size-18);
+    --ix-spacing-2xs: 8px;
+    --ix-spacing-xs: 12px;
+    --ix-spacing-sm: 16px;
+    --ix-spacing-md: 24px;
+    --ix-spacing-lg: 32px;
+    --ix-spacing-xl: 40px;
+    --ix-spacing-2xl: 48px;
+    --ix-spacing-3xl: 64px;
+    --ix-spacing-4xl: 80px;
+    --ix-spacing-5xl: 96px;
+}
+
+/* Tablet (≥768px) — kun xl–5xl endres */
+@media (min-width: 768px) {
+    :where(:root, .ix-body, [data-density="default"]) {
+        --ix-spacing-xl: 40px;
+        --ix-spacing-2xl: 48px;
+        --ix-spacing-3xl: 64px;
+        --ix-spacing-4xl: 80px;
+        --ix-spacing-5xl: 96px;
+    }
+
+    :where([data-density="compact"]) {
+        --ix-spacing-xl: 32px;
+        --ix-spacing-2xl: 40px;
+        --ix-spacing-3xl: 48px;
+        --ix-spacing-4xl: 64px;
+        --ix-spacing-5xl: 80px;
+    }
+
+    :where([data-density="comfortable"]) {
+        --ix-spacing-xl: 48px;
+        --ix-spacing-2xl: 64px;
+        --ix-spacing-3xl: 80px;
+        --ix-spacing-4xl: 96px;
+        --ix-spacing-5xl: 128px;
+    }
+}
+
+/* Desktop (≥1024px) — kun xl–5xl endres (compact == tablet, utelates) */
+@media (min-width: 1024px) {
+    :where(:root, .ix-body, [data-density="default"]) {
+        --ix-spacing-xl: 48px;
+        --ix-spacing-2xl: 64px;
+        --ix-spacing-3xl: 80px;
+        --ix-spacing-4xl: 96px;
+        --ix-spacing-5xl: 128px;
+    }
+
+    :where([data-density="comfortable"]) {
+        --ix-spacing-xl: 64px;
+        --ix-spacing-2xl: 80px;
+        --ix-spacing-3xl: 96px;
+        --ix-spacing-4xl: 128px;
+        --ix-spacing-5xl: 128px;
+    }
 }

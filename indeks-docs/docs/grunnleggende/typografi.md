@@ -16,8 +16,8 @@ Begge fontene er tilgjengelige i Figma og kan brukes direkte, uten behov for lok
 ## Store bokstaver og kursiv
 Unngå å bruke tekst med kun store bokstaver, da dette gir dårligere lesbarhet. Det samme gjelder kursiv, som ikke bør brukes i overskrifter eller i større tekstmengder, ettersom det kan gjøre teksten vanskeligere å lese.
 
-## Responsiv
-Typografien er responsiv og tilpasser seg ulike skjermstørrelser. Basestørrelsen er 18 px på desktop og 16 px på mobil, og skalerer automatisk mellom breakpoints for å sikre god lesbarhet på tvers av enheter og kontekster.
+## Fontstørrelse
+Basestørrelsen er alltid 16px (`1rem`) og skalerer ikke med skjermstørrelsen. Overskriftsstørrelsene er faste og beregnes ut fra basestørrelsen, slik at proporsjonene er konsistente på tvers av enheter og kontekster.
 
 ## Størrelse på overskrifter og semantikk
 Du står fritt til å velge størrelse på overskrifter basert på behov og kontekst. Semantikk og visuell utforming er bevisst holdt adskilt, slik at riktig HTML-struktur kan brukes uavhengig av ønsket uttrykk.

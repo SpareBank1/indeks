@@ -23,7 +23,7 @@ Eksempler på egenskaper som kan legges til med utility-klasser er spacing (marg
 
 ## Spacing
 
-Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. Baseverdien er responsiv og varierer mellom 16px og 18px basert på skjermstørrelse. Alle spacing-verdier beregnes som multipler av baseverdien, og kan overstyres av `density`-modifierne.
+Spacing i Indeks bruker faste px-verdier som justeres på tre breakpoints (mobil, tablet fra 768px, desktop fra 1024px). De minste verdiene (`2xs`–`lg`) er like på alle breakpoints; kun `xl`–`5xl` øker på større skjermer. Verdiene kan overstyres av `density`-modifierne. Se [spacing-skalaen](/docs/grunnleggende/tokens/spacing) for alle verdier.
 
 `margin`, `padding` og `gap` bruker variablene fra skalaen, og har tilsvarende klassenavn. For eksempel gir klassen `.ix-p-2xs` padding lik verdien av `--ix-spacing-2xs`.
 
@@ -41,6 +41,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-p-2xl`  | `padding: var(--ix-spacing-2xl);`        |
 | `.ix-p-3xl`  | `padding: var(--ix-spacing-3xl);`        |
 | `.ix-p-4xl`  | `padding: var(--ix-spacing-4xl);`        |
+| `.ix-p-5xl`  | `padding: var(--ix-spacing-5xl);`        |
 | `.ix-pt-0`   | `padding-top: 0;`                        |
 | `.ix-pt-2xs` | `padding-top: var(--ix-spacing-2xs);`    |
 | `.ix-pt-xs`  | `padding-top: var(--ix-spacing-xs);`     |
@@ -51,6 +52,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-pt-2xl` | `padding-top: var(--ix-spacing-2xl);`    |
 | `.ix-pt-3xl` | `padding-top: var(--ix-spacing-3xl);`    |
 | `.ix-pt-4xl` | `padding-top: var(--ix-spacing-4xl);`    |
+| `.ix-pt-5xl` | `padding-top: var(--ix-spacing-5xl);`    |
 | `.ix-pr-0`   | `padding-right: 0;`                      |
 | `.ix-pr-2xs` | `padding-right: var(--ix-spacing-2xs);`  |
 | `.ix-pr-xs`  | `padding-right: var(--ix-spacing-xs);`   |
@@ -61,6 +63,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-pr-2xl` | `padding-right: var(--ix-spacing-2xl);`  |
 | `.ix-pr-3xl` | `padding-right: var(--ix-spacing-3xl);`  |
 | `.ix-pr-4xl` | `padding-right: var(--ix-spacing-4xl);`  |
+| `.ix-pr-5xl` | `padding-right: var(--ix-spacing-5xl);`  |
 | `.ix-pb-0`   | `padding-bottom: 0;`                     |
 | `.ix-pb-2xs` | `padding-bottom: var(--ix-spacing-2xs);` |
 | `.ix-pb-xs`  | `padding-bottom: var(--ix-spacing-xs);`  |
@@ -71,6 +74,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-pb-2xl` | `padding-bottom: var(--ix-spacing-2xl);` |
 | `.ix-pb-3xl` | `padding-bottom: var(--ix-spacing-3xl);` |
 | `.ix-pb-4xl` | `padding-bottom: var(--ix-spacing-4xl);` |
+| `.ix-pb-5xl` | `padding-bottom: var(--ix-spacing-5xl);` |
 | `.ix-pl-0`   | `padding-left: 0;`                       |
 | `.ix-pl-2xs` | `padding-left: var(--ix-spacing-2xs);`   |
 | `.ix-pl-xs`  | `padding-left: var(--ix-spacing-xs);`    |
@@ -81,6 +85,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-pl-2xl` | `padding-left: var(--ix-spacing-2xl);`   |
 | `.ix-pl-3xl` | `padding-left: var(--ix-spacing-3xl);`   |
 | `.ix-pl-4xl` | `padding-left: var(--ix-spacing-4xl);`   |
+| `.ix-pl-5xl` | `padding-left: var(--ix-spacing-5xl);`   |
 | `.ix-px-0`   | `padding-inline: 0;`                     |
 | `.ix-px-2xs` | `padding-inline: var(--ix-spacing-2xs);` |
 | `.ix-px-xs`  | `padding-inline: var(--ix-spacing-xs);`  |
@@ -91,6 +96,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-px-2xl` | `padding-inline: var(--ix-spacing-2xl);` |
 | `.ix-px-3xl` | `padding-inline: var(--ix-spacing-3xl);` |
 | `.ix-px-4xl` | `padding-inline: var(--ix-spacing-4xl);` |
+| `.ix-px-5xl` | `padding-inline: var(--ix-spacing-5xl);` |
 | `.ix-py-0`   | `padding-block: 0;`                      |
 | `.ix-py-2xs` | `padding-block: var(--ix-spacing-2xs);`  |
 | `.ix-py-xs`  | `padding-block: var(--ix-spacing-xs);`   |
@@ -101,6 +107,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-py-2xl` | `padding-block: var(--ix-spacing-2xl);`  |
 | `.ix-py-3xl` | `padding-block: var(--ix-spacing-3xl);`  |
 | `.ix-py-4xl` | `padding-block: var(--ix-spacing-4xl);`  |
+| `.ix-py-5xl` | `padding-block: var(--ix-spacing-5xl);`  |
 
 ### Margin
 
@@ -117,6 +124,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-m-2xl`  | `margin: var(--ix-spacing-2xl);`        |
 | `.ix-m-3xl`  | `margin: var(--ix-spacing-3xl);`        |
 | `.ix-m-4xl`  | `margin: var(--ix-spacing-4xl);`        |
+| `.ix-m-5xl`  | `margin: var(--ix-spacing-5xl);`        |
 | `.ix-mt-0`   | `margin-top: 0;`                        |
 | `.ix-mt-2xs` | `margin-top: var(--ix-spacing-2xs);`    |
 | `.ix-mt-xs`  | `margin-top: var(--ix-spacing-xs);`     |
@@ -127,6 +135,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-mt-2xl` | `margin-top: var(--ix-spacing-2xl);`    |
 | `.ix-mt-3xl` | `margin-top: var(--ix-spacing-3xl);`    |
 | `.ix-mt-4xl` | `margin-top: var(--ix-spacing-4xl);`    |
+| `.ix-mt-5xl` | `margin-top: var(--ix-spacing-5xl);`    |
 | `.ix-mr-0`   | `margin-right: 0;`                      |
 | `.ix-mr-2xs` | `margin-right: var(--ix-spacing-2xs);`  |
 | `.ix-mr-xs`  | `margin-right: var(--ix-spacing-xs);`   |
@@ -137,6 +146,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-mr-2xl` | `margin-right: var(--ix-spacing-2xl);`  |
 | `.ix-mr-3xl` | `margin-right: var(--ix-spacing-3xl);`  |
 | `.ix-mr-4xl` | `margin-right: var(--ix-spacing-4xl);`  |
+| `.ix-mr-5xl` | `margin-right: var(--ix-spacing-5xl);`  |
 | `.ix-mb-0`   | `margin-bottom: 0;`                     |
 | `.ix-mb-2xs` | `margin-bottom: var(--ix-spacing-2xs);` |
 | `.ix-mb-xs`  | `margin-bottom: var(--ix-spacing-xs);`  |
@@ -147,6 +157,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-mb-2xl` | `margin-bottom: var(--ix-spacing-2xl);` |
 | `.ix-mb-3xl` | `margin-bottom: var(--ix-spacing-3xl);` |
 | `.ix-mb-4xl` | `margin-bottom: var(--ix-spacing-4xl);` |
+| `.ix-mb-5xl` | `margin-bottom: var(--ix-spacing-5xl);` |
 | `.ix-ml-0`   | `margin-left: 0;`                       |
 | `.ix-ml-2xs` | `margin-left: var(--ix-spacing-2xs);`   |
 | `.ix-ml-xs`  | `margin-left: var(--ix-spacing-xs);`    |
@@ -157,6 +168,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-ml-2xl` | `margin-left: var(--ix-spacing-2xl);`   |
 | `.ix-ml-3xl` | `margin-left: var(--ix-spacing-3xl);`   |
 | `.ix-ml-4xl` | `margin-left: var(--ix-spacing-4xl);`   |
+| `.ix-ml-5xl` | `margin-left: var(--ix-spacing-5xl);`   |
 | `.ix-my-2xs` | `margin-block: var(--ix-spacing-2xs)`   |
 | `.ix-my-xs`  | `margin-block: var(--ix-spacing-xs);`   |
 | `.ix-my-sm`  | `margin-block: var(--ix-spacing-sm);`   |
@@ -166,6 +178,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-my-2xl` | `margin-block: var(--ix-spacing-2xl);`  |
 | `.ix-my-3xl` | `margin-block: var(--ix-spacing-3xl);`  |
 | `.ix-my-4xl` | `margin-block: var(--ix-spacing-4xl);`  |
+| `.ix-my-5xl` | `margin-block: var(--ix-spacing-5xl);`  |
 | `.ix-mx-0`    | `margin-inline: 0;`                    |
 | `.ix-mx-auto` | `margin-inline: auto;`                 |
 | `.ix-mx-2xs` | `margin-inline: var(--ix-spacing-2xs);` |
@@ -177,6 +190,7 @@ Spacing i Indeks er basert på en skala med verdier regnet ut fra en baseverdi. 
 | `.ix-mx-2xl` | `margin-inline: var(--ix-spacing-2xl);` |
 | `.ix-mx-3xl` | `margin-inline: var(--ix-spacing-3xl);` |
 | `.ix-mx-4xl` | `margin-inline: var(--ix-spacing-4xl);` |
+| `.ix-mx-5xl` | `margin-inline: var(--ix-spacing-5xl);` |
 
 ### Gap
 
@@ -195,6 +209,7 @@ når du trenger ulike verdier i de to retningene.
 | `.ix-gap-2xl`     | `gap: var(--ix-spacing-2xl);`        |
 | `.ix-gap-3xl`     | `gap: var(--ix-spacing-3xl);`        |
 | `.ix-gap-4xl`     | `gap: var(--ix-spacing-4xl);`        |
+| `.ix-gap-5xl`     | `gap: var(--ix-spacing-5xl);`        |
 | `.ix-row-gap-0`   | `row-gap: 0;`                        |
 | `.ix-row-gap-2xs` | `row-gap: var(--ix-spacing-2xs);`    |
 | `.ix-row-gap-xs`  | `row-gap: var(--ix-spacing-xs);`     |
@@ -205,6 +220,7 @@ når du trenger ulike verdier i de to retningene.
 | `.ix-row-gap-2xl` | `row-gap: var(--ix-spacing-2xl);`    |
 | `.ix-row-gap-3xl` | `row-gap: var(--ix-spacing-3xl);`    |
 | `.ix-row-gap-4xl` | `row-gap: var(--ix-spacing-4xl);`    |
+| `.ix-row-gap-5xl` | `row-gap: var(--ix-spacing-5xl);`    |
 | `.ix-col-gap-0`   | `column-gap: 0;`                     |
 | `.ix-col-gap-2xs` | `column-gap: var(--ix-spacing-2xs);` |
 | `.ix-col-gap-xs`  | `column-gap: var(--ix-spacing-xs);`  |
@@ -215,6 +231,7 @@ når du trenger ulike verdier i de to retningene.
 | `.ix-col-gap-2xl` | `column-gap: var(--ix-spacing-2xl);` |
 | `.ix-col-gap-3xl` | `column-gap: var(--ix-spacing-3xl);` |
 | `.ix-col-gap-4xl` | `column-gap: var(--ix-spacing-4xl);` |
+| `.ix-col-gap-5xl` | `column-gap: var(--ix-spacing-5xl);` |
 
 ### Responsiv spacing
 
@@ -240,6 +257,7 @@ For eksempel gir klassen `.ix-md-p-2xl` padding med verdien av 2xl på medium (`
 | `.ix-<skjermstørrelse>-m-2xl`  | `margin: var(--ix-spacing-2xl);`        |
 | `.ix-<skjermstørrelse>-m-3xl`  | `margin: var(--ix-spacing-3xl);`        |
 | `.ix-<skjermstørrelse>-m-4xl`  | `margin: var(--ix-spacing-4xl);`        |
+| `.ix-<skjermstørrelse>-m-5xl`  | `margin: var(--ix-spacing-5xl);`        |
 | `.ix-<skjermstørrelse>-m-auto` | `margin: auto;`                         |
 | `.ix-<skjermstørrelse>-mt-0`   | `margin-top: 0;`                        |
 | `.ix-<skjermstørrelse>-mt-2xs` | `margin-top: var(--ix-spacing-2xs);`    |
@@ -251,6 +269,7 @@ For eksempel gir klassen `.ix-md-p-2xl` padding med verdien av 2xl på medium (`
 | `.ix-<skjermstørrelse>-mt-2xl` | `margin-top: var(--ix-spacing-2xl);`    |
 | `.ix-<skjermstørrelse>-mt-3xl` | `margin-top: var(--ix-spacing-3xl);`    |
 | `.ix-<skjermstørrelse>-mt-4xl` | `margin-top: var(--ix-spacing-4xl);`    |
+| `.ix-<skjermstørrelse>-mt-5xl` | `margin-top: var(--ix-spacing-5xl);`    |
 | `.ix-<skjermstørrelse>-mb-0`   | `margin-bottom: 0;`                     |
 | `.ix-<skjermstørrelse>-mb-2xs` | `margin-bottom: var(--ix-spacing-2xs);` |
 | `.ix-<skjermstørrelse>-mb-xs`  | `margin-bottom: var(--ix-spacing-xs);`  |
@@ -261,6 +280,7 @@ For eksempel gir klassen `.ix-md-p-2xl` padding med verdien av 2xl på medium (`
 | `.ix-<skjermstørrelse>-mb-2xl` | `margin-bottom: var(--ix-spacing-2xl);` |
 | `.ix-<skjermstørrelse>-mb-3xl` | `margin-bottom: var(--ix-spacing-3xl);` |
 | `.ix-<skjermstørrelse>-mb-4xl` | `margin-bottom: var(--ix-spacing-4xl);` |
+| `.ix-<skjermstørrelse>-mb-5xl` | `margin-bottom: var(--ix-spacing-5xl);` |
 | `.ix-<skjermstørrelse>-mr-0`   | `margin-right: 0;`                      |
 | `.ix-<skjermstørrelse>-mr-2xs` | `margin-right: var(--ix-spacing-2xs);`  |
 | `.ix-<skjermstørrelse>-mr-xs`  | `margin-right: var(--ix-spacing-xs);`   |
@@ -271,6 +291,7 @@ For eksempel gir klassen `.ix-md-p-2xl` padding med verdien av 2xl på medium (`
 | `.ix-<skjermstørrelse>-mr-2xl` | `margin-right: var(--ix-spacing-2xl);`  |
 | `.ix-<skjermstørrelse>-mr-3xl` | `margin-right: var(--ix-spacing-3xl);`  |
 | `.ix-<skjermstørrelse>-mr-4xl` | `margin-right: var(--ix-spacing-4xl);`  |
+| `.ix-<skjermstørrelse>-mr-5xl` | `margin-right: var(--ix-spacing-5xl);`  |
 | `.ix-<skjermstørrelse>-ml-0`   | `margin-left: 0;`                       |
 | `.ix-<skjermstørrelse>-ml-2xs` | `margin-left: var(--ix-spacing-2xs);`   |
 | `.ix-<skjermstørrelse>-ml-xs`  | `margin-left: var(--ix-spacing-xs);`    |
@@ -281,6 +302,7 @@ For eksempel gir klassen `.ix-md-p-2xl` padding med verdien av 2xl på medium (`
 | `.ix-<skjermstørrelse>-ml-2xl` | `margin-left: var(--ix-spacing-2xl);`   |
 | `.ix-<skjermstørrelse>-ml-3xl` | `margin-left: var(--ix-spacing-3xl);`   |
 | `.ix-<skjermstørrelse>-ml-4xl` | `margin-left: var(--ix-spacing-4xl);`   |
+| `.ix-<skjermstørrelse>-ml-5xl` | `margin-left: var(--ix-spacing-5xl);`   |
 | `.ix-<skjermstørrelse>-my-2xs` | `margin-block: var(--ix-spacing-2xs);`  |
 | `.ix-<skjermstørrelse>-my-xs`  | `margin-block: var(--ix-spacing-xs);`   |
 | `.ix-<skjermstørrelse>-my-sm`  | `margin-block: var(--ix-spacing-sm);`   |
@@ -290,6 +312,7 @@ For eksempel gir klassen `.ix-md-p-2xl` padding med verdien av 2xl på medium (`
 | `.ix-<skjermstørrelse>-my-2xl` | `margin-block: var(--ix-spacing-2xl);`  |
 | `.ix-<skjermstørrelse>-my-3xl` | `margin-block: var(--ix-spacing-3xl);`  |
 | `.ix-<skjermstørrelse>-my-4xl` | `margin-block: var(--ix-spacing-4xl);`  |
+| `.ix-<skjermstørrelse>-my-5xl` | `margin-block: var(--ix-spacing-5xl);`  |
 | `.ix-<skjermstørrelse>-mx-2xs` | `margin-inline: var(--ix-spacing-2xs);` |
 | `.ix-<skjermstørrelse>-mx-xs`  | `margin-inline: var(--ix-spacing-xs);`  |
 | `.ix-<skjermstørrelse>-mx-sm`  | `margin-inline: var(--ix-spacing-sm);`  |
@@ -299,6 +322,7 @@ For eksempel gir klassen `.ix-md-p-2xl` padding med verdien av 2xl på medium (`
 | `.ix-<skjermstørrelse>-mx-2xl` | `margin-inline: var(--ix-spacing-2xl);` |
 | `.ix-<skjermstørrelse>-mx-3xl` | `margin-inline: var(--ix-spacing-3xl);` |
 | `.ix-<skjermstørrelse>-mx-4xl` | `margin-inline: var(--ix-spacing-4xl);` |
+| `.ix-<skjermstørrelse>-mx-5xl` | `margin-inline: var(--ix-spacing-5xl);` |
 
 Responsiv padding og gap følger samme mønster som responsiv margin.
 
@@ -316,6 +340,7 @@ Responsiv padding og gap følger samme mønster som responsiv margin.
 | `.ix-<skjermstørrelse>-p-2xl`  | `padding: var(--ix-spacing-2xl);`                                                   |
 | `.ix-<skjermstørrelse>-p-3xl`  | `padding: var(--ix-spacing-3xl);`                                                   |
 | `.ix-<skjermstørrelse>-p-4xl`  | `padding: var(--ix-spacing-4xl);`                                                   |
+| `.ix-<skjermstørrelse>-p-5xl`  | `padding: var(--ix-spacing-5xl);`                                                   |
 | `.ix-<skjermstørrelse>-pt-0`   | `padding-top: 0;`                                                                   |
 | `.ix-<skjermstørrelse>-pt-2xs` | `padding-top: var(--ix-spacing-2xs);`                                               |
 | `.ix-<skjermstørrelse>-pt-xs`  | `padding-top: var(--ix-spacing-xs);`                                                |
@@ -326,6 +351,7 @@ Responsiv padding og gap følger samme mønster som responsiv margin.
 | `.ix-<skjermstørrelse>-pt-2xl` | `padding-top: var(--ix-spacing-2xl);`                                               |
 | `.ix-<skjermstørrelse>-pt-3xl` | `padding-top: var(--ix-spacing-3xl);`                                               |
 | `.ix-<skjermstørrelse>-pt-4xl` | `padding-top: var(--ix-spacing-4xl);`                                               |
+| `.ix-<skjermstørrelse>-pt-5xl` | `padding-top: var(--ix-spacing-5xl);`                                               |
 | `.ix-<skjermstørrelse>-pb-0`   | `padding-bottom: 0;`                                                                |
 | `.ix-<skjermstørrelse>-pb-2xs` | `padding-bottom: var(--ix-spacing-2xs);`                                            |
 | `.ix-<skjermstørrelse>-pb-xs`  | `padding-bottom: var(--ix-spacing-xs);`                                             |
@@ -336,6 +362,7 @@ Responsiv padding og gap følger samme mønster som responsiv margin.
 | `.ix-<skjermstørrelse>-pb-2xl` | `padding-bottom: var(--ix-spacing-2xl);`                                            |
 | `.ix-<skjermstørrelse>-pb-3xl` | `padding-bottom: var(--ix-spacing-3xl);`                                            |
 | `.ix-<skjermstørrelse>-pb-4xl` | `padding-bottom: var(--ix-spacing-4xl);`                                            |
+| `.ix-<skjermstørrelse>-pb-5xl` | `padding-bottom: var(--ix-spacing-5xl);`                                            |
 | `.ix-<skjermstørrelse>-pr-0`   | `padding-right: 0;`                                                                 |
 | `.ix-<skjermstørrelse>-pr-2xs` | `padding-right: var(--ix-spacing-2xs);`                                             |
 | `.ix-<skjermstørrelse>-pr-xs`  | `padding-right: var(--ix-spacing-xs);`                                              |
@@ -346,6 +373,7 @@ Responsiv padding og gap følger samme mønster som responsiv margin.
 | `.ix-<skjermstørrelse>-pr-2xl` | `padding-right: var(--ix-spacing-2xl);`                                             |
 | `.ix-<skjermstørrelse>-pr-3xl` | `padding-right: var(--ix-spacing-3xl);`                                             |
 | `.ix-<skjermstørrelse>-pr-4xl` | `padding-right: var(--ix-spacing-4xl);`                                             |
+| `.ix-<skjermstørrelse>-pr-5xl` | `padding-right: var(--ix-spacing-5xl);`                                             |
 | `.ix-<skjermstørrelse>-pl-0`   | `padding-left: 0;`                                                                  |
 | `.ix-<skjermstørrelse>-pl-2xs` | `padding-left: var(--ix-spacing-2xs);`                                              |
 | `.ix-<skjermstørrelse>-pl-xs`  | `padding-left: var(--ix-spacing-xs);`                                               |
@@ -356,6 +384,7 @@ Responsiv padding og gap følger samme mønster som responsiv margin.
 | `.ix-<skjermstørrelse>-pl-2xl` | `padding-left: var(--ix-spacing-2xl);`                                              |
 | `.ix-<skjermstørrelse>-pl-3xl` | `padding-left: var(--ix-spacing-3xl);`                                              |
 | `.ix-<skjermstørrelse>-pl-4xl` | `padding-left: var(--ix-spacing-4xl);`                                              |
+| `.ix-<skjermstørrelse>-pl-5xl` | `padding-left: var(--ix-spacing-5xl);`                                              |
 | `.ix-<skjermstørrelse>-py-2xs` | `padding-block: var(--ix-spacing-2xs);`  |
 | `.ix-<skjermstørrelse>-py-xs`  | `padding-block: var(--ix-spacing-xs);`   |
 | `.ix-<skjermstørrelse>-py-sm`  | `padding-block: var(--ix-spacing-sm);`   |
@@ -365,6 +394,7 @@ Responsiv padding og gap følger samme mønster som responsiv margin.
 | `.ix-<skjermstørrelse>-py-2xl` | `padding-block: var(--ix-spacing-2xl);`  |
 | `.ix-<skjermstørrelse>-py-3xl` | `padding-block: var(--ix-spacing-3xl);`  |
 | `.ix-<skjermstørrelse>-py-4xl` | `padding-block: var(--ix-spacing-4xl);`  |
+| `.ix-<skjermstørrelse>-py-5xl` | `padding-block: var(--ix-spacing-5xl);`  |
 | `.ix-<skjermstørrelse>-px-2xs` | `padding-inline: var(--ix-spacing-2xs);` |
 | `.ix-<skjermstørrelse>-px-xs`  | `padding-inline: var(--ix-spacing-xs);`  |
 | `.ix-<skjermstørrelse>-px-sm`  | `padding-inline: var(--ix-spacing-sm);`  |
@@ -374,6 +404,7 @@ Responsiv padding og gap følger samme mønster som responsiv margin.
 | `.ix-<skjermstørrelse>-px-2xl` | `padding-inline: var(--ix-spacing-2xl);` |
 | `.ix-<skjermstørrelse>-px-3xl` | `padding-inline: var(--ix-spacing-3xl);` |
 | `.ix-<skjermstørrelse>-px-4xl` | `padding-inline: var(--ix-spacing-4xl);` |
+| `.ix-<skjermstørrelse>-px-5xl` | `padding-inline: var(--ix-spacing-5xl);` |
 
 #### Responsiv gap
 
@@ -388,6 +419,7 @@ Responsiv padding og gap følger samme mønster som responsiv margin.
 | `.ix-<skjermstørrelse>-gap-2xl` | `gap: var(--ix-spacing-2xl);` |
 | `.ix-<skjermstørrelse>-gap-3xl` | `gap: var(--ix-spacing-3xl);` |
 | `.ix-<skjermstørrelse>-gap-4xl` | `gap: var(--ix-spacing-4xl);` |
+| `.ix-<skjermstørrelse>-gap-5xl` | `gap: var(--ix-spacing-5xl);` |
 
 ## Density modifiers
 

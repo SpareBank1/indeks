@@ -40,6 +40,10 @@
     padding: var(--ix-spacing-4xl);
 }
 
+.ix-p-5xl {
+    padding: var(--ix-spacing-5xl);
+}
+
 /* Padding top */
 
 .ix-pt-0 {
@@ -80,6 +84,10 @@
 
 .ix-pt-4xl {
     padding-top: var(--ix-spacing-4xl);
+}
+
+.ix-pt-5xl {
+    padding-top: var(--ix-spacing-5xl);
 }
 
 /* Padding bottom */
@@ -124,6 +132,10 @@
     padding-bottom: var(--ix-spacing-4xl);
 }
 
+.ix-pb-5xl {
+    padding-bottom: var(--ix-spacing-5xl);
+}
+
 /* Padding right */
 
 .ix-pr-0 {
@@ -164,6 +176,10 @@
 
 .ix-pr-4xl {
     padding-right: var(--ix-spacing-4xl);
+}
+
+.ix-pr-5xl {
+    padding-right: var(--ix-spacing-5xl);
 }
 
 /* Padding left */
@@ -208,6 +224,10 @@
     padding-left: var(--ix-spacing-4xl);
 }
 
+.ix-pl-5xl {
+    padding-left: var(--ix-spacing-5xl);
+}
+
 /* Padding horizontal */
 
 .ix-px-0 {
@@ -248,6 +268,10 @@
 
 .ix-px-4xl {
     padding-inline: var(--ix-spacing-4xl);
+}
+
+.ix-px-5xl {
+    padding-inline: var(--ix-spacing-5xl);
 }
 
 /* Padding vertical */
@@ -292,6 +316,10 @@
     padding-block: var(--ix-spacing-4xl);
 }
 
+.ix-py-5xl {
+    padding-block: var(--ix-spacing-5xl);
+}
+
 @media (min-width: 768px) {
     .ix-sm-p-0 {
         padding: 0;
@@ -331,6 +359,10 @@
 
     .ix-sm-p-4xl {
         padding: var(--ix-spacing-4xl);
+    }
+
+    .ix-sm-p-5xl {
+        padding: var(--ix-spacing-5xl);
     }
 
     /* Padding top */
@@ -375,6 +407,10 @@
         padding-top: var(--ix-spacing-4xl);
     }
 
+    .ix-sm-pt-5xl {
+        padding-top: var(--ix-spacing-5xl);
+    }
+
     /* Padding bottom */
 
     .ix-sm-pb-0 {
@@ -415,6 +451,10 @@
 
     .ix-sm-pb-4xl {
         padding-bottom: var(--ix-spacing-4xl);
+    }
+
+    .ix-sm-pb-5xl {
+        padding-bottom: var(--ix-spacing-5xl);
     }
 
     /* Padding right */
@@ -459,6 +499,10 @@
         padding-right: var(--ix-spacing-4xl);
     }
 
+    .ix-sm-pr-5xl {
+        padding-right: var(--ix-spacing-5xl);
+    }
+
     /* Padding left */
 
     .ix-sm-pl-0 {
@@ -499,6 +543,10 @@
 
     .ix-sm-pl-4xl {
         padding-left: var(--ix-spacing-4xl);
+    }
+
+    .ix-sm-pl-5xl {
+        padding-left: var(--ix-spacing-5xl);
     }
 
     /* Padding horizontal */
@@ -543,6 +591,10 @@
         padding-inline: var(--ix-spacing-4xl);
     }
 
+    .ix-sm-px-5xl {
+        padding-inline: var(--ix-spacing-5xl);
+    }
+
     /* Padding vertical */
 
     .ix-sm-py-0 {
@@ -583,6 +635,10 @@
 
     .ix-sm-py-4xl {
         padding-block: var(--ix-spacing-4xl);
+    }
+
+    .ix-sm-py-5xl {
+        padding-block: var(--ix-spacing-5xl);
     }
 }
 
@@ -627,6 +683,10 @@
         padding: var(--ix-spacing-4xl);
     }
 
+    .ix-md-p-5xl {
+        padding: var(--ix-spacing-5xl);
+    }
+
     /* Padding top */
 
     .ix-md-pt-0 {
@@ -667,6 +727,10 @@
 
     .ix-md-pt-4xl {
         padding-top: var(--ix-spacing-4xl);
+    }
+
+    .ix-md-pt-5xl {
+        padding-top: var(--ix-spacing-5xl);
     }
 
     /* Padding bottom */
@@ -711,6 +775,10 @@
         padding-bottom: var(--ix-spacing-4xl);
     }
 
+    .ix-md-pb-5xl {
+        padding-bottom: var(--ix-spacing-5xl);
+    }
+
     /* Padding right */
 
     .ix-md-pr-0 {
@@ -751,6 +819,10 @@
 
     .ix-md-pr-4xl {
         padding-right: var(--ix-spacing-4xl);
+    }
+
+    .ix-md-pr-5xl {
+        padding-right: var(--ix-spacing-5xl);
     }
 
     /* Padding left */
@@ -795,6 +867,10 @@
         padding-left: var(--ix-spacing-4xl);
     }
 
+    .ix-md-pl-5xl {
+        padding-left: var(--ix-spacing-5xl);
+    }
+
     /* Padding horizontal */
 
     .ix-md-px-0 {
@@ -837,6 +913,10 @@
         padding-inline: var(--ix-spacing-4xl);
     }
 
+    .ix-md-px-5xl {
+        padding-inline: var(--ix-spacing-5xl);
+    }
+
     /* Padding vertical */
 
     .ix-md-py-0 {
@@ -877,6 +957,10 @@
 
     .ix-md-py-4xl {
         padding-block: var(--ix-spacing-4xl);
+    }
+
+    .ix-md-py-5xl {
+        padding-block: var(--ix-spacing-5xl);
     }
 }
 
@@ -921,6 +1005,10 @@
         padding: var(--ix-spacing-4xl);
     }
 
+    .ix-lg-p-5xl {
+        padding: var(--ix-spacing-5xl);
+    }
+
     /* Padding top */
 
     .ix-lg-pt-0 {
@@ -961,6 +1049,10 @@
 
     .ix-lg-pt-4xl {
         padding-top: var(--ix-spacing-4xl);
+    }
+
+    .ix-lg-pt-5xl {
+        padding-top: var(--ix-spacing-5xl);
     }
 
     /* Padding bottom */
@@ -1005,6 +1097,10 @@
         padding-bottom: var(--ix-spacing-4xl);
     }
 
+    .ix-lg-pb-5xl {
+        padding-bottom: var(--ix-spacing-5xl);
+    }
+
     /* Padding right */
 
     .ix-lg-pr-0 {
@@ -1045,6 +1141,10 @@
 
     .ix-lg-pr-4xl {
         padding-right: var(--ix-spacing-4xl);
+    }
+
+    .ix-lg-pr-5xl {
+        padding-right: var(--ix-spacing-5xl);
     }
 
     /* Padding left */
@@ -1089,6 +1189,10 @@
         padding-left: var(--ix-spacing-4xl);
     }
 
+    .ix-lg-pl-5xl {
+        padding-left: var(--ix-spacing-5xl);
+    }
+
     /* Padding horizontal */
 
     .ix-lg-px-0 {
@@ -1131,6 +1235,10 @@
         padding-inline: var(--ix-spacing-4xl);
     }
 
+    .ix-lg-px-5xl {
+        padding-inline: var(--ix-spacing-5xl);
+    }
+
     /* Padding vertical */
 
     .ix-lg-py-0 {
@@ -1171,6 +1279,10 @@
 
     .ix-lg-py-4xl {
         padding-block: var(--ix-spacing-4xl);
+    }
+
+    .ix-lg-py-5xl {
+        padding-block: var(--ix-spacing-5xl);
     }
 }
 
@@ -1215,6 +1327,10 @@
         padding: var(--ix-spacing-4xl);
     }
 
+    .ix-xl-p-5xl {
+        padding: var(--ix-spacing-5xl);
+    }
+
     /* Padding top */
 
     .ix-xl-pt-0 {
@@ -1255,6 +1371,10 @@
 
     .ix-xl-pt-4xl {
         padding-top: var(--ix-spacing-4xl);
+    }
+
+    .ix-xl-pt-5xl {
+        padding-top: var(--ix-spacing-5xl);
     }
 
     /* Padding bottom */
@@ -1299,6 +1419,10 @@
         padding-bottom: var(--ix-spacing-4xl);
     }
 
+    .ix-xl-pb-5xl {
+        padding-bottom: var(--ix-spacing-5xl);
+    }
+
     /* Padding right */
 
     .ix-xl-pr-0 {
@@ -1339,6 +1463,10 @@
 
     .ix-xl-pr-4xl {
         padding-right: var(--ix-spacing-4xl);
+    }
+
+    .ix-xl-pr-5xl {
+        padding-right: var(--ix-spacing-5xl);
     }
 
     /* Padding left */
@@ -1383,6 +1511,10 @@
         padding-left: var(--ix-spacing-4xl);
     }
 
+    .ix-xl-pl-5xl {
+        padding-left: var(--ix-spacing-5xl);
+    }
+
     /* Padding horizontal */
 
     .ix-xl-px-0 {
@@ -1425,6 +1557,10 @@
         padding-inline: var(--ix-spacing-4xl);
     }
 
+    .ix-xl-px-5xl {
+        padding-inline: var(--ix-spacing-5xl);
+    }
+
     /* Padding vertical */
 
     .ix-xl-py-0 {
@@ -1465,5 +1601,9 @@
 
     .ix-xl-py-4xl {
         padding-block: var(--ix-spacing-4xl);
+    }
+
+    .ix-xl-py-5xl {
+        padding-block: var(--ix-spacing-5xl);
     }
 }
