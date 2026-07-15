@@ -169,23 +169,45 @@ describe('TextField', () => {
         expect(onChange).toHaveBeenCalledTimes(1);
     });
 
-    it('setter data-format paa ix-field naar format er et variant-navn', () => {
+    it('setter data-format paa input naar format er et variant-navn', () => {
         const { container } = render(<TextField label="Telefon" format="phone" />);
-        const ixField = container.querySelector('ix-field');
-        expect(ixField?.getAttribute('data-format')).toBe('phone');
+        const input = container.querySelector('input');
+        expect(input?.getAttribute('data-format')).toBe('phone');
     });
 
-    it('setter data-format-pattern paa ix-field naar formatPattern er satt', () => {
+    it('setter data-format-pattern paa input naar formatPattern er satt', () => {
         const { container } = render(<TextField label="Dato" formatPattern="00.00.0000" />);
-        const ixField = container.querySelector('ix-field');
-        expect(ixField?.getAttribute('data-format-pattern')).toBe('00.00.0000');
+        const input = container.querySelector('input');
+        expect(input?.getAttribute('data-format-pattern')).toBe('00.00.0000');
+    });
+
+    it('setter data-format-live paa input naar formatLive er satt', () => {
+        const { container } = render(<TextField label="Telefon" format="phone" formatLive={false} />);
+        const input = container.querySelector('input');
+        expect(input?.getAttribute('data-format-live')).toBe('false');
+    });
+
+    it('setter ikke data-format-live naar formatLive er utelatt', () => {
+        const { container } = render(<TextField label="Telefon" format="phone" />);
+        const input = container.querySelector('input');
+        expect(input?.hasAttribute('data-format-live')).toBe(false);
+    });
+
+    it('formatLive={false} tvinger innebygd variant til blur (rå ved fokus)', () => {
+        const { container } = render(<TextField label="Telefon" name="tlf" format="phone" defaultValue="12345678" formatLive={false} />);
+        const input = screen.getByRole('textbox') as HTMLInputElement;
+        expect(input.value).toBe('123 45 678');
+        input.focus();
+        fireEvent.focus(input);
+        expect(input.value).toBe('12345678');
+        expect((container.querySelector('input[type="hidden"]') as HTMLInputElement).value).toBe('12345678');
     });
 
     it('setter ikke data-format naar format er et objekt (bruker property via ref)', () => {
         const formatter = { format: (r: string) => r, parse: (d: string) => d };
         const { container } = render(<TextField label="Egen" format={formatter} />);
-        const ixField = container.querySelector('ix-field');
-        expect(ixField?.hasAttribute('data-format')).toBe(false);
+        const input = container.querySelector('input');
+        expect(input?.hasAttribute('data-format')).toBe(false);
     });
 
     it('lar native pattern-attributt gaa uroert til input (ikke formatPattern)', () => {
@@ -202,68 +224,74 @@ describe('TextField', () => {
         expect(input.classList.contains('custom')).toBe(false);
     });
 
-    describe('controlled formatering', () => {
-        // Overlay-modell: input.value er alltid rå, den formaterte visningen ligger
-        // i .ix-text-field__format-display (aria-hidden), vist/skjult via CSS.
-        const overlayText = (container: HTMLElement): string | undefined => container.querySelector('.ix-text-field__format-display')?.textContent ?? undefined;
+    describe('controlled formatering (mirror-modell)', () => {
+        // Mirror-modell: synlig input viser formatert tekst (live) eller rå ved
+        // fokus (blur); en skjult input[type=hidden] bærer den rå verdien.
+        const mirrorValue = (container: HTMLElement): string | undefined => (container.querySelector('input[type="hidden"]') as HTMLInputElement | null)?.value;
 
-        it('input holder rå verdi, overlay viser formatert i controlled-modus', () => {
-            const { container } = render(<TextField label="Tlf" format="phone" value="12345678" onChange={() => {}} />);
+        it('synlig input viser formatert (live), mirror holder rå (controlled)', () => {
+            const { container } = render(<TextField label="Tlf" name="tlf" format="phone" value="12345678" onChange={() => {}} />);
             const input = screen.getByRole('textbox') as HTMLInputElement;
-            expect(input.value).toBe('12345678');
-            expect(overlayText(container)).toBe('123 45 678');
+            expect(input.value).toBe('123 45 678');
+            expect(mirrorValue(container)).toBe('12345678');
         });
 
-        it('beholder overlay-visning ved urelatert re-render (controlled)', () => {
+        it('beholder visning ved urelatert re-render (controlled)', () => {
             function Wrap() {
                 const [, force] = useState(0);
                 return (
                     <>
-                        <TextField label="Tlf" format="phone" value="12345678" onChange={() => {}} />
+                        <TextField label="Tlf" name="tlf" format="phone" value="12345678" onChange={() => {}} />
                         <button onClick={() => force((n) => n + 1)}>rerender</button>
                     </>
                 );
             }
             const { container } = render(<Wrap />);
             const input = screen.getByRole('textbox') as HTMLInputElement;
-            expect(input.value).toBe('12345678');
-            expect(overlayText(container)).toBe('123 45 678');
+            expect(input.value).toBe('123 45 678');
+            expect(mirrorValue(container)).toBe('12345678');
             fireEvent.click(screen.getByText('rerender'));
-            expect(input.value).toBe('12345678');
-            expect(overlayText(container)).toBe('123 45 678');
+            expect(input.value).toBe('123 45 678');
+            expect(mirrorValue(container)).toBe('12345678');
         });
 
-        it('oppdaterer overlay når ny verdi settes programmatisk (controlled)', () => {
+        it('reformaterer synlig input når ny verdi settes programmatisk (controlled)', () => {
             function Wrap() {
                 const [v, setV] = useState('12345678');
                 return (
                     <>
-                        <TextField label="Tlf" format="phone" value={v} onChange={(e) => setV((e.target as HTMLInputElement).value)} />
+                        <TextField label="Tlf" name="tlf" format="phone" value={v} onChange={(e) => setV((e.target as HTMLInputElement).value)} />
                         <button onClick={() => setV('87654321')}>sett ny</button>
                     </>
                 );
             }
             const { container } = render(<Wrap />);
             const input = screen.getByRole('textbox') as HTMLInputElement;
-            expect(overlayText(container)).toBe('123 45 678');
+            expect(input.value).toBe('123 45 678');
             fireEvent.click(screen.getByText('sett ny'));
-            // input.value følger den rå prop-verdien; overlay re-formateres via useLayoutEffect.
-            expect(input.value).toBe('87654321');
-            expect(overlayText(container)).toBe('876 54 321');
+            // Synlig input re-formateres via refreshFormat i useLayoutEffect; mirror rå.
+            expect(input.value).toBe('876 54 321');
+            expect(mirrorValue(container)).toBe('87654321');
         });
 
-        it('input eksponerer alltid rå verdi (form-innsending / input.value)', () => {
-            function Wrap() {
-                const [v, setV] = useState('12345678');
-                return <TextField label="Tlf" format="phone" value={v} onChange={(e) => setV((e.target as HTMLInputElement).value)} />;
-            }
-            const { container } = render(<Wrap />);
+        it('onChange gir rå verdi i live-modus (form/input.value er formatert)', () => {
+            const onChange = vi.fn();
+            const { container } = render(<TextField label="Tlf" name="tlf" format="phone" defaultValue="" onChange={onChange} />);
             const input = screen.getByRole('textbox') as HTMLInputElement;
-            // Uansett fokus-tilstand: input.value er rå (overlay bærer formateringen).
-            expect(input.value).toBe('12345678');
-            expect(overlayText(container)).toBe('123 45 678');
-            input.focus();
-            expect(input.value).toBe('12345678');
+            input.value = '12345678';
+            input.setSelectionRange(8, 8);
+            fireEvent.input(input);
+            // Synlig input formateres, men onChange leverer rå verdi til konsumenten.
+            expect(input.value).toBe('123 45 678');
+            expect(mirrorValue(container)).toBe('12345678');
+            expect((onChange.mock.lastCall![0].target as HTMLInputElement).value).toBe('12345678');
+        });
+
+        it('uncontrolled live (defaultValue) rendrer formatert startverdi', () => {
+            const { container } = render(<TextField label="Tlf" name="tlf" format="phone" defaultValue="12345678" />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            expect(input.value).toBe('123 45 678');
+            expect(mirrorValue(container)).toBe('12345678');
         });
     });
 });

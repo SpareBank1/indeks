@@ -1,14 +1,20 @@
 /**
  * Input-formatering for ix-field — rene funksjoner, pattern-kompilator og registry.
  *
- * ## Filosofi: formatering, ikke masking
+ * ## Filosofi: vi formaterer, vi masker ikke
  *
- * Dette er IKKE en live tegn-maske som avviser tastetrykk mens man skriver.
- * Mekanismen bygger på **format-on-blur**: brukeren skriver fritt, feltet
- * formateres når det mister fokus, og går tilbake til rå (redigerbar) form når
- * det får fokus igjen. Det unngår caret-hopp og skjermleser-relesing som følger
- * med per-tegn-maskering — en bevisst a11y-beslutning (jf. GOV.UK-frarådingen mot
- * å reformatere telefonnummer mens brukeren skriver).
+ * Dette er IKKE en tegn-maske som avviser tastetrykk. Uansett modus vises ALT
+ * brukeren skriver — også ekstra tegn og tegn som ikke «hører hjemme» (en bokstav
+ * i et sifferfelt). Feil fanges av validering, ikke ved å droppe tegn. Derfor er
+ * `parse` tapsfri (fjerner kun separatorene `format` setter inn).
+ *
+ * To moduser, styrt av `live`-flagget på formatteren:
+ *   - **Blur (standard):** feltet formateres når det mister fokus og viser rå
+ *     (redigerbar) verdi ved fokus. Ingen caret-hopp mens man skriver — en bevisst
+ *     a11y-beslutning (jf. GOV.UK-frarådingen mot å reformatere telefonnummer mens
+ *     brukeren skriver).
+ *   - **Live (opt-in, `live: true`):** separatorene bygger seg opp mens man
+ *     skriver. De innebygde variantene bruker dette.
  *
  * ## Kontrakten
  *
@@ -23,8 +29,8 @@
  * ## Tre måter å skaffe en formatter (i ix-field, se IxField.ts)
  *
  *   1. Egen funksjon som property:  `el.formatter = { format, parse }`
- *   2. Navngitt via registry:       `data-format="phone"` (+ `registerFormat(...)`)
- *   3. Pattern-streng, ingen JS:    `data-format-pattern="000 00 000"`
+ *   2. Navngitt via registry:       `<input data-format="phone">` (+ `registerFormat(...)`)
+ *   3. Pattern-streng, ingen JS:    `<input data-format-pattern="000 00 000">`
  *
  * Alle tre gir samme `FieldFormatter`-kontrakt.
  */
@@ -32,8 +38,24 @@
 export interface FieldFormatter {
     /** Rå verdi → visningsstreng. */
     format(raw: string): string;
-    /** Visningsstreng → rå verdi (sannheten konsumenten lagrer). */
+    /**
+     * Visningsstreng → rå verdi (sannheten konsumenten lagrer).
+     *
+     * **Tapsfri:** fjerner kun separatorene formatteren selv setter inn og
+     * beholder alt annet — også tegn som ikke «hører hjemme» (en bokstav i et
+     * sifferfelt). Vi formaterer, vi masker ikke: feil fanges av validering, ikke
+     * ved å droppe tegn. Derfor holder `parse(format(raw)) === raw` for enhver rå
+     * verdi, ikke bare gyldige.
+     */
     parse(display: string): string;
+    /**
+     * Formater mens brukeren skriver (separatorer dukker opp fortløpende).
+     * Standard `false`/utelatt = format-on-blur (formateres når feltet mister
+     * fokus, rå verdi vises ved fokus for fri redigering). De innebygde variantene
+     * opter inn på live; egne pattern-strenger og `{format,parse}`-objekter er
+     * blur med mindre de setter dette.
+     */
+    live?: boolean;
 }
 
 // ── Pattern-kompilator ──────────────────────────────────────────────────────
@@ -70,32 +92,36 @@ function compileTokens(pattern: string): PatternToken[] {
  *
  * `format` fyller slots med matchende tegn fra den rå verdien og setter inn
  * separatorer først når neste slot faktisk fylles (ingen dinglende separator på
- * slutten mens man skriver). `parse` beholder kun tegn som kan fylle en slot, i
- * rekkefølge, opp til antall slots — separatorer og ugyldige tegn droppes.
+ * slutten mens man skriver). Tegn som ikke passer neste slot — enten fordi
+ * brukeren skrev flere tegn enn patternet har plasser, eller skrev noe som ikke
+ * hører hjemme (bokstav i et sifferfelt) — droppes IKKE: den ledende delen som
+ * passer formateres, og resten legges uformatert på til slutt i samme
+ * rekkefølge brukeren skrev. Alt brukeren skriver forblir synlig.
+ *
+ * `parse` er tapsfri: den fjerner kun separator-tegnene patternet definerer
+ * (literal-tokens) og beholder alt annet i rekkefølge — ingen cap på antall
+ * slots, ingen filtrering av «ugyldige» tegn. Slik overlever et feilaktig tegn
+ * (bokstav i et sifferfelt) i den rå verdien og kan fanges av validering.
  */
 export function createPatternFormatter(pattern: string): FieldFormatter {
     const tokens = compileTokens(pattern);
-    const slots = tokens.filter((t): t is Extract<PatternToken, { type: 'slot' }> => t.type === 'slot');
 
-    // Beholder tegn som matcher minst én slot-definisjon i patternet.
-    const keepChar = (char: string): boolean => slots.some((s) => s.match.test(char));
+    // Separator-tegnene patternet setter inn (literal-tokens). parse fjerner kun
+    // disse. En slot-definisjon som også kan matche et separator-tegn ville vært
+    // tvetydig, men patternene våre bruker mellomrom/punktum som ingen slot matcher.
+    const separators = new Set(tokens.filter((t) => t.type === 'literal').map((t) => (t as Extract<PatternToken, { type: 'literal' }>).value));
 
     return {
         parse(display: string): string {
             let raw = '';
             for (const char of display) {
-                if (keepChar(char)) {
-                    raw += char;
-                    if (raw.length === slots.length) break;
-                }
+                if (!separators.has(char)) raw += char;
             }
             return raw;
         },
 
         format(raw: string): string {
-            // Rens rå verdi til kun gyldige tegn, slik at lim inn av en allerede
-            // formatert verdi ("123 45 678") også fungerer.
-            const chars = [...raw].filter(keepChar);
+            const chars = [...raw];
             let out = '';
             let pendingLiterals = '';
             let i = 0;
@@ -105,14 +131,17 @@ export function createPatternFormatter(pattern: string): FieldFormatter {
                     pendingLiterals += token.value;
                     continue;
                 }
-                // slot: finn neste tegn som matcher denne slotens type
-                while (i < chars.length && !token.match.test(chars[i])) i++;
-                if (i >= chars.length) break;
+                // slot: neste tegn må matche slotens type. Passer det ikke,
+                // stopper vi konsumeringen — resten legges på verbatim under.
+                if (i >= chars.length || !token.match.test(chars[i])) break;
                 out += pendingLiterals + chars[i];
                 pendingLiterals = '';
                 i++;
             }
-            return out;
+
+            // Legg resterende tegn på uformatert (ekstra tegn utover patternet
+            // eller tegn som ikke passet). Ingen dinglende separator.
+            return out + chars.slice(i).join('');
         },
     };
 }
@@ -130,30 +159,44 @@ export function createAmountFormatter(options: { groupSeparator?: string; decima
     const group = options.groupSeparator ?? ' ';
     const decimal = options.decimalSeparator ?? ',';
 
-    // Alt som ikke er siffer eller desimalskilletegn fjernes (også tusenskille).
+    // Tapsfri parse: fjern kun tusenskillet (separatoren format setter inn), og
+    // behold alt annet — siffer, desimalskilletegn og eventuelle feilaktige tegn.
+    // Vi formaterer, vi masker ikke; validering fanger ugyldige verdier.
     const stripToRaw = (display: string): string => {
-        let raw = '';
-        let seenDecimal = false;
-        for (const char of display) {
-            if (char >= '0' && char <= '9') {
-                raw += char;
-            } else if (char === decimal && !seenDecimal) {
-                raw += decimal;
-                seenDecimal = true;
-            }
-        }
-        return raw;
+        // split/join fjerner alle forekomster av gruppe-tegnet uten regex-escaping.
+        return display.split(group).join('');
     };
 
     return {
         parse: stripToRaw,
 
         format(raw: string): string {
-            const clean = stripToRaw(raw);
-            if (clean === '') return '';
-            const [intPart, ...rest] = clean.split(decimal);
+            // Konsumer den ledende delen som er gyldig beløp (siffer + ett
+            // desimalskilletegn), stopp ved første tegn som ikke passer, og legg
+            // resten uformatert på — slik at alt brukeren skriver forblir synlig.
+            const chars = [...raw];
+            let leading = '';
+            let seenDecimal = false;
+            let i = 0;
+            for (; i < chars.length; i++) {
+                const char = chars[i];
+                if (char >= '0' && char <= '9') {
+                    leading += char;
+                } else if (char === decimal && !seenDecimal) {
+                    leading += decimal;
+                    seenDecimal = true;
+                } else {
+                    break;
+                }
+            }
+
+            const rest = chars.slice(i).join('');
+            if (leading === '') return rest;
+
+            const [intPart, ...decimals] = leading.split(decimal);
             const grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, group);
-            return rest.length > 0 ? `${grouped}${decimal}${rest.join('')}` : grouped;
+            const formatted = decimals.length > 0 ? `${grouped}${decimal}${decimals.join('')}` : grouped;
+            return formatted + rest;
         },
     };
 }
@@ -175,7 +218,7 @@ const registry = new Map<string, FieldFormatter>();
 
 /**
  * Registrerer en navngitt formatter som deretter kan brukes via
- * `data-format="<navn>"` på et ix-field, hvor som helst i appen.
+ * `data-format="<navn>"` på et input inne i et ix-field, hvor som helst i appen.
  *
  * Team kan registrere sine egne varianter (orgnr, kortnummer, …) uten at
  * designsystemet må endres — «felles, men ikke avhengig av oss».
@@ -195,9 +238,12 @@ export function resolveFormat(name: string): FieldFormatter | undefined {
 // `amount` bruker tall-formatteren med norske separatorer (mellomrom + komma),
 // i tråd med eksisterende intern bruk.
 
-registerFormat('phone', createPatternFormatter('000 00 000')); // norsk 8-sifret nummer
-registerFormat('ssn', createPatternFormatter('000000 00000')); // fødselsnummer DDMMÅÅ NNNNN
-registerFormat('date', createPatternFormatter('00.00.0000')); // dd.mm.åååå
-registerFormat('account', createPatternFormatter('0000 00 00000')); // kontonummer 1234 56 78903
-registerFormat('orgnr', createPatternFormatter('000 000 000')); // organisasjonsnummer 123 456 789
-registerFormat('amount', createAmountFormatter({ groupSeparator: ' ', decimalSeparator: ',' }));
+// live: true — de innebygde variantene formaterer mens brukeren skriver. Flagget
+// settes på registreringen (ikke i factoryene, som deles med egne pattern-strenger
+// som skal være blur som standard). Spread beholder format/parse uendret.
+registerFormat('phone', { ...createPatternFormatter('000 00 000'), live: true }); // norsk 8-sifret nummer
+registerFormat('ssn', { ...createPatternFormatter('000000 00000'), live: true }); // fødselsnummer DDMMÅÅ NNNNN
+registerFormat('date', { ...createPatternFormatter('00.00.0000'), live: true }); // dd.mm.åååå
+registerFormat('account', { ...createPatternFormatter('0000 00 00000'), live: true }); // kontonummer 1234 56 78903
+registerFormat('orgnr', { ...createPatternFormatter('000 000 000'), live: true }); // organisasjonsnummer 123 456 789
+registerFormat('amount', { ...createAmountFormatter({ groupSeparator: ' ', decimalSeparator: ',' }), live: true });

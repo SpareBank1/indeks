@@ -45,8 +45,8 @@
     { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
     { "id": "2.4.7", "notes": "Tydelig fokusindikator med god kontrast." },
     { "id": "2.5.8", "notes": "Inputfeltet oppfyller minimum 24x24px klikkflate." },
-    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring. Ved formatering vises rå verdi ved fokus — ingen reformatering under skriving." },
-    { "id": "3.2.2", "notes": "Input trigger ingen automatisk kontekstendring. Formatering skjer kun på blur (ikke per tastetrykk), så markøren hopper ikke og skjermleseren re-leser ikke feltet under skriving." },
+    { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring. I blur-modus vises rå verdi ved fokus; i live-modus reformateres verdien mens man skriver, men markøren styres eksplisitt så den holder plassen." },
+    { "id": "3.2.2", "notes": "Input trigger ingen automatisk kontekstendring. De innebygde variantene formaterer live (per tastetrykk) med eksplisitt markørstyring, mens egne formattere er blur med mindre live settes. Formatering masker ikke — den avviser aldri tastetrykk, og bytter aldri fokus eller side." },
     { "id": "4.1.2", "notes": "Native input med implisitt rolle. Tilgjengelig navn fra label. Tilstander eksponeres korrekt." }
   ],
   "notRelevant": [

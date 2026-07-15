@@ -202,7 +202,9 @@ Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for
 
 ### Formatering av verdien
 
-TextField kan formatere innholdet automatisk. Feltet formateres når det mister fokus, og viser den rå (uformaterte) verdien igjen når det får fokus — slik at brukeren alltid redigerer fritt uten at markøren hopper. Sett `format` til en innebygd variant (`"phone"`, `"amount"`, `"account"`, `"orgnr"`, `"ssn"`, `"date"`), eller bruk `formatPattern` for enkle mønstre.
+TextField kan formatere innholdet automatisk. Sett `format` til en innebygd variant (`"phone"`, `"amount"`, `"account"`, `"orgnr"`, `"ssn"`, `"date"`), eller bruk `formatPattern` for enkle mønstre. De innebygde variantene formaterer **live** — separatorene dukker opp mens man skriver. Egne pattern-strenger og `{format,parse}`-objekter formateres på blur (viser rå verdi ved fokus) med mindre de setter `live: true`. Uansett vises alt brukeren skriver — feil fanges av validering, ikke ved å droppe tegn.
+
+Formatering er visuell — den erstatter ikke behovet for å fortelle brukeren hva som forventes. Oppgi derfor forventet format som tekst i `description` (f.eks. `"11 siffer, f.eks. 1234 56 78903"`), slik eksemplene under gjør.
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">
@@ -211,6 +213,7 @@ TextField kan formatere innholdet automatisk. Feltet formateres når det mister 
 <>
   <TextField
     label="Beløp i kroner"
+    description="Beløp med tusenskille, f.eks. 1 234 567"
     format="amount"
     suffix="kr"
     inputMode="decimal"
@@ -218,7 +221,7 @@ TextField kan formatere innholdet automatisk. Feltet formateres når det mister 
   />
   <TextField
     label="Kontonummer"
-    description="11 siffer"
+    description="11 siffer, f.eks. 1234 56 78903"
     format="account"
     inputMode="numeric"
     defaultValue="12345678903"
@@ -231,19 +234,20 @@ TextField kan formatere innholdet automatisk. Feltet formateres når det mister 
 
 ```jsx live
 <>
-  <ix-field data-format="amount">
+  <ix-field>
     <label>Beløp i kroner</label>
+    <span data-field="description">Beløp med tusenskille, f.eks. 1 234 567</span>
     <div class="ix-text-field">
-      <input type="text" inputmode="decimal" value="1234567" />
+      <input type="text" inputmode="decimal" data-format="amount" value="1234567" />
       <div data-field="suffix">kr</div>
     </div>
     <span data-field="error"></span>
   </ix-field>
-  <ix-field data-format="account">
+  <ix-field>
     <label>Kontonummer</label>
-    <span data-field="description">11 siffer</span>
+    <span data-field="description">11 siffer, f.eks. 1234 56 78903</span>
     <div class="ix-text-field">
-      <input type="text" inputmode="numeric" value="12345678903" />
+      <input type="text" inputmode="numeric" data-format="account" value="12345678903" />
     </div>
     <span data-field="error"></span>
   </ix-field>
@@ -253,9 +257,9 @@ TextField kan formatere innholdet automatisk. Feltet formateres når det mister 
 </TabItem>
 </Tabs>
 
-Klikk i feltet for å se den rå verdien, og klikk ut for å se den formaterte. `format="amount"` gir tusenskille (`1 234 567`), og `format="account"` grupperer kontonummeret (`1234 56 78903`).
+Skriv i feltene og se separatorene bygge seg opp mens du skriver — `format="amount"` gir tusenskille (`1 234 567`), og `format="account"` grupperer kontonummeret (`1234 56 78903`). Begge er live-varianter.
 
-Formateringen er kun visuell — verdien du leser av `onChange` er alltid den rå verdien uten separatorer. Se [Formatering](./textfield-formatering) for de tre måtene å definere en formatter på, egne varianter, og tilgjengelighetshensyn.
+Verdien du leser av `onChange` er alltid den rå verdien uten separatorer (den ligger i en skjult mirror-input som også brukes ved form-innsending). Se [Formatering](./textfield-formatering) for de to modusene, de tre måtene å definere en formatter på, egne varianter, og tilgjengelighetshensyn.
 
 ### Deaktivert og skrivebeskyttet
 
