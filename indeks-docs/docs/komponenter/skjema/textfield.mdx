@@ -40,7 +40,7 @@ Prøv å endre label eller description direkte i editoren. Komponenten kobler `f
   <label>Kontonummer</label>
   <span data-field="description">11 siffer uten mellomrom</span>
   <div class="ix-text-field">
-    <input type="text" inputMode="numeric" name="accountNumber" />
+    <input type="text" inputmode="numeric" name="accountNumber" />
   </div>
   <span data-field="error"></span>
 </ix-field>
@@ -114,7 +114,7 @@ Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
   <label>Kontonummer</label>
   <span data-field="description">11 siffer uten mellomrom</span>
   <div class="ix-text-field">
-    <input inputMode="numeric" />
+    <input inputmode="numeric" />
   </div>
   <span data-field="error">Kontonummer må ha 11 siffer</span>
 </ix-field>
@@ -170,7 +170,7 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må li
   <ix-field>
     <label>Beløp i kroner</label>
     <div class="ix-text-field">
-      <input inputMode="numeric" />
+      <input inputmode="numeric" />
       <div data-field="suffix">kr</div>
     </div>
     <span data-field="error"></span>
@@ -178,7 +178,7 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må li
   <ix-field>
     <label>Rente i prosent</label>
     <div class="ix-text-field">
-      <input inputMode="decimal" />
+      <input inputmode="decimal" />
       <div data-field="suffix">%</div>
     </div>
     <span data-field="error"></span>
@@ -187,7 +187,7 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må li
     <label>Beløp i euro</label>
     <div class="ix-text-field">
       <div data-field="prefix">€</div>
-      <input inputMode="numeric" />
+      <input inputmode="numeric" />
       <div data-field="suffix">,00</div>
     </div>
     <span data-field="error"></span>
@@ -199,6 +199,63 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må li
 </Tabs>
 
 Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for NOK, ikke `prefix`. `prefix` brukes for valutasymboler som plasseres foran beløpet (f.eks. `€`, `$`).
+
+### Formatering av verdien
+
+TextField kan formatere innholdet automatisk. Feltet formateres når det mister fokus, og viser den rå (uformaterte) verdien igjen når det får fokus — slik at brukeren alltid redigerer fritt uten at markøren hopper. Sett `format` til en innebygd variant (`"phone"`, `"amount"`, `"account"`, `"orgnr"`, `"ssn"`, `"date"`), eller bruk `formatPattern` for enkle mønstre.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextField
+    label="Beløp i kroner"
+    format="amount"
+    suffix="kr"
+    inputMode="decimal"
+    defaultValue="1234567"
+  />
+  <TextField
+    label="Kontonummer"
+    description="11 siffer"
+    format="account"
+    inputMode="numeric"
+    defaultValue="12345678903"
+  />
+</>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <ix-field data-format="amount">
+    <label>Beløp i kroner</label>
+    <div class="ix-text-field">
+      <input type="text" inputmode="decimal" value="1234567" />
+      <div data-field="suffix">kr</div>
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+  <ix-field data-format="account">
+    <label>Kontonummer</label>
+    <span data-field="description">11 siffer</span>
+    <div class="ix-text-field">
+      <input type="text" inputmode="numeric" value="12345678903" />
+    </div>
+    <span data-field="error"></span>
+  </ix-field>
+</>
+```
+
+</TabItem>
+</Tabs>
+
+Klikk i feltet for å se den rå verdien, og klikk ut for å se den formaterte. `format="amount"` gir tusenskille (`1 234 567`), og `format="account"` grupperer kontonummeret (`1234 56 78903`).
+
+Formateringen er kun visuell — verdien du leser av `onChange` er alltid den rå verdien uten separatorer. Se [Formatering](./textfield-formatering) for de tre måtene å definere en formatter på, egne varianter, og tilgjengelighetshensyn.
 
 ### Deaktivert og skrivebeskyttet
 
@@ -228,14 +285,14 @@ Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for
   <ix-field>
     <label>Kontonummer</label>
     <div class="ix-text-field">
-      <input defaultValue="1234 56 78903" disabled />
+      <input value="1234 56 78903" disabled />
     </div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field>
     <label>Kontonummer</label>
     <div class="ix-text-field">
-      <input defaultValue="1234 56 78903" readOnly />
+      <input value="1234 56 78903" readonly />
     </div>
     <span data-field="error"></span>
   </ix-field>
@@ -510,14 +567,14 @@ Disabled og read-only styres kun via native attributter på input. `ix-field` h�
   <ix-field>
     <label>Kontonummer</label>
     <div class="ix-text-field">
-      <input defaultValue="1234 56 78903" disabled />
+      <input value="1234 56 78903" disabled />
     </div>
     <span data-field="error"></span>
   </ix-field>
   <ix-field>
     <label>Referanse</label>
     <div class="ix-text-field">
-      <input defaultValue="ORD-2026-0042" readOnly />
+      <input value="ORD-2026-0042" readonly />
     </div>
     <span data-field="error"></span>
   </ix-field>

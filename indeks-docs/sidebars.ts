@@ -140,7 +140,12 @@ const sidebars: SidebarsConfig = {
                             items: ['komponenter/skjema/radio-group-designvalg'],
                         },
                         'komponenter/skjema/select',
-                        'komponenter/skjema/textfield',
+                        {
+                            type: 'category',
+                            label: 'TextField',
+                            link: { type: 'doc', id: 'komponenter/skjema/textfield' },
+                            items: ['komponenter/skjema/textfield-formatering'],
+                        },
                         'komponenter/skjema/textarea',
                         'komponenter/skjema/tooltip',
                         'komponenter/skjema/validation-message',

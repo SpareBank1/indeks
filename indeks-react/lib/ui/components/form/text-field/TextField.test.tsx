@@ -1,7 +1,16 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { createRef } from 'react';
+import { createRef, useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { TextField } from './TextField';
+import { IxField } from '@sb1/indeks-web';
+
+// Formaterings-oppførsel (focus/blur/refreshFormat) bor i ix-field-WC-en.
+// Registrer den lokalt for de controlled-testene som trenger den. Payoff:
+// øvrige tester i fila er skrevet mot inert ix-field, men å definere elementet
+// er trygt — uten formatter og med korrekt ARIA-lim endrer WC-en ingenting de sjekker.
+if (!customElements.get('ix-field')) {
+    customElements.define('ix-field', IxField);
+}
 
 describe('TextField', () => {
     it('rendrer label koblet til input via htmlFor/id', () => {
@@ -160,11 +169,101 @@ describe('TextField', () => {
         expect(onChange).toHaveBeenCalledTimes(1);
     });
 
+    it('setter data-format paa ix-field naar format er et variant-navn', () => {
+        const { container } = render(<TextField label="Telefon" format="phone" />);
+        const ixField = container.querySelector('ix-field');
+        expect(ixField?.getAttribute('data-format')).toBe('phone');
+    });
+
+    it('setter data-format-pattern paa ix-field naar formatPattern er satt', () => {
+        const { container } = render(<TextField label="Dato" formatPattern="00.00.0000" />);
+        const ixField = container.querySelector('ix-field');
+        expect(ixField?.getAttribute('data-format-pattern')).toBe('00.00.0000');
+    });
+
+    it('setter ikke data-format naar format er et objekt (bruker property via ref)', () => {
+        const formatter = { format: (r: string) => r, parse: (d: string) => d };
+        const { container } = render(<TextField label="Egen" format={formatter} />);
+        const ixField = container.querySelector('ix-field');
+        expect(ixField?.hasAttribute('data-format')).toBe(false);
+    });
+
+    it('lar native pattern-attributt gaa uroert til input (ikke formatPattern)', () => {
+        render(<TextField label="Postnr" pattern="[0-9]{4}" />);
+        const input = screen.getByRole('textbox');
+        expect(input.getAttribute('pattern')).toBe('[0-9]{4}');
+    });
+
     it('className gaar til wrapper (ix-field), ikke til input', () => {
         const { container } = render(<TextField label="Test" className="custom" />);
         const ixField = container.querySelector('ix-field');
         const input = screen.getByRole('textbox');
         expect(ixField?.classList.contains('custom')).toBe(true);
         expect(input.classList.contains('custom')).toBe(false);
+    });
+
+    describe('controlled formatering', () => {
+        // Overlay-modell: input.value er alltid rå, den formaterte visningen ligger
+        // i .ix-text-field__format-display (aria-hidden), vist/skjult via CSS.
+        const overlayText = (container: HTMLElement): string | undefined => container.querySelector('.ix-text-field__format-display')?.textContent ?? undefined;
+
+        it('input holder rå verdi, overlay viser formatert i controlled-modus', () => {
+            const { container } = render(<TextField label="Tlf" format="phone" value="12345678" onChange={() => {}} />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            expect(input.value).toBe('12345678');
+            expect(overlayText(container)).toBe('123 45 678');
+        });
+
+        it('beholder overlay-visning ved urelatert re-render (controlled)', () => {
+            function Wrap() {
+                const [, force] = useState(0);
+                return (
+                    <>
+                        <TextField label="Tlf" format="phone" value="12345678" onChange={() => {}} />
+                        <button onClick={() => force((n) => n + 1)}>rerender</button>
+                    </>
+                );
+            }
+            const { container } = render(<Wrap />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            expect(input.value).toBe('12345678');
+            expect(overlayText(container)).toBe('123 45 678');
+            fireEvent.click(screen.getByText('rerender'));
+            expect(input.value).toBe('12345678');
+            expect(overlayText(container)).toBe('123 45 678');
+        });
+
+        it('oppdaterer overlay når ny verdi settes programmatisk (controlled)', () => {
+            function Wrap() {
+                const [v, setV] = useState('12345678');
+                return (
+                    <>
+                        <TextField label="Tlf" format="phone" value={v} onChange={(e) => setV((e.target as HTMLInputElement).value)} />
+                        <button onClick={() => setV('87654321')}>sett ny</button>
+                    </>
+                );
+            }
+            const { container } = render(<Wrap />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            expect(overlayText(container)).toBe('123 45 678');
+            fireEvent.click(screen.getByText('sett ny'));
+            // input.value følger den rå prop-verdien; overlay re-formateres via useLayoutEffect.
+            expect(input.value).toBe('87654321');
+            expect(overlayText(container)).toBe('876 54 321');
+        });
+
+        it('input eksponerer alltid rå verdi (form-innsending / input.value)', () => {
+            function Wrap() {
+                const [v, setV] = useState('12345678');
+                return <TextField label="Tlf" format="phone" value={v} onChange={(e) => setV((e.target as HTMLInputElement).value)} />;
+            }
+            const { container } = render(<Wrap />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            // Uansett fokus-tilstand: input.value er rå (overlay bærer formateringen).
+            expect(input.value).toBe('12345678');
+            expect(overlayText(container)).toBe('123 45 678');
+            input.focus();
+            expect(input.value).toBe('12345678');
+        });
     });
 });

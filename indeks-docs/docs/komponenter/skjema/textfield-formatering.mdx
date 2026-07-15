@@ -1,0 +1,244 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Formatering
+
+TextField kan formatere innholdet automatisk mens brukeren fyller ut — beløp med tusenskille, telefonnummer i grupper, kontonummer, fødselsnummer. Denne siden forklarer hvordan formatering virker, de tre måtene å definere en formatter på, og tilgjengelighetshensynene bak. For vanlig bruk og API, se [TextField](./textfield).
+
+## Format-on-blur, ikke live maskering
+
+Indeks viser den formaterte verdien **når feltet ikke har fokus**, ikke for hvert tastetrykk. Når feltet får fokus, vises den rå (uformaterte) verdien slik at brukeren kan redigere fritt.
+
+Teknisk gjøres dette med en **overlay**: selve `<input>`-elementet holder alltid den rå verdien og røres aldri av formateringen. Den formaterte teksten vises i et eget lag (`aria-hidden`) oppå input, og CSS bytter hvilket som er synlig ut fra fokus. Konsekvensen er viktig: fordi input-verdien alltid er rå, får du den rå verdien overalt uten ekstra arbeid — `onChange`, `input.value`, `<form>`-innsending og `FormData` (se [Bruk uten React](#bruk-uten-react--html--web-component)).
+
+**Dette er et bevisst, tilgjengelighetsdrevet valg — ikke en teknisk begrensning.** Vi vurderte klassisk «input-masking» (live reformatering for hvert tegn, slik Cleave.js og imask gjør) og valgte det bort. Vi vet at det gir dårligere flyt for enkelte felt — særlig beløp, der mange ønsker å se tusenskillet bygge seg opp mens de skriver — men vi prioriterer tilgjengelighet over den effekten. Live maskering har kjente problemer:
+
+- **Markøren hopper.** Redigerer du et tegn midt i strengen, sender mange løsninger markøren til slutten. Format-on-blur unngår problemet helt — vi rører aldri verdien mens du skriver.
+- **Skjermlesere leser hele feltet på nytt** hver gang en separator settes inn under skriving (WCAG 4.1.3 / 3.3.2).
+- **Stille avvisning av tastetrykk** — maskering som nekter «ugyldige» tegn uten tilbakemelding bryter WCAG 3.3.1.
+- **Transkribering blir vanskeligere.** Skriver du av et nummer fra et kort eller dokument, forstyrrer løpende reformatering sammenligningen med kilden (jf. [GOV.UK sin frarådning](https://design-system.service.gov.uk/patterns/telephone-numbers/) mot å reformatere telefonnummer mens brukeren skriver).
+
+De aller fleste designsystemer (Aksel, Digdir, Adobe Spectrum, GOV.UK m.fl.) shipper av samme grunn ingen live maske. Format-on-blur gir den samme pene visningen uten disse ulempene.
+
+Fordi selve `<input>` alltid inneholder den rå verdien, gir kopiering fra feltet den rå verdien — et fødselsnummer kopieres uten mellomrom. Den formaterte overlayen er `aria-hidden` og ikke markerbar (`pointer-events: none`), så den kommer aldri med på utklippstavlen.
+
+:::info Verdien du får er alltid rå
+Formateringen er kun visuell. `onChange`, `input.value` og form-innsending gir deg verdien uten separatorer (`"12345678"`, ikke `"123 45 678"`). Du lagrer og validerer den rå verdien; visningen er presentasjon.
+:::
+
+## Tre måter å definere en formatter
+
+En formatter er et par rene funksjoner: `format(raw)` lager visningsstrengen, `parse(display)` gjør den om til rå verdi igjen. `parse(format(raw))` skal alltid gi tilbake `raw`.
+
+Du kan angi formatteren på tre måter, i økende grad av fleksibilitet.
+
+### 1. Innebygd variant (`format="navn"`)
+
+De vanligste behovene er innebygd:
+
+| Variant | Formaterer | Eksempel |
+|---------|------------|----------|
+| `phone` | Norsk telefonnummer | `123 45 678` |
+| `amount` | Beløp med tusenskille | `1 234 567,89` |
+| `account` | Kontonummer | `1234 56 78903` |
+| `orgnr` | Organisasjonsnummer | `123 456 789` |
+| `ssn` | Fødselsnummer | `010190 12345` |
+| `date` | Dato | `24.12.2026` |
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField label="Telefonnummer" format="phone" type="tel" inputMode="numeric" autoComplete="tel-national" defaultValue="12345678" />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field data-format="phone">
+  <label>Telefonnummer</label>
+  <div class="ix-text-field">
+    <input type="tel" inputmode="numeric" autocomplete="tel-national" value="12345678" />
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### 2. Pattern-streng (`formatPattern="..."`)
+
+For enkle mønstre uten kode. Hvert tegn i pattern-strengen er enten en plass brukeren fyller, eller en fast separator:
+
+| Tegn | Betyr |
+|------|-------|
+| `0` | ett siffer |
+| `a` | én bokstav (inkl. æ ø å) |
+| `*` | hvilket som helst tegn |
+| alt annet | fast separator (settes inn automatisk) |
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField label="Kontonummer" formatPattern="0000 00 00000" inputMode="numeric" defaultValue="12345678903" />
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field data-format-pattern="0000 00 00000">
+  <label>Kontonummer</label>
+  <div class="ix-text-field">
+    <input type="text" inputmode="numeric" value="12345678903" />
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+:::note `formatPattern` er ikke det native `pattern`-attributtet
+`formatPattern` styrer *visning*. Det native `pattern`-attributtet (en valideringsregex) sendes fortsatt uendret videre til `<input>`. De to er uavhengige.
+:::
+
+### 3. Egen funksjon (`format={{ format, parse }}`)
+
+For logikk som ikke passer et pattern — locale-avhengige beløp, egne grupperinger, versaler:
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField
+  label="Referanse"
+  defaultValue="ab-123"
+  format={{
+    format: (raw) => raw.toUpperCase(),
+    parse: (display) => display.toLowerCase(),
+  }}
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+Et `{ format, parse }`-objekt kan ikke uttrykkes som et attributt, så i ren HTML settes det som en **property** på `<ix-field>`:
+
+```html
+<ix-field id="referanse">
+  <label>Referanse</label>
+  <div class="ix-text-field">
+    <input type="text" value="ab-123" />
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+
+<script type="module">
+  const field = document.getElementById('referanse');
+  field.formatter = {
+    format: (raw) => raw.toUpperCase(),
+    parse: (display) => display.toLowerCase(),
+  };
+</script>
+```
+
+</TabItem>
+</Tabs>
+
+## Egne, delbare varianter
+
+Trenger teamet ditt en variant flere felter skal dele — som ikke er blant de innebygde — kan du registrere den **én gang** og bruke den overalt via `format="<navn>"`. Da slipper du å sende inn funksjonen på hvert felt, og du er ikke avhengig av at designsystemet legger den til.
+
+Registrering skjer på web component-laget (`IxField`), som React-komponenten bygger på:
+
+```ts
+import { IxField, createPatternFormatter } from '@sb1/indeks-web';
+
+// Registrer én gang ved oppstart av appen (eksempel: KID-nummer):
+IxField.registerFormatter('kid', createPatternFormatter('0000 0000 0000 000'));
+```
+
+```html
+<!-- Deretter, hvor som helst: -->
+<ix-field data-format="kid">
+  <label>KID-nummer</label>
+  <div class="ix-text-field"><input inputmode="numeric" /></div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+`createPatternFormatter` og `createAmountFormatter` er eksportert fra `@sb1/indeks-web` for å bygge egne formattere, men du kan også sende inn et hvilket som helst `{ format, parse }`-objekt.
+
+## Presedens
+
+Setter du flere kilder samtidig, gjelder rekkefølgen: **funksjon-property → `data-format` → `data-format-pattern`**. Altså vinner en direkte satt formatter over et registrert navn, som igjen vinner over en pattern-streng.
+
+## Bruk uten React (HTML / web component)
+
+Formateringen ligger i `<ix-field>`, så den virker helt uten React:
+
+```html
+<ix-field data-format="phone">
+  <label>Telefonnummer</label>
+  <div class="ix-text-field">
+    <input type="tel" inputmode="numeric" value="12345678" name="tlf" />
+  </div>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+### Rå verdi er tilgjengelig gratis
+
+Fordi `<input>` alltid holder den rå verdien (formateringen er en visuell overlay), trenger du ikke gjøre noe spesielt for å få den ut:
+
+```js
+const field = document.querySelector('ix-field');
+
+// Direkte fra input — alltid rå:
+field.querySelector('input').value; // "12345678"
+
+// Bekvemmelighets-getter på ix-field:
+field.rawValue; // "12345678"
+
+// Native form-innsending sender også rå verdi:
+const data = new FormData(document.querySelector('form'));
+data.get('tlf'); // "12345678" (ikke "123 45 678")
+```
+
+## Tilgjengelighet
+
+- **Bruk aldri `type="number"`** med formatering. Med separatorer i verdien returnerer nettleseren tom `.value`. Bruk `type="text"` eller `type="tel"` med `inputMode="numeric"`/`"decimal"`.
+- **Kommuniser forventet format som tekst**, i `description` eller label — ikke som placeholder-«understreker». `description="11 siffer"` er både synlig og lest opp av skjermleser.
+- **Formatering er ikke validering.** Feltet avviser aldri tastetrykk stille. Valider på blur eller innsending, og gi en tydelig feilmelding via `errorMessage`.
+- **Sett riktig `autocomplete`** (WCAG 1.3.5) — f.eks. `autocomplete="tel-national"` for telefonnummer.
+
+## Migrering fra Cleave.js og react-number-format
+
+Bruker appen din `cleave.js` (utdatert) eller `react-number-format` for felt-formatering, kan disse erstattes:
+
+| Tidligere | Nå |
+|-----------|-----|
+| Cleave `{ blocks, delimiter }` for SSN/telefon | `format="ssn"` / `format="phone"` eller `formatPattern` |
+| Cleave `{ numeral: true, delimiter, numeralDecimalMark }` | `format="amount"` |
+| `react-number-format` `NumericFormat` (tusenskille/desimaler) | `format="amount"` |
+| Egen `format`-funksjon | `format={{ format, parse }}` |
+
+Til forskjell fra disse bibliotekene viser Indeks kun formatert verdi når feltet ikke har fokus, og eksponerer alltid den rå verdien (i `onChange`, `input.value` og form-innsending) — så nedstrøms kode som allerede lagrer råverdien (`rawValue`/`floatValue`) fungerer likt.
+
+:::caution Atferdsendring for live-maskerte felt
+Migrerer du et felt som i dag reformaterer *mens* brukeren skriver (f.eks. beløp med tusenskille via Cleave `numeral` eller en egenskrevet caret-løsning), er dette en bevisst atferdsendring: brukeren ser den rå verdien mens hun skriver og gruppering først når feltet mister fokus. Det er tilsiktet — se [Format-on-blur, ikke live maskering](#format-on-blur-ikke-live-maskering) for begrunnelsen.
+:::
+
+:::note Kjent begrensning: svært lange verdier
+Overlayet klipper likt som input (`overflow: hidden`), men hvis en verdi er så lang at teksten scroller horisontalt i input, kan den formaterte overlayen bli forskjøvet i forhold til råteksten. Dette er kun synlig når feltet *ikke* har fokus, og er sjelden et problem for de typiske formatene (telefon, kontonummer, fødselsnummer, beløp).
+:::
+
+## Relatert
+
+- [TextField](./textfield) — bruk og fullt API
+- [ValidationMessage](./validation-message) — vise valideringsfeil
