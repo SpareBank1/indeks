@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode, useEffect, useId, useRef } from 'react';
+import { forwardRef, type ReactNode, useEffect, useId, useLayoutEffect, useRef } from 'react';
 import { Field } from '../field/Field';
 import type { IxField } from '@sb1/indeks-web';
 
@@ -62,6 +62,17 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
         if (!fieldRef.current) return;
         fieldRef.current.formatter = formatIsObject ? (format as FieldFormatter) : null;
     }, [format, formatIsObject]);
+
+    // Controlled-støtte: input.value holder alltid den rå verdien, og den
+    // formaterte visningen er en overlay i ix-field. Når React skriver den rå
+    // `value`-propen til input ved en re-render, fyres ikke input-eventet, så
+    // overlayen må oppdateres eksplisitt. useLayoutEffect kjører etter commit
+    // (før paint) og ber ix-field re-formatere overlayen. No-op når ingen
+    // formatter er aktiv, så uncontrolled er upåvirket.
+    const hasFormatter = format != null || formatPattern != null;
+    useLayoutEffect(() => {
+        if (hasFormatter) fieldRef.current?.refreshFormat();
+    });
 
     return (
         <Field

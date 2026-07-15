@@ -563,7 +563,10 @@ describe('IxField', () => {
     });
 
     describe('formatering', () => {
-        it('formaterer startverdi ved tilkobling (data-format)', () => {
+        // Overlay-teksten er den formaterte visningen; input.value er alltid rå.
+        const overlayText = (field: HTMLElement): string | undefined => field.querySelector('.ix-text-field__format-display')?.textContent ?? undefined;
+
+        it('input beholder rå verdi, overlay viser formatert (data-format)', () => {
             const field = createField(`
                 <ix-field data-format="phone">
                     <label>Telefon</label>
@@ -572,10 +575,11 @@ describe('IxField', () => {
                 </ix-field>
             `);
             const input = field.querySelector('input')!;
-            expect(input.value).toBe('123 45 678');
+            expect(input.value).toBe('12345678');
+            expect(overlayText(field)).toBe('123 45 678');
         });
 
-        it('viser rå verdi ved fokus, formatert ved blur', () => {
+        it('wrapper input i .ix-text-field__format og legger overlay etter input', () => {
             const field = createField(`
                 <ix-field data-format="phone">
                     <label>Telefon</label>
@@ -584,13 +588,24 @@ describe('IxField', () => {
                 </ix-field>
             `);
             const input = field.querySelector('input')!;
-            expect(input.value).toBe('123 45 678');
+            const wrapper = input.closest('.ix-text-field__format');
+            expect(wrapper).not.toBeNull();
+            expect(wrapper!.querySelector('.ix-text-field__format-display')).not.toBeNull();
+        });
 
-            input.focus();
-            expect(input.value).toBe('12345678');
-
-            input.blur();
-            expect(input.value).toBe('123 45 678');
+        it('overlay oppdateres når brukeren skriver (input-event), input forblir rå', () => {
+            const field = createField(`
+                <ix-field data-format="phone">
+                    <label>Telefon</label>
+                    <input value="12345678" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            input.value = '87654321';
+            input.dispatchEvent(new Event('input'));
+            expect(input.value).toBe('87654321');
+            expect(overlayText(field)).toBe('876 54 321');
         });
 
         it('støtter data-format-pattern uten JS', () => {
@@ -602,7 +617,8 @@ describe('IxField', () => {
                 </ix-field>
             `);
             const input = field.querySelector('input')!;
-            expect(input.value).toBe('24.12.2026');
+            expect(input.value).toBe('24122026');
+            expect(overlayText(field)).toBe('24.12.2026');
         });
 
         it('formatter-property har høyest presedens', () => {
@@ -619,10 +635,12 @@ describe('IxField', () => {
                 format: (raw) => raw.toUpperCase(),
                 parse: (display) => display.toLowerCase(),
             };
-            expect(input.value).toBe('ABC');
+            // Input er rå (uendret); overlay viser den egendefinerte formateringen.
+            expect(input.value).toBe('abc');
+            expect(overlayText(field)).toBe('ABC');
         });
 
-        it('fødselsnummer viser rå verdi (uten mellomrom) ved fokus — trygg kopiering', () => {
+        it('fødselsnummer: input holder rå verdi (uten mellomrom) — trygg kopiering og form-innsending', () => {
             const field = createField(`
                 <ix-field data-format="ssn">
                     <label>Fødselsnummer</label>
@@ -631,9 +649,30 @@ describe('IxField', () => {
                 </ix-field>
             `);
             const input = field.querySelector('input')!;
-            expect(input.value).toBe('010190 12345');
-            input.focus();
             expect(input.value).toBe('01019012345');
+            expect(overlayText(field)).toBe('010190 12345');
+        });
+
+        it('rawValue gir rå verdi når formatter er aktiv', () => {
+            const field = createField(`
+                <ix-field data-format="phone">
+                    <label>Telefon</label>
+                    <input value="12345678" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            expect(field.rawValue).toBe('12345678');
+        });
+
+        it('rawValue er tom streng uten aktiv formatter', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Vanlig</label>
+                    <input value="12345678" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            expect(field.rawValue).toBe('');
         });
 
         it('advarer ved ukjent data-format', () => {
@@ -649,7 +688,7 @@ describe('IxField', () => {
             warnSpy.mockRestore();
         });
 
-        it('gjør ingenting uten formatter (uendret oppførsel)', () => {
+        it('gjør ingenting uten formatter (uendret oppførsel, ingen overlay/wrapper)', () => {
             const field = createField(`
                 <ix-field>
                     <label>Vanlig</label>
@@ -659,12 +698,11 @@ describe('IxField', () => {
             `);
             const input = field.querySelector('input')!;
             expect(input.value).toBe('12345678');
-            input.focus();
-            input.blur();
-            expect(input.value).toBe('12345678');
+            expect(input.closest('.ix-text-field__format')).toBeNull();
+            expect(field.querySelector('.ix-text-field__format-display')).toBeNull();
         });
 
-        it('rydder opp focus/blur-lyttere i disconnectedCallback', () => {
+        it('refreshFormat() oppdaterer overlay etter at rå verdi er skrevet (controlled)', () => {
             const field = createField(`
                 <ix-field data-format="phone">
                     <label>Telefon</label>
@@ -672,11 +710,50 @@ describe('IxField', () => {
                     <span data-field="error"></span>
                 </ix-field>
             `);
+            const input = field.querySelector('input')!;
+            expect(overlayText(field)).toBe('123 45 678');
+
+            // Simuler at React skriver rå prop-verdi ved en re-render (uten input-event).
+            input.value = '87654321';
+            field.refreshFormat();
+            expect(input.value).toBe('87654321');
+            expect(overlayText(field)).toBe('876 54 321');
+        });
+
+        it('refreshFormat() er en no-op uten aktiv formatter', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Vanlig</label>
+                    <input value="12345678" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(() => field.refreshFormat()).not.toThrow();
+            expect(input.value).toBe('12345678');
+        });
+
+        it('rydder opp overlay, wrapper og lyttere i disconnectedCallback', () => {
+            const field = createField(`
+                <ix-field data-format="phone">
+                    <label>Telefon</label>
+                    <input value="12345678" />
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(input.closest('.ix-text-field__format')).not.toBeNull();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tilgang til privat felt for aa teste cleanup
             expect((field as any)._formatTeardown).not.toBeNull();
+
             field.remove();
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tilgang til privat felt for aa teste cleanup
             expect((field as any)._formatTeardown).toBeNull();
+            // Overlay fjernet og input unwrappet.
+            expect(field.querySelector('.ix-text-field__format-display')).toBeNull();
+            expect(field.querySelector('.ix-text-field__format')).toBeNull();
+            expect(field.querySelector('input')).not.toBeNull();
         });
     });
 

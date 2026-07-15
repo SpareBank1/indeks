@@ -97,10 +97,15 @@ export class IxField extends HTMLElement {
     private _charCountControl: TextControl | null = null;
 
     // ── Formatering (opt-in) ────────────────────────────────────────────────
-    // Aktiv formatter og opprydding for focus/blur/clipboard-lyttere. Null når
-    // ingen formatter er satt — da oppfører ix-field seg nøyaktig som før.
+    // Aktiv formatter og opprydding for overlay/lyttere. Null når ingen formatter
+    // er satt — da oppfører ix-field seg nøyaktig som før.
     private _formatterProp: FieldFormatter | null = null;
     private _formatTeardown: (() => void) | null = null;
+    // Aktiv formatter/kontroll/overlay mens formatering er kablet — brukes av
+    // _updateOverlay() og den public refreshFormat()/rawValue.
+    private _activeFormatter: FieldFormatter | null = null;
+    private _activeControl: HTMLInputElement | null = null;
+    private _formatOverlay: HTMLElement | null = null;
 
     /**
      * Registrer en navngitt formatter globalt. Brukes deretter via
@@ -123,6 +128,19 @@ export class IxField extends HTMLElement {
 
     get formatter(): FieldFormatter | null {
         return this._formatterProp;
+    }
+
+    /**
+     * Den rå (uformaterte) verdien til feltet. Fordi `<input>` alltid holder rå
+     * verdi (formateringen er en visuell overlay), er dette bare input-verdien.
+     * Tom streng når ingen formatter er aktiv eller det ikke finnes noe input.
+     *
+     * Praktisk for ren JS/HTML: `document.querySelector('ix-field').rawValue`.
+     * Merk at `<form>`-innsending og `new FormData(form)` også gir rå verdi
+     * automatisk, siden `input.value` aldri muteres.
+     */
+    get rawValue(): string {
+        return this._activeControl?.value ?? '';
     }
 
     static get observedAttributes(): string[] {
@@ -343,16 +361,20 @@ export class IxField extends HTMLElement {
 
     // ── Formatering (opt-in) ─────────────────────────────────────────────────
     //
-    // Format-on-blur, IKKE live tegn-maske. Prinsippet:
-    //   - Rå verdi er alltid sannheten. Mens feltet har fokus viser vi rå verdi,
-    //     så brukeren skriver og redigerer fritt (ingen caret-hopp, ingen stille
-    //     avvisning av tastetrykk).
-    //   - Når feltet mister fokus formaterer vi visningen (`format(parse(value))`).
-    //   - Ved fokus går vi tilbake til rå form (`parse(value)`).
+    // Overlay-basert format-on-blur, IKKE live tegn-maske og IKKE value-swap.
+    // Prinsippet:
+    //   - `<input>` holder ALLTID den rå verdien og muteres aldri for formatering.
+    //     Vi wrapper input i `.ix-text-field__format` og legger et aria-hidden
+    //     overlay-span (`.ix-text-field__format-display`) oppå med den formaterte
+    //     teksten.
+    //   - Ren CSS (`:focus-within`) bytter synlighet: ufokusert vises overlay
+    //     (input-tekst gjort gjennomsiktig), fokusert vises rå input-tekst og
+    //     overlay skjules. Ingen JS rører verdien.
     //
-    // Konsekvens: siden feltet viser rå verdi mens det er fokusert, gir kopiering
-    // (som krever fokus/seleksjon) automatisk den rå verdien på utklippstavlen —
-    // f.eks. fødselsnummer uten mellomrom — uten egen copy/cut-håndtering.
+    // Konsekvens: rå verdi er tilgjengelig gratis overalt — `input.value`,
+    // `<form>`-submit, `new FormData(form)` og React `value`/`onChange` gir alt
+    // den rå verdien uten separatorer. Ingen caret-hopp, ingen stille avvisning
+    // av tastetrykk.
 
     // Løser opp aktiv formatter etter presedens: property → data-format → data-format-pattern.
     private _resolveFormatter(): FieldFormatter | null {
@@ -383,37 +405,72 @@ export class IxField extends HTMLElement {
         const control = this.querySelector<HTMLInputElement>('input');
         if (!control) return;
 
-        const applyFormatted = (): void => {
-            control.value = formatter.format(formatter.parse(control.value));
-        };
-        const applyRaw = (): void => {
-            control.value = formatter.parse(control.value);
-        };
+        this._activeFormatter = formatter;
+        this._activeControl = control;
 
-        // Ved fokus: vis rå, redigerbar verdi — men ikke for readonly/disabled der
-        // brukeren uansett ikke redigerer; da beholder vi den formaterte visningen.
-        const onFocus = (): void => {
-            if (!control.readOnly && !control.disabled) applyRaw();
-        };
-        const onBlur = (): void => applyFormatted();
+        // Wrap input i .ix-text-field__format (samme mønster som label-row i _wire)
+        // om den ikke allerede er wrappet, og legg overlay-spanet etter input.
+        let wrapper = control.closest<HTMLElement>('.ix-text-field__format');
+        if (!wrapper) {
+            wrapper = document.createElement('span');
+            wrapper.className = 'ix-text-field__format';
+            control.parentNode!.insertBefore(wrapper, control);
+            wrapper.appendChild(control);
+        }
 
-        control.addEventListener('focus', onFocus);
-        control.addEventListener('blur', onBlur);
+        const overlay = document.createElement('span');
+        overlay.className = 'ix-text-field__format-display';
+        overlay.setAttribute('aria-hidden', 'true');
+        wrapper.appendChild(overlay);
+        this._formatOverlay = overlay;
+
+        // Hold overlay i synk med input-verdien mens brukeren skriver, slik at den
+        // formaterte visningen er klar i det feltet mister fokus.
+        const onInput = (): void => this._updateOverlay();
+        control.addEventListener('input', onInput);
 
         this._formatTeardown = (): void => {
-            control.removeEventListener('focus', onFocus);
-            control.removeEventListener('blur', onBlur);
+            control.removeEventListener('input', onInput);
+            overlay.remove();
+            // Unwrap input: flytt det tilbake ut av wrapperen og fjern wrapperen.
+            if (wrapper.parentNode) {
+                wrapper.parentNode.insertBefore(control, wrapper);
+                wrapper.remove();
+            }
+            this._activeFormatter = null;
+            this._activeControl = null;
+            this._formatOverlay = null;
         };
 
-        // Formater eventuell startverdi, med mindre feltet allerede har fokus
-        // (da er brukeren midt i redigering og skal se rå verdi).
-        if (document.activeElement !== control) applyFormatted();
+        // Formater eventuell startverdi.
+        this._updateOverlay();
+    }
+
+    // Skriver den formaterte visningen til overlay-spanet. Input.value er alltid
+    // rå, så vi formaterer den direkte. Idempotent — trygg å kalle flere ganger.
+    private _updateOverlay(): void {
+        const formatter = this._activeFormatter;
+        const control = this._activeControl;
+        const overlay = this._formatOverlay;
+        if (!formatter || !control || !overlay) return;
+        overlay.textContent = formatter.format(control.value);
+    }
+
+    /**
+     * Re-anvender den formaterte overlay-visningen.
+     *
+     * Nyttig for controlled React: når React skriver den rå prop-verdien til
+     * `input.value` ved en re-render, fyres ikke `input`-eventet, så overlay må
+     * oppdateres eksplisitt. Kall denne etter commit (f.eks. i `useLayoutEffect`).
+     * No-op når ingen formatter er aktiv.
+     */
+    refreshFormat(): void {
+        this._updateOverlay();
     }
 
     private _teardownFormatting(): void {
         this._formatTeardown?.();
         this._formatTeardown = null;
-        this._formatControl = null;
     }
 
     // Holder aria-invalid på input synkronisert med om error-elementet har
