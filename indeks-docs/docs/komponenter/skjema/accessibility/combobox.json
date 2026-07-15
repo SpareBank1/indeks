@@ -1,0 +1,104 @@
+{
+  "component": "Combobox",
+  "lastReviewed": "2026-07-13",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv beskrivende labeltekst",
+      "details": "Labelen skal forklare hva brukeren skal velge — ikke handlingen. \"Land\" er bedre enn \"Søk og velg land\". Alle combobox-felter må ha en label, enten synlig eller via ariaLabel.",
+      "wcag": ["2.4.6", "3.3.2"]
+    },
+    {
+      "summary": "Send inn oversatt tekst for alle strenger",
+      "details": "noHitsText, toggleLabel, removeChipLabel, chipsLabel, arrowHintText og resultsText leses av skjermleser og/eller vises i UI. Komponenten har ingen innebygde fallback-tekster — send inn riktig streng for språket ditt (bokmål, nynorsk, engelsk). resultsText er en mal med {n} som byttes med antall treff.",
+      "wcag": ["3.1.1", "3.1.2"]
+    },
+    {
+      "summary": "Skriv gode feilmeldinger",
+      "details": "Feilmeldingen må si hva som er galt og hva brukeren skal gjøre. \"Du må velge et land\" — ikke \"Ugyldig valg\". Komponenten viser og annonserer meldingen, men du skriver innholdet.",
+      "wcag": ["3.3.1", "3.3.3"]
+    },
+    {
+      "summary": "Bruk meningsfulle option-tekster",
+      "details": "Hvert alternativ skal ha en tydelig og beskrivende label. Beskrivelsen (andrelinje) er valgfri tilleggsinfo, ikke en erstatning for en klar label. \"Norge\" er bedre enn \"NO\".",
+      "wcag": ["2.4.6"]
+    },
+    {
+      "summary": "Ved flervalg: forklar chip-navigasjonen",
+      "details": "arrowHintText kobles via aria-describedby (skjult element) på inputfeltet og forteller skjermleserbrukere at valgte alternativer (chips) nås med piltast. chipsLabel gir chip-gruppen (role=group) et tilgjengelig navn. Send inn begge i multi-modus.",
+      "wcag": ["3.3.2"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "input får role=combobox med aria-autocomplete=list, aria-expanded og aria-controls til listbox. Lista er role=listbox, alternativer role=option. Single: aria-selected=true kun på valgt (øvrige uten attributt, APG). Multi: valgte vises som chips med role=button i en role=group-wrapper (chipsLabel). Skjult select gir semantisk form-verdi." },
+    { "id": "1.3.2", "notes": "Chips, felt, liste og feilmelding følger naturlig rekkefølge i DOM." },
+    { "id": "1.3.3", "notes": "Valgt tilstand vises med checkmark (struktur) i tillegg til bakgrunn — i både single og flervalg, ikke farge alene." },
+    { "id": "1.4.1", "notes": "Valgt og aktivt alternativ kommuniseres med checkmark (begge moduser) og bakgrunn, ikke farge alene. Feiltilstand bruker tekst, ramme og aria-invalid." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport. Chips brytes over flere linjer." },
+    { "id": "1.4.11", "notes": "Ramme, fokusindikator og aktivt alternativ oppfyller 3:1 kontrastkrav." },
+    { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
+    { "id": "1.4.13", "notes": "Lista lukkes forutsigbart med Escape og klikk utenfor; ingen hover-only innhold som forsvinner utilsiktet." },
+    { "id": "2.1.1", "notes": "Fullt opererbart med tastatur: piltaster navigerer i lista (virtual focus via aria-activedescendant), Enter velger, Escape lukker, Backspace fjerner chip, piltast navigerer mellom chips." },
+    { "id": "2.1.2", "notes": "Fokus blir på inputfeltet og kan navigeres ut med Tab/Shift+Tab. Ingen tastaturfelle." },
+    { "id": "2.4.3", "notes": "Ett tab-stopp på feltet; chips nås med piltast (radiogruppe-modell), ikke egne tab-stopp. Naturlig DOM-rekkefølge." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator på inputfeltet og på toggle-knappen ved tastaturfokus." },
+    { "id": "2.5.8", "notes": "Toggle-knapp og alternativer oppfyller minimum 44x44px klikkflate." },
+    { "id": "3.2.1", "notes": "Fokus alene trigger ingen kontekstendring — lista åpnes ved skriving, klikk eller piltast, ikke ved fokus." },
+    { "id": "3.2.2", "notes": "Valg trigger ingen automatisk kontekstendring med mindre onChange eksplisitt gjør det." },
+    { "id": "4.1.2", "notes": "APG combobox-mønster: role=combobox/listbox/option, aria-expanded, aria-controls, aria-activedescendant, aria-selected, aria-multiselectable. Chips er role=button i en role=group-wrapper (gyldig navn/rolle, ikke orphan options). Piltast-hint kobles via aria-describedby (skjult element), additivt sammen med ix-field sin describedby. Tilgjengelig navn fra label." },
+    { "id": "4.1.3", "notes": "To role=status live-regioner: synlig no-hits-melding ved 0 treff, og en skjult (sr-only) region som annonserer antall treff (resultsText, {n}) ved filtrering — debounced og kun når antallet endres, så skjermleseren ikke oversvømmes. Feilmelding annonseres via ix-field sin aria-live=polite." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Checkmark og chevron er dekorative CSS-masker med aria-hidden; ingen informasjonsbærende bilder." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et felt for personlig informasjon — autocomplete gjelder ikke." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1", "reason": "Ingen bevegelsesbaserte gester — alt betjenes med enkle trykk/klikk." },
+    { "id": "2.5.2" },
+    { "id": "2.5.4", "reason": "Ingen bevegelsesaktivering." },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til inputfeltet" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Bokstav", "action": "Filtrerer lista og åpner den" },
+    { "key": "Arrow Down", "action": "Åpner lista / flytter aktivt alternativ nedover" },
+    { "key": "Arrow Up", "action": "Flytter aktivt alternativ oppover" },
+    { "key": "Enter", "action": "Velger aktivt alternativ (lukker lista i single, holder åpen i multi)" },
+    { "key": "Escape", "action": "Lukker lista uten å endre valg" },
+    { "key": "Backspace", "action": "Tom input i multi: flytter fokus til siste chip. På chip: fjerner chipen" },
+    { "key": "Arrow Left/Right", "action": "Flervalg: navigerer mellom valgte chips" }
+  ],
+  "screenReader": [
+    "Ved fokus: \"[label], kombinasjonsboks, sammenrullet\"",
+    "Ved skriving: aktivt alternativ annonseres via aria-activedescendant: \"[alternativ], [posisjon] av [total]\" (single leser \"valgt\" kun på det valgte, ikke \"ikke valgt\" på hvert)",
+    "Ved filtrering: antall treff annonseres via en skjult role=status (resultsText), f.eks. \"5 alternativer\"",
+    "Flervalg: \"[label], kombinasjonsboks\" + skjult aria-describedby-hint som forklarer chip-navigasjon",
+    "Ved 0 treff: no-hits-teksten annonseres via role=status",
+    "Valgt chip: \"[alternativ], [fjern-tekst], knapp\" i gruppen [chipsLabel]",
+    "Ved feil: \"[label], ugyldig, kombinasjonsboks, [feilmelding]\""
+  ]
+}

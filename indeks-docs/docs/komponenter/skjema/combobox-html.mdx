@@ -1,0 +1,248 @@
+# Combobox i ren HTML
+
+Denne siden forklarer *i detalj* hvordan `<ix-combobox>` fungerer når du skriver ren HTML, Astro eller et annet ikke-React-miljø. Bruker du React, holder det å lese [Combobox](./combobox) — der er hele strukturen skjult bak `Combobox`-komponenten. For bruk, tilstander og API, se [hovedsiden](./combobox).
+
+Combobox er en **ARIA-lim-komponent**: web-komponenten eier ikke innholdet, den binder sammen native elementer du skriver selv. Du er ansvarlig for strukturen (input, liste, alternativer); komponenten legger på ARIA, håndterer tastatur og filtrering, posisjonerer lista, og synkroniserer valget til et skjult `<select>`. Det betyr at du har full kontroll på markup — men også at du må skrive litt mer enn for en vanlig `<select>`.
+
+## Anatomi
+
+Et fullstendig combobox-markup ser slik ut. Hver del har en fast rolle:
+
+```html
+<ix-combobox class="ix-combobox" name="land" data-no-hits-text="Ingen treff">
+  <div class="ix-combobox__chips" data-field="chips"></div>
+  <div class="ix-text-field">
+    <input class="ix-text-field__input" />
+    <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+  </div>
+  <div class="ix-combobox__listbox" hidden>
+    <div class="ix-combobox__option" data-value="47">
+      <span class="ix-combobox__option-check" aria-hidden="true"></span>
+      <span class="ix-combobox__option-label">Norge</span>
+      <span class="ix-combobox__option-description">+47</span>
+    </div>
+    <!-- flere alternativer … -->
+  </div>
+  <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
+  <select data-field="native" name="land" hidden></select>
+</ix-combobox>
+```
+
+| Del | Rolle |
+|-----|-------|
+| `<ix-combobox name="…">` | Rot-elementet. `name` blir navnet på det skjulte `<select>` ved skjemainnsending |
+| `[data-field="chips"]` | Wrapper for chips. **Kun flervalg** — la den stå tom, komponenten fyller den |
+| `.ix-text-field > input` | Søkefeltet brukeren skriver i. Får `role="combobox"` og all input-ARIA |
+| `.ix-combobox__toggle` | Chevron-knappen som åpner/lukker lista |
+| `.ix-combobox__listbox` | Lista med alternativene. Skriv den `hidden` — komponenten styrer synlighet |
+| `.ix-combobox__option[data-value]` | Ett alternativ. **`data-value` er verdien** |
+| `.ix-combobox__option-label` | Den synlige teksten for alternativet |
+| `.ix-combobox__option-description` | Valgfri andrelinje under label |
+| `.ix-combobox__no-hits` | Melding når filteret gir 0 treff (`role="status"`) |
+| `select[data-field="native"]` | Skjult `<select>` som faktisk sendes med skjemaet. Kan utelates — opprettes da automatisk |
+
+Legg merke til at alternativet **ikke** er et `<option>`-element, men en `<div class="ix-combobox__option">`. Verdien ligger i `data-value`, ikke i tekstinnholdet. Det er dette som lar et alternativ ha to linjer (label + beskrivelse) og en checkmark — noe et native `<option>` ikke kan.
+
+## Hvordan et valg skjer
+
+Når brukeren velger et alternativ (klikk eller Enter), gjør komponenten alt dette for deg:
+
+1. Setter `aria-selected="true"` på den valgte `.ix-combobox__option` — **dette er sanningskilden for hva som er valgt**.
+2. I single: skriver alternativets label inn i inputfeltet. I flervalg: lager en chip i `[data-field="chips"]` og tømmer inputfeltet.
+3. Bygger det skjulte `<select>` på nytt fra alle options som har `aria-selected="true"` — hver blir en `<option value="<data-value>" selected>`.
+4. Fyrer en `change`-hendelse på `<ix-combobox>`.
+
+Du håndterer altså aldri chips, inputtekst eller den skjulte selecten manuelt. Alt følger av `aria-selected` på options. Det samme gjelder når brukeren fjerner et valg (avmarkerer, eller sletter en chip): `aria-selected` settes til `false`, chip/inputtekst fjernes, og selecten bygges på nytt.
+
+## Forhåndsvalgte verdier
+
+Skal ett eller flere alternativer være valgt når siden lastes, markerer du dem med `aria-selected="true"` på `.ix-combobox__option`. Det er den **eneste** sanningskilden for startverdi:
+
+- **Ikke** sett `value` på inputen — komponenten fyller den selv fra det forhåndsvalgte alternativet.
+- **Ikke** skriv `<option selected>` i det skjulte selectet — det bygges opp på nytt fra `aria-selected` hver gang og overskrives.
+- **Ikke** skriv chips (`<data class="ix-chip">`) for hånd — komponenten genererer dem.
+
+### Single — ett forhåndsvalg
+
+```jsx live
+<ix-field>
+  <label for="land-preselect-single">Land</label>
+  <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
+    <div class="ix-text-field">
+      <input id="land-preselect-single" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+    </div>
+    <div class="ix-combobox__listbox" hidden>
+      <div class="ix-combobox__option" data-value="47" aria-selected="true">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Norge</span>
+        <span class="ix-combobox__option-description">+47</span>
+      </div>
+      <div class="ix-combobox__option" data-value="46">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Sverige</span>
+        <span class="ix-combobox__option-description">+46</span>
+      </div>
+    </div>
+    <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
+    <select data-field="native" name="land" hidden></select>
+  </ix-combobox>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+Norge vises i feltet fra start fordi optionen har `aria-selected="true"` — ingenting annet er nødvendig.
+
+### Flervalg — flere forhåndsvalg
+
+I flervalg gir du hvert forhåndsvalgt alternativ `aria-selected="true"` og lar `[data-field="chips"]` stå tom. Komponenten lager en chip per valgte alternativ.
+
+```jsx live
+<ix-field>
+  <label for="land-preselect-multi">Land</label>
+  <ix-combobox
+    class="ix-combobox"
+    multiple
+    data-no-hits-text="Ingen treff"
+    data-remove-chip-label="fjern"
+    data-chips-label="Valgte alternativer"
+    data-arrow-hint-text="Bruk piltastene for å navigere mellom valgte alternativer"
+    data-results-text="{n} alternativer"
+    name="land"
+  >
+    <div class="ix-combobox__chips" data-field="chips"></div>
+    <div class="ix-text-field">
+      <input id="land-preselect-multi" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+    </div>
+    <div class="ix-combobox__listbox" hidden>
+      <div class="ix-combobox__option" data-value="47" aria-selected="true">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Norge</span>
+      </div>
+      <div class="ix-combobox__option" data-value="46" aria-selected="true">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Sverige</span>
+      </div>
+      <div class="ix-combobox__option" data-value="45">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Danmark</span>
+      </div>
+    </div>
+    <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
+    <select data-field="native" name="land" hidden></select>
+  </ix-combobox>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+## Form-innsending
+
+Combobox er ikke selv et form-felt. Den synkroniserer valget til et skjult `<select data-field="native">`, og **det er selecten som sendes med skjemaet**:
+
+- `name` på selecten arves fra `<ix-combobox name="…">`.
+- Hver valgte option blir en `<option value="<data-value>" selected>`.
+- I flervalg settes `multiple` på selecten automatisk, så alle valgte verdier sendes.
+
+Utelater du selecten, oppretter komponenten den automatisk. Legger du den til selv, la den stå tom — komponenten fyller den. (Å skrive den selv er nyttig hvis du vil styre nøyaktig hvor i skjemaet den ligger.)
+
+```html
+<form>
+  <ix-combobox name="land"> … </ix-combobox>
+  <button type="submit">Send</button>
+</form>
+```
+
+Ved innsending sendes `land=47` i single, eller `land=47&land=46` i flervalg — samme som en vanlig `<select>` / `<select multiple>`.
+
+## Reagere på endringer med JavaScript
+
+Uten React lytter du på `change`-hendelsen på `<ix-combobox>` og leser gjeldende verdi fra det skjulte `<select>`, som allerede er synkronisert når hendelsen fyres.
+
+```js
+const combobox = document.querySelector('ix-combobox');
+const select = combobox.querySelector('select[data-field="native"]');
+
+combobox.addEventListener('change', () => {
+  // Single: én verdi. Flervalg: bruk select.selectedOptions.
+  console.log('Valgt:', select.value);
+
+  // Flervalg — alle valgte verdier:
+  const alle = Array.from(select.selectedOptions, (o) => o.value);
+  console.log('Alle valgte:', alle);
+});
+```
+
+`change` er et bublende `CustomEvent` uten `detail` — verdien ligger i det skjulte `<select>`, ikke på hendelsen.
+
+## Hva ix-combobox gjør med DOM-en
+
+Du skriver den semantiske strukturen — komponenten legger på ARIA og IDer. Her er hva som skjer i single-varianten, fra HTML du skriver til DOM etter at komponenten har kjørt.
+
+**Før** (det du skriver):
+
+```html
+<ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
+  <div class="ix-text-field">
+    <input class="ix-text-field__input" aria-label="Land" />
+    <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
+  </div>
+  <div class="ix-combobox__listbox">
+    <div class="ix-combobox__option" data-value="47" aria-selected="true">
+      <span class="ix-combobox__option-check" aria-hidden="true"></span>
+      <span class="ix-combobox__option-label">Norge</span>
+    </div>
+  </div>
+  <div class="ix-combobox__no-hits" role="status">Ingen treff</div>
+</ix-combobox>
+```
+
+**Etter** (det som er i DOM etter at `ix-combobox` har kjørt):
+
+```html
+<ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
+  <div class="ix-text-field">
+    <input class="ix-text-field__input" aria-label="Land"
+           id="ix-combobox-input-1" role="combobox" aria-autocomplete="list"
+           autocomplete="off" aria-expanded="false"
+           aria-controls="ix-combobox-listbox-1" />
+    <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer" tabindex="-1"></button>
+  </div>
+  <div class="ix-combobox__listbox" id="ix-combobox-listbox-1"
+       role="listbox" aria-multiselectable="false" hidden>
+    <div class="ix-combobox__option" data-value="47" aria-selected="true"
+         id="ix-combobox-listbox-1-option-0" role="option">
+      <span class="ix-combobox__option-check" aria-hidden="true"></span>
+      <span class="ix-combobox__option-label">Norge</span>
+    </div>
+  </div>
+  <div class="ix-combobox__no-hits" role="status"></div>
+  <!-- Opprettet automatisk, fylt fra aria-selected: -->
+  <select data-field="native" name="land" hidden>
+    <option value="47" selected>Norge</option>
+  </select>
+</ix-combobox>
+```
+
+Fordi Norge-optionen hadde `aria-selected="true"`, satte komponenten i tillegg `input.value = "Norge"` og la til `<option value="47" selected>` i det skjulte selectet.
+
+Hva som ble lagt til:
+
+| Hva | Hvor | Hvorfor |
+|-----|------|---------|
+| `role="combobox"`, `aria-autocomplete="list"` | `<input>` | Gjør feltet til en combobox for skjermlesere |
+| `id` (genereres om den mangler) | `<input>`, `.ix-combobox__listbox`, hver `.ix-combobox__option` | Grunnlag for ARIA-koblinger og virtual focus |
+| `aria-controls` | `<input>` | Peker på listbox-IDen |
+| `aria-expanded` | `<input>` | `true`/`false` når lista åpnes/lukkes |
+| `aria-activedescendant` | `<input>` | Peker på aktivt alternativ under piltast-navigasjon — fokus flyttes aldri fysisk inn i lista |
+| `role="listbox"`, `aria-multiselectable` | `.ix-combobox__listbox` | Semantikk for lista; `true` i flervalg |
+| `role="option"`, `aria-selected` | hver `.ix-combobox__option` | Semantikk og valgt-tilstand (`aria-selected="false"` settes om den mangler) |
+| `tabindex="-1"` | `.ix-combobox__toggle` | Chevron-knappen skal ikke ha eget tab-stopp — feltet betjenes fra inputen |
+| `<select data-field="native">` | inni `<ix-combobox>` | Skjult select for form-innsending. Opprettes automatisk om du ikke skrev den, og fylles fra `aria-selected` |
+
+I flervalg legger komponenten i tillegg til `aria-description` på inputen (fra `data-arrow-hint-text`) og genererer `<data class="ix-chip" data-removable>`-elementer i `[data-field="chips"]` for hvert valgte alternativ.
+
+## Relatert
+
+- [Combobox](./combobox) — bruk, tilstander, React-API og props
+- [Select](./select) — enklere valg fra kort/mellomlang liste uten søk
