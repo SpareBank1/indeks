@@ -7,7 +7,9 @@ TextField kan formatere innholdet automatisk mens brukeren fyller ut — beløp 
 
 ## Format-on-blur, ikke live maskering
 
-Indeks formaterer **når feltet mister fokus**, ikke for hvert tastetrykk. Når feltet får fokus igjen, vises den rå (uformaterte) verdien slik at brukeren kan redigere fritt.
+Indeks viser den formaterte verdien **når feltet ikke har fokus**, ikke for hvert tastetrykk. Når feltet får fokus, vises den rå (uformaterte) verdien slik at brukeren kan redigere fritt.
+
+Teknisk gjøres dette med en **overlay**: selve `<input>`-elementet holder alltid den rå verdien og røres aldri av formateringen. Den formaterte teksten vises i et eget lag (`aria-hidden`) oppå input, og CSS bytter hvilket som er synlig ut fra fokus. Konsekvensen er viktig: fordi input-verdien alltid er rå, får du den rå verdien overalt uten ekstra arbeid — `onChange`, `input.value`, `<form>`-innsending og `FormData` (se [Bruk uten React](#bruk-uten-react--html--web-component)).
 
 **Dette er et bevisst, tilgjengelighetsdrevet valg — ikke en teknisk begrensning.** Vi vurderte klassisk «input-masking» (live reformatering for hvert tegn, slik Cleave.js og imask gjør) og valgte det bort. Vi vet at det gir dårligere flyt for enkelte felt — særlig beløp, der mange ønsker å se tusenskillet bygge seg opp mens de skriver — men vi prioriterer tilgjengelighet over den effekten. Live maskering har kjente problemer:
 
@@ -18,10 +20,10 @@ Indeks formaterer **når feltet mister fokus**, ikke for hvert tastetrykk. Når 
 
 De aller fleste designsystemer (Aksel, Digdir, Adobe Spectrum, GOV.UK m.fl.) shipper av samme grunn ingen live maske. Format-on-blur gir den samme pene visningen uten disse ulempene.
 
-Fordi feltet viser rå verdi mens det er fokusert, gir kopiering automatisk den rå verdien — et fødselsnummer kopieres uten mellomrom.
+Fordi selve `<input>` alltid inneholder den rå verdien, gir kopiering fra feltet den rå verdien — et fødselsnummer kopieres uten mellomrom. Den formaterte overlayen er `aria-hidden` og ikke markerbar (`pointer-events: none`), så den kommer aldri med på utklippstavlen.
 
 :::info Verdien du får er alltid rå
-Formateringen er kun visuell. `onChange` gir deg verdien uten separatorer (`"12345678"`, ikke `"123 45 678"`). Du lagrer og validerer den rå verdien; visningen er presentasjon.
+Formateringen er kun visuell. `onChange`, `input.value` og form-innsending gir deg verdien uten separatorer (`"12345678"`, ikke `"123 45 678"`). Du lagrer og validerer den rå verdien; visningen er presentasjon.
 :::
 
 ## Tre måter å definere en formatter
@@ -57,7 +59,7 @@ De vanligste behovene er innebygd:
 <ix-field data-format="phone">
   <label>Telefonnummer</label>
   <div class="ix-text-field">
-    <input type="tel" inputMode="numeric" autoComplete="tel-national" value="12345678" />
+    <input type="tel" inputmode="numeric" autocomplete="tel-national" value="12345678" />
   </div>
   <span data-field="error"></span>
 </ix-field>
@@ -91,7 +93,7 @@ For enkle mønstre uten kode. Hvert tegn i pattern-strengen er enten en plass br
 <ix-field data-format-pattern="0000 00 00000">
   <label>Kontonummer</label>
   <div class="ix-text-field">
-    <input type="text" inputMode="numeric" value="12345678903" />
+    <input type="text" inputmode="numeric" value="12345678903" />
   </div>
   <span data-field="error"></span>
 </ix-field>
@@ -184,10 +186,28 @@ Formateringen ligger i `<ix-field>`, så den virker helt uten React:
 <ix-field data-format="phone">
   <label>Telefonnummer</label>
   <div class="ix-text-field">
-    <input type="tel" inputmode="numeric" value="12345678" />
+    <input type="tel" inputmode="numeric" value="12345678" name="tlf" />
   </div>
   <span data-field="error"></span>
 </ix-field>
+```
+
+### Rå verdi er tilgjengelig gratis
+
+Fordi `<input>` alltid holder den rå verdien (formateringen er en visuell overlay), trenger du ikke gjøre noe spesielt for å få den ut:
+
+```js
+const field = document.querySelector('ix-field');
+
+// Direkte fra input — alltid rå:
+field.querySelector('input').value; // "12345678"
+
+// Bekvemmelighets-getter på ix-field:
+field.rawValue; // "12345678"
+
+// Native form-innsending sender også rå verdi:
+const data = new FormData(document.querySelector('form'));
+data.get('tlf'); // "12345678" (ikke "123 45 678")
 ```
 
 ## Tilgjengelighet
@@ -208,10 +228,14 @@ Bruker appen din `cleave.js` (utdatert) eller `react-number-format` for felt-for
 | `react-number-format` `NumericFormat` (tusenskille/desimaler) | `format="amount"` |
 | Egen `format`-funksjon | `format={{ format, parse }}` |
 
-Til forskjell fra disse bibliotekene formaterer Indeks kun på blur, og eksponerer den rå verdien i `onChange` — så nedstrøms kode som allerede lagrer råverdien (`rawValue`/`floatValue`) fungerer likt.
+Til forskjell fra disse bibliotekene viser Indeks kun formatert verdi når feltet ikke har fokus, og eksponerer alltid den rå verdien (i `onChange`, `input.value` og form-innsending) — så nedstrøms kode som allerede lagrer råverdien (`rawValue`/`floatValue`) fungerer likt.
 
 :::caution Atferdsendring for live-maskerte felt
-Migrerer du et felt som i dag reformaterer *mens* brukeren skriver (f.eks. beløp med tusenskille via Cleave `numeral` eller en egenskrevet caret-løsning), er dette en bevisst atferdsendring: brukeren ser den rå verdien mens hun skriver og gruppering først på blur. Det er tilsiktet — se [Format-on-blur, ikke live maskering](#format-on-blur-ikke-live-maskering) for begrunnelsen.
+Migrerer du et felt som i dag reformaterer *mens* brukeren skriver (f.eks. beløp med tusenskille via Cleave `numeral` eller en egenskrevet caret-løsning), er dette en bevisst atferdsendring: brukeren ser den rå verdien mens hun skriver og gruppering først når feltet mister fokus. Det er tilsiktet — se [Format-on-blur, ikke live maskering](#format-on-blur-ikke-live-maskering) for begrunnelsen.
+:::
+
+:::note Kjent begrensning: svært lange verdier
+Overlayet klipper likt som input (`overflow: hidden`), men hvis en verdi er så lang at teksten scroller horisontalt i input, kan den formaterte overlayen bli forskjøvet i forhold til råteksten. Dette er kun synlig når feltet *ikke* har fokus, og er sjelden et problem for de typiske formatene (telefon, kontonummer, fødselsnummer, beløp).
 :::
 
 ## Relatert
