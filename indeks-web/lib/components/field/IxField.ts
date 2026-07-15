@@ -97,23 +97,26 @@ export class IxField extends HTMLElement {
     private _charCountControl: TextControl | null = null;
 
     // ── Formatering (opt-in) ────────────────────────────────────────────────
-    // Aktiv formatter og opprydding for overlay/lyttere. Null når ingen formatter
+    // Aktiv formatter og opprydding for lyttere/mirror. Null når ingen formatter
     // er satt — da oppfører ix-field seg nøyaktig som før.
     private _formatterProp: FieldFormatter | null = null;
     private _formatTeardown: (() => void) | null = null;
-    // Aktiv formatter/kontroll/overlay mens formatering er kablet — brukes av
-    // _updateOverlay() og den public refreshFormat()/rawValue.
+    // Aktiv formatter/kontroll mens formatering er kablet — brukes av
+    // refreshFormat()/rawValue og fokus-håndteringen.
     private _activeFormatter: FieldFormatter | null = null;
     private _activeControl: HTMLInputElement | null = null;
-    private _formatOverlay: HTMLElement | null = null;
+    // Skjult mirror-input som bærer den rå verdien (og det opprinnelige name-et)
+    // slik at <form>-submit/FormData får rå verdi selv om synlig input viser
+    // formatert tekst. Null når feltet mangler name eller ingen formatter er aktiv.
+    private _formatMirror: HTMLInputElement | null = null;
 
     /**
      * Registrer en navngitt formatter globalt. Brukes deretter via
-     * `data-format="<navn>"` på et hvilket som helst ix-field.
+     * `data-format="<navn>"` på et hvilket som helst input inne i et ix-field.
      *
      * @example
      * IxField.registerFormatter('orgnr', { format, parse });
-     * // <ix-field data-format="orgnr"><input …></ix-field>
+     * // <ix-field><input data-format="orgnr" …></ix-field>
      */
     static registerFormatter = registerFormat;
 
@@ -131,20 +134,30 @@ export class IxField extends HTMLElement {
     }
 
     /**
-     * Den rå (uformaterte) verdien til feltet. Fordi `<input>` alltid holder rå
-     * verdi (formateringen er en visuell overlay), er dette bare input-verdien.
-     * Tom streng når ingen formatter er aktiv eller det ikke finnes noe input.
+     * Den rå (uformaterte) verdien til feltet. Sannheten ligger i den skjulte
+     * mirror-inputen; uten mirror (feltet mangler `name`) utledes den ved å
+     * `parse()` den synlige verdien. Tom streng når ingen formatter er aktiv
+     * eller det ikke finnes noe input.
      *
      * Praktisk for ren JS/HTML: `document.querySelector('ix-field').rawValue`.
      * Merk at `<form>`-innsending og `new FormData(form)` også gir rå verdi
-     * automatisk, siden `input.value` aldri muteres.
+     * automatisk, siden mirror-inputen bærer det opprinnelige `name`-et.
      */
     get rawValue(): string {
-        return this._activeControl?.value ?? '';
+        if (this._formatMirror) return this._formatMirror.value;
+        const control = this._activeControl;
+        const formatter = this._activeFormatter;
+        if (!control) return '';
+        return formatter ? formatter.parse(control.value) : control.value;
+    }
+
+    /** True når den aktive formatteren formaterer live (mens man skriver). */
+    get live(): boolean {
+        return !!this._activeFormatter?.live;
     }
 
     static get observedAttributes(): string[] {
-        return ['tooltip', 'tooltip-label', 'tooltip-placement', 'data-format', 'data-format-pattern'];
+        return ['tooltip', 'tooltip-label', 'tooltip-placement'];
     }
 
     connectedCallback(): void {
@@ -166,9 +179,6 @@ export class IxField extends HTMLElement {
     attributeChangedCallback(name: string, _oldValue: string | null, _newValue: string | null): void {
         if (name === 'tooltip' || name === 'tooltip-label' || name === 'tooltip-placement') {
             if (this.isConnected) this._syncTooltip();
-        }
-        if (name === 'data-format' || name === 'data-format-pattern') {
-            if (this.isConnected) this._wireFormatting();
         }
     }
 
@@ -206,8 +216,12 @@ export class IxField extends HTMLElement {
                     }
                 }
             }
+            // React setter data-format/-pattern på <input> etter connectedCallback,
+            // så vi må re-kable formateringen når de dukker opp eller endres.
+            const affectsFormat = mutations.some((m) => m.attributeName === 'data-format' || m.attributeName === 'data-format-pattern' || m.attributeName === 'data-format-live');
+            if (affectsFormat) this._wireFormatting();
         });
-        this._stateObserver.observe(control, { attributes: true, attributeFilter: ['disabled', 'readonly', 'maxlength', 'minlength'] });
+        this._stateObserver.observe(control, { attributes: true, attributeFilter: ['disabled', 'readonly', 'maxlength', 'minlength', 'data-format', 'data-format-pattern', 'data-format-live'] });
 
         if (import.meta.env.DEV && control instanceof HTMLInputElement && control.type === 'number') {
             console.warn('[ix-field] Unngå type="number" — bruk inputMode="numeric" i stedet.');
@@ -361,26 +375,27 @@ export class IxField extends HTMLElement {
 
     // ── Formatering (opt-in) ─────────────────────────────────────────────────
     //
-    // Overlay-basert format-on-blur, IKKE live tegn-maske og IKKE value-swap.
-    // Prinsippet:
-    //   - `<input>` holder ALLTID den rå verdien og muteres aldri for formatering.
-    //     Vi wrapper input i `.ix-text-field__format` og legger et aria-hidden
-    //     overlay-span (`.ix-text-field__format-display`) oppå med den formaterte
-    //     teksten.
-    //   - Ren CSS (`:focus-within`) bytter synlighet: ufokusert vises overlay
-    //     (input-tekst gjort gjennomsiktig), fokusert vises rå input-tekst og
-    //     overlay skjules. Ingen JS rører verdien.
+    // Modell: synlig `<input>` viser tekst for mennesker; en skjult
+    // `<input type="hidden">`-mirror bærer den RÅ verdien og er sannheten.
+    //   - Mirror får det opprinnelige `name`-et; synlig input får `${name}_formatted`.
+    //     Dermed sender `<form>`-submit/`FormData` rå verdi under opprinnelig navn,
+    //     og JS kan hente den formaterte visningen via `${name}_formatted`.
+    //   - Rå verdi bevarer ALT brukeren skrev (minus separatorene `format` setter
+    //     inn) — vi formaterer, vi masker ikke. Feil fanges av validering.
     //
-    // Konsekvens: rå verdi er tilgjengelig gratis overalt — `input.value`,
-    // `<form>`-submit, `new FormData(form)` og React `value`/`onChange` gir alt
-    // den rå verdien uten separatorer. Ingen caret-hopp, ingen stille avvisning
-    // av tastetrykk.
+    // To moduser, styrt av `formatter.live`:
+    //   - Blur (standard): synlig input viser rå verdi ved fokus (fri redigering,
+    //     ingen caret-matte) og `format(raw)` når feltet mister fokus.
+    //   - Live (opt-in): synlig input holder alltid `format(raw)`; hvert tastetrykk
+    //     reformateres i sanntid med caret-styring (_maskInPlace). Alt vises.
 
     // Løser opp aktiv formatter etter presedens: property → data-format → data-format-pattern.
-    private _resolveFormatter(): FieldFormatter | null {
+    // data-format/-pattern leses fra <input>-kontrollen (ikke host-elementet), slik
+    // at konfigurasjonen bor sammen med kontrollen den gjelder.
+    private _resolveFormatter(control: HTMLInputElement): FieldFormatter | null {
         if (this._formatterProp) return this._formatterProp;
 
-        const name = this.getAttribute('data-format');
+        const name = control.getAttribute('data-format');
         if (name) {
             const named = resolveFormat(name);
             if (named) return named;
@@ -389,83 +404,164 @@ export class IxField extends HTMLElement {
             }
         }
 
-        const pattern = this.getAttribute('data-format-pattern');
+        const pattern = control.getAttribute('data-format-pattern');
         if (pattern) return createPatternFormatter(pattern);
 
         return null;
     }
 
+    // Overstyrer formatterens live-modus per felt fra data-format-live på inputen.
+    // Tre-tilstand: attributtet mangler → formatterens egen default; "true"/""
+    // (bare-attributt) → live; "false" → blur. Returnerer en kopi når live avviker,
+    // slik at vi ikke muterer en delt/registrert formatter.
+    private _applyLiveOverride(formatter: FieldFormatter, control: HTMLInputElement): FieldFormatter {
+        if (!control.hasAttribute('data-format-live')) return formatter;
+        const attr = control.getAttribute('data-format-live');
+        const live = attr !== 'false';
+        if (live === !!formatter.live) return formatter;
+        return { ...formatter, live };
+    }
+
     private _wireFormatting(): void {
         this._teardownFormatting();
-
-        const formatter = this._resolveFormatter();
-        if (!formatter) return;
 
         // Kun <input> støttes for formatering (ikke textarea/select).
         const control = this.querySelector<HTMLInputElement>('input');
         if (!control) return;
 
+        const base = this._resolveFormatter(control);
+        if (!base) return;
+        const formatter = this._applyLiveOverride(base, control);
+
         this._activeFormatter = formatter;
         this._activeControl = control;
 
-        // Wrap input i .ix-text-field__format (samme mønster som label-row i _wire)
-        // om den ikke allerede er wrappet, og legg overlay-spanet etter input.
-        let wrapper = control.closest<HTMLElement>('.ix-text-field__format');
-        if (!wrapper) {
-            wrapper = document.createElement('span');
-            wrapper.className = 'ix-text-field__format';
-            control.parentNode!.insertBefore(wrapper, control);
-            wrapper.appendChild(control);
+        // Verdien i input ved kabling er den rå (author/React skriver rå verdi).
+        const initialRaw = control.value;
+
+        // ── Skjult mirror + navnejuggling ────────────────────────────────────
+        // Bare når feltet har et name — uten name er det ingenting å submitte, og
+        // rå verdi er fremdeles tilgjengelig via rawValue (parse av synlig verdi).
+        const originalName = control.getAttribute('name');
+        let mirror: HTMLInputElement | null = null;
+        if (originalName !== null) {
+            control.setAttribute('name', `${originalName}_formatted`);
+            mirror = document.createElement('input');
+            mirror.type = 'hidden';
+            mirror.name = originalName;
+            mirror.value = initialRaw;
+            mirror.disabled = control.disabled;
+            control.after(mirror);
+            this._formatMirror = mirror;
+        } else if (import.meta.env.DEV) {
+            console.info('[ix-field] Formatert felt uten name — <form>-submit får ikke rå verdi (bruk .rawValue). Gi input et name for å aktivere skjult rå-mirror.');
         }
 
-        const overlay = document.createElement('span');
-        overlay.className = 'ix-text-field__format-display';
-        overlay.setAttribute('aria-hidden', 'true');
-        wrapper.appendChild(overlay);
-        this._formatOverlay = overlay;
-
-        // Hold overlay i synk med input-verdien mens brukeren skriver, slik at den
-        // formaterte visningen er klar i det feltet mister fokus.
-        const onInput = (): void => this._updateOverlay();
-        control.addEventListener('input', onInput);
-
-        this._formatTeardown = (): void => {
-            control.removeEventListener('input', onInput);
-            overlay.remove();
-            // Unwrap input: flytt det tilbake ut av wrapperen og fjern wrapperen.
-            if (wrapper.parentNode) {
-                wrapper.parentNode.insertBefore(control, wrapper);
-                wrapper.remove();
-            }
-            this._activeFormatter = null;
-            this._activeControl = null;
-            this._formatOverlay = null;
+        // ── Lyttere per modus ─────────────────────────────────────────────────
+        const listeners: Array<[keyof HTMLElementEventMap, EventListener]> = [];
+        const on = (type: keyof HTMLElementEventMap, fn: EventListener): void => {
+            control.addEventListener(type, fn);
+            listeners.push([type, fn]);
         };
 
-        // Formater eventuell startverdi.
-        this._updateOverlay();
+        if (formatter.live) {
+            // Live: reformater i selve inputen hvert tastetrykk, styr caret, speil rå.
+            on('input', () => this._maskInPlace());
+            // Seed startverdi formatert (feltet er ufokusert ved kabling).
+            control.value = formatter.format(initialRaw);
+        } else {
+            // Blur: rå ved fokus (fri redigering), formatert ved blur.
+            on('focus', () => {
+                control.value = this.rawValue;
+            });
+            on('input', () => {
+                // Synlig verdi ER rå mens fokusert — hold mirror i synk.
+                if (this._formatMirror) this._formatMirror.value = control.value;
+            });
+            on('blur', () => {
+                control.value = formatter.format(this.rawValue);
+            });
+            // Seed: formatert om ufokusert (vanlig), rå om feltet alt har fokus.
+            const focused = this.contains(document.activeElement) && document.activeElement === control;
+            control.value = focused ? initialRaw : formatter.format(initialRaw);
+        }
+
+        this._formatTeardown = (): void => {
+            for (const [type, fn] of listeners) control.removeEventListener(type, fn);
+            // Gjenopprett synlig input til et vanlig rått felt.
+            control.value = this.rawValue;
+            if (originalName !== null) control.setAttribute('name', originalName);
+            mirror?.remove();
+            this._formatMirror = null;
+            this._activeFormatter = null;
+            this._activeControl = null;
+        };
     }
 
-    // Skriver den formaterte visningen til overlay-spanet. Input.value er alltid
-    // rå, så vi formaterer den direkte. Idempotent — trygg å kalle flere ganger.
-    private _updateOverlay(): void {
+    // Live-modus: les synlig verdi + caret, reformater, skriv tilbake, gjenopprett
+    // caret, og speil rå til mirror. Bruker kun formatter.parse (tapsfri), så den
+    // virker for alle formattere. O(n²) på prefiks-parse — trivielt for korte felt.
+    private _maskInPlace(): void {
         const formatter = this._activeFormatter;
         const control = this._activeControl;
-        const overlay = this._formatOverlay;
-        if (!formatter || !control || !overlay) return;
-        overlay.textContent = formatter.format(control.value);
+        if (!formatter || !control) return;
+
+        const display = control.value;
+        const caret = control.selectionStart ?? display.length;
+
+        // Antall signifikante (ikke-separator) tegn før caret.
+        const before = formatter.parse(display.slice(0, caret)).length;
+
+        const raw = formatter.parse(display);
+        const next = formatter.format(raw);
+
+        // Finn caret-posisjonen i den nye strengen som har like mange signifikante
+        // tegn foran seg.
+        let newCaret = next.length;
+        if (before === 0) {
+            newCaret = 0;
+        } else {
+            for (let i = 1; i <= next.length; i++) {
+                if (formatter.parse(next.slice(0, i)).length >= before) {
+                    newCaret = i;
+                    break;
+                }
+            }
+        }
+
+        if (next !== display) control.value = next;
+        control.setSelectionRange(newCaret, newCaret);
+        if (this._formatMirror) this._formatMirror.value = raw;
     }
 
     /**
-     * Re-anvender den formaterte overlay-visningen.
+     * Re-anvender formateringen fra en rå verdi.
      *
-     * Nyttig for controlled React: når React skriver den rå prop-verdien til
-     * `input.value` ved en re-render, fyres ikke `input`-eventet, så overlay må
-     * oppdateres eksplisitt. Kall denne etter commit (f.eks. i `useLayoutEffect`).
-     * No-op når ingen formatter er aktiv.
+     * Nyttig for controlled React: når React skriver den rå prop-verdien ved en
+     * re-render fyres ikke `input`-eventet, så visningen må oppdateres eksplisitt.
+     * Kall denne etter commit (f.eks. i `useLayoutEffect`). No-op når ingen
+     * formatter er aktiv.
+     *
+     * @param raw Ny rå verdi. Utelates den, reformateres gjeldende rå verdi.
      */
-    refreshFormat(): void {
-        this._updateOverlay();
+    refreshFormat(raw?: string): void {
+        const formatter = this._activeFormatter;
+        const control = this._activeControl;
+        if (!formatter || !control) return;
+
+        const nextRaw = raw ?? this.rawValue;
+        if (this._formatMirror) this._formatMirror.value = nextRaw;
+
+        // Vis rå mens fokusert i blur-modus (brukeren redigerer); ellers formatert.
+        const focused = document.activeElement === control;
+        const nextDisplay = !formatter.live && focused ? nextRaw : formatter.format(nextRaw);
+
+        // Equality-guard: ikke rør inputen (og caret) om visningen alt stemmer —
+        // avgjørende for at controlled re-renders ikke flytter caret under skriving.
+        if (nextDisplay !== control.value) {
+            control.value = nextDisplay;
+            if (formatter.live) control.setSelectionRange(nextDisplay.length, nextDisplay.length);
+        }
     }
 
     private _teardownFormatting(): void {
@@ -493,6 +589,9 @@ export class IxField extends HTMLElement {
         this.toggleAttribute('data-disabled', control.disabled);
         const readOnly = 'readOnly' in control ? (control as HTMLInputElement | HTMLTextAreaElement).readOnly : false;
         this.toggleAttribute('data-readonly', readOnly);
+        // Speil disabled til den skjulte mirror-inputen: en disabled synlig input
+        // submittes ikke, så mirror må heller ikke sende stale/duplikat rå verdi.
+        if (this._formatMirror) this._formatMirror.disabled = control.disabled;
     }
 
     // Synkroniserer tooltip-knappen med tooltip/tooltip-label-attributtene.

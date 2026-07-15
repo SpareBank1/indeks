@@ -21,16 +21,16 @@ describe('createPatternFormatter', () => {
             expect(fmt.format('1234')).toBe('123 4');
         });
 
-        it('parse fjerner separatorer og gir rå verdi', () => {
+        it('parse fjerner kun separatorer og gir rå verdi', () => {
             expect(fmt.parse('123 45 678')).toBe('12345678');
         });
 
-        it('parse dropper ugyldige tegn', () => {
-            expect(fmt.parse('12a34')).toBe('1234');
+        it('parse er tapsfri: beholder tegn som ikke passer (validering fanger feil)', () => {
+            expect(fmt.parse('12a34')).toBe('12a34');
         });
 
-        it('parse kutter ved antall slots', () => {
-            expect(fmt.parse('123456789999')).toBe('12345678');
+        it('parse kutter ikke ved antall slots (tapsfri)', () => {
+            expect(fmt.parse('123456789999')).toBe('123456789999');
         });
 
         it('round-trip parse(format(raw)) === raw', () => {
@@ -41,6 +41,14 @@ describe('createPatternFormatter', () => {
 
         it('format tåler allerede formatert input (lim inn)', () => {
             expect(fmt.format('123 45 678')).toBe('123 45 678');
+        });
+
+        it('viser ekstra tegn utover patternet uformatert til slutt', () => {
+            expect(fmt.format('1234567890')).toBe('123 45 67890');
+        });
+
+        it('bevarer tegn som ikke passer, i skrevet rekkefølge', () => {
+            expect(fmt.format('12a34')).toBe('12a34');
         });
     });
 
@@ -76,8 +84,10 @@ describe('createPatternFormatter', () => {
     describe('bokstav-slot "aaa"', () => {
         const fmt = createPatternFormatter('aa-aa');
 
-        it('beholder bokstaver inkl. æøå, dropper siffer', () => {
-            expect(fmt.parse('A1b2ø3')).toBe('Abø');
+        it('parse fjerner kun separatoren (-), format fyller slots', () => {
+            // Tapsfri parse fjerner bare bindestreken; siffer beholdes (validering fanger dem).
+            expect(fmt.parse('A1b2ø3')).toBe('A1b2ø3');
+            expect(fmt.parse('ab-cd')).toBe('abcd');
             expect(fmt.format('abcd')).toBe('ab-cd');
         });
     });
@@ -102,8 +112,10 @@ describe('createAmountFormatter', () => {
         expect(fmt.parse('1 234 567,89')).toBe('1234567,89');
     });
 
-    it('parse ignorerer ekstra desimalskilletegn', () => {
-        expect(fmt.parse('12,34,56')).toBe('12,3456');
+    it('parse er tapsfri: fjerner kun tusenskillet, beholder alt annet', () => {
+        // Ekstra desimaltegn dedupliseres IKKE lenger — validering fanger ugyldig verdi.
+        expect(fmt.parse('12,34,56')).toBe('12,34,56');
+        expect(fmt.parse('12a34')).toBe('12a34');
     });
 
     it('round-trip', () => {
@@ -114,6 +126,10 @@ describe('createAmountFormatter', () => {
 
     it('format tåler allerede formatert input', () => {
         expect(fmt.format('1 234 567,89')).toBe('1 234 567,89');
+    });
+
+    it('bevarer tegn som ikke passer, i skrevet rekkefølge', () => {
+        expect(fmt.format('12a34')).toBe('12a34');
     });
 });
 
@@ -163,5 +179,18 @@ describe('registry', () => {
         const custom: FieldFormatter = createPatternFormatter('00-00-00');
         registerFormat('custom-test', custom);
         expect(resolveFormat('custom-test')!.format('123456')).toBe('12-34-56');
+    });
+});
+
+describe('live-flagg', () => {
+    it('de innebygde variantene formaterer live', () => {
+        for (const name of ['phone', 'ssn', 'date', 'account', 'orgnr', 'amount']) {
+            expect(resolveFormat(name)!.live, name).toBe(true);
+        }
+    });
+
+    it('egne pattern-/beløps-formattere er blur (live utelatt)', () => {
+        expect(createPatternFormatter('000 00 000').live).toBeUndefined();
+        expect(createAmountFormatter().live).toBeUndefined();
     });
 });

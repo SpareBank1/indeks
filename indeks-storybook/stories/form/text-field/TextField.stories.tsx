@@ -98,32 +98,33 @@ export const TooltipPlassering: Story = {
 };
 
 /**
- * Formatering: feltet formateres når det mister fokus, og viser rå verdi ved
- * fokus slik at brukeren kan redigere fritt (ingen caret-hopp). `format="phone"`
- * bruker den innebygde norske telefon-varianten.
+ * Formatering: de innebygde variantene formaterer **live** — separatorene dukker
+ * opp mens man skriver, med caret-styring. `format="phone"` bruker den innebygde
+ * norske telefon-varianten. Alt brukeren skriver vises (vi masker ikke); rå verdi
+ * ligger i en skjult mirror-input og er tilgjengelig via `onChange` / form-submit.
  */
 export const FormatTelefon: Story = {
-  args: { label: 'Telefonnummer', format: 'phone', defaultValue: '12345678', type: 'tel', inputMode: 'numeric', autoComplete: 'tel-national' },
+  args: { label: 'Telefonnummer', description: '8 siffer, f.eks. 123 45 678', format: 'phone', defaultValue: '12345678', type: 'tel', inputMode: 'numeric', autoComplete: 'tel-national' },
   render: (args) => <TextField {...args} />,
 };
 
 export const FormatBelop: Story = {
-  args: { label: 'Beløp', format: 'amount', defaultValue: '1234567', suffix: 'kr', inputMode: 'decimal' },
+  args: { label: 'Beløp', description: 'Beløp med tusenskille, f.eks. 1 234 567', format: 'amount', defaultValue: '1234567', suffix: 'kr', inputMode: 'decimal' },
   render: (args) => <TextField {...args} />,
 };
 
 export const FormatFodselsnummer: Story = {
-  args: { label: 'Fødselsnummer', format: 'ssn', defaultValue: '01019012345', inputMode: 'numeric' },
+  args: { label: 'Fødselsnummer', description: '11 siffer, f.eks. 010190 12345', format: 'ssn', defaultValue: '01019012345', inputMode: 'numeric' },
   render: (args) => <TextField {...args} />,
 };
 
 export const FormatKontonummer: Story = {
-  args: { label: 'Kontonummer', format: 'account', defaultValue: '12345678903', inputMode: 'numeric' },
+  args: { label: 'Kontonummer', description: '11 siffer, f.eks. 1234 56 78903', format: 'account', defaultValue: '12345678903', inputMode: 'numeric' },
   render: (args) => <TextField {...args} />,
 };
 
 export const FormatOrgnr: Story = {
-  args: { label: 'Organisasjonsnummer', format: 'orgnr', defaultValue: '123456789', inputMode: 'numeric' },
+  args: { label: 'Organisasjonsnummer', description: '9 siffer, f.eks. 123 456 789', format: 'orgnr', defaultValue: '123456789', inputMode: 'numeric' },
   render: (args) => <TextField {...args} />,
 };
 
@@ -132,7 +133,17 @@ export const FormatOrgnr: Story = {
  * helst, resten = separatorer. Her et KID-nummer.
  */
 export const FormatPattern: Story = {
-  args: { label: 'KID-nummer', formatPattern: '0000 0000 0000 000', defaultValue: '1234567890123', inputMode: 'numeric' },
+  args: { label: 'KID-nummer', description: '13 siffer, f.eks. 1234 5678 9012 3', formatPattern: '0000 0000 0000 000', defaultValue: '1234567890123', inputMode: 'numeric' },
+  render: (args) => <TextField {...args} />,
+};
+
+/**
+ * `formatLive` overstyrer modus per felt: her tvinges den innebygde (live)
+ * telefon-varianten til blur, så feltet viser rå verdi ved fokus og formatert
+ * ved blur.
+ */
+export const FormatLiveAv: Story = {
+  args: { label: 'Telefonnummer (live av)', description: '8 siffer, f.eks. 123 45 678', format: 'phone', formatLive: false, defaultValue: '12345678', type: 'tel', inputMode: 'numeric' },
   render: (args) => <TextField {...args} />,
 };
 
@@ -143,6 +154,7 @@ export const FormatPattern: Story = {
 export const FormatEgenFunksjon: Story = {
   args: {
     label: 'Referanse',
+    description: 'Store bokstaver, f.eks. AB-123',
     defaultValue: 'ab-123',
     format: {
       format: (raw: string) => raw.toUpperCase(),
@@ -153,15 +165,16 @@ export const FormatEgenFunksjon: Story = {
 };
 
 /**
- * Ren HTML/web component: `data-format` (eller `data-format-pattern`) på `<ix-field>`
+ * Ren HTML/web component: `data-format` (eller `data-format-pattern`) på `<input>`
  * gir samme formatering uten React.
  */
 export const FormatHTML: Story = {
   render: () => (
-    <ix-field data-format="phone">
+    <ix-field>
       <label className="ix-label">Telefonnummer</label>
+      <span data-field="description">8 siffer, f.eks. 123 45 678</span>
       <div className="ix-text-field">
-        <input defaultValue="12345678" type="tel" inputMode="numeric" />
+        <input defaultValue="12345678" type="tel" inputMode="numeric" data-format="phone" />
       </div>
       <span data-field="error"></span>
     </ix-field>
