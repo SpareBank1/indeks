@@ -139,6 +139,7 @@ const sidebars: SidebarsConfig = {
                             items: ['komponenter/skjema/combobox-html'],
                         },
                         'komponenter/skjema/label',
+                        'komponenter/skjema/phone-number-field',
                         {
                             type: 'category',
                             label: 'RadioGroup',

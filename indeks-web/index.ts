@@ -3,6 +3,7 @@ import { IxCombobox } from './lib/components/combobox/IxCombobox.js';
 import { IxField } from './lib/components/field/IxField.js';
 import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
+import { IxPhoneNumberField } from './lib/components/phone-number-field/IxPhoneNumberField.js';
 import { IxRadioGroup } from './lib/components/radio-group/IxRadioGroup.js';
 import './lib/modal/modal.js';
 import './lib/tooltip/tooltip.js';
@@ -12,12 +13,14 @@ customElements.define('ix-icon', IxIcon);
 customElements.define('ix-radio-group', IxRadioGroup);
 customElements.define('ix-checkbox-group', IxCheckboxGroup);
 customElements.define('ix-combobox', IxCombobox);
+customElements.define('ix-phone-number-field', IxPhoneNumberField);
 
 export { IxField };
 export { IxIcon };
 export { IxRadioGroup };
 export { IxCheckboxGroup };
 export { IxCombobox };
+export { IxPhoneNumberField };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
 
@@ -31,6 +34,7 @@ declare global {
         'ix-radio-group': IxRadioGroup;
         'ix-checkbox-group': IxCheckboxGroup;
         'ix-combobox': IxCombobox;
+        'ix-phone-number-field': IxPhoneNumberField;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -51,6 +55,14 @@ declare global {
                 name?: string;
                 disabled?: boolean | '';
                 readonly?: boolean | '';
+                'data-state'?: 'error' | 'readonly' | 'disabled';
+                class?: string;
+                children?: unknown;
+            };
+            'ix-phone-number-field': {
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                required?: boolean | '';
                 'data-state'?: 'error' | 'readonly' | 'disabled';
                 class?: string;
                 children?: unknown;

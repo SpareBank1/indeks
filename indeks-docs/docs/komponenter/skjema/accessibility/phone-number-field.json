@@ -1,0 +1,111 @@
+{
+  "component": "PhoneNumberField",
+  "lastReviewed": "2026-07-15",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv beskrivende felles label",
+      "details": "label er gruppens tilgjengelige navn (leses som legend av skjermlesere). \"Mobilnummer\" er bedre enn \"Nummer\". Den beskriver hva de to feltene til sammen samler inn — ikke handlingen.",
+      "wcag": ["1.3.1", "2.4.6", "3.3.2"]
+    },
+    {
+      "summary": "Gi begge feltene et tilgjengelig navn",
+      "details": "countryLabel og numberLabel er påkrevde aria-label på henholdsvis landvelgeren og nummerfeltet. Feltene har ingen egen synlig label — gruppens legend navngir helheten, mens aria-label skiller de to. \"Landkode\" og \"Telefonnummer\" på riktig språk.",
+      "wcag": ["3.3.2", "4.1.2"]
+    },
+    {
+      "summary": "Skriv konkret feilmelding",
+      "details": "errorMessage skal forklare hva brukeren må gjøre. \"Skriv inn et gyldig telefonnummer\" er bedre enn \"Ugyldig\". Komponenten viser meldingen på gruppenivå, setter aria-invalid på host og annonserer den polite — men teksten er ditt ansvar.",
+      "wcag": ["3.3.1", "3.3.3"]
+    },
+    {
+      "summary": "Send inn combobox-tekstene på riktig språk",
+      "details": "noHitsText (påkrevd), toggleLabel og resultsText videreføres til landvelgeren og må oversettes (bokmål, nynorsk, engelsk). Den innebygde landlista lokaliseres med locale, men UI-chrome har ingen fallback.",
+      "wcag": ["3.1.2"]
+    },
+    {
+      "summary": "Vurder bruk av disabled",
+      "details": "Et deaktivert felt er vanskelig å forstå uten forklaring, og disabled bryter kontrastkravet (1.4.3 unntar disabled-elementer). Vurder om feltet heller bør forklares eller skjules.",
+      "wcag": ["3.3.2"]
+    }
+  ],
+  "issues": [
+    {
+      "summary": "Nummerformatet er norsk-spesifikt",
+      "details": "Standardformatet (numberFormat=\"phone\") er norsk 8-sifret (123 45 678) uavhengig av valgt land. Endring av landkode reformaterer ikke nummeret. For andre lands nummerlengder må konsumenten sende eget format/formatPattern. Dette er en kjent begrensning i v1, ikke et WCAG-brudd.",
+      "wcag": []
+    }
+  ],
+  "handled": [
+    { "id": "1.3.1", "notes": "ix-phone-number-field setter role=\"group\", aria-labelledby til den felles legend, og aria-describedby til description og error. De to kontrollene (ix-combobox og nummer-input) beholder sin egen ARIA." },
+    { "id": "1.3.5", "notes": "Nummerfeltet får autocomplete=\"tel-national\", type=\"tel\" og inputmode=\"numeric\" slik at feltets formål eksponeres programmatisk og nettleser/hjelpemidler kan autofylle telefonnummer." },
+    { "id": "1.4.1", "notes": "Valgt land vises som tekst — kallekoden (f.eks. +47) i landfeltet, med landnavnet som sekundær tekst i lista. Valgt-tilstand i lista markeres med checkmark (form) — ikke kun farge. Feiltilstand vises både med aria-invalid, tekstmelding og farge." },
+    { "id": "1.4.3", "notes": "Tekst bruker --ix-color-foreground-main-default mot standard bakgrunn. Forventes å oppfylle 4,5:1. Verifiser ved egendefinerte bakgrunnsfarger." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320 px: landvelger + nummerfelt brytes til hverandre under (flex-wrap) på smal skjerm og legger seg side ved side fra 768 px. Ingen horisontal scroll." },
+    { "id": "1.4.11", "notes": "Feltenes border og fokus-indikatorer arves fra combobox.css og text-field.css (--ix-color-border-main-default / --ix-color-fill-*). Forventes å oppfylle 3:1." },
+    { "id": "1.4.12", "notes": "Bruker relative enheter og tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
+    { "id": "2.1.1", "notes": "Fullt tastaturopererbar: Tab når landvelger så nummerfelt, combobox har eget APG-tastaturmønster (piltast/Enter/Escape), nummerfeltet er en vanlig tekst-input." },
+    { "id": "2.4.3", "notes": "Fokusrekkefølge følger DOM: landvelger før nummerfelt, som samsvarer med leserekkefølgen." },
+    { "id": "2.4.7", "notes": ":focus-visible på begge feltene gir tydelig outline (arvet fra underliggende komponenter)." },
+    { "id": "2.5.5", "notes": "Toggle-knapp, alternativer og inputfelter oppfyller minimum 44×44 px klikkflate (arvet fra combobox/text-field)." },
+    { "id": "2.5.8", "notes": "Klikkeflaten på 44×44 px oppfyller WCAG 2.2 AA-kravet (24×24 px) med god margin." },
+    { "id": "3.3.1", "notes": "ix-phone-number-field setter aria-invalid=\"true\" på host når errorMessage har innhold, og kobler feilmeldingen via aria-describedby." },
+    { "id": "3.3.2", "notes": "Felles legend + per-felt aria-label gir instruksjoner/etiketter for begge kontrollene." },
+    { "id": "3.3.3", "notes": "errorMessage brukes til å gi konkret feilmelding. Komponenten viser den, men teksten er konsumentens ansvar." },
+    { "id": "4.1.2", "notes": "role=\"group\" med aria-labelledby gir gruppa navn og rolle. De to kontrollene eksponerer egne roller/navn/verdier (combobox-mønster og native input)." },
+    { "id": "4.1.3", "notes": "ix-phone-number-field setter aria-live=\"polite\" på error-elementet slik at endringer i feilmeldingen annonseres uten å avbryte brukeren." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1" },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3" },
+    { "id": "1.3.4" },
+    { "id": "1.4.2" },
+    { "id": "1.4.4", "notes": "Bruker relative enheter — skalerer korrekt ved 200 % zoom, men det er ikke en aktiv tilpasning i komponenten." },
+    { "id": "1.4.5" },
+    { "id": "1.4.13" },
+    { "id": "2.1.2" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2" },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2", "reason": "Alt innhold er på gruppens språk; komponenten setter ikke lang på deler." },
+    { "id": "3.2.1" },
+    { "id": "3.2.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til landvelgeren, deretter til nummerfeltet" },
+    { "key": "Pil ned / Pil opp", "action": "Åpner og navigerer i landlista når landvelgeren har fokus" },
+    { "key": "Enter", "action": "Velger markert land i landlista" },
+    { "key": "Escape", "action": "Lukker landlista uten å endre valg" },
+    { "key": "Skriving", "action": "I landvelgeren filtrerer teksten lista; i nummerfeltet skrives telefonnummeret (formateres til 123 45 678)" }
+  ],
+  "screenReader": [
+    "Ved fokus inn i komponenten: \"[label], gruppe\" — leses opp som group med legend som navn",
+    "Ved fokus på landvelgeren: \"[countryLabel], combobox\" med APG-annonsering av alternativer og antall treff",
+    "Hvert alternativ leses i DOM-rekkefølge: kallekoden først, så landnavnet (f.eks. «+47, Norge»). Valgt verdi som vises i landfeltet er kallekoden.",
+    "Ved fokus på nummerfeltet: \"[numberLabel], redigering, tekst\"",
+    "Ved feiltilstand: aria-invalid annonseres som «ugyldig» på gruppa, og feilmeldingsteksten leses opp polite via aria-live",
+    "Når description er satt: leses opp som del av gruppe-konteksten via aria-describedby"
+  ]
+}

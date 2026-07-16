@@ -1,6 +1,6 @@
 import { afterEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
-import { IxCheckboxGroup, IxCombobox, IxRadioGroup } from '@sb1/indeks-web';
+import { IxCheckboxGroup, IxCombobox, IxPhoneNumberField, IxRadioGroup } from '@sb1/indeks-web';
 
 // React-laget er tynt — flere komponenter avhenger av at WC-en kjører sin
 // connectedCallback for å sette ARIA-koblinger, generere IDer og synkronisere
@@ -13,6 +13,9 @@ if (!customElements.get('ix-checkbox-group')) {
 }
 if (!customElements.get('ix-combobox')) {
     customElements.define('ix-combobox', IxCombobox);
+}
+if (!customElements.get('ix-phone-number-field')) {
+    customElements.define('ix-phone-number-field', IxPhoneNumberField);
 }
 
 afterEach(() => {
