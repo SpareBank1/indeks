@@ -6,6 +6,7 @@ import type {
     IxDateField,
     IxField,
     IxIcon,
+    IxPhoneNumberField,
     IxProgressBar,
     IxRadioGroup,
     IxTabs,
@@ -71,6 +72,13 @@ declare module 'react' {
                 'data-state'?: 'error' | 'readonly' | 'disabled';
                 'data-open-label'?: string;
                 'data-native-picker-mobile'?: boolean | '';
+            };
+            'ix-phone-number-field': React.DetailedHTMLProps<React.HTMLAttributes<IxPhoneNumberField>, IxPhoneNumberField> & {
+                class?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                required?: boolean | '';
+                'data-state'?: 'error' | 'readonly' | 'disabled';
             };
             'ix-progress-bar': React.DetailedHTMLProps<React.HTMLAttributes<IxProgressBar>, IxProgressBar> & {
                 value?: number;

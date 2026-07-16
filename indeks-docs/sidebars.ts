@@ -175,6 +175,7 @@ const sidebars: SidebarsConfig = {
                         },
                         'komponenter/skjema/date-field',
                         'komponenter/skjema/label',
+                        'komponenter/skjema/phone-number-field',
                         {
                             type: 'category',
                             label: 'RadioGroup',
