@@ -1,12 +1,22 @@
-import { forwardRef, useId, useMemo } from 'react';
+import { forwardRef, useId } from 'react';
 import type { IxPhoneNumberField as IxPhoneNumberFieldElement } from '@sb1/indeks-web';
 import { Combobox } from '../combobox/Combobox';
 import { TextField, type FieldFormatter } from '../text-field/TextField';
 import { ValidationMessage } from '../validation-message/ValidationMessage';
-import { type CountryLocale, type CountryOption, getDefaultCountries } from './countries';
 
-export type { CountryOption, CountryLocale };
-export { getDefaultCountries };
+/**
+ * Landvalg for PhoneNumberField. `value` er landkoden (uten `+`), `label` er
+ * kalle-koden (`+47`, primærtekst) og `description` er landnavnet (sekundær).
+ * Utelates → web-komponenten fyller inn sin innebygde, lokaliserbare landliste.
+ */
+export type CountryOption = {
+    value: string;
+    label: string;
+    description?: string;
+};
+
+/** Språk for den innebygde landlista i web-komponenten. */
+export type CountryLocale = 'nb' | 'nn' | 'en';
 
 export type PhoneNumberFieldProps = {
     /** Synlig felles label over begge feltene (f.eks. «Mobilnummer»). */
@@ -48,8 +58,9 @@ export type PhoneNumberFieldProps = {
     onChange?: (value: string) => void;
 
     /**
-     * Landliste. Utelates → innebygd standardliste (Norge → Norden → alfabetisk)
-     * i språket fra `locale`. Send inn egen liste for å utvide/begrense.
+     * Landliste. Utelates → web-komponenten fyller inn sin innebygde standardliste
+     * (Norge → Norden → alfabetisk) i språket fra `locale`. Send inn egen liste
+     * for å utvide/begrense (serialiseres til `data-countries` på web-komponenten).
      */
     countries?: CountryOption[];
     /** Språk for den innebygde standard-landlista. @default 'nb' */
@@ -78,11 +89,13 @@ export type PhoneNumberFieldProps = {
     id?: string;
 };
 
-// React-laget er tynt: <ix-phone-number-field> (WC) eier gruppe-ARIA (role=group,
-// aria-labelledby/describedby, aria-invalid, disabled/readonly-propagering). De to
-// feltene er de eksisterende <Combobox> og <TextField> — all deres ARIA, filtrering,
-// virtual focus, formatering og form-synk gjenbrukes urørt. Denne komponenten legger
-// kun til felles label/feilmelding og side-ved-side-layout.
+// React-laget er tynt: <ix-phone-number-field> (WC) eier alt innholds-relatert —
+// gruppe-ARIA (role=group, aria-labelledby/describedby, aria-invalid), propagering
+// av disabled/readonly/required, landlista (injiseres i den tomme <Combobox>),
+// forhåndsvalg, nummer-feltets standardattributter (type=tel, inputmode, autocomplete,
+// data-format) og data-state. React videresender kun config: i18n-tekster, verdier og
+// data-*-attributter. De to feltene er de eksisterende <Combobox> og <TextField> — all
+// deres ARIA, filtrering, virtual focus, formatering og form-synk gjenbrukes urørt.
 export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumberFieldProps>(function PhoneNumberField(
     {
         label,
@@ -119,21 +132,18 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
     const groupId = id ?? generatedId;
     const legendId = `${groupId}-legend`;
 
-    const options = useMemo(
-        () => countries ?? getDefaultCountries(locale),
-        [countries, locale]
-    );
-
-    const dataState = errorMessage ? 'error' : readOnly ? 'readonly' : disabled ? 'disabled' : undefined;
-
     return (
         <ix-phone-number-field
             ref={ref}
             id={groupId}
             class={className}
-            data-state={dataState}
             disabled={disabled || undefined}
             readonly={readOnly || undefined}
+            required={required || undefined}
+            data-locale={locale}
+            data-country-code={countryCode}
+            data-default-country-code={defaultCountryCode}
+            data-countries={countries ? JSON.stringify(countries) : undefined}
         >
             <span data-field="legend" id={legendId}>
                 {label}
@@ -141,9 +151,12 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
             {description && <span data-field="description">{description}</span>}
             <div data-field="items">
                 <div data-field="country">
+                    {/* Tom options-liste: web-komponenten injiserer landlista og
+                        forhåndsvalg (fra data-*-country-code på host). Kontrollert
+                        countryCode speiles fortsatt inn av Combobox sin useEffect. */}
                     <Combobox
                         ariaLabel={countryLabel}
-                        options={options}
+                        options={[]}
                         name={countryName}
                         value={countryCode}
                         defaultValue={defaultCountryCode}
@@ -151,17 +164,16 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
                         noHitsText={noHitsText}
                         toggleLabel={toggleLabel}
                         resultsText={resultsText}
-                        required={required}
                         disabled={disabled}
                         readOnly={readOnly}
                     />
                 </div>
                 <div data-field="number">
+                    {/* type/inputmode/autocomplete/data-format stampes av web-komponenten.
+                        format sendes fra React så TextFields kontrollerte-verdi-logikk
+                        (hasFormatter) beholdes. */}
                     <TextField
                         ariaLabel={numberLabel}
-                        type="tel"
-                        inputMode="numeric"
-                        autoComplete="tel-national"
                         placeholder={placeholder}
                         name={name}
                         value={value}
@@ -172,7 +184,6 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
                         formatLive={numberFormatLive}
                         disabled={disabled}
                         readOnly={readOnly}
-                        required={required}
                     />
                 </div>
             </div>
