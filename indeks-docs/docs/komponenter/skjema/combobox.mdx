@@ -27,26 +27,6 @@ Combobox er en sammensatt komponent med en del markup. [Combobox i ren HTML](./c
 ## Kom i gang
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Combobox
-  label="Land"
-  placeholder="Søk etter land …"
-  noHitsText="Ingen treff"
-  toggleLabel="Vis alternativer"
-  options={[
-    { value: '47', label: 'Norge', description: '+47' },
-    { value: '46', label: 'Sverige', description: '+46' },
-    { value: '45', label: 'Danmark', description: '+45' },
-    { value: '358', label: 'Finland', description: '+358' },
-  ]}
-/>
-```
-
-Prøv å skrive for å filtrere lista. Søket treffer både **label**, **verdi** og **beskrivelse** — så «+47» eller «47» finner Norge like godt som «Norge». Filtreringen er locale-bevisst (norsk collator, æ/ø/å-korrekt og aksent-uavhengig). `noHitsText` og `toggleLabel` er tekster du selv oversetter.
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -84,6 +64,25 @@ Prøv å skrive for å filtrere lista. Søket treffer både **label**, **verdi**
 `<ix-combobox>` kobler ARIA (role=combobox/listbox/option, aria-activedescendant), håndterer tastatur og filtrering, og synkroniserer valgte verdier til den skjulte `<select>`.
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Combobox
+  label="Land"
+  placeholder="Søk etter land …"
+  noHitsText="Ingen treff"
+  toggleLabel="Vis alternativer"
+  options={[
+    { value: '47', label: 'Norge', description: '+47' },
+    { value: '46', label: 'Sverige', description: '+46' },
+    { value: '45', label: 'Danmark', description: '+45' },
+  ]}
+/>
+```
+
+Prøv å skrive for å filtrere lista. Søket treffer både **label**, **verdi** og **beskrivelse** — så «+47» eller «47» finner Norge like godt som «Norge». Filtreringen er locale-bevisst (norsk collator, æ/ø/å-korrekt og aksent-uavhengig). `noHitsText` og `toggleLabel` er tekster du selv oversetter.
+
+</TabItem>
 </Tabs>
 
 ## Eksempler
@@ -93,26 +92,6 @@ Prøv å skrive for å filtrere lista. Søket treffer både **label**, **verdi**
 I React setter du startverdi med `defaultValue` (ukontrollert) eller `value` (kontrollert). I ren HTML markerer du alternativet med `aria-selected="true"` — se [Combobox i ren HTML](./combobox-html#forhåndsvalgte-verdier) for detaljene.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Combobox
-  label="Land"
-  placeholder="Søk etter land …"
-  noHitsText="Ingen treff"
-  toggleLabel="Vis alternativer"
-  defaultValue="47"
-  options={[
-    { value: '47', label: 'Norge', description: '+47' },
-    { value: '46', label: 'Sverige', description: '+46' },
-    { value: '45', label: 'Danmark', description: '+45' },
-  ]}
-/>
-```
-
-I React setter du startverdi med `defaultValue` (ukontrollert) eller `value` (kontrollert) — `'47'` i single, `['47', '46']` i flervalg.
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -134,6 +113,11 @@ I React setter du startverdi med `defaultValue` (ukontrollert) eller `value` (ko
         <span class="ix-combobox__option-label">Sverige</span>
         <span class="ix-combobox__option-description">+46</span>
       </div>
+      <div class="ix-combobox__option" data-value="45">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Danmark</span>
+        <span class="ix-combobox__option-description">+45</span>
+      </div>
     </div>
     <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
     <select data-field="native" name="land" hidden></select>
@@ -143,6 +127,26 @@ I React setter du startverdi med `defaultValue` (ukontrollert) eller `value` (ko
 ```
 
 Norge vises i feltet fra start fordi optionen har `aria-selected="true"`. Verken `value` på inputen eller `<option>` i den skjulte selecten skal settes for hånd — [Combobox i ren HTML](./combobox-html) forklarer hvorfor.
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Combobox
+  label="Land"
+  placeholder="Søk etter land …"
+  noHitsText="Ingen treff"
+  toggleLabel="Vis alternativer"
+  defaultValue="47"
+  options={[
+    { value: '47', label: 'Norge', description: '+47' },
+    { value: '46', label: 'Sverige', description: '+46' },
+    { value: '45', label: 'Danmark', description: '+45' },
+  ]}
+/>
+```
+
+I React setter du startverdi med `defaultValue` (ukontrollert) eller `value` (kontrollert) — `'47'` i single, `['47', '46']` i flervalg.
 
 </TabItem>
 </Tabs>
@@ -168,9 +172,9 @@ function KontrollertLand() {
         value={land}
         onChange={setLand}
         options={[
-          { value: '47', label: 'Norge' },
-          { value: '46', label: 'Sverige' },
-          { value: '45', label: 'Danmark' },
+          { value: '47', label: 'Norge', description: '+47' },
+          { value: '46', label: 'Sverige', description: '+46' },
+          { value: '45', label: 'Danmark', description: '+45' },
         ]}
       />
       <p>Valgt verdi: {land || '(ingen)'}</p>
@@ -188,28 +192,6 @@ Søk/filtrering skjer inne i web-komponenten (locale-bevisst, treffer label, ver
 I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alternativer vises som chips. Chips nås med piltast og fjernes med Backspace eller klikk.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Combobox
-  label="Land"
-  multiple
-  placeholder="Søk etter land …"
-  noHitsText="Ingen treff"
-  toggleLabel="Vis alternativer"
-  removeChipLabel="fjern"
-  arrowHintText="Bruk piltastene for å navigere mellom valgte alternativer"
-  defaultValue={['47', '46']}
-  options={[
-    { value: '47', label: 'Norge', description: '+47' },
-    { value: '46', label: 'Sverige', description: '+46' },
-    { value: '45', label: 'Danmark', description: '+45' },
-    { value: '358', label: 'Finland', description: '+358' },
-  ]}
-/>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -232,14 +214,17 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
       <div class="ix-combobox__option" data-value="47" aria-selected="true">
         <span class="ix-combobox__option-check" aria-hidden="true"></span>
         <span class="ix-combobox__option-label">Norge</span>
+        <span class="ix-combobox__option-description">+47</span>
       </div>
-      <div class="ix-combobox__option" data-value="46">
+      <div class="ix-combobox__option" data-value="46" aria-selected="true">
         <span class="ix-combobox__option-check" aria-hidden="true"></span>
         <span class="ix-combobox__option-label">Sverige</span>
+        <span class="ix-combobox__option-description">+46</span>
       </div>
       <div class="ix-combobox__option" data-value="45">
         <span class="ix-combobox__option-check" aria-hidden="true"></span>
         <span class="ix-combobox__option-label">Danmark</span>
+        <span class="ix-combobox__option-description">+45</span>
       </div>
     </div>
     <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
@@ -250,29 +235,32 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 ```
 
 </TabItem>
-</Tabs>
-
-### Med hjelpetekst
-
-<Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ```tsx live
 <Combobox
   label="Land"
-  description="Søk og velg landet du bor i"
-  placeholder="Søk …"
+  multiple
+  placeholder="Søk etter land …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
+  removeChipLabel="fjern"
+  arrowHintText="Bruk piltastene for å navigere mellom valgte alternativer"
+  defaultValue={['47', '46']}
   options={[
-    { value: '47', label: 'Norge' },
-    { value: '46', label: 'Sverige' },
-    { value: '45', label: 'Danmark' },
+    { value: '47', label: 'Norge', description: '+47' },
+    { value: '46', label: 'Sverige', description: '+46' },
+    { value: '45', label: 'Danmark', description: '+45' },
   ]}
 />
 ```
 
 </TabItem>
+</Tabs>
+
+### Med hjelpetekst
+
+<Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -288,10 +276,17 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
       <div class="ix-combobox__option" data-value="47" aria-selected="true">
         <span class="ix-combobox__option-check" aria-hidden="true"></span>
         <span class="ix-combobox__option-label">Norge</span>
+        <span class="ix-combobox__option-description">+47</span>
       </div>
       <div class="ix-combobox__option" data-value="46">
         <span class="ix-combobox__option-check" aria-hidden="true"></span>
         <span class="ix-combobox__option-label">Sverige</span>
+        <span class="ix-combobox__option-description">+46</span>
+      </div>
+      <div class="ix-combobox__option" data-value="45">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Danmark</span>
+        <span class="ix-combobox__option-description">+45</span>
       </div>
     </div>
     <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
@@ -302,28 +297,29 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 ```
 
 </TabItem>
-</Tabs>
-
-### Med feilmelding
-
-<Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ```tsx live
 <Combobox
   label="Land"
-  errorMessage="Du må velge et land for å fortsette"
+  description="Søk og velg landet du bor i"
   placeholder="Søk …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   options={[
-    { value: '47', label: 'Norge' },
-    { value: '46', label: 'Sverige' },
+    { value: '47', label: 'Norge', description: '+47' },
+    { value: '46', label: 'Sverige', description: '+46' },
+    { value: '45', label: 'Danmark', description: '+45' },
   ]}
 />
 ```
 
 </TabItem>
+</Tabs>
+
+### Med feilmelding
+
+<Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -338,10 +334,17 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
       <div class="ix-combobox__option" data-value="47" aria-selected="true">
         <span class="ix-combobox__option-check" aria-hidden="true"></span>
         <span class="ix-combobox__option-label">Norge</span>
+        <span class="ix-combobox__option-description">+47</span>
       </div>
       <div class="ix-combobox__option" data-value="46">
         <span class="ix-combobox__option-check" aria-hidden="true"></span>
         <span class="ix-combobox__option-label">Sverige</span>
+        <span class="ix-combobox__option-description">+46</span>
+      </div>
+      <div class="ix-combobox__option" data-value="45">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Danmark</span>
+        <span class="ix-combobox__option-description">+45</span>
       </div>
     </div>
     <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
@@ -352,28 +355,29 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 ```
 
 </TabItem>
-</Tabs>
-
-### Deaktivert
-
-<Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ```tsx live
 <Combobox
   label="Land"
-  disabled
-  defaultValue="47"
+  errorMessage="Du må velge et land for å fortsette"
+  placeholder="Søk …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   options={[
-    { value: '47', label: 'Norge' },
-    { value: '46', label: 'Sverige' },
+    { value: '47', label: 'Norge', description: '+47' },
+    { value: '46', label: 'Sverige', description: '+46' },
+    { value: '45', label: 'Danmark', description: '+45' },
   ]}
 />
 ```
 
 </TabItem>
+</Tabs>
+
+### Deaktivert
+
+<Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -388,6 +392,17 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
       <div class="ix-combobox__option" data-value="47" aria-selected="true">
         <span class="ix-combobox__option-check" aria-hidden="true"></span>
         <span class="ix-combobox__option-label">Norge</span>
+        <span class="ix-combobox__option-description">+47</span>
+      </div>
+      <div class="ix-combobox__option" data-value="46">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Sverige</span>
+        <span class="ix-combobox__option-description">+46</span>
+      </div>
+      <div class="ix-combobox__option" data-value="45">
+        <span class="ix-combobox__option-check" aria-hidden="true"></span>
+        <span class="ix-combobox__option-label">Danmark</span>
+        <span class="ix-combobox__option-description">+45</span>
       </div>
     </div>
     <div class="ix-combobox__no-hits" role="status" hidden>Ingen treff</div>
@@ -395,6 +410,24 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
   </ix-combobox>
   <span data-field="error" aria-live="polite"></span>
 </ix-field>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Combobox
+  label="Land"
+  disabled
+  defaultValue="47"
+  noHitsText="Ingen treff"
+  toggleLabel="Vis alternativer"
+  options={[
+    { value: '47', label: 'Norge', description: '+47' },
+    { value: '46', label: 'Sverige', description: '+46' },
+    { value: '45', label: 'Danmark', description: '+45' },
+  ]}
+/>
 ```
 
 </TabItem>

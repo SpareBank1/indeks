@@ -13,7 +13,19 @@
    - __listbox     popover-panel med forslag
    - __option      to-linjers list item (checkmark + label + description)
    - __option-*    check / label / description
-   - __no-hits     melding når filteret gir 0 treff */
+   - __no-hits     melding når filteret gir 0 treff
+
+   Selektorstrategi (som text-field.css / field.css): der web componenten setter
+   et stabilt kjøretids-anker bruker vi det som PRIMÆR selektor og beholder BEM-
+   klassen som backup — `:where(<anker>, .ix-combobox__<del>)`:
+   - listbox → [role='listbox']       (settes i IxCombobox._wire)
+   - option  → [role='option']        (+ [data-active]/[aria-selected] tilstand)
+   - toggle  → .ix-text-field > button (eneste knapp i feltet)
+   - chips   → [data-field='chips']    (WC leser wrapperen slik)
+   BEM-klassene beholdes uansett: de er querySelector-hooks i JS, og fungerer som
+   no-flash-anker før connectedCallback rekker å sette role. Delene UTEN trygt
+   anker (__option-check/label/description, __no-hits — role=status er tvetydig
+   mot den skjulte results-regionen) forblir rene klasse-selektorer. */
 
 :where(ix-combobox, .ix-combobox) {
     display: block;
@@ -23,7 +35,7 @@
 /* ── Chips-wrapper (kun multiselect) ────────────────────────────────────────
    Chipene selv er <data class="ix-chip" data-removable> og styles av chip.css.
    Her styles kun oppsettet: flyt over flere linjer ved mange valg (1.4.10). */
-:where(.ix-combobox__chips) {
+:where(.ix-combobox [data-field='chips'], .ix-combobox__chips) {
     display: flex;
     flex-wrap: wrap;
     gap: var(--ix-spacing-xs);
@@ -31,7 +43,7 @@
 }
 
 /* Tom wrapper skal ikke ta plass før noe er valgt. */
-:where(.ix-combobox__chips:empty) {
+:where(.ix-combobox [data-field='chips']:empty, .ix-combobox__chips:empty) {
     display: none;
 }
 
@@ -45,7 +57,7 @@
     position: relative;
 }
 
-:where(.ix-combobox__toggle) {
+:where(.ix-combobox .ix-text-field > button, .ix-combobox__toggle) {
     all: unset;
     box-sizing: border-box;
 
@@ -78,7 +90,7 @@
     padding-inline-end: calc(var(--ix-spacing-sm) + 1.5em);
 }
 
-:where(.ix-combobox__toggle)::after {
+:where(.ix-combobox .ix-text-field > button, .ix-combobox__toggle)::after {
     content: '';
     width: 1em;
     height: 1em;
@@ -97,22 +109,25 @@
 }
 
 /* Chevron peker opp når lista er åpen. Host [data-open] settes av web componenten. */
+:where(ix-combobox[data-open], .ix-combobox[data-open]) .ix-text-field > button::after,
 :where(ix-combobox[data-open], .ix-combobox[data-open]) .ix-combobox__toggle::after {
     transform: rotate(180deg);
 }
 
-:where(.ix-combobox__toggle:focus-visible) {
+:where(.ix-combobox .ix-text-field > button:focus-visible, .ix-combobox__toggle:focus-visible) {
     outline: var(--ix-outline-default);
     outline-offset: calc(-1 * var(--ix-outline-offset-default));
 }
 
 /* Knappen er en gjennomsiktig overlay oppå inputen — input eier ramme og flate. */
-:where(.ix-text-field) > .ix-combobox__toggle {
+:where(.ix-combobox .ix-text-field > button, .ix-text-field > .ix-combobox__toggle) {
     background-color: transparent;
     border: none;
 }
 
 /* Disabled / read-only felt toner ned chevronen sammen med inputen. */
+:where(.ix-text-field) > input:disabled ~ button,
+:where(.ix-text-field) > input:read-only ~ button,
 :where(.ix-text-field) > input:disabled ~ .ix-combobox__toggle,
 :where(.ix-text-field) > input:read-only ~ .ix-combobox__toggle {
     color: var(--ix-color-foreground-main-disabled);
@@ -127,7 +142,7 @@
    popover-API, ingen avhengighet, hele browserslist). Panelet ligger
    position: fixed i viewport-koordinater. Ingen shadow-token finnes ennå, så
    panelet løftes med tydelig kant + flate, som tooltip. */
-:where(.ix-combobox__listbox) {
+:where(.ix-combobox [role='listbox'], .ix-combobox__listbox) {
     position: fixed;
     margin: 0;
     padding: var(--ix-spacing-2xs);
@@ -137,6 +152,12 @@
     border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
     border-radius: var(--ix-border-radius-sm);
 
+    /* Egen min-bredde uavhengig av feltet. _position() (IxCombobox.ts) setter
+       inline width = feltbredden; når feltet er smalt (f.eks. landvelgeren i
+       phone-number-field viser bare `+47`) ville lista blitt for smal for
+       landnavn. min-width vinner over inline width, så lista forblir lesbar.
+       16rem (256px) < 320px mobil, og JS klemmer left ≥ 8px, så ingen overflow. */
+    min-width: 16rem;
     max-height: 16rem;
     overflow-y: auto;
     z-index: var(--ix-z-index-overlay);
@@ -144,7 +165,7 @@
 
 /* Lukket: web componenten setter hidden. [hidden] i seg selv gir display: none,
    men vi er eksplisitte her siden panelet ellers har display fra listen. */
-:where(.ix-combobox__listbox[hidden]) {
+:where(.ix-combobox [role='listbox'][hidden], .ix-combobox__listbox[hidden]) {
     display: none;
 }
 
@@ -153,7 +174,7 @@
    plass alltid (checkmark er visibility:hidden når ikke valgt), slik at label
    ikke hopper når valgt tilstand endres. Valgt vises med checkmark (struktur)
    + fetere label — ikke farge alene (WCAG 1.4.1). */
-:where(.ix-combobox__option) {
+:where(.ix-combobox [role='option'], .ix-combobox__option) {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
@@ -173,12 +194,12 @@
    componenten — IKKE :hover alene, for tastatur og mus skal se likt ut.
    Lyseblå flate; valgt tilstand vises i tillegg med checkmark (ikke farge alene,
    WCAG 1.4.1). */
-:where(.ix-combobox__option:hover),
-:where(.ix-combobox__option[data-active]) {
+:where(.ix-combobox [role='option']:hover, .ix-combobox__option:hover),
+:where(.ix-combobox [role='option'][data-active], .ix-combobox__option[data-active]) {
     background-color: var(--ix-color-fill-info-subtle);
 }
 
-:where(.ix-combobox__option[aria-disabled='true']) {
+:where(.ix-combobox [role='option'][aria-disabled='true'], .ix-combobox__option[aria-disabled='true']) {
     color: var(--ix-color-foreground-main-disabled);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
@@ -223,12 +244,12 @@
 }
 
 /* Valgt option viser krysset (begge moduser). */
-:where(.ix-combobox__option[aria-selected='true']) .ix-combobox__option-check {
+:where(.ix-combobox [role='option'][aria-selected='true'], .ix-combobox__option[aria-selected='true']) .ix-combobox__option-check {
     visibility: visible;
 }
 
 /* Valgt option får litt tyngre label så tilstanden ikke hviler på farge alene. */
-:where(.ix-combobox__option[aria-selected='true']) .ix-combobox__option-label {
+:where(.ix-combobox [role='option'][aria-selected='true'], .ix-combobox__option[aria-selected='true']) .ix-combobox__option-label {
     font-weight: var(--ix-font-weight-medium);
 }
 
@@ -252,7 +273,7 @@
    Playwright kjører med reducedMotion: 'reduce'; stopp chevron-rotasjonens
    transition slik at snapshots blir deterministiske. */
 @media (prefers-reduced-motion: reduce) {
-    :where(.ix-combobox__toggle)::after {
+    :where(.ix-combobox .ix-text-field > button, .ix-combobox__toggle)::after {
         transition: none;
     }
 }

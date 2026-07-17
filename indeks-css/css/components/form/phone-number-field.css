@@ -65,24 +65,30 @@
 }
 
 /* ── Feltene side ved side ──────────────────────────────────────────────────
-   Mobile first (320 px): landvelger og nummerfelt ligger på rad med fast
-   avstand. Landvelgeren (combobox) har fast, romslig nok bredde til landnavn +
-   kode; nummerfeltet tar resten (flex: 1). Ingen fast bredde på selve gruppa
-   (WCAG 1.4.10 — ingen horisontal scroll ved 320 px). flex-wrap som defensivt
-   fallback hvis en svært lang landtekst + gap ikke får plass. */
+   Landvelger og nummerfelt ligger alltid på samme rad — også på 320 px. Vi
+   bruker `nowrap` (ikke `wrap`) fordi landvelgeren nå er smal (kun kallekode
+   `+47` vises som valgt verdi), så begge feltene får plass selv på den minste
+   skjermen. Nummerfeltet tar resten (flex: 1, min-width: 0), så gruppa aldri
+   tvinger horisontal scroll (WCAG 1.4.10). Ingen fast bredde på selve gruppa. */
 :where(ix-phone-number-field, .ix-phone-number-field) [data-field='items'] {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: flex-start;
     gap: var(--ix-spacing-sm);
 }
 
-/* Landvelger: fast bredde. Krymper ikke under sitt eget innhold, men får
-   krympe litt (flex-shrink 1) hvis rekka blir trang før wrap slår inn. */
+/* Landvelger: smal, fast bredde. Vi MÅ sette en eksplisitt `flex-basis` (ikke
+   `auto`) — med `auto` arver kolonnen inputens intrinsiske bredde (~20 tegn),
+   og siden den ikke skal krympe (`flex-shrink: 0`) ville feltet blitt altfor
+   bredt. Kolonnen viser bare kallekoden (`+47`), så 5.5rem gir rom til koden +
+   chevron-reservasjonen. `min-width: 0` fjerner flex-itemets default
+   `min-width: auto`, ellers kan det brede barnet (comboboxens input) presse
+   kolonnen forbi basisen — samme grunn som nummerfeltet under. Selve
+   nedtrekkslista har egen min-width (combobox.css) så landnavn er lesbare der. */
 :where(ix-phone-number-field, .ix-phone-number-field) [data-field='country'] {
-    flex: 0 1 11rem;
-    min-width: 8rem;
+    flex: 0 0 5.5rem;
+    min-width: 0;
 }
 
 /* Nummerfelt: tar resterende plass. min-width: 0 lar det krympe under sin
@@ -90,13 +96,6 @@
 :where(ix-phone-number-field, .ix-phone-number-field) [data-field='number'] {
     flex: 1 1 auto;
     min-width: 0;
-}
-
-/* Fra sm og opp har vi alltid god plass til begge feltene på én rad. */
-@media (min-width: 768px) {
-    :where(ix-phone-number-field, .ix-phone-number-field) [data-field='items'] {
-        flex-wrap: nowrap;
-    }
 }
 
 /* ── Disabled ────────────────────────────────────────────────────────────────
