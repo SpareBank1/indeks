@@ -64,6 +64,10 @@ declare global {
                 readonly?: boolean | '';
                 required?: boolean | '';
                 'data-state'?: 'error' | 'readonly' | 'disabled';
+                'data-locale'?: 'nb' | 'nn' | 'en';
+                'data-countries'?: string;
+                'data-country-code'?: string;
+                'data-default-country-code'?: string;
                 class?: string;
                 children?: unknown;
             };

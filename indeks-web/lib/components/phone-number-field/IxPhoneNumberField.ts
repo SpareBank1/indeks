@@ -1,18 +1,24 @@
+import { type CountryOption, getDefaultCountries, normalizeLocale } from './countries.js';
+
 /**
- * IxPhoneNumberField — ARIA-lim for telefonnummer med landvelger.
+ * IxPhoneNumberField — telefonnummer med landvelger.
  *
  * ## Designfilosofi
  *
- * Komponenten er en sammensatt gruppe: den binder sammen en eksisterende
- * <ix-combobox> (landkode) og et <ix-field>-tekstfelt (nummer) under én felles
- * label og én felles valideringsmelding. Den erstatter ingen native elementer
- * og reimplementerer verken combobox- eller formaterings-oppførsel — <ix-combobox>
- * og <ix-field> gjør fortsatt sin egen interne ARIA-kabling. Denne komponentens
- * eneste jobb er gruppe-semantikken rundt de to feltene.
+ * Komponenten er en sammensatt gruppe: den binder sammen en <ix-combobox>
+ * (landkode) og et <ix-field>-tekstfelt (nummer) under én felles label og én
+ * felles valideringsmelding. Den reimplementerer verken combobox- eller
+ * formaterings-oppførsel — <ix-combobox> og <ix-field> gjør fortsatt sin egen
+ * interne ARIA-kabling.
+ *
+ * HTML/WC er primærkilden: forfatteren skriver minimal markup (en TOM
+ * <ix-combobox> holder), og komponenten fyller landlista, setter forhåndsvalg
+ * og stamper nummer-feltets standardattributter. React er et tynt lag som kun
+ * videresender config som data-*-attributter.
  *
  * Speiler <ix-checkbox-group>/<ix-radio-group>-mønsteret, med disse forskjellene:
  * de to «kontrollene» er en <ix-combobox> og et nummer-<input> (ikke en liste av
- * like radio/checkbox), og disabled/readonly propageres til begge disse.
+ * like radio/checkbox), og disabled/readonly/required propageres til begge disse.
  *
  * ## Hva komponenten gjør
  *
@@ -31,11 +37,21 @@
  *    tomt → aria-invalid fjernes. aria-invalid settes kun på host — det er
  *    gruppens validitet som telles.
  *
- * 5. Propagerer disabled/readonly til begge kontrollene: attributt på
- *    <ix-combobox> og .disabled/.readOnly på nummer-<input>. Egne (per-kontroll)
- *    verdier bevares via en WeakMap slik at group-toggle ikke overstyrer dem.
+ * 5. Propagerer disabled/readonly/required til begge kontrollene. Egne
+ *    (per-kontroll) verdier bevares via WeakMaps slik at group-toggle ikke
+ *    overstyrer dem.
  *
- * 6. Lytter på childList slik at kontroller som React rendrer inn etter mount
+ * 6. Fyller landvelgeren: injiserer .ix-combobox__option-markup i den tomme
+ *    <ix-combobox>-lista fra en innebygd, lokaliserbar landliste (eller en
+ *    egendefinert `data-countries`-JSON), og setter aria-selected på
+ *    forhåndsvalgt land (data-country-code / data-default-country-code).
+ *
+ * 7. Stamper nummer-feltets standardattributter (type=tel, inputmode=numeric,
+ *    autocomplete=tel-national, data-format=phone) om de mangler.
+ *
+ * 8. Utleder data-state (error/readonly/disabled) for CSS.
+ *
+ * 9. Lytter på childList slik at kontroller som React rendrer inn etter mount
  *    (conditional rendering) fanges opp og re-wires.
  *
  * ## Ingen Shadow DOM
@@ -45,15 +61,20 @@
  * krysser en shadow-grense.
  *
  * @example
- * <ix-phone-number-field>
+ * <ix-phone-number-field data-locale="nb" data-default-country-code="47">
  *   <span data-field="legend">Mobilnummer</span>
  *   <span data-field="description">Vi bruker det kun til SMS-varsling</span>
  *   <div data-field="items">
- *     <ix-combobox data-field="country" data-no-hits-text="Ingen treff"> … </ix-combobox>
+ *     <ix-combobox data-field="country" class="ix-combobox" data-no-hits-text="Ingen treff">
+ *       <div class="ix-text-field">
+ *         <input class="ix-text-field__input" aria-label="Landkode" />
+ *         <button type="button" class="ix-combobox__toggle" aria-label="Vis land"></button>
+ *       </div>
+ *       <div class="ix-combobox__listbox" hidden></div>
+ *     </ix-combobox>
  *     <ix-field data-field="number">
  *       <div class="ix-text-field">
- *         <input type="tel" inputmode="numeric" autocomplete="tel-national"
- *                data-format="phone" aria-label="Telefonnummer" />
+ *         <input aria-label="Telefonnummer" />
  *       </div>
  *     </ix-field>
  *   </div>
@@ -67,13 +88,18 @@ export class IxPhoneNumberField extends HTMLElement {
     private _errorObserver: MutationObserver | null = null;
     private _childObserver: MutationObserver | null = null;
     private _instanceId = 0;
-    // Bevarer per-kontroll disabled/readonly fra forfatter slik at group-toggle
-    // ikke overstyrer den. WeakMap for å unngå memory leak ved DOM-fjerning.
+    // Re-entrancy-vakt rundt options-injisering: hindrer at vår egen
+    // childList-mutasjon (options-append) trigger en ny injisering.
+    private _filling = false;
+    // Bevarer per-kontroll disabled/readonly/required fra forfatter slik at
+    // group-toggle ikke overstyrer den. WeakMap for å unngå memory leak ved
+    // DOM-fjerning.
     private _ownDisabled: WeakMap<Element, boolean> = new WeakMap();
     private _ownReadonly: WeakMap<Element, boolean> = new WeakMap();
+    private _ownRequired: WeakMap<Element, boolean> = new WeakMap();
 
     static get observedAttributes(): string[] {
-        return ['disabled', 'readonly'];
+        return ['disabled', 'readonly', 'required', 'data-locale', 'data-countries', 'data-country-code', 'data-default-country-code'];
     }
 
     connectedCallback(): void {
@@ -92,6 +118,14 @@ export class IxPhoneNumberField extends HTMLElement {
         if (!this.isConnected) return;
         if (attr === 'disabled' || attr === 'readonly') {
             this._syncHostStateToControls();
+        } else if (attr === 'required') {
+            this._syncRequired();
+        } else if (attr === 'data-locale' || attr === 'data-countries') {
+            // Landlista endret seg → bygg våre injiserte options på nytt.
+            this._refillCombobox();
+        } else if (attr === 'data-country-code' || attr === 'data-default-country-code') {
+            // Kun forhåndsvalget endret seg → flytt aria-selected, ikke rebuild.
+            this._applyPreselection();
         }
     }
 
@@ -118,21 +152,35 @@ export class IxPhoneNumberField extends HTMLElement {
         // ── 3. aria-describedby (description + error) ─────────────────────────
         this._wireDescribedBy();
 
-        // ── 4. Propager disabled/readonly til kontrollene ─────────────────────
-        this._syncHostStateToControls();
+        // ── 4. Fyll landvelgeren + stamp nummer-defaults ──────────────────────
+        this._fillCombobox();
+        this._stampNumberDefaults();
 
-        // ── 5. Lytt på childList for felt/kontroller lagt til etter mount ─────
+        // ── 5. Propager disabled/readonly/required til kontrollene ────────────
+        this._syncHostStateToControls();
+        this._syncRequired();
+
+        // ── 6. data-state for CSS ─────────────────────────────────────────────
+        this._syncDataState();
+
+        // ── 7. Lytt på childList for felt/kontroller lagt til etter mount ─────
         // React kan rendre <ix-combobox>/<ix-field> ELLER [data-field]-spennene
         // (f.eks. betinget description) inn etter connectedCallback. Da må vi kjøre
-        // disabled/readonly-propageringen på nytt for nye kontroller, OG re-koble
-        // aria-describedby om description/error dukket opp eller forsvant.
+        // propageringen på nytt for nye kontroller, fylle en combobox som nettopp
+        // dukket opp, OG re-koble aria-describedby om description/error dukket opp
+        // eller forsvant. Ignorer mutasjoner vi selv forårsaker under injisering.
         this._childObserver = new MutationObserver((mutations) => {
+            if (this._filling) return;
+
             const hasControlChange = mutations.some((m) =>
                 Array.from(m.addedNodes).some((n) => this._containsControl(n)) ||
                 Array.from(m.removedNodes).some((n) => this._containsControl(n))
             );
             if (hasControlChange) {
+                this._fillCombobox();
+                this._stampNumberDefaults();
                 this._syncHostStateToControls();
+                this._syncRequired();
             }
 
             const hasGroupFieldChange = mutations.some((m) =>
@@ -238,6 +286,18 @@ export class IxPhoneNumberField extends HTMLElement {
         } else {
             this.removeAttribute('aria-invalid');
         }
+        this._syncDataState();
+    }
+
+    // Utleder data-state for CSS fra feiltekst + disabled/readonly på host.
+    // error > readonly > disabled (feil vinner alltid; ellers vises tilstanden).
+    // Speiler dataState-utledningen React tidligere gjorde i JSX.
+    private _syncDataState(): void {
+        const error = this.querySelector<HTMLElement>(':scope > [data-field="error"]');
+        const hasError = !!error?.textContent?.trim();
+        const state = hasError ? 'error' : this.hasAttribute('readonly') ? 'readonly' : this.hasAttribute('disabled') ? 'disabled' : null;
+        if (state) this.setAttribute('data-state', state);
+        else this.removeAttribute('data-state');
     }
 
     private _syncHostStateToControls(): void {
@@ -249,6 +309,20 @@ export class IxPhoneNumberField extends HTMLElement {
 
         const input = this._numberInput();
         if (input) this._applyState(input, isDisabled, isReadonly, 'property');
+
+        this._syncDataState();
+    }
+
+    // Propagerer required fra host til begge kontrollene. Til forskjell fra
+    // disabled/readonly (som <ix-combobox> observerer på host-nivå) må required
+    // settes på combobox-ens INDRE <input> — <ix-combobox> observerer ikke
+    // required, så en attributt på host-en ville vært en no-op.
+    private _syncRequired(): void {
+        const on = this.hasAttribute('required');
+        const comboboxInput = this._combobox()?.querySelector<HTMLInputElement>('input') ?? null;
+        if (comboboxInput) this._applyFlag(comboboxInput, 'required', on, this._ownRequired, 'property');
+        const numberInput = this._numberInput();
+        if (numberInput) this._applyFlag(numberInput, 'required', on, this._ownRequired, 'property');
     }
 
     // Setter/gjenoppretter disabled+readonly på én kontroll. `mode` skiller
@@ -263,25 +337,21 @@ export class IxPhoneNumberField extends HTMLElement {
 
     private _applyFlag(
         control: Element,
-        flag: 'disabled' | 'readonly',
+        flag: 'disabled' | 'readonly' | 'required',
         groupOn: boolean,
         ownStore: WeakMap<Element, boolean>,
         mode: 'attribute' | 'property'
     ): void {
+        // Mapper flagg → DOM-property (readonly-attributtet er `readOnly`-propertyen).
+        const prop = flag === 'readonly' ? 'readOnly' : flag;
         const read = (): boolean =>
-            mode === 'attribute'
-                ? control.hasAttribute(flag)
-                : flag === 'disabled'
-                  ? (control as HTMLInputElement).disabled
-                  : (control as HTMLInputElement).readOnly;
+            mode === 'attribute' ? control.hasAttribute(flag) : !!(control as unknown as Record<string, boolean>)[prop];
         const write = (value: boolean): void => {
             if (mode === 'attribute') {
                 if (value) control.setAttribute(flag, '');
                 else control.removeAttribute(flag);
-            } else if (flag === 'disabled') {
-                (control as HTMLInputElement).disabled = value;
             } else {
-                (control as HTMLInputElement).readOnly = value;
+                (control as unknown as Record<string, boolean>)[prop] = value;
             }
         };
 
@@ -291,6 +361,157 @@ export class IxPhoneNumberField extends HTMLElement {
         } else if (ownStore.has(control)) {
             write(ownStore.get(control)!);
             ownStore.delete(control);
+        }
+    }
+
+    // ── Landvelger: injisering av options ───────────────────────────────────────
+
+    // Fyller den tomme <ix-combobox>-lista med land-options. Idempotent: fyller
+    // KUN når lista er tom, så forfatter-leverte options (eller en allerede fylt
+    // liste) aldri overskrives. <ix-combobox> sin egen _optionObserver plukker opp
+    // de tillagte nodene og gir dem role/id; siden vi setter aria-selected direkte
+    // leser den også forhåndsvalget via _syncFromInitialSelection.
+    private _fillCombobox(): void {
+        if (this._filling) return;
+        const listbox = this._listbox();
+        if (!listbox) return;
+        if (listbox.querySelector('.ix-combobox__option')) return; // (B) idempotens
+
+        const options = this._resolveCountryOptions();
+        if (options.length === 0) return;
+
+        const preselect = this._preselectValue();
+
+        this._filling = true;
+        try {
+            const frag = document.createDocumentFragment();
+            for (const opt of options) {
+                frag.appendChild(this._buildOption(opt, opt.value === preselect));
+            }
+            // Marker at WC-en eier disse options, så en senere locale-endring kun
+            // rører våre egne (ikke forfatter-leverte) options.
+            listbox.setAttribute('data-ix-injected', '');
+            listbox.appendChild(frag);
+        } finally {
+            this._filling = false;
+        }
+    }
+
+    // Bygger lista på nytt ved locale/countries-endring — men bare hvis WC-en
+    // selv fylte den (data-ix-injected). Forfatter-leverte options røres aldri.
+    private _refillCombobox(): void {
+        const listbox = this._listbox();
+        if (!listbox || !listbox.hasAttribute('data-ix-injected')) {
+            // Enten ingen combobox ennå, eller forfatter eier options → prøv vanlig
+            // (idempotent) fyll i tilfelle lista fortsatt er tom.
+            this._fillCombobox();
+            return;
+        }
+        this._filling = true;
+        try {
+            for (const opt of Array.from(listbox.querySelectorAll('.ix-combobox__option'))) opt.remove();
+        } finally {
+            this._filling = false;
+        }
+        listbox.removeAttribute('data-ix-injected');
+        this._fillCombobox();
+    }
+
+    // Flytter aria-selected til option som matcher forhåndsvalget, uten å bygge
+    // lista på nytt. Single (APG): fjern attributtet på de uvalgte.
+    private _applyPreselection(): void {
+        const listbox = this._listbox();
+        if (!listbox) return;
+        const preselect = this._preselectValue();
+        this._filling = true;
+        try {
+            for (const opt of Array.from(listbox.querySelectorAll<HTMLElement>('.ix-combobox__option'))) {
+                if (preselect !== null && opt.getAttribute('data-value') === preselect) {
+                    opt.setAttribute('aria-selected', 'true');
+                } else {
+                    opt.removeAttribute('aria-selected');
+                }
+            }
+        } finally {
+            this._filling = false;
+        }
+    }
+
+    private _buildOption(opt: CountryOption, selected: boolean): HTMLElement {
+        const el = document.createElement('div');
+        el.className = 'ix-combobox__option';
+        el.setAttribute('data-value', opt.value);
+        // Single (APG): sett aria-selected="true" KUN på den valgte. <ix-combobox>
+        // fjerner attributtet på uvalgte og annonserer da ikke «ikke valgt».
+        if (selected) el.setAttribute('aria-selected', 'true');
+
+        const check = document.createElement('span');
+        check.className = 'ix-combobox__option-check';
+        check.setAttribute('aria-hidden', 'true');
+        el.appendChild(check);
+
+        const label = document.createElement('span');
+        label.className = 'ix-combobox__option-label';
+        label.textContent = opt.label;
+        el.appendChild(label);
+
+        if (opt.description) {
+            const desc = document.createElement('span');
+            desc.className = 'ix-combobox__option-description';
+            desc.textContent = opt.description;
+            el.appendChild(desc);
+        }
+        return el;
+    }
+
+    // Forhåndsvalgt landkode: kontrollert (data-country-code) har forrang over
+    // ukontrollert start (data-default-country-code).
+    private _preselectValue(): string | null {
+        return this.getAttribute('data-country-code') ?? this.getAttribute('data-default-country-code');
+    }
+
+    // Løser landlista: egendefinert data-countries (JSON) om gyldig, ellers den
+    // innebygde lista i valgt locale.
+    private _resolveCountryOptions(): CountryOption[] {
+        const raw = this.getAttribute('data-countries');
+        if (raw) {
+            try {
+                const parsed: unknown = JSON.parse(raw);
+                if (Array.isArray(parsed) && parsed.every((o) => o && typeof o.value === 'string' && typeof o.label === 'string')) {
+                    return parsed as CountryOption[];
+                }
+                if (import.meta.env.DEV) {
+                    console.warn('[ix-phone-number-field] data-countries er ikke en gyldig options-liste ({value,label}[]) — bruker innebygd landliste.');
+                }
+            } catch {
+                if (import.meta.env.DEV) {
+                    console.warn('[ix-phone-number-field] Kunne ikke parse data-countries som JSON — bruker innebygd landliste.');
+                }
+            }
+        }
+        return getDefaultCountries(normalizeLocale(this.getAttribute('data-locale')));
+    }
+
+    private _listbox(): HTMLElement | null {
+        return this._combobox()?.querySelector<HTMLElement>('.ix-combobox__listbox') ?? null;
+    }
+
+    // ── Nummer-felt: standardattributter ────────────────────────────────────────
+
+    // Stamper nummer-inputens standardattributter KUN når de mangler, så en
+    // forfatter som setter dem selv beholder sine verdier. data-format="phone"
+    // fanges av <ix-field> sin _stateObserver og gir norsk 8-sifret formatering.
+    private _stampNumberDefaults(): void {
+        const input = this._numberInput();
+        if (!input) return;
+        const defaults: Record<string, string> = {
+            type: 'tel',
+            inputmode: 'numeric',
+            autocomplete: 'tel-national',
+            'data-format': 'phone',
+        };
+        for (const [attr, value] of Object.entries(defaults)) {
+            if (!input.hasAttribute(attr)) input.setAttribute(attr, value);
         }
     }
 }

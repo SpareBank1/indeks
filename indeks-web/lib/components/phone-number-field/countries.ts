@@ -1,12 +1,17 @@
-import type { ComboboxOption } from '../combobox/Combobox';
-
 /**
- * Landvalg for PhoneNumberField. `value` er landkoden (uten `+`) og brukes som
- * verdi/`countryCode`. `label` er kalle-koden (`+47`) — den vises som valgt
- * verdi i input og er primærtekst. `description` er landnavnet (sekundær tekst
- * i lista, som skjermleseren leser etter kallekoden).
+ * Landvalg for <ix-phone-number-field>. `value` er landkoden (uten `+`) og
+ * brukes som verdi/`data-country-code`. `label` er kalle-koden (`+47`) — den
+ * vises som valgt verdi i input og er primærtekst. `description` er landnavnet
+ * (sekundær tekst i lista, som skjermleseren leser etter kallekoden).
  */
-export type CountryOption = ComboboxOption;
+export type CountryOption = {
+    /** Landkode uten `+` (option-value, f.eks. `"47"`). */
+    value: string;
+    /** Kalle-kode vist som primærtekst (`"+47"`). */
+    label: string;
+    /** Landnavn — sekundær beskrivelse i lista. */
+    description?: string;
+};
 
 /** Språk for den innebygde landlista. */
 export type CountryLocale = 'nb' | 'nn' | 'en';
@@ -21,18 +26,19 @@ type CountryEntry = {
 };
 
 // Kuratert landliste. IKKE en full ISO-liste — dekker Norden + de vanligste
-// landene norske tjenester møter. Konsumenten kan sende inn en egen `countries`-
-// liste for å utvide/begrense. Landnavn er bevisst hardkodet, oversatt data
-// (utvikler-godkjent unntak fra «ingen hardkodet tekst»): de er lokaliserbare
-// via `locale` og fullt overstyrbare via prop.
+// landene norske tjenester møter. Konsumenten kan sende inn en egen liste (via
+// `data-countries` på host / `countries`-prop i React) for å utvide/begrense.
+// Landnavn er bevisst hardkodet, oversatt data (utvikler-godkjent unntak fra
+// «ingen hardkodet tekst»): de er lokaliserbare via `locale` og fullt
+// overstyrbare.
 //
-// `nordic: true` løfter landet til toppen (etter Norge) uavhengig av alfabetisk
+// Norden (SE/DK/FI/IS) løftes til toppen (etter Norge) uavhengig av alfabetisk
 // sortering. Norge er alltid aller øverst.
 //
 // MERK: kallekoden (`code`) er også option-`value`, så den MÅ være unik i lista.
 // E.164 deler koder mellom land (+1 = hele NANP, +7 = RU/KZ …). Der to land
 // deler kode kan bare ett representeres i den kuraterte lista — vi tar med det
-// vanligste (USA for +1). Trenger konsumenten flere, sender de egen `countries`.
+// vanligste (USA for +1). Trenger konsumenten flere, sender de egen liste.
 const NORDIC = new Set(['SE', 'DK', 'FI', 'IS']);
 
 const COUNTRIES: CountryEntry[] = [
@@ -74,8 +80,7 @@ const COUNTRIES: CountryEntry[] = [
  * Bygger standard landliste for en gitt `locale`. Rekkefølge: Norge først,
  * deretter Norden (Sverige, Danmark, Finland, Island), deretter resten
  * alfabetisk etter lokalisert landnavn (locale-bevisst `Intl.Collator`, som
- * håndterer æ/ø/å). Konsumenten kan sende resultatet videre urørt eller mikse
- * med egne land.
+ * håndterer æ/ø/å).
  *
  * @default locale = 'nb'
  */
@@ -96,4 +101,9 @@ export function getDefaultCountries(locale: CountryLocale = 'nb'): CountryOption
     );
 
     return [...norway, ...nordics, ...rest].map(toOption);
+}
+
+/** Normaliserer en `data-locale`-attributt til en gyldig `CountryLocale`. */
+export function normalizeLocale(value: string | null): CountryLocale {
+    return value === 'nn' || value === 'en' ? value : 'nb';
 }

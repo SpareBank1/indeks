@@ -1,13 +1,13 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { PhoneNumberField } from './PhoneNumberField';
-import { getDefaultCountries } from './countries';
 
 // De indre custom-elementene (ix-field / ix-combobox / ix-phone-number-field)
 // registreres i testSetup.ts (som importerer @sb1/indeks-web) og kjører derfor sin
-// connectedCallback i jsdom — WC-ene er aktive i disse testene. Vi verifiserer likevel
-// primært den rendrede markupen og prop-gjennomføringen her; den fulle WC-oppførselen
-// dekkes av IxPhoneNumberField.test.ts.
+// connectedCallback i jsdom — WC-ene er aktive i disse testene. React er et tynt lag:
+// disse testene verifiserer at prop-ene videresendes riktig og at WC-en (som eier
+// landlista, forhåndsvalg, nummer-defaults og required-propagering) gjør jobben sin
+// gjennom React-markupen. Selve landdata-logikken dekkes av indeks-web sine tester.
 
 function renderField(props: Partial<React.ComponentProps<typeof PhoneNumberField>> = {}) {
     return render(
@@ -122,14 +122,15 @@ describe('PhoneNumberField', () => {
 
     it('propagerer required til BEGGE feltene (landvelger + nummerfelt)', () => {
         // required skal gjelde hele telefonnummeret — både at et land er valgt og
-        // at nummeret er fylt ut. Host-elementet får IKKE et required-attributt
-        // (role="group" leser det ikke); det er de to inputene som bærer det.
+        // at nummeret er fylt ut. React setter required på host-en som config;
+        // web-komponenten propagerer den videre til de to inputene (der den faktisk
+        // teller — role="group" har ingen egen required-semantikk).
         renderField({ required: true });
         const comboboxInput = document.querySelector('ix-combobox input');
         const numberInput = document.querySelector('[data-field="number"] input');
         expect(comboboxInput?.hasAttribute('required')).toBe(true);
         expect(numberInput?.hasAttribute('required')).toBe(true);
-        expect(document.querySelector('ix-phone-number-field')?.hasAttribute('required')).toBe(false);
+        expect(document.querySelector('ix-phone-number-field')?.hasAttribute('required')).toBe(true);
     });
 
     it('videresender egendefinert nummerFormatPattern', () => {
@@ -137,32 +138,31 @@ describe('PhoneNumberField', () => {
         const input = document.querySelector('[data-field="number"] input')!;
         expect(input.getAttribute('data-format-pattern')).toBe('000 000 000');
     });
-});
 
-describe('getDefaultCountries', () => {
-    it('legger Norge først, deretter Norden (sortert på landnavn)', () => {
-        const list = getDefaultCountries('nb');
-        // label = kallekode, description = landnavn. Sortering skjer på landnavn:
-        // Danmark, Finland, Island, Sverige → kallekodene i den rekkefølgen.
-        expect(list[0].label).toBe('+47');
-        expect(list.slice(1, 5).map((c) => c.label)).toEqual(['+45', '+358', '+354', '+46']);
-        expect(list.slice(1, 5).map((c) => c.description)).toEqual(['Danmark', 'Finland', 'Island', 'Sverige']);
+    it('videresender locale som data-locale til web-komponenten', () => {
+        renderField({ locale: 'en' });
+        expect(document.querySelector('ix-phone-number-field')?.getAttribute('data-locale')).toBe('en');
     });
 
-    it('bruker kallekoden som label og landnavnet som description', () => {
-        const list = getDefaultCountries('nb');
-        expect(list[0]).toMatchObject({ value: '47', label: '+47', description: 'Norge' });
+    it('serialiserer egendefinert countries til data-countries', () => {
+        const countries = [{ value: '47', label: '+47', description: 'Bare Norge' }];
+        renderField({ countries });
+        const raw = document.querySelector('ix-phone-number-field')?.getAttribute('data-countries');
+        expect(raw).toBe(JSON.stringify(countries));
     });
 
-    it('oversetter landnavn (description) per locale', () => {
-        expect(getDefaultCountries('nn')[0].description).toBe('Noreg');
-        expect(getDefaultCountries('en')[0].description).toBe('Norway');
-    });
-
-    it('har unike value (kallekode) — ingen kollisjon som gjør et land uvalgbart', () => {
-        // value = data-value i comboboxen; duplikat gjør ett land uvalgbart og
-        // gir React duplikat-key. E.164 deler koder (+1 NANP), så lista må kuratere.
-        const values = getDefaultCountries('nb').map((c) => c.value);
-        expect(new Set(values).size).toBe(values.length);
+    it('videresender countryCode/defaultCountryCode som data-*-country-code', () => {
+        const { rerender } = renderField({ defaultCountryCode: '45' });
+        expect(document.querySelector('ix-phone-number-field')?.getAttribute('data-default-country-code')).toBe('45');
+        rerender(
+            <PhoneNumberField
+                label="Mobilnummer"
+                countryLabel="Landkode"
+                numberLabel="Telefonnummer"
+                noHitsText="Ingen treff"
+                countryCode="46"
+            />
+        );
+        expect(document.querySelector('ix-phone-number-field')?.getAttribute('data-country-code')).toBe('46');
     });
 });

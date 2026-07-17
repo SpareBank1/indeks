@@ -77,14 +77,20 @@ export const EngelskLandliste: Story = {
 };
 
 /**
- * Rå HTML-anatomi: `<ix-phone-number-field>` binder sammen en eksisterende
- * `<ix-combobox>` (landkode) og et `<ix-field>`-tekstfelt (nummer) under én
- * felles legend og én felles valideringsmelding. Nummerfeltet slår på
- * `data-format="phone"` for norsk 8-sifret formatering.
+ * Rå HTML-anatomi: forfatteren skriver minimal markup — en **tom**
+ * `<ix-combobox>` (input + chevron + tom `.ix-combobox__listbox`) og et bart
+ * nummer-`<input>`. `<ix-phone-number-field>` fyller landlista fra `data-locale`,
+ * setter forhåndsvalg via `data-default-country-code`, stamper nummer-feltets
+ * standardattributter (`type=tel`, `inputmode`, `autocomplete`, `data-format=phone`),
+ * og legger på gruppe-ARIA rundt de to feltene.
  */
 export const HTML: Story = {
     render: () => (
-        <ix-phone-number-field class="ix-phone-number-field">
+        <ix-phone-number-field
+            class="ix-phone-number-field"
+            data-locale="nb"
+            data-default-country-code="47"
+        >
             <span data-field="legend" id="tlf-html-legend">
                 Mobilnummer
             </span>
@@ -99,27 +105,7 @@ export const HTML: Story = {
                             />
                             <button type="button" className="ix-combobox__toggle" aria-label="Vis landkoder" />
                         </div>
-                        <div className="ix-combobox__listbox" hidden>
-                            <div className="ix-combobox__option" data-value="47">
-                                <span className="ix-combobox__option-check" aria-hidden="true" />
-                                <span className="ix-combobox__option-label">+47</span>
-                                <span className="ix-combobox__option-description">Norge</span>
-                            </div>
-                            <div className="ix-combobox__option" data-value="46">
-                                <span className="ix-combobox__option-check" aria-hidden="true" />
-                                <span className="ix-combobox__option-label">+46</span>
-                                <span className="ix-combobox__option-description">Sverige</span>
-                            </div>
-                            <div className="ix-combobox__option" data-value="45">
-                                <span className="ix-combobox__option-check" aria-hidden="true" />
-                                <span className="ix-combobox__option-label">+45</span>
-                                <span className="ix-combobox__option-description">Danmark</span>
-                            </div>
-                        </div>
-                        <div className="ix-combobox__no-hits" role="status" hidden>
-                            Ingen treff
-                        </div>
-                        <select data-field="native" name="landkode" hidden />
+                        <div className="ix-combobox__listbox" hidden />
                     </ix-combobox>
                 </div>
                 <div data-field="number">
@@ -128,11 +114,7 @@ export const HTML: Story = {
                             <input
                                 id="tlf-html-number"
                                 className="ix-text-field__input"
-                                type="tel"
-                                inputMode="numeric"
-                                autoComplete="tel-national"
                                 aria-label="Telefonnummer"
-                                data-format="phone"
                                 name="tlf"
                             />
                         </div>
