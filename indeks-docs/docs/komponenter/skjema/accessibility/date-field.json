@@ -1,0 +1,96 @@
+{
+  "component": "DateField",
+  "lastReviewed": "2026-07-20",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv beskrivende labeltekst",
+      "details": "Labelen skal forklare hvilken dato feltet gjelder — ikke handlingen. \"Fødselsdato\" er bedre enn \"Velg dato\". Alle datofelter må ha en label, enten synlig (label) eller skjult (ariaLabel).",
+      "wcag": ["2.4.6", "3.3.2"]
+    },
+    {
+      "summary": "Oppgi forventet format som synlig tekst",
+      "details": "Feltet formaterer det brukeren taster til dd.mm.åååå, men formatet må også stå som synlig hjelpetekst i description (f.eks. \"dd.mm.åååå\"). Formateringen alene er ikke nok — den vises først når brukeren begynner å skrive. Ikke bruk placeholder til dette; den forsvinner idet brukeren skriver og har svak kontrast.",
+      "wcag": ["3.3.1", "3.3.2"]
+    },
+    {
+      "summary": "Send inn oversatt tekst for kalenderknappen",
+      "details": "openLabel (HTML: data-open-label) blir aria-label på kalenderknappen og leses av skjermlesere. Komponenten har ingen innebygd fallback — send inn riktig streng for språket ditt (bokmål, nynorsk, engelsk), f.eks. \"Åpne kalender\". Uten tekst varsler web-komponenten i utviklingsbygg.",
+      "wcag": ["3.1.1", "4.1.2"]
+    },
+    {
+      "summary": "Skriv gode feilmeldinger",
+      "details": "Feilmeldingen må si hva som er galt og hva brukeren skal gjøre. \"Datoen må være etter 01.01.2020\" — ikke \"Ugyldig dato\". Formateringen validerer ikke: feltet avviser aldri tastetrykk, så valider på blur/innsending med en egen errorMessage.",
+      "wcag": ["3.3.1", "3.3.3"]
+    },
+    {
+      "summary": "Bruk min/max for å avgrense datoer",
+      "details": "min og max (ISO, åååå-mm-dd) speiles til den native date-inputen og sperrer utenforliggende datoer i OS-kalenderen. Sperring av enkeltdager eller helger støttes ikke i denne fasen — håndter slik validering med en egen errorMessage på blur/innsending.",
+      "wcag": ["3.3.1"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Label kobles til den synlige inputen via for/id (ix-field). Hjelpetekst og feilmelding kobles via aria-describedby. Den genererte native date-inputen bærer ISO-verdien for form-innsending og er aria-hidden; kalenderknappen har role=button med tilgjengelig navn." },
+    { "id": "1.3.2", "notes": "Label, input, hjelpetekst og feilmelding følger naturlig rekkefølge i DOM." },
+    { "id": "1.3.3", "notes": "Feiltilstand bruker tekst, ramme og aria-invalid — ikke farge alene." },
+    { "id": "1.3.5", "notes": "Kan kombineres med autocomplete=\"bday\" på den synlige inputen for datofelt som ber om personlig informasjon." },
+    { "id": "1.4.1", "notes": "Feiltilstand kommuniseres med farge, rammeendring og tekstlig feilmelding. Kalenderikonet er en dekorativ CSS-maske med aria-hidden på knappen som har eget tekstnavn." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport uten horisontal scroll." },
+    { "id": "1.4.11", "notes": "Ramme, fokusindikator og kalenderikon oppfyller 3:1 kontrastkrav." },
+    { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
+    { "id": "2.1.1", "notes": "Å velge dato er fullt opererbart med tastatur ved å taste dd.mm.åååå i den synlige inputen — feltet formaterer fortløpende og avviser aldri tastetrykk. Den grafiske kalenderen er en peker-basert forbedring: både kalenderknappen og den overlagte native date-inputen er tabindex=-1, så de gir ingen ekstra tab-stopp og lager ingen kontroll som ikke virker for tastaturbrukere på nettlesere uten showPicker()." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab. Verken kalenderknappen eller den overlagte native inputen er i tab-rekkefølgen (begge tabindex=-1), så det finnes ingen tastaturfelle." },
+    { "id": "2.4.3", "notes": "Ett tab-stopp på den synlige inputfeltet, i naturlig DOM-rekkefølge. Kalenderknapp og native input er tabindex=-1." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator på inputfeltet (arves fra text-field). Kalenderknappen har også en focus-visible-regel, men nås kun med peker." },
+    { "id": "2.5.8", "notes": "Kalenderknappen oppfyller minimum 44x44px klikkflate; den overlagte native inputen dekker samme flate." },
+    { "id": "3.2.1", "notes": "Fokus alene trigger ingen kontekstendring — kalenderen åpnes først ved klikk/tap på kalenderknappen (eller den overlagte native inputen)." },
+    { "id": "3.2.2", "notes": "Tasting reformaterer til dd.mm.åååå med eksplisitt markørstyring, men bytter aldri fokus eller side. Kalendervalg fyller feltet uten uventet kontekstendring." },
+    { "id": "4.1.2", "notes": "Native tekst-input og native date-input med implisitte roller. Kalenderknappen er en native button med tilgjengelig navn fra openLabel/data-open-label. Tilstander (disabled, readonly, invalid) eksponeres korrekt." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Kalenderikonet er en dekorativ CSS-maske med aria-hidden; knappen har eget tekstnavn." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.4" },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.13", "reason": "Ingen hover-/fokus-utløst innhold som forsvinner; hjelpetekst er persistent." },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1", "reason": "Ingen bevegelsesbaserte gester — alt betjenes med enkle trykk/klikk." },
+    { "id": "2.5.2" },
+    { "id": "2.5.4", "reason": "Ingen bevegelsesaktivering." },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.1.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Feilmeldinger håndteres via ix-field sin aria-live=\"polite\" (dekket av 3.3.1). Ingen øvrige statusmeldinger." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til inputfeltet (kalenderknappen er ikke i tab-rekkefølgen)" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Sifre", "action": "Skriver datoen; feltet formaterer fortløpende til dd.mm.åååå" }
+  ],
+  "screenReader": [
+    "Ved fokus på feltet: \"[label], rediger tekst, [hjelpetekst]\"",
+    "Kalenderknappen er peker-basert (tabindex=-1) og skjules fra skjermleser på touch-enheter; datoen tastes i selve feltet",
+    "Ved feil: \"[label], ugyldig, rediger tekst, [feilmelding]\"",
+    "Med skjult label: \"[label], rediger tekst\" — labelen leses opp selv om den ikke er synlig"
+  ]
+}

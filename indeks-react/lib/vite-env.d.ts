@@ -3,6 +3,7 @@
 import type {
     IxCheckboxGroup,
     IxCombobox,
+    IxDateField,
     IxField,
     IxIcon,
     IxProgressBar,
@@ -58,6 +59,17 @@ declare module 'react' {
                 'data-remove-chip-label'?: string;
                 'data-chips-label'?: string;
                 'data-results-text'?: string;
+            };
+            'ix-date-field': React.DetailedHTMLProps<React.HTMLAttributes<IxDateField>, IxDateField> & {
+                name?: string;
+                class?: string;
+                min?: string;
+                max?: string;
+                value?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                'data-state'?: 'error' | 'readonly' | 'disabled';
+                'data-open-label'?: string;
             };
             'ix-progress-bar': React.DetailedHTMLProps<React.HTMLAttributes<IxProgressBar>, IxProgressBar> & {
                 value?: number;

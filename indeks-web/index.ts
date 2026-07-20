@@ -1,5 +1,6 @@
 import { IxCheckboxGroup } from './lib/components/checkbox-group/IxCheckboxGroup.js';
 import { IxCombobox } from './lib/components/combobox/IxCombobox.js';
+import { IxDateField } from './lib/components/date-field/IxDateField.js';
 import { IxField } from './lib/components/field/IxField.js';
 import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
@@ -15,6 +16,7 @@ customElements.define('ix-icon', IxIcon);
 customElements.define('ix-radio-group', IxRadioGroup);
 customElements.define('ix-checkbox-group', IxCheckboxGroup);
 customElements.define('ix-combobox', IxCombobox);
+customElements.define('ix-date-field', IxDateField);
 customElements.define('ix-progress-bar', IxProgressBar);
 customElements.define('ix-tabs', IxTabs);
 customElements.define('ix-tab-list', IxTabList);
@@ -30,6 +32,7 @@ export { IxIcon };
 export { IxRadioGroup };
 export { IxCheckboxGroup };
 export { IxCombobox };
+export { IxDateField };
 export { IxProgressBar };
 export type { ProgressBarState } from './lib/components/progress-bar/IxProgressBar.js';
 export { IxTabs, IxTabList, IxTab, IxTabPanel };
@@ -53,6 +56,7 @@ declare global {
         'ix-radio-group': IxRadioGroup;
         'ix-checkbox-group': IxCheckboxGroup;
         'ix-combobox': IxCombobox;
+        'ix-date-field': IxDateField;
         'ix-progress-bar': IxProgressBar;
         'ix-tabs': IxTabs;
         'ix-tab-list': IxTabList;
@@ -92,6 +96,17 @@ declare global {
                 'data-remove-chip-label'?: string;
                 'data-chips-label'?: string;
                 'data-results-text'?: string;
+                class?: string;
+                children?: unknown;
+            };
+            'ix-date-field': {
+                name?: string;
+                min?: string;
+                max?: string;
+                value?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                'data-open-label'?: string;
                 class?: string;
                 children?: unknown;
             };
