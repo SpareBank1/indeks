@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import type { IxCheckboxGroup, IxCombobox, IxField, IxIcon, IxRadioGroup } from '@sb1/indeks-web';
+import type { IxCheckboxGroup, IxCombobox, IxDateField, IxField, IxIcon, IxRadioGroup } from '@sb1/indeks-web';
 import type { IconName } from './ui/icons/icon-types';
 
 declare module 'react' {
@@ -47,6 +47,17 @@ declare module 'react' {
                 'data-remove-chip-label'?: string;
                 'data-chips-label'?: string;
                 'data-results-text'?: string;
+            };
+            'ix-date-field': React.DetailedHTMLProps<React.HTMLAttributes<IxDateField>, IxDateField> & {
+                name?: string;
+                class?: string;
+                min?: string;
+                max?: string;
+                value?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                'data-state'?: 'error' | 'readonly' | 'disabled';
+                'data-open-label'?: string;
             };
             'ix-stack': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
                 class?: string;
