@@ -43,10 +43,8 @@
     margin-block-start: calc(var(--ix-spacing-xs) - var(--ix-spacing-2xs));
 }
 
-:where(ix-field, .ix-field) [data-field='error'] {
-    font-size: var(--ix-font-size-md);
-    color: var(--ix-color-foreground-danger-default);
-}
+/* Selve feilmeldingens typografi, farge, ikon-layout og :empty-skjul ligger nå
+   i form/validation-message.css (delt av alle feltkomponenter). */
 
 :where(ix-field, .ix-field) [data-field='char-count'] {
     font-size: var(--ix-font-size-sm);

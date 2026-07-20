@@ -1,0 +1,40 @@
+/* ── ValidationMessage — feilmelding under et felt eller en feltgruppe ────────
+ *
+ * Feilmeldingen skrives som et element med `data-field="error"` (React:
+ * <ValidationMessage>). Elementet ligger alltid i DOM — tomt betyr «ingen feil»
+ * — og skjules visuelt med :empty. <ix-field>/<ix-radio-group>/<ix-checkbox-group>
+ * kobler det til inputen via aria-describedby og setter aria-live="polite".
+ *
+ * Ikonet er en badge (<ix-icon data-badge>): en glyf på en farget sirkel. Den
+ * gjenbruker badge-primitiven i icons/icon.css. `data-status="danger"` kobler
+ * --ix-color-status-* (se @sb1/indeks-utils/css/status-colors.css) slik at
+ * sirkelen får danger-fyll automatisk. Badgen krympes fra standard 32px til en
+ * inline-vennlig størrelse som flukter med teksten (--ix-font-size-md ≈ 16px).
+ *
+ * Denne komponenten har ingen egen web component — kun klassen/attributtet
+ * styles. Rotselektoren treffer derfor [data-field="error"] direkte (satt av
+ * forfatter eller React-wrapperen), ikke en <ix-validation-message>-tag.
+ */
+
+:where([data-field='error']) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ix-spacing-2xs);
+    font-size: var(--ix-font-size-md);
+    line-height: 150%;
+    color: var(--ix-color-foreground-danger-default);
+}
+
+/* Tom melding tar ingen plass — elementet blir stående i DOM for aria-live. */
+/* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+:where([data-field='error']):empty {
+    display: none;
+}
+
+/* Badge-ikonet: krymp sirkel + glyf til inline-størrelse. `data-status="danger"`
+   på selve ikonet fyller sirkelen med danger-farge (icon.css badge-regel). */
+:where([data-field='error'] ix-icon[data-badge]) {
+    flex: 0 0 auto;
+    --ix-icon-badge-size: var(--ix-font-size-lg);
+    --ix-icon-badge-glyph-size: var(--ix-font-size-sm);
+}
