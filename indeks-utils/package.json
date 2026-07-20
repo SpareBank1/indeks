@@ -52,10 +52,10 @@
     "devDependencies": {
         "autoprefixer": "^10.5.2",
         "cssnano": "^8.0.2",
-        "postcss": "^8.5.16",
+        "postcss": "^8.5.18",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^16.1.1",
         "postcss-preset-env": "^11.3.2",
-        "tsx": "^4.23.0"
+        "tsx": "^4.23.1"
     }
 }
