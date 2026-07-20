@@ -54,17 +54,17 @@
     "author": "",
     "license": "MIT",
     "devDependencies": {
-        "@figma/rest-api-spec": "^0.40.0",
+        "@figma/rest-api-spec": "^0.41.0",
         "@types/node": "^25.9.4",
         "autoprefixer": "^10.5.2",
-        "colorjs.io": "^0.6.1",
+        "colorjs.io": "^0.7.0",
         "cssnano": "^8.0.2",
         "dotenv": "^17.4.2",
-        "postcss": "^8.5.16",
+        "postcss": "^8.5.18",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^16.1.1",
         "postcss-preset-env": "^11.3.2",
-        "tsx": "^4.23.0",
-        "vitest": "^4.1.9"
+        "tsx": "^4.23.1",
+        "vitest": "^4.1.10"
     }
 }
