@@ -1,6 +1,16 @@
 import { afterEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
-import { IxCheckboxGroup, IxCombobox, IxIcon, IxProgressBar, IxRadioGroup } from '@sb1/indeks-web';
+import {
+    IxCheckboxGroup,
+    IxCombobox,
+    IxIcon,
+    IxProgressBar,
+    IxRadioGroup,
+    IxTabs,
+    IxTabList,
+    IxTab,
+    IxTabPanel,
+} from '@sb1/indeks-web';
 
 // React-laget er tynt — flere komponenter avhenger av at WC-en kjører sin
 // connectedCallback for å sette ARIA-koblinger, generere IDer og synkronisere
@@ -19,6 +29,12 @@ if (!customElements.get('ix-icon')) {
 }
 if (!customElements.get('ix-progress-bar')) {
     customElements.define('ix-progress-bar', IxProgressBar);
+}
+if (!customElements.get('ix-tabs')) {
+    customElements.define('ix-tabs', IxTabs);
+    customElements.define('ix-tab-list', IxTabList);
+    customElements.define('ix-tab', IxTab);
+    customElements.define('ix-tab-panel', IxTabPanel);
 }
 
 afterEach(() => {

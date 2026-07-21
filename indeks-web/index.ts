@@ -5,6 +5,7 @@ import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
 import { IxProgressBar } from './lib/components/progress-bar/IxProgressBar.js';
 import { IxRadioGroup } from './lib/components/radio-group/IxRadioGroup.js';
+import { IxTabs, IxTabList, IxTab, IxTabPanel } from './lib/components/tabs/IxTabs.js';
 import './lib/modal/modal.js';
 import './lib/tooltip/tooltip.js';
 
@@ -14,6 +15,10 @@ customElements.define('ix-radio-group', IxRadioGroup);
 customElements.define('ix-checkbox-group', IxCheckboxGroup);
 customElements.define('ix-combobox', IxCombobox);
 customElements.define('ix-progress-bar', IxProgressBar);
+customElements.define('ix-tabs', IxTabs);
+customElements.define('ix-tab-list', IxTabList);
+customElements.define('ix-tab', IxTab);
+customElements.define('ix-tab-panel', IxTabPanel);
 
 export { IxField };
 export { IxIcon };
@@ -21,6 +26,7 @@ export { IxRadioGroup };
 export { IxCheckboxGroup };
 export { IxCombobox };
 export { IxProgressBar };
+export { IxTabs, IxTabList, IxTab, IxTabPanel };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
 
@@ -35,6 +41,10 @@ declare global {
         'ix-checkbox-group': IxCheckboxGroup;
         'ix-combobox': IxCombobox;
         'ix-progress-bar': IxProgressBar;
+        'ix-tabs': IxTabs;
+        'ix-tab-list': IxTabList;
+        'ix-tab': IxTab;
+        'ix-tab-panel': IxTabPanel;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -89,6 +99,26 @@ declare global {
                 'data-value-text'?: string;
                 class?: string;
                 style?: string | Record<string, string>;
+            };
+            'ix-tabs': { [key: string]: unknown; class?: string; children?: unknown };
+            'ix-tab-list': { [key: string]: unknown; class?: string; children?: unknown };
+            'ix-tab': {
+                [key: string]: unknown;
+                id?: string;
+                'aria-selected'?: 'true' | 'false';
+                'aria-controls'?: string;
+                'aria-disabled'?: 'true' | 'false';
+                'aria-label'?: string;
+                class?: string;
+                children?: unknown;
+            };
+            'ix-tab-panel': {
+                [key: string]: unknown;
+                id?: string;
+                hidden?: boolean;
+                'aria-labelledby'?: string;
+                class?: string;
+                children?: unknown;
             };
         }
     }

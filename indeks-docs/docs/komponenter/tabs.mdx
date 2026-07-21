@@ -1,0 +1,355 @@
+---
+title: Tabs
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/tabs.json';
+
+# Tabs
+
+Faner lar brukeren veksle mellom likeverdige innholdsseksjoner på samme side — uten å navigere til en ny side. Bare én seksjon vises om gangen, og en horisontal fane-liste styrer hvilken. Fanene supplerer SegmentedControl, som brukes til gjensidig utelukkende tilstander og filtre.
+
+## Egnet til
+
+- Å dele opp relatert innhold i seksjoner der brukeren ser én om gangen
+- Detaljvisninger med flere fasetter (oversikt, transaksjoner, innstillinger)
+- Å redusere skrolling ved å samle innhold bak likeverdige valg
+
+## Uegnet til
+
+- Sekvensielle steg brukeren skal gjennom i rekkefølge — bruk en stegindikator
+- Navigasjon mellom sider — bruk lenker eller meny
+- Gjensidig utelukkende filtre eller på/av-tilstander — bruk SegmentedControl
+- Innhold brukeren må se samtidig — vis det åpent ved siden av hverandre
+
+## Kom i gang
+
+Marker start-fanen med `defaultValue` (i HTML: `aria-selected="true"` på fanen og `hidden` på de skjulte panelene). Hver fane kobles til sitt panel via samme `value` — i HTML med et delt `data-value` på fanen og panelet. Koblingen følger `data-value`, ikke rekkefølgen, så fanene og panelene kan stå i vilkårlig orden.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-tabs class="ix-tabs">
+  <ix-tab-list class="ix-tabs__list" aria-label="Kontoinformasjon">
+    <ix-tab class="ix-tabs__tab" data-value="oversikt" aria-selected="true">Oversikt</ix-tab>
+    <ix-tab class="ix-tabs__tab" data-value="transaksjoner" aria-selected="false">Transaksjoner</ix-tab>
+    <ix-tab class="ix-tabs__tab" data-value="innstillinger" aria-selected="false">Innstillinger</ix-tab>
+  </ix-tab-list>
+  <ix-tab-panel class="ix-tabs__panel" data-value="oversikt">
+    <p>Saldo og nøkkeltall for kontoen.</p>
+  </ix-tab-panel>
+  <ix-tab-panel class="ix-tabs__panel" data-value="transaksjoner" hidden>
+    <p>De siste inn- og utbetalingene.</p>
+  </ix-tab-panel>
+  <ix-tab-panel class="ix-tabs__panel" data-value="innstillinger" hidden>
+    <p>Navn, varsler og kontoinnstillinger.</p>
+  </ix-tab-panel>
+</ix-tabs>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Tabs defaultValue="oversikt">
+  <Tabs.List ariaLabel="Kontoinformasjon">
+    <Tabs.Tab value="oversikt">Oversikt</Tabs.Tab>
+    <Tabs.Tab value="transaksjoner">Transaksjoner</Tabs.Tab>
+    <Tabs.Tab value="innstillinger">Innstillinger</Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="oversikt">
+    <p>Saldo og nøkkeltall for kontoen.</p>
+  </Tabs.Panel>
+  <Tabs.Panel value="transaksjoner">
+    <p>De siste inn- og utbetalingene.</p>
+  </Tabs.Panel>
+  <Tabs.Panel value="innstillinger">
+    <p>Navn, varsler og kontoinnstillinger.</p>
+  </Tabs.Panel>
+</Tabs>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Med ikon
+
+En fane kan ha et ikon foran teksten. Ikonet følger samme tilstandsfarge som teksten (aktiv/passiv) og er kun støtte — teksten er hovedbæreren.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-tabs class="ix-tabs">
+  <ix-tab-list class="ix-tabs__list" aria-label="Bankoversikt">
+    <ix-tab class="ix-tabs__tab" data-value="konto" aria-selected="true">
+      <ix-icon name="account_balance" aria-hidden="true"></ix-icon> Konto
+    </ix-tab>
+    <ix-tab class="ix-tabs__tab" data-value="betalinger" aria-selected="false">
+      <ix-icon name="payments" aria-hidden="true"></ix-icon> Betalinger
+    </ix-tab>
+    <ix-tab class="ix-tabs__tab" data-value="sparing" aria-selected="false">
+      <ix-icon name="savings" aria-hidden="true"></ix-icon> Sparing
+    </ix-tab>
+  </ix-tab-list>
+  <ix-tab-panel class="ix-tabs__panel" data-value="konto">
+    <p>Oversikt over kontoene dine.</p>
+  </ix-tab-panel>
+  <ix-tab-panel class="ix-tabs__panel" data-value="betalinger" hidden>
+    <p>Kommende og utførte betalinger.</p>
+  </ix-tab-panel>
+  <ix-tab-panel class="ix-tabs__panel" data-value="sparing" hidden>
+    <p>Sparemål og renter.</p>
+  </ix-tab-panel>
+</ix-tabs>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Tabs defaultValue="konto">
+  <Tabs.List ariaLabel="Bankoversikt">
+    <Tabs.Tab value="konto">
+      <Icon name="account_balance" /> Konto
+    </Tabs.Tab>
+    <Tabs.Tab value="betalinger">
+      <Icon name="payments" /> Betalinger
+    </Tabs.Tab>
+    <Tabs.Tab value="sparing">
+      <Icon name="savings" /> Sparing
+    </Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="konto">
+    <p>Oversikt over kontoene dine.</p>
+  </Tabs.Panel>
+  <Tabs.Panel value="betalinger">
+    <p>Kommende og utførte betalinger.</p>
+  </Tabs.Panel>
+  <Tabs.Panel value="sparing">
+    <p>Sparemål og renter.</p>
+  </Tabs.Panel>
+</Tabs>
+```
+
+</TabItem>
+</Tabs>
+
+### Kun ikon
+
+Faner uten synlig tekst må ha et tilgjengelig navn (på brukerens språk) — ellers får skjermlesere ingen fane-etikett. I HTML settes det med `aria-label` på fanen; i React med `ariaLabel`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-tabs class="ix-tabs">
+  <ix-tab-list class="ix-tabs__list" aria-label="Navigasjon">
+    <ix-tab class="ix-tabs__tab" data-value="hjem" aria-selected="true" aria-label="Hjem">
+      <ix-icon name="home" aria-hidden="true"></ix-icon>
+    </ix-tab>
+    <ix-tab class="ix-tabs__tab" data-value="profil" aria-selected="false" aria-label="Profil">
+      <ix-icon name="person" aria-hidden="true"></ix-icon>
+    </ix-tab>
+    <ix-tab class="ix-tabs__tab" data-value="innstillinger" aria-selected="false" aria-label="Innstillinger">
+      <ix-icon name="settings" aria-hidden="true"></ix-icon>
+    </ix-tab>
+  </ix-tab-list>
+  <ix-tab-panel class="ix-tabs__panel" data-value="hjem">
+    <p>Hjem-innhold.</p>
+  </ix-tab-panel>
+  <ix-tab-panel class="ix-tabs__panel" data-value="profil" hidden>
+    <p>Profil-innhold.</p>
+  </ix-tab-panel>
+  <ix-tab-panel class="ix-tabs__panel" data-value="innstillinger" hidden>
+    <p>Innstillinger-innhold.</p>
+  </ix-tab-panel>
+</ix-tabs>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Tabs defaultValue="hjem">
+  <Tabs.List ariaLabel="Navigasjon">
+    <Tabs.Tab value="hjem" ariaLabel="Hjem">
+      <Icon name="home" />
+    </Tabs.Tab>
+    <Tabs.Tab value="profil" ariaLabel="Profil">
+      <Icon name="person" />
+    </Tabs.Tab>
+    <Tabs.Tab value="innstillinger" ariaLabel="Innstillinger">
+      <Icon name="settings" />
+    </Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="hjem">
+    <p>Hjem-innhold.</p>
+  </Tabs.Panel>
+  <Tabs.Panel value="profil">
+    <p>Profil-innhold.</p>
+  </Tabs.Panel>
+  <Tabs.Panel value="innstillinger">
+    <p>Innstillinger-innhold.</p>
+  </Tabs.Panel>
+</Tabs>
+```
+
+</TabItem>
+</Tabs>
+
+### Deaktivert fane
+
+En deaktivert fane vises dempet, kan ikke aktiveres og hoppes over ved piltast-navigasjon. I HTML settes `aria-disabled="true"` (eller attributtet `disabled`) på fanen; i React sender du `disabled`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-tabs class="ix-tabs">
+  <ix-tab-list class="ix-tabs__list" aria-label="Eksempel med deaktivert fane">
+    <ix-tab class="ix-tabs__tab" data-value="aktiv" aria-selected="true">Aktiv</ix-tab>
+    <ix-tab class="ix-tabs__tab" data-value="deaktivert" aria-selected="false" aria-disabled="true">Deaktivert</ix-tab>
+    <ix-tab class="ix-tabs__tab" data-value="ledig" aria-selected="false">Ledig</ix-tab>
+  </ix-tab-list>
+  <ix-tab-panel class="ix-tabs__panel" data-value="aktiv">
+    <p>Innhold for den aktive fanen.</p>
+  </ix-tab-panel>
+  <ix-tab-panel class="ix-tabs__panel" data-value="deaktivert" hidden>
+    <p>Dette panelet er ikke tilgjengelig.</p>
+  </ix-tab-panel>
+  <ix-tab-panel class="ix-tabs__panel" data-value="ledig" hidden>
+    <p>Innhold for den ledige fanen.</p>
+  </ix-tab-panel>
+</ix-tabs>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Tabs defaultValue="aktiv">
+  <Tabs.List ariaLabel="Eksempel med deaktivert fane">
+    <Tabs.Tab value="aktiv">Aktiv</Tabs.Tab>
+    <Tabs.Tab value="deaktivert" disabled>Deaktivert</Tabs.Tab>
+    <Tabs.Tab value="ledig">Ledig</Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panel value="aktiv">
+    <p>Innhold for den aktive fanen.</p>
+  </Tabs.Panel>
+  <Tabs.Panel value="deaktivert">
+    <p>Dette panelet er ikke tilgjengelig.</p>
+  </Tabs.Panel>
+  <Tabs.Panel value="ledig">
+    <p>Innhold for den ledige fanen.</p>
+  </Tabs.Panel>
+</Tabs>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Innhold og formulering
+
+- Skriv korte, beskrivende fane-etiketter som gir mening lest alene.
+- Start med det viktigste ordet — lista skal være lett å skanne.
+- Bruk konsistent nivå på etikettene (f.eks. alle substantiv) i samme fane-sett.
+
+### Manuell aktivering
+
+Å flytte fokus mellom faner med piltast bytter *ikke* panel automatisk — brukeren aktiverer den fokuserte fanen med Enter eller Mellomrom (eller klikk). Det gir forutsigbar oppførsel og unngår at skjermleserbrukere hopper gjennom flere paneler ved ren navigasjon.
+
+### Mange faner
+
+Ved plassmangel scroller fane-lista horisontalt i én rad — rekkefølgen bevares og siden får ingen horisontal scroll. Har du svært mange seksjoner, vurder om innholdet heller bør deles på flere sider.
+
+## Kontrollert og ukontrollert
+
+I React kan `Tabs` være ukontrollert (`defaultValue` — web componenten eier videre tilstand) eller kontrollert (`value` + `onChange` — React eier tilstanden). Bruk kontrollert modus når valgt fane må styres utenfra, f.eks. synkronisert med URL.
+
+```tsx
+function Konto() {
+  const [fane, setFane] = useState('oversikt');
+  return (
+    <Tabs value={fane} onChange={setFane}>
+      <Tabs.List ariaLabel="Kontoinformasjon">
+        <Tabs.Tab value="oversikt">Oversikt</Tabs.Tab>
+        <Tabs.Tab value="transaksjoner">Transaksjoner</Tabs.Tab>
+      </Tabs.List>
+      <Tabs.Panel value="oversikt">…</Tabs.Panel>
+      <Tabs.Panel value="transaksjoner">…</Tabs.Panel>
+    </Tabs>
+  );
+}
+```
+
+## Props
+
+Props-tabellen genereres automatisk fra Storybook (`tags: ['autodocs']`).
+
+## Tilpasning med CSS
+
+Trenger du `ix-tabs`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte. Web componenten `<ix-tabs>` kobler roller, `aria-controls`, roving `tabindex`, tastatur og panel-visning ved mount; du skriver semantisk markup, gir hver fane og sitt panel et delt `data-value`, og markerer start-fanen med `aria-selected="true"` og de skjulte panelene med `hidden`.
+
+### Tilgjengelige klasser og selektorer
+
+| Element/tilstand | Selektor / attributt |
+|------------------|----------------------|
+| Rot | `.ix-tabs` på `<ix-tabs>` |
+| Fane-liste (tablist) | `.ix-tabs__list` på `<ix-tab-list>` |
+| Enkelt-fane | `.ix-tabs__tab` på `<ix-tab>` |
+| Fane↔panel-kobling | delt `data-value` på `<ix-tab>` og `<ix-tab-panel>` |
+| Aktiv fane | `[aria-selected="true"]` på fanen |
+| Deaktivert fane | `[aria-disabled="true"]` (eller `:disabled`) på fanen |
+| Innholdspanel | `.ix-tabs__panel` på `<ix-tab-panel>` |
+| Skjult panel | `[hidden]` på panelet (native) |
+
+Understreken er synlig i alle tilstander og markerer tilstand med farge: passiv bruker `--ix-color-border-main-default`, hover `--ix-color-border-main-hover` og aktiv `--ix-color-fill-main-default` (brand-farge). Passiv fane-tekst bruker `--ix-color-foreground-main-subtle`, aktiv/hover-tekst `--ix-color-foreground-main-default`. Overstyr disse tokenene for å tilpasse fargene.
+
+### Eksempel: ren HTML
+
+```html
+<ix-tabs class="ix-tabs">
+  <ix-tab-list class="ix-tabs__list" aria-label="Kontoinformasjon">
+    <ix-tab class="ix-tabs__tab" data-value="oversikt" aria-selected="true">Oversikt</ix-tab>
+    <ix-tab class="ix-tabs__tab" data-value="detaljer" aria-selected="false">Detaljer</ix-tab>
+  </ix-tab-list>
+  <ix-tab-panel class="ix-tabs__panel" data-value="oversikt">
+    <p>Innhold for oversikt.</p>
+  </ix-tab-panel>
+  <ix-tab-panel class="ix-tabs__panel" data-value="detaljer" hidden>
+    <p>Innhold for detaljer.</p>
+  </ix-tab-panel>
+</ix-tabs>
+```
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Gi kun-ikon-faner et `ariaLabel`** — en fane uten synlig tekst trenger et tilgjengelig navn på brukerens språk. Komponenten har ingen hardkodet fallback.
+- **Merk fane-settet med `ariaLabel`** på `Tabs.List` når flere uavhengige fane-sett finnes på samme side, så skjermleserbrukere kan skille dem.
+- **Skriv korte, beskrivende etiketter** som beskriver innholdet i tilhørende panel og gir mening lest alene.
+- **Bruk faner til likeverdig innhold** — ikke til sekvensielle steg (bruk stegindikator) eller navigasjon mellom sider (bruk lenker).
+
+### Hva komponenten gjør automatisk
+
+- **Roller og relasjoner** — web componenten setter `role="tablist"/"tab"/"tabpanel"`, `aria-selected`, `aria-controls` (fane → panel) og `aria-labelledby` (panel → fane) ved mount. Ingen ekstra ARIA er nødvendig.
+- **Tastaturnavigasjon (manuell aktivering)** — roving `tabindex` gir én tab-stopp; pil venstre/høyre flytter fokus, Home/End går til første/siste, deaktiverte faner hoppes over, og Enter/Mellomrom aktiverer.
+- **Tilstand annonseres** — aktiv fane formidles av `aria-selected`, ikke av farge alene; deaktiverte faner markeres med `aria-disabled`.
+- **Fokusindikator** — tydelig fokusring på fane og panel (`:focus-visible`), med offset innover så den ikke klippes av scroll-containeren.
+- **Reflow og touch-mål** — fane-lista scroller horisontalt ved plassmangel (siden får ingen horisontal scroll ned til 320 px), og hver fane har min. 44×44 px touch-mål.
+- **Redusert bevegelse** — indikator-overgangen respekterer `prefers-reduced-motion: reduce`.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />

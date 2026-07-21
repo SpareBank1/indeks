@@ -1,0 +1,135 @@
+/* Tabs — veksle mellom likeverdige innholdsseksjoner på samme side.
+ *
+ * Tabs organiserer relatert innhold i seksjoner der kun én er synlig om gangen.
+ * En horisontal liste med tabs (role="tablist") styrer hvilket panel
+ * (role="tabpanel") som vises. Aktiv tab markeres med en understrek-indikator.
+ *
+ * All ARIA-kabling, tastaturnavigasjon og panel-visning håndteres av web
+ * componenten <ix-tabs> (ARIA-lim, light DOM). CSS-en styler både tag og klasse
+ * slik at ren HTML-bruk uten React også virker.
+ *
+ * Struktur:
+ *   <ix-tabs class="ix-tabs">
+ *     <ix-tab-list class="ix-tabs__list">
+ *       <ix-tab class="ix-tabs__tab">Oversikt</ix-tab>
+ *       <ix-tab class="ix-tabs__tab">Detaljer</ix-tab>
+ *     </ix-tab-list>
+ *     <ix-tab-panel class="ix-tabs__panel">…</ix-tab-panel>
+ *     <ix-tab-panel class="ix-tabs__panel" hidden>…</ix-tab-panel>
+ *   </ix-tabs>
+ */
+
+/* Rot: vertikal stabling av tablist + paneler. */
+:where(ix-tabs, .ix-tabs) {
+    display: block;
+    color: var(--ix-color-foreground-main-default);
+}
+
+/* Tablist: horisontal rad med tabs. Scroller horisontalt ved overflow (én rad,
+ * bevart rekkefølge) — WCAG 1.4.10 ivaretas ved at kun lista scroller, ikke
+ * hele siden. Hver fane bærer sin egen understrek-indikator (se under), så
+ * lista har ingen gjennomgående skillelinje. */
+:where(ix-tab-list, .ix-tabs__list) {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    /* Skjul rullefeltet diskret, men behold scrollbarhet (tastatur/touch/trackpad). */
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    scrollbar-width: none;
+}
+
+:where(ix-tab-list, .ix-tabs__list)::-webkit-scrollbar {
+    display: none;
+}
+
+/* Enkelt-tab: knappe-lignende klikkflate med en understrek-indikator som er
+ * synlig i ALLE tilstander — den bytter kun farge (passiv grå → hover mørkere
+ * grå → valgt blå). Ikon + tekst ligger på samme rad (flex-rad), så samme regel
+ * dekker alle tre variantene (kun tekst / ikon + tekst / kun ikon). */
+:where(ix-tab, .ix-tabs__tab) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ix-spacing-sm);
+    flex: 0 0 auto;
+
+    /* Touch-mål min. 44×44 px (WCAG 2.5.8) — sikres av min-height/min-width + padding. */
+    min-height: 44px;
+    min-width: 44px;
+    box-sizing: border-box;
+    padding: var(--ix-spacing-sm) var(--ix-spacing-md);
+
+    font-size: var(--ix-font-size-md);
+    font-weight: var(--ix-font-weight-medium);
+    /* Passiv tab har lavere visuell vekt enn aktiv. */
+    color: var(--ix-color-foreground-main-subtle);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+
+    /* Understrek-indikator: alltid synlig. Passiv er en tynn grå linje;
+     * hover/valgt blir tykkere (og fargede). For at etiketten ikke skal hoppe
+     * når linja vokser fra 1→2 px, kompenserer vi med 1 px ekstra
+     * padding-bottom i passiv tilstand — nulles ut igjen ved hover/valgt. */
+    border-bottom: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    padding-bottom: calc(var(--ix-spacing-sm) + var(--ix-border-width-default));
+
+    /* --ix-transition-all blir automatisk `none` ved prefers-reduced-motion. */
+    transition: var(--ix-transition-all);
+}
+
+/* Hover — tydeligere tekst + tykkere, mørkere understrek. */
+:where(ix-tab:hover, .ix-tabs__tab:hover) {
+    color: var(--ix-color-foreground-main-default);
+    border-bottom-width: var(--ix-border-width-bold);
+    border-bottom-color: var(--ix-color-border-main-hover);
+    padding-bottom: var(--ix-spacing-sm);
+}
+
+/* Fokus — synlig ring. Offset innover så den ikke klippes av scroll-containeren. */
+:where(ix-tab:focus-visible, .ix-tabs__tab:focus-visible) {
+    outline: var(--ix-outline-default);
+    outline-offset: calc(var(--ix-outline-offset-default) * -1);
+    border-radius: var(--ix-border-radius-sm);
+}
+
+/* Aktiv/valgt — full tekstfarge + tykkere understrek i brand-farge (blå). */
+:where(ix-tab[aria-selected='true'], .ix-tabs__tab[aria-selected='true']) {
+    color: var(--ix-color-foreground-main-default);
+    border-bottom-width: var(--ix-border-width-bold);
+    border-bottom-color: var(--ix-color-fill-main-default);
+    padding-bottom: var(--ix-spacing-sm);
+}
+
+/* Disabled — dempet og ikke-klikkbar. Dekker både aria-disabled (WC) og :disabled
+ * (native <button>). */
+:where(
+    ix-tab[aria-disabled='true'],
+    .ix-tabs__tab[aria-disabled='true'],
+    ix-tab:disabled,
+    .ix-tabs__tab:disabled
+) {
+    opacity: var(--ix-opacity-disabled);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Innholdspanel. Skjult panel styres av native [hidden] (satt av WC). Synlig
+ * panel får luft mot tablist. */
+:where(ix-tab-panel, .ix-tabs__panel) {
+    display: block;
+    padding-block-start: var(--ix-spacing-md);
+}
+
+:where(ix-tab-panel[hidden], .ix-tabs__panel[hidden]) {
+    display: none;
+}
+
+/* Deaktiver indikator-overgangen eksplisitt ved redusert bevegelse (i tillegg til
+ * at --ix-transition-all allerede nulles ut) — deterministiske snapshots. */
+@media (prefers-reduced-motion: reduce) {
+    :where(ix-tab, .ix-tabs__tab) {
+        transition: none;
+    }
+}

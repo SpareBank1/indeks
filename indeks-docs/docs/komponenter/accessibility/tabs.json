@@ -1,0 +1,97 @@
+{
+  "component": "Tabs",
+  "lastReviewed": "2026-07-21",
+  "consumerResponsibilities": [
+    {
+      "summary": "Gi kun-ikon-faner et tilgjengelig navn med ariaLabel",
+      "details": "En fane som bare inneholder et ikon har ingen synlig tekst skjermlesere kan lese. Sett `ariaLabel` på `Tabs.Tab` (i HTML: `aria-label` på `<ix-tab>`) med en kort, beskrivende etikett på brukerens språk (bokmål, nynorsk eller engelsk). Komponenten har ingen hardkodet fallback.",
+      "wcag": ["4.1.2", "2.4.4"]
+    },
+    {
+      "summary": "Merk fane-settet med ariaLabel når flere finnes på samme side",
+      "details": "Har siden flere uavhengige fane-sett, gi hver `Tabs.List` et eget `ariaLabel` (i HTML: `aria-label` på `<ix-tab-list>`) slik at skjermleserbrukere kan skille dem fra hverandre. Teksten er i18n-ansvaret til konsumenten.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Skriv korte, beskrivende fane-etiketter",
+      "details": "Fane-etiketten skal gi mening lest alene og beskrive innholdet i tilhørende panel. Hold den kort så lista kan skannes raskt. Et valgfritt prefiks-ikon støtter forståelsen, men teksten er hovedbæreren.",
+      "wcag": ["2.4.6"]
+    },
+    {
+      "summary": "Bruk faner til likeverdig innhold — ikke steg eller navigasjon",
+      "details": "Faner er for å veksle mellom likeverdige innholdsseksjoner på samme side. Bruk dem ikke for sekvensielle steg (bruk en stegindikator) eller for navigasjon mellom sider (bruk lenker). Feil bruk gir skjermleserbrukere misvisende semantikk.",
+      "wcag": ["1.3.1"]
+    }
+  ],
+  "handled": [
+    { "id": "1.3.1", "notes": "Web componenten kobler `role=\"tablist\"`/`\"tab\"`/`\"tabpanel\"`, `aria-selected`, `aria-controls` (tab → panel) og `aria-labelledby` (panel → tab) ved mount. Relasjonene er dermed programmessig eksponert, ikke bare visuelle." },
+    { "id": "1.3.2", "notes": "Innhold følger naturlig leserekkefølge i DOM: tablist først, deretter det synlige panelet. Skjulte paneler har native `hidden` og er tatt ut av leserekkefølgen." },
+    { "id": "1.4.1", "notes": "Aktiv fane formidles av `aria-selected` (annonseres av skjermleser) i tillegg til understrek-indikatoren — ikke av farge alene." },
+    { "id": "1.4.3", "notes": "Fane-tekst bruker `--ix-color-foreground-main-default` (aktiv) og `--ix-color-foreground-main-subtle` (passiv) mot `--ix-color-surface-main`, som oppfyller kontrastkravet i både lys og mørk modus." },
+    { "id": "1.4.4", "notes": "Relative enheter (font-size-tokens) — tekst skalerer korrekt ved 200 % zoom uten at innhold brytes." },
+    { "id": "1.4.10", "notes": "Ved plassmangel scroller kun tablisten horisontalt (én rad, bevart rekkefølge); siden får ingen horisontal scroll. Reflower korrekt ned til 320 px viewport." },
+    { "id": "1.4.11", "notes": "Fokusindikatoren på fanene oppfyller 3:1 kontrastkrav via `--ix-outline-default`. Aktiv-indikatoren (understreken) bruker brand-fargen `--ix-color-fill-main-default`; passiv/hover-understrek bruker `--ix-color-border-main-default`/`--ix-color-border-main-hover`." },
+    { "id": "2.1.1", "notes": "Full tastaturstøtte: Tab inn/ut av tablisten (roving tabindex — kun én tab-stopp), pil venstre/høyre flytter fokus mellom faner, Home/End til første/siste, Enter/Mellomrom aktiverer fokusert fane." },
+    { "id": "2.1.2", "notes": "Ingen tastaturfeller — fokus navigeres fritt ut av tablisten med Tab/Shift+Tab." },
+    { "id": "2.4.3", "notes": "Roving tabindex gir én tab-stopp for hele tablisten; fokusrekkefølgen følger DOM: tablist før panel." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator på fanene (`:focus-visible`), med offset innover så den ikke klippes av scroll-containeren." },
+    { "id": "2.3.3", "notes": "Overgangen på aktiv-indikatoren respekterer `prefers-reduced-motion: reduce` — transition settes til `none`." },
+    { "id": "2.5.8", "notes": "Hver fane har min. 44×44 px klikk-/touch-mål via `min-height`/`min-width` + padding." },
+    { "id": "3.2.1", "notes": "Ingen kontekstendring ved fokus. Manuell aktivering: å flytte fokus mellom faner med piltast bytter ikke panel før brukeren trykker Enter/Mellomrom." },
+    { "id": "3.2.2", "notes": "Å aktivere en fane gjør kun det forventede (viser tilhørende panel) — ingen automatisk kontekstendring eller navigasjon." },
+    { "id": "4.1.2", "notes": "Roller, navn og tilstand (`aria-selected`, `aria-disabled`) eksponeres korrekt via ARIA satt av web componenten. Aktiv/valgt fane annonseres, deaktiverte faner markeres og hoppes over ved piltast-navigasjon." }
+  ],
+  "issues": [],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Komponenten har ikke eget bildeinnhold. Et valgfritt prefiks-ikon i en fane er konsumentens ansvar (Icon-komponenten håndterer alt-tekst/aria-hidden), og kun-ikon-faner krever `ariaLabel` (se konsumentansvar)." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Formidler ikke instruksjoner basert på sensoriske egenskaper." },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt som ber om personlig informasjon." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.12" },
+    { "id": "1.4.13" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1", "reason": "Indikator-overgangen er kort, respekterer prefers-reduced-motion og blinker ikke." },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.5" },
+    { "id": "2.5.1", "reason": "Ingen gestbaserte interaksjoner — enkelt klikk/tap eller tastatur." },
+    { "id": "2.5.2", "reason": "Aktivering skjer på pekeropp; et klikk kan avbrytes ved å dra bort før slipp." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1" },
+    { "id": "3.3.2" },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus inn i tablisten (til aktiv fane) og videre ut til første fokuserbare element etter tablisten — kun én tab-stopp i tablisten. Panelet er ikke en egen tab-stopp." },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Pil venstre / Pil høyre", "action": "Flytter fokus til forrige/neste fane, looper rundt endene og hopper over deaktiverte faner (aktiverer ikke)" },
+    { "key": "Home", "action": "Flytter fokus til første fane" },
+    { "key": "End", "action": "Flytter fokus til siste fane" },
+    { "key": "Enter", "action": "Aktiverer den fokuserte fanen og viser tilhørende panel" },
+    { "key": "Space", "action": "Aktiverer den fokuserte fanen og viser tilhørende panel" }
+  ],
+  "screenReader": [
+    "Ved fokus på en fane: «[etikett], fane, valgt/ikke valgt, [posisjon] av [antall]»",
+    "Deaktivert fane annonseres som utilgjengelig og hoppes over ved piltast-navigasjon",
+    "Å aktivere en fane bytter det synlige panelet uten å flytte fokus bort fra fanen; panelet er programmessig knyttet til fanen via aria-controls/aria-labelledby"
+  ]
+}
