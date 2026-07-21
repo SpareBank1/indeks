@@ -20,6 +20,7 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Components/InteractiveIcon',
   'Components/Message',
   'Components/Modal',
+  'Components/ProgressBar',
   'Components/Spinner',
   'Layout/Grid',
   'Layout/HStack',
