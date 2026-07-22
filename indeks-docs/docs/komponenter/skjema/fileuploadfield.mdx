@@ -7,10 +7,6 @@ import a11yData from './accessibility/fileuploadfield.json';
 
 FileUploadField lar brukeren legge ved filer i et skjema. Komponenten kommer i to varianter: en **kompakt** knapp som passer inn i vanlige skjema, og en større **dropzone** med dra-og-slipp. Valgte filer vises i en liste under feltet, hver med navn, størrelse og en fjern-knapp.
 
-:::tip Går lenger enn de fleste
-Komponenten annonserer «fil lagt til» og «fil fjernet» til skjermlesere via en egen polite live-region. Det gjør ingen av referansesystemene vi undersøkte (Aksel, Carbon, Ant, Polaris, Spectrum) — så filutvalget er tydelig også uten syn.
-:::
-
 ## Egnet til
 
 - Vedlegg i skjema (kvitteringer, kontrakter, dokumentasjon)
@@ -276,7 +272,7 @@ Dra-og-slipp er kun en snarvei for mus. Filer fra operativsystemet kan ikke dras
 
 ### Polite live-region annonserer endringer
 
-En egen visuelt skjult `aria-live="polite"`-region annonserer «[filnavn] lagt til» og «[filnavn] fjernet». Dette går lenger enn referansesystemene — ingen av dem annonserer at en fil ble lagt til eller fjernet. Feilmeldinger annonseres separat via `ix-field` sin feil-region.
+En egen visuelt skjult `aria-live="polite"`-region annonserer «[filnavn] lagt til» og «[filnavn] fjernet», så filutvalget er tydelig også uten syn. Ingen av referansesystemene vi undersøkte (Aksel, Carbon, Ant, Polaris, Spectrum) annonserer at en fil ble lagt til eller fjernet. Feilmeldinger annonseres separat via `ix-field` sin feil-region.
 
 ### Tilstrekkelig klikkflate
 
