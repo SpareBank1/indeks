@@ -138,6 +138,7 @@ const sidebars: SidebarsConfig = {
                             link: { type: 'doc', id: 'komponenter/skjema/combobox' },
                             items: ['komponenter/skjema/combobox-html'],
                         },
+                        'komponenter/skjema/fileuploadfield',
                         'komponenter/skjema/label',
                         {
                             type: 'category',

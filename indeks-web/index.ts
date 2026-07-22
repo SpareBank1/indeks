@@ -1,6 +1,7 @@
 import { IxCheckboxGroup } from './lib/components/checkbox-group/IxCheckboxGroup.js';
 import { IxCombobox } from './lib/components/combobox/IxCombobox.js';
 import { IxField } from './lib/components/field/IxField.js';
+import { IxFileUpload } from './lib/components/file-upload/IxFileUpload.js';
 import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
 import { IxRadioGroup } from './lib/components/radio-group/IxRadioGroup.js';
@@ -12,8 +13,10 @@ customElements.define('ix-icon', IxIcon);
 customElements.define('ix-radio-group', IxRadioGroup);
 customElements.define('ix-checkbox-group', IxCheckboxGroup);
 customElements.define('ix-combobox', IxCombobox);
+customElements.define('ix-file-upload', IxFileUpload);
 
 export { IxField };
+export { IxFileUpload };
 export { IxIcon };
 export { IxRadioGroup };
 export { IxCheckboxGroup };
@@ -27,6 +30,7 @@ export type { FieldFormatter } from './lib/components/field/formats.js';
 declare global {
     interface HTMLElementTagNameMap {
         'ix-field': IxField;
+        'ix-file-upload': IxFileUpload;
         'ix-icon': IxIcon;
         'ix-radio-group': IxRadioGroup;
         'ix-checkbox-group': IxCheckboxGroup;
@@ -37,6 +41,19 @@ declare global {
     namespace JSX {
         interface IntrinsicElements {
             'ix-field': { [key: string]: unknown; class?: string; children?: unknown };
+            'ix-file-upload': {
+                name?: string;
+                'data-variant'?: 'compact' | 'dropzone';
+                'data-max-size'?: string | number;
+                'trigger-label'?: string;
+                'dropzone-label'?: string;
+                'remove-label'?: string;
+                'added-label'?: string;
+                'removed-label'?: string;
+                'error-too-large'?: string;
+                class?: string;
+                children?: unknown;
+            };
             'ix-radio-group': {
                 name?: string;
                 disabled?: boolean | '';

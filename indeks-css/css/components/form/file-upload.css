@@ -1,0 +1,239 @@
+/* ix-file-upload — filopplasting med to varianter:
+ * kompakt (knapp, standard) og dropzone (dra-og-slipp-flate).
+ * Web componenten (IxFileUpload) genererer indre DOM: den native
+ * <input type="file"> skjules, og trigger-knapp/dropzone-flate + fil-liste
+ * + en visuelt skjult aria-live-region rendres av WC.
+ *
+ * Mobile first: basis-stil er for 320 px; oppskalering via @media (min-width). */
+
+:where(ix-file-upload, .ix-file-upload) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ix-spacing-sm);
+}
+
+/* Den native filinputen er sannhetskilden for form-submit, men skjules visuelt.
+   WC forwarder klikk fra trigger/dropzone til denne. */
+:where(ix-file-upload, .ix-file-upload) > input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ── Trigger-knapp (kompakt variant, standard) ─────────────────────────────── */
+
+:where(ix-file-upload, .ix-file-upload) [data-field="trigger"] {
+    all: unset;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ix-spacing-sm);
+    min-height: 44px;
+    padding: var(--ix-spacing-sm) var(--ix-spacing-md);
+    color: var(--ix-color-component-button-secondary-foreground-default);
+    background-color: transparent;
+    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-secondary-border-default);
+    border-radius: var(--ix-border-radius-button);
+    font-size: var(--ix-font-size-md);
+    font-weight: var(--ix-font-weight-button);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    cursor: pointer;
+    transition: var(--ix-transition-all);
+}
+
+:where(ix-file-upload, .ix-file-upload) [data-field="trigger"]:hover {
+    background-color: var(--ix-color-component-button-secondary-fill-default-hover);
+    border-color: var(--ix-color-component-button-secondary-border-default-hover);
+}
+
+:where(ix-file-upload, .ix-file-upload) [data-field="trigger"]:focus-visible {
+    outline: var(--ix-outline-default);
+    outline-offset: var(--ix-outline-offset-default);
+}
+
+/* Opplastingsikon i trigger-knappen (arver currentColor via maske). */
+:where(ix-file-upload, .ix-file-upload) [data-field="trigger"]::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    background-color: currentColor;
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpolyline points='17 8 12 3 7 8'/%3E%3Cline x1='12' x2='12' y1='3' y2='15'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpolyline points='17 8 12 3 7 8'/%3E%3Cline x1='12' x2='12' y1='3' y2='15'/%3E%3C/svg%3E");
+    /* stylelint-enable plugin/no-unsupported-browser-features */
+}
+
+/* ── Dropzone-variant ──────────────────────────────────────────────────────── */
+
+:where(ix-file-upload[data-variant="dropzone"], .ix-file-upload[data-variant="dropzone"]) [data-field="dropzone"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--ix-spacing-sm);
+    padding: var(--ix-spacing-lg) var(--ix-spacing-md);
+    text-align: center;
+    color: var(--ix-color-foreground-main-subtle);
+    background-color: var(--ix-color-fill-interactive-default);
+    border: var(--ix-border-width-bold) dashed var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-md);
+    transition: var(--ix-transition-all);
+}
+
+@media (min-width: 768px) {
+    /* matches --ix-breakpoint-sm */
+    :where(ix-file-upload[data-variant="dropzone"], .ix-file-upload[data-variant="dropzone"]) [data-field="dropzone"] {
+        padding: var(--ix-spacing-xl) var(--ix-spacing-lg);
+    }
+}
+
+/* Dra-tilstand — WC setter [data-dragging] på host under dragover. */
+:where(ix-file-upload[data-dragging], .ix-file-upload[data-dragging]) [data-field="dropzone"] {
+    color: var(--ix-color-foreground-main-default);
+    background-color: var(--ix-color-fill-main-subtle);
+    border-color: var(--ix-color-border-focus-default);
+}
+
+/* Dekorativ instruksjonstekst i dropzonen (WC setter aria-hidden). */
+:where(ix-file-upload, .ix-file-upload) [data-field="dropzone-hint"] {
+    font-size: var(--ix-font-size-md);
+}
+
+/* Stort opplastingsikon i dropzonen. */
+:where(ix-file-upload, .ix-file-upload) [data-field="dropzone-icon"] {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background-color: currentColor;
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpolyline points='17 8 12 3 7 8'/%3E%3Cline x1='12' x2='12' y1='3' y2='15'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpolyline points='17 8 12 3 7 8'/%3E%3Cline x1='12' x2='12' y1='3' y2='15'/%3E%3C/svg%3E");
+    /* stylelint-enable plugin/no-unsupported-browser-features */
+}
+
+/* ── Fil-liste ─────────────────────────────────────────────────────────────── */
+
+:where(ix-file-upload, .ix-file-upload) [data-field="file-list"] {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ix-spacing-xs);
+}
+
+:where(ix-file-upload, .ix-file-upload) [data-field="file-item"] {
+    display: flex;
+    align-items: center;
+    gap: var(--ix-spacing-sm);
+    padding: var(--ix-spacing-sm);
+    background-color: var(--ix-color-fill-main-subtle);
+    border-radius: var(--ix-border-radius-sm);
+}
+
+/* Fil-ikon foran navnet. */
+:where(ix-file-upload, .ix-file-upload) [data-field="file-item"]::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    background-color: var(--ix-color-foreground-main-subtle);
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/%3E%3Cpath d='M14 2v4a2 2 0 0 0 2 2h4'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/%3E%3Cpath d='M14 2v4a2 2 0 0 0 2 2h4'/%3E%3C/svg%3E");
+    /* stylelint-enable plugin/no-unsupported-browser-features */
+}
+
+:where(ix-file-upload, .ix-file-upload) [data-field="file-name"] {
+    flex-grow: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--ix-font-size-md);
+    color: var(--ix-color-foreground-main-default);
+}
+
+:where(ix-file-upload, .ix-file-upload) [data-field="file-size"] {
+    flex-shrink: 0;
+    font-size: var(--ix-font-size-sm);
+    color: var(--ix-color-foreground-main-subtle);
+}
+
+/* Fjern-knapp per fil — kryss-ikon via maske. */
+:where(ix-file-upload, .ix-file-upload) [data-field="file-remove"] {
+    all: unset;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    color: var(--ix-color-foreground-main-default);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    cursor: pointer;
+    border-radius: var(--ix-border-radius-sm);
+    transition: var(--ix-transition-all);
+}
+
+:where(ix-file-upload, .ix-file-upload) [data-field="file-remove"]::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-color: currentColor;
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-image: url(https://cdn.sparebank1.no/icons/close.svg);
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-image: url(https://cdn.sparebank1.no/icons/close.svg);
+    /* stylelint-enable plugin/no-unsupported-browser-features */
+}
+
+:where(ix-file-upload, .ix-file-upload) [data-field="file-remove"]:hover {
+    background-color: var(--ix-color-fill-main-subtle-hover);
+}
+
+:where(ix-file-upload, .ix-file-upload) [data-field="file-remove"]:focus-visible {
+    outline: var(--ix-outline-default);
+    outline-offset: var(--ix-outline-offset-default);
+}
+
+/* ── Disabled ──────────────────────────────────────────────────────────────── */
+
+:where(ix-file-upload, .ix-file-upload) > input[type="file"]:disabled ~ [data-field="trigger"],
+:where(ix-file-upload, .ix-file-upload) > input[type="file"]:disabled ~ [data-field="dropzone"] {
+    opacity: var(--ix-opacity-disabled);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    cursor: not-allowed;
+    pointer-events: none;
+}

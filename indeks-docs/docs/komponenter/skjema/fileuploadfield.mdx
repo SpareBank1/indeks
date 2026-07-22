@@ -1,0 +1,372 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/fileuploadfield.json';
+
+# FileUploadField
+
+FileUploadField lar brukeren legge ved filer i et skjema. Komponenten kommer i to varianter: en **kompakt** knapp som passer inn i vanlige skjema, og en større **dropzone** med dra-og-slipp. Valgte filer vises i en liste under feltet, hver med navn, størrelse og en fjern-knapp.
+
+## Egnet til
+
+- Vedlegg i skjema (kvitteringer, kontrakter, dokumentasjon)
+- Situasjoner der brukeren skal laste opp én eller flere filer av gangen
+- Dropzone-varianten: flater der dra-og-slipp er en naturlig snarvei på desktop
+
+## Uegnet til
+
+- Ren bildeopplasting med forhåndsvisning og beskjæring (bruk en egen bildekomponent)
+- Opplasting som starter automatisk / viser opplastingsprogresjon (komponenten holder kun filutvalget — du håndterer selve opplastingen)
+- Når dropzone er eneste vei: dra-og-slipp er en museforbedring, aldri en erstatning for knappen
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<FileUploadField
+  label="Vedlegg"
+  triggerLabel="Velg fil"
+  removeLabel="Fjern"
+  addedLabel="{name} lagt til"
+  removedLabel="{name} fjernet"
+  multiple
+/>
+```
+
+Den native `<input type="file">` er sannhetskilden — verdien sendes med i et vanlig form-submit uten JavaScript. `triggerLabel` og `removeLabel` er påkrevde tekster du selv oversetter. `addedLabel`/`removedLabel` er maler der `{name}` byttes med filnavnet i skjermleser-annonseringen. `multiple` gir flervalg og virker i begge varianter — se [Flere filer](#flere-filer) for forskjellen mellom kompakt og dropzone.
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="vedlegg-html">Vedlegg</label>
+  <ix-file-upload
+    class="ix-file-upload"
+    trigger-label="Velg fil"
+    remove-label="Fjern"
+    added-label="{name} lagt til"
+    removed-label="{name} fjernet"
+  >
+    <input id="vedlegg-html" type="file" name="vedlegg" multiple />
+  </ix-file-upload>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+`<ix-file-upload>` genererer trigger-knapp, fil-liste med fjern-knapper og en skjult polite live-region. Du skriver kun host-elementet og den native `<input type="file">` — komponenten holder `input.files` synk når filer fjernes eller slippes.
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Dropzone
+
+Dropzone-varianten gir en større flate med dra-og-slipp. Filvelger-knappen inni er alltid der som tastaturvei — OS-filer kan ikke dras inn med tastatur.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<FileUploadField
+  label="Vedlegg"
+  variant="dropzone"
+  dropzoneLabel="Dra og slipp filer her, eller"
+  triggerLabel="Velg fil"
+  removeLabel="Fjern"
+  addedLabel="{name} lagt til"
+  removedLabel="{name} fjernet"
+  multiple
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="vedlegg-dropzone">Vedlegg</label>
+  <ix-file-upload
+    class="ix-file-upload"
+    data-variant="dropzone"
+    dropzone-label="Dra og slipp filer her, eller"
+    trigger-label="Velg fil"
+    remove-label="Fjern"
+    added-label="{name} lagt til"
+    removed-label="{name} fjernet"
+  >
+    <input id="vedlegg-dropzone" type="file" name="vedlegg" multiple />
+  </ix-file-upload>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Flere filer
+
+Sett `multiple` på feltet for å la brukeren legge ved flere filer. Det virker i begge varianter — men de to måtene å velge på oppfører seg litt ulikt:
+
+:::note Kompakt erstatter, dropzone akkumulerer
+**Velg-fil-knappen** åpner den native filvelgeren, der hvert nytt valg **erstatter** det forrige (standard `<input type="file">`-oppførsel). Vil brukeren bytte ut én fil, fjerner de den fra lista og velger på nytt.
+
+**Dropzonen** **akkumulerer**: å slippe filer flere ganger legger dem til det eksisterende utvalget (så lenge `multiple` er satt).
+
+Uten `multiple` holder feltet kun én fil av gangen i begge varianter.
+:::
+
+### Med hjelpetekst og maks størrelse
+
+Forklar hvilke filtyper og hvilken maksstørrelse som godtas *før* brukeren velger fil. `accept` filtrerer filvelgeren, og `maxSize` (bytes) avviser for store filer med `errorTooLarge` (`{name}` byttes med filnavnet).
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<FileUploadField
+  label="Vedlegg"
+  description="PDF eller bilde, maks 5 MB per fil"
+  accept=".pdf,image/*"
+  maxSize={5242880}
+  errorTooLarge="{name} er for stor (maks 5 MB)"
+  triggerLabel="Velg fil"
+  removeLabel="Fjern"
+  addedLabel="{name} lagt til"
+  removedLabel="{name} fjernet"
+  multiple
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="vedlegg-maxsize">Vedlegg</label>
+  <span data-field="description">PDF eller bilde, maks 5 MB per fil</span>
+  <ix-file-upload
+    class="ix-file-upload"
+    data-max-size="5242880"
+    error-too-large="{name} er for stor (maks 5 MB)"
+    trigger-label="Velg fil"
+    remove-label="Fjern"
+    added-label="{name} lagt til"
+    removed-label="{name} fjernet"
+  >
+    <input id="vedlegg-maxsize" type="file" name="vedlegg" accept=".pdf,image/*" multiple />
+  </ix-file-upload>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Med feilmelding
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<FileUploadField
+  label="Vedlegg"
+  errorMessage="Du må legge ved minst ett vedlegg"
+  triggerLabel="Velg fil"
+  removeLabel="Fjern"
+  addedLabel="{name} lagt til"
+  removedLabel="{name} fjernet"
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="vedlegg-error">Vedlegg</label>
+  <ix-file-upload
+    class="ix-file-upload"
+    trigger-label="Velg fil"
+    remove-label="Fjern"
+    added-label="{name} lagt til"
+    removed-label="{name} fjernet"
+  >
+    <input id="vedlegg-error" type="file" name="vedlegg" aria-invalid="true" />
+  </ix-file-upload>
+  <span data-field="error">Du må legge ved minst ett vedlegg</span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+### Deaktivert
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+<FileUploadField
+  label="Vedlegg"
+  disabled
+  triggerLabel="Velg fil"
+  removeLabel="Fjern"
+  addedLabel="{name} lagt til"
+  removedLabel="{name} fjernet"
+/>
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label for="vedlegg-disabled">Vedlegg</label>
+  <ix-file-upload
+    class="ix-file-upload"
+    trigger-label="Velg fil"
+    remove-label="Fjern"
+    added-label="{name} lagt til"
+    removed-label="{name} fjernet"
+  >
+    <input id="vedlegg-disabled" type="file" name="vedlegg" disabled />
+  </ix-file-upload>
+  <span data-field="error" aria-live="polite"></span>
+</ix-field>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Tydelige labels beskriver filen, ikke handlingen
+
+Labelen skal si hva slags fil brukeren skal legge ved. Skriv «Vedlegg» eller «Last opp kvittering» — ikke «Velg fil» (det er knappen sin jobb).
+
+### Forklar krav på forhånd
+
+Bruk `description` til å fortelle hvilke filtyper og hvilken maksstørrelse som godtas før brukeren velger fil. Da unngår du å overraske med en feilmelding etterpå.
+
+### Dropzone er en snarvei, ikke en erstatning
+
+Dropzone-varianten er nyttig på desktop, men dra-og-slipp fungerer ikke med tastatur. Knappen inni dropzonen er alltid tastaturveien og skal aldri fjernes eller skjules.
+
+### Vis alltid hva som er valgt
+
+Valgte filer listes med navn og størrelse, hver med en fjern-knapp. Brukeren skal aldri være i tvil om hvilke filer som ligger klare til innsending.
+
+## Tilgjengelighet / universell utforming
+
+### Native input som sannhetskilde
+
+Feltet bygger på en native `<input type="file">`. Den gir gratis tastaturstøtte, skjermleserstøtte og form-innsending. Trigger og fjern-knapper er ekte `<button>`-elementer, ikke `<div>`-er.
+
+### Dropzone er en museforbedring
+
+Dra-og-slipp er kun en snarvei for mus. Filer fra operativsystemet kan ikke dras inn med tastatur, så den fokuserbare knappen inni dropzonen er tilgjengelighetsveien. Dropzone-`<div>`-en gjøres aldri tastatur-operabel, og dekorativt ikon/instruksjonstekst har `aria-hidden`.
+
+### Polite live-region annonserer endringer
+
+En egen visuelt skjult `aria-live="polite"`-region annonserer «[filnavn] lagt til» og «[filnavn] fjernet», så filutvalget er tydelig også uten syn. Ingen av referansesystemene vi undersøkte (Aksel, Carbon, Ant, Polaris, Spectrum) annonserer at en fil ble lagt til eller fjernet. Feilmeldinger annonseres separat via `ix-field` sin feil-region.
+
+### Tilstrekkelig klikkflate
+
+Velg-fil-knappen og hver fjern-knapp oppfyller minimum 44×44 px klikkflate.
+
+### i18n — send inn oversatt tekst
+
+Komponenten har ingen innebygde tekster. `triggerLabel` og `removeLabel` er påkrevde; `dropzoneLabel`, `addedLabel`, `removedLabel` og `errorTooLarge` sendes inn ved behov — på riktig språk (bokmål, nynorsk, engelsk). Det finnes ingen norsk fallback, siden den ville smittet over på andre språk. `addedLabel`, `removedLabel` og `errorTooLarge` er maler der `{name}` byttes med filnavnet.
+
+I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.warn` når `trigger-label`, `remove-label` (eller `dropzone-label` i dropzone-varianten) mangler.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+### FileUploadFieldProps
+
+Arver alle native attributter fra `<input type="file">` (bl.a. `name`, `accept`, `multiple`, `onChange`, `required`) unntatt `type` og `size`. Flervalg styres av `multiple` (se [Flere filer](#flere-filer)).
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `label` | `string` | Nei | | Synlig labeltekst over feltet |
+| `triggerLabel` | `string` | Ja | | Tekst på velg-fil-knappen (i18n) |
+| `removeLabel` | `string` | Ja | | Suffiks på fjern-knappens aria-label, f.eks. «Fjern» → «Fjern rapport.pdf» (i18n) |
+| `variant` | `'compact' \| 'dropzone'` | Nei | `'compact'` | Kompakt knapp eller dra-og-slipp-dropzone |
+| `dropzoneLabel` | `string` | Nei | | Instruksjonstekst i dropzonen (i18n, kun `dropzone`) |
+| `addedLabel` | `string` | Nei | | Mal for live-annonsering ved lagt til fil, `{name}` byttes ut (i18n) |
+| `removedLabel` | `string` | Nei | | Mal for live-annonsering ved fjernet fil, `{name}` byttes ut (i18n) |
+| `maxSize` | `number` | Nei | | Maks filstørrelse i bytes. Filer over avvises med `errorTooLarge` |
+| `errorTooLarge` | `string` | Nei | | Feiltekst når en fil er større enn `maxSize`, `{name}` byttes ut (i18n) |
+| `description` | `string` | Nei | | Hjelpetekst under label |
+| `errorMessage` | `string` | Nei | | Feilmelding. Trigger `aria-invalid` når den har innhold |
+| `disabled` | `boolean` | Nei | | Deaktiverer feltet |
+| `tooltip` | `string` | Nei | | Tooltip-innhold ved label |
+| `tooltipLabel` | `string` | Nei | | aria-label på tooltip-knappen (i18n) |
+| `tooltipPlacement` | `string` | Nei | | Plassering av tooltip |
+| `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
+| `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til den native `<input type="file">` |
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+### `<ix-file-upload>`
+
+| Attributt | Påkrevd | Beskrivelse |
+|-----------|---------|-------------|
+| `trigger-label` | Ja | Tekst på velg-fil-knappen |
+| `remove-label` | Ja | Suffiks på fjern-knappens aria-label |
+| `data-variant` | Nei | `"dropzone"` for dra-og-slipp-flate (utelates for kompakt) |
+| `dropzone-label` | Nei | Instruksjonstekst i dropzonen (kun `dropzone`) |
+| `added-label` | Nei | Mal for annonsering ved lagt til fil, `{name}` = filnavn |
+| `removed-label` | Nei | Mal for annonsering ved fjernet fil, `{name}` = filnavn |
+| `data-max-size` | Nei | Maks filstørrelse i bytes |
+| `error-too-large` | Nei | Feiltekst ved for stor fil, `{name}` = filnavn |
+
+### Delelementer (light DOM)
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `> input[type="file"]` | Ja | Den native filinputen. Sannhetskilde for form-submit. Skriv `name`, `accept`, `multiple` og `disabled` her |
+| `[data-field="trigger"]` | — | Velg-fil-knappen. Genereres av komponenten |
+| `[data-field="dropzone"]` | — | Dra-og-slipp-flaten (kun `dropzone`). Genereres av komponenten |
+| `[data-field="file-list"]` | — | `<ul>` med valgte filer. Genereres av komponenten |
+| `[data-field="announce"]` | — | Skjult `aria-live="polite"`-region. Genereres av komponenten |
+
+Alle delelementer genereres av web-komponenten — du skriver kun host og den native inputen.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Rot | `.ix-file-upload` |
+| Velg-fil-knapp | `[data-field="trigger"]` |
+| Dropzone | `[data-field="dropzone"]` |
+| Fil-liste | `[data-field="file-list"]` |
+| Fil-rad | `[data-field="file-item"]` |
+| Filnavn | `[data-field="file-name"]` |
+| Filstørrelse | `[data-field="file-size"]` |
+| Fjern-knapp | `[data-field="file-remove"]` |
+
+## Relatert
+
+- [TextField](./textfield) — for enkel tekstinput i skjema
+- [Combobox](./combobox) — søkbar liste med valg
+- [Message](../message) — for tilbakemeldinger etter innsending
