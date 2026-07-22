@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import type { IxCheckboxGroup, IxCombobox, IxField, IxIcon, IxRadioGroup } from '@sb1/indeks-web';
+import type { IxCheckboxGroup, IxCombobox, IxField, IxIcon, IxPhoneNumberField, IxRadioGroup } from '@sb1/indeks-web';
 import type { IconName } from './ui/icons/icon-types';
 
 declare module 'react' {
@@ -47,6 +47,13 @@ declare module 'react' {
                 'data-remove-chip-label'?: string;
                 'data-chips-label'?: string;
                 'data-results-text'?: string;
+            };
+            'ix-phone-number-field': React.DetailedHTMLProps<React.HTMLAttributes<IxPhoneNumberField>, IxPhoneNumberField> & {
+                class?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                required?: boolean | '';
+                'data-state'?: 'error' | 'readonly' | 'disabled';
             };
             'ix-stack': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
                 class?: string;
