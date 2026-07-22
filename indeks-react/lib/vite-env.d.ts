@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import type { IxCheckboxGroup, IxCombobox, IxField, IxIcon, IxRadioGroup } from '@sb1/indeks-web';
+import type { IxCheckboxGroup, IxCombobox, IxField, IxFileUpload, IxIcon, IxRadioGroup } from '@sb1/indeks-web';
 import type { IconName } from './ui/icons/icon-types';
 
 declare module 'react' {
@@ -47,6 +47,18 @@ declare module 'react' {
                 'data-remove-chip-label'?: string;
                 'data-chips-label'?: string;
                 'data-results-text'?: string;
+            };
+            'ix-file-upload': React.DetailedHTMLProps<React.HTMLAttributes<IxFileUpload>, IxFileUpload> & {
+                name?: string;
+                class?: string;
+                'data-variant'?: 'compact' | 'dropzone';
+                'data-max-size'?: string | number;
+                'trigger-label'?: string;
+                'dropzone-label'?: string;
+                'remove-label'?: string;
+                'added-label'?: string;
+                'removed-label'?: string;
+                'error-too-large'?: string;
             };
             'ix-stack': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
                 class?: string;

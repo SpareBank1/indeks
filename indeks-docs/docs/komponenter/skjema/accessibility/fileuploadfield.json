@@ -1,0 +1,97 @@
+{
+  "component": "FileUploadField",
+  "lastReviewed": "2026-07-22",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv beskrivende labeltekst",
+      "details": "Labelen skal forklare hva slags fil brukeren skal legge ved — ikke handlingen. \"Vedlegg\" eller \"Last opp kvittering\" er bedre enn \"Velg fil\". Alle felt må ha en label.",
+      "wcag": ["2.4.6", "3.3.2"]
+    },
+    {
+      "summary": "Send inn oversatt tekst for alle strenger",
+      "details": "triggerLabel, dropzoneLabel, removeLabel, addedLabel, removedLabel og errorTooLarge leses av skjermleser og/eller vises i UI. Komponenten har ingen innebygde fallback-tekster — send inn riktig streng for språket ditt (bokmål, nynorsk, engelsk). addedLabel, removedLabel og errorTooLarge er maler med {name} som byttes med filnavnet.",
+      "wcag": ["3.1.1", "3.1.2"]
+    },
+    {
+      "summary": "Forklar krav til filtype og størrelse",
+      "details": "Bruk description til å fortelle hvilke filtyper (accept) og hvilken maksstørrelse (maxSize) som godtas, før brukeren velger fil. Da unngår du å overraske med en feilmelding etterpå.",
+      "wcag": ["3.3.2", "3.3.5"]
+    },
+    {
+      "summary": "Skriv gode feilmeldinger",
+      "details": "errorTooLarge må si hva som er galt og hva brukeren skal gjøre — \"{name} er for stor (maks 5 MB)\", ikke \"Ugyldig fil\". Komponenten viser og annonserer meldingen, men du skriver innholdet.",
+      "wcag": ["3.3.1", "3.3.3"]
+    },
+    {
+      "summary": "Ikke gjør dropzone til eneste vei",
+      "details": "Dra-og-slipp er en museforbedring. OS-filer kan ikke dras inn med tastatur, så den fokuserbare velg-fil-knappen inni dropzonen er tilgjengelighetsveien — den må alltid finnes. Ikke skjul eller fjern knappen i dropzone-varianten.",
+      "wcag": ["2.1.1"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Native <input type=\"file\"> er sannhetskilde og kobles til label av ix-field. Fil-lista er en <ul> med <li> per fil (navn + størrelse + fjern-knapp). Fjern-knappen har aria-label sammensatt av removeLabel + filnavn. Dekorativt dropzone-ikon og -hint har aria-hidden." },
+    { "id": "1.3.2", "notes": "Label, beskrivelse, trigger/dropzone, fil-liste og feilmelding følger naturlig rekkefølge i DOM." },
+    { "id": "1.3.3", "notes": "Instruksjoner er ikke avhengige av form eller plassering alene — trigger har tekstetikett, fil-liste viser filnavn som tekst." },
+    { "id": "1.4.1", "notes": "Dra-tilstand (data-dragging) og feiltilstand kommuniseres med ramme/tekst i tillegg til farge, ikke farge alene." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport uten horisontal scroll. Fil-liste-rader brytes vertikalt." },
+    { "id": "1.4.11", "notes": "Ramme, fokusindikator og dropzone-kant oppfyller 3:1 kontrastkrav." },
+    { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
+    { "id": "2.1.1", "notes": "Fullt opererbart med tastatur: trigger og fjern-knapper er ekte <button>. Dropzone er en museforbedring — den fokuserbare knappen inni er tastaturveien. Filvelgeren åpnes med Enter/Space på knappen." },
+    { "id": "2.1.2", "notes": "Ingen tastaturfelle. Fokus flyttes fritt inn og ut av trigger og fjern-knapper med Tab/Shift+Tab." },
+    { "id": "2.4.3", "notes": "Trigger og fjern-knapper er egne tab-stopp i naturlig DOM-rekkefølge." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator (--ix-outline-default) på trigger, dropzone-knapp og fjern-knapper ved tastaturfokus." },
+    { "id": "2.5.8", "notes": "Trigger og fjern-knapper oppfyller minimum 44x44px klikkflate." },
+    { "id": "3.2.1", "notes": "Fokus alene endrer ikke kontekst — filvelgeren åpnes først ved aktivering av knappen." },
+    { "id": "3.2.2", "notes": "Å velge en fil endrer ikke kontekst automatisk med mindre onChange eksplisitt gjør det." },
+    { "id": "3.3.1", "notes": "Feil ved for stor fil identifiseres med tekst i ix-field sin feil-region og annonseres via aria-live=polite. aria-invalid settes av ix-field når feiltekst har innhold." },
+    { "id": "4.1.2", "notes": "Trigger og fjern-knapper er <button type=\"button\"> med tilgjengelig navn (fjern-knapp: removeLabel + filnavn). Native file-input beholder rolle/verdi for form-submit. Dekorative ikoner/hint er aria-hidden." },
+    { "id": "4.1.3", "notes": "En egen visuelt skjult polite live-region (aria-live=polite) annonserer «{name} lagt til» og «{name} fjernet» når filutvalget endres. Dette går lenger enn referansesystemene (Aksel, Carbon, Ant, Polaris, Spectrum) — ingen av dem annonserer lagt-til/fjernet. Feilmelding annonseres separat via ix-field sin feil-region." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Opplastnings- og fjern-ikon er dekorative CSS-masker med aria-hidden; ingen informasjonsbærende bilder." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et felt for personlig informasjon — autocomplete gjelder ikke." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.13", "reason": "Ingen hover- eller fokus-utløst innhold som må kunne pekes på eller lukkes." },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1", "reason": "Dra-og-slipp er en ren museforbedring; all funksjonalitet er tilgjengelig via enkle trykk/klikk på knappen." },
+    { "id": "2.5.2" },
+    { "id": "2.5.4", "reason": "Ingen bevegelsesaktivering." },
+    { "id": "2.5.6" },
+    { "id": "2.5.7", "reason": "Dra-og-slipp krever ikke dragging — filvelgeren via knapp er en likeverdig enkelt-peker-vei." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til velg-fil-knappen, deretter til hver fjern-knapp i fil-lista" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Enter / Space", "action": "På velg-fil-knappen: åpner filvelgeren. På en fjern-knapp: fjerner filen" }
+  ],
+  "screenReader": [
+    "Ved fokus på knappen: \"[triggerLabel], knapp\"",
+    "Ved valgt fil: den polite live-regionen leser \"[filnavn] lagt til\" (addedLabel)",
+    "Ved fjernet fil: den polite live-regionen leser \"[filnavn] fjernet\" (removedLabel)",
+    "Hver fjern-knapp: \"[removeLabel] [filnavn], knapp\"",
+    "Ved for stor fil: \"[label], ugyldig\" + feilmeldingen (errorTooLarge) via feil-regionen"
+  ]
+}
