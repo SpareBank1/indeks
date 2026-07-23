@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import type { IxCheckboxGroup, IxCombobox, IxField, IxIcon, IxRadioGroup } from '@sb1/indeks-web';
+import type { IxCheckboxGroup, IxCombobox, IxField, IxIcon, IxProgressBar, IxRadioGroup } from '@sb1/indeks-web';
 import type { IconName } from './ui/icons/icon-types';
 
 declare module 'react' {
@@ -47,6 +47,15 @@ declare module 'react' {
                 'data-remove-chip-label'?: string;
                 'data-chips-label'?: string;
                 'data-results-text'?: string;
+            };
+            'ix-progress-bar': React.DetailedHTMLProps<React.HTMLAttributes<IxProgressBar>, IxProgressBar> & {
+                value?: number;
+                class?: string;
+                'data-state'?: 'active' | 'success' | 'error';
+                label?: string;
+                'data-support-text'?: string;
+                'data-show-value'?: boolean | '';
+                'data-value-text'?: string;
             };
             'ix-stack': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
                 class?: string;

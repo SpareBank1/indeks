@@ -32,4 +32,6 @@ export type { InteractiveIconProps, InteractiveIconStatus } from './interactive-
 
 export { ListElement } from './list-element/ListElement';
 export { Spinner } from './spinner/Spinner';
+export { ProgressBar } from './progress-bar/ProgressBar';
+export type { ProgressBarProps, ProgressBarState } from './progress-bar/ProgressBar';
 export { Table } from './table/Table';

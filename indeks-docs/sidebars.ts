@@ -91,6 +91,7 @@ const sidebars: SidebarsConfig = {
                             items: ['komponenter/icon-analyse'],
                         },
                         'komponenter/interactive-icon',
+                        'komponenter/progress-bar',
                         'komponenter/spinner',
                         'komponenter/typografi',
                     ],
