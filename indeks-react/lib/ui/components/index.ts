@@ -31,6 +31,8 @@ export { InteractiveIcon } from './interactive-icon/InteractiveIcon';
 export type { InteractiveIconProps, InteractiveIconStatus } from './interactive-icon/InteractiveIcon';
 
 export { ListElement } from './list-element/ListElement';
+export { ReadMore } from './read-more/ReadMore';
+export type { ReadMoreProps } from './read-more/ReadMore';
 export { Spinner } from './spinner/Spinner';
 export { ProgressBar } from './progress-bar/ProgressBar';
 export type { ProgressBarProps, ProgressBarState } from './progress-bar/ProgressBar';

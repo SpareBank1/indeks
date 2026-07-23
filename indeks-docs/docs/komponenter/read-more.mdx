@@ -1,0 +1,196 @@
+---
+title: ReadMore
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/read-more.json';
+
+# ReadMore
+
+ReadMore viser og skjuler én frittstående tekstblokk bak en klikkbar label. Den er nyttig for utdypende, sekundær informasjon som ikke alle trenger med en gang: brukeren ser labelen og åpner forklaringen kun ved behov. Komponenten bygger på native `<details>`/`<summary>`, så tastatur og skjermleser fungerer uten ekstra oppsett.
+
+## Egnet til
+
+- Utdypende forklaringer til et enkelt begrep eller spørsmål
+- Sekundær informasjon som støtter, men ikke er nødvendig for hovedinnholdet
+- Å holde tett innhold skannbart uten å skjule det helt
+- Korte «les mer»-avsnitt inne i tekstflaten
+
+## Uegnet til
+
+- Flere seksjoner som hører sammen — bruk heller [Accordion](/docs/komponenter/accordion)
+- Innhold brukeren må se for å komme videre — vis det åpent
+- Navigasjon mellom sider — bruk lenker eller meny
+- Lange, strukturerte tekstmengder som bør ha egne overskrifter
+
+## Kom i gang
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<details class="ix-read-more">
+  <summary>Hva regnes som helsemessige begrensninger?</summary>
+  <div class="ix-read-more__content">
+    <p>Med helsemessige begrensninger mener vi funksjonshemming, sykdom eller skade som påvirker hverdagen din over tid.</p>
+  </div>
+</details>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ReadMore label="Hva regnes som helsemessige begrensninger?">
+  <p>Med helsemessige begrensninger mener vi funksjonshemming, sykdom eller skade som påvirker hverdagen din over tid.</p>
+</ReadMore>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Åpen som standard
+
+Marker seksjonen med `open` (HTML) eller `defaultOpen` (React) om innholdet bør vises ved start.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<details class="ix-read-more" open>
+  <summary>Hva er inkludert?</summary>
+  <div class="ix-read-more__content">
+    <p>Avtalen inkluderer nettbank, mobilbank og gratis kortbruk i Norge.</p>
+  </div>
+</details>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ReadMore label="Hva er inkludert?" defaultOpen>
+  <p>Avtalen inkluderer nettbank, mobilbank og gratis kortbruk i Norge.</p>
+</ReadMore>
+```
+
+</TabItem>
+</Tabs>
+
+### Rikt innhold
+
+Innholdet kan bestå av tekst, lister, lenker og andre komponenter.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<details class="ix-read-more" open>
+  <summary>Hva er inkludert?</summary>
+  <div class="ix-read-more__content">
+    <p>Avtalen inkluderer blant annet:</p>
+    <ul class="ix-list-element">
+      <li>Nettbank og mobilbank</li>
+      <li>Gratis kortbruk i Norge</li>
+      <li>Varsling på SMS</li>
+    </ul>
+    <p>Les mer i <a class="ix-link-text" href="#">vilkårene</a>.</p>
+  </div>
+</details>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ReadMore label="Hva er inkludert?" defaultOpen>
+  <p>Avtalen inkluderer blant annet:</p>
+  <ListElement as="ul">
+    <li>Nettbank og mobilbank</li>
+    <li>Gratis kortbruk i Norge</li>
+    <li>Varsling på SMS</li>
+  </ListElement>
+  <p>Les mer i <LinkText href="#">vilkårene</LinkText>.</p>
+</ReadMore>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Innhold og formulering
+
+- Skriv en kort, beskrivende label som gir mening lest alene.
+- Start med det viktigste ordet — labelen skal være lett å skanne.
+- Unngå at brukeren må åpne seksjonen for å forstå hva den inneholder.
+
+### ReadMore eller Accordion?
+
+Bruk ReadMore for **én** enkeltstående forklaring i tekstflaten. Har du **flere** seksjoner som hører sammen og bør stå i et samlet kort, bruk [Accordion](/docs/komponenter/accordion) i stedet.
+
+## Tilpasning med CSS
+
+Trenger du `ix-read-more`-stylingen på HTML du setter sammen selv, kan du bruke klassene direkte. Native `<details>`/`<summary>` gir semantikk og tastatur — ingen JavaScript er nødvendig.
+
+### Tilgjengelige klasser
+
+| Element/tilstand | Selektor / attributt |
+|------------------|----------------------|
+| Rot | `.ix-read-more` på et `<details>`-element |
+| Åpen | `[open]` på `<details>` (native) |
+| Label | `<summary>` (første barn — styles via `.ix-read-more > summary`) |
+| Innhold | `.ix-read-more__content` på `<div>` (etter label) |
+
+### Eksempel: ren HTML
+
+```html
+<details class="ix-read-more">
+  <summary>Hva regnes som helsemessige begrensninger?</summary>
+  <div class="ix-read-more__content">
+    <p>Med helsemessige begrensninger mener vi funksjonshemming, sykdom eller skade som påvirker hverdagen din over tid.</p>
+  </div>
+</details>
+```
+
+Den myke åpne/lukke-animasjonen er en progressiv CSS-enhancement; nettlesere uten støtte hopper bare åpent/lukket.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Skriv kort og beskrivende label-tekst** — labelen er klikkflaten og må gi mening alene.
+- **Ikke gjem nødvendig innhold** — ReadMore er for utdypende, sekundær informasjon. Innhold brukeren må se for å komme videre skal vises åpent.
+- **Bruk overskriftsnivå ved behov** — inngår labelen i en dokumentstruktur, kan du legge en `<Heading>`/`<h3>` inni labelen for korrekt overskriftshierarki.
+
+### Hva komponenten gjør automatisk
+
+- **Disclosure-semantikk** — labelen er en native `<summary>`: fokuserbar med Tab, åpnes/lukkes med Enter og Space, og åpen/lukket-tilstand annonseres av skjermlesere. Ingen ekstra ARIA er nødvendig.
+- **Programmessig kobling** — innholdet ligger inne i samme `<details>` som labelen, så de er knyttet sammen uten `aria-controls`/`id`.
+- **Tilstandsindikator** — en chevron roterer for å vise åpen/lukket. Animasjonen er kort og respekterer `prefers-reduced-motion`.
+- **Fokusindikator** — tydelig fokusring på labelen (`:focus-visible`).
+
+:::note Avvik fra akseptansekriteriene: `<summary>` framfor `<button>`
+En button-basert løsning (`<button aria-expanded aria-controls>` + panel med matchende `id`) er et vanlig mønster for disclosure. Vi bygger i stedet på native `<details>`/`<summary>`, som oppfyller samme intensjon — fokuserbar disclosure-knapp, Enter/Space og åpen/lukket-tilstand annonsert av skjermlesere — uten eksplisitt `aria-expanded`/`aria-controls`. Innholdet er programmessig knyttet til labelen ved å ligge inne i samme `<details>`, så aria-koblingen er overflødig. Dette er enklere, har bred innebygd støtte og følger samme native-tilnærming som Accordion.
+:::
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+### `ReadMore`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `label` | `ReactNode` | | Klikkbar label (kort og beskrivende) |
+| `children` | `ReactNode` | | Innholdet som avsløres — tekst, lister eller andre komponenter |
+| `defaultOpen` | `boolean` | `false` | Start seksjonen åpen. Speiler native `<details open>` |
+| `className` | `string` | | Ekstra CSS-klasser på rot-`<details>` |
