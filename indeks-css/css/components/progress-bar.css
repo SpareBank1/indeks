@@ -9,6 +9,10 @@
     --ii-progress-bar-height: 8px;
     --ii-progress-bar-fill: 0%;
 
+    /* Fyllet glir over ~1s så bevegelsen er tydelig å oppfatte når verdien
+       endres; deaktiveres ved prefers-reduced-motion lenger ned. */
+    --ii-progress-bar-fill-duration: 1s;
+
     /* Fyllfargen bytter per tilstand. `active` er nøytral/primær fremdriftsfarge;
        `success`/`error` arver status-fill via `data-status`-kaskaden på host
        (se @sb1/indeks-utils/css/status-colors.css). */
@@ -74,15 +78,22 @@
 
 /* Fyll = fremdriftsindikatoren. Fylles horisontalt fra venstre. Overgang
    mellom verdier og tilstander skjer mykt (ingen brå sprang) — deaktiveres
-   ved prefers-reduced-motion lenger ned. */
+   ved prefers-reduced-motion lenger ned.
+
+   Bredden glir over den lengre fill-varigheten så bevegelsen er tydelig å
+   oppfatte; fargeskiftet ved statusbytte holdes kjapt (--ix-transition-duration).
+   NB: `var(--ix-transition-all)` kan ikke brukes per property her — den
+   ekspanderer til `all <dur> <easing>`, som ville gitt to property-navn i samme
+   transition-ledd (ugyldig). Bygg leddene av duration + animation-tokenene i
+   stedet. */
 :where(.ix-progress-bar__fill) {
     width: var(--ii-progress-bar-fill);
     height: 100%;
     background-color: var(--ii-progress-bar-fill-color);
     border-radius: inherit;
     transition:
-        width var(--ix-transition-all),
-        background-color var(--ix-transition-all);
+        width var(--ii-progress-bar-fill-duration) var(--ix-transition-animation),
+        background-color var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
 /* Statusikon-badge — kun success/error (web componenten injiserer den).
