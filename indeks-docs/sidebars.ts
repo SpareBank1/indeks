@@ -138,6 +138,7 @@ const sidebars: SidebarsConfig = {
                             link: { type: 'doc', id: 'komponenter/skjema/combobox' },
                             items: ['komponenter/skjema/combobox-html'],
                         },
+                        'komponenter/skjema/date-field',
                         'komponenter/skjema/label',
                         {
                             type: 'category',

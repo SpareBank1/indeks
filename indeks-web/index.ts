@@ -1,5 +1,6 @@
 import { IxCheckboxGroup } from './lib/components/checkbox-group/IxCheckboxGroup.js';
 import { IxCombobox } from './lib/components/combobox/IxCombobox.js';
+import { IxDateField } from './lib/components/date-field/IxDateField.js';
 import { IxField } from './lib/components/field/IxField.js';
 import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
@@ -12,12 +13,14 @@ customElements.define('ix-icon', IxIcon);
 customElements.define('ix-radio-group', IxRadioGroup);
 customElements.define('ix-checkbox-group', IxCheckboxGroup);
 customElements.define('ix-combobox', IxCombobox);
+customElements.define('ix-date-field', IxDateField);
 
 export { IxField };
 export { IxIcon };
 export { IxRadioGroup };
 export { IxCheckboxGroup };
 export { IxCombobox };
+export { IxDateField };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
 
@@ -31,6 +34,7 @@ declare global {
         'ix-radio-group': IxRadioGroup;
         'ix-checkbox-group': IxCheckboxGroup;
         'ix-combobox': IxCombobox;
+        'ix-date-field': IxDateField;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -65,6 +69,18 @@ declare global {
                 'data-remove-chip-label'?: string;
                 'data-chips-label'?: string;
                 'data-results-text'?: string;
+                class?: string;
+                children?: unknown;
+            };
+            'ix-date-field': {
+                name?: string;
+                min?: string;
+                max?: string;
+                value?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                'data-open-label'?: string;
+                'data-native-picker-mobile'?: boolean | '';
                 class?: string;
                 children?: unknown;
             };

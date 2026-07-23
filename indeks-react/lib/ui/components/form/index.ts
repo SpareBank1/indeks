@@ -9,6 +9,8 @@ export { CheckboxButton } from './checkbox-group/CheckboxButton';
 export type { CheckboxButtonProps } from './checkbox-group/CheckboxButton';
 export { Combobox } from './combobox/Combobox';
 export type { ComboboxProps, ComboboxOption } from './combobox/Combobox';
+export { DateField } from './date-field/DateField';
+export type { DateFieldProps } from './date-field/DateField';
 export { RadioGroup } from './radio-group/RadioGroup';
 export type { RadioGroupProps, RadioOption } from './radio-group/RadioGroup';
 export { RadioButton } from './radio-group/RadioButton';

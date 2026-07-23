@@ -16,8 +16,10 @@ describe('createPatternFormatter', () => {
             expect(fmt.format('12345678')).toBe('123 45 678');
         });
 
-        it('formaterer delvis nummer uten dinglende separator', () => {
-            expect(fmt.format('123')).toBe('123');
+        it('setter separator så snart gruppen foran er full', () => {
+            // Full første gruppe (3 siffer) → separatoren dukker opp med én gang.
+            expect(fmt.format('123')).toBe('123 ');
+            // Halvfylt andre gruppe → ingen ny separator ennå.
             expect(fmt.format('1234')).toBe('123 4');
         });
 
@@ -71,13 +73,30 @@ describe('createPatternFormatter', () => {
             expect(fmt.format('24122026')).toBe('24.12.2026');
         });
 
-        it('formaterer delvis uten dinglende punktum', () => {
-            expect(fmt.format('24')).toBe('24');
-            expect(fmt.format('2412')).toBe('24.12');
+        it('setter punktum så snart gruppen foran er full', () => {
+            // Full dag (2 siffer) → punktum dukker opp med én gang.
+            expect(fmt.format('24')).toBe('24.');
+            // Full dag + måned → begge punktum, klar for år.
+            expect(fmt.format('2412')).toBe('24.12.');
+            // Halvfylt dag → intet punktum ennå.
+            expect(fmt.format('2')).toBe('2');
         });
 
         it('parse fjerner punktum', () => {
             expect(fmt.parse('24.12.2026')).toBe('24122026');
+        });
+
+        it('dikter ikke opp separator når neste tegn ikke passer (vist verbatim)', () => {
+            // Gruppen er full, men neste tegn er ugyldig ⇒ vi stopper og legger
+            // resten uformatert på uten å tvinge inn et punktum (unngår også
+            // dobling ved innliming av allerede formatert tekst).
+            expect(fmt.format('24a')).toBe('24a');
+        });
+
+        it('round-trip holder med etterhengende separator', () => {
+            for (const raw of ['', '2', '24', '2412', '24122026']) {
+                expect(fmt.parse(fmt.format(raw))).toBe(raw);
+            }
         });
     });
 
