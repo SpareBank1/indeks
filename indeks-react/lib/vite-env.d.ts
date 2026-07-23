@@ -58,6 +58,7 @@ declare module 'react' {
                 readonly?: boolean | '';
                 'data-state'?: 'error' | 'readonly' | 'disabled';
                 'data-open-label'?: string;
+                'data-native-picker-mobile'?: boolean | '';
             };
             'ix-stack': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
                 class?: string;

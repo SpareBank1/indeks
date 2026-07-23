@@ -176,6 +176,14 @@ export class IxDateField extends HTMLElement {
         if (name) this._native.name = name;
         if (visibleName) this._input.removeAttribute('name');
 
+        // Reflekter touch-plattform til verten så CSS kan styre pekermekanikken:
+        // på desktop lar vi den gjennomsiktige native-inputen slippe pekeren
+        // gjennom (pointer-events:none) så klikket treffer knappen → showPicker()
+        // — avgjørende i Firefox, som ikke åpner kalenderen når man klikker i
+        // "kroppen" av en opacity:0 date-input. På touch beholder native-inputen
+        // pekeren så et tapp åpner OS-velgeren direkte.
+        this.toggleAttribute('data-touch', IS_TOUCH);
+
         this._syncToggleLabel();
         this._syncControlState();
 
