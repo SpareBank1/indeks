@@ -95,6 +95,13 @@
     padding-inline: var(--ix-spacing-md);
 }
 
+/* Vertikal skillelinje langs venstre kant av innholdet når seksjonen er åpen.
+ * Skiller det avdekkede innholdet visuelt fra labelen. Scopet til [open] slik at
+ * streken ikke vises under lukke-animasjonen. Samme border-token som Divider. */
+:where(.ix-read-more[open] > .ix-read-more__content) {
+    border-inline-start: var(--ix-border-default);
+}
+
 :where(.ix-read-more__content) > :first-child {
     margin-top: 0;
 }

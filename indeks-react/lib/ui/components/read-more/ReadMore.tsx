@@ -5,7 +5,7 @@ import type { JSX, ReactNode } from 'react';
 export type ReadMoreProps = {
     /**
      * Klikkbar label (`<summary>`) — kort og beskrivende, må gi mening lest
-     * alene. Kan inneholde et prefiks-ikon, men teksten er hovedbæreren.
+     * alene.
      */
     label: ReactNode;
     /**

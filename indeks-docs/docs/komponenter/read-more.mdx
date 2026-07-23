@@ -81,36 +81,6 @@ Marker seksjonen med `open` (HTML) eller `defaultOpen` (React) om innholdet bør
 </TabItem>
 </Tabs>
 
-### Med prefiks-ikon
-
-Labelen tar innhold, så du kan sette et ikon foran teksten. Teksten er alltid hovedbæreren — ikonet er kun støtte.
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<details class="ix-read-more">
-  <summary>
-    <ix-icon name="info"></ix-icon> Om helsemessige begrensninger
-  </summary>
-  <div class="ix-read-more__content">
-    <p>Med helsemessige begrensninger mener vi funksjonshemming, sykdom eller skade som påvirker hverdagen din over tid.</p>
-  </div>
-</details>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<ReadMore label={<><Icon name="info" /> Om helsemessige begrensninger</>}>
-  <p>Med helsemessige begrensninger mener vi funksjonshemming, sykdom eller skade som påvirker hverdagen din over tid.</p>
-</ReadMore>
-```
-
-</TabItem>
-</Tabs>
-
 ### Rikt innhold
 
 Innholdet kan bestå av tekst, lister, lenker og andre komponenter.
@@ -193,7 +163,7 @@ Den myke åpne/lukke-animasjonen er en progressiv CSS-enhancement; nettlesere ut
 
 ### Hva du selv må sørge for
 
-- **Skriv kort og beskrivende label-tekst** — labelen er klikkflaten og må gi mening alene. Et valgfritt prefiks-ikon støtter, men teksten er alltid hovedbæreren.
+- **Skriv kort og beskrivende label-tekst** — labelen er klikkflaten og må gi mening alene.
 - **Ikke gjem nødvendig innhold** — ReadMore er for utdypende, sekundær informasjon. Innhold brukeren må se for å komme videre skal vises åpent.
 - **Bruk overskriftsnivå ved behov** — inngår labelen i en dokumentstruktur, kan du legge en `<Heading>`/`<h3>` inni labelen for korrekt overskriftshierarki.
 
@@ -220,7 +190,7 @@ En button-basert løsning (`<button aria-expanded aria-controls>` + panel med ma
 
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
-| `label` | `ReactNode` | | Klikkbar label (kort og beskrivende, kan inkludere et prefiks-ikon) |
+| `label` | `ReactNode` | | Klikkbar label (kort og beskrivende) |
 | `children` | `ReactNode` | | Innholdet som avsløres — tekst, lister eller andre komponenter |
 | `defaultOpen` | `boolean` | `false` | Start seksjonen åpen. Speiler native `<details open>` |
 | `className` | `string` | | Ekstra CSS-klasser på rot-`<details>` |

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { createRef } from 'react';
 import { ReadMore } from './ReadMore';
@@ -50,21 +50,5 @@ describe('ReadMore', () => {
             </ReadMore>,
         );
         expect(ref.current?.classList.contains('ix-read-more')).toBe(true);
-    });
-
-    it('label støtter ReactNode (f.eks. prefiks-ikon)', () => {
-        render(
-            <ReadMore
-                label={
-                    <>
-                        <span data-testid="ikon" /> Les mer
-                    </>
-                }
-            >
-                Innhold
-            </ReadMore>,
-        );
-        expect(screen.getByTestId('ikon')).toBeTruthy();
-        expect(screen.getByText(/Les mer/)).toBeTruthy();
     });
 });

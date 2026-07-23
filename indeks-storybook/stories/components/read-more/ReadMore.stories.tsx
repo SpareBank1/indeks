@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Icon, LinkText, ListElement, ReadMore } from '@sb1/indeks-react';
+import { LinkText, ListElement, ReadMore } from '@sb1/indeks-react';
 
 const meta = {
     title: 'Components/ReadMore',
@@ -32,20 +32,6 @@ export const Standard: Story = {};
 export const DefaultOpen: Story = {
     name: 'Åpen som standard',
     args: { defaultOpen: true },
-};
-
-/**
- * Labelen støtter et prefiks-ikon foran teksten (`label` tar ReactNode).
- */
-export const MedIkon: Story = {
-    name: 'Med prefiks-ikon',
-    args: {
-        label: (
-            <>
-                <Icon name="info" /> Om helsemessige begrensninger
-            </>
-        ),
-    },
 };
 
 /**

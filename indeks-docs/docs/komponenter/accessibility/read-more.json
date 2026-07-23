@@ -4,8 +4,8 @@
   "consumerResponsibilities": [
     {
       "summary": "Skriv kort og beskrivende label-tekst",
-      "details": "Labelen er klikkflaten og skal beskrive hva som avsløres slik at den gir mening lest alene. Hold den kort. Et valgfritt prefiks-ikon kan støtte forståelsen, men teksten er alltid hovedbæreren — ikonet skal ikke være eneste informasjon. Teksten sendes inn av konsumenten (bokmål, nynorsk eller engelsk); komponenten har ingen hardkodet tekst.",
-      "wcag": ["2.4.6", "1.1.1"]
+      "details": "Labelen er klikkflaten og skal beskrive hva som avsløres slik at den gir mening lest alene. Hold den kort. Teksten sendes inn av konsumenten (bokmål, nynorsk eller engelsk); komponenten har ingen hardkodet tekst.",
+      "wcag": ["2.4.6"]
     },
     {
       "summary": "Bruk overskriftsnivå i label ved behov",
@@ -37,7 +37,7 @@
     { "id": "4.1.2", "notes": "Native <details>/<summary> gir korrekt rolle og åpne/lukke-tilstand til skjermlesere uten ekstra ARIA. Komponenten er ren CSS og setter ingen ARIA." }
   ],
   "notRelevant": [
-    { "id": "1.1.1", "reason": "Komponenten har ikke eget bildeinnhold. Et valgfritt prefiks-ikon i labelen er konsumentens ansvar (Icon-komponenten håndterer alt-tekst/aria-hidden)." },
+    { "id": "1.1.1", "reason": "Komponenten har ikke eget bildeinnhold — labelen er ren tekst sendt inn av konsumenten." },
     { "id": "1.2.1" },
     { "id": "1.2.2" },
     { "id": "1.2.3" },
