@@ -131,21 +131,6 @@ describe('IxTabs — initial valgt', () => {
         expect(panels(el)[1].hasAttribute('hidden')).toBe(false);
     });
 
-    it('hopper over disabled fane som default-valg', () => {
-        const el = mount(`
-            <ix-tabs>
-                <ix-tab-list>
-                    <ix-tab aria-disabled="true">A</ix-tab>
-                    <ix-tab>B</ix-tab>
-                </ix-tab-list>
-                <ix-tab-panel>A</ix-tab-panel>
-                <ix-tab-panel>B</ix-tab-panel>
-            </ix-tabs>
-        `);
-        const [, t1] = tabs(el);
-        expect(t1.getAttribute('aria-selected')).toBe('true');
-    });
-
     it('sender ikke change ved init', () => {
         const wrapper = document.createElement('div');
         const handler = vi.fn();
@@ -196,42 +181,6 @@ describe('IxTabs — aktivering', () => {
         expect(handler).not.toHaveBeenCalled();
     });
 
-    it('aktiverer ikke disabled fane', () => {
-        const el = mount(`
-            <ix-tabs>
-                <ix-tab-list>
-                    <ix-tab>A</ix-tab>
-                    <ix-tab aria-disabled="true">B</ix-tab>
-                </ix-tab-list>
-                <ix-tab-panel>A</ix-tab-panel>
-                <ix-tab-panel>B</ix-tab-panel>
-            </ix-tabs>
-        `);
-        const [t0, t1] = tabs(el);
-        t1.click();
-        expect(t1.getAttribute('aria-selected')).toBe('false');
-        expect(t0.getAttribute('aria-selected')).toBe('true');
-    });
-
-    it('speiler rent disabled-attributt til aria-disabled (ren HTML-bruk)', () => {
-        const el = mount(`
-            <ix-tabs>
-                <ix-tab-list>
-                    <ix-tab>A</ix-tab>
-                    <ix-tab disabled>B</ix-tab>
-                </ix-tab-list>
-                <ix-tab-panel>A</ix-tab-panel>
-                <ix-tab-panel>B</ix-tab-panel>
-            </ix-tabs>
-        `);
-        const [t0, t1] = tabs(el);
-        // CSS :disabled matcher ikke custom elements — speiling gir konsistent
-        // dempet styling og skjermleser-tilstand.
-        expect(t1.getAttribute('aria-disabled')).toBe('true');
-        t1.click();
-        expect(t1.getAttribute('aria-selected')).toBe('false');
-        expect(t0.getAttribute('aria-selected')).toBe('true');
-    });
 });
 
 describe('IxTabs — tastaturnavigasjon (manuell aktivering)', () => {
@@ -266,25 +215,6 @@ describe('IxTabs — tastaturnavigasjon (manuell aktivering)', () => {
         expect(document.activeElement).toBe(t2);
         keydown(t2, 'ArrowRight');
         expect(document.activeElement).toBe(t0);
-    });
-
-    it('hopper over disabled fane ved pilnavigasjon', () => {
-        const el = mount(`
-            <ix-tabs>
-                <ix-tab-list>
-                    <ix-tab>A</ix-tab>
-                    <ix-tab aria-disabled="true">B</ix-tab>
-                    <ix-tab>C</ix-tab>
-                </ix-tab-list>
-                <ix-tab-panel>A</ix-tab-panel>
-                <ix-tab-panel>B</ix-tab-panel>
-                <ix-tab-panel>C</ix-tab-panel>
-            </ix-tabs>
-        `);
-        const [t0, , t2] = tabs(el);
-        t0.focus();
-        keydown(t0, 'ArrowRight');
-        expect(document.activeElement).toBe(t2);
     });
 });
 

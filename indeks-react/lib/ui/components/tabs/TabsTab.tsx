@@ -10,8 +10,6 @@ export type TabsTabProps = {
     value: string;
     /** Fane-etiketten — tekst, ikon, eller ikon + tekst. */
     children?: ReactNode;
-    /** Deaktiver fanen. Settes som `aria-disabled` og hoppes over i navigasjon. */
-    disabled?: boolean;
     /**
      * Tilgjengelig navn når fanen kun viser et ikon (i18n — konsumenten
      * oversetter). Uten synlig tekst må dette settes.
@@ -26,7 +24,7 @@ export type TabsTabProps = {
  * `aria-selected` (fra `Tabs`' start-verdi) og bærer `value` via `data-value`
  * slik at `Tabs` kan mappe tilbake til verdien i sin change-bro.
  */
-export function TabsTab({ value, children, disabled, ariaLabel, className }: TabsTabProps): JSX.Element {
+export function TabsTab({ value, children, ariaLabel, className }: TabsTabProps): JSX.Element {
     const ctx = useContext(TabsContext);
     const selected = ctx?.initialValue === value;
 
@@ -35,7 +33,6 @@ export function TabsTab({ value, children, disabled, ariaLabel, className }: Tab
             class={clsx('ix-tabs__tab', className)}
             data-value={value}
             aria-selected={selected ? 'true' : 'false'}
-            aria-disabled={disabled ? 'true' : undefined}
             aria-label={ariaLabel}
         >
             {children}

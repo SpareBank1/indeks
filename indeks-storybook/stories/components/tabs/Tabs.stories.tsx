@@ -102,33 +102,6 @@ export const KunIkon: Story = {
 };
 
 /**
- * En deaktivert fane vises dempet, kan ikke aktiveres og hoppes over ved
- * piltast-navigasjon.
- */
-export const Disabled: Story = {
-    render: () => (
-        <Tabs defaultValue="aktiv">
-            <Tabs.List ariaLabel="Eksempel med deaktivert fane">
-                <Tabs.Tab value="aktiv">Aktiv</Tabs.Tab>
-                <Tabs.Tab value="deaktivert" disabled>
-                    Deaktivert
-                </Tabs.Tab>
-                <Tabs.Tab value="ledig">Ledig</Tabs.Tab>
-            </Tabs.List>
-            <Tabs.Panel value="aktiv">
-                <p>Innhold for den aktive fanen.</p>
-            </Tabs.Panel>
-            <Tabs.Panel value="deaktivert">
-                <p>Dette panelet er ikke tilgjengelig.</p>
-            </Tabs.Panel>
-            <Tabs.Panel value="ledig">
-                <p>Innhold for den ledige fanen.</p>
-            </Tabs.Panel>
-        </Tabs>
-    ),
-};
-
-/**
  * Ren HTML med web componenten `<ix-tabs>` — uten React-wrapper. Forfatteren
  * skriver semantisk markup og setter `aria-selected` på start-fanen og `hidden`
  * på de skjulte panelene; web componenten kobler resten (roller, `aria-controls`,

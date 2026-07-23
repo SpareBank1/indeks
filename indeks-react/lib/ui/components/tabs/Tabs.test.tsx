@@ -8,9 +8,7 @@ function renderBasic(props: Partial<React.ComponentProps<typeof Tabs>> = {}) {
             <Tabs.List ariaLabel="Kontoinformasjon">
                 <Tabs.Tab value="oversikt">Oversikt</Tabs.Tab>
                 <Tabs.Tab value="detaljer">Detaljer</Tabs.Tab>
-                <Tabs.Tab value="historikk" disabled>
-                    Historikk
-                </Tabs.Tab>
+                <Tabs.Tab value="historikk">Historikk</Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value="oversikt">Oversikt-innhold</Tabs.Panel>
             <Tabs.Panel value="detaljer">Detaljer-innhold</Tabs.Panel>
@@ -38,12 +36,6 @@ describe('Tabs — rendering', () => {
         const root = container.querySelector('ix-tabs');
         expect(root?.classList.contains('ix-tabs')).toBe(true);
         expect(root?.classList.contains('egen-klasse')).toBe(true);
-    });
-
-    it('markerer disabled fane med aria-disabled', () => {
-        renderBasic();
-        const historikk = screen.getByRole('tab', { name: 'Historikk' });
-        expect(historikk.getAttribute('aria-disabled')).toBe('true');
     });
 });
 
@@ -79,13 +71,6 @@ describe('Tabs — interaksjon og onChange', () => {
         fireEvent.click(screen.getByRole('tab', { name: 'Detaljer' }));
         expect(screen.getByRole('tabpanel').textContent).toBe('Detaljer-innhold');
     });
-
-    it('kaller ikke onChange for disabled fane', () => {
-        const onChange = vi.fn();
-        renderBasic({ onChange });
-        fireEvent.click(screen.getByRole('tab', { name: 'Historikk' }));
-        expect(onChange).not.toHaveBeenCalled();
-    });
 });
 
 describe('Tabs — kontrollert', () => {
@@ -98,9 +83,7 @@ describe('Tabs — kontrollert', () => {
                 <Tabs.List ariaLabel="Kontoinformasjon">
                     <Tabs.Tab value="oversikt">Oversikt</Tabs.Tab>
                     <Tabs.Tab value="detaljer">Detaljer</Tabs.Tab>
-                    <Tabs.Tab value="historikk" disabled>
-                        Historikk
-                    </Tabs.Tab>
+                    <Tabs.Tab value="historikk">Historikk</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value="oversikt">Oversikt-innhold</Tabs.Panel>
                 <Tabs.Panel value="detaljer">Detaljer-innhold</Tabs.Panel>

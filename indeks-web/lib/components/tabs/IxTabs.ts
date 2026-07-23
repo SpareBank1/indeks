@@ -27,9 +27,9 @@
  *    (panel → fane). Eksisterende IDer og aria-controls respekteres. Fane[i]
  *    kobles til panel[i], eller til panelet fanens aria-controls peker på.
  * 3. Manuell aktivering: piltast (Venstre/Høyre) og Home/End flytter kun FOKUS
- *    via roving tabindex (fokusert fane får tabindex=0, resten -1). Deaktiverte
- *    faner hoppes over, og navigasjonen looper rundt endene. Enter/Space (og
- *    klikk) aktiverer den fokuserte fanen.
+ *    via roving tabindex (fokusert fane får tabindex=0, resten -1).
+ *    Piltast-navigasjonen looper rundt endene. Enter/Space (og klikk) aktiverer
+ *    den fokuserte fanen.
  * 4. Kun én fane er valgt om gangen. Ved aktivering flyttes aria-selected +
  *    tabindex til ny fane, tilhørende panel vises, øvrige skjules ([hidden] +
  *    aria-hidden). Panelet gjøres ikke fokuserbart — det er ikke en egen
@@ -37,7 +37,7 @@
  *    Fane→panel-kobling skjer via delt data-value (ellers aria-controls,
  *    ellers posisjon) — se _getPanel.
  * 5. Minst én fane er valgt ved mount — enten den som har aria-selected="true"
- *    i markup, ellers den første aktiverbare.
+ *    i markup, ellers den første fanen.
  * 6. Ved aktivering (klikk/tastatur) sendes et bubbling CustomEvent('change')
  *    på <ix-tabs> slik at en React-wrapper kan lese aria-selected og kalle
  *    onChange. Programmatisk init og ekstern (kontrollert) synk sender IKKE
@@ -69,7 +69,6 @@ const ARIA_SELECTED = 'aria-selected';
 const ARIA_CONTROLS = 'aria-controls';
 const ARIA_LABELLEDBY = 'aria-labelledby';
 const ARIA_HIDDEN = 'aria-hidden';
-const ARIA_DISABLED = 'aria-disabled';
 const DATA_VALUE = 'data-value';
 
 function isTab(el: Element): el is HTMLElement {
@@ -78,10 +77,6 @@ function isTab(el: Element): el is HTMLElement {
 
 function isPanel(el: Element): el is HTMLElement {
     return el instanceof HTMLElement && (el.tagName === 'IX-TAB-PANEL' || el.getAttribute(ROLE) === 'tabpanel');
-}
-
-function isDisabled(tab: HTMLElement): boolean {
-    return tab.getAttribute(ARIA_DISABLED) === 'true' || tab.hasAttribute('disabled');
 }
 
 export class IxTabs extends HTMLElement {
@@ -192,15 +187,6 @@ export class IxTabs extends HTMLElement {
             if (!tab.getAttribute(ROLE)) tab.setAttribute(ROLE, 'tab');
             if (!tab.id) tab.id = `ix-tab-${this._instanceId}-${i}`;
 
-            // <ix-tab> er ikke et form-element, så CSS `:disabled` matcher det ikke.
-            // Speil et rent `disabled`-attributt (ren HTML-bruk) til aria-disabled slik
-            // at både dempet styling og skjermleser-tilstand blir konsistent. React-laget
-            // setter allerede aria-disabled selv. Observeres ikke (attributeFilter er kun
-            // aria-selected), så ingen re-wire-løkke.
-            if (tab.hasAttribute('disabled') && tab.getAttribute(ARIA_DISABLED) !== 'true') {
-                tab.setAttribute(ARIA_DISABLED, 'true');
-            }
-
             const panel = this._getPanel(tab, i);
             if (panel) {
                 if (!panel.getAttribute(ROLE)) panel.setAttribute(ROLE, 'tabpanel');
@@ -210,12 +196,9 @@ export class IxTabs extends HTMLElement {
             }
         });
 
-        // Initial valgt fane: markup-valgt (aria-selected="true") og aktiverbar,
-        // ellers første aktiverbare, ellers første fane. Init sender ikke change.
-        const selected =
-            tabs.find((t) => t.getAttribute(ARIA_SELECTED) === 'true' && !isDisabled(t)) ??
-            tabs.find((t) => !isDisabled(t)) ??
-            tabs[0];
+        // Initial valgt fane: markup-valgt (aria-selected="true"), ellers første
+        // fane. Init sender ikke change.
+        const selected = tabs.find((t) => t.getAttribute(ARIA_SELECTED) === 'true') ?? tabs[0];
         this.setSelected(selected, false);
     }
 
@@ -225,7 +208,7 @@ export class IxTabs extends HTMLElement {
      * (dispatch=true) OG når valget faktisk endres.
      */
     setSelected(selected: HTMLElement | null | undefined, dispatch = false): void {
-        if (!selected || isDisabled(selected)) return;
+        if (!selected) return;
         const tabs = this._getTabs();
         if (!tabs.includes(selected)) return;
 
@@ -270,14 +253,10 @@ export class IxTabs extends HTMLElement {
         target.focus();
     }
 
-    /** Neste aktiverbare fane fra `from`, i retning `step`, med loop rundt endene. */
-    private _nextEnabled(tabs: HTMLElement[], from: number, step: number): number {
+    /** Neste fane fra `from`, i retning `step`, med loop rundt endene. */
+    private _step(tabs: HTMLElement[], from: number, step: number): number {
         const n = tabs.length;
-        for (let i = 1; i <= n; i++) {
-            const idx = (from + step * i + n * i) % n;
-            if (!isDisabled(tabs[idx])) return idx;
-        }
-        return from;
+        return (from + step + n) % n;
     }
 
     private _onClick(e: MouseEvent): void {
@@ -300,12 +279,12 @@ export class IxTabs extends HTMLElement {
             return;
         }
 
-        // Piltast (horisontal) + Home/End flytter kun fokus, hopper over disabled.
+        // Piltast (horisontal) + Home/End flytter kun fokus.
         let next: number;
-        if (e.key === 'ArrowRight') next = this._nextEnabled(tabs, current, 1);
-        else if (e.key === 'ArrowLeft') next = this._nextEnabled(tabs, current, -1);
-        else if (e.key === 'Home') next = this._nextEnabled(tabs, -1, 1);
-        else if (e.key === 'End') next = this._nextEnabled(tabs, 0, -1);
+        if (e.key === 'ArrowRight') next = this._step(tabs, current, 1);
+        else if (e.key === 'ArrowLeft') next = this._step(tabs, current, -1);
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = tabs.length - 1;
         else return;
 
         e.preventDefault();

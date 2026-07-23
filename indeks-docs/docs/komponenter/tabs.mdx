@@ -203,57 +203,6 @@ Faner uten synlig tekst må ha et tilgjengelig navn (på brukerens språk) — e
 </TabItem>
 </Tabs>
 
-### Deaktivert fane
-
-En deaktivert fane vises dempet, kan ikke aktiveres og hoppes over ved piltast-navigasjon. I HTML settes `aria-disabled="true"` (eller attributtet `disabled`) på fanen; i React sender du `disabled`.
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<ix-tabs class="ix-tabs">
-  <ix-tab-list class="ix-tabs__list" aria-label="Eksempel med deaktivert fane">
-    <ix-tab class="ix-tabs__tab" data-value="aktiv" aria-selected="true">Aktiv</ix-tab>
-    <ix-tab class="ix-tabs__tab" data-value="deaktivert" aria-selected="false" aria-disabled="true">Deaktivert</ix-tab>
-    <ix-tab class="ix-tabs__tab" data-value="ledig" aria-selected="false">Ledig</ix-tab>
-  </ix-tab-list>
-  <ix-tab-panel class="ix-tabs__panel" data-value="aktiv">
-    <p>Innhold for den aktive fanen.</p>
-  </ix-tab-panel>
-  <ix-tab-panel class="ix-tabs__panel" data-value="deaktivert" hidden>
-    <p>Dette panelet er ikke tilgjengelig.</p>
-  </ix-tab-panel>
-  <ix-tab-panel class="ix-tabs__panel" data-value="ledig" hidden>
-    <p>Innhold for den ledige fanen.</p>
-  </ix-tab-panel>
-</ix-tabs>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<Tabs defaultValue="aktiv">
-  <Tabs.List ariaLabel="Eksempel med deaktivert fane">
-    <Tabs.Tab value="aktiv">Aktiv</Tabs.Tab>
-    <Tabs.Tab value="deaktivert" disabled>Deaktivert</Tabs.Tab>
-    <Tabs.Tab value="ledig">Ledig</Tabs.Tab>
-  </Tabs.List>
-  <Tabs.Panel value="aktiv">
-    <p>Innhold for den aktive fanen.</p>
-  </Tabs.Panel>
-  <Tabs.Panel value="deaktivert">
-    <p>Dette panelet er ikke tilgjengelig.</p>
-  </Tabs.Panel>
-  <Tabs.Panel value="ledig">
-    <p>Innhold for den ledige fanen.</p>
-  </Tabs.Panel>
-</Tabs>
-```
-
-</TabItem>
-</Tabs>
-
 ## Retningslinjer
 
 ### Innhold og formulering
@@ -307,7 +256,6 @@ Trenger du `ix-tabs`-stylingen på HTML du setter sammen selv — uten React-kom
 | Enkelt-fane | `.ix-tabs__tab` på `<ix-tab>` |
 | Fane↔panel-kobling | delt `data-value` på `<ix-tab>` og `<ix-tab-panel>` |
 | Aktiv fane | `[aria-selected="true"]` på fanen |
-| Deaktivert fane | `[aria-disabled="true"]` (eller `:disabled`) på fanen |
 | Innholdspanel | `.ix-tabs__panel` på `<ix-tab-panel>` |
 | Skjult panel | `[hidden]` på panelet (native) |
 
@@ -342,9 +290,9 @@ Understreken er synlig i alle tilstander og markerer tilstand med farge: passiv 
 ### Hva komponenten gjør automatisk
 
 - **Roller og relasjoner** — web componenten setter `role="tablist"/"tab"/"tabpanel"`, `aria-selected`, `aria-controls` (fane → panel) og `aria-labelledby` (panel → fane) ved mount. Ingen ekstra ARIA er nødvendig.
-- **Tastaturnavigasjon (manuell aktivering)** — roving `tabindex` gir én tab-stopp; pil venstre/høyre flytter fokus, Home/End går til første/siste, deaktiverte faner hoppes over, og Enter/Mellomrom aktiverer.
-- **Tilstand annonseres** — aktiv fane formidles av `aria-selected`, ikke av farge alene; deaktiverte faner markeres med `aria-disabled`.
-- **Fokusindikator** — tydelig fokusring på fane og panel (`:focus-visible`), med offset innover så den ikke klippes av scroll-containeren.
+- **Tastaturnavigasjon (manuell aktivering)** — roving `tabindex` gir én tab-stopp; pil venstre/høyre flytter fokus, Home/End går til første/siste, og Enter/Mellomrom aktiverer.
+- **Tilstand annonseres** — aktiv fane formidles av `aria-selected`, ikke av farge alene.
+- **Fokusindikator** — tydelig fokusring rundt hele fanen (`:focus-visible`); tablisten reserverer vertikal plass så ringen ikke klippes av scroll-containeren.
 - **Reflow og touch-mål** — fane-lista scroller horisontalt ved plassmangel (siden får ingen horisontal scroll ned til 320 px), og hver fane har min. 44×44 px touch-mål.
 - **Redusert bevegelse** — indikator-overgangen respekterer `prefers-reduced-motion: reduce`.
 

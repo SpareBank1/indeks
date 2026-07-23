@@ -1,6 +1,6 @@
 {
   "component": "Tabs",
-  "lastReviewed": "2026-07-21",
+  "lastReviewed": "2026-07-23",
   "consumerResponsibilities": [
     {
       "summary": "Gi kun-ikon-faner et tilgjengelig navn med ariaLabel",
@@ -34,12 +34,12 @@
     { "id": "2.1.1", "notes": "Full tastaturstøtte: Tab inn/ut av tablisten (roving tabindex — kun én tab-stopp), pil venstre/høyre flytter fokus mellom faner, Home/End til første/siste, Enter/Mellomrom aktiverer fokusert fane." },
     { "id": "2.1.2", "notes": "Ingen tastaturfeller — fokus navigeres fritt ut av tablisten med Tab/Shift+Tab." },
     { "id": "2.4.3", "notes": "Roving tabindex gir én tab-stopp for hele tablisten; fokusrekkefølgen følger DOM: tablist før panel." },
-    { "id": "2.4.7", "notes": "Tydelig fokusindikator på fanene (`:focus-visible`), med offset innover så den ikke klippes av scroll-containeren." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator rundt hele fanen (`:focus-visible`); tablisten reserverer vertikal plass (`padding-block`) så ringen ikke klippes av scroll-containeren." },
     { "id": "2.3.3", "notes": "Overgangen på aktiv-indikatoren respekterer `prefers-reduced-motion: reduce` — transition settes til `none`." },
     { "id": "2.5.8", "notes": "Hver fane har min. 44×44 px klikk-/touch-mål via `min-height`/`min-width` + padding." },
     { "id": "3.2.1", "notes": "Ingen kontekstendring ved fokus. Manuell aktivering: å flytte fokus mellom faner med piltast bytter ikke panel før brukeren trykker Enter/Mellomrom." },
     { "id": "3.2.2", "notes": "Å aktivere en fane gjør kun det forventede (viser tilhørende panel) — ingen automatisk kontekstendring eller navigasjon." },
-    { "id": "4.1.2", "notes": "Roller, navn og tilstand (`aria-selected`, `aria-disabled`) eksponeres korrekt via ARIA satt av web componenten. Aktiv/valgt fane annonseres, deaktiverte faner markeres og hoppes over ved piltast-navigasjon." }
+    { "id": "4.1.2", "notes": "Roller, navn og tilstand (`aria-selected`) eksponeres korrekt via ARIA satt av web componenten. Aktiv/valgt fane annonseres til skjermlesere." }
   ],
   "issues": [],
   "notRelevant": [
@@ -83,7 +83,7 @@
   "keyboard": [
     { "key": "Tab", "action": "Flytter fokus inn i tablisten (til aktiv fane) og videre ut til første fokuserbare element etter tablisten — kun én tab-stopp i tablisten. Panelet er ikke en egen tab-stopp." },
     { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
-    { "key": "Pil venstre / Pil høyre", "action": "Flytter fokus til forrige/neste fane, looper rundt endene og hopper over deaktiverte faner (aktiverer ikke)" },
+    { "key": "Pil venstre / Pil høyre", "action": "Flytter fokus til forrige/neste fane, looper rundt endene (aktiverer ikke)" },
     { "key": "Home", "action": "Flytter fokus til første fane" },
     { "key": "End", "action": "Flytter fokus til siste fane" },
     { "key": "Enter", "action": "Aktiverer den fokuserte fanen og viser tilhørende panel" },
@@ -91,7 +91,6 @@
   ],
   "screenReader": [
     "Ved fokus på en fane: «[etikett], fane, valgt/ikke valgt, [posisjon] av [antall]»",
-    "Deaktivert fane annonseres som utilgjengelig og hoppes over ved piltast-navigasjon",
     "Å aktivere en fane bytter det synlige panelet uten å flytte fokus bort fra fanen; panelet er programmessig knyttet til fanen via aria-controls/aria-labelledby"
   ]
 }
