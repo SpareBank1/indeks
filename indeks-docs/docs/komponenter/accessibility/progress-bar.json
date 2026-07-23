@@ -1,0 +1,97 @@
+{
+  "component": "ProgressBar",
+  "lastReviewed": "2026-07-21",
+  "consumerResponsibilities": [
+    {
+      "summary": "Gi alltid et tilgjengelig navn",
+      "details": "I active-tilstand må baren ha et tilgjengelig navn — ellers hører skjermleserbrukeren bare rollen og verdien (WCAG 4.1.2). Bruk label for et synlig navn (kobles via aria-labelledby), eller aria-label når baren skal stå uten synlig tekst. Navnet skal beskrive hva fremdriften gjelder («Laster opp dokumenter»), ikke bare at noe pågår («Prosessering»). Web componenten advarer i dev når active mangler navn. Navnet er aldri hardkodet — konsumenten sender det inn på riktig språk (bokmål, nynorsk, engelsk).",
+      "wcag": ["1.3.1", "4.1.2", "2.4.6"]
+    },
+    {
+      "summary": "La støttetekst følge overgangen til success/error",
+      "details": "Overgangen til success/error annonseres kun for skjermleser dersom støtteteksten (data-support-text / supportText) settes samtidig — teksten leses opp via en polite live-region. Uten støttetekst blir overgangen stille (kun visuell endring av ikon og farge), og skjermleserbrukeren får ikke vite at prosessen ble fullført eller feilet. Web componenten advarer i dev når success/error mangler støttetekst. I error skal teksten dessuten forklare hva som gikk galt og hva brukeren kan gjøre videre. Teksten sendes inn av konsumenten på riktig språk.",
+      "wcag": ["4.1.3", "1.4.1", "3.3.1"]
+    },
+    {
+      "summary": "Bruk kun én ProgressBar per prosess",
+      "details": "ProgressBar representerer alltid én sammenhengende prosess. Ikke bruk flere barer for å vise deltilstander i samme prosess — det gir skjermleserbrukere flere konkurrerende progressbar-roller og et uklart bilde av samlet fremdrift. Trenger du å vise plassering i et flerstegsforløp, bruk Stepper i stedet.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Sett kun reell fremdrift som verdi",
+      "details": "value skal reflektere faktisk fremdrift (0–100). Ikke sett en kunstig eller beregnet verdi som ikke svarer til noe brukeren venter på — det villeder både syns- og skjermleserbrukere. Er varigheten ukjent, bruk Spinner i stedet for ProgressBar. Bruk valueText for en lokalisert skjermleser-frasering («25 av 100») der ren prosent er utilstrekkelig.",
+      "wcag": ["4.1.2"]
+    },
+    {
+      "summary": "Sjekk kontrast mot egen bakgrunn",
+      "details": "Fyll og track bruker tokens som oppfyller non-text-kontrast (1.4.11) mot standard bakgrunn i både lys og mørk modus. Vises ProgressBar over en avvikende bakgrunn (farget panel, bilde), må konsumenten selv verifisere at fyll mot track og fyll mot bakgrunn fortsatt oppfyller 3:1.",
+      "wcag": ["1.4.11"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Semantisk struktur: i active er host role=\"progressbar\" med aria-valuenow/min/max; label kobles via aria-labelledby og støttetekst via aria-describedby. I success/error fjernes progressbar-rollen og status formidles semantisk med ikon + tekst (tilsvarende Message)." },
+    { "id": "1.3.2", "notes": "Innhold følger naturlig leserekkefølge i DOM: label/verdi, deretter track/fyll, deretter støttetekst." },
+    { "id": "1.4.1", "notes": "Tilstand (active/success/error) formidles med ikon + tekst i tillegg til farge — farge er aldri eneste signal. Statusikonet vises alltid i success og error." },
+    { "id": "1.4.3", "notes": "Tekst (label, verdi, støttetekst) bruker foreground-tokens som oppfyller kontrastkravet i både lys og mørk modus." },
+    { "id": "1.4.4", "notes": "Relative enheter (font-size-tokens) — tekst skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Mobile-first uten faste bredder (width: 100%) — reflower korrekt ned til 320px viewport uten horisontal scroll. Linjehøyden reduseres ikke på noen skjermstørrelse." },
+    { "id": "1.4.11", "notes": "Non-text-kontrast mellom fylt del (fill) og ufylt del (neutral-subtle track) oppfyller 3:1 via tokens i både lys og mørk modus." },
+    { "id": "2.2.2", "notes": "Overgang mellom verdier/tilstander animeres mykt, men prefers-reduced-motion: reduce fjerner transitionen helt — fyllet hopper direkte til endelig bredde/farge." },
+    { "id": "4.1.2", "notes": "Name, Role, Value: i active eksponeres role=\"progressbar\" med aria-valuenow (avrundet), aria-valuemin=\"0\", aria-valuemax=\"100\" og valgfri aria-valuetext. Tilgjengelig navn fra label via aria-labelledby (eller aria-label satt av konsumenten). På iOS byttes rollen til role=\"img\" og verdien bakes inn i aria-label, fordi VoiceOver ikke leser løpende aria-valuenow-endringer på en progressbar; desktop og Android beholder progressbar-semantikken. I success/error fjernes rollen og value-attributtene (ikke lenger en progressbar)." },
+    { "id": "4.1.3", "notes": "Støtteteksten er en stabil, alltid-tilstedeværende live-region (role=\"status\" aria-live=\"polite\" aria-atomic=\"false\") generert av web componenten. Overgang til success/error annonseres høflig når den forklarende teksten settes inn, uten å flytte fokus." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Statusikonet er en dekorativ <ix-icon data-badge> merket aria-hidden=\"true\" — status formidles av tekst, så ingen alt-tekst er nødvendig." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Formidler ikke instruksjoner basert på sensoriske egenskaper." },
+    { "id": "1.3.4", "reason": "Ingen orientasjons-avhengig funksjonalitet." },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt som ber om personlig informasjon." },
+    { "id": "1.4.2", "reason": "Ingen lyd." },
+    { "id": "1.4.5", "reason": "Ingen bilde av tekst." },
+    { "id": "1.4.12", "reason": "Ingen fast tekstavstand som brytes ved brukertilpasning." },
+    { "id": "1.4.13", "reason": "Ikke hover/fokus-utløst innhold." },
+    { "id": "2.1.1", "reason": "Ikke-interaktiv — ingen tastaturbetjening er nødvendig." },
+    { "id": "2.1.2", "reason": "Ikke-interaktiv — ingen tastaturfelle." },
+    { "id": "2.1.4", "reason": "Ingen hurtigtaster." },
+    { "id": "2.2.1", "reason": "Komponenten har ingen tidsbegrensning." },
+    { "id": "2.3.1", "reason": "Ingen blinking — jevn overgang under terskel for anfall." },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.3", "reason": "Ikke fokuserbar." },
+    { "id": "2.4.4", "reason": "Ikke en lenke." },
+    { "id": "2.4.5" },
+    { "id": "2.4.7", "reason": "Ikke-interaktiv og mottar ikke fokus." },
+    { "id": "2.4.11", "reason": "Ikke-interaktiv og mottar ikke fokus." },
+    { "id": "2.5.1", "reason": "Ingen gestbaserte interaksjoner." },
+    { "id": "2.5.2", "reason": "Ikke-interaktiv." },
+    { "id": "2.5.4", "reason": "Ikke-interaktiv." },
+    { "id": "2.5.6", "reason": "Ikke-interaktiv." },
+    { "id": "2.5.7", "reason": "Ikke-interaktiv." },
+    { "id": "2.5.8", "reason": "Ikke-interaktiv — ingen touch-mål." },
+    { "id": "3.1.1" },
+    { "id": "3.1.2", "reason": "Endrer ikke språk." },
+    { "id": "3.2.1", "reason": "Mottar ikke fokus — ingen kontekstendring." },
+    { "id": "3.2.2", "reason": "Ingen skjemainput." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.2", "reason": "Ikke et skjemafelt — ingen input-labels/instruksjoner." },
+    { "id": "3.3.3", "reason": "Ikke et skjemafelt." },
+    { "id": "3.3.4", "reason": "Ikke et skjemafelt." },
+    { "id": "3.3.7", "reason": "Ikke et skjemafelt." },
+    { "id": "3.3.8", "reason": "Ikke et skjemafelt." }
+  ],
+  "keyboard": [],
+  "screenReader": [
+    "active ved fokus/opplesing: \"[label], [verdi], fremdriftsindikator\" — rolle progressbar med aria-valuenow (eller aria-valuetext om satt)",
+    "Verdiendring i active: skjermlesere som følger progressbar-verdien annonserer ny aria-valuenow uten å flytte fokus",
+    "active på iOS: leses som \"[label], [verdi]\" (role=\"img\" med verdien i aria-label), siden VoiceOver ikke annonserer løpende aria-valuenow på en progressbar",
+    "Overgang til success/error: den forklarende støtteteksten legges til i en polite live-region (role=\"status\") og leses høflig når skjermleseren er ledig",
+    "success/error: ikke lenger en progressbar — status bæres av støtteteksten (ikonet er dekorativt og aria-hidden)"
+  ]
+}

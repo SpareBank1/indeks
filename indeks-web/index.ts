@@ -3,6 +3,7 @@ import { IxCombobox } from './lib/components/combobox/IxCombobox.js';
 import { IxField } from './lib/components/field/IxField.js';
 import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
+import { IxProgressBar } from './lib/components/progress-bar/IxProgressBar.js';
 import { IxRadioGroup } from './lib/components/radio-group/IxRadioGroup.js';
 import './lib/modal/modal.js';
 import './lib/tooltip/tooltip.js';
@@ -12,12 +13,14 @@ customElements.define('ix-icon', IxIcon);
 customElements.define('ix-radio-group', IxRadioGroup);
 customElements.define('ix-checkbox-group', IxCheckboxGroup);
 customElements.define('ix-combobox', IxCombobox);
+customElements.define('ix-progress-bar', IxProgressBar);
 
 export { IxField };
 export { IxIcon };
 export { IxRadioGroup };
 export { IxCheckboxGroup };
 export { IxCombobox };
+export { IxProgressBar };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
 
@@ -31,6 +34,7 @@ declare global {
         'ix-radio-group': IxRadioGroup;
         'ix-checkbox-group': IxCheckboxGroup;
         'ix-combobox': IxCombobox;
+        'ix-progress-bar': IxProgressBar;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -73,6 +77,16 @@ declare global {
                 'data-size'?: 'sm' | 'md' | 'lg' | 'xl';
                 'aria-label'?: string;
                 'aria-labelledby'?: string;
+                class?: string;
+                style?: string | Record<string, string>;
+            };
+            'ix-progress-bar': {
+                value?: number | string;
+                'data-state'?: 'active' | 'success' | 'error';
+                label?: string;
+                'data-support-text'?: string;
+                'data-show-value'?: boolean | '';
+                'data-value-text'?: string;
                 class?: string;
                 style?: string | Record<string, string>;
             };
