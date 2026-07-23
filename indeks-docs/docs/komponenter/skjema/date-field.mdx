@@ -29,22 +29,24 @@ Brukeren ser og taster `dd.mm.åååå`. Selve verdien — det som sendes ved in
 
 ## Kom i gang
 
-I feltet taster brukeren datoen, som formateres fortløpende til `dd.mm.åååå`. Kalenderknappen til høyre åpner enhetens innebygde datovelger. På desktop uten `showPicker()`-støtte fanges klikket av en gjennomsiktig native date-input som ligger oppå knappen, så kalenderen åpnes robust helt ned til nettleser-baselinen vår.
+I feltet taster brukeren datoen, som formateres fortløpende til `dd.mm.åååå` — punktumet dukker opp med én gang en gruppe er full (`24` → `24.`, `2412` → `24.12.`), så brukeren aldri trenger å taste skilletegnet selv. Kalenderknappen til høyre åpner enhetens innebygde datovelger. På desktop kaller knappen `showPicker()`; på touch fanges tappet av en gjennomsiktig native date-input som ligger oppå knappen, så kalenderen åpnes robust.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-field>
-  <label for="fodt-html">Fødselsdato</label>
-  <span data-field="description">dd.mm.åååå</span>
-  <ix-date-field class="ix-date-field" data-open-label="Åpne kalender" name="fodt">
-    <div class="ix-text-field">
-      <input id="fodt-html" inputmode="numeric" data-format="date" />
-    </div>
-  </ix-date-field>
-  <span data-field="error" aria-live="polite"></span>
-</ix-field>
+<ix-stack>
+  <ix-field>
+    <label for="fodt-html">Fødselsdato</label>
+    <span data-field="description">dd.mm.åååå</span>
+    <ix-date-field class="ix-date-field" data-open-label="Åpne kalender" name="fodt">
+      <div class="ix-text-field">
+        <input id="fodt-html" inputmode="numeric" data-format="date" />
+      </div>
+    </ix-date-field>
+    <span data-field="error" aria-live="polite"></span>
+  </ix-field>
+</ix-stack>
 ```
 
 Forfatteren skriver kun `.ix-text-field` med den synlige inputen (`data-format="date"`). Web-komponenten `<ix-date-field>` genererer selv kalenderknappen og den overlagte native date-inputen, flytter `name` til den native inputen (så innsending gir ISO), og synkroniserer de to veier.
@@ -53,12 +55,14 @@ Forfatteren skriver kun `.ix-text-field` med den synlige inputen (`data-format="
 <TabItem value="react" label="React">
 
 ```tsx live
-<DateField
-  label="Fødselsdato"
-  description="dd.mm.åååå"
-  openLabel="Åpne kalender"
-  name="fodt"
-/>
+<VStack>
+  <DateField
+    label="Fødselsdato"
+    description="dd.mm.åååå"
+    openLabel="Åpne kalender"
+    name="fodt"
+  />
+</VStack>
 ```
 
 `openLabel` blir `aria-label` på kalenderknappen og må sendes inn på riktig språk. `description` gir formathint som synlig tekst.
@@ -76,16 +80,18 @@ Startverdien settes i ISO (`åååå-mm-dd`) og vises som `dd.mm.åååå` i fel
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-field>
-  <label for="fodt-preselect">Fødselsdato</label>
-  <span data-field="description">dd.mm.åååå</span>
-  <ix-date-field class="ix-date-field" data-open-label="Åpne kalender" name="fodt" value="1990-05-17">
-    <div class="ix-text-field">
-      <input id="fodt-preselect" inputmode="numeric" data-format="date" />
-    </div>
-  </ix-date-field>
-  <span data-field="error" aria-live="polite"></span>
-</ix-field>
+<ix-stack>
+  <ix-field>
+    <label for="fodt-preselect">Fødselsdato</label>
+    <span data-field="description">dd.mm.åååå</span>
+    <ix-date-field class="ix-date-field" data-open-label="Åpne kalender" name="fodt" value="1990-05-17">
+      <div class="ix-text-field">
+        <input id="fodt-preselect" inputmode="numeric" data-format="date" />
+      </div>
+    </ix-date-field>
+    <span data-field="error" aria-live="polite"></span>
+  </ix-field>
+</ix-stack>
 ```
 
 `value="1990-05-17"` på `<ix-date-field>` seeder både den synlige inputen (17.05.1990) og den native ISO-inputen.
@@ -94,12 +100,14 @@ Startverdien settes i ISO (`åååå-mm-dd`) og vises som `dd.mm.åååå` i fel
 <TabItem value="react" label="React">
 
 ```tsx live
-<DateField
-  label="Fødselsdato"
-  description="dd.mm.åååå"
-  openLabel="Åpne kalender"
-  defaultValue="1990-05-17"
-/>
+<VStack>
+  <DateField
+    label="Fødselsdato"
+    description="dd.mm.åååå"
+    openLabel="Åpne kalender"
+    defaultValue="1990-05-17"
+  />
+</VStack>
 ```
 
 </TabItem>
@@ -113,35 +121,39 @@ Startverdien settes i ISO (`åååå-mm-dd`) og vises som `dd.mm.åååå` i fel
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-field>
-  <label for="dato-minmax">Dato</label>
-  <span data-field="description">Velg en dato i 2020-tallet</span>
-  <ix-date-field
-    class="ix-date-field"
-    data-open-label="Åpne kalender"
-    name="dato"
-    min="2020-01-01"
-    max="2030-12-31"
-  >
-    <div class="ix-text-field">
-      <input id="dato-minmax" inputmode="numeric" data-format="date" />
-    </div>
-  </ix-date-field>
-  <span data-field="error" aria-live="polite"></span>
-</ix-field>
+<ix-stack>
+  <ix-field>
+    <label for="dato-minmax">Dato</label>
+    <span data-field="description">Velg en dato i 2020-tallet</span>
+    <ix-date-field
+      class="ix-date-field"
+      data-open-label="Åpne kalender"
+      name="dato"
+      min="2020-01-01"
+      max="2030-12-31"
+    >
+      <div class="ix-text-field">
+        <input id="dato-minmax" inputmode="numeric" data-format="date" />
+      </div>
+    </ix-date-field>
+    <span data-field="error" aria-live="polite"></span>
+  </ix-field>
+</ix-stack>
 ```
 
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
-<DateField
-  label="Dato"
-  description="Velg en dato i 2020-tallet"
-  openLabel="Åpne kalender"
-  min="2020-01-01"
-  max="2030-12-31"
-/>
+<VStack>
+  <DateField
+    label="Dato"
+    description="Velg en dato i 2020-tallet"
+    openLabel="Åpne kalender"
+    min="2020-01-01"
+    max="2030-12-31"
+  />
+</VStack>
 ```
 
 </TabItem>
@@ -155,28 +167,32 @@ Formateringen validerer ikke — den avviser aldri tastetrykk. Valider på blur 
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-field>
-  <label for="fodt-error">Fødselsdato</label>
-  <span data-field="description">dd.mm.åååå</span>
-  <ix-date-field class="ix-date-field" data-open-label="Åpne kalender" name="fodt" data-state="error">
-    <div class="ix-text-field">
-      <input id="fodt-error" inputmode="numeric" data-format="date" aria-invalid="true" />
-    </div>
-  </ix-date-field>
-  <span data-field="error">Du må oppgi en gyldig dato</span>
-</ix-field>
+<ix-stack>
+  <ix-field>
+    <label for="fodt-error">Fødselsdato</label>
+    <span data-field="description">dd.mm.åååå</span>
+    <ix-date-field class="ix-date-field" data-open-label="Åpne kalender" name="fodt" data-state="error">
+      <div class="ix-text-field">
+        <input id="fodt-error" inputmode="numeric" data-format="date" aria-invalid="true" />
+      </div>
+    </ix-date-field>
+    <span data-field="error">Du må oppgi en gyldig dato</span>
+  </ix-field>
+</ix-stack>
 ```
 
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
-<DateField
-  label="Fødselsdato"
-  description="dd.mm.åååå"
-  openLabel="Åpne kalender"
-  errorMessage="Du må oppgi en gyldig dato"
-/>
+<VStack>
+  <DateField
+    label="Fødselsdato"
+    description="dd.mm.åååå"
+    openLabel="Åpne kalender"
+    errorMessage="Du må oppgi en gyldig dato"
+  />
+</VStack>
 ```
 
 </TabItem>
@@ -188,29 +204,72 @@ Formateringen validerer ikke — den avviser aldri tastetrykk. Valider på blur 
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-field>
-  <label for="fodt-disabled">Fødselsdato</label>
-  <span data-field="description">dd.mm.åååå</span>
-  <ix-date-field class="ix-date-field" data-open-label="Åpne kalender" name="fodt" disabled value="1990-05-17">
-    <div class="ix-text-field">
-      <input id="fodt-disabled" inputmode="numeric" data-format="date" disabled />
-    </div>
-  </ix-date-field>
-  <span data-field="error" aria-live="polite"></span>
-</ix-field>
+<ix-stack>
+  <ix-field>
+    <label for="fodt-disabled">Fødselsdato</label>
+    <span data-field="description">dd.mm.åååå</span>
+    <ix-date-field class="ix-date-field" data-open-label="Åpne kalender" name="fodt" disabled value="1990-05-17">
+      <div class="ix-text-field">
+        <input id="fodt-disabled" inputmode="numeric" data-format="date" disabled />
+      </div>
+    </ix-date-field>
+    <span data-field="error" aria-live="polite"></span>
+  </ix-field>
+</ix-stack>
 ```
 
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
-<DateField
-  label="Fødselsdato"
-  description="dd.mm.åååå"
-  openLabel="Åpne kalender"
-  disabled
-  defaultValue="1990-05-17"
-/>
+<VStack>
+  <DateField
+    label="Fødselsdato"
+    description="dd.mm.åååå"
+    openLabel="Åpne kalender"
+    disabled
+    defaultValue="1990-05-17"
+  />
+</VStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Mobilvelger på tapp
+
+Som standard fokuserer et tapp i feltet for manuell tasting, og kalenderen åpnes via knappen. Med `nativePickerOnMobile` (HTML: `data-native-picker-mobile`) åpner et tapp _hvor som helst_ i feltet enhetens innebygde datovelger i stedet. Flagget er **kun aktivt på touch-enheter** — på desktop har det ingen effekt, så du kan sette det uten å endre skrivbar-oppførselen der. Test det med mobil-emulering i nettleseren.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack>
+  <ix-field>
+    <label for="fodt-mobile">Fødselsdato</label>
+    <span data-field="description">dd.mm.åååå</span>
+    <ix-date-field class="ix-date-field" data-open-label="Åpne kalender" name="fodt" data-native-picker-mobile>
+      <div class="ix-text-field">
+        <input id="fodt-mobile" inputmode="numeric" data-format="date" />
+      </div>
+    </ix-date-field>
+    <span data-field="error" aria-live="polite"></span>
+  </ix-field>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack>
+  <DateField
+    label="Fødselsdato"
+    description="dd.mm.åååå"
+    openLabel="Åpne kalender"
+    nativePickerOnMobile
+  />
+</VStack>
 ```
 
 </TabItem>
@@ -251,7 +310,7 @@ Trenger du et intervall, bruk to separate datofelter med hver sin label («Fra»
 
 ## Kjent begrensning (fase 1)
 
-Denne versjonen støtter `min`/`max`, men ikke sperring av enkeltdager eller helger, og bruker enhetens innebygde kalender. En egen kalendervelger for desktop med fler-års-navigasjon er planlagt i en senere fase. På eldre nettlesere uten `showPicker()` åpnes kalenderen fortsatt via den gjennomsiktige native date-inputen som ligger oppå knappen.
+Denne versjonen støtter `min`/`max`, men ikke sperring av enkeltdager eller helger, og bruker enhetens innebygde kalender. En egen kalendervelger for desktop med fler-års-navigasjon er planlagt i en senere fase. På desktop åpner kalenderknappen velgeren via `showPicker()`; på de eldste nettleserne i baselinen vår (Safari 15.4, Firefox 100) uten `showPicker()` kan desktop-brukeren i stedet navigere med tastatur og taste datoen direkte.
 
 ## Universell utforming
 
@@ -309,6 +368,7 @@ Trenger du `ix-date-field`-stylingen på HTML du setter sammen selv — uten Rea
 | `max` | Nei | Seneste valgbare dato i ISO. Speiles til native input |
 | `disabled` | Nei | Deaktiverer feltet |
 | `readonly` | Nei | Skrivebeskyttet felt |
+| `data-native-picker-mobile` | Nei | Lar et tapp hvor som helst i feltet åpne OS-velgeren. Kun aktivt på touch |
 | `data-state` | Nei | `error` / `readonly` / `disabled` — visuell tilstand |
 
 ### Delelementer (light DOM)
@@ -340,6 +400,7 @@ Trenger du `ix-date-field`-stylingen på HTML du setter sammen selv — uten Rea
 | `disabled` | `boolean` | Nei | | Deaktiverer feltet |
 | `readOnly` | `boolean` | Nei | | Skrivebeskyttet felt |
 | `required` | `boolean` | Nei | | Markerer feltet som påkrevd |
+| `nativePickerOnMobile` | `boolean` | Nei | `false` | Tapp åpner OS-velgeren hvor som helst i feltet. Kun aktivt på touch |
 | `tooltip` | `string` | Nei | | Tooltip-tekst ved label |
 | `tooltipLabel` | `string` | Nei | | aria-label på tooltip-knappen (i18n) |
 | `tooltipPlacement` | `string` | Nei | | Plassering av tooltip |

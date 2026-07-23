@@ -24,6 +24,13 @@ export type DateFieldProps = {
     max?: string;
     /** aria-label på kalenderknappen (i18n — konsumenten oversetter). */
     openLabel: string;
+    /**
+     * Lar et tapp hvor som helst i feltet åpne enhetens innebygde datovelger.
+     * Kun aktivt på touch-enheter; på desktop har flagget ingen effekt. Standard
+     * `false` — der fokuserer et tapp feltet for manuell tasting, og kalenderen
+     * åpnes via knappen.
+     */
+    nativePickerOnMobile?: boolean;
     placeholder?: string;
     description?: string;
     errorMessage?: string;
@@ -53,6 +60,7 @@ export const DateField = forwardRef<IxDateField, DateFieldProps>(function DateFi
         min,
         max,
         openLabel,
+        nativePickerOnMobile,
         placeholder,
         description,
         errorMessage,
@@ -124,6 +132,7 @@ export const DateField = forwardRef<IxDateField, DateFieldProps>(function DateFi
                 readonly={readOnly || undefined}
                 data-state={dataState}
                 data-open-label={openLabel}
+                data-native-picker-mobile={nativePickerOnMobile || undefined}
             >
                 <div className="ix-text-field">
                     <input

@@ -90,13 +90,18 @@ function compileTokens(pattern: string): PatternToken[] {
 /**
  * Lager en formatter fra en pattern-streng.
  *
- * `format` fyller slots med matchende tegn fra den rå verdien og setter inn
- * separatorer først når neste slot faktisk fylles (ingen dinglende separator på
- * slutten mens man skriver). Tegn som ikke passer neste slot — enten fordi
- * brukeren skrev flere tegn enn patternet har plasser, eller skrev noe som ikke
- * hører hjemme (bokstav i et sifferfelt) — droppes IKKE: den ledende delen som
- * passer formateres, og resten legges uformatert på til slutt i samme
- * rekkefølge brukeren skrev. Alt brukeren skriver forblir synlig.
+ * `format` fyller slots med matchende tegn fra den rå verdien og setter inn en
+ * separator så snart gruppen foran er fylt OG resten av verdien er konsumert —
+ * separatoren dukker altså opp med én gang gruppen er komplett ("24" → "24.",
+ * "2412" → "24.12."), ikke først når neste siffer skrives. En separator legges
+ * aldri til for en halvfylt gruppe, og heller ikke når vi stoppet fordi neste
+ * tegn ikke passet sloten (da ville vi doblet separatoren ved innliming av
+ * allerede formatert tekst). Tegn som ikke passer neste slot — enten fordi
+ * brukeren skrev flere tegn enn
+ * patternet har plasser, eller skrev noe som ikke hører hjemme (bokstav i et
+ * sifferfelt) — droppes IKKE: den ledende delen som passer formateres, og resten
+ * legges uformatert på til slutt i samme rekkefølge brukeren skrev. Alt brukeren
+ * skriver forblir synlig.
  *
  * `parse` er tapsfri: den fjerner kun separator-tegnene patternet definerer
  * (literal-tokens) og beholder alt annet i rekkefølge — ingen cap på antall
@@ -139,9 +144,16 @@ export function createPatternFormatter(pattern: string): FieldFormatter {
                 i++;
             }
 
-            // Legg resterende tegn på uformatert (ekstra tegn utover patternet
-            // eller tegn som ikke passet). Ingen dinglende separator.
-            return out + chars.slice(i).join('');
+            // Flush en ventende separator når HELE den rå verdien er konsumert og
+            // gruppen foran nettopp ble fylt: da dukker separatoren opp med én gang
+            // ("24" → "24.", "2412" → "24.12."), i stedet for å vente på neste
+            // siffer. Stoppet vi derimot fordi neste tegn ikke passet sloten
+            // (i < chars.length) — f.eks. innliming av en allerede formatert streng
+            // der neste tegn ER separatoren, eller et ugyldig tegn — dropper vi
+            // flushen og legger resten uformatert på, så vi verken dobler
+            // separatoren eller dikter opp en for en gruppe brukeren ikke fylte.
+            const trailing = i >= chars.length ? pendingLiterals : '';
+            return out + trailing + chars.slice(i).join('');
         },
     };
 }

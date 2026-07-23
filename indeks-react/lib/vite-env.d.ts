@@ -70,6 +70,7 @@ declare module 'react' {
                 readonly?: boolean | '';
                 'data-state'?: 'error' | 'readonly' | 'disabled';
                 'data-open-label'?: string;
+                'data-native-picker-mobile'?: boolean | '';
             };
             'ix-progress-bar': React.DetailedHTMLProps<React.HTMLAttributes<IxProgressBar>, IxProgressBar> & {
                 value?: number;

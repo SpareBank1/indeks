@@ -56,6 +56,18 @@ describe('IxDateField', () => {
         expect(el.querySelectorAll('input.ix-date-field__native')).toHaveLength(1);
     });
 
+    it('setter ikke data-touch på desktop (jsdom er ikke-touch)', () => {
+        // På desktop lar CSS pekeren gå gjennom native-inputen til knappen; touch-
+        // markøren skal derfor være fraværende. IS_TOUCH leses fra userAgent ved
+        // modullasting, som i jsdom ikke er en mobil-UA.
+        const el = mount(`
+            <ix-date-field data-open-label="Åpne kalender">
+                <div class="ix-text-field"><input data-format="date" /></div>
+            </ix-date-field>
+        `);
+        expect(el.hasAttribute('data-touch')).toBe(false);
+    });
+
     it('setter name på native og fjerner det fra synlig input', () => {
         const el = mount(`
             <ix-date-field data-open-label="Åpne kalender" name="fodt">

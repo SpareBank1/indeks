@@ -17,6 +17,13 @@
 :where(ix-date-field, .ix-date-field) {
     display: block;
     position: relative;
+
+    /* Datoen har fast lengde (dd.mm.åååå = 10 tegn) + kalenderikon, så feltet
+       trenger aldri full bredde — uten et tak flyter det ut med mye luft. Vi
+       kapper til innholdet + ikon + venstre/høyre padding. Bare et tak: i en
+       smalere beholder krymper feltet fortsatt. Konsumenten kan overstyre med
+       egen width/max-width på .ix-date-field (eller className i React). */
+    max-width: calc(10ch + 1.5em + 3 * var(--ix-spacing-sm));
 }
 
 /* ── Kalenderknapp ──────────────────────────────────────────────────────────
@@ -137,6 +144,30 @@
     opacity: 0;
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: pointer;
+}
+
+/* ── Peker-mekanikk: desktop vs touch ────────────────────────────────────────
+   Web-komponenten setter data-touch på verten på touch-plattformer. Uten det
+   (desktop, inkl. Firefox) lar vi pekeren gå GJENNOM den gjennomsiktige native-
+   inputen så klikket treffer knappen under, som kaller showPicker(). Firefox
+   åpner ikke OS-kalenderen når man klikker i kroppen av en opacity:0 date-input
+   (kun via egen indikator / showPicker med brukeraktivering), så uten dette
+   virker feltet "dødt" for peker i FF. På touch beholder native-inputen pekeren
+   (regelen slår ikke inn), så et tapp åpner OS-velgeren direkte. */
+:where(.ix-date-field:not([data-touch]) .ix-text-field) > input.ix-date-field__native {
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    pointer-events: none;
+}
+
+/* Opt-in mobilvelger: med data-native-picker-mobile på verten (React:
+   nativePickerOnMobile) dekker den gjennomsiktige native-inputen HELE feltet på
+   touch, så et tapp hvor som helst i feltet åpner OS-datovelgeren i stedet for
+   bare å fokusere for tasting. Kun aktivt på touch ([data-touch]) — på desktop
+   har flagget ingen effekt (native-inputen har pointer-events:none der uansett).
+   Sammensatt input.ix-date-field__native beholder spesifisiteten over
+   text-field.css sin `> input`-regel. */
+:where(.ix-date-field[data-touch][data-native-picker-mobile] .ix-text-field) > input.ix-date-field__native {
+    inset-inline-start: 0;
 }
 
 /* Disabled / read-only: native-inputen skal ikke fange tap. WC speiler

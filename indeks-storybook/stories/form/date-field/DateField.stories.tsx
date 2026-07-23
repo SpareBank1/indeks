@@ -55,6 +55,17 @@ export const Deaktivert: Story = {
     },
 };
 
+/**
+ * Med `nativePickerOnMobile` åpner et tapp hvor som helst i feltet enhetens
+ * innebygde datovelger. Flagget er kun aktivt på touch-enheter — på desktop har
+ * det ingen effekt. Test med mobil-emulering.
+ */
+export const MobilVelger: Story = {
+    args: {
+        nativePickerOnMobile: true,
+    },
+};
+
 export const MedTooltip: Story = {
     args: {
         tooltip: 'Vi bruker fødselsdato for å bekrefte identiteten din',

@@ -643,6 +643,44 @@ describe('IxField', () => {
                 expect(input.value).toBe('123 4');
                 expect(input.selectionStart).toBe(5);
             });
+
+            it('caret hopper forbi den auto-innsatte separatoren når en gruppe fylles', () => {
+                const field = createField(`
+                    <ix-field>
+                        <label>Telefon</label>
+                        <input name="tlf" data-format="phone" value="" />
+                        <span data-field="error"></span>
+                    </ix-field>
+                `);
+                const input = field.querySelector('input')!;
+                // Fyll første gruppe (3 siffer) → separatoren dukker opp med én gang.
+                input.value = '123';
+                input.setSelectionRange(3, 3);
+                input.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
+                // "123 " — caret skal stå ETTER mellomrommet (posisjon 4), klar for
+                // neste siffer, ikke foran det ("123|").
+                expect(input.value).toBe('123 ');
+                expect(input.selectionStart).toBe(4);
+            });
+
+            it('caret fanges ikke bak separatoren ved sletting (backspace)', () => {
+                const field = createField(`
+                    <ix-field>
+                        <label>Telefon</label>
+                        <input name="tlf" data-format="phone" value="" />
+                        <span data-field="error"></span>
+                    </ix-field>
+                `);
+                const input = field.querySelector('input')!;
+                // Etterlikn backspace fra "123 4": brukeren sletter '4', caret på 4.
+                input.value = '123 ';
+                input.setSelectionRange(4, 4);
+                input.dispatchEvent(new InputEvent('input', { inputType: 'deleteContentBackward' }));
+                // Ved sletting hopper vi IKKE forbi separatoren — caret blir stående på
+                // 3 (foran mellomrommet), så neste backspace når det siste sifferet.
+                expect(input.value).toBe('123 ');
+                expect(input.selectionStart).toBe(3);
+            });
         });
 
         describe('blur (egen ikke-live formatter)', () => {
@@ -715,7 +753,8 @@ describe('IxField', () => {
                 input.value = '2412';
                 input.setSelectionRange(4, 4);
                 input.dispatchEvent(new Event('input'));
-                expect(input.value).toBe('24.12');
+                // Begge grupper fulle ⇒ separator dukker opp med én gang etter måneden.
+                expect(input.value).toBe('24.12.');
                 expect(mirror(field)!.value).toBe('2412');
             });
 

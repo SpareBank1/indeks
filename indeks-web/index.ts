@@ -107,6 +107,7 @@ declare global {
                 disabled?: boolean | '';
                 readonly?: boolean | '';
                 'data-open-label'?: string;
+                'data-native-picker-mobile'?: boolean | '';
                 class?: string;
                 children?: unknown;
             };
