@@ -9,7 +9,7 @@ import Term from '@site/src/components/Term';
 
 # ADR-DS-009: CSS-arkitektur
 
-<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+<AdrStatusLogg historikk={[{ status: 'Besluttet', dato: '2026-07-24' }]} />
 
 ## Beslutning
 
@@ -21,7 +21,7 @@ All styling bruker ren **HTML + CSS** med `ix-`-prefix på alle klasser og custo
 
 ### Utility-klasser
 
-Inspirert av [ok-css](https://github.com/SpareBank1/ok-css) (SpareBank 1s interne CSS-rammeverk), Tailwind og nettbanken: `ix-m-md`, `ix-flex`, `ix-gap-sm`. Dekker ~80% av behovene. For avanserte behov bruker man egne CSS-filer med design tokens.
+Inspirert av ok-css (SpareBank 1s interne CSS-rammeverk), Tailwind og nettbanken: `ix-m-md`, `ix-flex`, `ix-gap-sm`. Dekker ~80% av behovene. For avanserte behov bruker man egne CSS-filer med design tokens.
 
 Responsive varianter følger mønsteret `ix-{breakpoint}-{klasse}`, f.eks. `ix-sm-flex` for flex fra 768px og oppover. Breakpoints: sm (768px), md (1024px), lg (1280px), xl (1600px).
 
@@ -31,15 +31,11 @@ Responsive varianter følger mønsteret `ix-{breakpoint}-{klasse}`, f.eks. `ix-s
 
 ### CSS-struktur
 
-`indeks-css/css/`: box/, card/, components/, form/, icons/, typography/.
+`indeks-css/css/`: components/, icons/, layout/, surface/, typography/.
 
 ### Dark mode
 
-Temaet styres med CSS-klasser på rotelementet: `ix-light-mode` og `ix-dark-mode` tvinger henholdsvis lyst og mørkt tema. Klassen `ix-regard-color-scheme-preference` følger brukerens OS-preferanse via `prefers-color-scheme`.
-
-:::warning Åpent spørsmål
-Vurder om `ix-regard-color-scheme-preference` bør beholdes eller fjernes. Det er ønskelig at konsumenter eksplisitt velger tema (`ix-light-mode` / `ix-dark-mode`) fremfor å arve OS-preferanse automatisk.
-:::
+Temaet styres med CSS-klasser på rotelementet: `ix-scheme-light` og `ix-scheme-dark` tvinger henholdsvis lyst og mørkt tema. `ix-scheme-auto` følger brukerens OS-preferanse via `prefers-color-scheme`. Uten klasse er light mode default. Klassene deler `ix-scheme-`-prefiks med varierende suffiks, og mapper mot CSS-egenskapen `color-scheme` / `prefers-color-scheme`.
 
 ### Drivere for beslutningen
 

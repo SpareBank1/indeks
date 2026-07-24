@@ -21,7 +21,6 @@ Oversikt over alle workflows i Indeks designsystem.
                       ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │  ⚠️  Manuell merge av release PR                                │
-│  (pr-release-gate.yml blokkerer andre PR-er)                    │
 └─────────────────────┬───────────────────────────────────────────┘
                       ▼
 ┌─────────────────────────────────────────────────────────────────┐
@@ -43,7 +42,6 @@ Oversikt over alle workflows i Indeks designsystem.
 | Workflow                        | Fil                   | Trigger             | Beskrivelse                                                      |
 | ------------------------------- | --------------------- | ------------------- | ---------------------------------------------------------------- |
 | **Release - Create Version PR** | `release-version-pr.yml`      | Manuell kjøring     | Kjører `changeset version`, lager release-branch og PR           |
-| **Release Gate**                | `pr-release-gate.yml`         | PR til main         | Blokkerer merge av andre PR-er når det finnes en åpen release PR |
 | **Create GitHub Release**       | `release-tag-and-publish.yml` | Manuell kjøring     | Oppretter én GitHub release + individuelle tags per pakke        |
 | **Publish to npm**              | `release-npm-publish.yml`     | Release published   | Bygger og publiserer alle oppdaterte pakker til npm              |
 
@@ -73,11 +71,7 @@ Oversikt over alle workflows i Indeks designsystem.
 For at release-flyten skal fungere korrekt, legg til følgende i branch protection for `main`:
 
 - **Required status checks:**
-    - `Release gate`
     - `PR - Build, test, deploy preview`
     - `Playwright Tests` (valgfritt)
 
-Dette sikrer at:
-
-1. Ingen PR-er kan merges når det finnes en ventende release PR
-2. Alle PR-er må bygge før merge
+Dette sikrer at alle PR-er må bygge før merge.

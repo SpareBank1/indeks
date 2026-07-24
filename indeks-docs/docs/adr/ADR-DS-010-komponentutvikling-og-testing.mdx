@@ -1,6 +1,6 @@
 ---
 title: ADR-DS-010 Komponentutvikling og testing
-description: Storybook 9 for komponentutvikling. Docker-basert Playwright for reproduserbare visuelle tester og accessibility.
+description: Storybook for komponentutvikling. Docker-basert Playwright for reproduserbare visuelle tester og accessibility.
 ---
 
 import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
@@ -9,26 +9,25 @@ import Term from '@site/src/components/Term';
 
 # ADR-DS-010: Komponentutvikling og testing
 
-<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+<AdrStatusLogg historikk={[{ status: 'Besluttet', dato: '2026-07-24' }]} />
 
 ## Beslutning
 
-**<Term>Storybook</Term> 9** for isolert komponentutvikling og **<Term>Docker</Term>-basert <Term>Playwright</Term>** for reproduserbare visuelle tester og accessibility-sjekk.
+**<Term>Storybook</Term>** for isolert komponentutvikling og **<Term>Docker</Term>-basert <Term>Playwright</Term>** for reproduserbare visuelle tester og accessibility-sjekk.
 
-### Storybook 9
+### Storybook
 
 Hver komponent har en `.stories.tsx`-fil ved siden av implementasjonen. Port 6006 i utvikling. Addons: a11y og docs. Custom preview med theme switching og device context. Publiseres til design.sparebank1.no/storybook.
 
 ### Playwright i Docker
 
-Base image `mcr.microsoft.com/playwright:v1.55.0`. Kjører mot Storybook på port 9009 — en egen port slik at Storybook kan kjøre på port 6006 i utvikling samtidig som man oppdaterer skjermbildetester. Docker Compose orkestrerer services.
+Base image `mcr.microsoft.com/playwright` (SHA-pinnet i `indeks-storybook/Dockerfile`). Testene kjører mot den statisk bygde Storybooken (`storybook-static`) servert på port 9009 — en egen port slik at Storybook-dev-serveren kan kjøre på port 6006 samtidig. Docker Compose orkestrerer services.
 
-Accessibility-testing via <Term>axe-core</Term> kjøres eksplisitt mot <Term>WCAG</Term> 2.2 A og AA (`wcag2a`, `wcag2aa`, `wcag22aa`). Violations blokkerer merge. Unntak kan legges til per komponent, men må dokumenteres i komponentens kode.
+Accessibility-testing via <Term>axe-core</Term> kjøres eksplisitt mot <Term>WCAG</Term> 2.2 A og AA (`wcag2a`, `wcag2aa`, `wcag22aa`) — se `indeks-storybook/tests/scanAll.dtest.ts`. Violations blokkerer merge. Unntak kan legges til per komponent, men må dokumenteres i komponentens kode.
 
 Visuelle tester vurderes som del av PR-review. For nye komponenter godkjenner designer implementasjonen før baseline-screenshots settes. Ved feil lastes Playwright-rapporten ned som CI-artefakt for å se hvilke skjermbilder som avviker.
 
-
-Kommandoer: `npm run test:playwright` for tester, `npm run test:playwright:update-screenshots` for å oppdatere baseline-screenshots.
+Kommandoer (fra `indeks-storybook`): `pnpm test:playwright` for tester, `pnpm update-snapshots` for å oppdatere baseline-screenshots.
 
 ### Drivere for beslutningen
 

@@ -167,6 +167,7 @@ const sidebars: SidebarsConfig = {
             label: 'Arkitekturbeslutninger (ADR)',
             collapsed: true,
             items: [
+                'adr/oversikt',
                 'adr/retningslinjer',
                 'ordbok',
                 {

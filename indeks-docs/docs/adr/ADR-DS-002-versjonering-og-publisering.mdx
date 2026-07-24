@@ -9,7 +9,7 @@ import Term from '@site/src/components/Term';
 
 # ADR-DS-002: Versjonering og publisering
 
-<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+<AdrStatusLogg historikk={[{ status: 'Besluttet', dato: '2026-07-24' }]} />
 
 ## Beslutning
 
@@ -80,7 +80,7 @@ i stedet for Conventional Commits.
 Tokens, CSS og React bumpes alltid til samme versjon, som i SpareBank 1s eksisterende
 designsystem FFE.
 
-**Forkastet fordi:** `indeks-tokens` og `indeks-utils` har uavhengige versjoner nettopp for å unngå dette — en token-endring skal ikke tvinge CSS, Web Components og React til ny versjon. Å låse alle fire til samme versjon fjerner den fordelen og tvinger konsumenter til å ugyldiggjøre all CDN-cache ved selv små token-justeringer.
+**Forkastet fordi:** `indeks-tokens` og `indeks-utils` endres sjelden, og skal beholde et stabilt versjonsnummer slik at deres egne CDN-artefakter kan caches lengst mulig. Cascade-bumpingen går bevisst kun én vei — en token- eller utils-endring patch-bumper `indeks-css` (og dermed `indeks-web` og `indeks-react`), men en css/web/react-endring bumper *aldri* tokens/utils tilbake. Å låse alle fire til samme versjon (FFE-stil) ville bumpet tokens/utils ved hver minste css- eller react-endring og ugyldiggjort cachen deres helt unødvendig.
 
 ### Helt uavhengige versjoner
 

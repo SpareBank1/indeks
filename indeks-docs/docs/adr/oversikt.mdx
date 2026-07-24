@@ -1,0 +1,100 @@
+---
+title: Kort fortalt — hvorfor eget system
+description: En rask, folkelig oversikt over hvorfor vi bygger Indeks selv og hvilke valg vi har tatt. For deg som vil ha helheten uten å lese alle ADR-ene.
+---
+
+# Kort fortalt
+
+Denne siden er snarveien. Vil du ha helheten på fem minutter — hvorfor vi bygger
+Indeks selv og hva vi faktisk har bestemt — så er det her. Detaljene, avveiningene
+og de forkastede alternativene ligger i de enkelte [ADR-ene](#de-store-valgene).
+
+## Hvorfor et eget designsystem?
+
+Vi kunne tatt et ferdig bibliotek fra hylla. Vi lot være, av én grunn: **behovene
+våre passer ikke helt med det ferdige alternativene løser.**
+
+- **Vi må virke på gamle enheter.** Kundene våre bruker telefoner og nettlesere som
+  er flere år gamle. De fleste moderne bibliotek forutsetter ferske nettlesere. Vi
+  setter et bevisst gulv og håndhever det automatisk.
+- **Vi må virke overalt.** Nettsider, React-apper og hybrid-apper (webview i en
+  mobilapp). Da kan vi ikke låse oss til ett rammeverk.
+- **Tilgjengelighet er ikke valgfritt.** Som bank har vi et lovkrav, men vi vil også
+  faktisk at alle skal kunne bruke tjenestene våre. Det må være bygget inn fra bunnen,
+  ikke limt på til slutt.
+- **Vi vil eie våre egne farger, avstander og mønstre.** SpareBank 1 har en visuell
+  identitet. Et eget system lar oss uttrykke den presist, i stedet for å presse den
+  inn i noen andres.
+- **Vi satser på ren web-teknologi der det er mulig.** Rammeverk kommer og går;
+  nettleseren består. Ved å lene oss på det plattformen allerede kan, bygger vi noe
+  som holder på lang sikt og ikke må skrives om hver gang moten skifter.
+
+## De fem målene — og hvordan vi løser dem
+
+Alt vi har bestemt kan spores tilbake til fem mål.
+
+### 1. Mobil-først
+
+Vi designer for den minste skjermen først og bygger oppover. Avstander og størrelser
+er faste, forutsigbare steg per skjermbredde — ikke noe som flyter ukontrollert.
+Berøringsflater er store nok til en tommel.
+
+→ [ADR-DS-008 Spacing-system](./ADR-DS-008-spacing-system)
+
+### 2. Virker overalt (hybrid-app-støtte)
+
+Kjernen er **web components** — byggeklosser som fungerer i ren HTML, i React, og i
+en mobilapp uten å dra med seg et helt rammeverk. React-laget vårt er et tynt skall
+utenpå. Da slipper vi å vedlikeholde logikken to ganger.
+
+→ [ADR-DS-004 Web components](./ADR-DS-004-web-components) ·
+[ADR-DS-005 React-bibliotek](./ADR-DS-005-react-bibliotek)
+
+### 3. Støtte for gamle enheter
+
+Vi har ett gulv for hvilke nettlesere vi støtter, og tre uavhengige verktøy passer
+på at vi ikke ved et uhell bruker noe som er for nytt. Bommer du, sier byggesteget
+fra — ikke kunden.
+
+### 4. Tilgjengelighet (a11y)
+
+Dette er systemets sterkeste side. Hver komponent har et eget regnskap mot alle
+WCAG 2.2-kriteriene. Automatiske tester blokkerer sammenslåing hvis noe er utilgjengelig.
+Og ingen tekst er hardkodet — alt som vises eller leses opp kan settes på bokmål,
+nynorsk eller engelsk.
+
+→ [ADR-DS-010 Komponentutvikling og testing](./ADR-DS-010-komponentutvikling-og-testing)
+
+### 5. Egne behov
+
+Vi bruker **tokens** — navngitte verdier for farger, avstander og mer — som én felles
+kilde. Farger designes i et fargerom (OKLCH) som gir jevne, harmoniske skalaer. Og
+konsumenter kan trygt overstyre utseendet der de trenger det, uten å kjempe mot systemet.
+
+→ [ADR-DS-006 Tokens og farger](./ADR-DS-006-tokens-og-farger) ·
+[ADR-DS-007 Fargesystem](./ADR-DS-007-fargesystem)
+
+## De store valgene {#de-store-valgene}
+
+Resten av ADR-ene handler om hvordan vi jobber for at systemet skal holde over tid:
+
+- **Alt i ett repo** med felles byggverktøy — enklere å holde pakkene i takt.
+  [ADR-DS-001](./ADR-DS-001-monorepo-og-byggverktoy)
+- **Versjonering og publisering** styres av changesets, med sporbar kobling mellom
+  pakke og kildekode. [ADR-DS-002](./ADR-DS-002-versjonering-og-publisering)
+- **Ressurser serveres fra CDN**, slik at flere apper deler og cacher de samme filene
+  i stedet for å laste dem på nytt hver for seg.
+  [ADR-DS-002](./ADR-DS-002-versjonering-og-publisering)
+- **CI/CD** kjøres i GitHub Actions. [ADR-DS-003](./ADR-DS-003-ci-cd)
+- **Styling er ren CSS** — ingen runtime, virker uansett rammeverk.
+  [ADR-DS-009](./ADR-DS-009-css-only-styling)
+- **Komponenter utvikles og testes** etter en fast oppskrift med visuelle tester og
+  a11y-tester. [ADR-DS-010](./ADR-DS-010-komponentutvikling-og-testing)
+- **Dokumentasjon** bor sammen med koden. [ADR-DS-011](./ADR-DS-011-dokumentasjon)
+
+## Vil du grave dypere? {#kilde}
+
+- Hver [ADR](./ADR-DS-001-monorepo-og-byggverktoy) forklarer bakgrunn, problemstilling,
+  konsekvenser og hvilke alternativer vi forkastet.
+- [Retningslinjene](./retningslinjer) beskriver konvensjoner teamet er enige om (som
+  ikke er arkitekturbeslutninger).

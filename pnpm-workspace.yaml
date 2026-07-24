@@ -21,7 +21,7 @@ trustPolicy: no-downgrad
 
 enablePrePostScripts: false
 autoInstallPeers: false
-strictPeerDependencies: false
+strictPeerDependencies: true
 preferFrozenLockfile: true
 shamefullyHoist: false
 #Workspace

@@ -9,7 +9,7 @@ import Term from '@site/src/components/Term';
 
 # ADR-DS-004: Web Components
 
-<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-02-24' }]} />
+<AdrStatusLogg historikk={[{ status: 'Besluttet', dato: '2026-07-24' }]} />
 
 ## Beslutning
 
@@ -55,9 +55,8 @@ uavhengig av hvilke JavaScript-rammeverk de bruker?
 
 ### Ulemper
 
-- <Term>SSR</Term>-støtte for Web Components er uavklart — `customElements.define()` er en nettleser-API som ikke finnes i Node.js, og konsekvensene for Next.js og lignende rammeverk er ikke fullt utforsket ennå
-- Utviklere må lære Web Components-standarden (<Term>Custom Elements API</Term>)
-- React-laget håndterer React-spesifikke ting som event-mapping og prop-konvertering
+- <Term>SSR</Term>: `customElements.define()` er en nettleser-API som ikke finnes i Node.js. Vi har testet SSR i de tilfellene vi har prøvd, og det har fungert godt — men vi har ikke verifisert alle rammeverk (Next.js o.l.) uttømmende
+- Team Designsystem må beherske Web Components-standarden (<Term>Custom Elements API</Term>) — i praksis en liten kostnad, siden komponentene vi skriver er forholdsvis enkle og konsumenter merker lite (de bruker React-wrapperen eller ren HTML)
 - Konsumenter er selv ansvarlige for å laste `indeks-web` én gang — dette forhindrer kollisjoner ved registrering av custom elements
 
 ### Tiltak mot ulemper
@@ -78,7 +77,7 @@ Fortsette med React-only komponenter for all logikk.
 Et lett bibliotek fra Google for å skrive Web Components med deklarativ template-syntaks
 og reaktivitetssystem. Brukes av blant andre Adobe (Spectrum), SAP og ING.
 
-**Forkastet fordi:** Vi ønsker å holde `indeks-web` fri for eksterne bibliotek- og rammeverk-avhengigheter. Native Custom Elements er håndterbart for komponentene vi faktisk trenger å skrive. Vi ser også til [designsystemet.no](https://designsystemet.no) som gjør det samme med native Web Components — det gir oss mulighet til å lære av og bygge videre på deres erfaringer.
+**Forkastet fordi:** Vi ønsker å holde `indeks-web` fri for eksterne bibliotek- og rammeverk-avhengigheter. Lits verdi ligger i deklarativ templating og reaktiv rendering *inne i* komponenten — noe vi ikke trenger, fordi vi ikke bruker Shadow DOM. Våre Web Components er tynne wrappere som manipulerer lys-DOM direkte, så native Custom Elements er håndterbart for komponentene vi faktisk skriver. Vi ser også til [designsystemet.no](https://designsystemet.no) som gjør det samme med native Web Components — det gir oss mulighet til å lære av og bygge videre på deres erfaringer.
 
 ### Stencil.js (Ionic)
 
