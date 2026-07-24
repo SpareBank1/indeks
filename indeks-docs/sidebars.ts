@@ -122,6 +122,7 @@ const sidebars: SidebarsConfig = {
                 'komponenter/message',
                 'komponenter/modal',
                 'komponenter/read-more',
+                'komponenter/tabs',
                 {
                     type: 'category',
                     label: 'Skjema',

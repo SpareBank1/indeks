@@ -1,6 +1,17 @@
 /// <reference types="vite/client" />
 
-import type { IxCheckboxGroup, IxCombobox, IxField, IxIcon, IxProgressBar, IxRadioGroup } from '@sb1/indeks-web';
+import type {
+    IxCheckboxGroup,
+    IxCombobox,
+    IxField,
+    IxIcon,
+    IxProgressBar,
+    IxRadioGroup,
+    IxTabs,
+    IxTabList,
+    IxTab,
+    IxTabPanel,
+} from '@sb1/indeks-web';
 import type { IconName } from './ui/icons/icon-types';
 
 declare module 'react' {
@@ -56,6 +67,25 @@ declare module 'react' {
                 'data-support-text'?: string;
                 'data-show-value'?: boolean | '';
                 'data-value-text'?: string;
+            };
+            'ix-tabs': React.DetailedHTMLProps<React.HTMLAttributes<IxTabs>, IxTabs> & {
+                class?: string;
+            };
+            'ix-tab-list': React.DetailedHTMLProps<React.HTMLAttributes<IxTabList>, IxTabList> & {
+                class?: string;
+                'aria-label'?: string;
+            };
+            'ix-tab': React.DetailedHTMLProps<React.HTMLAttributes<IxTab>, IxTab> & {
+                class?: string;
+                'data-value'?: string;
+                'aria-selected'?: 'true' | 'false';
+                'aria-disabled'?: 'true' | 'false';
+                'aria-label'?: string;
+            };
+            'ix-tab-panel': React.DetailedHTMLProps<React.HTMLAttributes<IxTabPanel>, IxTabPanel> & {
+                class?: string;
+                'data-value'?: string;
+                hidden?: boolean;
             };
             'ix-stack': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
                 class?: string;

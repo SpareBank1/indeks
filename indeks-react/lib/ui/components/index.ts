@@ -37,3 +37,5 @@ export { Spinner } from './spinner/Spinner';
 export { ProgressBar } from './progress-bar/ProgressBar';
 export type { ProgressBarProps, ProgressBarState } from './progress-bar/ProgressBar';
 export { Table } from './table/Table';
+export { Tabs } from './tabs/Tabs';
+export type { TabsProps, TabsListProps, TabsTabProps, TabsPanelProps } from './tabs/Tabs';
