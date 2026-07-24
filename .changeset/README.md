@@ -6,12 +6,10 @@ This project uses [Changesets](https://github.com/changesets/changesets) to mana
 
 The changesets configuration is defined in `.changeset/config.json`:
 
--   **Independent versioning**: Each package (indeks-tokens, indeks-utils, indeks-css, indeks-react) can have its own version number
--   **Fixed packages**: indeks-css and indeks-react are fixed - they will always be released with the same version number
--   **Linked packages**:
-    -   indeks-tokens and indeks-utils are linked - when tokens change, utils should be updated
-    -   indeks-utils and indeks-css are linked - when utils change, css should be updated
--   **Ignored packages**: indeks-docs, indeks-eksempel, and shared are not published (documentation and example apps)
+-   **Independent versioning**: indeks-tokens and indeks-utils each have their own version number
+-   **Fixed packages**: @sb1/indeks-css, @sb1/indeks-web and @sb1/indeks-react are fixed - they are always released with the same version number
+-   **Internal dependency updates**: when tokens or utils change, dependent packages get a patch bump (`updateInternalDependencies: "patch"`)
+-   **Ignored packages**: @sb1/indeks-docs, @sb1/indeks-eksempel, and @sb1/indeks-storybook are not published (documentation, example and Storybook apps)
 -   **Access**: Public - packages will be published as public to npm
 
 ## Workflow
@@ -61,26 +59,26 @@ Based on project requirements:
 -   **indeks-tokens**: ~Monthly changes
 -   **indeks-utils**: Infrequent changes
 -   **indeks-css**: Frequent changes (multiple times per day)
--   **indeks-react**: Frequent changes (multiple times per day, fixed with indeks-css - always same version)
+-   **indeks-web**: Frequent changes (fixed with indeks-css - always same version)
+-   **indeks-react**: Frequent changes (multiple times per day, fixed with indeks-css/web - always same version)
 
 ### 4. Dependency Cascade
 
 When creating changesets, remember the dependency chain:
 
 ```
-indeks-tokens (changes)
-    → triggers indeks-utils update (linked)
-        → triggers indeks-css update (linked)
-            → triggers indeks-react update (fixed - same version as css)
+indeks-tokens / indeks-utils (changes)
+    → patch-bumps indeks-css (internal dependency)
+        → indeks-css, indeks-web and indeks-react share one version (fixed)
 ```
 
-**Important**: With the linked configuration, changesets will automatically prompt you to update dependent packages. You typically only need to create a changeset for the package you're directly changing.
+**Important**: indeks-css, indeks-web and indeks-react are a fixed group — a bump to one bumps all three to the same version. A token/utils change patch-bumps css, which carries web and react along. You typically only need to create a changeset for the package you're directly changing.
 
 **Example**: If you change a token:
 
 1. Create changeset for indeks-tokens (minor)
-2. Changesets will automatically prompt to update indeks-utils, indeks-css (because they're linked)
-3. indeks-react will automatically get the same version as indeks-css (fixed)
+2. indeks-css gets a patch bump because it depends on tokens
+3. indeks-web and indeks-react get the same version as indeks-css (fixed)
 
 ### 5. Versioning and Publishing
 
@@ -122,7 +120,7 @@ In GitHub Actions, the workflow will:
 
 ```bash
 npm run changeset
-# Select: @sb1/indeks-css and @sb1/indeks-react (linked)
+# Select: @sb1/indeks-css (indeks-web and indeks-react follow - fixed)
 # Type: patch
 # Summary: "Fix Card component border radius"
 ```
@@ -134,7 +132,7 @@ npm run changeset
 # Select: @sb1/indeks-tokens
 # Type: minor
 # Summary: "Update spacing scale to use new base size"
-# Changesets will prompt for linked packages (utils, css) and fixed packages (react)
+# indeks-css gets a patch bump (depends on tokens); indeks-web and indeks-react follow (fixed)
 ```
 
 ### Example 3: Utils-only Change
@@ -144,7 +142,7 @@ npm run changeset
 # Select: @sb1/indeks-utils
 # Type: patch
 # Summary: "Add new utility classes for grid gap"
-# Changesets will prompt for linked package (css) and fixed package (react)
+# indeks-css gets a patch bump (depends on utils); indeks-web and indeks-react follow (fixed)
 ```
 
 ### Example 4: Breaking Change
@@ -154,7 +152,7 @@ npm run changeset
 # Select: @sb1/indeks-css
 # Type: major
 # Summary: "BREAKING: Rename .ix-btn to .ix-button"
-# indeks-react will automatically get the same version (fixed)
+# indeks-web and indeks-react will automatically get the same version (fixed)
 ```
 
 ## Tips

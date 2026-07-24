@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { PreferencesProvider } from '@site/src/preferences/PreferencesContext';
 
 // Docusaurus tvinger et valgt tema (data-theme="dark"|"light" på <html>).
-// Vi speiler dette ved å sette enten .ix-light-mode eller .ix-dark-mode
+// Vi speiler dette ved å sette enten .ix-scheme-light eller .ix-scheme-dark
 // på indeks-roten, slik at eksempler i docs følger Docusaurus-temaet
 // i stedet for brukerens OS-preferanse.
 export default function Root({ children }: { children: ReactNode }) {
@@ -17,7 +17,7 @@ export default function Root({ children }: { children: ReactNode }) {
         return () => observer.disconnect();
     }, []);
 
-    const className = mode ? `ix-body ix-${mode}-mode` : 'ix-body';
+    const className = mode ? `ix-body ix-scheme-${mode}` : 'ix-body';
     return (
         <PreferencesProvider>
             <div className={className}>{children}</div>

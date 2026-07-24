@@ -117,7 +117,7 @@ export const Standard: Story = {
     play: openModalPlay('Slett element'),
 };
 
-/** Samme dialog i mørk modus — modalen arver tema fra `.ix-dark-mode`-wrapperen. */
+/** Samme dialog i mørk modus — modalen arver tema fra `.ix-scheme-dark`-wrapperen. */
 export const DarkMode: Story = {
     name: 'Mørk modus',
     globals: { scheme: 'dark' },

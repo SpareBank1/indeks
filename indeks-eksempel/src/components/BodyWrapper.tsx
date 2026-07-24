@@ -46,7 +46,7 @@ const BodyContent: React.FC = () => {
     };
 
     return (
-        <div className="ix-body ix-scala-system regard-color-scheme-preference" data-density="default" style={{ fontSize: '16px' }}>
+        <div className="ix-body ix-scala-system ix-scheme-auto" data-density="default" style={{ fontSize: '16px' }}>
             <SettingsPopover
                 onDensityChange={handleDensityChange}
                 onFontSizeChange={handleFontSizeChange}

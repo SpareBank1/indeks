@@ -2,9 +2,9 @@
 :host,
 [data-status="default"],
 [data-status="neutral"],
-.ix-dark-mode,
-.ix-light-mode,
-.regard-color-scheme-preference {
+.ix-scheme-dark,
+.ix-scheme-light,
+.ix-scheme-auto {
     --ix-color-status-surface: var(--ix-color-surface-main-default);
     --ix-color-status-surface-hover: var(--ix-color-surface-main-hover);
     --ix-color-status-surface-active: var(--ix-color-surface-main-active);

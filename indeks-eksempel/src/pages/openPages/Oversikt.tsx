@@ -9,10 +9,10 @@ export default function OpenPagesOverview() {
             <div className="ix-p-md ix-color-background-tinted">
                 <OversiktEksempel title="Tinted Bakgrunn" />
             </div>
-            <div className="ix-p-md ix-dark-mode ix-color-background-default">
+            <div className="ix-p-md ix-scheme-dark ix-color-background-default">
                 <OversiktEksempel title="Dark Bakgrunn" />
             </div>
-            <div className="ix-p-md ix-dark-mode ix-color-background-tinted">
+            <div className="ix-p-md ix-scheme-dark ix-color-background-tinted">
                 <OversiktEksempel title="Dark Bakgrunn" />
             </div>
         </>

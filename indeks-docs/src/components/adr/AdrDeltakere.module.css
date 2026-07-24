@@ -1,0 +1,64 @@
+.deltakere {
+    margin-top: 3rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--ifm-color-emphasis-100);
+    border-radius: var(--ifm-global-radius);
+    border: 1px solid var(--ifm-color-emphasis-200);
+    font-size: 0.875rem;
+}
+
+.overskrift {
+    margin: 0 0 1rem 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ifm-color-emphasis-500);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.5rem;
+}
+
+.gruppe {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.felt {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.feltLabel {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ifm-color-emphasis-500);
+}
+
+.feltVerdi {
+    color: var(--ifm-font-color-base);
+    line-height: 1.4;
+}
+
+.liste {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.liste li {
+    margin: 0;
+    padding: 0;
+    color: var(--ifm-font-color-base);
+    line-height: 1.4;
+}

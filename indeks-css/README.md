@@ -38,7 +38,7 @@ npm install @sb1/indeks-css
         <link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/0.1.1.css" />
     </head>
     <body>
-        <button class="button">Klikk her</button>
+        <button class="ix-button">Klikk her</button>
     </body>
 </html>
 ```
@@ -63,8 +63,8 @@ import '@sb1/indeks-css';
 
 Grunnverdiene som hele designsystemet bygger på, definert som CSS custom properties:
 
--   **Farger** - Fargepaletter i OKLCH fargerom
--   **Spacing** - Fluid spacing som skalerer med skjermstørrelse
+-   **Farger** - Fargepaletter (generert i OKLCH, sendes ut som hex)
+-   **Spacing** - Faste px-steg per breakpoint (mobile-first) med density-varianter
 -   **Typografi** - Skriftstørrelser, linjehøyder og vekter
 -   **Border, outline, shadows** - Kantlinjer og dybdeeffekter
 -   **Breakpoints** - Skjermstørrelser for responsive layouts
@@ -89,7 +89,8 @@ CSS som er spesifikk for Indeks sine komponenter:
 
 -   **Komponenter** - Button, Card, Table, Tag, Spinner, Divider, List, Form-elementer
 -   **Typografi** - Heading, Text, Link
--   **Layout** - Box
+-   **Surface** - Surface (bakgrunns- og flateflater)
+-   **Layout** - Grid- og layout-klasser
 -   **Icons** - Icon-system integrert med sb1-icons
 
 ## 🎯 Bruk med React

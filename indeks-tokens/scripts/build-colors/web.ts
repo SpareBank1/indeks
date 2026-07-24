@@ -119,15 +119,15 @@ function buildSemanticColorsCss(semanticColors: any) {
         .join('\n');
 
     return `
-:root, :host, .ix-light-mode {
+:root, :host, .ix-scheme-light {
 ${lightVars}
 }
 @media (prefers-color-scheme: dark) {
-    .regard-color-scheme-preference {
+    .ix-scheme-auto {
 ${darkVars}
     }
 }
-.ix-dark-mode {
+.ix-scheme-dark {
 ${darkVars}
 }`;
 }
