@@ -21,7 +21,7 @@
   "issues": [],
   "handled": [
     { "id": "1.4.3", "notes": "Feilmeldingsteksten bruker --ix-color-foreground-danger-default. Forventes å oppfylle 4,5:1 mot standard bakgrunn. Kontroller med kontrastverktøy ved egendefinerte bakgrunnsfarger." },
-    { "id": "1.4.1", "notes": "Feilmeldingen formidles ikke kun med farge — teksten beskriver feilen eksplisitt, og inputen får aria-invalid=\"true\" via ix-field/ix-radio-group." },
+    { "id": "1.4.1", "notes": "Feilmeldingen formidles ikke kun med farge — teksten beskriver feilen eksplisitt, det dekorative badge-ikonet forsterker den visuelt, og inputen får aria-invalid=\"true\" via ix-field/ix-radio-group." },
     { "id": "1.4.4", "notes": "Bruker --ix-font-size-md (relativ enhet) — skalerer korrekt ved 200 % zoom." },
     { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
     { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
@@ -40,7 +40,7 @@
     { "id": "1.3.5" },
     { "id": "1.4.2" },
     { "id": "1.4.5" },
-    { "id": "1.4.11", "reason": "ValidationMessage er ikke en UI-komponent med ramme eller ikon — kun tekst." },
+    { "id": "1.4.11", "reason": "Badge-ikonet er dekorativt (aria-hidden) — feilen formidles av teksten, så ikonet har ingen kontrastkrav som ikke-tekstlig innhold." },
     { "id": "1.4.13" },
     { "id": "2.1.1", "reason": "Ikke interaktiv." },
     { "id": "2.1.2" },

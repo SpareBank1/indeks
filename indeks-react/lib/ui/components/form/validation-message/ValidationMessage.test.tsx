@@ -52,4 +52,23 @@ describe('ValidationMessage', () => {
         const el = container.querySelector('span[data-field="error"]');
         expect(el?.getAttribute('data-testid')).toBe('min-feil');
     });
+
+    it('rendrer et dekorativt badge-ikon når det finnes innhold', () => {
+        const { container } = render(<ValidationMessage>Feil</ValidationMessage>);
+        const icon = container.querySelector('ix-icon[data-badge]');
+        expect(icon).not.toBeNull();
+        expect(icon?.getAttribute('data-status')).toBe('danger');
+        expect(icon?.getAttribute('name')).toBe('close');
+        expect(icon?.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('rendrer ikke ikon når children er tom', () => {
+        const { container } = render(<ValidationMessage>{''}</ValidationMessage>);
+        expect(container.querySelector('ix-icon[data-badge]')).toBeNull();
+    });
+
+    it('rendrer ikke ikon når showIcon er false', () => {
+        const { container } = render(<ValidationMessage showIcon={false}>Feil</ValidationMessage>);
+        expect(container.querySelector('ix-icon[data-badge]')).toBeNull();
+    });
 });
