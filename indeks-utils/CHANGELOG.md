@@ -1,5 +1,40 @@
 # @sb1/indeks-utils
 
+## 0.8.0
+
+### Minor Changes
+
+-   bee3cd1: Forenklet spacing- og font-systemet betraktelig. Spacing bruker nå faste px-verdier på tre mobile-first breakpoints (mobil, tablet fra `768px`, desktop fra `1024px`) i stedet for kontinuerlig fluid `clamp()`-skalering. De minste verdiene (`2xs`–`lg`) er like på alle breakpoints; kun `xl`–`5xl` øker på tablet og desktop. Ny `5xl`-spacing-token med tilhørende utility-klasser (`.ix-{m,p,gap}-5xl` + responsive varianter og `ix-stack`/`ix-grid` `gap="5xl"`), og `GapSize`-typen i React inkluderer nå `5xl`.
+
+    Fontstørrelsen er nå fast 16px (`1rem`) og skalerer ikke lenger opp til 18px med skjermbredden. Overskriftsstørrelsene beholder samme modulære skala, men er nå faste rem-verdier. Alle spacing- og fontstørrelser er dermed endret — dobbeltsjekk flater på flere skjermstørrelser og density-moduser.
+
+### Patch Changes
+
+-   3139022: `neutral` er den eksplisitte nøytral-verdien i status-farge-systemet — samme main-flate
+    som ellers, ingen nye fargetokens.
+
+    -   **`--ix-color-status-*`** har `neutral` i samme selektor-gruppe som `:root`, så nøytral
+        virker i ren HTML/CSS uten `data-status` (fallback fra `:root`).
+    -   **Delt `Status`-type** (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`)
+        eksporteres fra `@sb1/indeks-react`. `Surface` bruker den med `neutral` som default og
+        setter `data-status` direkte.
+
+    For ren HTML: et `.ix-surface` uten `data-status` inni en `[data-status]`-forelder
+    arver forelderens statusfarge — sett `data-status="neutral"` for å bryte arven.
+
+-   3139022: Renamer `Box` til `Surface`, og ferdigstiller og dokumenterer komponenten. `Surface` er en enkel visuell flate for gruppering av innhold — bevisst enklere enn `Card` (ingen elevation eller klikk-affordanse), og bygget i sin helhet på utility-klasser med et godt React-API på toppen.
+
+    Nytt:
+
+    -   **Statusfarge via `data-status`.** `.ix-surface` gir nå main-flaten alene, og statusfargene (`info`/`success`/`warning`/`danger`) settes med `data-status` i HTML og `status`-prop i React — samme status-system som `Message` (`--ix-color-status-*`). Erstatter den tidligere `surfaceColor`-propen / `.ix-color-surface-*`-klassene på flaten.
+    -   **`radius`-prop** på `Surface` og tilhørende `ix-radius-*`-utility-klasser (`xs`/`sm`/`md`/`lg`/`xl`/`pill`/`circle`) i `@sb1/indeks-utils`, basert på de eksisterende border-radius-tokenene.
+    -   **`direction`-prop** (`row`/`column`, standard `column`) for å legge innhold ved siden av hverandre uten egen CSS.
+
+    **Breaking:** `Box`-eksporten er fjernet fra `@sb1/indeks-react` — bruk `Surface` i stedet, og CSS-klassen `.ix-box` er erstattet av `.ix-surface`. `surfaceColor`-propen er byttet ut med `status` (`neutral`/`info`/`success`/`warning`/`danger`); `neutral` gir den nøytrale main-flaten.
+
+-   Updated dependencies [bee3cd1]
+    -   @sb1/indeks-tokens@0.7.0
+
 ## 0.7.0
 
 ### Minor Changes
