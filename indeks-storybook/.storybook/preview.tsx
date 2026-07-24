@@ -44,7 +44,7 @@ const preview: Preview = {
                         </div>
                     )}
                     {(scheme === 'both' || scheme === 'dark') && (
-                        <div className={`storybook-docs-content-container ix-dark-mode ${classname}`}>
+                        <div className={`storybook-docs-content-container ix-scheme-dark ${classname}`}>
                             <h3>Dark mode</h3>
                             <Story />
                         </div>
