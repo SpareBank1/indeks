@@ -9,7 +9,7 @@ import Term from '@site/src/components/Term';
 
 # ADR-DS-009: CSS-arkitektur
 
-<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+<AdrStatusLogg historikk={[{ status: 'Besluttet', dato: '2026-07-24' }]} />
 
 ## Beslutning
 
@@ -21,7 +21,7 @@ All styling bruker ren **HTML + CSS** med `ix-`-prefix på alle klasser og custo
 
 ### Utility-klasser
 
-Inspirert av [ok-css](https://github.com/SpareBank1/ok-css) (SpareBank 1s interne CSS-rammeverk), Tailwind og nettbanken: `ix-m-md`, `ix-flex`, `ix-gap-sm`. Dekker ~80% av behovene. For avanserte behov bruker man egne CSS-filer med design tokens.
+Inspirert av ok-css (SpareBank 1s interne CSS-rammeverk), Tailwind og nettbanken: `ix-m-md`, `ix-flex`, `ix-gap-sm`. Dekker ~80% av behovene. For avanserte behov bruker man egne CSS-filer med design tokens.
 
 Responsive varianter følger mønsteret `ix-{breakpoint}-{klasse}`, f.eks. `ix-sm-flex` for flex fra 768px og oppover. Breakpoints: sm (768px), md (1024px), lg (1280px), xl (1600px).
 
@@ -31,7 +31,7 @@ Responsive varianter følger mønsteret `ix-{breakpoint}-{klasse}`, f.eks. `ix-s
 
 ### CSS-struktur
 
-`indeks-css/css/`: box/, card/, components/, form/, icons/, typography/.
+`indeks-css/css/`: components/, icons/, layout/, surface/, typography/.
 
 ### Dark mode
 

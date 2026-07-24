@@ -1,53 +1,61 @@
 ---
 title: ADR-DS-008 Spacing-system
-description: Spacing bruker fluid skalering kombinert med et density-system (Compact/Default/Comfortable). Typografi bruker fluid skalering. Verdiene er matematisk beregnet, ikke 8px-grid.
+description: Spacing bruker faste px-verdier på tre mobile-first breakpoints kombinert med et density-system (Compact/Default/Comfortable). Typografi bruker en rem-basert geometrisk skala uten density.
 ---
 
 import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
 import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
 import Term from '@site/src/components/Term';
 
-# ADR-DS-008: Spacing-system (fluid + density)
+# ADR-DS-008: Spacing-system (faste breakpoints + density)
 
-<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+<AdrStatusLogg historikk={[{ status: 'Besluttet', dato: '2026-07-24' }]} />
 
 ## Beslutning
 
-Spacing bruker **<Term>fluid skalering</Term>** kombinert med et **<Term>density-system</Term>** — verdier beregnes matematisk og følger ikke 8px-grid.
+Spacing bruker **faste px-verdier på tre mobile-first breakpoints** kombinert med et **<Term>density-system</Term>** (Compact/Default/Comfortable). Typografi bruker en `rem`-basert geometrisk skala uten density.
 
-### Fluid spacing
+### Faste spacing-steg per breakpoint
 
-Basen skalerer flytende med viewport — 16px på mobil (375px), 18px på større skjermer (1024px+). Alle spacing-trinn beregnes fra denne basen med en geometrisk skala (ratio 1.125), slik at hvert trinn er litt større enn det forrige. Typografi skalerer på samme måte, men uten density-nivåer.
+Spacing er faste px-verdier definert mobile-first på tre breakpoints:
 
-Eksempler på `--ix-spacing-md` (trinn 0) og `--ix-spacing-lg` (trinn 3) i Default:
+- **mobil** (base)
+- **tablet** (`min-width: 768px`)
+- **desktop** (`min-width: 1024px`)
 
-| | 375px | 1024px+ |
-|---|---|---|
-| `--ix-spacing-md` | ~16px | ~18px |
-| `--ix-spacing-lg` | ~20px | ~23px |
+Trinnene `2xs`–`lg` er konstante på alle breakpoints; kun `xl`–`5xl` øker på større skjermer. Tokens eksponeres som `--ix-spacing-2xs` til `--ix-spacing-5xl`.
+
+Eksempel på Default:
+
+| Token | mobil | tablet (≥768px) | desktop (≥1024px) |
+|---|---|---|---|
+| `--ix-spacing-md` | 16px | 16px | 16px |
+| `--ix-spacing-lg` | 24px | 24px | 24px |
+| `--ix-spacing-xl` | 32px | 40px | 48px |
+| `--ix-spacing-3xl` | 48px | 64px | 80px |
 
 ### Density
 
-Density styres med CSS-klasser på et container-element og er implementert som et fast skift på ±2 trinn i skalaen. Compact forskyvs 2 trinn ned, Comfortable 2 trinn opp.
+Density styres med `data-density`-attributtet (`default`, `compact`, `comfortable`) på et container-element, og gir hvert nivå sitt eget sett med faste px-verdier. Compact er tettere enn Default, Comfortable er luftigere.
 
-Eksempel på `--ix-spacing-md` på 1024px+:
+Eksempel på `--ix-spacing-md` (mobil):
 
 | Compact | Default | Comfortable |
 |---|---|---|
-| ~14px | ~18px | ~23px |
+| 12px | 16px | 24px |
 
 ### Typografi
 
-Fontstørrelser bruker samme geometriske skala som spacing, men basen er `rem`-basert — det betyr at brukeren kan endre fontstørrelse via nettleserinnstillinger og at typografien skalerer deretter. Trinnene er definert på `.ix-body` og eksponert som tokens (`--ix-font-size-xs` til `--ix-font-size-5xl`). Det finnes ingen density-nivåer for typografi.
+Fontstørrelser bruker en geometrisk skala med ratio 1.125, men basen er fast `1rem` og `rem`-basert — det betyr at brukeren kan endre fontstørrelse via nettleserinnstillinger og at typografien skalerer deretter. Trinnene er definert på `.ix-body` og eksponert som tokens (`--ix-font-size-xs` til `--ix-font-size-5xl`). Det finnes ingen density-nivåer og ingen breakpoint-variasjon for typografi.
 
-| Token | 375px | 1024px+ |
-|---|---|---|
-| `--ix-font-size-md` | ~16px | ~18px |
-| `--ix-font-size-3xl` | ~25px | ~29px |
+| Token | Verdi (base `1rem`) |
+|---|---|
+| `--ix-font-size-md` | ~16px (1rem) |
+| `--ix-font-size-3xl` | ~29px (1.125⁵ rem) |
 
 ### Kombinert
 
-Density settes én gang på et container-element og arves av alle komponenter inni.
+Density settes én gang på et container-element (`data-density`) og arves av alle komponenter inni.
 
 ### Figma
 
@@ -55,9 +63,9 @@ Designere setter skjermstørrelse på frame og density for bruksområdet, og ser
 
 ### Drivere for beslutningen
 
-- Automatisk responsivitet uten ekstra arbeid fra utviklere
-- Ulike bruksområder krever fundamentalt ulik spacing
-- Matematisk konsistente proporsjoner fremfor subjektive valg
+- Forutsigbar layout — faste verdier per breakpoint er enklere å resonnere om enn fluid skalering
+- Responsivitet uten at utviklere håndterer breakpoints manuelt (tokens bytter verdi automatisk)
+- Ulike bruksområder krever fundamentalt ulik spacing (density)
 - Spacing og fontstørrelse er bevisst uavhengige — brukeren kan endre font uten at layout brytes, i tråd med <Term>WCAG</Term> 1.4.4
 
 ## Bakgrunn
@@ -84,44 +92,41 @@ responsivitet uten ekstra arbeid.
 
 ### Ulemper
 
-- Systemet gir verdier som 12px, 18px, 27px i stedet for 8px-grid — dette er bevisst
-  og matematisk korrekt, men er uvant for designere med 8px-bakgrunn
 - Tre density-nivåer å forholde seg til (Compact, Default, Comfortable)
-- Systemet gir verdier som ~16px, ~20px, ~23px i stedet for 8px-grid — dette er bevisst og matematisk korrekt, men er uvant for designere med 8px-bakgrunn
+- Verdiene følger ikke et strengt 8px-grid på alle trinn — bevisst, men uvant for designere med 8px-bakgrunn
+- Kun `xl`–`5xl` varierer per breakpoint; de mindre trinnene er konstante, noe som må kommuniseres slik at man ikke forventer at all spacing skalerer med skjermstørrelse
 
 ### Tiltak mot ulemper
 
-- Dokumentasjon forklarer systemet og begrunnelsen for ikke-grid-verdier
-- Figma-bibliotek gjør det enkelt å se faktiske beregnede verdier
+- Dokumentasjon forklarer systemet og hvilke trinn som varierer per breakpoint
+- Figma-bibliotek gjør det enkelt å se faktiske verdier per skjermstørrelse og density
 
 ## Forkastede alternativer
+
+### Fluid skalering med `clamp()`
+
+Den opprinnelige implementasjonen: spacing og fontstørrelse skalerte flytende med viewport via `clamp()` og en `calc()`-basert base.
+
+**Forkastet fordi:** Ga mindre forutsigbar layout — samme token kunne ha «alle» mellomverdier avhengig av viewport-bredde, noe som gjorde det vanskeligere å resonnere om og verifisere design. Faste steg per breakpoint gir designere og utviklere konkrete verdier å forholde seg til. (Density-systemet ble beholdt.)
 
 ### Standard 8px-grid
 
 Det dominerende spacing-systemet i designbransjen. Alle verdier er multipler av 8px.
 
-**Forkastet fordi:** Ikke responsivt i seg selv — responsivitet må håndteres manuelt med
-breakpoints. Løser heller ikke behovet for ulik tetthet mellom nettbank og salgssider.
-
-### Faste breakpoints
-
-Definere ulike spacing-verdier per breakpoint (sm/md/lg) i stedet for fluid skalering.
-
-**Forkastet fordi:** Gir merkbare "hopp" i layout ved breakpoints i stedet for jevn skalering.
+**Forkastet fordi:** Løser ikke behovet for ulik tetthet mellom nettbank og salgssider (density). Vårt system er mobile-first per breakpoint og bruker density i stedet for et fast grid.
 
 ### Kun viewport units (vw/vh)
 
-Bruke viewport-relative enheter direkte uten `calc()`-basert fluid logikk.
+Bruke viewport-relative enheter direkte for spacing.
 
 **Forkastet fordi:** Gir ingen kontroll over minimums- og maksimumsstørrelser. Skaper
 tilgjengelighetsproblemer — brukere som bruker zoom vil ikke få økt spacing som forventet.
 
-### Kun fluid uten density
+### Faste steg uten density
 
-Implementere fluid skalering uten density-nivåer.
+Implementere faste breakpoint-verdier uten density-nivåer.
 
-**Forkastet fordi:** Nettbank og salgssider har fundamentalt ulike behov som fluid skalering
-alene ikke kan løse.
+**Forkastet fordi:** Nettbank og salgssider har fundamentalt ulike tetthetsbehov som ett enkelt sett verdier ikke dekker.
 
 ### Separate spacing-systemer per bruksområde
 

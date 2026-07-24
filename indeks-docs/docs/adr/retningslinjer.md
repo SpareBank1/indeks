@@ -2,19 +2,22 @@
 
 Disse retningslinjene er ikke arkitekturbeslutninger, men konvensjoner teamet har blitt enige om.
 
-## Komponent co-location
+## Hvor en komponent bor
 
-Alle filer relatert til en komponent ligger sammen:
+Indeks er en monorepo (se [ADR-DS-001](./ADR-DS-001-monorepo-og-byggverktoy)), og en
+komponent er ofte spredt over flere pakker etter ansvar:
 
 ```
-lib/components/Button/
-├── Button.tsx
-├── Button.stories.tsx
-└── Button.test.ts
+indeks-css/css/components/<navn>/        # styling (.ix-<navn>)
+indeks-web/lib/components/<navn>/        # web component (hvis komponenten trenger logikk)
+indeks-react/lib/ui/                     # tynn React-wrapper (components/, layout/, typography/, icons/)
+indeks-storybook/stories/                # <Navn>.stories.tsx
+indeks-docs/docs/komponenter/<navn>.mdx  # dokumentasjon
 ```
 
-Komponenter grupperes i kategorier: `Typography/`, `Layout/`, `Form/`, `Components/`.
-Delte utilities ligger i `lib/utils/`.
+React-komponentene grupperes i `indeks-react/lib/ui/` etter kategori (`components/`,
+`layout/`, `typography/`, `icons/`). Delte React-hooks ligger i `indeks-react/lib/hooks/`
+og delte typer i `indeks-react/lib/types/`.
 
 ## Språkvalg i kode og dokumentasjon
 

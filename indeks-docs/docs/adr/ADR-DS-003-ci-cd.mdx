@@ -9,7 +9,7 @@ import Term from '@site/src/components/Term';
 
 # ADR-DS-003: CI/CD med GitHub Actions
 
-<AdrStatusLogg historikk={[{ status: 'Utkast', dato: '2026-01-23' }]} />
+<AdrStatusLogg historikk={[{ status: 'Besluttet', dato: '2026-07-24' }]} />
 
 ## Beslutning
 
@@ -21,7 +21,6 @@ Kjøres på pull requests mot main.
 
 - **`pr-build-and-preview.yml`** — Bygger alle pakker, kjører lint og tester, bygger <Term>Storybook</Term>, og deployer forhåndsvisning til Azure Static Web Apps. Inkluderer lisenssjekk og sikkerhetsaudit.
 - **`pr-playwright.yml`** — Kjører <Term>Playwright</Term>-tester i <Term>Docker</Term> mot Storybook. Trigges bare ved endringer i komponent- og stilpakker.
-- **`pr-release-gate.yml`** — Sjekker om det finnes en åpen release-PR. Satt opp som påkrevd status-sjekk i branch protection rules, slik at merge blokkeres automatisk til release-PR-en er håndtert.
 - **`pr-cleanup.yml`** — Sletter Azure-forhåndsvisningen når en PR lukkes.
 
 ### Release-workflow

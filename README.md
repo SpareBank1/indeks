@@ -14,10 +14,14 @@ graph TD
     %% Hovedrepositoriet indeks
     subgraph "Indeks repositorium"
         TOKENS[indeks-tokens<br/>Design tokens]
+        UTILS[indeks-utils<br/>CSS utility-klasser]
         CSS[indeks-css<br/>CSS bibliotek]
+        WEB[indeks-web<br/>Web components]
         REACT[indeks-react<br/>React komponenter]
+        STORYBOOK[indeks-storybook<br/>Komponentworkshop og tester]
         DOCS[indeks-docs<br/>Dokumentasjon]
         EKSEMPEL[indeks-eksempel<br/>Eksempler]
+        SHARED[shared<br/>Delte interne verktoy]
     end
 
     %% Publiseringsdestinasjoner
@@ -36,6 +40,9 @@ graph TD
 
     subgraph "NPM Registry"
         NPM_TOKENS[indeks-tokens<br/>npm pakke]
+        NPM_UTILS[indeks-utils<br/>npm pakke]
+        NPM_CSS[indeks-css<br/>npm pakke]
+        NPM_WEB[indeks-web<br/>npm pakke]
         NPM_REACT[indeks-react<br/>npm pakke]
     end
 
@@ -47,18 +54,23 @@ graph TD
     CSS -->|GitHub Actions| CDN_CSS
     DOCS -->|GitHub Pages| DOCS_SITE
     EKSEMPEL -->|GitHub Pages| EKSEMPEL_SITE
-    REACT -->|Storybook bygg| STORYBOOK_SITE
+    STORYBOOK -->|Storybook bygg| STORYBOOK_SITE
 
     TOKENS -->|npm publisering| NPM_TOKENS
+    UTILS -->|npm publisering| NPM_UTILS
+    CSS -->|npm publisering| NPM_CSS
+    WEB -->|npm publisering| NPM_WEB
     REACT -->|npm publisering| NPM_REACT
 
     %% Avhengigheter
     TOKENS -->|byggavhengighet| CSS
+    UTILS -->|byggavhengighet| CSS
     CSS -->|avhengighet| EKSEMPEL
+    WEB -->|avhengighet| REACT
     REACT -->|avhengighet| EKSEMPEL
     CSS -->|avhengighet| DOCS
     REACT -->|avhengighet| DOCS
-    CSS -->|avhengighet| STORYBOOK_SITE
+    CSS -->|avhengighet| STORYBOOK
 
     %% Styling
     classDef external fill:#e1f5fe
@@ -68,10 +80,10 @@ graph TD
     classDef npm fill:#fce4ec
 
     class SB1_LOGOS,SB1_FONTS,SB1_ICONS external
-    class TOKENS,CSS,REACT,DOCS,EKSEMPEL indeks
+    class TOKENS,UTILS,CSS,WEB,REACT,STORYBOOK,DOCS,EKSEMPEL,SHARED indeks
     class CDN_LOGOS,CDN_FONTS,CDN_ICONS,CDN_CSS cdn
     class DOCS_SITE,EKSEMPEL_SITE,STORYBOOK_SITE github
-    class NPM_TOKENS,NPM_REACT npm
+    class NPM_TOKENS,NPM_UTILS,NPM_CSS,NPM_WEB,NPM_REACT npm
 ```
 
 ## Repositoriestruktur
@@ -79,10 +91,14 @@ graph TD
 Dette monorepoet inneholder flere pakker som jobber sammen for å tilby SpareBank 1 sitt designsystem:
 
 -   **indeks-tokens**: Design tokens (farger, spacing, typografi) publisert som npm pakke
--   **indeks-css**: CSS bibliotek bygget fra tokens, publisert til CDN
--   **indeks-react**: React komponentbibliotek publisert som npm pakke
+-   **indeks-utils**: CSS utility-klasser publisert som npm pakke (inlines i indeks-css)
+-   **indeks-css**: CSS bibliotek bygget fra tokens og utils, publisert til npm og CDN
+-   **indeks-web**: Web components (custom elements), publisert som npm pakke og til CDN
+-   **indeks-react**: React komponentbibliotek (tynne wrappere over indeks-web) publisert som npm pakke
+-   **indeks-storybook**: Komponentworkshop og visuelle/a11y-tester (privat, publiseres ikke)
 -   **indeks-docs**: Dokumentasjonsside publisert til GitHub Pages
 -   **indeks-eksempel**: Eksempelimplementasjoner publisert til GitHub Pages
+-   **shared**: Delte interne bygg-/konfigverktøy (privat, publiseres ikke)
 
 ## Kjøre opp prosjektet
 
@@ -151,5 +167,5 @@ Versjonsbumping og npm-publisering gjøres manuelt lokalt for kontroll.
 ### Versjoneringsregler
 
 -   **indeks-tokens** og **indeks-utils**: Independent versioning (kan ha ulike versjoner)
--   **indeks-css** og **indeks-react**: Fixed versioning (alltid samme versjon)
--   Linked dependencies: Når tokens/utils oppdateres, bumpes også css automatisk
+-   **indeks-css**, **indeks-web** og **indeks-react**: Fixed versioning (alltid samme versjon)
+-   Interne avhengigheter: når tokens/utils oppdateres, får indeks-css et patch-bump automatisk (`updateInternalDependencies: "patch"`), og web/react følger med som del av fixed-gruppa

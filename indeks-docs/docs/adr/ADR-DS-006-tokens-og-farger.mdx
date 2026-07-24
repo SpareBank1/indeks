@@ -9,19 +9,19 @@ import Term from '@site/src/components/Term';
 
 # ADR-DS-006: Design tokens
 
-<AdrStatusLogg
-    historikk={[
-        { status: 'Utkast', dato: '2026-01-23' },
-    ]}
-/>
+<AdrStatusLogg historikk={[{ status: 'Besluttet', dato: '2026-07-24' }]} />
 
 ## Beslutning
 
-Design tokens defineres som JSON i `indeks-tokens/tokens/` og er single source of truth. Synkroniseres toveis med Figma med klare ansvarsgrenser.
+De fleste design tokens defineres som JSON i `indeks-tokens/tokens/` og er single source of truth for disse. Synkroniseres toveis med Figma med klare ansvarsgrenser.
 
 ### Token-struktur
 
-JSON-filer i `indeks-tokens/tokens/` (colors/, spacing.json, typography.json, border.json, breakpoints.json, z-index.json, transition.json). Genererer <Term>CSS custom properties</Term> (`--ix-*`), iOS Swift-verdier og Android XML. Fargesystemet er beskrevet i [ADR-DS-007](./ADR-DS-007-fargesystem).
+JSON-filer i `indeks-tokens/tokens/` (colors/, typography.json, border.json, breakpoints.json, z-index.json, transition.json, opacity.json, outline.json). Genererer <Term>CSS custom properties</Term> (`--ix-*`), iOS Swift-verdier og Android XML. Fargesystemet er beskrevet i [ADR-DS-007](./ADR-DS-007-fargesystem).
+
+:::note Spacing bor i CSS, ikke JSON
+Spacing er et bevisst unntak: `spacing.json` er en tom stubb, og spacing-tokenene defineres direkte som håndskrevet CSS i `indeks-utils/css/spacing.css` (faste px per breakpoint + density, se [ADR-DS-008](./ADR-DS-008-spacing-system)). Spacing-modellen (breakpoint-varianter × density-nivåer) er mer lesbar som CSS enn som generert JSON, og blir værende der.
+:::
 
 ### Figma-sync
 
@@ -32,7 +32,7 @@ Synkroniseringen er toveis men med klare ansvarsgrenser: primitive verdier eies 
 - Konsistens på tvers av plattformer (web, iOS, Android)
 - Versjonskontroll av design-verdier — endringer er sporbare i git
 - Koden er fasit for primitive verdier — designere styrer <Term>semantisk mapping</Term>
-- Theming — konsumenter som Kredittbanken og Spleis kan bytte ut primitive farger og få komplette fargeskalaer og semantiske tokens generert for sitt tema. Se [ADR-DS-007](./ADR-DS-007-fargesystem) for detaljer om fargesystemet
+- Theming — konsumenter som Spleis kan bytte ut primitive farger og få komplette fargeskalaer og semantiske tokens generert for sitt tema. Se [ADR-DS-007](./ADR-DS-007-fargesystem) for detaljer om fargesystemet
 
 ## Bakgrunn
 
