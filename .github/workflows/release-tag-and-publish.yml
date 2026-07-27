@@ -38,11 +38,10 @@ jobs:
               run: pnpm install --frozen-lockfile --ignore-scripts
 
             - name: Opprett versjons-PR eller publiser
-              uses: dotansimha/changesets-action@069996e9be15531bd598272996fa23853d61590e # v1.5.2
+              uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
               with:
                   version: pnpm ci:version
                   publish: pnpm ci:publish
-                  createGithubReleases: aggregate
                   commit: 'chore: version packages'
                   title: 'chore: version packages'
               env:

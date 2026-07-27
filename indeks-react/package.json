@@ -42,7 +42,6 @@
     },
     "scripts": {
         "build": "tsc -b ./tsconfig.json && vite build",
-        "prepublishOnly": "pnpm run build",
         "lint": "eslint .",
         "preview": "vite preview",
         "update-packages": "npx npm-check-updates -i --format group",
