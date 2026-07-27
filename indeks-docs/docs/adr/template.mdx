@@ -1,0 +1,88 @@
+---
+title: ADR-mal
+description: Mal for nye arkitekturbeslutninger i Indeks designsystem.
+---
+
+import AdrStatusLogg from '@site/src/components/adr/AdrStatusLogg';
+import AdrDeltakere from '@site/src/components/adr/AdrDeltakere';
+
+# ADR-DS-XXX: [Beskrivende tittel]
+
+<AdrStatusLogg
+    historikk={[
+        { status: 'Utkast', dato: 'YYYY-MM-DD' },
+    ]}
+/>
+
+## Bakgrunn
+
+Beskriv konteksten en utenforstående trenger for å forstå beslutningsbehovet. Hva er
+situasjonen? Hvilke tidligere beslutninger eller oppgaver har utløst dette behovet?
+
+## Problemstilling
+
+Den konkrete problemstillingen denne beslutningen skal svare på. Én eller to setninger.
+
+## Beslutning
+
+Hva ble besluttet, konkret og tydelig. Bruk korte avsnitt per del av beslutningen, eller
+en bulletet liste hvis det er flere sidestilte punkter. Ved Utkast/Forslag: beskriv
+anbefalingen og mulige valg.
+
+### Drivere for beslutningen
+
+- Driver 1: f.eks. kostnader, driftsmodell, prinsipp, kvalitetsegenskap, tid, begrensning
+- Driver 2
+- Driver 3
+
+## Konsekvenser
+
+### Hvem påvirkes?
+
+Scope for beslutningen og konsekvenser for ulike grupperinger.
+
+### Ulemper
+
+Utfordringer som må løses, konsekvenser ved at man valgte bort andre løsninger.
+
+### Tiltak mot ulemper
+
+- Konkret tiltak mot en spesifikk ulempe
+
+## Forkastede alternativer
+
+Hvert forkastet alternativ får sin egen seksjon. Beskriv alternativet kort (én setning
+for lesere som ikke kjenner det), og gi et konkret avvisningsargument.
+
+### [Navn på alternativ 1]
+
+Kort beskrivelse av fordeler og ulemper.
+
+**Forkastet fordi:** Kjerneargumentet i én setning.
+
+### [Navn på alternativ 2]
+
+...
+
+<AdrDeltakere
+    utarbeidetAv="Navn, rolle"
+/>
+
+{/*
+Fyll ut alle kjente felter:
+
+<AdrDeltakere
+    utarbeidetAv={['Navn, rolle', 'Navn, rolle']}
+    beslutningstaker="Navn, rolle"
+    besluttetAv="Navn, rolle"
+    besluttetDato="YYYY-MM-DD"
+    involvert={[
+        'Navn, rolle, YYYY-MM-DD',
+        'Forum/møte, YYYY-MM-DD',
+    ]}
+    informert={[
+        'Navn, rolle, YYYY-MM-DD',
+        'Forum/møte, YYYY-MM-DD',
+    ]}
+/>
+*/}
