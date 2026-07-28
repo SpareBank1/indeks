@@ -7,6 +7,18 @@ import a11yData from './accessibility/validation-message.json';
 
 ValidationMessage viser en feilmelding knyttet til et skjemafelt eller en feltgruppe.
 
+:::note Success-tilstand er under vurdering
+
+Komponenten støtter i dag kun **error**-tilstand. Figma viser også en **success**-variant (grønt ikon + grønn tekst), men vi har ikke tatt den i bruk ennå. Før vi implementerer success må vi avklare:
+
+- **Når gir bekreftelse faktisk verdi?** Success-meldinger på hvert felt kan skape støy og over-annonsering for skjermlesere.
+- **Hvordan annonseres den?** `ix-field` setter i dag `aria-live="polite"` for feil. Success bør ikke avbryte, men vi må sikre at den ikke dobbelt-annonseres sammen med feil.
+- **Skal `aria-invalid` fjernes?** Success og error deler i dag samme `[data-field="error"]`-slot og `aria-invalid`-logikk i `ix-field`.
+
+API-et er forberedt for å utvides med en `variant`/status senere uten brytende endringer. Ta kontakt med designsystem-teamet før du bygger på success.
+
+:::
+
 ## Egnet til
 
 - Feilmelding under et inputfelt eller en feltgruppe (f.eks. RadioGroup)
@@ -15,17 +27,20 @@ ValidationMessage viser en feilmelding knyttet til et skjemafelt eller en feltgr
 ## Uegnet til
 
 - Generelle informasjonsmeldinger som ikke er feil
-- Suksess- eller advarselsmeldinger som ikke trenger rød styling
+- Suksess- eller advarselsmeldinger (success-tilstand er under vurdering — se notatet øverst)
 
 ## Kom i gang
 
-ValidationMessage rendrer et `<span data-field="error">` som styles av Indeks-CSS. Når elementet ligger inne i en `<ix-field>` eller `<ix-radio-group>`, kobles det automatisk til input via `aria-describedby` og setter `aria-invalid="true"` på inputen når meldingen har innhold.
+ValidationMessage rendrer et `<span data-field="error">` med et dekorativt feilikon (en badge — hvit glyf på rød sirkel) foran teksten. Elementet styles av Indeks-CSS. Når det ligger inne i en `<ix-field>` eller `<ix-radio-group>`, kobles det automatisk til input via `aria-describedby` og setter `aria-invalid="true"` på inputen når meldingen har innhold.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<span data-field="error">Du må velge et alternativ</span>
+<span data-field="error">
+  <ix-icon data-badge data-status="danger" name="close" aria-hidden="true" />
+  Du må velge et alternativ
+</span>
 ```
 
 </TabItem>
@@ -37,6 +52,12 @@ ValidationMessage rendrer et `<span data-field="error">` som styles av Indeks-CS
 
 </TabItem>
 </Tabs>
+
+Ikonet er dekorativt (`aria-hidden`) — feilen formidles av teksten. Slå det av med `showIcon={false}` (React) eller ved å utelate `<ix-icon>` (HTML) i de sjeldne tilfellene der ikonet ikke passer.
+
+```tsx live
+<ValidationMessage showIcon={false}>Du må velge et alternativ</ValidationMessage>
+```
 
 ## Bruk inne i ix-field
 
@@ -112,10 +133,13 @@ Når du veksler mellom feil og ingen feil, behold `<span data-field="error">` i 
 
 ### `[data-field="error"]`
 
-Et element med `data-field="error"` styles automatisk av Indeks-CSS som en feilmelding (rød tekst, riktig spacing). Inne i `<ix-field>` eller `<ix-radio-group>` kobles det også til input via `aria-describedby`, og inputen får `aria-invalid="true"` når elementet har innhold.
+Et element med `data-field="error"` styles automatisk av Indeks-CSS som en feilmelding (rød tekst, riktig spacing, ikon-layout). Inne i `<ix-field>` eller `<ix-radio-group>` kobles det også til input via `aria-describedby`, og inputen får `aria-invalid="true"` når elementet har innhold. Feilikonet skrives som et dekorativt `<ix-icon data-badge>` foran teksten — utelat det for å skjule ikonet.
 
 ```html
-<span data-field="error">Du må velge et alternativ</span>
+<span data-field="error">
+  <ix-icon data-badge data-status="danger" name="close" aria-hidden="true"></ix-icon>
+  Du må velge et alternativ
+</span>
 ```
 
 </TabItem>
@@ -126,6 +150,7 @@ Et element med `data-field="error"` styles automatisk av Indeks-CSS som en feilm
 | Prop | Type | Påkrevd | Beskrivelse |
 |------|------|---------|-------------|
 | `children` | `ReactNode` | Nei | Feilmeldingsteksten |
+| `showIcon` | `boolean` | Nei | Vis det dekorative feilikonet foran teksten. Standard `true`. |
 | `id` | `string` | Nei | ID på elementet — nødvendig hvis du kobler manuelt med `aria-describedby` |
 | `className` | `string` | Nei | Ekstra CSS-klasser |
 | `ref` | `Ref<HTMLSpanElement>` | Nei | Ref videresendes til `<span>`-elementet |
@@ -137,12 +162,14 @@ I tillegg støttes alle standard HTML-attributter på span.
 
 ## Tilpasning med CSS
 
-ValidationMessage styles av globale regler på `[data-field="error"]`. Det finnes ingen egne CSS-variabler for komponenten — typografi og farge arves fra token-systemet:
+ValidationMessage styles av globale regler på `[data-field="error"]` i `form/validation-message.css`. Det finnes ingen egne CSS-variabler for komponenten — typografi, farge og ikon-badge arves fra token-systemet:
 
 | Egenskap | Token |
 |----------|-------|
 | Skriftstørrelse | `--ix-font-size-md` |
-| Farge | `--ix-color-foreground-danger-default` |
+| Tekstfarge | `--ix-color-foreground-danger-default` |
+| Ikon-badge sirkelfarge | `--ix-color-status-fill` (via `data-status="danger"`) |
+| Ikon-badge størrelse | `--ix-icon-badge-size` (satt til `--ix-font-size-lg`) |
 
 ## Relatert
 

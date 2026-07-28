@@ -13,12 +13,19 @@ type Story = StoryObj<typeof meta>;
 
 export const Standard: Story = {};
 
+export const UtenIkon: Story = {
+    args: { showIcon: false, children: 'Du må fylle inn et gyldig kontonummer' },
+};
+
 export const MedId: Story = {
     args: { id: 'min-feil', children: 'Beløpet må være et tall' },
 };
 
 export const HTML: Story = {
     render: () => (
-        <span data-field="error">Du må velge et alternativ</span>
+        <span data-field="error">
+            <ix-icon data-badge="" data-status="danger" name="close" aria-hidden="true" />
+            Du må velge et alternativ
+        </span>
     ),
 };

@@ -27,17 +27,7 @@
     margin: 0;
 }
 
-:where(ix-radio-group, .ix-radio-group) [data-field='error'] {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--ix-spacing-2xs);
-    font-size: var(--ix-font-size-md);
-    color: var(--ix-color-foreground-danger-default);
-}
-
-:where(ix-radio-group, .ix-radio-group) [data-field='error']:empty {
-    display: none;
-}
+/* Feilmeldingen ([data-field='error']) styles i form/validation-message.css. */
 
 :where(ix-radio-group, .ix-radio-group) [data-field='items'] {
     display: flex;

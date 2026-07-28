@@ -31,17 +31,7 @@
     margin: 0;
 }
 
-:where(ix-checkbox-group, .ix-checkbox-group) [data-field='error'] {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--ix-spacing-2xs);
-    font-size: var(--ix-font-size-md);
-    color: var(--ix-color-foreground-danger-default);
-}
-
-:where(ix-checkbox-group, .ix-checkbox-group) [data-field='error']:empty {
-    display: none;
-}
+/* Feilmeldingen ([data-field='error']) styles i form/validation-message.css. */
 
 /* Alternativene vises som vertikal liste — bedre skannbarhet (jf. checkbox-
  * retningslinjene). Chip-varianten wrapper på rad via egen regel under. */

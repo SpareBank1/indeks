@@ -1,5 +1,6 @@
 import { forwardRef, type ReactNode } from 'react';
 import { Label } from '../label/Label';
+import { ValidationMessage } from '../validation-message/ValidationMessage';
 import type { IxField } from '@sb1/indeks-web';
 
 export type FieldProps = {
@@ -35,7 +36,7 @@ export const Field = forwardRef<IxField, FieldProps>(function Field({
             {label && <Label htmlFor={inputId}>{label}</Label>}
             <span data-field="description">{description}</span>
             {children}
-            <span data-field="error">{errorMessage}</span>
+            <ValidationMessage>{errorMessage}</ValidationMessage>
         </ix-field>
     );
 });
