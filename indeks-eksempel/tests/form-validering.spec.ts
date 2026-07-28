@@ -73,10 +73,10 @@ test('korrekt utfylling sender inn RÅ verdier', async ({ page }) => {
     await page.getByLabel('Fra konto').selectOption('brukskonto');
     await page.getByLabel('Melding').fill('Hei, dette er en test');
 
-    // RadioGroup (register) / CheckboxGroup (Controller): den native inputen er
-    // visuelt skjult av web-component-stylingen, så vi klikker den synlige labelen
-    // (slik en bruker gjør). Verifiser deretter at underliggende input ble avmerket.
-    // For RadioGroup ruter register-objektet rett ned på de native radio-inputene.
+    // RadioGroup / CheckboxGroup: den native inputen er visuelt skjult av
+    // web-component-stylingen, så vi klikker den synlige labelen (slik en bruker gjør).
+    // Verifiser deretter at underliggende input ble avmerket. RHF samler
+    // checkbox-verdiene til et string[].
     await page.getByText('Privat', { exact: true }).click();
     await expect(page.getByLabel('Privat')).toBeChecked();
 

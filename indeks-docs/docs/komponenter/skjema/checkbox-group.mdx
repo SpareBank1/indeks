@@ -67,7 +67,7 @@ CheckboxGroup samler flere relaterte checkboxer i én gruppe der brukeren kan ve
 
 For enkle lister er `options`-propen den raskeste veien — på samme måte som `Select`. Hver option har `value` og `label`.
 
-I praksis vil du som regel holde valgte verdier i state og koble dem via `value`/`onChange`. Merk at `value` er et **array** — flere kan være valgt samtidig:
+I praksis vil du som regel holde valgte verdier i state og koble dem via `value`/`onChange`. Merk at `value` er et **array** — flere kan være valgt samtidig. `onChange` er event-basert (verdien ligger i `event.target.value`, av/på i `event.target.checked`), slik at et `{...register('felt')}` fra React Hook Form kan spres rett på komponenten — se [Form-validering](../../monstre-og-maler/form-validering). I kontrollert bruk bygger du selv neste array:
 
 ```tsx
 const [kontakt, setKontakt] = useState<string[]>(['epost']);
@@ -76,7 +76,13 @@ const [kontakt, setKontakt] = useState<string[]>(['epost']);
   legend="Hvordan vil du bli kontaktet?"
   name="kontakt"
   value={kontakt}
-  onChange={setKontakt}
+  onChange={(event) =>
+    setKontakt((prev) =>
+      event.target.checked
+        ? [...prev, event.target.value]
+        : prev.filter((v) => v !== event.target.value)
+    )
+  }
   options={[
     { value: 'epost', label: 'E-post' },
     { value: 'sms', label: 'SMS' },
@@ -426,7 +432,9 @@ Når du bruker `<ix-checkbox-group>` eller React-komponenten, settes dette opp f
 | `name` | `string` | Nei | | `name`-attributtet på alle inputs. Propageres til hver input når satt |
 | `value` | `string[]` | Nei | | Kontrollert modus: hvilke alternativer som er valgt. Bruk sammen med `onChange` |
 | `defaultValue` | `string[]` | Nei | `[]` | Ukontrollert modus: initielt valgte verdier. Brukeren kan endre fritt |
-| `onChange` | `(values: string[]) => void` | Nei | | Kalles med hele det oppdaterte arrayet når brukeren toggler et valg |
+| `onChange` | `ChangeEventHandler<HTMLInputElement>` | Nei | | Event-basert. Kalles med det native change-eventet — toggl-verdien i `event.target.value`, av/på i `event.target.checked`. RHF samler de avmerkede verdiene til et `string[]`; i kontrollert bruk bygger du selv neste array. Lar `{...register()}` spres rett på |
+| `onBlur` | `FocusEventHandler<HTMLInputElement>` | Nei | | Videresendes til hver input (RHF touched-state ved `mode: 'onBlur'`) |
+| `ref` | `Ref<HTMLInputElement>` | Nei | | Rutes ned på hver native checkbox-input. RHF akkumulerer dem og eier `checked` (register-modus) |
 | `disabled` | `boolean` | Nei | `false` | Deaktiverer hele gruppen |
 | `readOnly` | `boolean` | Nei | `false` | Skrivebeskytter hele gruppen |
 | `hideLegend` | `boolean` | Nei | `false` | Skjuler legend visuelt — leses fortsatt av skjermlesere |

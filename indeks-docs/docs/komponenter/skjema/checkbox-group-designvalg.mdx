@@ -20,9 +20,15 @@ Komponenten bruker en host-`<div>` (gjennom custom element `<ix-checkbox-group>`
 
 ## `value` er et array — flervalg, ikke mutex
 
-Der RadioGroup har `value: string` (ett valg), har CheckboxGroup `value: string[]`. `onChange` kalles med hele det oppdaterte arrayet, og `handleChange(value, checked)` legger til eller fjerner verdien.
+Der RadioGroup har `value: string` (ett valg), har CheckboxGroup `value: string[]`. `value.includes(v)` avgjør om en enkelt checkbox er avkrysset.
 
-*Hvorfor:* checkbox-semantikken er at flere valg kan være aktive samtidig og uavhengig. Et array er den naturlige modellen — `value.includes(v)` avgjør om en enkelt checkbox er avkrysset.
+*Hvorfor:* checkbox-semantikken er at flere valg kan være aktive samtidig og uavhengig. Et array er den naturlige modellen.
+
+## `onChange` er event-basert — akkurat som RadioGroup
+
+`onChange` videresender det *ekte* native change-eventet (`ChangeEventHandler<HTMLInputElement>`), ikke det oppdaterte arrayet. Toggl-verdien ligger i `event.target.value`, av/på i `event.target.checked`. Komponenten har tre koblingsmodi styrt av samme `ref != null`-signal som RadioGroup: kontrollert (`value` satt), register (`{...register()}` spres → RHF eier `checked` via de native refene, `ref` rutes ned på hver input via `mergedRef`), og ren uncontrolled (`defaultValue` + intern array-state).
+
+*Hvorfor:* React Hook Form samler en checkbox-gruppe til et `string[]` ved å lese `checked`+`value` fra alle inputs som deler `name`, og fordeler et array tilbake ved å matche `value`. Det krever at RHF ser de ekte inputene og eventene — nøyaktig det native routing gir. Å sende `(values: string[])` ville brutt register()-kontrakten. Konsekvens (pre-release): kontrollerte forbrukere bygger selv neste array fra `event.target`. *Vurdert:* en union `((values) => void) | ChangeEventHandler` for å beholde det behagelige array-callbacket i kontrollert modus — forkastet fordi union-typen smitter til TS-forbrukere og gir to divergerende mentale modeller for samme prop. Speiler RadioGroup 1:1; eneste forskjell er at `checked` er medlemskap (`value.includes(v)`) i stedet for likhet.
 
 ## Ingen `name`-auto-generering
 

@@ -13,7 +13,7 @@ import {
     TextField,
 } from '@sb1/indeks-react';
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import * as v from 'valibot';
 
 /*
@@ -24,12 +24,9 @@ import * as v from 'valibot';
  *   2. Fungere som datagrunnlag for en Playwright e2e-test (tomt submit → feil,
  *      ugyldig input → Valibot-melding, korrekt input → rå verdier vises).
  *
- * To integrasjonsmønstre (se kommentarer per felt):
- *   Mønster A — `register()`: for komponenter som videresender ref og sender et
- *     change-event i RHF-form (TextField — også i formatter-modus, TextArea, Select,
- *     Checkbox, Combobox, RadioGroup).
- *   Mønster B — `<Controller>`: for komponenter der field.value ikke er en enkel
- *     input-verdi (CheckboxGroup → string[]).
+ * Alle felt kobles med `{...register('felt')}` — komponentene oppfører seg som
+ * native inputs (videresender ref, sender ekte change/blur-events). Kommentarene
+ * under nevner bare det som IKKE er åpenbart per felt.
  *
  * Alle komponenter er «bring-your-own-validation»: `errorMessage` tar en ferdig
  * streng. RHF + Valibot produserer strengen; komponenten viser den og setter
@@ -51,7 +48,7 @@ const schema = v.object({
         v.email('Ugyldig e-postadresse')
     ),
     // Rå verdi = 11 siffer uten separatorer. Feltet formateres visuelt via
-    // formatPattern, men innsendt/validert verdi er rå (se Controller under).
+    // formatPattern, men innsendt/validert verdi er rå (se TextField-feltet under).
     kontonummer: v.pipe(
         v.string(),
         v.regex(/^\d{11}$/, 'Kontonummer må være 11 siffer')
@@ -120,7 +117,6 @@ export default function FormValidering() {
     const {
         register,
         handleSubmit,
-        control,
         formState: { errors },
     } = useForm<FormData>({
         resolver: valibotResolver(schema),
@@ -139,14 +135,12 @@ export default function FormValidering() {
                 </Heading>
 
                 <Form onSubmit={handleSubmit(onValid)} noValidate>
-                    {/* Mønster A (register): TextField videresender ref til <input>. */}
                     <TextField
                         label="Navn"
                         {...register('navn')}
                         errorMessage={errors.navn?.message}
                     />
 
-                    {/* Mønster A (register): e-post. */}
                     <TextField
                         label="E-post"
                         type="email"
@@ -154,14 +148,7 @@ export default function FormValidering() {
                         errorMessage={errors.epost?.message}
                     />
 
-                    {/*
-                        Mønster A (register) for TextField i FORMATTER-modus: med
-                        formatPattern eier ix-field DOM-verdien, men TextField
-                        videresender en proxy-ref til register() slik at RHF leser rå
-                        via ref.value og re-formaterer ved skriving. Bindes derfor helt
-                        likt et uformatert felt. Innsendt verdi er rå (11 siffer uten
-                        mellomrom), mens visningen er «0000 00 00000».
-                    */}
+
                     <TextField
                         label="Kontonummer"
                         inputMode="numeric"
@@ -170,7 +157,6 @@ export default function FormValidering() {
                         errorMessage={errors.kontonummer?.message}
                     />
 
-                    {/* Mønster A (register): Select videresender ref til <select>. */}
                     <Select
                         label="Fra konto"
                         placeholder="Velg konto"
@@ -179,20 +165,13 @@ export default function FormValidering() {
                         errorMessage={errors.fraKonto?.message}
                     />
 
-                    {/* Mønster A (register): TextArea videresender ref til <textarea>. */}
                     <TextArea
                         label="Melding"
                         {...register('melding')}
                         errorMessage={errors.melding?.message}
                     />
 
-                    {/*
-                        Mønster A (register): RadioGroup rendrer ekte native
-                        <input type="radio">. register-objektet (ref/onChange/onBlur)
-                        rutes rett ned på hver input; RHF eier checked via de native
-                        refene og skriver defaultValues inn ved mount — så vi trenger
-                        INGEN egen defaultValue her (til forskjell fra Combobox).
-                    */}
+
                     <RadioGroup
                         legend="Kontotype"
                         options={kontotypeOptions}
@@ -200,29 +179,15 @@ export default function FormValidering() {
                         errorMessage={errors.kontotype?.message}
                     />
 
-                    {/* Mønster B (Controller): CheckboxGroup har custom onChange(values[]). */}
-                    <Controller
-                        name="tjenester"
-                        control={control}
-                        render={({ field, fieldState }) => (
-                            <CheckboxGroup
-                                legend="Tjenester"
-                                options={tjenesteOptions}
-                                value={field.value}
-                                onChange={field.onChange}
-                                errorMessage={fieldState.error?.message}
-                            />
-                        )}
+
+                    <CheckboxGroup
+                        legend="Tjenester"
+                        options={tjenesteOptions}
+                        {...register('tjenester')}
+                        errorMessage={errors.tjenester?.message}
                     />
 
-                    {/*
-                        Mønster A (register): Combobox sender et syntetisk change-
-                        event i RHF-form (verdi i target.value), så {...register()}
-                        kan spres rett på. `ref` → host (fokus-ved-feil via WC),
-                        `onChange`/`onBlur` → syntetiske events, `name` → skjult
-                        <select>. defaultValue settes separat fordi register er
-                        ukontrollert (useForm sin defaultValues pusher ikke inn).
-                    */}
+
                     <Combobox
                         label="Land"
                         placeholder="Søk etter land"
@@ -233,12 +198,6 @@ export default function FormValidering() {
                         errorMessage={errors.land?.message}
                     />
 
-
-                    {/*
-                        Mønster A (register): Checkbox videresender ref til <input
-                        type=checkbox>. RHF register mapper checked ↔ value; Valibot
-                        v.literal(true) krever avkrysning.
-                    */}
                     <Checkbox
                         label="Jeg godtar vilkårene"
                         {...register('samtykke')}
