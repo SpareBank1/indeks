@@ -16,6 +16,8 @@ export type { RadioButtonProps } from './radio-group/RadioButton';
 export { Select } from './select/Select';
 export type { SelectProps, SelectOption, SelectOptionGroup } from './select/Select';
 export { TextField } from './text-field/TextField';
+export type { TextFieldProps } from './text-field/TextField';
 export { TextArea } from './text-area/TextArea';
+export type { TextAreaProps } from './text-area/TextArea';
 export { ValidationMessage } from './validation-message/ValidationMessage';
 export type { ValidationMessageProps } from './validation-message/ValidationMessage';
