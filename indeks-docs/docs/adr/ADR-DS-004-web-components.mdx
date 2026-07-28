@@ -20,8 +20,14 @@ Eksempel: `ix-field` er ikke et input-felt — det er et omgivende lag som knytt
 **Shadow DOM:** Vi unngår Shadow DOM som hovedregel. Shadow DOM isolerer markup fra resten av dokumentet, noe som gjør tilgjengelighetsarbeid vanskeligere — skjermlesere og ARIA-relasjoner må fungere på tvers av shadow boundaries, og konsumenter mister muligheten til å style med CSS-variabler. Unntaket er komponenter som viser visuelt innhold basert på universelt utformet data i markup — for eksempel et chart-element som rendres visuelt i Shadow DOM mens tabelldata forblir tilgjengelig i vanlig DOM.
 
 **Arkitektur:** `indeks-web` (Web Components) → `indeks-react` (wrapper).
-React-pakken eksponerer komponentene med idiomatisk React API. Det meste av funksjonaliteten ligger i Web Component-en — React-laget håndterer React-spesifikke ting som event-mapping og prop-konvertering, slik at konsumenter i prinsippet kan gjøre det samme med ren HTML.
+React-pakken eksponerer komponentene med idiomatisk React API. Det meste av funksjonaliteten ligger i Web Component-en — React-laget håndterer React-spesifikke ting som event-mapping og prop-konvertering, slik at en ren-HTML-konsument får nøyaktig samme fullverdige komponent.
 Hvordan `indeks-react` bygges og distribueres er beskrevet i [ADR-DS-005](./ADR-DS-005-react-bibliotek).
+
+**Bevisste rammeverk-tilpasninger:** React-laget kan ha målrettede tilpasninger for å fungere godt med utbredte React-verktøy — for eksempel props som gjør en komponent kompatibel med React Hook Form (`register()`), slik at skjemakobling blir idiomatisk. Slike tilpasninger handler utelukkende om *integrasjon* — å få React til å fungere — aldri om å gi React-konsumenter mer funksjonalitet eller en annen brukeropplevelse.
+
+**UI og UX skal være identisk uansett konsument.** En bruker skal ikke kunne se eller kjenne — verken visuelt eller via tastatur og skjermleser — om et felt er bygget med ren HTML eller React. HTML-versjonen av hver komponent er fullverdig i seg selv; React-wrapperen legger ikke til noe ekstra, den kabler bare det som allerede finnes lenger ned i stacken. Det som *skal* skille seg, er API-flaten: React får idiomatiske props, typer og JSX, mens HTML får attributter og web component. Ulikt grensesnitt, lik komponent.
+
+Tilpasninger er tillatt så lenge to ting holder: (1) Web Component-en forblir kilden til sannhet — logikken legges i WC-en når den også gagner ikke-React-konsumenter (f.eks. native `change`-events og fokushåndtering på riktig element), og React-laget begrenser seg til tynn kabling; og (2) HTML-pariteten bevares — en ren-HTML- eller Vue/Angular-konsument får samme fullverdige komponent, ikke en redusert variant. En React-only-egenskap som ikke lar seg uttrykke i WC-en, skal være liten, veldokumentert og ikke bryte de andre konsumentene.
 
 ### Drivere for beslutningen
 
@@ -49,9 +55,11 @@ uavhengig av hvilke JavaScript-rammeverk de bruker?
 ### Hvem påvirkes?
 
 - **Team Designsystem** — implementerer Web Components
-- **React-konsumenter** — bruker React-wrapperen, merker lite
-- **Andre team** — får tilgang til komponentlogikk uten React-avhengighet
+- **React-konsumenter** — bruker React-wrapperen og slipper å forholde seg til maskineriet under; for team som vil bygge frontend uten å tenke på hvordan det fungerer, er dette et godt valg
+- **Andre team** — får tilgang til komponentlogikk uten React-avhengighet; team som bruker andre rammeverk eller vil tilpasse mer, ser naturlig mer av kompleksiteten bak — men får samme komponent
 - **Designere** — ingen endring
+
+Abstraksjonsnivået skalerer altså med hvor mye konsumenten vil involvere seg: React skjuler mest, ren HTML og andre rammeverk eksponerer mer av maskineriet. Uansett nivå er komponenten — og brukeropplevelsen — den samme.
 
 ### Ulemper
 
