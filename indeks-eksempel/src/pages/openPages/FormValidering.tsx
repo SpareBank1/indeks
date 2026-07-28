@@ -48,7 +48,7 @@ const schema = v.object({
         v.email('Ugyldig e-postadresse')
     ),
     // Rå verdi = 11 siffer uten separatorer. Feltet formateres visuelt via
-    // formatPattern, men innsendt/validert verdi er rå (se TextField-feltet under).
+    // format="account", men innsendt/validert verdi er rå (se TextField-feltet under).
     kontonummer: v.pipe(
         v.string(),
         v.regex(/^\d{11}$/, 'Kontonummer må være 11 siffer')
@@ -152,7 +152,7 @@ export default function FormValidering() {
                     <TextField
                         label="Kontonummer"
                         inputMode="numeric"
-                        formatPattern="0000 00 00000"
+                        format="account"
                         {...register('kontonummer')}
                         errorMessage={errors.kontonummer?.message}
                     />

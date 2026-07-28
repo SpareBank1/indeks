@@ -91,7 +91,7 @@ Et formatert `TextField` (`format` eller `formatPattern`) bindes **på samme må
 <TextField
     label="Kontonummer"
     inputMode="numeric"
-    formatPattern="0000 00 00000"
+    format="account"
     {...register('kontonummer')}
     errorMessage={errors.kontonummer?.message}
 />

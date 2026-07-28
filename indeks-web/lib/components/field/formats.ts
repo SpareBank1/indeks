@@ -238,6 +238,15 @@ export function resolveFormat(name: string): FieldFormatter | undefined {
 // `amount` bruker tall-formatteren med norske separatorer (mellomrom + komma),
 // i tråd med eksisterende intern bruk.
 
+/**
+ * Navnene på de innebygde formatvariantene. Eksporteres slik at typelaget
+ * (indeks-react dupliserer denne listen for autocomplete på `format`) kan holdes
+ * i synk via en sync-test — React importerer ikke web-runtime ellers.
+ */
+export const BUILTIN_FORMAT_NAMES = ['phone', 'amount', 'account', 'orgnr', 'ssn', 'date'] as const;
+
+export type BuiltInFormatName = (typeof BUILTIN_FORMAT_NAMES)[number];
+
 // live: true — de innebygde variantene formaterer mens brukeren skriver. Flagget
 // settes på registreringen (ikke i factoryene, som deles med egne pattern-strenger
 // som skal være blur som standard). Spread beholder format/parse uendret.

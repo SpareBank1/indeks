@@ -1,20 +1,9 @@
 import { forwardRef, type ReactNode, useEffect, useId, useLayoutEffect, useRef } from 'react';
 import { Field } from '../field/Field';
 import type { IxField } from '@sb1/indeks-web';
+import type { FieldFormatter, FormatName } from './text-field-formats';
 
-/**
- * Format/parse-par for input-formatering. Duplisert her (ikke importert fra
- * `@sb1/indeks-web`) fordi React-laget aldri importerer web-runtime — web lastes
- * fra CDN. Holdes i synk med `FieldFormatter` i indeks-web.
- */
-export type FieldFormatter = {
-    /** Rå verdi → visningsstreng. */
-    format(raw: string): string;
-    /** Visningsstreng → rå verdi (tapsfri: fjerner kun separatorer). */
-    parse(display: string): string;
-    /** Formater mens brukeren skriver. Standard false = format-on-blur. */
-    live?: boolean;
-};
+export type { FieldFormatter, FormatName, BuiltInFormatName } from './text-field-formats';
 
 type TextFieldOwnProps = {
     label?: string;
@@ -41,7 +30,7 @@ type TextFieldOwnProps = {
      * validering, ikke ved å droppe tegn. `onChange` og form-innsending gir alltid
      * den rå verdien (uten separatorer).
      */
-    format?: string | FieldFormatter;
+    format?: FormatName | FieldFormatter;
     /**
      * Pattern-streng for formatering uten kode: `"000 00 000"` (`0`=siffer,
      * `a`=bokstav, `*`=hva som helst, resten = separatorer). Merk: dette er IKKE

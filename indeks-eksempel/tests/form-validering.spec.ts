@@ -66,8 +66,8 @@ test('korrekt utfylling sender inn RÅ verdier', async ({ page }) => {
     await page.getByLabel('Navn').fill('Kari Nordmann');
     await page.getByLabel('E-post').fill('kari@example.com');
 
-    // Formatert felt via register (proxy-ref): skriv 11 siffer, visning blir
-    // «1234 56 78901», innsendt verdi rå. Bindes likt et uformatert felt.
+    // Formatert felt (format="account") via register (proxy-ref): skriv 11 siffer,
+    // visning blir «1234 56 78901», innsendt verdi rå. Bindes likt et uformatert felt.
     await page.getByLabel('Kontonummer').fill('12345678901');
 
     await page.getByLabel('Fra konto').selectOption('brukskonto');
