@@ -20,11 +20,11 @@ API-et i React er `<RadioGroup>` med `<RadioButton>`-barn, ikke en prop-array (`
 
 *Hvorfor:* gir lesbar JSX og lar hver knapp bære eget innhold (description, custom labels, ekstra HTML-attributter). *Vurdert:* `options`-array — låser strukturen og gjør alt som ikke er "label + value" tungvint.
 
-## Context bærer kun `name`, `value`, `onChange`
+## Context bærer de native felt-koblingene, ikke `disabled`/`readOnly`/`required`
 
-`RadioGroupContext` propagerer det React må vite om: gruppens `name`, valgt verdi og change-handler. `disabled`, `readOnly` og `required` ligger *ikke* i Context — de settes som HTML-attributter på `<ix-radio-group>`, og web component-en propagerer dem ned til hver `<input>`.
+`RadioGroupContext` propagerer det React må rute ned på hver native `<input>`: gruppens `name`, valgt verdi (kontrollert modus), den event-baserte `onChange`, `onBlur`, og — i register-modus — RHF sin `ref` (samme objekt på alle inputs, som RHF akkumulerer) pluss et `uncontrolled`-flagg. `disabled`, `readOnly` og `required` ligger *ikke* i Context — de settes som HTML-attributter på `<ix-radio-group>`, og web component-en propagerer dem ned til hver `<input>`.
 
-*Hvorfor:* unngår dobbelt sannhet. WC må uansett vite om disabled for å håndtere per-knapp bevaring (se under), så å duplisere det i Context ville bare gitt to kilder å holde i synk.
+*Hvorfor:* radioene er ekte native input-elementer, så `register()` kobles slik det er bygget for radios — `ref`/`onChange`/`onBlur` rutes rett ned på inputene, og RHF eier `checked` via de native refene. Context er kanalen for den rutingen. `disabled` m.fl. holdes utenfor for å unngå dobbelt sannhet: WC må uansett vite om disabled for per-knapp bevaring (se under), så å duplisere det i Context ville bare gitt to kilder å holde i synk.
 
 ## Ingen egen web component for `RadioButton`
 

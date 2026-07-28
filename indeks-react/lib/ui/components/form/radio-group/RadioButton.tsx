@@ -1,5 +1,12 @@
-import { forwardRef, type InputHTMLAttributes, type JSX } from 'react';
+import { forwardRef, useCallback, type InputHTMLAttributes, type JSX, type Ref } from 'react';
 import { useRadioGroupContext } from './RadioGroupContext';
+
+// Setter samme node på flere refs. Brukes for å gi både RadioButtons egen
+// forwardRef og gruppens register-ref (ctx.inputRef) tilgang til inputen.
+function setRef<T>(ref: Ref<T> | undefined, node: T): void {
+    if (typeof ref === 'function') ref(node);
+    else if (ref) (ref as React.MutableRefObject<T | null>).current = node;
+}
 
 export type RadioButtonProps = {
     value: string;
@@ -26,23 +33,36 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(functi
 ): JSX.Element {
     const ctx = useRadioGroupContext();
     const name = ctx?.name;
-    const isChecked = ctx?.value !== undefined ? ctx.value === value : undefined;
+    // I register-modus (uncontrolled) eier RHF/native checked — ikke sett den fra
+    // React, ellers slåss React-propen mot RHF sine DOM-skrivinger. Kontrollert
+    // modus (value satt) setter checked som før.
+    const isChecked = ctx?.uncontrolled ? undefined : ctx?.value !== undefined ? ctx.value === value : undefined;
 
-    function handleChange() {
-        ctx?.onChange?.(value);
-    }
+    // Memoisert så RHF ikke av/reregistrerer refen (churn i _f.refs) hver render.
+    const ctxInputRef = ctx?.inputRef;
+    const mergedRef = useCallback(
+        (node: HTMLInputElement | null) => {
+            setRef(ref, node);
+            setRef(ctxInputRef, node);
+        },
+        [ref, ctxInputRef]
+    );
 
     return (
         <div className={className}>
             <input
-                ref={ref}
+                // Både RadioButtons egen ref og gruppens register-ref må få noden.
+                ref={mergedRef}
                 type="radio"
                 id={id}
                 value={value}
                 name={name}
                 disabled={disabled}
                 checked={isChecked}
-                onChange={ctx ? handleChange : undefined}
+                // Videresend det EKTE change-eventet: event.target.value = value, så
+                // RHF register/Controller leser verdien nativt.
+                onChange={ctx?.onChange}
+                onBlur={ctx?.onBlur}
                 {...restInputAttrs}
             />
             <label>{label}</label>

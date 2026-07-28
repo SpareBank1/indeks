@@ -168,7 +168,7 @@ Radio chip er `RadioGroup` med `variant="chip"`. Se [RadioGroup](../skjema/radio
 | `name` | `string` | | Felles `name` for alle radioknappene. Genereres automatisk hvis utelatt |
 | `value` | `string` | | Valgt verdi (kontrollert) |
 | `defaultValue` | `string` | | Valgt verdi (ukontrollert) |
-| `onChange` | `(value: string) => void` | | Kalles med valgt verdi når brukeren bytter |
+| `onChange` | `ChangeEventHandler<HTMLInputElement>` | | Event-basert — valgt verdi ligger i `event.target.value` |
 | `size` | `'sm' \| 'md'` | `'md'` | Størrelse — kun relevant for `variant="chip"` |
 | `description` | `string` | | Hjelpetekst over alternativene |
 | `errorMessage` | `string` | | Feilmelding — setter `aria-invalid` på gruppen |

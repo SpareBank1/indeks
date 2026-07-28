@@ -1,4 +1,5 @@
 import { fireEvent, render } from '@testing-library/react';
+import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { RadioButton } from './RadioButton';
 import { RadioGroup } from './RadioGroup';
@@ -127,12 +128,13 @@ describe('RadioGroup', () => {
         expect(inputs[2].checked).toBe(false);
     });
 
-    it('kaller onChange med riktig value ved klikk', () => {
+    it('kaller onChange med et event (verdi i event.target.value) ved klikk', () => {
         const onChange = vi.fn();
         const { container } = renderGroup({ value: 'privat', onChange });
         const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
         fireEvent.click(inputs[1]);
-        expect(onChange).toHaveBeenCalledWith('bedrift');
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange.mock.calls[0][0].target.value).toBe('bedrift');
     });
 
     it('disabled-attributtet på host propagerer til alle inputs (via WC)', () => {
@@ -229,7 +231,60 @@ describe('RadioGroup', () => {
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
             expect(inputs[1].checked).toBe(true);
             fireEvent.click(inputs[0]);
-            expect(onChange).toHaveBeenCalledWith('a');
+            expect(onChange.mock.calls[0][0].target.value).toBe('a');
+        });
+    });
+
+    describe('register-modus (ref satt)', () => {
+        it('setter ikke checked fra React når ref er satt (RHF eier checked)', () => {
+            const ref = createRef<HTMLInputElement>();
+            // defaultValue skal IKKE gi checked i register-modus — RHF styrer det.
+            const { container } = renderGroup({ ref, defaultValue: 'bedrift' });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            for (const input of inputs) {
+                expect(input.checked).toBe(false);
+            }
+        });
+
+        it('ruter ref til hver native input (RHF akkumulerer refs)', () => {
+            // Callback-ref kalles én gang per input med samme funksjon.
+            const seen: HTMLInputElement[] = [];
+            const ref = (node: HTMLInputElement | null) => {
+                if (node) seen.push(node);
+            };
+            const { container } = renderGroup({ ref });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            expect(seen).toHaveLength(inputs.length);
+            expect(seen).toEqual(Array.from(inputs));
+        });
+
+        it('videresender onBlur til inputene', () => {
+            const onBlur = vi.fn();
+            const ref = createRef<HTMLInputElement>();
+            const { container } = renderGroup({ ref, onBlur });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            fireEvent.blur(inputs[0]);
+            expect(onBlur).toHaveBeenCalledTimes(1);
+        });
+
+        it('onChange får ekte event med target.value i register-modus', () => {
+            const onChange = vi.fn();
+            const ref = createRef<HTMLInputElement>();
+            const { container } = renderGroup({ ref, onChange });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            fireEvent.click(inputs[2]);
+            expect(onChange.mock.calls[0][0].target.value).toBe('annet');
+        });
+    });
+
+    describe('ren uncontrolled (kun defaultValue)', () => {
+        it('defaultValue gir checked, og klikk oppdaterer intern state', () => {
+            const { container } = renderGroup({ defaultValue: 'bedrift' });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            expect(inputs[1].checked).toBe(true);
+            fireEvent.click(inputs[2]);
+            expect(inputs[2].checked).toBe(true);
+            expect(inputs[1].checked).toBe(false);
         });
     });
 });
