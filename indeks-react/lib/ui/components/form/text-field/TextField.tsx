@@ -62,7 +62,7 @@ export type TextFieldProps = TextFieldOwnProps &
     Omit<React.InputHTMLAttributes<HTMLInputElement>, keyof TextFieldOwnProps | 'size'>;
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
-    { label, ariaLabel, className, id, prefix, suffix, description, errorMessage, tooltip, tooltipLabel, tooltipPlacement, disabled, readOnly, format, formatPattern, formatLive, value, defaultValue, onChange, ...inputAttrs },
+    { label, ariaLabel, className, id, name, prefix, suffix, description, errorMessage, tooltip, tooltipLabel, tooltipPlacement, disabled, readOnly, format, formatPattern, formatLive, value, defaultValue, onChange, onBlur, ...inputAttrs },
     ref
 ) {
     const generatedId = useId();
@@ -72,21 +72,63 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
     // objekt, og for å lese rå verdi / re-formatere. Attributt-varianten
     // (`data-format`/`data-format-pattern`) settes direkte på <input>.
     const fieldRef = useRef<IxField>(null);
-    // Intern ref til <input> for å hekte en native input-lytter i formatter-modus.
-    // Slås sammen med den forwardede `ref` slik at konsumenten fortsatt får inputen.
+    // Intern ref til <input> for å hekte native lyttere i formatter-modus.
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const setInputRef = (node: HTMLInputElement | null): void => {
-        inputRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-    };
     const formatIsObject = typeof format === 'object' && format !== null;
     const hasFormatter = format != null || formatPattern != null;
+    const isControlled = value !== undefined;
+
+    // I formatter-modus eier ix-field den synlige DOM-verdien (formatert), og den rå
+    // verdien lever i en skjult mirror. RHF sin register() er ref-sentrisk: den leser
+    // verdien via `ref.value` og skriver via `ref.value = rå`. Vi kan derfor ikke gi
+    // RHF den native inputen (dens `.value` er formatert). I stedet videresender vi en
+    // liten PROXY: `get value` gir rå, `set value` re-formaterer via ix-field, og
+    // `focus()` delegerer til den synlige inputen (fokus-ved-feil). Slik bindes et
+    // formatert felt med `{...register('felt')}` akkurat som et uformatert.
+    const lastSeedRef = useRef<string | null>(null);
+    const proxyRef = useRef<HTMLInputElement | null>(null);
+    if (proxyRef.current === null) {
+        const proxy = {
+            name: '',
+            focus(): void {
+                inputRef.current?.focus();
+            },
+            get value(): string {
+                return fieldRef.current?.rawValue ?? lastSeedRef.current ?? '';
+            },
+            set value(next: string | null) {
+                const raw = next == null ? '' : String(next);
+                lastSeedRef.current = raw;
+                // fieldRef kan være null under mount (barn-ref committes før forelder);
+                // finn ix-field via DOM i mellomtiden.
+                const field = fieldRef.current ?? (inputRef.current?.closest('ix-field') as IxField | null);
+                field?.refreshFormat(raw);
+            },
+        };
+        proxyRef.current = proxy as unknown as HTMLInputElement;
+    }
+    proxyRef.current.name = name ?? '';
+
+    // Videresend proxy i formatter-modus, ellers den native inputen. Sett
+    // `inputRef.current` FØR `ref(...)`: RHF trigger `proxy.value = default` synkront i
+    // sin ref-callback (mount-seed), og setteren trenger inputRef for å finne ix-field.
+    const setInputRef = (node: HTMLInputElement | null): void => {
+        inputRef.current = node;
+        const forwarded = hasFormatter && node ? proxyRef.current : node;
+        if (typeof ref === 'function') ref(forwarded);
+        else if (ref) ref.current = forwarded;
+    };
 
     useEffect(() => {
         if (!fieldRef.current) return;
         fieldRef.current.formatter = formatIsObject ? (format as FieldFormatter) : null;
-    }, [format, formatIsObject]);
+        // Objekt-formattere kobles her (post-commit), ikke ved connect. Ved mount-seed
+        // var formatering derfor ikke aktiv og refreshFormat var no-op — reconcile den
+        // lagrede rå-seeden nå. Idempotent (refreshFormat equality-guarder).
+        if (hasFormatter && !isControlled && lastSeedRef.current != null) {
+            fieldRef.current.refreshFormat(lastSeedRef.current);
+        }
+    }, [format, formatIsObject, hasFormatter, isControlled]);
 
     // onChange skal alltid levere RÅ verdi til konsumenten, uansett modus. I
     // formatter-modus eier ix-field den synlige input-verdien (formatert), så vi
@@ -98,30 +140,47 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
     // rå verdi. Vi holder onChange i en ref så lytteren ikke må re-hektes.
     const onChangeRef = useRef(onChange);
     onChangeRef.current = onChange;
+    const onBlurRef = useRef(onBlur);
+    onBlurRef.current = onBlur;
     useEffect(() => {
         const input = inputRef.current;
         if (!hasFormatter || !input) return;
-        const listener = (event: Event): void => {
+        const emitChange = (event: Event): void => {
             const cb = onChangeRef.current;
             if (!cb) return;
             const raw = fieldRef.current?.rawValue ?? input.value;
-            // Lever en React-lignende ChangeEvent der target.value er rå. Vi bruker
-            // en lettvekts stand-in (ikke Object.create(input) — det ville brutt
+            // Lever en React-lignende ChangeEvent der target.value er rå. Vi bruker en
+            // lettvekts stand-in (ikke Object.create(input) — det ville brutt
             // jsdom/React sin brand-sjekk på HTMLInputElement) som eksponerer det
-            // konsumenten faktisk leser: value, name og elementet selv.
-            const target = { value: raw, name: input.name, id: input.id };
+            // konsumenten (og RHF) leser: value, name, id. Bruk name-PROPPEN, ikke
+            // input.name — ix-field har byttet den synlige inputen til `${name}_formatted`.
+            const target = { value: raw, name: name ?? input.name, id: input.id };
             cb({ ...event, target, currentTarget: target, nativeEvent: event } as unknown as React.ChangeEvent<HTMLInputElement>);
         };
-        input.addEventListener('input', listener);
-        return () => input.removeEventListener('input', listener);
-    }, [hasFormatter]);
+        // Blur emitteres syntetisk (ikke spredt på inputen) fordi den synlige inputen
+        // heter `${name}_formatted` etter ix-field sitt navnebytte — et ekte blur-event
+        // ville hatt feil target.name, så RHF sitt feltoppslag bommer. Syntetisk blur
+        // med opprinnelig navn + rå verdi oppdaterer touched-state korrekt.
+        const emitBlur = (event: Event): void => {
+            const cb = onBlurRef.current;
+            if (!cb) return;
+            const raw = fieldRef.current?.rawValue ?? input.value;
+            const target = { value: raw, name: name ?? input.name, id: input.id };
+            cb({ ...event, target, currentTarget: target, type: 'blur', nativeEvent: event } as unknown as React.FocusEvent<HTMLInputElement>);
+        };
+        input.addEventListener('input', emitChange);
+        input.addEventListener('blur', emitBlur);
+        return () => {
+            input.removeEventListener('input', emitChange);
+            input.removeEventListener('blur', emitBlur);
+        };
+    }, [hasFormatter, name]);
 
     // Når en formatter er aktiv eier ix-field den synlige input-verdien: den viser
     // formatert tekst (som React ikke kan regne ut for streng-varianter), mens den
     // rå verdien ligger i en skjult mirror-input. Derfor binder vi IKKE `value` til
     // DOM-inputen i formatter-modus — vi seeder rå verdi via `defaultValue` og lar
     // ix-field formatere. Controlled `value` reconciles via refreshFormat under.
-    const isControlled = value !== undefined;
     useLayoutEffect(() => {
         if (hasFormatter && isControlled) fieldRef.current?.refreshFormat(value == null ? '' : String(value));
     });
@@ -146,6 +205,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
                     ref={setInputRef}
                     {...inputAttrs}
                     id={inputId}
+                    name={name}
                     disabled={disabled}
                     readOnly={readOnly}
                     aria-label={ariaLabel}
@@ -154,11 +214,12 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
                     data-format-live={formatLive === undefined ? undefined : String(formatLive)}
                     // I formatter-modus eier ix-field DOM-verdien → seed rå via
                     // defaultValue (uncontrolled på DOM-nivå), reconcile via effekt,
-                    // og onChange leveres av den native lytteren over (rå verdi).
-                    // Uten formatter: vanlig controlled/uncontrolled onChange som før.
+                    // og onChange/onBlur leveres av de native lytterne over (rå verdi,
+                    // opprinnelig navn). Uten formatter: vanlig controlled/uncontrolled
+                    // onChange/onBlur rett på inputen som før.
                     {...(hasFormatter
                         ? { defaultValue: (value ?? defaultValue ?? '') as string | number | readonly string[] }
-                        : { value, defaultValue, onChange })}
+                        : { value, defaultValue, onChange, onBlur })}
                 />
                 {suffix && <div data-field="suffix">{suffix}</div>}
             </div>

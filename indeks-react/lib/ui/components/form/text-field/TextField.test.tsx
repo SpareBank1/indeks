@@ -294,4 +294,95 @@ describe('TextField', () => {
             expect(mirrorValue(container)).toBe('12345678');
         });
     });
+
+    describe('register()-modus (proxy-ref i formatter-modus)', () => {
+        // I formatter-modus videresendes en proxy til `ref` i stedet for den native
+        // inputen, slik at RHF register() kan lese rå via `ref.value`, skrive rå via
+        // `ref.value = …` (re-formaterer), og fokusere ved feil. Uten formatter
+        // forwardes den ekte inputen som før.
+        const mirrorValue = (container: HTMLElement): string | undefined => (container.querySelector('input[type="hidden"]') as HTMLInputElement | null)?.value;
+
+        it('formatter-ref er en proxy (ikke HTMLInputElement) med value/focus/name', () => {
+            const ref = createRef<HTMLInputElement>();
+            render(<TextField label="Tlf" name="tlf" format="phone" ref={ref} />);
+            expect(ref.current).not.toBeInstanceOf(HTMLInputElement);
+            expect(typeof ref.current?.focus).toBe('function');
+            expect(ref.current?.name).toBe('tlf');
+            expect(typeof ref.current?.value).toBe('string');
+        });
+
+        it('proxy.value gir RÅ verdi etter input', () => {
+            const ref = createRef<HTMLInputElement>();
+            render(<TextField label="Tlf" name="tlf" format="phone" defaultValue="" ref={ref} />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            input.value = '12345678';
+            input.setSelectionRange(8, 8);
+            fireEvent.input(input);
+            // Synlig input er formatert, men proxy-ref-en (det RHF leser) gir rå.
+            expect(input.value).toBe('123 45 678');
+            expect(ref.current?.value).toBe('12345678');
+        });
+
+        it('proxy.value = rå re-formaterer synlig input og mirror (som RHF reset/setValue)', () => {
+            const ref = createRef<HTMLInputElement>();
+            const { container } = render(<TextField label="Tlf" name="tlf" format="phone" defaultValue="" ref={ref} />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            // Simuler RHF som skriver rå verdi programmatisk via ref-en.
+            (ref.current as unknown as { value: string }).value = '12345678';
+            expect(input.value).toBe('123 45 678');
+            expect(mirrorValue(container)).toBe('12345678');
+            expect(ref.current?.value).toBe('12345678');
+        });
+
+        it('proxy.value = null gir tom streng uten å kaste', () => {
+            const ref = createRef<HTMLInputElement>();
+            render(<TextField label="Tlf" name="tlf" format="phone" defaultValue="12345678" ref={ref} />);
+            expect(() => {
+                (ref.current as unknown as { value: string | null }).value = null;
+            }).not.toThrow();
+            expect(ref.current?.value).toBe('');
+        });
+
+        it('proxy.focus() delegerer til den synlige inputen', () => {
+            const ref = createRef<HTMLInputElement>();
+            render(<TextField label="Tlf" name="tlf" format="phone" ref={ref} />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            ref.current?.focus();
+            expect(document.activeElement).toBe(input);
+        });
+
+        it('syntetisk onChange bruker det opprinnelige navnet (ikke ${name}_formatted)', () => {
+            const onChange = vi.fn();
+            render(<TextField label="Konto" name="konto" format="phone" defaultValue="" onChange={onChange} />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            // ix-field har døpt om den synlige inputen ved kabling.
+            expect(input.name).toBe('konto_formatted');
+            input.value = '12345678';
+            input.setSelectionRange(8, 8);
+            fireEvent.input(input);
+            expect(onChange.mock.lastCall![0].target.name).toBe('konto');
+            expect(onChange.mock.lastCall![0].target.value).toBe('12345678');
+        });
+
+        it('emitterer syntetisk blur med opprinnelig navn, rå verdi og type=blur', () => {
+            const onBlur = vi.fn();
+            render(<TextField label="Konto" name="konto" format="phone" defaultValue="12345678" onBlur={onBlur} />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            fireEvent.blur(input);
+            expect(onBlur).toHaveBeenCalledTimes(1);
+            expect(onBlur.mock.lastCall![0].type).toBe('blur');
+            expect(onBlur.mock.lastCall![0].target).toMatchObject({ name: 'konto', value: '12345678' });
+        });
+
+        it('uten formatter: ref er den native inputen og onBlur spres rett på den', () => {
+            const ref = createRef<HTMLInputElement>();
+            const onBlur = vi.fn();
+            render(<TextField label="E-post" name="epost" ref={ref} onBlur={onBlur} />);
+            const input = screen.getByRole('textbox') as HTMLInputElement;
+            expect(ref.current).toBeInstanceOf(HTMLInputElement);
+            expect(ref.current).toBe(input);
+            fireEvent.blur(input);
+            expect(onBlur).toHaveBeenCalledTimes(1);
+        });
+    });
 });
