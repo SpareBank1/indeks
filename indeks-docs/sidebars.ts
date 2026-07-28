@@ -154,6 +154,7 @@ const sidebars: SidebarsConfig = {
                 'komponenter/modal',
                 'komponenter/read-more',
                 'komponenter/tabs',
+                'komponenter/tag',
                 {
                     type: 'category',
                     label: 'Skjema',

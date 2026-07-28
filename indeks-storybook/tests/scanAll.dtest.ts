@@ -24,6 +24,7 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Components/ProgressBar',
   'Components/Spinner',
   'Components/Tabs',
+  'Components/Tag',
   'Layout/Grid',
   'Layout/HStack',
   'Layout/VStack',

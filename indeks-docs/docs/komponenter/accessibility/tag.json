@@ -1,0 +1,92 @@
+{
+  "component": "Tag",
+  "lastReviewed": "2026-07-28",
+  "consumerResponsibilities": [
+    {
+      "summary": "Ikke stol på farge alene for å formidle status",
+      "details": "Tag-varianten (info, success, warning, danger) endrer kun farge. Fargen alene formidler ikke betydning til brukere med nedsatt fargesyn eller skjermlesere. Teksten i taggen må selv bære betydningen — skriv «Utløpt» eller «Godkjent», ikke bare en rød eller grønn tag uten forklarende tekst.",
+      "wcag": ["1.4.1"]
+    },
+    {
+      "summary": "Skriv meningsfull tekst i taggen",
+      "details": "Taggen har ingen automatisk tilgjengelig navn utover tekstinnholdet. Innholdet leses av skjermleser som vanlig tekst, uten noen rolle-annonsering. Bruk kort, beskrivende tekst på brukerens språk (bokmål, nynorsk eller engelsk). Komponenten har ingen hardkodet tekst.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Ikoner i taggen er dekorative — merk dem som skjult",
+      "details": "Et ikon i taggen skal støtte teksten, ikke erstatte den. Sett aria-hidden=\"true\" på <ix-icon> slik at skjermleser ikke leser ikonet. Er ikonet det eneste innholdet (ingen tekst), er taggen meningsløs for skjermlesere — legg alltid til synlig eller skjult tekst.",
+      "wcag": ["1.1.1"]
+    },
+    {
+      "summary": "Sett riktig rolle/semantikk hvis taggen er interaktiv",
+      "details": "Tag er som standard en ikke-interaktiv <span>. Gjør du taggen til en lenke eller knapp via as=\"a\"/as=\"button\", er du selv ansvarlig for meningsfull lenketekst, href eller onClick, og at fokus- og tastaturatferd gir mening i konteksten.",
+      "wcag": ["4.1.2", "2.4.4"]
+    }
+  ],
+  "handled": [
+    { "id": "1.3.1", "notes": "Tekstinnholdet følger naturlig leserekkefølge i DOM. Ingen skjult struktur som må formidles." },
+    { "id": "1.3.2", "notes": "Innhold (ikon + tekst) følger naturlig og meningsfull sekvens i DOM." },
+    { "id": "1.4.1", "notes": "Status kommuniseres av tekstinnhold i tillegg til farge — komponenten legger ikke opp til farge alene, men teksten er konsumentens ansvar." },
+    { "id": "1.4.3", "notes": "Emphasis bruker invers (lys) tekst mot mettet flate (4.8–5.5:1). Subtle bruker mørk main-tekst mot pastell-flate i alle statuser (10.8–13.2:1); fargen bæres av flate og border. Farget tekst per status ble vurdert, men token-systemet har ingen per-status foreground mørk nok til å nå 4.5:1 på de lyse subtle-flatene (info ville falt til 1.48:1), så mørk tekst er brukt." },
+    { "id": "1.4.4", "notes": "Størrelser bruker relative font-size-tokens og skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Taggen er width: fit-content uten fast bredde og reflower korrekt ned til 320 px viewport." },
+    { "id": "1.4.11", "notes": "Emphasis-flaten oppfyller 3:1 komponentavgrensning mot lys sidebakgrunn (5.0–5.8:1 mot hvit). Subtle-varianten er bevisst rolig: pastell-flate (1.4–1.7:1) og border (2.2–2.5:1) når ikke 3:1 mot en lys side, men taggen er ikke-interaktiv og all betydning bæres av teksten (1.4.1) med 10.8–13.1:1 — avgrensningen er dekorativ, så 1.4.11 stiller ikke krav til den." },
+    { "id": "1.3.4", "notes": "Ingen fast orientering — taggen fungerer i både portrett og landskap." }
+  ],
+  "issues": [],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Taggen har ikke ikke-tekstlig innhold i seg selv; ikon-barn er dekorativt og skjules av konsumenten med aria-hidden." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Taggen formidler ikke instruksjoner." },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt som ber om personlig informasjon." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.12" },
+    { "id": "1.4.13", "reason": "Taggen viser ikke innhold ved hover/fokus." },
+    { "id": "2.1.1", "reason": "Standard-taggen er ikke-interaktiv. Interaktiv bruk (as=\"a\"/\"button\") arver native tastaturstøtte." },
+    { "id": "2.1.2" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.3", "reason": "Ikke-interaktiv — ikke i tab-rekkefølgen." },
+    { "id": "2.4.4", "reason": "Kun relevant hvis konsumenten gjør taggen til en lenke — da er lenketekst konsumentens ansvar." },
+    { "id": "2.4.5" },
+    { "id": "2.4.6" },
+    { "id": "2.4.7", "reason": "Standard-taggen er ikke fokuserbar. Interaktiv bruk arver native :focus-visible." },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2" },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "2.5.8", "reason": "Ikke-interaktiv — intet klikkmål-krav. Interaktiv bruk må selv sikre 24×24 px." },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.1", "reason": "Ikke-interaktiv — ingen kontekstendring ved fokus." },
+    { "id": "3.2.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1" },
+    { "id": "3.3.2" },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.2", "reason": "Standard-taggen er ren tekst uten interaktiv rolle. Interaktiv bruk (as=\"a\"/\"button\") gir native rolle." },
+    { "id": "4.1.3", "reason": "Taggen genererer ingen statusmeldinger — den er statisk innhold." }
+  ],
+  "keyboard": [],
+  "screenReader": [
+    "Ikke-interaktiv tag: leses som vanlig tekst i lesekontekst — «[tekst]», uten rolle-annonsering.",
+    "Ikon i taggen leses ikke når det har aria-hidden=\"true\".",
+    "Interaktiv tag (as=\"a\"/\"button\"): annonseres med native rolle — «[tekst], lenke» eller «[tekst], knapp»."
+  ]
+}
