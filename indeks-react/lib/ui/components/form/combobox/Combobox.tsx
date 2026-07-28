@@ -28,8 +28,19 @@ export type ComboboxProps = {
     value?: string | string[];
     /** Ukontrollert startverdi. String i single, string[] i multi. */
     defaultValue?: string | string[];
-    /** Kalles med ny verdi (string i single, string[] i multi) ved valg/fjerning. */
-    onChange?: (value: string | string[]) => void;
+    /**
+     * Kalles ved valg/fjerning med et syntetisk change-event. Verdien ligger i
+     * `event.target.value` (string i single, string[] i multi). Formen matcher
+     * React Hook Form, så `{...register('felt')}` kan spres rett på komponenten;
+     * med `<Controller>` binder du `field.onChange` direkte.
+     */
+    onChange?: (event: ComboboxChangeEvent) => void;
+    /**
+     * Kalles når fokus forlater komponenten (ikke ved intern fokusflytting mellom
+     * input, chips og liste) med et syntetisk blur-event. Brukes bl.a. av React
+     * Hook Form `register` for touched-state og `mode: 'onBlur'`.
+     */
+    onBlur?: (event: ComboboxBlurEvent) => void;
     /** Placeholder i inputfeltet. */
     placeholder?: string;
     description?: string;
@@ -60,6 +71,26 @@ export type ComboboxProps = {
     id?: string;
 };
 
+/**
+ * Syntetisk change-event Combobox sender til `onChange`. Formen (`target.name`,
+ * `target.value`) er den samme React Hook Form selv bygger for `<Controller>`, og
+ * er det både `register()` og `<Controller>` leser verdien fra via `getEventValue`
+ * (`event.target.value`). Vi kan ikke videresende det ekte `<select>`-eventet:
+ * en native select har `.type`, som får `register` til å lese verdien fra ref-en i
+ * stedet, og `.value` på en multiple-select gir kun første valgte option — begge
+ * gir feil verdi i multi. `value` er `string` i single, `string[]` i multi.
+ */
+export type ComboboxChangeEvent = {
+    target: { name?: string; value: string | string[] };
+    type: string;
+};
+
+/** Syntetisk blur-event Combobox sender til `onBlur` (touched-state i RHF). */
+export type ComboboxBlurEvent = {
+    target: { name?: string };
+    type: string;
+};
+
 function toValueArray(value: string | string[] | undefined): string[] {
     if (value === undefined) return [];
     return Array.isArray(value) ? value : value ? [value] : [];
@@ -80,6 +111,7 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
         value: controlledValue,
         defaultValue,
         onChange,
+        onBlur,
         placeholder,
         description,
         errorMessage,
@@ -141,11 +173,28 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
             const selected = Array.from(host.querySelectorAll<HTMLElement>('.ix-combobox__option'))
                 .filter((o) => o.getAttribute('aria-selected') === 'true')
                 .map((o) => o.getAttribute('data-value') ?? '');
-            onChange(multiple ? selected : (selected[0] ?? ''));
+            const value = multiple ? selected : (selected[0] ?? '');
+            // Syntetisk event i RHF-form: verdien i target.value, name fra select.
+            onChange({ target: { name, value }, type: 'change' });
         };
         host.addEventListener('change', handler);
         return () => host.removeEventListener('change', handler);
-    }, [onChange, multiple]);
+    }, [onChange, multiple, name]);
+
+    // Rapporter blur til konsumenten kun når fokus forlater HELE komponenten —
+    // ikke ved intern flytting mellom input, chips og liste (focusout bobler, så
+    // relatedTarget innenfor host betyr fortsatt fokusert). RHF `register` bruker
+    // dette til touched-state og `mode: 'onBlur'`.
+    useEffect(() => {
+        const host = hostRef.current;
+        if (!host || !onBlur) return;
+        const handler = (event: FocusEvent) => {
+            const next = event.relatedTarget as Node | null;
+            if (!next || !host.contains(next)) onBlur({ target: { name }, type: 'blur' });
+        };
+        host.addEventListener('focusout', handler);
+        return () => host.removeEventListener('focusout', handler);
+    }, [onBlur, name]);
 
     const dataState = errorMessage ? 'error' : readOnly ? 'readonly' : disabled ? 'disabled' : undefined;
 

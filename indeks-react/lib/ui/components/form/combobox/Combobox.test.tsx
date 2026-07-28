@@ -123,22 +123,45 @@ describe('Combobox', () => {
         expect(container.querySelector('[data-value="se"]')?.getAttribute('aria-selected')).toBe('true');
     });
 
-    it('kaller onChange med valgt verdi når WC emitter change (single)', () => {
+    it('kaller onChange med syntetisk event (verdi i target.value, single)', () => {
         const onChange = vi.fn();
-        const { container } = renderCombobox({ onChange });
+        const { container } = renderCombobox({ name: 'land', onChange });
         const no = container.querySelector<HTMLElement>('[data-value="no"]')!;
         no.setAttribute('aria-selected', 'true');
         container.querySelector('ix-combobox')!.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        expect(onChange).toHaveBeenCalledWith('no');
+        expect(onChange).toHaveBeenCalledWith({ target: { name: 'land', value: 'no' }, type: 'change' });
     });
 
-    it('kaller onChange med array i multi', () => {
+    it('kaller onChange med array i target.value i multi', () => {
         const onChange = vi.fn();
-        const { container } = renderCombobox({ multiple: true, onChange });
+        const { container } = renderCombobox({ name: 'land', multiple: true, onChange });
         container.querySelector('[data-value="no"]')!.setAttribute('aria-selected', 'true');
         container.querySelector('[data-value="se"]')!.setAttribute('aria-selected', 'true');
         container.querySelector('ix-combobox')!.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        expect(onChange).toHaveBeenCalledWith(['no', 'se']);
+        expect(onChange).toHaveBeenCalledWith({ target: { name: 'land', value: ['no', 'se'] }, type: 'change' });
+    });
+
+    it('kaller onBlur når fokus forlater komponenten', () => {
+        const onBlur = vi.fn();
+        const { container } = renderCombobox({ onBlur });
+        const host = container.querySelector('ix-combobox')!;
+        // relatedTarget utenfor host → fokus forlater komponenten.
+        const outside = document.createElement('button');
+        document.body.appendChild(outside);
+        host.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: outside }));
+        expect(onBlur).toHaveBeenCalledTimes(1);
+        expect(onBlur).toHaveBeenCalledWith({ target: { name: undefined }, type: 'blur' });
+        outside.remove();
+    });
+
+    it('kaller ikke onBlur ved intern fokusflytting innad i komponenten', () => {
+        const onBlur = vi.fn();
+        const { container } = renderCombobox({ onBlur });
+        const host = container.querySelector('ix-combobox')!;
+        // relatedTarget innenfor host (f.eks. input → toggle-knapp) → fortsatt fokusert.
+        const toggle = container.querySelector('.ix-combobox__toggle')!;
+        host.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: toggle }));
+        expect(onBlur).not.toHaveBeenCalled();
     });
 
     it('rendrer error-span og aria-invalid ved feilmelding', () => {

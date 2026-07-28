@@ -145,6 +145,14 @@ export class IxCombobox extends HTMLElement {
         this._results = null;
     }
 
+    // Fokus delegeres til den synlige inputen. Host-elementet er ikke fokuserbart,
+    // og den skjulte selecten er `hidden` (ikke fokuserbar). Uten dette lander
+    // `element.focus()` — som form-rammeverk kaller for å hoppe til første felt med
+    // valideringsfeil (f.eks. React Hook Form) — ingensteds.
+    override focus(options?: FocusOptions): void {
+        this._input?.focus(options);
+    }
+
     attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null): void {
         if (!this.isConnected) return;
         if (name === 'disabled' || name === 'readonly') {
@@ -766,6 +774,12 @@ export class IxCombobox extends HTMLElement {
     }
 
     private _emitChange(): void {
+        // Native change på den skjulte selecten: gjør at form-lyttere (ren HTML,
+        // Vue, Angular, React Hook Form via register) som lytter på det navngitte
+        // form-elementet hører endringen. Programmatisk verdiendring fyrer ikke
+        // change av seg selv, og host-CustomEventen under bobler ikke NED til
+        // selecten (som er et barn), så vi må dispatche eksplisitt her.
+        this._select?.dispatchEvent(new Event('change', { bubbles: true }));
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
 
