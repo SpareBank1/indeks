@@ -1,29 +1,8 @@
 import { Heading, HStack, LinkText, Text, VStack } from '@sb1/indeks-react';
-import type { OriginScaleNames } from '@sb1/indeks-tokens/generate';
+import { colorScales, defaultColors } from '../../components/colorScaleConfig';
 import { useColorOverrides } from '../../contexts/ColorOverrideContext';
 
-const colorScales: { name: OriginScaleNames; label: string }[] = [
-    { name: 'brand', label: 'Brand' },
-    { name: 'success', label: 'Success' },
-    { name: 'info', label: 'Info' },
-    { name: 'warning', label: 'Warning' },
-    { name: 'danger', label: 'Danger' },
-    { name: 'gray', label: 'Gray' },
-    { name: 'neutral', label: 'Neutral' },
-];
-
 const steps = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950];
-
-/** Standard basisfarge per skala, brukt som utgangspunkt i fargevelgeren. */
-const defaultColors: Record<OriginScaleNames, string> = {
-    brand: '#0078d8',
-    success: '#00885b',
-    info: '#467ca4',
-    warning: '#af6500',
-    danger: '#c94e4f',
-    gray: '#6d7888',
-    neutral: '#af6516',
-};
 
 export default function GenererFarger() {
     const { colorOverrides, setColorOverride } = useColorOverrides();

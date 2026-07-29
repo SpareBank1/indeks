@@ -1,5 +1,7 @@
-import { Icon, VStack } from '@sb1/indeks-react';
+import { Accordion, Icon, VStack } from '@sb1/indeks-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ColorScaleControls } from './ColorScaleControls';
 
 interface SettingsPopoverProps {
     onDensityChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -9,6 +11,7 @@ interface SettingsPopoverProps {
     onResetColors: () => void;
     fontSize: number;
     nativeMode: boolean;
+    theme: string;
 }
 
 export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
@@ -19,6 +22,7 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
     onResetColors,
     fontSize,
     nativeMode,
+    theme,
 }) => {
     const [open, setOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -82,15 +86,11 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
                             <select
                                 id="theme"
                                 className="ix-border-default"
-                                defaultValue="sb1"
+                                value={theme}
                                 onChange={onThemeChange}
                             >
                                 <option value="sb1">SpareBank 1</option>
                                 <option value="kredittbanken">Kredittbanken</option>
-                                <option value="bnbank">BN Bank</option>
-                                <option value="lofavor">LO Favør</option>
-                                <option value="coop">Coop</option>
-                                <option value="sbm">SBM</option>
                             </select>
                         </label>
 
@@ -104,13 +104,26 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
                             Native-modus
                         </label>
 
-                        <button
-                            type="button"
-                            className="ix-border-default ix-p-2xs"
-                            onClick={onResetColors}
-                        >
-                            Nullstill farger
-                        </button>
+                        <Accordion>
+                            <Accordion.Item>
+                                <Accordion.Header>Farger</Accordion.Header>
+                                <Accordion.Content>
+                                    <VStack gap="sm">
+                                        <ColorScaleControls />
+                                        <button
+                                            type="button"
+                                            className="ix-border-default ix-p-2xs"
+                                            onClick={onResetColors}
+                                        >
+                                            Nullstill farger
+                                        </button>
+                                        <Link to="/internTesting/generer-farger" onClick={() => setOpen(false)}>
+                                            Rediger på egen side →
+                                        </Link>
+                                    </VStack>
+                                </Accordion.Content>
+                            </Accordion.Item>
+                        </Accordion>
                     </VStack>
                 </div>
             )}

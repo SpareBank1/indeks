@@ -4,11 +4,15 @@ import { SpacingProvider, useSpacing } from '../contexts/SpacingContext';
 import Layout from './Layout';
 import { SettingsPopover } from './SettingsPopover';
 
+const THEME_STORAGE_KEY = 'indeks-eksempel-theme';
+const THEME_LINK_ID = 'active-theme-stylesheet';
+
 const BodyContent: React.FC = () => {
     const { updateSpacing } = useSpacing();
     const { resetColors } = useColorOverrides();
     const [fontSize, setFontSize] = React.useState(16);
     const [nativeMode, setNativeMode] = React.useState(false);
+    const [theme, setTheme] = React.useState(() => localStorage.getItem(THEME_STORAGE_KEY) ?? 'sb1');
 
     useEffect(() => {
         if (nativeMode) {
@@ -18,11 +22,22 @@ const BodyContent: React.FC = () => {
         }
     }, [nativeMode]);
 
+    // Behold valgt theme på tvers av sidebytte og reload: bruk én styrt <link>
+    // og persistér valget i localStorage.
+    useEffect(() => {
+        let link = document.getElementById(THEME_LINK_ID) as HTMLLinkElement | null;
+        if (!link) {
+            link = document.createElement('link');
+            link.id = THEME_LINK_ID;
+            link.rel = 'stylesheet';
+            document.head.appendChild(link);
+        }
+        link.href = `./themes/${theme}.css`;
+        localStorage.setItem(THEME_STORAGE_KEY, theme);
+    }, [theme]);
+
     const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const style = document.createElement('link');
-        style.setAttribute('href', `./themes/${event.target.value}.css`);
-        style.setAttribute('rel', 'stylesheet');
-        document.head.appendChild(style);
+        setTheme(event.target.value);
     };
 
     const handleDensityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -57,6 +72,7 @@ const BodyContent: React.FC = () => {
                 onResetColors={resetColors}
                 fontSize={fontSize}
                 nativeMode={nativeMode}
+                theme={theme}
             />
             <Layout />
         </div>
