@@ -9,6 +9,7 @@ import {
 import { ValidationMessage } from '../validation-message/ValidationMessage';
 import { CheckboxButton } from './CheckboxButton';
 import { CheckboxGroupContext } from './CheckboxGroupContext';
+import { toggleValue } from './toggle-value';
 
 export type CheckboxOption = {
     value: string;
@@ -98,10 +99,7 @@ export const CheckboxGroup = forwardRef<HTMLInputElement, CheckboxGroupProps>(fu
 
     const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         if (!isControlled && !isRegister) {
-            const changed = event.target.value;
-            setUncontrolledValue((prev) =>
-                event.target.checked ? [...prev, changed] : prev.filter((v) => v !== changed)
-            );
+            setUncontrolledValue((prev) => toggleValue(prev, event));
         }
         onChange?.(event);
     };

@@ -67,22 +67,19 @@ CheckboxGroup samler flere relaterte checkboxer i én gruppe der brukeren kan ve
 
 For enkle lister er `options`-propen den raskeste veien — på samme måte som `Select`. Hver option har `value` og `label`.
 
-I praksis vil du som regel holde valgte verdier i state og koble dem via `value`/`onChange`. Merk at `value` er et **array** — flere kan være valgt samtidig. `onChange` er event-basert (verdien ligger i `event.target.value`, av/på i `event.target.checked`), slik at et `{...register('felt')}` fra React Hook Form kan spres rett på komponenten — se [Form-validering](../../monstre-og-maler/form-validering). I kontrollert bruk bygger du selv neste array:
+I praksis vil du som regel holde valgte verdier i state og koble dem via `value`/`onChange`. Merk at `value` er et **array** — flere kan være valgt samtidig. `onChange` er event-basert (verdien ligger i `event.target.value`, av/på i `event.target.checked`), slik at et `{...register('felt')}` fra React Hook Form kan spres rett på komponenten — se [Form-validering](../../monstre-og-maler/form-validering).
+
+Bruker du **ikke** React Hook Form, gir `useCheckboxGroup`-hooken deg kontrollert array-state uten at du selv må bygge neste array. Den returnerer `{ value, onChange }` klar til å spres på komponenten, og `value` er `string[]` du kan bruke til å vise/skjule avhengige seksjoner:
 
 ```tsx
-const [kontakt, setKontakt] = useState<string[]>(['epost']);
+import { CheckboxGroup, useCheckboxGroup } from '@sb1/indeks-react';
+
+const kontakt = useCheckboxGroup(['epost']);
 
 <CheckboxGroup
   legend="Hvordan vil du bli kontaktet?"
   name="kontakt"
-  value={kontakt}
-  onChange={(event) =>
-    setKontakt((prev) =>
-      event.target.checked
-        ? [...prev, event.target.value]
-        : prev.filter((v) => v !== event.target.value)
-    )
-  }
+  {...kontakt}
   options={[
     { value: 'epost', label: 'E-post' },
     { value: 'sms', label: 'SMS' },
@@ -90,6 +87,8 @@ const [kontakt, setKontakt] = useState<string[]>(['epost']);
   ]}
 />
 ```
+
+Trenger du bare selve array-oppdateringen i din egen state, bruk den rene funksjonen `toggleValue(prev, event)` — det er den samme oppskriften hooken bygger på.
 
 Trenger du mer — deaktiverte alternativer, custom `id`-er eller ref — bruk `CheckboxButton`-barn i stedet:
 

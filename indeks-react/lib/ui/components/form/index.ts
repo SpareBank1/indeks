@@ -7,6 +7,7 @@ export { CheckboxGroup } from './checkbox-group/CheckboxGroup';
 export type { CheckboxGroupProps, CheckboxOption } from './checkbox-group/CheckboxGroup';
 export { CheckboxButton } from './checkbox-group/CheckboxButton';
 export type { CheckboxButtonProps } from './checkbox-group/CheckboxButton';
+export { toggleValue, useCheckboxGroup } from './checkbox-group/toggle-value';
 export { Combobox } from './combobox/Combobox';
 export type { ComboboxProps, ComboboxOption } from './combobox/Combobox';
 export { RadioGroup } from './radio-group/RadioGroup';
