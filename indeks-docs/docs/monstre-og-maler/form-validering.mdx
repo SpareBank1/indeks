@@ -79,8 +79,13 @@ En praktisk konsekvens: i motsetning til `Combobox`, trenger du **ikke** en egen
 <Combobox label="Land" options={landOptions} noHitsText="Ingen treff" {...register('land')} errorMessage={errors.land?.message} />
 ```
 
-:::note Initialverdi ved `register()`
-`register()` er ukontrollert, og `defaultValues` i `useForm` pushes ikke inn i komponenten. Vil du vise et forhåndsvalgt alternativ, sett `defaultValue` på `Combobox` i tillegg (og hold det i synk med `defaultValues`). Trenger du full kontrollert binding, kan `Combobox` også brukes med `<Controller>` (bind `value` og `field.onChange`).
+:::note Initialverdi og programmatisk endring ved `register()`
+`register()`-koblingen på `Combobox` går **én vei** (UI → skjema): verdien flyter inn i RHF via det syntetiske change-eventet. Fordi `ref` peker på web-komponenten (ikke en native input RHF kan skrive `value` på), gjelder to ting:
+
+- **Initialverdi:** `defaultValues` i `useForm` pushes ikke inn i komponenten. Vil du vise et forhåndsvalgt alternativ, sett `defaultValue` på `Combobox` i tillegg (og hold det i synk med `defaultValues`).
+- **Programmatisk endring:** `reset()` og `setValue()` oppdaterer RHF sin egen tilstand (og dermed innsendt verdi), men **oppdaterer ikke det synlige valget i `Combobox`-en**. I motsetning til `RadioGroup`/`CheckboxGroup` — der RHF skriver `checked` rett på de native refene — har web-komponenten ingen ref RHF kan skrive tilbake gjennom.
+
+Trenger du full toveis binding (skjema → UI ved `reset`/`setValue`, eller kontrollert verdi), bruk `<Controller>` og bind `value` + `field.onChange`.
 :::
 
 ## `TextField` med formatering
