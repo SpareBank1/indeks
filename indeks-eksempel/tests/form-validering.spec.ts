@@ -8,7 +8,9 @@ import { expect, test } from '@playwright/test';
  */
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('/#/internTesting/form-validering');
+    // Relativ URL (uten ledende slash) så den resolver mot baseURL-ens
+    // /eksempel/-base — en ledende slash ville droppet basen og gått mot origin.
+    await page.goto('#/internTesting/form-validering');
     await expect(page.getByRole('heading', { name: 'Form-validering' })).toBeVisible();
 });
 
