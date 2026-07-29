@@ -170,7 +170,6 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
                 .filter((o) => o.getAttribute('aria-selected') === 'true')
                 .map((o) => o.getAttribute('data-value') ?? '');
             const value = multiple ? selected : (selected[0] ?? '');
-            // Syntetisk event i delt RHF-form: verdien i target.value, name fra select.
             onChange(createFieldEvent('change', { name, value }, event));
         };
         host.addEventListener('change', handler);
@@ -187,8 +186,8 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
         const handler = (event: FocusEvent) => {
             const next = event.relatedTarget as Node | null;
             if (next && host.contains(next)) return;
-            // Blur bærer nå også value (delt form med change) — konsumenter som leser
-            // event.target.value i en felles handler får samme form på begge.
+            // Blur bærer value på samme form som change, så en felles handler kan lese
+            // event.target.value på begge.
             const selected = Array.from(host.querySelectorAll<HTMLElement>('.ix-combobox__option'))
                 .filter((o) => o.getAttribute('aria-selected') === 'true')
                 .map((o) => o.getAttribute('data-value') ?? '');

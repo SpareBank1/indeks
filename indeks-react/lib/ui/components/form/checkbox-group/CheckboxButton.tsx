@@ -50,7 +50,6 @@ export const CheckboxButton = forwardRef<HTMLInputElement, CheckboxButtonProps>(
     return (
         <div className={`ix-checkbox${disabled ? ' ix-checkbox--disabled' : ''}${className ? ` ${className}` : ''}`}>
             <input
-                // Både CheckboxButtons egen ref og gruppens register-ref må få noden.
                 ref={mergedRef}
                 type="checkbox"
                 id={id}
@@ -58,7 +57,6 @@ export const CheckboxButton = forwardRef<HTMLInputElement, CheckboxButtonProps>(
                 name={name}
                 disabled={disabled}
                 checked={isChecked}
-                // Videresend det EKTE change-eventet: RHF leser value+checked nativt.
                 onChange={ctx?.onChange}
                 onBlur={ctx?.onBlur}
                 {...restInputAttrs}

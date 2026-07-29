@@ -210,11 +210,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
                     data-format={typeof format === 'string' ? format : undefined}
                     data-format-pattern={formatPattern}
                     data-format-live={formatLive === undefined ? undefined : String(formatLive)}
-                    // I formatter-modus eier ix-field DOM-verdien → seed rå via
-                    // defaultValue (uncontrolled på DOM-nivå), reconcile via effekt,
-                    // og onChange/onBlur leveres av de native lytterne over (rå verdi,
-                    // opprinnelig navn). Uten formatter: vanlig controlled/uncontrolled
-                    // onChange/onBlur rett på inputen som før.
+                    // Formatter-modus: seed rå via defaultValue (native lyttere over
+                    // leverer onChange/onBlur med rå verdi). Uten formatter: vanlig
+                    // controlled/uncontrolled rett på inputen.
                     {...(hasFormatter
                         ? { defaultValue: (value ?? defaultValue ?? '') as string | number | readonly string[] }
                         : { value, defaultValue, onChange, onBlur })}

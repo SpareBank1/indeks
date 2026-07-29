@@ -51,7 +51,6 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(functi
     return (
         <div className={className}>
             <input
-                // Både RadioButtons egen ref og gruppens register-ref må få noden.
                 ref={mergedRef}
                 type="radio"
                 id={id}
@@ -59,8 +58,6 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(functi
                 name={name}
                 disabled={disabled}
                 checked={isChecked}
-                // Videresend det EKTE change-eventet: event.target.value = value, så
-                // RHF register/Controller leser verdien nativt.
                 onChange={ctx?.onChange}
                 onBlur={ctx?.onBlur}
                 {...restInputAttrs}

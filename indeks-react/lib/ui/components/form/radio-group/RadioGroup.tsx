@@ -84,11 +84,7 @@ export const RadioGroup = forwardRef<HTMLInputElement, RadioGroupProps>(function
     ref
 ) {
     const isControlled = controlledValue !== undefined;
-    // Kontrollert vinner over ref: `value` er det eksplisitte opt-out-signalet, så en
-    // ref alene slår ikke på register-modus når konsumenten styrer verdien selv.
     const isRegister = ref != null && !isControlled;
-    // Intern state kun for ren uncontrolled bruk (defaultValue uten RHF). I
-    // register-modus eier RHF/native checked, så vi holder ingen React-state.
     const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
     const value = isControlled ? controlledValue : isRegister ? undefined : uncontrolledValue;
 
