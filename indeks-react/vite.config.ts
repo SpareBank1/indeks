@@ -4,12 +4,6 @@ import { mergeConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { sharedConfig } from '../vite.shared.js';
 
-// Delt av vite.config.ts og vitest.config.ts så alias-oppsettet ikke divergerer.
-export const alias = {
-    '@': resolve(__dirname, 'lib'),
-    '@sb1/indeks-css': resolve(__dirname, '../indeks-css'),
-};
-
 // https://vite.dev/config/
 export default mergeConfig(sharedConfig, {
     plugins: [
@@ -36,6 +30,9 @@ export default mergeConfig(sharedConfig, {
         },
     },
     resolve: {
-        alias,
+        alias: {
+            '@': resolve(__dirname, 'lib'),
+            '@sb1/indeks-css': resolve(__dirname, '../indeks-css'),
+        },
     },
 });

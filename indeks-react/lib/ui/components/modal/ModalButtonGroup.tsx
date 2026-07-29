@@ -1,4 +1,4 @@
-import { cn } from '@/cn';
+import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type { HTMLAttributes, JSX } from 'react';
 

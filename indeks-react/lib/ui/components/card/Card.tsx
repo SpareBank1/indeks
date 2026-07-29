@@ -1,4 +1,4 @@
-import { cn } from '@/cn';
+import { cn } from '../../../cn';
 import {
     type AnchorHTMLAttributes,
     type ButtonHTMLAttributes,

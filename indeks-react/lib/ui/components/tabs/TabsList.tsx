@@ -1,4 +1,4 @@
-import { cn } from '@/cn';
+import { cn } from '../../../cn';
 import { type JSX, type ReactNode } from 'react';
 
 export type TabsListProps = {

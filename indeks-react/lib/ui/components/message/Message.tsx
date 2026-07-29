@@ -1,4 +1,4 @@
-import { cn } from '@/cn';
+import { cn } from '../../../cn';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { JSX, ReactNode } from 'react';
 import { useMessageRegion } from '../message-region/MessageRegionContext';

@@ -1,4 +1,4 @@
-import { cn } from '@/cn';
+import { cn } from '../../cn';
 import type { ElementType, JSX } from 'react';
 import type { IconName } from './icon-types';
 

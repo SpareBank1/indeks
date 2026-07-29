@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, JSX } from 'react';
-import { cn } from '@/cn';
+import { cn } from '../../../cn';
 
 export type ProgressBarState = 'active' | 'success' | 'error';
 

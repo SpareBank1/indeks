@@ -1,4 +1,4 @@
-import { cn } from '@/cn';
+import { cn } from '../../../cn';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { ForwardRefExoticComponent, JSX, ReactNode, RefAttributes } from 'react';
 import { TabsContext } from './TabsContext';

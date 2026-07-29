@@ -1,4 +1,4 @@
-import { cn } from '@/cn';
+import { cn } from '../../../cn';
 import { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ForwardRefExoticComponent, JSX, ReactNode, RefAttributes } from 'react';
 import { ModalContext } from './ModalContext';

@@ -1,4 +1,4 @@
-import { cn } from '@/cn';
+import { cn } from '../../../../cn';
 import type { FormHTMLAttributes, JSX, ReactNode } from "react";
 
 export type FormProps = {

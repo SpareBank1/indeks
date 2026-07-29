@@ -1,4 +1,4 @@
-import { cn } from '@/cn';
+import { cn } from '../../../../cn';
 import { forwardRef, type LabelHTMLAttributes, type ReactNode } from 'react';
 
 export type LabelProps = {
