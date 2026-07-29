@@ -1,6 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
 import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { firstEvent } from '../test-events';
 import { RadioButton } from './RadioButton';
 import { RadioGroup } from './RadioGroup';
 
@@ -113,7 +114,7 @@ describe('RadioButton', () => {
             );
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
             fireEvent.click(inputs[1]);
-            expect(onChange.mock.calls[0][0].target.value).toBe('b');
+            expect(firstEvent(onChange).target.value).toBe('b');
         });
 
         it('group-disabled på host propagerer til alle inputs (WC)', () => {

@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { lastEvent } from '../test-events';
 import { Combobox, type ComboboxOption } from './Combobox';
 
 const OPTIONS: ComboboxOption[] = [
@@ -129,8 +130,8 @@ describe('Combobox', () => {
         const no = container.querySelector<HTMLElement>('[data-value="no"]')!;
         no.setAttribute('aria-selected', 'true');
         container.querySelector('ix-combobox')!.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        expect(onChange.mock.lastCall![0].type).toBe('change');
-        expect(onChange.mock.lastCall![0].target).toMatchObject({ name: 'land', value: 'no' });
+        expect(lastEvent(onChange).type).toBe('change');
+        expect(lastEvent(onChange).target).toMatchObject({ name: 'land', value: 'no' });
     });
 
     it('kaller onChange med array i target.value i multi', () => {
@@ -139,8 +140,8 @@ describe('Combobox', () => {
         container.querySelector('[data-value="no"]')!.setAttribute('aria-selected', 'true');
         container.querySelector('[data-value="se"]')!.setAttribute('aria-selected', 'true');
         container.querySelector('ix-combobox')!.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        expect(onChange.mock.lastCall![0].type).toBe('change');
-        expect(onChange.mock.lastCall![0].target).toMatchObject({ name: 'land', value: ['no', 'se'] });
+        expect(lastEvent(onChange).type).toBe('change');
+        expect(lastEvent(onChange).target).toMatchObject({ name: 'land', value: ['no', 'se'] });
     });
 
     it('kaller onBlur når fokus forlater komponenten', () => {
@@ -152,9 +153,9 @@ describe('Combobox', () => {
         document.body.appendChild(outside);
         host.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: outside }));
         expect(onBlur).toHaveBeenCalledTimes(1);
-        expect(onBlur.mock.lastCall![0].type).toBe('blur');
+        expect(lastEvent(onBlur).type).toBe('blur');
         // Delt syntetisk form: blur bærer nå også value (single, ingen valgt → '').
-        expect(onBlur.mock.lastCall![0].target).toMatchObject({ name: '', value: '' });
+        expect(lastEvent(onBlur).target).toMatchObject({ name: '', value: '' });
         outside.remove();
     });
 

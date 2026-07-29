@@ -1,6 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
 import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { firstEvent } from '../test-events';
 import { CheckboxButton } from './CheckboxButton';
 import { CheckboxGroup } from './CheckboxGroup';
 
@@ -114,7 +115,7 @@ describe('CheckboxGroup', () => {
             const { container } = renderGroup({ value: ['epost'], onChange });
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
             fireEvent.click(inputs[1]);
-            expect(onChange.mock.calls[0][0].target.value).toBe('sms');
+            expect(firstEvent(onChange).target.value).toBe('sms');
         });
 
         it('videresender ekte change-event (target.value) når et valg fjernes', () => {
@@ -122,7 +123,7 @@ describe('CheckboxGroup', () => {
             const { container } = renderGroup({ value: ['epost', 'sms'], onChange });
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
             fireEvent.click(inputs[0]);
-            expect(onChange.mock.calls[0][0].target.value).toBe('epost');
+            expect(firstEvent(onChange).target.value).toBe('epost');
         });
 
         it('ukontrollert: defaultValue krysser av riktige valg', () => {
@@ -179,8 +180,8 @@ describe('CheckboxGroup', () => {
             const { container } = renderGroup({ ref, onChange });
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
             fireEvent.click(inputs[2]);
-            expect(onChange.mock.calls[0][0].target.value).toBe('telefon');
-            expect(onChange.mock.calls[0][0].target.checked).toBe(true);
+            expect(firstEvent(onChange).target.value).toBe('telefon');
+            expect(firstEvent(onChange).target.checked).toBe(true);
         });
 
         it('kontrollert value vinner over ref (ref slår ikke på register-modus)', () => {
@@ -248,7 +249,7 @@ describe('CheckboxGroup', () => {
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
             expect(inputs[1].checked).toBe(true);
             fireEvent.click(inputs[0]);
-            expect(onChange.mock.calls[0][0].target.value).toBe('a');
+            expect(firstEvent(onChange).target.value).toBe('a');
         });
     });
 });

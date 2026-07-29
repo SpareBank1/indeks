@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { createRef, useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { lastEvent } from '../test-events';
 import { TextField } from './TextField';
 import { IxField } from '@sb1/indeks-web';
 
@@ -284,7 +285,7 @@ describe('TextField', () => {
             // Synlig input formateres, men onChange leverer rå verdi til konsumenten.
             expect(input.value).toBe('123 45 678');
             expect(mirrorValue(container)).toBe('12345678');
-            expect((onChange.mock.lastCall![0].target as HTMLInputElement).value).toBe('12345678');
+            expect((lastEvent(onChange).target as HTMLInputElement).value).toBe('12345678');
         });
 
         it('uncontrolled live (defaultValue) rendrer formatert startverdi', () => {
@@ -360,8 +361,8 @@ describe('TextField', () => {
             input.value = '12345678';
             input.setSelectionRange(8, 8);
             fireEvent.input(input);
-            expect(onChange.mock.lastCall![0].target.name).toBe('konto');
-            expect(onChange.mock.lastCall![0].target.value).toBe('12345678');
+            expect(lastEvent(onChange).target.name).toBe('konto');
+            expect(lastEvent(onChange).target.value).toBe('12345678');
         });
 
         it('emitterer syntetisk blur med opprinnelig navn, rå verdi og type=blur', () => {
@@ -370,8 +371,8 @@ describe('TextField', () => {
             const input = screen.getByRole('textbox') as HTMLInputElement;
             fireEvent.blur(input);
             expect(onBlur).toHaveBeenCalledTimes(1);
-            expect(onBlur.mock.lastCall![0].type).toBe('blur');
-            expect(onBlur.mock.lastCall![0].target).toMatchObject({ name: 'konto', value: '12345678' });
+            expect(lastEvent(onBlur).type).toBe('blur');
+            expect(lastEvent(onBlur).target).toMatchObject({ name: 'konto', value: '12345678' });
         });
 
         it('uten formatter: ref er den native inputen og onBlur spres rett på den', () => {
