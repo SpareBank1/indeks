@@ -2,6 +2,7 @@ import { Accordion, Icon, VStack } from '@sb1/indeks-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ColorScaleControls } from './ColorScaleControls';
+import { themes } from './themeConfig';
 
 interface SettingsPopoverProps {
     onDensityChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -89,8 +90,11 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
                                 value={theme}
                                 onChange={onThemeChange}
                             >
-                                <option value="sb1">SpareBank 1</option>
-                                <option value="kredittbanken">Kredittbanken</option>
+                                {themes.map((t) => (
+                                    <option key={t.value} value={t.value}>
+                                        {t.label}
+                                    </option>
+                                ))}
                             </select>
                         </label>
 

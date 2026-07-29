@@ -3,6 +3,7 @@ import { ColorOverrideProvider, useColorOverrides } from '../contexts/ColorOverr
 import { SpacingProvider, useSpacing } from '../contexts/SpacingContext';
 import Layout from './Layout';
 import { SettingsPopover } from './SettingsPopover';
+import { DEFAULT_THEME, isValidTheme } from './themeConfig';
 
 const THEME_STORAGE_KEY = 'indeks-eksempel-theme';
 const THEME_LINK_ID = 'active-theme-stylesheet';
@@ -12,7 +13,10 @@ const BodyContent: React.FC = () => {
     const { resetColors } = useColorOverrides();
     const [fontSize, setFontSize] = React.useState(16);
     const [nativeMode, setNativeMode] = React.useState(false);
-    const [theme, setTheme] = React.useState(() => localStorage.getItem(THEME_STORAGE_KEY) ?? 'sb1');
+    const [theme, setTheme] = React.useState(() => {
+        const stored = localStorage.getItem(THEME_STORAGE_KEY);
+        return isValidTheme(stored) ? stored : DEFAULT_THEME;
+    });
 
     useEffect(() => {
         if (nativeMode) {
@@ -32,12 +36,17 @@ const BodyContent: React.FC = () => {
             link.rel = 'stylesheet';
             document.head.appendChild(link);
         }
-        link.href = `./themes/${theme}.css`;
-        localStorage.setItem(THEME_STORAGE_KEY, theme);
+        // Bygg href fra en validert konstant (én av de kjente theme-literalene),
+        // aldri direkte fra den lagrede strengen — lukker CodeQL-funnet om at
+        // untrusted DOM/localStorage-tekst styrer <link>-URL-en.
+        const safeTheme = isValidTheme(theme) ? theme : DEFAULT_THEME;
+        link.href = `./themes/${safeTheme}.css`;
+        localStorage.setItem(THEME_STORAGE_KEY, safeTheme);
     }, [theme]);
 
     const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setTheme(event.target.value);
+        const value = event.target.value;
+        setTheme(isValidTheme(value) ? value : DEFAULT_THEME);
     };
 
     const handleDensityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
