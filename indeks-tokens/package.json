@@ -24,6 +24,9 @@
     "exports": {
         ".": "./dist/index.css"
     },
+    "bin": {
+        "indeks-tokens": "./dist/cli.js"
+    },
     "files": [
         "dist",
         "CHANGELOG.md",
@@ -37,10 +40,11 @@
     },
     "scripts": {
         "dev": "echo not implemented",
-        "build": "rm -rf ./dist ./.build && pnpm run build:tokens:css && pnpm run build:colors:web && pnpm run build:colors:figma && pnpm run build:bundle",
+        "build": "rm -rf ./dist ./.build && pnpm run build:tokens:css && pnpm run build:colors:web && pnpm run build:colors:figma && pnpm run build:bundle && pnpm run build:cli",
+        "build:cli": "esbuild scripts/build-colors/cli.ts --bundle --platform=node --format=esm --outfile=dist/cli.js --banner:js='#!/usr/bin/env node' --define:__PKG_VERSION__=\"\\\"$npm_package_version\\\"\"",
         "build:spacing": "node ./scripts/build-spacing-tokens.cjs",
         "sync-tokens": "tsx scripts/figma-api/sync_figma_to_tokens.ts",
-        "test": "vitest buildThemeColors.test.ts",
+        "test": "vitest run buildThemeColors.test.ts cli.integration.test.ts",
         "build:colors:web": "tsx ./scripts/build-colors/index platform=web path=./.build/css",
         "build:colors:figma": "tsx ./scripts/build-colors/index platform=figma path=./tokens/colors/from-code",
         "build:colors:ios": "tsx ./scripts/build-colors/index platform=ios path=./dist/ios",
@@ -59,6 +63,7 @@
         "colorjs.io": "^0.7.0",
         "cssnano": "^8.0.2",
         "dotenv": "^17.4.2",
+        "esbuild": "0.28.1",
         "postcss": "^8.5.20",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^16.1.1",

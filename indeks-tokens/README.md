@@ -23,7 +23,7 @@ Du trenger kun å installere `@sb1/indeks-tokens` hvis du:
 2. **Bygger egne verktøy** som trenger tilgang til token-data
 3. **Trenger TypeScript-typer** for tokens
 
-**OBS:** Du trenger ikke installere pakken for å kjøre scripts. Fremtidige scripts (eksport til iOS/Android, custom themes) kan kjøres direkte med `npx @sb1/indeks-tokens <kommando>`.
+**OBS:** Du trenger ikke installere pakken for å generere fargetokens. Fargegeneratoren kjøres direkte med `npx @sb1/indeks-tokens build-colors ...` (se [dokumentasjonen](#-dokumentasjon)).
 
 ## 📥 Installasjon
 
@@ -47,15 +47,15 @@ npm install @sb1/indeks-tokens
 @import '@sb1/indeks-tokens';
 ```
 
-### Scripts (kommer snart)
+### Generér fargetokens
 
-Fremtidige scripts vil inkludere:
+Pakken har en `build-colors`-kommando som genererer fargetokens for flere plattformer — kjøres uten å installere pakken:
 
-- Eksport av fargetokens for Android
-- Eksport av fargetokens for iOS
-- Generering av egne themes
+```bash
+npx @sb1/indeks-tokens build-colors platform=<figma|web|android|ios> path=<utmappe> [theme=<sti-til-theme.json>]
+```
 
-Disse kan kjøres med `npx @sb1/indeks-tokens <kommando>` uten å installere pakken.
+Uten `theme=` brukes standard `sb1`-theme. Se dokumentasjonen for [web](https://sparebank1.github.io/designsystem/?path=/docs/design-farger-web--docs) og [native (iOS/Android)](https://sparebank1.github.io/designsystem/?path=/docs/design-farger-native--docs), inkludert hvordan du lager ditt eget theme.
 
 ## 🔗 Relaterte pakker
 

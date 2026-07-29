@@ -1,10 +1,9 @@
 import { writeFileSyncEnsureDir } from '../../../../shared/tokens/utils.js';
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Pakkeversjon injiseres ved bygg (esbuild --define). Under test/tsx finnes den
+// ikke, så vi faller tilbake til 'dev' via typeof-guard (unngår ReferenceError).
+declare const __PKG_VERSION__: string;
+const PKG_VERSION = typeof __PKG_VERSION__ !== 'undefined' ? __PKG_VERSION__ : 'dev';
 
 type ColorSet = Record<string, string>;
 
@@ -14,10 +13,6 @@ interface Colors {
 }
 
 function buildContents(path: string): void {
-    const packageJsonPath = join(__dirname, '../../../package.json');
-    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
-    const version = packageJson.version;
-
     writeFileSyncEnsureDir(
         `${path}/SemanticColors.xcassets/Contents.json`,
         `{
@@ -31,7 +26,7 @@ function buildContents(path: string): void {
         `${path}/SemanticColors.xcassets/README.md`,
         `# Semantic Colors
 
-Fargene er bygget fra FFE Core versjon: ${version}
+Fargene er bygget fra Indeks Tokens versjon: ${PKG_VERSION}
 
 Dokumentasjon på: https://sparebank1.github.io/designsystem/?path=/docs/design-farger-native--docs
 `

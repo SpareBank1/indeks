@@ -47,6 +47,7 @@ const sidebars: SidebarsConfig = {
                             items: [
                                 'retningslinjer/farger/farger',
                                 'retningslinjer/farger/fargemodus',
+                                'grunnleggende/tokens/farger-web',
                                 'grunnleggende/tokens/farger-native',
                             ],
                         },

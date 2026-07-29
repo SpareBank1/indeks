@@ -2,13 +2,13 @@
 
 Pakken `@sb1/indeks-tokens` inneholder fargetokens som kan bygges til forskjellige plattformer, inkludert native (iOS og Android).
 
-For å bruke fargene i native-apper er det enkleste å bygge dem til den relevante plattformen ved hjelp av scripts som følger med pakken.
+For å bruke fargene i native-apper er det enkleste å bygge dem til den relevante plattformen ved hjelp av `build-colors`-kommandoen som følger med pakken.
 
 ## Hvordan bygge fargene
 
-Scriptene som brukes for å bygge fargene til native ligger i `@sb1/indeks-tokens`-pakken under `scripts/build-colors/mobile`.
+Pakken `@sb1/indeks-tokens` eksponerer en `build-colors`-kommando som genererer fargetokens for den plattformen du velger.
 
-For å bruke scriptet kan du bruke `npx` som lar deg kjøre scripts fra pakker uten å installere dem. Du kan enten kjøre det i root og legge til riktig path, eller kjøre det i riktig mappe med path `.`
+Du kan kjøre den med `npx` uten å installere pakken. Kommandoen har samme signatur uansett plattform — du styrer resultatet med `platform=`, `path=` og valgfritt `theme=`. Den samme generatoren brukes også for [web](./farger-web).
 
 :::tip Versjonering
 Vi anbefaler at dere commiter scriptet dere bruker for å bygge fargene, slik at dere har kontroll på når fargene endrer seg. Ved å ha dette committet blir det enklere å spore når fargene endrer seg og å vite hvilken versjon en er på.
@@ -81,58 +81,58 @@ SemanticColors.xcassets/
 
 ## Egne themes
 
-Du kan lage ditt eget theme ved å opprette en TypeScript-fil som eksporterer et theme-objekt. Scriptet vil da bruke dette themet i stedet for det innebygde sb1-themet.
+Du kan lage ditt eget theme ved å opprette en JSON-fil med et theme-objekt. Generatoren vil da bruke dette themet i stedet for det innebygde sb1-themet.
 
 ### Eksempel på egen theme-fil
 
-Lag en fil `my-theme.ts`:
+Lag en fil `my-theme.json`:
 
-```typescript
-import type { Theme } from '@sb1/indeks-tokens/themes/types';
-
-export const myTheme: Theme = {
-    name: 'my-custom-theme',
-    identityColor: '#005aa4',
-    colors: {
-        brand: '#0078D8',
-        success: '#00885B',
-        info: '#467CA4',
-        danger: '#C94E4F',
-        warning: '#AF6500',
-        gray: '#6D7888',
-        neutral: '#AF6516',
+```json
+{
+    "name": "my-custom-theme",
+    "identityColor": "#005aa4",
+    "colors": {
+        "brand": "#0078D8",
+        "success": "#00885B",
+        "info": "#467CA4",
+        "danger": "#C94E4F",
+        "warning": "#AF6500",
+        "gray": "#6D7888",
+        "neutral": "#AF6516"
     },
-    themeable: {
-        'font-family': {
-            normal: 'System',
-            heading: 'System',
+    "themeable": {
+        "font-family": {
+            "normal": "System",
+            "heading": "System"
         },
-        'font-weight': {
-            normal: 400,
-            bold: 600,
-            heading: 700,
+        "font-weight": {
+            "normal": 400,
+            "bold": 600,
+            "heading": 700
         },
-        border: {
-            radius: {
-                button: 25,
-                checkbox: 4,
-                input: 8,
-            },
-        },
-    },
-};
+        "border": {
+            "radius": {
+                "button": 25,
+                "checkbox": 4,
+                "input": 8
+            }
+        }
+    }
+}
 ```
+
+De sju basisfargene under `colors` er påkrevd. `identityColor` og `themeable` er valgfrie.
 
 ### Bruke eget theme
 
 ```bash
-npx @sb1/indeks-tokens build-colors platform=android path=./android/colors theme=./my-theme.ts
+npx @sb1/indeks-tokens build-colors platform=android path=./android/colors theme=./my-theme.json
 ```
 
 Eller for iOS:
 
 ```bash
-npx @sb1/indeks-tokens build-colors platform=ios path=./ios/colors theme=./my-theme.ts
+npx @sb1/indeks-tokens build-colors platform=ios path=./ios/colors theme=./my-theme.json
 ```
 
 ## Fargeskalaer

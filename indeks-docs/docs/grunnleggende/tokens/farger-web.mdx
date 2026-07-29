@@ -1,0 +1,92 @@
+# Farger for Web
+
+Pakken `@sb1/indeks-tokens` inneholder fargetokens som brukes i hele designsystemet. På web trenger de aller fleste ikke å generere farger selv — den ferdig bygde CSS-en inneholder alt du trenger. Men du kan generere din egen web-CSS med et eget theme ved hjelp av den samme `build-colors`-kommandoen som brukes for [native (iOS/Android)](./farger-native).
+
+## Standard bruk: importer ferdig CSS
+
+I de aller fleste tilfeller skal du **ikke** generere farger selv. Bruk den ferdig bygde CSS-en, som allerede inneholder alle fargetokens:
+
+```css
+@import url('https://cdn.sparebank1.no/indeks/css/<versjon>/index.css');
+```
+
+Eller via npm med `@sb1/indeks-css` (som inkluderer tokens):
+
+```bash
+npm install @sb1/indeks-css
+```
+
+Da får du alle `--ix-color-*`-variablene ferdig satt opp med både light og dark mode. Du trenger ikke resten av denne siden.
+
+## Egen web-CSS fra eget theme
+
+Har du behov for et eget theme (egne merkevarefarger), kan du generere web-CSS med `build-colors`:
+
+```bash
+npx @sb1/indeks-tokens build-colors platform=web path=./css theme=./my-theme.json
+```
+
+Uten `theme=` genereres CSS-en med standard `sb1`-theme.
+
+### Output
+
+Kommandoen skriver to slags filer til `path`:
+
+```
+css/
+├── colors.css
+└── themes/
+    └── <theme-navn>.css
+```
+
+- **`themes/<theme-navn>.css`** — primitivene (`--ii-primitive-*`), altså de fullstendige fargeskalaene generert fra basisfargene i themet ditt.
+- **`colors.css`** — de semantiske fargene (`--ix-color-*`), som peker inn i primitivene. Denne inneholder både light mode (`:root`, `.ix-light-mode`), dark mode (`.ix-dark-mode`) og `prefers-color-scheme`-håndtering.
+
+:::info `--ii-` vs `--ix-`
+`--ii-primitive-*` er interne primitiver (implementasjonsdetalj) — ikke bruk dem direkte i applikasjonskoden din. `--ix-color-*` er det offentlige API-et du styler mot.
+:::
+
+### Importrekkefølge
+
+Primitivene må lastes før de semantiske fargene, siden `colors.css` refererer til `--ii-primitive-*`-variablene:
+
+```css
+@import './css/themes/my-theme.css';
+@import './css/colors.css';
+```
+
+## Eksempel på egen theme-fil
+
+Theme-fila er en JSON-fil med de sju basisfargene. `identityColor` og `themeable` (font, border-radius) er valgfrie. Lag en fil `my-theme.json`:
+
+```json
+{
+    "name": "my-custom-theme",
+    "identityColor": "#005aa4",
+    "colors": {
+        "brand": "#0078D8",
+        "success": "#00885B",
+        "info": "#467CA4",
+        "danger": "#C94E4F",
+        "warning": "#AF6500",
+        "gray": "#6D7888",
+        "neutral": "#AF6516"
+    },
+    "themeable": {
+        "font-family": {
+            "normal": "Inter, sans-serif",
+            "heading": "Inter, sans-serif"
+        }
+    }
+}
+```
+
+Filnavnet på theme-CSS-en følger `name`-feltet i JSON-fila — themet over gir `css/themes/my-custom-theme.css`.
+
+## Parametere
+
+- `platform=web` — spesifiserer at du vil bygge web-CSS
+- `path=<sti>` — hvor filene skal lagres (f.eks. `./css`)
+- `theme=<sti>` — (valgfri) sti til egen JSON-theme-fil (default: `sb1`)
+
+Den samme kommandoen bygger også farger for iOS og Android — se [Farger for Native](./farger-native).
