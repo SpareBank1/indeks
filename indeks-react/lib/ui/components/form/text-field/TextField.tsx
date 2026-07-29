@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode, useEffect, useId, useLayoutEffect, useRef } from 'react';
+import { forwardRef, type ReactNode, useCallback, useEffect, useId, useLayoutEffect, useRef } from 'react';
 import { Field } from '../field/Field';
 import type { IxField } from '@sb1/indeks-web';
 import type { FieldFormatter, FormatName } from './text-field-formats';
@@ -101,12 +101,19 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
     // Videresend proxy i formatter-modus, ellers den native inputen. Sett
     // `inputRef.current` FØR `ref(...)`: RHF trigger `proxy.value = default` synkront i
     // sin ref-callback (mount-seed), og setteren trenger inputRef for å finne ix-field.
-    const setInputRef = (node: HTMLInputElement | null): void => {
-        inputRef.current = node;
-        const forwarded = hasFormatter && node ? proxyRef.current : node;
-        if (typeof ref === 'function') ref(forwarded);
-        else if (ref) ref.current = forwarded;
-    };
+    // Memoisert så RHF ikke av/reregistrerer refen (og dermed re-kjører mount-seed
+    // `proxy.value = default`) hver render — samme grep som mergedRef i Radio/Checkbox.
+    // Deps: kun `ref` og `hasFormatter` styrer hva som videresendes; proxyRef/inputRef
+    // er stabile useRef-objekter.
+    const setInputRef = useCallback(
+        (node: HTMLInputElement | null): void => {
+            inputRef.current = node;
+            const forwarded = hasFormatter && node ? proxyRef.current : node;
+            if (typeof ref === 'function') ref(forwarded);
+            else if (ref) ref.current = forwarded;
+        },
+        [ref, hasFormatter]
+    );
 
     useEffect(() => {
         if (!fieldRef.current) return;
