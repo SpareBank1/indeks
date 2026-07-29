@@ -9,6 +9,7 @@ on:
             - 'indeks-web/**'
             - 'indeks-css/**'
             - 'indeks-tokens/**'
+            - 'indeks-utils/**'
 
 concurrency:
     group: playwright-${{ github.head_ref || github.ref }}

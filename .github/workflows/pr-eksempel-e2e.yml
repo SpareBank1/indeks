@@ -9,6 +9,7 @@ on:
             - 'indeks-web/**'
             - 'indeks-css/**'
             - 'indeks-tokens/**'
+            - 'indeks-utils/**'
 
 concurrency:
     group: eksempel-e2e-${{ github.head_ref || github.ref }}
