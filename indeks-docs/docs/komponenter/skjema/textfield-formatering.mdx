@@ -22,7 +22,7 @@ Et formatert felt kobles med `{...register('felt')}` akkurat som et uformatert (
 ## To moduser: blur (standard) og live (opt-in)
 
 - **Blur (standard):** feltet viser formatert verdi **når det ikke har fokus**, og den rå (uformaterte) verdien når det får fokus, slik at brukeren kan redigere fritt uten at markøren hopper. Egne pattern-strenger og `{format,parse}`-objekter er blur med mindre de opter inn på live.
-- **Live (opt-in):** separatorene bygger seg opp **mens brukeren skriver**, og markøren styres så den holder plassen. De seks innebygde variantene (`phone`, `amount`, `account`, `orgnr`, `ssn`, `date`) formaterer live.
+- **Live (opt-in):** separatorene bygger seg opp **mens brukeren skriver**, og markøren styres så den holder plassen. Fem av de innebygde variantene (`phone`, `amount`, `account`, `orgnr`, `ssn`) formaterer live. `date` er unntaket — den er skilletegn-bevisst og formaterer på blur (se tabellen under).
 
 Modus bæres av et `live`-flagg på selve formatteren — det er ingen egen prop eller attributt på feltet.
 
@@ -55,16 +55,16 @@ Du kan angi formatteren på tre måter, i økende grad av fleksibilitet.
 
 ### 1. Innebygd variant (`format="navn"`)
 
-De vanligste behovene er innebygd. **Alle de innebygde variantene formaterer live:**
+De vanligste behovene er innebygd. **De fem fast-bredde variantene formaterer live; `date` er unntaket (skilletegn-bevisst, formaterer på blur):**
 
-| Variant | Formaterer | Eksempel |
-|---------|------------|----------|
-| `phone` | Norsk telefonnummer | `123 45 678` |
-| `amount` | Beløp med tusenskille | `1 234 567,89` |
-| `account` | Kontonummer | `1234 56 78903` |
-| `orgnr` | Organisasjonsnummer | `123 456 789` |
-| `ssn` | Fødselsnummer | `010190 12345` |
-| `date` | Dato | `24.12.2026` |
+| Variant | Formaterer | Modus | Eksempel |
+|---------|------------|-------|----------|
+| `phone` | Norsk telefonnummer | live | `123 45 678` |
+| `amount` | Beløp med tusenskille | live | `1 234 567,89` |
+| `account` | Kontonummer | live | `1234 56 78903` |
+| `orgnr` | Organisasjonsnummer | live | `123 456 789` |
+| `ssn` | Fødselsnummer | live | `010190 12345` |
+| `date` | Dato — godtar `1.1.2026`, nullutfyller på blur | blur | `24.12.2026` |
 
 <Tabs groupId="variant">
 <TabItem value="react" label="React">

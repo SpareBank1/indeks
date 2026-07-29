@@ -36,6 +36,10 @@ describe('IxDateField', () => {
         expect(toggle).not.toBeNull();
         expect(toggle!.getAttribute('type')).toBe('button');
         expect(toggle!.getAttribute('aria-label')).toBe('Åpne kalender');
+        // Desktop: knappen er tastaturets vei inn i kalenderen — den skal være
+        // fokuserbar (tabbar) og ikke skjult for skjermleser.
+        expect((toggle as HTMLButtonElement).tabIndex).toBe(0);
+        expect(toggle!.hasAttribute('aria-hidden')).toBe(false);
         expect(native).not.toBeNull();
         expect(native!.getAttribute('type')).toBe('date');
         expect(native!.getAttribute('aria-hidden')).toBe('true');
@@ -140,6 +144,56 @@ describe('IxDateField', () => {
         input.value = '17.05';
         input.dispatchEvent(new Event('input', { bubbles: true }));
         expect(nativeInput(el).value).toBe('');
+    });
+
+    it('enkeltsifret dag/måned (1.1.2026) → native får ISO', () => {
+        const el = mount(`
+            <ix-date-field data-open-label="Åpne kalender">
+                <div class="ix-text-field"><input data-format="date" /></div>
+            </ix-date-field>
+        `);
+        const input = visibleInput(el);
+        input.value = '1.1.2026';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        expect(nativeInput(el).value).toBe('2026-01-01');
+    });
+
+    it('blandet enkelt-/tosifret (1.5.1990) → native får ISO', () => {
+        const el = mount(`
+            <ix-date-field data-open-label="Åpne kalender">
+                <div class="ix-text-field"><input data-format="date" /></div>
+            </ix-date-field>
+        `);
+        const input = visibleInput(el);
+        input.value = '1.5.1990';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        expect(nativeInput(el).value).toBe('1990-05-01');
+    });
+
+    it('8 sifre uten skilletegn (01012026) → native får ISO', () => {
+        const el = mount(`
+            <ix-date-field data-open-label="Åpne kalender">
+                <div class="ix-text-field"><input data-format="date" /></div>
+            </ix-date-field>
+        `);
+        const input = visibleInput(el);
+        input.value = '01012026';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        expect(nativeInput(el).value).toBe('2026-01-01');
+    });
+
+    it('ufullstendig/tvetydig verdi gir tom native ISO', () => {
+        const el = mount(`
+            <ix-date-field data-open-label="Åpne kalender">
+                <div class="ix-text-field"><input data-format="date" /></div>
+            </ix-date-field>
+        `);
+        const input = visibleInput(el);
+        for (const value of ['1.1.', '1.1.26', '112026']) {
+            input.value = value;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            expect(nativeInput(el).value, value).toBe('');
+        }
     });
 
     it('value-attributt (ISO) seeder både native og synlig', () => {

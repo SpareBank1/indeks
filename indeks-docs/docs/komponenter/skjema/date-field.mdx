@@ -29,7 +29,7 @@ Brukeren ser og taster `dd.mm.åååå`. Selve verdien — det som sendes ved in
 
 ## Kom i gang
 
-I feltet taster brukeren datoen, som formateres fortløpende til `dd.mm.åååå` — punktumet dukker opp med én gang en gruppe er full (`24` → `24.`, `2412` → `24.12.`), så brukeren aldri trenger å taste skilletegnet selv. Kalenderknappen til høyre åpner enhetens innebygde datovelger. På desktop kaller knappen `showPicker()`; på touch fanges tappet av en gjennomsiktig native date-input som ligger oppå knappen, så kalenderen åpnes robust.
+I feltet taster brukeren datoen. Feltet er skilletegn-bevisst og fleksibelt: du kan taste `1.1.2026` like gjerne som `01.01.2026` (eller `01012026` uten skilletegn). Teksten står urørt mens du skriver, og feltet normaliserer til `dd.mm.åååå` — nullutfyller enkeltsifret dag/måned — når det mister fokus (`1.1.2026` → `01.01.2026`). Et fullt 4-sifret år kreves for at datoen regnes som komplett. Kalenderknappen til høyre åpner enhetens innebygde datovelger. På desktop kaller knappen `showPicker()`; på touch fanges tappet av en gjennomsiktig native date-input som ligger oppå knappen, så kalenderen åpnes robust.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">

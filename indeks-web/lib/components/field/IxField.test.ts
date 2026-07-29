@@ -721,6 +721,30 @@ describe('IxField', () => {
                 input.dispatchEvent(new Event('input'));
                 expect(mirror(field)!.value).toBe('24122026');
             });
+
+            it('data-format="date": urørt mens man skriver, nullutfyller ved blur', () => {
+                // Ende-til-ende gjennom ix-field sin blur-sti: dato-formatteren er
+                // blur (ikke live) og skilletegn-bevisst, så `1.1.2026` skal stå
+                // urørt mens man skriver og normaliseres til `01.01.2026` på blur.
+                const field = createField(`
+                    <ix-field>
+                        <label>Dato</label>
+                        <input data-format="date" value="" />
+                        <span data-field="error"></span>
+                    </ix-field>
+                `);
+                const input = field.querySelector('input')!;
+                input.focus();
+                input.dispatchEvent(new Event('focus'));
+                input.value = '1.1.2026';
+                input.dispatchEvent(new Event('input'));
+                // Live-reformatering skjer ikke — teksten står som skrevet.
+                expect(input.value).toBe('1.1.2026');
+
+                input.blur();
+                input.dispatchEvent(new Event('blur'));
+                expect(input.value).toBe('01.01.2026');
+            });
         });
 
         describe('data-format-live (per-felt override)', () => {

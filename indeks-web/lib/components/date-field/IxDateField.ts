@@ -6,7 +6,8 @@
  * Hybrid av to mønstre. `ix-date-field` ligger NØSTET inne i `ix-field` (som
  * `ix-combobox`), og `ix-field` gjør ARIA-limet: kobler label↔input,
  * aria-describedby, feilmelding, OG formateringen (`data-format="date"` →
- * live dd.mm.åååå). `ix-date-field` dupliserer ingenting av dette. Dens ENESTE
+ * normaliserer til dd.mm.åååå på blur; brukeren kan taste `1.1.2026` like gjerne
+ * som `01.01.2026`). `ix-date-field` dupliserer ingenting av dette. Dens ENESTE
  * jobb er å gjøre feltet til et datofelt:
  *
  *   1. GENERERE to instrumentelle elementer inn i `.ix-text-field` (idempotent):
@@ -43,18 +44,18 @@
  * </ix-field>
  */
 
+import { isoFromDate } from '../field/formats.js';
+
 // Enkel touch-plattform-sniff (samme idé som ix-combobox): på touch skjuler vi
 // kalenderknappen fra skjermleser — den gjennomsiktige native-inputen over
 // knappen er primærmekanismen der, og en swipe skal ikke treffe to mål.
 const IS_TOUCH = typeof navigator !== 'undefined' && /iphone|ipad|ipod|android/i.test(navigator.userAgent);
 
 // ── Rene konverteringer mellom ISO (åååå-mm-dd) og siffer (ddmmyyyy) ─────────
-
-// 8 siffer ddmmyyyy → ISO åååå-mm-dd. Alt annet (ufullstendig/ugyldig) → ''.
-function isoFromDigits(digits: string): string {
-    if (!/^\d{8}$/.test(digits)) return '';
-    return `${digits.slice(4, 8)}-${digits.slice(2, 4)}-${digits.slice(0, 2)}`;
-}
+//
+// Synlig → ISO går via `isoFromDate` (delt med ix-field sin dato-formatter), som
+// er skilletegn-bevisst og godtar `1.1.2026`. ISO → synlig bruker de faste
+// digit-helperne under, siden en gyldig ISO-verdi alltid er nullutfylt 8 sifre.
 
 // ISO åååå-mm-dd → 8 siffer ddmmyyyy. Alt annet → ''.
 function digitsFromIso(iso: string): string {
@@ -160,7 +161,8 @@ export class IxDateField extends HTMLElement {
             const toggle = document.createElement('button');
             toggle.type = 'button';
             toggle.className = 'ix-date-field__toggle';
-            toggle.tabIndex = -1;
+            // tabIndex styres i _syncToggleLabel: tabbar på desktop (tastaturets
+            // vei til kalenderen), men -1 på touch der knappen er aria-hidden.
             // Sett inn FØR native slik at native (høyere z-index) overlapper knappen
             // og fanger tap på mobil.
             field.insertBefore(toggle, this._native);
@@ -204,9 +206,8 @@ export class IxDateField extends HTMLElement {
             this._seedFromIso(initialIso);
         } else if (this._input.value) {
             // Synlig felt hadde en verdi i markup — utled ISO til native.
-            const raw = this._input.value.replace(/\D/g, '');
             this._syncing = true;
-            this._native.value = isoFromDigits(raw);
+            this._native.value = isoFromDate(this._input.value);
             this._syncing = false;
         }
         this._lastEmitted = this._native.value;
@@ -215,9 +216,11 @@ export class IxDateField extends HTMLElement {
     // ── Synk: synlig (dd.mm.åååå) → native (ISO) ────────────────────────────
     private _handleVisibleInput(): void {
         if (this._syncing || !this._input || !this._native) return;
-        const raw = this._input.value.replace(/\D/g, '');
+        // Skilletegn-bevisst: `isoFromDate` tolker det tastede punktumet som
+        // segment-grense og godtar `1.1.2026`. ISO-sannheten holdes oppdatert per
+        // tastetrykk selv om den synlige teksten først normaliseres ved blur.
         this._syncing = true;
-        this._native.value = isoFromDigits(raw);
+        this._native.value = isoFromDate(this._input.value);
         this._syncing = false;
         this._emitIfChanged();
     }
@@ -231,7 +234,7 @@ export class IxDateField extends HTMLElement {
         const digits = digitsFromIso(this._native.value);
         this._syncing = true;
         this._input.value = digits ? displayFromDigits(digits) : '';
-        // La ix-field sin live-formatter og React sin input-lytter reagere.
+        // La ix-field sin formatter og React sin input-lytter reagere.
         // Guardet av _syncing, så vår egen synlige input-lytter løper ikke.
         this._input.dispatchEvent(new Event('input', { bubbles: true }));
         this._syncing = false;
@@ -290,7 +293,16 @@ export class IxDateField extends HTMLElement {
                 console.warn('[ix-date-field] Kalenderknappen mangler tilgjengelig navn. Sett data-open-label (React: openLabel) på riktig språk.');
             }
         }
-        // Skjul knappen fra skjermleser på touch — native-tap er primær der.
-        if (IS_TOUCH) this._toggle.setAttribute('aria-hidden', 'true');
+        // Skjul knappen fra skjermleser på touch — native-tap er primær der —
+        // og ta den ut av tab-rekkefølgen (et aria-hidden-element skal ikke
+        // kunne fokuseres med tastatur). På desktop er knappen tastaturets
+        // eneste vei inn i kalenderen, så der skal den tabbes til.
+        if (IS_TOUCH) {
+            this._toggle.setAttribute('aria-hidden', 'true');
+            this._toggle.tabIndex = -1;
+        } else {
+            this._toggle.removeAttribute('aria-hidden');
+            this._toggle.tabIndex = 0;
+        }
     }
 }

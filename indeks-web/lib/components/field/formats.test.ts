@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 import {
     amountFormatterForLocale,
     createAmountFormatter,
+    createDateFormatter,
     createPatternFormatter,
+    isoFromDate,
+    normalizeDateDisplay,
+    parseDate,
     registerFormat,
     resolveFormat,
     type FieldFormatter,
@@ -112,6 +116,79 @@ describe('createPatternFormatter', () => {
     });
 });
 
+describe('createDateFormatter', () => {
+    const fmt = createDateFormatter();
+
+    it('nullutfyller enkeltsifret dag/måned til dd.mm.åååå', () => {
+        expect(fmt.format('1.1.2026')).toBe('01.01.2026');
+        expect(fmt.format('1.12.2026')).toBe('01.12.2026');
+        expect(fmt.format('24.1.2026')).toBe('24.01.2026');
+    });
+
+    it('lar allerede komplett dato stå (idempotent)', () => {
+        expect(fmt.format('01.01.2026')).toBe('01.01.2026');
+        expect(fmt.format('24.12.2026')).toBe('24.12.2026');
+        expect(fmt.format(fmt.format('1.1.2026'))).toBe('01.01.2026');
+    });
+
+    it('godtar 8 sifre uten skilletegn som ddmmåååå', () => {
+        expect(fmt.format('01012026')).toBe('01.01.2026');
+        expect(fmt.format('24122026')).toBe('24.12.2026');
+    });
+
+    it('viser ufullstendig dato verbatim (dropper aldri tegn)', () => {
+        // Mangler år / for kort år → ikke komplett, vis som skrevet.
+        expect(fmt.format('1.1.')).toBe('1.1.');
+        expect(fmt.format('1.1.26')).toBe('1.1.26');
+        expect(fmt.format('24.12')).toBe('24.12');
+        // 6 sifre uten skilletegn er tvetydig (vet ikke hvor grensene går).
+        expect(fmt.format('112026')).toBe('112026');
+    });
+
+    it('formaterer ikke ugyldig innhold — vises verbatim', () => {
+        expect(fmt.format('1.a.2026')).toBe('1.a.2026');
+        expect(fmt.format('1.1.1.2026')).toBe('1.1.1.2026');
+        expect(fmt.format('abc')).toBe('abc');
+    });
+
+    it('parse er identitet — punktumet er meningsfullt, ikke separator', () => {
+        expect(fmt.parse('01.01.2026')).toBe('01.01.2026');
+        expect(fmt.parse('1.1.2026')).toBe('1.1.2026');
+    });
+
+    it('formaterer på blur (live utelatt)', () => {
+        expect(fmt.live).toBeUndefined();
+    });
+});
+
+describe('parseDate / isoFromDate / normalizeDateDisplay', () => {
+    it('parseDate nullutfyller og krever 4-sifret år', () => {
+        expect(parseDate('1.1.2026')).toEqual({ day: '01', month: '01', year: '2026' });
+        expect(parseDate('24.12.2026')).toEqual({ day: '24', month: '12', year: '2026' });
+        expect(parseDate('01012026')).toEqual({ day: '01', month: '01', year: '2026' });
+    });
+
+    it('parseDate gir null for ufullstendig/tvetydig/ugyldig', () => {
+        expect(parseDate('1.1.')).toBeNull();
+        expect(parseDate('1.1.26')).toBeNull();
+        expect(parseDate('112026')).toBeNull();
+        expect(parseDate('1.a.2026')).toBeNull();
+        expect(parseDate('1.1.1.2026')).toBeNull();
+        expect(parseDate('')).toBeNull();
+    });
+
+    it('isoFromDate bygger ISO fra komplett dato, ellers tom', () => {
+        expect(isoFromDate('1.1.2026')).toBe('2026-01-01');
+        expect(isoFromDate('24.12.2026')).toBe('2026-12-24');
+        expect(isoFromDate('1.1.26')).toBe('');
+    });
+
+    it('normalizeDateDisplay nullutfyller komplett, ellers verbatim', () => {
+        expect(normalizeDateDisplay('1.1.2026')).toBe('01.01.2026');
+        expect(normalizeDateDisplay('1.1.')).toBe('1.1.');
+    });
+});
+
 describe('createAmountFormatter', () => {
     const fmt = createAmountFormatter({ groupSeparator: ' ', decimalSeparator: ',' });
 
@@ -202,10 +279,14 @@ describe('registry', () => {
 });
 
 describe('live-flagg', () => {
-    it('de innebygde variantene formaterer live', () => {
-        for (const name of ['phone', 'ssn', 'date', 'account', 'orgnr', 'amount']) {
+    it('de fast-bredde variantene formaterer live', () => {
+        for (const name of ['phone', 'ssn', 'account', 'orgnr', 'amount']) {
             expect(resolveFormat(name)!.live, name).toBe(true);
         }
+    });
+
+    it('date formaterer på blur (variabel-bredde, skilletegn-bevisst)', () => {
+        expect(resolveFormat('date')!.live).toBeFalsy();
     });
 
     it('egne pattern-/beløps-formattere er blur (live utelatt)', () => {

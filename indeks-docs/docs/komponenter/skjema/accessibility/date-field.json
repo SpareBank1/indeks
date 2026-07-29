@@ -1,6 +1,6 @@
 {
   "component": "DateField",
-  "lastReviewed": "2026-07-20",
+  "lastReviewed": "2026-07-29",
   "consumerResponsibilities": [
     {
       "summary": "Skriv beskrivende labeltekst",
@@ -9,7 +9,7 @@
     },
     {
       "summary": "Oppgi forventet format som synlig tekst",
-      "details": "Feltet formaterer det brukeren taster til dd.mm.åååå, men formatet må også stå som synlig hjelpetekst i description (f.eks. \"dd.mm.åååå\"). Formateringen alene er ikke nok — den vises først når brukeren begynner å skrive. Ikke bruk placeholder til dette; den forsvinner idet brukeren skriver og har svak kontrast.",
+      "details": "Feltet normaliserer det brukeren taster til dd.mm.åååå når feltet mister fokus, men formatet må også stå som synlig hjelpetekst i description (f.eks. \"dd.mm.åååå\"). Normaliseringen alene er ikke nok — den skjer først på blur, og teksten står urørt mens man skriver. Ikke bruk placeholder til dette; den forsvinner idet brukeren skriver og har svak kontrast.",
       "wcag": ["3.3.1", "3.3.2"]
     },
     {
@@ -39,13 +39,13 @@
     { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport uten horisontal scroll." },
     { "id": "1.4.11", "notes": "Ramme, fokusindikator og kalenderikon oppfyller 3:1 kontrastkrav." },
     { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
-    { "id": "2.1.1", "notes": "Å velge dato er fullt opererbart med tastatur ved å taste dd.mm.åååå i den synlige inputen — feltet formaterer fortløpende og avviser aldri tastetrykk. Den grafiske kalenderen er en peker-basert forbedring: både kalenderknappen og den overlagte native date-inputen er tabindex=-1, så de gir ingen ekstra tab-stopp og lager ingen kontroll som ikke virker for tastaturbrukere på nettlesere uten showPicker()." },
-    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab. Verken kalenderknappen eller den overlagte native inputen er i tab-rekkefølgen (begge tabindex=-1), så det finnes ingen tastaturfelle." },
-    { "id": "2.4.3", "notes": "Ett tab-stopp på den synlige inputfeltet, i naturlig DOM-rekkefølge. Kalenderknapp og native input er tabindex=-1." },
-    { "id": "2.4.7", "notes": "Tydelig fokusindikator på inputfeltet (arves fra text-field). Kalenderknappen har også en focus-visible-regel, men nås kun med peker." },
+    { "id": "2.1.1", "notes": "Å velge dato er fullt opererbart med tastatur på to måter: (1) tast datoen i den synlige inputen — feltet er skilletegn-bevisst (godtar 1.1.2026), avviser aldri tastetrykk, lar teksten stå urørt mens man skriver og normaliserer til dd.mm.åååå på blur; (2) tab til kalenderknappen og trykk Enter/Mellomrom for å åpne OS-kalenderen (showPicker() utløses av tastaturaktiveringen). På desktop er knappen i tab-rekkefølgen. På touch er knappen tabindex=-1 og aria-hidden — der er tasting i feltet primærveien og et tapp åpner den native velgeren. Den overlagte native date-inputen er alltid tabindex=-1, så den lager aldri et ekstra tab-stopp." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab. Kalenderknappen (desktop) og inputen er vanlige fokuserbare kontroller uten fokusfeller; den overlagte native inputen er tabindex=-1 og fanger aldri fokus." },
+    { "id": "2.4.3", "notes": "På desktop to tab-stopp i naturlig DOM-rekkefølge: den synlige inputen, deretter kalenderknappen. På touch ett tab-stopp (knappen er tabindex=-1). Den overlagte native inputen er alltid tabindex=-1." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator på inputfeltet (arves fra text-field) og på kalenderknappen (focus-visible med --ix-outline-default), så tastaturbrukere ser hvor fokus står når de tabber til knappen på desktop." },
     { "id": "2.5.8", "notes": "Kalenderknappen oppfyller minimum 44x44px klikkflate; den overlagte native inputen dekker samme flate." },
     { "id": "3.2.1", "notes": "Fokus alene trigger ingen kontekstendring — kalenderen åpnes først ved klikk/tap på kalenderknappen (eller den overlagte native inputen)." },
-    { "id": "3.2.2", "notes": "Tasting reformaterer til dd.mm.åååå med eksplisitt markørstyring, men bytter aldri fokus eller side. Kalendervalg fyller feltet uten uventet kontekstendring." },
+    { "id": "3.2.2", "notes": "Feltet endrer aldri teksten mens man skriver; det normaliserer til dd.mm.åååå først når feltet mister fokus, og bytter aldri fokus eller side. Kalendervalg fyller feltet uten uventet kontekstendring." },
     { "id": "4.1.2", "notes": "Native tekst-input og native date-input med implisitte roller. Kalenderknappen er en native button med tilgjengelig navn fra openLabel/data-open-label. Tilstander (disabled, readonly, invalid) eksponeres korrekt." }
   ],
   "notRelevant": [
@@ -83,13 +83,14 @@
     { "id": "4.1.3", "reason": "Feilmeldinger håndteres via ix-field sin aria-live=\"polite\" (dekket av 3.3.1). Ingen øvrige statusmeldinger." }
   ],
   "keyboard": [
-    { "key": "Tab", "action": "Flytter fokus til inputfeltet (kalenderknappen er ikke i tab-rekkefølgen)" },
+    { "key": "Tab", "action": "Flytter fokus til inputfeltet, deretter til kalenderknappen (kun desktop)" },
     { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
-    { "key": "Sifre", "action": "Skriver datoen; feltet formaterer fortløpende til dd.mm.åååå" }
+    { "key": "Sifre", "action": "Skriver datoen (1.1.2026 eller 01.01.2026); feltet normaliserer til dd.mm.åååå når det mister fokus" },
+    { "key": "Enter / Mellomrom", "action": "Åpner OS-kalenderen når kalenderknappen har fokus" }
   ],
   "screenReader": [
     "Ved fokus på feltet: \"[label], rediger tekst, [hjelpetekst]\"",
-    "Kalenderknappen er peker-basert (tabindex=-1) og skjules fra skjermleser på touch-enheter; datoen tastes i selve feltet",
+    "På desktop: kalenderknappen er et eget tab-stopp og leses som \"[openLabel], knapp\" — Enter/Mellomrom åpner kalenderen. På touch er knappen tabindex=-1 og skjult for skjermleser; datoen tastes i feltet og et tapp åpner den native velgeren",
     "Ved feil: \"[label], ugyldig, rediger tekst, [feilmelding]\"",
     "Med skjult label: \"[label], rediger tekst\" — labelen leses opp selv om den ikke er synlig"
   ]
