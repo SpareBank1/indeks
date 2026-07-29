@@ -112,3 +112,30 @@ describe('build-colors CLI (dist/cli.js)', () => {
         expect(stdout).toContain('Usage: build-colors');
     });
 });
+
+/**
+ * Integrasjonstest for det publiserte runtime-API-et (`dist/generate.js`,
+ * subpath-eksport `@sb1/indeks-tokens/generate`).
+ *
+ * Fanger opp om vi brekker esbuild-bygget (build:generate) eller exports-oppsettet
+ * som gjør at konsumenter kan `import { buildColorScaleVariables } from
+ * '@sb1/indeks-tokens/generate'` — i browser eller Node.
+ */
+describe('runtime-API (dist/generate.js)', () => {
+    const generatePath = join(pkgRoot, 'dist/generate.js');
+
+    beforeAll(() => {
+        // Bygg bundelen fra kilde, så testen fanger et ødelagt esbuild-oppsett.
+        execFileSync('pnpm', ['run', 'build:generate'], { cwd: pkgRoot, stdio: 'pipe' });
+        expect(existsSync(generatePath)).toBe(true);
+    }, 60_000);
+
+    it('eksporterer buildColorScaleVariables og gir en var-map', async () => {
+        const mod = await import(generatePath);
+        expect(typeof mod.buildColorScaleVariables).toBe('function');
+
+        const vars = mod.buildColorScaleVariables('brand', '#0078D8');
+        expect(vars['--ii-primitive-brand-0']).toMatch(/^#[0-9a-fA-F]{6}$/);
+        expect(vars['--ii-primitive-brand-950']).toMatch(/^#[0-9a-fA-F]{6}$/);
+    });
+});

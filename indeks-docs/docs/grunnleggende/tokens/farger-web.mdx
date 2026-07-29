@@ -67,6 +67,79 @@ Bruker du både `@sb1/indeks-css` (for komponent-CSS) og ditt eget theme, er det
 Ditt eget theme overstyrer bare indeks-css hvis det importeres **etter** indeks-css. Lastes det før — eller uten kontroll på rekkefølgen i bundleren — vinner indeks-css, og temaet får stille ingen effekt.
 :::
 
+## Generere farger i runtime
+
+Trenger du å endre farger **on-the-fly** — typisk å bytte `brand`-fargen basert på brukervalg
+eller merkevare — kan du generere fargeskalaer i runtime, både i nettleseren og i en Node-backend.
+Da bruker du subpath-eksporten `@sb1/indeks-tokens/generate`.
+
+:::info Da blir `@sb1/indeks-tokens` en ekte avhengighet
+Ved standard bruk (ferdig CSS) trenger du bare `@sb1/indeks-css`. Men bruker du runtime-API-et,
+importerer applikasjonskoden din faktisk JavaScript fra `@sb1/indeks-tokens` — da må pakken ligge
+under `dependencies` (ikke `devDependencies`) i din `package.json`:
+
+```bash
+npm install @sb1/indeks-tokens
+```
+
+Fargematematikken (`colorjs.io`) er bundlet inn i eksporten, så du får ingen ekstra
+avhengigheter å forholde deg til.
+:::
+
+### Slik henger det sammen
+
+De semantiske fargetokenene (`--ix-color-*`) peker på primitivene via `var(--ii-primitive-*)`.
+For å rethem-e i runtime trenger du derfor **bare** å regenerere primitiv-skalaen for de(n)
+basisfargen(e) du vil endre og sette `--ii-primitive-<navn>-<steg>` på et scope — alle de
+semantiske tokenene re-resolver seg selv via `var()`-kaskaden. Du skal **aldri** regenerere det
+semantiske laget selv.
+
+:::info Eneste tillatte bruk av `--ii-`
+`--ii-primitive-*` er ellers interne (se over). Runtime-generering er det ene stedet der du
+bevisst setter dem. API-et eier navnekonvensjonen og `gray-0 = #FFFFFF`-unntaket for deg, så du
+slipper å hardkode dem.
+:::
+
+### API
+
+- **`buildColorScaleVariables(navn, farge)`** — bygger en 20-trinns skala fra én basisfarge og
+  returnerer en ferdig CSS-variabel-map: `{ '--ii-primitive-brand-0': '#…', … }`.
+- **`applyColorScaleVariables(element, variabler)`** — setter map-en som inline-styling på et
+  element (nettleser).
+- **`colorScaleVariablesToCss(variabler, { selector })`** — serialiserer map-en til en CSS-streng
+  (Node-backend / injeksjon i `<head>`). `selector` er valgfri, standard `:root`.
+
+De to hjelperne tar en variabel-map, så du kan slå sammen flere skalaer:
+`{ ...buildColorScaleVariables('brand', a), ...buildColorScaleVariables('info', b) }`.
+
+### I nettleseren
+
+```js
+import { buildColorScaleVariables, applyColorScaleVariables } from '@sb1/indeks-tokens/generate';
+
+const vars = buildColorScaleVariables('brand', '#E4002B');
+applyColorScaleVariables(document.documentElement, vars);
+// Alle --ix-color-* som bygger på brand oppdateres nå automatisk.
+```
+
+### I en Node-backend
+
+Generér en CSS-streng du kan sende til klienten (f.eks. injisert i `<head>`):
+
+```js
+import { buildColorScaleVariables, colorScaleVariablesToCss } from '@sb1/indeks-tokens/generate';
+
+const vars = buildColorScaleVariables('brand', '#E4002B');
+const css = colorScaleVariablesToCss(vars);
+// ':root {\n  --ii-primitive-brand-0: #…;\n  … \n}'
+
+// Vil du scope temaet til et delområde i stedet for hele siden:
+const scoped = colorScaleVariablesToCss(vars, { selector: '.min-merkevare' });
+```
+
+Se [Fargeskalaer](./fargeskalaer) for hva basisfargen faktisk styrer (fargetone og metning —
+ikke lyshet).
+
 ## Eksempel på egen theme-fil
 
 Theme-fila er en JSON-fil med de sju basisfargene. `identityColor` og `themeable` (font, border-radius) er valgfrie. Lag en fil `my-theme.json`:
