@@ -3,7 +3,7 @@ import { ColorOverrideProvider, useColorOverrides } from '../contexts/ColorOverr
 import { SpacingProvider, useSpacing } from '../contexts/SpacingContext';
 import Layout from './Layout';
 import { SettingsPopover } from './SettingsPopover';
-import { DEFAULT_THEME, isValidTheme } from './themeConfig';
+import { DEFAULT_THEME, isValidTheme, themeStylesheetHref } from './themeConfig';
 
 const THEME_STORAGE_KEY = 'indeks-eksempel-theme';
 const THEME_LINK_ID = 'active-theme-stylesheet';
@@ -36,12 +36,10 @@ const BodyContent: React.FC = () => {
             link.rel = 'stylesheet';
             document.head.appendChild(link);
         }
-        // Bygg href fra en validert konstant (én av de kjente theme-literalene),
-        // aldri direkte fra den lagrede strengen — lukker CodeQL-funnet om at
-        // untrusted DOM/localStorage-tekst styrer <link>-URL-en.
-        const safeTheme = isValidTheme(theme) ? theme : DEFAULT_THEME;
-        link.href = `./themes/${safeTheme}.css`;
-        localStorage.setItem(THEME_STORAGE_KEY, safeTheme);
+        // href bygges fra allowlist-konstanten, ikke fra theme-strengen selv, så
+        // ingen untrusted localStorage-tekst kan flyte inn i <link href>.
+        link.href = themeStylesheetHref(theme);
+        localStorage.setItem(THEME_STORAGE_KEY, theme);
     }, [theme]);
 
     const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
