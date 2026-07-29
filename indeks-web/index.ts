@@ -31,6 +31,7 @@ export { IxRadioGroup };
 export { IxCheckboxGroup };
 export { IxCombobox };
 export { IxProgressBar };
+export type { ProgressBarState } from './lib/components/progress-bar/IxProgressBar.js';
 export { IxTabs, IxTabList, IxTab, IxTabPanel };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
