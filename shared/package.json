@@ -8,8 +8,7 @@
     "description": "",
     "private": true,
     "scripts": {
-        "test": "vitest",
-        "build": "echo not implemented"
+        "test": "vitest"
     },
     "devDependencies": {
         "vitest": "^4.1.10"
