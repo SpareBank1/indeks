@@ -15,7 +15,10 @@
  */
 
 export interface ClassDictionary {
-    [key: string]: boolean | number | undefined | null;
+    // Verdien tolkes kun som truthy/falsy — nøkkelen tas med når verdien er truthy.
+    // Tillater vilkårlige verdier fordi kall-steder bruker f.eks. `{ [`ix-m-${x}`]: x }`
+    // der `x` er en streng.
+    [key: string]: unknown;
 }
 
 export type ClassValue = string | number | boolean | null | undefined | ClassDictionary | ClassValue[];
