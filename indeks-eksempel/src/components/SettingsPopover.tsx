@@ -6,6 +6,7 @@ interface SettingsPopoverProps {
     onFontSizeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onThemeChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
     onNativeChange: (enabled: boolean) => void;
+    onResetColors: () => void;
     fontSize: number;
     nativeMode: boolean;
 }
@@ -15,6 +16,7 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
     onFontSizeChange,
     onThemeChange,
     onNativeChange,
+    onResetColors,
     fontSize,
     nativeMode,
 }) => {
@@ -101,6 +103,14 @@ export const SettingsPopover: React.FC<SettingsPopoverProps> = ({
                             />
                             Native-modus
                         </label>
+
+                        <button
+                            type="button"
+                            className="ix-border-default ix-p-2xs"
+                            onClick={onResetColors}
+                        >
+                            Nullstill farger
+                        </button>
                     </VStack>
                 </div>
             )}

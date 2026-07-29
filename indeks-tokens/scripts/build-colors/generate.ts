@@ -2,6 +2,10 @@ import { buildColorScale } from './buildThemeColors';
 import { DEFAULT_STEPS } from '../../themes/types';
 import type { OriginColor, OriginScaleNames } from '../../themes/types';
 
+// Re-eksporterer typene konsumenter trenger for å type sine egne kall, så de slipper
+// å grave i interne stier. Del av det offentlige `@sb1/indeks-tokens/generate`-API-et.
+export type { OriginColor, OriginScaleNames } from '../../themes/types';
+
 /**
  * Runtime-API for å generere fargeskalaer «on-the-fly» — i en Node-backend eller
  * rett i nettleseren.

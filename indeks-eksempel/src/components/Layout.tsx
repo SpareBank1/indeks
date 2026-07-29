@@ -24,6 +24,7 @@ export default function Layout() {
         { path: 'typografi-eksempler', label: 'Typografi-eksempler' },
         { path: 'fargeskalaer-eksempler', label: 'Fargeskalaer' },
         { path: 'form-validering', label: 'Form-validering' },
+        { path: 'generer-farger', label: 'Generer farger' },
     ];
 
     return (

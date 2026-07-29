@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import { ColorOverrideProvider, useColorOverrides } from '../contexts/ColorOverrideContext';
 import { SpacingProvider, useSpacing } from '../contexts/SpacingContext';
 import Layout from './Layout';
 import { SettingsPopover } from './SettingsPopover';
 
 const BodyContent: React.FC = () => {
     const { updateSpacing } = useSpacing();
+    const { resetColors } = useColorOverrides();
     const [fontSize, setFontSize] = React.useState(16);
     const [nativeMode, setNativeMode] = React.useState(false);
 
@@ -52,6 +54,7 @@ const BodyContent: React.FC = () => {
                 onFontSizeChange={handleFontSizeChange}
                 onThemeChange={handleThemeChange}
                 onNativeChange={setNativeMode}
+                onResetColors={resetColors}
                 fontSize={fontSize}
                 nativeMode={nativeMode}
             />
@@ -63,7 +66,9 @@ const BodyContent: React.FC = () => {
 const BodyWrapper: React.FC = () => {
     return (
         <SpacingProvider>
-            <BodyContent />
+            <ColorOverrideProvider>
+                <BodyContent />
+            </ColorOverrideProvider>
         </SpacingProvider>
     );
 };
