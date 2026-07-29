@@ -1,9 +1,11 @@
+import EksempelLink from '@site/src/components/EksempelLink';
+
 # Form-validering
 
 Indeks sine form-komponenter er **bring-your-own-validation**: hver komponent tar en ferdig `errorMessage`-streng og viser den (og setter `aria-invalid` selv). Selve valideringen — reglene og feilmeldingene — overlater vi til et form-rammeverk og et skjema. Denne siden viser det anbefalte oppsettet med [React Hook Form](https://react-hook-form.com/) (RHF) og [Valibot](https://valibot.dev/).
 
-:::tip Kjørbart eksempel
-Et fullstendig, kjørbart eksempel med alle felttyper finnes i `indeks-eksempel` under **Intern testing → Form-validering**, og dekkes av en funksjonell Playwright-e2e-test (`indeks-eksempel/tests/form-validering.spec.ts`).
+:::tip Se det i praksis
+Et fullstendig, kjørbart eksempel med alle felttyper ligger i eksempelappen: <EksempelLink to="internTesting/form-validering">åpne Form-validering</EksempelLink>. Kildekoden: [`indeks-eksempel/src/pages/openPages/FormValidering.tsx`](https://github.com/SpareBank1/indeks/blob/main/indeks-eksempel/src/pages/openPages/FormValidering.tsx). Eksemplet dekkes også av en funksjonell Playwright-e2e-test ([`indeks-eksempel/tests/form-validering.spec.ts`](https://github.com/SpareBank1/indeks/blob/main/indeks-eksempel/tests/form-validering.spec.ts)).
 :::
 
 ## Oppsett
@@ -30,62 +32,124 @@ const { register, handleSubmit, control, formState: { errors } } = useForm({
 });
 ```
 
-## To integrasjonsmønstre
+`control` trenger du bare hvis du kobler et felt med `<Controller>` — se [Felt som trenger to-veis binding](#felt-som-trenger-to-veis-binding-controller).
 
-Komponentene deler seg i to grupper etter hvordan de kobles til RHF.
+## Koble et felt til skjemaet
 
-### Mønster A — `register()`
-
-For komponenter som kobler seg til RHF med et change-event i RHF-form: **`TextField`, `TextArea`, `Select`, `Checkbox`, `Combobox`, `RadioGroup`, `CheckboxGroup`**. Spre `register('felt')` rett på komponenten:
+Alle Indeks sine form-komponenter kobles på samme måte: **spre `register('feltnavn')` rett på komponenten** og send `errors.feltnavn?.message` til `errorMessage`. Ingen wrapper, ingen ekstra re-render per tastetrykk.
 
 ```tsx
 <TextField label="Navn" {...register('navn')} errorMessage={errors.navn?.message} />
 <TextField label="E-post" type="email" {...register('epost')} errorMessage={errors.epost?.message} />
 <Select label="Fra konto" options={kontoOptions} {...register('fraKonto')} errorMessage={errors.fraKonto?.message} />
 <Checkbox label="Jeg godtar vilkårene" {...register('samtykke')} errorMessage={errors.samtykke?.message} />
-<Combobox label="Land" options={landOptions} noHitsText="Ingen treff" {...register('land')} errorMessage={errors.land?.message} />
+<TextArea label="Melding" {...register('melding')} errorMessage={errors.melding?.message} />
 <RadioGroup legend="Kontotype" options={kontotypeOptions} {...register('kontotype')} errorMessage={errors.kontotype?.message} />
 <CheckboxGroup legend="Tjenester" options={tjenesteOptions} {...register('tjenester')} errorMessage={errors.tjenester?.message} />
-```
-
-De fleste videresender `ref` til et native `<input>`/`<textarea>`/`<select>`. `RadioGroup` og `CheckboxGroup` rendrer ekte `<input type="radio">`/`<input type="checkbox">` og ruter `register`-objektet (`ref`/`onChange`/`onBlur`) rett ned på hver input — RHF eier `checked` via de native refene, akkurat slik `register()` er bygget for radio- og checkbox-grupper. `Combobox` er litt annerledes: `ref` går til web-komponenten (som eier fokus ved valideringsfeil), og `onChange` sender et syntetisk event der verdien ligger i `event.target.value` — se [egen note under](#combobox-med-register).
-
-Dette er den enkleste og mest effektive koblingen — ingen wrapper, ingen ekstra re-render per tastetrykk.
-
-### Mønster B — `<Controller>`
-
-Alle Indeks sine form-komponenter kobles i dag med `register()` (Mønster A) — det finnes ingen komponent i standardsettet som *krever* `<Controller>`. Mønsteret er likevel verdt å kjenne til: for komponenter der `field.value` ikke er en enkel input-verdi, eller når du vil kontrollere verdien fullt ut i React, kan du bruke `<Controller>` og map `field.value` → `value` og `field.onChange` → komponentens `onChange`. `RadioGroup`, `CheckboxGroup` og `Combobox` støtter alle dette (event-basert `onChange`), men `register()` er den enkleste koblingen der den holder.
-
-### `RadioGroup` og `CheckboxGroup` med `register()`
-
-Begge rendrer ekte native inputs (`<input type="radio">` / `<input type="checkbox">`, alle med samme `name`), så de kobles slik `register()` er *bygget* for radio- og checkbox-grupper: `register`-objektet rutes rett ned på hver input. `ref` samles av RHF i en refs-array (én per input), og RHF leser/skriver `checked` direkte på de native refene. React setter derfor **ikke** `checked` i register-modus — det ville slåss mot RHF sine DOM-skrivinger.
-
-En praktisk konsekvens: i motsetning til `Combobox`, trenger du **ikke** en egen `defaultValue`. RHF skriver `checked` fra `defaultValues` i `useForm` inn på de native refene ved mount, så forhåndsvalgte alternativer vises automatisk.
-
-```tsx
-<RadioGroup legend="Kontotype" options={kontotypeOptions} {...register('kontotype')} errorMessage={errors.kontotype?.message} />
-<CheckboxGroup legend="Tjenester" options={tjenesteOptions} {...register('tjenester')} errorMessage={errors.tjenester?.message} />
-```
-
-`onChange` er event-basert (verdien ligger i `event.target.value`), så både `register()` og `<Controller>` binder likt. Forskjellen: `RadioGroup` har én valgt verdi (`string`), mens `CheckboxGroup` samler de avmerkede verdiene til et `string[]` — RHF bygger arrayet fra `checked`+`value` på inputene som deler `name`.
-
-### `Combobox` med `register()`
-
-`Combobox` foretrekker `register()` (Mønster A), men det er verdt å forstå hvorfor den likevel skiller seg litt fra de andre. Komponenten sender et **syntetisk change-event** på RHF-form — `{ target: { name, value } }`, der `value` er `string` i single og `string[]` i multi. Det er den samme formen `<Controller>` selv bygger internt, så både `register()` og `<Controller>` leser verdien likt via `event.target.value`. (Vi kan ikke videresende det ekte `<select>`-eventet: en native select har `.type`, som får `register` til å lese verdien fra ref-en i stedet, og `.value` på en multiple-select gir kun første valgte option.)
-
-`ref` går til web-komponenten (ikke selecten), som flytter fokus til søkefeltet når skjemaet fokuserer feltet ved valideringsfeil.
-
-```tsx
 <Combobox label="Land" options={landOptions} noHitsText="Ingen treff" {...register('land')} errorMessage={errors.land?.message} />
 ```
 
-:::note Initialverdi og programmatisk endring ved `register()`
-`register()`-koblingen på `Combobox` går **én vei** (UI → skjema): verdien flyter inn i RHF via det syntetiske change-eventet. Fordi `ref` peker på web-komponenten (ikke en native input RHF kan skrive `value` på), gjelder to ting:
+Dette holder for de aller fleste skjemaer. `register()` gir én-veis binding (UI → skjema) — verdien flyter inn i RHF, og RHF validerer og sender inn. De to avsnittene under dekker to spesialtilfeller du kan møte: gruppevalg (radio/checkbox) og felt som trenger to-veis binding.
 
-- **Initialverdi:** `defaultValues` i `useForm` pushes ikke inn i komponenten. Vil du vise et forhåndsvalgt alternativ, sett `defaultValue` på `Combobox` i tillegg (og hold det i synk med `defaultValues`).
-- **Programmatisk endring:** `reset()` og `setValue()` oppdaterer RHF sin egen tilstand (og dermed innsendt verdi), men **oppdaterer ikke det synlige valget i `Combobox`-en**. I motsetning til `RadioGroup`/`CheckboxGroup` — der RHF skriver `checked` rett på de native refene — har web-komponenten ingen ref RHF kan skrive tilbake gjennom.
+### Komplett eksempel
 
-Trenger du full toveis binding (skjema → UI ved `reset`/`setValue`, eller kontrollert verdi), bruk `<Controller>` og bind `value` + `field.onChange`.
+```tsx
+import { valibotResolver } from '@hookform/resolvers/valibot';
+import { useForm } from 'react-hook-form';
+import * as v from 'valibot';
+import { Button, Form, TextField } from '@sb1/indeks-react';
+
+const schema = v.object({
+    navn: v.pipe(v.string(), v.trim(), v.minLength(2, 'Navn må ha minst 2 tegn')),
+    epost: v.pipe(v.string(), v.trim(), v.nonEmpty('E-post er påkrevd'), v.email('Ugyldig e-postadresse')),
+});
+
+function Kontaktskjema() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: valibotResolver(schema),
+        defaultValues: { navn: '', epost: '' },
+    });
+
+    return (
+        <Form onSubmit={handleSubmit((data) => console.log(data))} noValidate>
+            <TextField label="Navn" {...register('navn')} errorMessage={errors.navn?.message} />
+            <TextField label="E-post" type="email" {...register('epost')} errorMessage={errors.epost?.message} />
+            <Button type="submit">Send inn</Button>
+        </Form>
+    );
+}
+```
+
+## Gruppevalg: `RadioGroup` og `CheckboxGroup`
+
+Begge kobles med `register()` som over. Under panseret rendrer de ekte native inputs (`<input type="radio">` / `<input type="checkbox">`, alle med samme `name`), og `register`-objektet rutes rett ned på hver input — akkurat slik `register()` er *bygget* for radio- og checkbox-grupper. RHF eier `checked` via de native refene.
+
+To ting følger av dette:
+
+- **Forhåndsvalg kommer gratis fra `defaultValues`.** RHF skriver `checked` fra `useForm`-`defaultValues` inn på inputene ved mount — du trenger ikke sette `defaultValue` på selve gruppen.
+- **`RadioGroup` gir én verdi (`string`), `CheckboxGroup` gir et array (`string[]`).** RHF bygger arrayet fra `checked`+`value` på inputene som deler `name`.
+
+```tsx
+const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: valibotResolver(schema),
+    defaultValues: { kontotype: 'privat', tjenester: ['nettbank'] },
+});
+
+<RadioGroup
+    legend="Kontotype"
+    options={[
+        { value: 'privat', label: 'Privatkonto' },
+        { value: 'bedrift', label: 'Bedriftskonto' },
+    ]}
+    {...register('kontotype')}
+    errorMessage={errors.kontotype?.message}
+/>
+<CheckboxGroup
+    legend="Tjenester"
+    options={[
+        { value: 'nettbank', label: 'Nettbank' },
+        { value: 'kort', label: 'Kort' },
+    ]}
+    {...register('tjenester')}
+    errorMessage={errors.tjenester?.message}
+/>
+```
+
+## Felt som trenger to-veis binding: `<Controller>`
+
+`register()` binder én vei (UI → skjema). Trenger du at skjemaet også skal styre UI-et — for eksempel at `reset()`/`setValue()` skal oppdatere det synlige valget, eller at du vil kontrollere verdien fullt ut i React — bruk RHF sin `<Controller>` og bind `value` + `field.onChange`.
+
+Dette er særlig relevant for `Combobox`. Med `register()` peker `ref` på web-komponenten (som eier fokus ved valideringsfeil), og verdien flyter inn via et syntetisk change-event — men RHF har ingen native input å *skrive tilbake* gjennom, så `reset()`/`setValue()` oppdaterer ikke det synlige valget. `<Controller>` løser det:
+
+```tsx
+import { Controller, useForm } from 'react-hook-form';
+import { Combobox } from '@sb1/indeks-react';
+
+<Controller
+    control={control}
+    name="land"
+    render={({ field, fieldState }) => (
+        <Combobox
+            label="Land"
+            options={landOptions}
+            noHitsText="Ingen treff"
+            value={field.value}
+            onChange={(event) => field.onChange(event.target.value)}
+            onBlur={field.onBlur}
+            errorMessage={fieldState.error?.message}
+        />
+    )}
+/>
+```
+
+`Combobox` sitt `onChange` sender et event der verdien ligger i `event.target.value` (`string` i single, `string[]` i multi) — samme form som `register()` leser, så mappingen til `field.onChange` er triviell. `RadioGroup` og `CheckboxGroup` støtter også `<Controller>` på samme vis, men der holder `register()` nesten alltid.
+
+:::note `Combobox` med `register()` — initialverdi
+Bruker du `register()` (ikke `<Controller>`) og vil vise et forhåndsvalgt alternativ: sett `defaultValue` på `Combobox` i tillegg til `defaultValues` i `useForm`, og hold dem i synk. `defaultValues` alene pushes ikke inn i web-komponenten.
 :::
 
 ## `TextField` med formatering
