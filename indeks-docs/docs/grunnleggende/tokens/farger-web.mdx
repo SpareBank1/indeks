@@ -39,7 +39,7 @@ css/
     └── <theme-navn>.css
 ```
 
-- **`themes/<theme-navn>.css`** — primitivene (`--ii-primitive-*`), altså de fullstendige fargeskalaene generert fra basisfargene i themet ditt.
+- **`themes/<theme-navn>.css`** — primitivene (`--ii-primitive-*`), altså de fullstendige [fargeskalaene](./fargeskalaer) generert fra basisfargene i themet ditt. Merk at basisfargen kun styrer fargetone og metning — lysheten settes per trinn, så å gjøre en basisfarge lysere eller mørkere endrer ikke skalaen.
 - **`colors.css`** — de semantiske fargene (`--ix-color-*`), som peker inn i primitivene. Denne inneholder både light mode (`:root`, `.ix-light-mode`), dark mode (`.ix-dark-mode`) og `prefers-color-scheme`-håndtering.
 
 :::info `--ii-` vs `--ix-`
