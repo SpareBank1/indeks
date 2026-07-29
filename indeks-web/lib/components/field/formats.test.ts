@@ -136,10 +136,15 @@ describe('createDateFormatter', () => {
         expect(fmt.format('24122026')).toBe('24.12.2026');
     });
 
+    it('utvider 2-sifret år til 20xx', () => {
+        expect(fmt.format('1.1.26')).toBe('01.01.2026');
+        expect(fmt.format('24.12.99')).toBe('24.12.2099');
+        expect(fmt.format('1.1.00')).toBe('01.01.2000');
+    });
+
     it('viser ufullstendig dato verbatim (dropper aldri tegn)', () => {
-        // Mangler år / for kort år → ikke komplett, vis som skrevet.
+        // Mangler år → ikke komplett, vis som skrevet.
         expect(fmt.format('1.1.')).toBe('1.1.');
-        expect(fmt.format('1.1.26')).toBe('1.1.26');
         expect(fmt.format('24.12')).toBe('24.12');
         // 6 sifre uten skilletegn er tvetydig (vet ikke hvor grensene går).
         expect(fmt.format('112026')).toBe('112026');
@@ -162,15 +167,20 @@ describe('createDateFormatter', () => {
 });
 
 describe('parseDate / isoFromDate / normalizeDateDisplay', () => {
-    it('parseDate nullutfyller og krever 4-sifret år', () => {
+    it('parseDate nullutfyller og godtar 2- eller 4-sifret år', () => {
         expect(parseDate('1.1.2026')).toEqual({ day: '01', month: '01', year: '2026' });
         expect(parseDate('24.12.2026')).toEqual({ day: '24', month: '12', year: '2026' });
         expect(parseDate('01012026')).toEqual({ day: '01', month: '01', year: '2026' });
     });
 
+    it('parseDate utvider 2-sifret år til 20xx', () => {
+        expect(parseDate('1.1.26')).toEqual({ day: '01', month: '01', year: '2026' });
+        expect(parseDate('24.12.99')).toEqual({ day: '24', month: '12', year: '2099' });
+        expect(parseDate('1.1.00')).toEqual({ day: '01', month: '01', year: '2000' });
+    });
+
     it('parseDate gir null for ufullstendig/tvetydig/ugyldig', () => {
         expect(parseDate('1.1.')).toBeNull();
-        expect(parseDate('1.1.26')).toBeNull();
         expect(parseDate('112026')).toBeNull();
         expect(parseDate('1.a.2026')).toBeNull();
         expect(parseDate('1.1.1.2026')).toBeNull();
@@ -180,7 +190,7 @@ describe('parseDate / isoFromDate / normalizeDateDisplay', () => {
     it('isoFromDate bygger ISO fra komplett dato, ellers tom', () => {
         expect(isoFromDate('1.1.2026')).toBe('2026-01-01');
         expect(isoFromDate('24.12.2026')).toBe('2026-12-24');
-        expect(isoFromDate('1.1.26')).toBe('');
+        expect(isoFromDate('1.1.26')).toBe('2026-01-01');
     });
 
     it('normalizeDateDisplay nullutfyller komplett, ellers verbatim', () => {

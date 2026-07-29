@@ -188,7 +188,8 @@ export interface DateParts {
  * Komplett dato → nullutfylte deler; ufullstendig/tvetydig → `null`.
  *
  *   - Med punktum: nøyaktig 3 rent-numeriske segmenter, dag/måned 1-2 sifre,
- *     år nøyaktig 4 sifre. Dag/måned nullutfylles. `"1.1.2026"` → 01/01/2026.
+ *     år 2 eller 4 sifre. Dag/måned nullutfylles; 2-sifret år utvides til `20xx`
+ *     (`"26"` → `"2026"`). `"1.1.2026"` og `"1.1.26"` → begge 01/01/2026.
  *   - Uten punktum: nøyaktig 8 sifre tolkes som ddmmåååå (`"01012026"`). Annen
  *     lengde uten skilletegn (f.eks. `"112026"`) er tvetydig — vi kan ikke vite
  *     hvor grensene går uten punktum — og regnes ufullstendig → `null`.
@@ -201,8 +202,9 @@ export function parseDate(display: string): DateParts | null {
         const segments = trimmed.split('.');
         if (segments.length !== 3) return null;
         const [day, month, year] = segments;
-        if (!/^\d{1,2}$/.test(day) || !/^\d{1,2}$/.test(month) || !/^\d{4}$/.test(year)) return null;
-        return { day: day.padStart(2, '0'), month: month.padStart(2, '0'), year };
+        if (!/^\d{1,2}$/.test(day) || !/^\d{1,2}$/.test(month) || !/^(\d{2}|\d{4})$/.test(year)) return null;
+        const fullYear = year.length === 2 ? `20${year}` : year;
+        return { day: day.padStart(2, '0'), month: month.padStart(2, '0'), year: fullYear };
     }
 
     if (/^\d{8}$/.test(trimmed)) {

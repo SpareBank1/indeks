@@ -182,6 +182,18 @@ describe('IxDateField', () => {
         expect(nativeInput(el).value).toBe('2026-01-01');
     });
 
+    it('2-sifret år (1.1.26) → native får ISO med 20xx', () => {
+        const el = mount(`
+            <ix-date-field data-open-label="Åpne kalender">
+                <div class="ix-text-field"><input data-format="date" /></div>
+            </ix-date-field>
+        `);
+        const input = visibleInput(el);
+        input.value = '1.1.26';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        expect(nativeInput(el).value).toBe('2026-01-01');
+    });
+
     it('ufullstendig/tvetydig verdi gir tom native ISO', () => {
         const el = mount(`
             <ix-date-field data-open-label="Åpne kalender">
@@ -189,7 +201,7 @@ describe('IxDateField', () => {
             </ix-date-field>
         `);
         const input = visibleInput(el);
-        for (const value of ['1.1.', '1.1.26', '112026']) {
+        for (const value of ['1.1.', '112026']) {
             input.value = value;
             input.dispatchEvent(new Event('input', { bubbles: true }));
             expect(nativeInput(el).value, value).toBe('');
