@@ -1,6 +1,7 @@
 import { forwardRef, type ReactNode, useCallback, useEffect, useId, useLayoutEffect, useRef } from 'react';
 import { Field } from '../field/Field';
 import type { IxField } from '@sb1/indeks-web';
+import { createFieldEvent } from '../synthetic-events';
 import type { FieldFormatter, FormatName } from './text-field-formats';
 
 export type { FieldFormatter, FormatName, BuiltInFormatName } from './text-field-formats';
@@ -145,13 +146,13 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
             const cb = onChangeRef.current;
             if (!cb) return;
             const raw = fieldRef.current?.rawValue ?? input.value;
-            // Lever en React-lignende ChangeEvent der target.value er rå. Vi bruker en
-            // lettvekts stand-in (ikke Object.create(input) — det ville brutt
-            // jsdom/React sin brand-sjekk på HTMLInputElement) som eksponerer det
-            // konsumenten (og RHF) leser: value, name, id. Bruk name-PROPPEN, ikke
-            // input.name — ix-field har byttet den synlige inputen til `${name}_formatted`.
-            const target = { value: raw, name: name ?? input.name, id: input.id };
-            cb({ ...event, target, currentTarget: target, nativeEvent: event } as unknown as React.ChangeEvent<HTMLInputElement>);
+            // Lever en React-lignende ChangeEvent der target.value er rå, i den delte
+            // syntetiske formen (se ../synthetic-events). Vi kan ikke gi et ekte event:
+            // ix-field har byttet den synlige inputens navn til `${name}_formatted`, så
+            // vi bruker name-PROPPEN. `type` beholdes fra det native input-eventet.
+            cb(
+                createFieldEvent(event.type, { value: raw, name: name ?? input.name, id: input.id }, event) as unknown as React.ChangeEvent<HTMLInputElement>
+            );
         };
         // Blur emitteres syntetisk (ikke spredt på inputen) fordi den synlige inputen
         // heter `${name}_formatted` etter ix-field sitt navnebytte — et ekte blur-event
@@ -161,8 +162,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
             const cb = onBlurRef.current;
             if (!cb) return;
             const raw = fieldRef.current?.rawValue ?? input.value;
-            const target = { value: raw, name: name ?? input.name, id: input.id };
-            cb({ ...event, target, currentTarget: target, type: 'blur', nativeEvent: event } as unknown as React.FocusEvent<HTMLInputElement>);
+            cb(
+                createFieldEvent('blur', { value: raw, name: name ?? input.name, id: input.id }, event) as unknown as React.FocusEvent<HTMLInputElement>
+            );
         };
         input.addEventListener('input', emitChange);
         input.addEventListener('blur', emitBlur);

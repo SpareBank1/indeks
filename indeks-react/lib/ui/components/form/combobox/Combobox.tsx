@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useId, useRef } from 'react';
 import type { IxCombobox } from '@sb1/indeks-web';
 import { Field } from '../field/Field';
+import { createFieldEvent, type SyntheticFieldEvent } from '../synthetic-events';
 
 export type ComboboxOption = {
     value: string;
@@ -72,24 +73,19 @@ export type ComboboxProps = {
 };
 
 /**
- * Syntetisk change-event Combobox sender til `onChange`. Formen (`target.name`,
- * `target.value`) er den samme React Hook Form selv bygger for `<Controller>`, og
- * er det både `register()` og `<Controller>` leser verdien fra via `getEventValue`
+ * Syntetisk change/blur-event Combobox sender. Formen (`target.name`, `target.value`)
+ * er den samme React Hook Form selv bygger for `<Controller>`, og er det både
+ * `register()` og `<Controller>` leser verdien fra via `getEventValue`
  * (`event.target.value`). Vi kan ikke videresende det ekte `<select>`-eventet:
  * en native select har `.type`, som får `register` til å lese verdien fra ref-en i
  * stedet, og `.value` på en multiple-select gir kun første valgte option — begge
  * gir feil verdi i multi. `value` er `string` i single, `string[]` i multi.
+ * Delt form med de andre felt-komponentene, se `../synthetic-events`.
  */
-export type ComboboxChangeEvent = {
-    target: { name?: string; value: string | string[] };
-    type: string;
-};
+export type ComboboxChangeEvent = SyntheticFieldEvent<string | string[]>;
 
 /** Syntetisk blur-event Combobox sender til `onBlur` (touched-state i RHF). */
-export type ComboboxBlurEvent = {
-    target: { name?: string };
-    type: string;
-};
+export type ComboboxBlurEvent = SyntheticFieldEvent<string | string[]>;
 
 function toValueArray(value: string | string[] | undefined): string[] {
     if (value === undefined) return [];
@@ -169,13 +165,13 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
     useEffect(() => {
         const host = hostRef.current;
         if (!host || !onChange) return;
-        const handler = () => {
+        const handler = (event: Event) => {
             const selected = Array.from(host.querySelectorAll<HTMLElement>('.ix-combobox__option'))
                 .filter((o) => o.getAttribute('aria-selected') === 'true')
                 .map((o) => o.getAttribute('data-value') ?? '');
             const value = multiple ? selected : (selected[0] ?? '');
-            // Syntetisk event i RHF-form: verdien i target.value, name fra select.
-            onChange({ target: { name, value }, type: 'change' });
+            // Syntetisk event i delt RHF-form: verdien i target.value, name fra select.
+            onChange(createFieldEvent('change', { name, value }, event));
         };
         host.addEventListener('change', handler);
         return () => host.removeEventListener('change', handler);
@@ -190,11 +186,18 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
         if (!host || !onBlur) return;
         const handler = (event: FocusEvent) => {
             const next = event.relatedTarget as Node | null;
-            if (!next || !host.contains(next)) onBlur({ target: { name }, type: 'blur' });
+            if (next && host.contains(next)) return;
+            // Blur bærer nå også value (delt form med change) — konsumenter som leser
+            // event.target.value i en felles handler får samme form på begge.
+            const selected = Array.from(host.querySelectorAll<HTMLElement>('.ix-combobox__option'))
+                .filter((o) => o.getAttribute('aria-selected') === 'true')
+                .map((o) => o.getAttribute('data-value') ?? '');
+            const value = multiple ? selected : (selected[0] ?? '');
+            onBlur(createFieldEvent('blur', { name, value }, event));
         };
         host.addEventListener('focusout', handler);
         return () => host.removeEventListener('focusout', handler);
-    }, [onBlur, name]);
+    }, [onBlur, multiple, name]);
 
     const dataState = errorMessage ? 'error' : readOnly ? 'readonly' : disabled ? 'disabled' : undefined;
 

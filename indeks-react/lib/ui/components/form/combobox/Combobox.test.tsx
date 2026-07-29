@@ -129,7 +129,8 @@ describe('Combobox', () => {
         const no = container.querySelector<HTMLElement>('[data-value="no"]')!;
         no.setAttribute('aria-selected', 'true');
         container.querySelector('ix-combobox')!.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        expect(onChange).toHaveBeenCalledWith({ target: { name: 'land', value: 'no' }, type: 'change' });
+        expect(onChange.mock.lastCall![0].type).toBe('change');
+        expect(onChange.mock.lastCall![0].target).toMatchObject({ name: 'land', value: 'no' });
     });
 
     it('kaller onChange med array i target.value i multi', () => {
@@ -138,7 +139,8 @@ describe('Combobox', () => {
         container.querySelector('[data-value="no"]')!.setAttribute('aria-selected', 'true');
         container.querySelector('[data-value="se"]')!.setAttribute('aria-selected', 'true');
         container.querySelector('ix-combobox')!.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        expect(onChange).toHaveBeenCalledWith({ target: { name: 'land', value: ['no', 'se'] }, type: 'change' });
+        expect(onChange.mock.lastCall![0].type).toBe('change');
+        expect(onChange.mock.lastCall![0].target).toMatchObject({ name: 'land', value: ['no', 'se'] });
     });
 
     it('kaller onBlur når fokus forlater komponenten', () => {
@@ -150,7 +152,9 @@ describe('Combobox', () => {
         document.body.appendChild(outside);
         host.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: outside }));
         expect(onBlur).toHaveBeenCalledTimes(1);
-        expect(onBlur).toHaveBeenCalledWith({ target: { name: undefined }, type: 'blur' });
+        expect(onBlur.mock.lastCall![0].type).toBe('blur');
+        // Delt syntetisk form: blur bærer nå også value (single, ingen valgt → '').
+        expect(onBlur.mock.lastCall![0].target).toMatchObject({ name: '', value: '' });
         outside.remove();
     });
 
