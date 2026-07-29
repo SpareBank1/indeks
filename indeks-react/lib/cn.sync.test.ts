@@ -1,6 +1,6 @@
-import { cn as cnReact, type ClassValue } from './cn';
+import { cn as cnReact, type ClassValue } from '@/cn';
 import { cn as cnWeb } from '@sb1/indeks-web';
-import { describeInSync } from './test-utils/sync';
+import { describeInSync } from '@/test-utils/sync';
 
 // cn dupliseres bevisst i indeks-react og indeks-web. Siden cn er en funksjon (ikke
 // en verdi-liste) synkes den ved å kjøre et representativt sett input gjennom begge

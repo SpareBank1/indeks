@@ -1,4 +1,4 @@
-import { cn } from '../../../cn';
+import { cn } from '@/cn';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 export type TextProps<As extends ElementType> = {
     /** Elementtypen som skal brukes - standard er 'p' */

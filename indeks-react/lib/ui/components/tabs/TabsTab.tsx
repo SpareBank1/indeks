@@ -1,4 +1,4 @@
-import { cn } from '../../../cn';
+import { cn } from '@/cn';
 import { useContext, type JSX, type ReactNode } from 'react';
 import { TabsContext } from './TabsContext';
 

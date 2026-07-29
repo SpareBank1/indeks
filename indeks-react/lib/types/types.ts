@@ -1,4 +1,4 @@
-import { cn } from '../cn';
+import { cn } from '@/cn';
 
 /**
  * Statustema som kobles via `data-status` og `--ix-color-status-*`

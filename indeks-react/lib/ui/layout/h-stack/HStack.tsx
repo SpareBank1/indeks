@@ -1,4 +1,4 @@
-import { cn } from '../../../cn';
+import { cn } from '@/cn';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 import type { GapSize } from '../../../types/types';
 

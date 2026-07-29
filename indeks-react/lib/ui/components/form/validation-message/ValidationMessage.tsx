@@ -1,4 +1,4 @@
-import { cn } from '../../../../cn';
+import { cn } from '@/cn';
 import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 
 export type ValidationMessageProps = {

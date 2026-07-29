@@ -1,8 +1,14 @@
+import { resolve } from 'path'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
     plugins: [react()],
+    resolve: {
+        alias: {
+            '@': resolve(__dirname, 'lib'),
+        },
+    },
     test: {
         environment: 'jsdom',
         setupFiles: ['./testSetup.ts'],

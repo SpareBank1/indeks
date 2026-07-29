@@ -3,7 +3,7 @@ import type {
   JSX,
   ComponentPropsWithoutRef,
 } from "react";
-import { cn } from '../../../cn';
+import { cn } from '@/cn';
 import type { ComponentSize } from "../../../types/types";
 
 export type LinkTextProps<As extends ElementType = "a"> = {
