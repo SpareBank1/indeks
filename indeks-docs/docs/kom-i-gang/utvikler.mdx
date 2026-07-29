@@ -13,13 +13,20 @@ Kom i gang med Indeks i prosjektet ditt. Velg teknologi under, så tilpasser gui
 
 ## Installasjon
 
-### 1. Fonter
+### 1. Fonter og CDN-tilkobling
 
 Legg til SB1-fontene i `<head>` i HTML-dokumentet ditt. Monorepo-generatoren gjør dette automatisk.
 
+Indeks henter fonter, CSS, web components og ikon-SVG-er fra `cdn.sparebank1.no` ved runtime. Legg derfor en `preconnect` øverst i `<head>` — da rekker nettleseren DNS-oppslag, TLS-handshake og tilkobling før den første ressursen faktisk skal lastes, og du sparer ventetid på den kritiske gjengivingsstien.
+
 ```html
+<!-- Koble til CDN tidlig — før fonter, CSS og web components lastes. -->
+<link rel="preconnect" href="https://cdn.sparebank1.no" crossorigin />
+
 <link rel="stylesheet" href="https://cdn.sparebank1.no/fonts/v1.css" />
 ```
+
+`crossorigin` er nødvendig fordi fontene lastes med CORS; uten det åpner nettleseren en egen tilkobling for dem og preconnect-en blir bortkastet.
 
 ### 2. Styling
 
