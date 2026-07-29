@@ -46,14 +46,26 @@ css/
 `--ii-primitive-*` er interne primitiver (implementasjonsdetalj) — ikke bruk dem direkte i applikasjonskoden din. `--ix-color-*` er det offentlige API-et du styler mot.
 :::
 
-### Importrekkefølge
+### Rekkefølge og overstyring
 
-Primitivene må lastes før de semantiske fargene, siden `colors.css` refererer til `--ii-primitive-*`-variablene:
+Importér begge de genererte filene. **Rekkefølgen dem imellom spiller ingen rolle** — `--ix-color-*` refererer til `--ii-primitive-*` via `var()`, og CSS custom properties slås opp når de brukes, uavhengig av import-/deklarasjonsrekkefølge:
 
 ```css
 @import './css/themes/my-theme.css';
 @import './css/colors.css';
 ```
+
+Bruker du både `@sb1/indeks-css` (for komponent-CSS) og ditt eget theme, er det derimot rekkefølgen mot indeks-css som avgjør. Den ferdige CSS-en inlirer de samme tokenene under nøyaktig samme selektorer og spesifisitet, og det finnes ingen `@layer` som skiller dem — så det er «sist vinner» som gjelder:
+
+```css
+@import url('https://cdn.sparebank1.no/indeks/css/<versjon>/index.css');
+@import './css/themes/my-theme.css';
+@import './css/colors.css';
+```
+
+:::caution Eget theme må lastes sist
+Ditt eget theme overstyrer bare indeks-css hvis det importeres **etter** indeks-css. Lastes det før — eller uten kontroll på rekkefølgen i bundleren — vinner indeks-css, og temaet får stille ingen effekt.
+:::
 
 ## Eksempel på egen theme-fil
 
