@@ -275,6 +275,17 @@ describe('RadioGroup', () => {
             fireEvent.click(inputs[2]);
             expect(onChange.mock.calls[0][0].target.value).toBe('annet');
         });
+
+        it('kontrollert value vinner over ref (ref slår ikke på register-modus)', () => {
+            // Konsument som styrer verdien selv OG holder en ref (f.eks. for fokus/scroll):
+            // `value` skal fortsatt styre checked, ikke ignoreres til fordel for register.
+            const ref = createRef<HTMLInputElement>();
+            const { container } = renderGroup({ ref, value: 'bedrift', onChange: vi.fn() });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+            expect(inputs[1].checked).toBe(true);
+            expect(inputs[0].checked).toBe(false);
+            expect(inputs[2].checked).toBe(false);
+        });
     });
 
     describe('ren uncontrolled (kun defaultValue)', () => {

@@ -49,12 +49,17 @@ export type RadioGroupProps = {
 // eksponerer kun props-API, kontrollert state (value/onChange) og presentasjons-
 // attributter (data-state/data-orientation/className).
 //
-// Tre koblingsmodi:
+// Tre koblingsmodi. Standarden er RHF (register) — `{...register()}` skal virke uten
+// ekstra props — men du skal kunne velge det bort med `value` eller `defaultValue`:
 //  - Kontrollert: `value` satt → React styrer checked, `onChange` rapporterer endring.
-//  - Register (RHF): `{...register()}` spres → `ref` settes. RHF eier checked via de
-//    native radio-refene; React setter ikke checked (uncontrolled i context).
-//  - Ren uncontrolled: kun `defaultValue` → intern state styrer checked.
-// `ref != null` skiller register fra ren uncontrolled.
+//    Kontrollert VINNER over en ref: `value` er det eksplisitte «jeg styrer dette selv»-
+//    signalet, så en ref (f.eks. for å scrolle til feltet) slår ikke på register-modus.
+//  - Register (RHF): `ref` satt UTEN `value` (`{...register()}` spres). RHF eier checked
+//    via de native radio-refene; React setter ikke checked (uncontrolled i context).
+//  - Ren uncontrolled: kun `defaultValue` (ingen ref) → intern state styrer checked.
+// `ref != null && !isControlled` skiller register fra kontrollert/ren uncontrolled.
+// Merk: `defaultValue` + en bar ref (uncontrolled + DOM-håndtak, uten RHF) leses fortsatt
+// som register — en enslig ref er tvetydig. Sjeldent; dekket av dokumentasjon.
 export const RadioGroup = forwardRef<HTMLInputElement, RadioGroupProps>(function RadioGroup(
     {
         legend,
@@ -79,7 +84,9 @@ export const RadioGroup = forwardRef<HTMLInputElement, RadioGroupProps>(function
     ref
 ) {
     const isControlled = controlledValue !== undefined;
-    const isRegister = ref != null;
+    // Kontrollert vinner over ref: `value` er det eksplisitte opt-out-signalet, så en
+    // ref alene slår ikke på register-modus når konsumenten styrer verdien selv.
+    const isRegister = ref != null && !isControlled;
     // Intern state kun for ren uncontrolled bruk (defaultValue uten RHF). I
     // register-modus eier RHF/native checked, så vi holder ingen React-state.
     const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);

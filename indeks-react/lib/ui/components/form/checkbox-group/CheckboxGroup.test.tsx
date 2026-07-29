@@ -182,6 +182,17 @@ describe('CheckboxGroup', () => {
             expect(onChange.mock.calls[0][0].target.value).toBe('telefon');
             expect(onChange.mock.calls[0][0].target.checked).toBe(true);
         });
+
+        it('kontrollert value vinner over ref (ref slår ikke på register-modus)', () => {
+            // Konsument som styrer verdien selv OG holder en ref (f.eks. for fokus/scroll):
+            // `value` skal fortsatt styre checked, ikke ignoreres til fordel for register.
+            const ref = createRef<HTMLInputElement>();
+            const { container } = renderGroup({ ref, value: ['sms'], onChange: vi.fn() });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            expect(inputs[0].checked).toBe(false);
+            expect(inputs[1].checked).toBe(true);
+            expect(inputs[2].checked).toBe(false);
+        });
     });
 
     it('propagerer name fra host til alle inputs (via WC)', () => {
