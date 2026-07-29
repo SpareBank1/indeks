@@ -8,4 +8,5 @@ services:
       - CI=1
     # Serverer den ferdigbygde appen (dist/, bygget på host) og kjører e2e.
     # webServer i playwright.config.ts starter `vite preview` selv.
-    entrypoint: ["npx", "playwright", "test"]
+    # Entrypoint (Dockerfile) kjører Playwright og chowner output tilbake til
+    # host-brukeren på vei ut, uansett hvordan containeren startes.
