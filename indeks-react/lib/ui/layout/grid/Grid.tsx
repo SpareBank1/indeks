@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 import type { GapSize } from '../../../types/types';
 
@@ -69,7 +69,7 @@ export function Grid<As extends ElementType = 'div'>({
         const inlineClass = inline ? 'ix-inline-grid' : undefined;
         return (
             <Component
-                className={clsx('ix-grid', colsClass, rowsClass, gapClass, alignClass, justifyClass, inlineClass, className)}
+                className={cn('ix-grid', colsClass, rowsClass, gapClass, alignClass, justifyClass, inlineClass, className)}
                 {...restProps}
             >
                 {children}
@@ -113,7 +113,7 @@ export function GridItem<As extends ElementType = 'div'>({
     const colspanClass = colspan ? `ix-col-span-${colspan}` : undefined;
     const rowspanClass = rowspan ? `ix-row-span-${rowspan}` : undefined;
     return (
-        <Component className={clsx(colspanClass, rowspanClass, className)} {...restProps}>
+        <Component className={cn(colspanClass, rowspanClass, className)} {...restProps}>
             {children}
         </Component>
     );

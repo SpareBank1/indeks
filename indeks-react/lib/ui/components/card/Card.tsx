@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import {
     type AnchorHTMLAttributes,
     type ButtonHTMLAttributes,
@@ -27,7 +27,7 @@ export interface ActionProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const Action = ({ href, children, className, onClick, ...rest }: ActionProps) => {
-    const actionClass = clsx('ix-card__action', className);
+    const actionClass = cn('ix-card__action', className);
 
     if (href) {
         return (
@@ -54,7 +54,7 @@ export const Card = forwardRef<HTMLElement, CardProps>(
             return `ix-p-${padding}`;
         };
 
-        const cardClass = clsx(
+        const cardClass = cn(
             'ix-card',
             getSpacingClassName(),
             className,

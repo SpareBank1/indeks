@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 import type { ComponentSize } from '../../../types/types';
 
@@ -29,7 +29,7 @@ export function Tag<As extends ElementType = 'span'>(props: TagProps<As>): JSX.E
         <Component
             {...restProps}
             data-size={size}
-            className={clsx('ix-tag', `ix-tag--${variant}-${type}`, className)}
+            className={cn('ix-tag', `ix-tag--${variant}-${type}`, className)}
         />
     );
 }

@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { JSX, ReactNode } from 'react';
 import { useMessageRegion } from '../message-region/MessageRegionContext';
@@ -100,7 +100,7 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(function Message
     return (
         <div
             ref={ref}
-            className={clsx('ix-message', className)}
+            className={cn('ix-message', className)}
             data-status={status}
             data-full-width={fullWidth ? '' : undefined}
         >

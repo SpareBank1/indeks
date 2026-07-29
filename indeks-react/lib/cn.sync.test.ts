@@ -5,10 +5,12 @@ import { describeInSync } from './test-utils/sync';
 // cn dupliseres bevisst i indeks-react og indeks-web. Siden cn er en funksjon (ikke
 // en verdi-liste) synkes den ved å kjøre et representativt sett input gjennom begge
 // og sammenligne output. Dette er den ene tillatte @sb1/indeks-web-importen.
+const full = false;
+const wide = true;
 const CASES: ClassValue[][] = [
     ['ix-a', 'ix-b'],
     ['ix-a', false, undefined, null, 'ix-b'],
-    ['ix-button', false && 'ix-w-full', true && 'ix-wide'],
+    ['ix-button', full && 'ix-w-full', wide && 'ix-wide'],
     [{ 'ix-a': true, 'ix-b': false, 'ix-c': undefined }],
     [{ 'ix-a': 0, 'ix-b': 1 }],
     [{ [`ix-m-${'md'}`]: 'md', [`ix-px-${undefined}`]: undefined }],

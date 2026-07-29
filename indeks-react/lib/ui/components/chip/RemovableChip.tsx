@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes, JSX, MouseEvent } from 'react';
 
@@ -37,7 +37,7 @@ export const RemovableChip = forwardRef<HTMLButtonElement, RemovableChipProps>(
             <button
                 ref={ref}
                 type={type ?? 'button'}
-                className={clsx('ix-chip', className)}
+                className={cn('ix-chip', className)}
                 data-removable=""
                 data-size={size !== 'md' ? size : undefined}
                 aria-label={`${children} ${removeLabel}`}

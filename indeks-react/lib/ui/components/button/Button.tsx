@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type {
     ButtonHTMLAttributes,
@@ -65,7 +65,7 @@ export const Button: OverridableComponent<ButtonProps, HTMLButtonElement> = forw
     return (
         <Component
             ref={ref}
-            className={clsx('ix-button', width === 'full' && 'ix-w-full', className)}
+            className={cn('ix-button', width === 'full' && 'ix-w-full', className)}
             data-variant={variant}
             data-size={size !== 'md' ? size : undefined}
             data-danger={danger ? 'true' : undefined}

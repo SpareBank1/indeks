@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef, useEffect } from 'react';
 import type { HTMLAttributes, JSX } from 'react';
 import { useModalContext } from './ModalContext';
@@ -28,7 +28,7 @@ export const ModalDescription = forwardRef<HTMLParagraphElement, ModalDescriptio
             <p
                 ref={ref}
                 id={effectiveId}
-                className={clsx('ix-modal__description', className)}
+                className={cn('ix-modal__description', className)}
                 {...props}
             >
                 {children}

@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../../cn';
 import {
     forwardRef,
     useState,
@@ -110,7 +110,7 @@ export const CheckboxGroup = forwardRef<HTMLInputElement, CheckboxGroupProps>(fu
     return (
         <ix-checkbox-group
             name={name}
-            class={clsx(className) || undefined}
+            class={cn(className) || undefined}
             data-variant={variant}
             data-size={variant === 'chip' && size !== 'md' ? size : undefined}
             data-state={dataState}
