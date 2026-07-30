@@ -90,13 +90,18 @@ function compileTokens(pattern: string): PatternToken[] {
 /**
  * Lager en formatter fra en pattern-streng.
  *
- * `format` fyller slots med matchende tegn fra den rå verdien og setter inn
- * separatorer først når neste slot faktisk fylles (ingen dinglende separator på
- * slutten mens man skriver). Tegn som ikke passer neste slot — enten fordi
- * brukeren skrev flere tegn enn patternet har plasser, eller skrev noe som ikke
- * hører hjemme (bokstav i et sifferfelt) — droppes IKKE: den ledende delen som
- * passer formateres, og resten legges uformatert på til slutt i samme
- * rekkefølge brukeren skrev. Alt brukeren skriver forblir synlig.
+ * `format` fyller slots med matchende tegn fra den rå verdien og setter inn en
+ * separator så snart gruppen foran er fylt OG resten av verdien er konsumert —
+ * separatoren dukker altså opp med én gang gruppen er komplett ("24" → "24.",
+ * "2412" → "24.12."), ikke først når neste siffer skrives. En separator legges
+ * aldri til for en halvfylt gruppe, og heller ikke når vi stoppet fordi neste
+ * tegn ikke passet sloten (da ville vi doblet separatoren ved innliming av
+ * allerede formatert tekst). Tegn som ikke passer neste slot — enten fordi
+ * brukeren skrev flere tegn enn
+ * patternet har plasser, eller skrev noe som ikke hører hjemme (bokstav i et
+ * sifferfelt) — droppes IKKE: den ledende delen som passer formateres, og resten
+ * legges uformatert på til slutt i samme rekkefølge brukeren skrev. Alt brukeren
+ * skriver forblir synlig.
  *
  * `parse` er tapsfri: den fjerner kun separator-tegnene patternet definerer
  * (literal-tokens) og beholder alt annet i rekkefølge — ingen cap på antall
@@ -139,10 +144,102 @@ export function createPatternFormatter(pattern: string): FieldFormatter {
                 i++;
             }
 
-            // Legg resterende tegn på uformatert (ekstra tegn utover patternet
-            // eller tegn som ikke passet). Ingen dinglende separator.
-            return out + chars.slice(i).join('');
+            // Flush en ventende separator når HELE den rå verdien er konsumert og
+            // gruppen foran nettopp ble fylt: da dukker separatoren opp med én gang
+            // ("24" → "24.", "2412" → "24.12."), i stedet for å vente på neste
+            // siffer. Stoppet vi derimot fordi neste tegn ikke passet sloten
+            // (i < chars.length) — f.eks. innliming av en allerede formatert streng
+            // der neste tegn ER separatoren, eller et ugyldig tegn — dropper vi
+            // flushen og legger resten uformatert på, så vi verken dobler
+            // separatoren eller dikter opp en for en gruppe brukeren ikke fylte.
+            const trailing = i >= chars.length ? pendingLiterals : '';
+            return out + trailing + chars.slice(i).join('');
         },
+    };
+}
+
+// ── Dato-formatter (variabel-bredde grupper, skilletegn-bevisst) ─────────────
+//
+// Dato er den ENE innebygde varianten der en gruppe kan være 1 ELLER 2 sifre
+// (dag/måned). Da bærer det tastede punktumet informasjon posisjonen alene ikke
+// gir: `1.1.2026` (1. januar) mot `11.20.26`. Den generiske pattern-masken
+// (`00.00.0000`) stripper punktumet og re-plasserer bare sifre posisjonelt — den
+// ville tolket `1.1.2026` som `11.20.26`. Det bryter «vi formaterer, vi masker
+// ikke». Derfor en egen formatter som RESPEKTERER det tastede punktumet som en
+// segment-grense og kun LEGGER TIL formatering (nullutfylling), aldri fjerner
+// eller omrokerer.
+//
+// Til forskjell fra de fast-bredde variantene formaterer dato på BLUR (live
+// utelatt): teksten står urørt mens man skriver, og normaliseres når feltet
+// mister fokus. Å reformatere variabel-bredde grupper mens man skriver ville
+// gjort caret-oppførselen uforutsigbar.
+
+export interface DateParts {
+    day: string;
+    month: string;
+    year: string;
+}
+
+/**
+ * Kanonisk dato-parser — den ENE sannheten for hvordan en dato-streng tolkes.
+ * Både ix-field sin synlige formatering og IxDateField sin ISO-utleding går
+ * gjennom denne, så de aldri kan drifte fra hverandre.
+ *
+ * Komplett dato → nullutfylte deler; ufullstendig/tvetydig → `null`.
+ *
+ *   - Med punktum: nøyaktig 3 rent-numeriske segmenter, dag/måned 1-2 sifre,
+ *     år 2 eller 4 sifre. Dag/måned nullutfylles; 2-sifret år utvides til `20xx`
+ *     (`"26"` → `"2026"`). `"1.1.2026"` og `"1.1.26"` → begge 01/01/2026.
+ *   - Uten punktum: nøyaktig 8 sifre tolkes som ddmmåååå (`"01012026"`). Annen
+ *     lengde uten skilletegn (f.eks. `"112026"`) er tvetydig — vi kan ikke vite
+ *     hvor grensene går uten punktum — og regnes ufullstendig → `null`.
+ *   - Bokstaver, ekstra punktum eller feil segmentantall → `null`.
+ */
+export function parseDate(display: string): DateParts | null {
+    const trimmed = display.trim();
+
+    if (trimmed.includes('.')) {
+        const segments = trimmed.split('.');
+        if (segments.length !== 3) return null;
+        const [day, month, year] = segments;
+        if (!/^\d{1,2}$/.test(day) || !/^\d{1,2}$/.test(month) || !/^(\d{2}|\d{4})$/.test(year)) return null;
+        const fullYear = year.length === 2 ? `20${year}` : year;
+        return { day: day.padStart(2, '0'), month: month.padStart(2, '0'), year: fullYear };
+    }
+
+    if (/^\d{8}$/.test(trimmed)) {
+        return { day: trimmed.slice(0, 2), month: trimmed.slice(2, 4), year: trimmed.slice(4, 8) };
+    }
+
+    return null;
+}
+
+/** Komplett dato → visning `dd.mm.åååå` (nullutfylt); ellers strengen verbatim. */
+export function normalizeDateDisplay(display: string): string {
+    const parts = parseDate(display);
+    return parts ? `${parts.day}.${parts.month}.${parts.year}` : display;
+}
+
+/** Komplett dato → ISO `åååå-mm-dd`; ellers tom streng. */
+export function isoFromDate(display: string): string {
+    const parts = parseDate(display);
+    return parts ? `${parts.year}-${parts.month}-${parts.day}` : '';
+}
+
+/**
+ * Formatter for datofelt. `parse` er identitet — punktumet er en meningsfull
+ * tastet grense, ikke en separator å fjerne (trivielt tapsfri). `format`
+ * nullutfyller til `dd.mm.åååå` når datoen er komplett, ellers vises alt verbatim.
+ *
+ * Invariant-unntak: `parse(format(raw)) === raw` gjelder IKKE her, fordi
+ * nullutfylling (`"1"` → `"01"`) ikke er reversibel. Blur-syklusen krever i
+ * stedet at `format` er idempotent på allerede-normaliserte verdier —
+ * `format("01.01.2026") === "01.01.2026"` — som holder.
+ */
+export function createDateFormatter(): FieldFormatter {
+    return {
+        parse: (display) => display,
+        format: (raw) => normalizeDateDisplay(raw),
     };
 }
 
@@ -252,7 +349,7 @@ export type BuiltInFormatName = (typeof BUILTIN_FORMAT_NAMES)[number];
 // som skal være blur som standard). Spread beholder format/parse uendret.
 registerFormat('phone', { ...createPatternFormatter('000 00 000'), live: true }); // norsk 8-sifret nummer
 registerFormat('ssn', { ...createPatternFormatter('000000 00000'), live: true }); // fødselsnummer DDMMÅÅ NNNNN
-registerFormat('date', { ...createPatternFormatter('00.00.0000'), live: true }); // dd.mm.åååå
+registerFormat('date', createDateFormatter()); // dd.mm.åååå — blur, skilletegn-bevisst (godtar 1.1.2026)
 registerFormat('account', { ...createPatternFormatter('0000 00 00000'), live: true }); // kontonummer 1234 56 78903
 registerFormat('orgnr', { ...createPatternFormatter('000 000 000'), live: true }); // organisasjonsnummer 123 456 789
 registerFormat('amount', { ...createAmountFormatter({ groupSeparator: ' ', decimalSeparator: ',' }), live: true });

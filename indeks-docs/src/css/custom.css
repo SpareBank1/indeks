@@ -42,6 +42,16 @@
     min-height: calc(100vh - (var(--ifm-navbar-height) + 240px));
 }
 
+/* Live Playground-preview: hvit flate i stedet for Docusaurus-standardens grå
+   (--ifm-pre-background), som lå så nær en av våre farger at det så ut som et
+   WCAG-kontrastbrudd. Semantisk token gir hvit i lyst tema, mørk flate i mørkt.
+   Scopet til playground-containeren så vanlige <pre>-kodeblokker er urørt;
+   spesifisitet (0,2,0) slår temaets .playgroundPreview (0,1,0). CSS-modul-
+   klassenavnene er stabile, kun hash-suffikset varierer → substring-selektor. */
+[class*='playgroundContainer'] [class*='playgroundPreview'] {
+    background-color: var(--ix-color-background-default);
+}
+
 /* Restore list styling for markdown content */
 .markdown ul,
 .markdown ol {

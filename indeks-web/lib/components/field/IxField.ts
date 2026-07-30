@@ -466,7 +466,7 @@ export class IxField extends HTMLElement {
 
         if (formatter.live) {
             // Live: reformater i selve inputen hvert tastetrykk, styr caret, speil rå.
-            on('input', () => this._maskInPlace());
+            on('input', (e) => this._maskInPlace(e as InputEvent));
             // Seed startverdi formatert (feltet er ufokusert ved kabling).
             control.value = formatter.format(initialRaw);
         } else {
@@ -501,7 +501,7 @@ export class IxField extends HTMLElement {
     // Live-modus: les synlig verdi + caret, reformater, skriv tilbake, gjenopprett
     // caret, og speil rå til mirror. Bruker kun formatter.parse (tapsfri), så den
     // virker for alle formattere. O(n²) på prefiks-parse — trivielt for korte felt.
-    private _maskInPlace(): void {
+    private _maskInPlace(event?: InputEvent): void {
         const formatter = this._activeFormatter;
         const control = this._activeControl;
         if (!formatter || !control) return;
@@ -526,6 +526,18 @@ export class IxField extends HTMLElement {
                     newCaret = i;
                     break;
                 }
+            }
+        }
+
+        // Hopp forbi en auto-innsatt separator rett etter caret NÅR brukeren nettopp
+        // skrev et tegn (ikke ved sletting). Fyller man en gruppe dukker separatoren
+        // opp med én gang ("24" → "24."); uten dette hoppet ville caret havnet foran
+        // den ("24|.") og neste siffer sett feil ut et øyeblikk. Vi hopper ikke ved
+        // sletting — da ville backspace bli fanget bak separatoren og aldri komme forbi.
+        const isDelete = event?.inputType?.startsWith('delete') ?? false;
+        if (!isDelete) {
+            while (newCaret < next.length && !formatter.parse(next[newCaret])) {
+                newCaret++;
             }
         }
 
