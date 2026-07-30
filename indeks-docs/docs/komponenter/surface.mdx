@@ -3,18 +3,19 @@ import TabItem from '@theme/TabItem';
 
 # Surface
 
-Surface er en enkel visuell flate som grupperer relatert innhold, gjerne med en statusfarge,
-border eller avrundede hjørner. Den er bevisst enkel: en ren beholder for layout og visuell
-gruppering — uten klikk-affordanse eller annen interaktivitet.
+Surface er flaten flere ting ligger på: en region som samler flere beslektede elementer og
+skiller dem visuelt fra resten av siden med en egen surface-farge (nøytral eller status), gjerne
+med border eller avrundede hjørner. Den er bevisst enkel — en ren flate for layout og visuell
+gruppering, uten klikk-affordanse eller annen interaktivitet.
 
 Surface bygger i sin helhet på [utility-klasser](../utility-klasser/oversikt), men gir et React-API
 slik at du slipper å forholde deg til klassenavnene direkte.
 
 ## Egnet til
 
-- Visuell gruppering av relatert innhold i en flate med farge eller border
+- Visuell gruppering av flere beslektede elementer i én flate med farge eller border
 - Seksjoner og paneler i et oppsett (sett `as="section"` for riktig semantikk)
-- Et lett alternativ til `Card` når du ikke trenger et avgrenset, klikkbart innholdskort
+- Bakgrunnsflate for en gruppe elementer — også for flere [Card](./card) som ligger oppå
 - Rask layout med `gap`, `justifyContent` og `alignItems` uten egen CSS
 
 ## Uegnet til
@@ -25,14 +26,15 @@ slik at du slipper å forholde deg til klassenavnene direkte.
 
 ## Surface vs. Card
 
-Surface og [Card](./card) løser ulike behov:
+Surface og [Card](./card) virker på ulike nivåer:
 
-- **Surface** er en *enkel flate*. Den signaliserer ingen interaktivitet —
-  den grupperer innhold visuelt. Tenk bakgrunn, seksjon eller panel.
-- **Card** er et *innholdskort*. Det kan være klikkbart og bærer chevron når det er det, og
-  fremstår som en avgrenset enhet.
+- **Surface** er *flaten flere ting ligger på*. Den signaliserer ingen interaktivitet — den samler
+  en gruppe elementer og skiller dem visuelt fra resten av siden. Tenk bakgrunn, seksjon eller panel.
+- **Card** er *én ting*: en avgrenset, selvstendig innholdsenhet. Det kan være klikkbart og bærer
+  chevron når det er det.
 
-Trenger du at flaten kan trykkes, velg Card. Ellers Surface.
+Et Card kan ligge oppå en Surface — de konkurrerer ikke, de virker på ulike nivåer. Trenger du at
+selve flaten kan trykkes, velg Card. Skal flaten bare gruppere og skille ut innhold, velg Surface.
 
 ## Kom i gang
 
@@ -40,9 +42,17 @@ Trenger du at flaten kan trykkes, velg Card. Ellers Surface.
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<div class="ix-surface ix-radius-md ix-p-md ix-gap-2xs" data-status="info">
-  <h3>En enkel flate</h3>
-  <p>Surface grupperer innhold visuelt — uten interaktivitet.</p>
+<div class="ix-surface ix-radius-md ix-p-md ix-gap-sm" data-status="info">
+  <h3>Kontoutdrag</h3>
+  <p>Surface samler flere beslektede elementer på én flate — skilt visuelt fra siden.</p>
+  <div class="ix-card ix-p-md">
+    <strong>Brukskonto</strong>
+    <p>12 480,50 kr</p>
+  </div>
+  <div class="ix-card ix-p-md">
+    <strong>Sparekonto</strong>
+    <p>85 000,00 kr</p>
+  </div>
 </div>
 ```
 
@@ -50,9 +60,17 @@ Trenger du at flaten kan trykkes, velg Card. Ellers Surface.
 <TabItem value="react" label="React">
 
 ```tsx live
-<Surface status="info" radius="md" padding="md" gap="2xs">
-  <Heading as="h3" size="sm">En enkel flate</Heading>
-  <Text>Surface grupperer innhold visuelt — uten interaktivitet.</Text>
+<Surface status="info" radius="md" padding="md" gap="sm">
+  <Heading as="h3" size="sm">Kontoutdrag</Heading>
+  <Text>Surface samler flere beslektede elementer på én flate — skilt visuelt fra siden.</Text>
+  <Card padding="md">
+    <Heading as="h4" size="xs">Brukskonto</Heading>
+    <Text>12 480,50 kr</Text>
+  </Card>
+  <Card padding="md">
+    <Heading as="h4" size="xs">Sparekonto</Heading>
+    <Text>85 000,00 kr</Text>
+  </Card>
 </Surface>
 ```
 
