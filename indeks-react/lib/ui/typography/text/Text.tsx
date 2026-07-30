@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 export type TextProps<As extends ElementType> = {
     /** Elementtypen som skal brukes - standard er 'p' */
@@ -31,7 +31,7 @@ export function Text<As extends ElementType = 'p'>(props: TextProps<As>): JSX.El
         <Component
             {...restProps}
             data-size={size}
-            className={clsx('ix-text', { 'ix-mb-md': addRecommendedSpacing, 'ix-text--long': long }, className)}
+            className={cn('ix-text', { 'ix-mb-md': addRecommendedSpacing, 'ix-text--long': long }, className)}
         />
     );
 }

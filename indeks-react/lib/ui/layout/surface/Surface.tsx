@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 import {
     extractSpacingClassnameFromProps,
@@ -61,7 +61,7 @@ export function Surface<As extends ElementType = 'div'>(props: SurfaceProps<As>)
 
     const { spacingClassName, propsWitoutSpacingProps } = extractSpacingClassnameFromProps(restProps);
 
-    const _className = clsx(
+    const _className = cn(
         'ix-surface',
         {
             [`ix-border-${border}`]: border,

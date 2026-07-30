@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes, JSX } from 'react';
 import { Icon } from '../../icons';
@@ -25,7 +25,7 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
             <button
                 ref={ref}
                 type="button"
-                className={clsx('ix-modal__close', className)}
+                className={cn('ix-modal__close', className)}
                 aria-label={label}
                 onClick={(e) => {
                     onClick?.(e);

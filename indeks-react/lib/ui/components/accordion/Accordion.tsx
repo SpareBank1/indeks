@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, JSX, ReactNode, RefAttributes } from 'react';
 import { AccordionItem } from './AccordionItem';
@@ -38,7 +38,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Acc
     ref,
 ): JSX.Element {
     return (
-        <div ref={ref} className={clsx('ix-accordion', className)}>
+        <div ref={ref} className={cn('ix-accordion', className)}>
             {children}
         </div>
     );

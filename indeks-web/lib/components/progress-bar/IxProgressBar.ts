@@ -28,7 +28,7 @@ import { isIOS } from '../../utils/platform.js';
 
 let progressBarCounter = 0;
 
-type ProgressBarState = 'active' | 'success' | 'error';
+export type ProgressBarState = 'active' | 'success' | 'error';
 
 // Statusikon per tilstand — samme glyfer som Message bruker.
 const STATE_ICON: Record<Exclude<ProgressBarState, 'active'>, string> = {

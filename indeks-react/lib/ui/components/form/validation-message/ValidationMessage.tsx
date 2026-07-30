@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../../cn';
 import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 
 export type ValidationMessageProps = {
@@ -18,7 +18,7 @@ export const ValidationMessage = forwardRef<HTMLSpanElement, ValidationMessagePr
 ) {
     const hasContent = children !== undefined && children !== null && children !== '' && children !== false;
     return (
-        <span ref={ref} {...restProps} data-field="error" className={clsx(className)}>
+        <span ref={ref} {...restProps} data-field="error" className={cn(className)}>
             {hasContent && showIcon && <ix-icon data-badge="" data-status="danger" name="close" aria-hidden="true" />}
             {children}
         </span>

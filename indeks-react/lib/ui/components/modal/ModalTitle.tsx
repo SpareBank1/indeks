@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef, useEffect } from 'react';
 import type { HTMLAttributes, JSX } from 'react';
 import { useModalContext } from './ModalContext';
@@ -27,7 +27,7 @@ export const ModalTitle = forwardRef<HTMLHeadingElement, ModalTitleProps>(functi
     }, [registerTitle, effectiveId]);
 
     return (
-        <h2 ref={ref} id={effectiveId} className={clsx('ix-modal__title', className)} {...props}>
+        <h2 ref={ref} id={effectiveId} className={cn('ix-modal__title', className)} {...props}>
             {children}
         </h2>
     );

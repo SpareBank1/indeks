@@ -6,6 +6,7 @@ import type { IconName } from './lib/components/icon/IxIcon.js';
 import { IxProgressBar } from './lib/components/progress-bar/IxProgressBar.js';
 import { IxRadioGroup } from './lib/components/radio-group/IxRadioGroup.js';
 import { IxTabs, IxTabList, IxTab, IxTabPanel } from './lib/components/tabs/IxTabs.js';
+import { cn } from './lib/utils/cn.js';
 import './lib/modal/modal.js';
 import './lib/tooltip/tooltip.js';
 
@@ -20,12 +21,17 @@ customElements.define('ix-tab-list', IxTabList);
 customElements.define('ix-tab', IxTab);
 customElements.define('ix-tab-panel', IxTabPanel);
 
+// Eksponer cn globalt slik at web components og annen ikke-modul-kode kan bruke
+// `cn(...)` uten import når indeks-web er lastet (f.eks. via CDN). Idempotent.
+globalThis.cn = cn;
+
 export { IxField };
 export { IxIcon };
 export { IxRadioGroup };
 export { IxCheckboxGroup };
 export { IxCombobox };
 export { IxProgressBar };
+export type { ProgressBarState } from './lib/components/progress-bar/IxProgressBar.js';
 export { IxTabs, IxTabList, IxTab, IxTabPanel };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
@@ -33,7 +39,14 @@ export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
 export { createPatternFormatter, createAmountFormatter, amountFormatterForLocale, registerFormat, resolveFormat, BUILTIN_FORMAT_NAMES } from './lib/components/field/formats.js';
 export type { FieldFormatter, BuiltInFormatName } from './lib/components/field/formats.js';
 
+export { cn } from './lib/utils/cn.js';
+export type { ClassValue, ClassDictionary } from './lib/utils/cn.js';
+
 declare global {
+    // Gjør bar `cn(...)` tilgjengelig uten import i web-kode. `var` er mønsteret
+    // for å augmentere globalThis (jf. globalThis.cn-tilordningen over).
+    var cn: (...inputs: import('./lib/utils/cn.js').ClassValue[]) => string;
+
     interface HTMLElementTagNameMap {
         'ix-field': IxField;
         'ix-icon': IxIcon;

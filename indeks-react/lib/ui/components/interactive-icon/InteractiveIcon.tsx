@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes, JSX } from 'react';
 import { Icon } from '../../icons';
@@ -26,7 +26,7 @@ export const InteractiveIcon = forwardRef<HTMLButtonElement, InteractiveIconProp
             <button
                 ref={ref}
                 type="button"
-                className={clsx('ix-interactive-icon', className)}
+                className={cn('ix-interactive-icon', className)}
                 data-status={status !== 'default' ? status : undefined}
                 {...props}
             >

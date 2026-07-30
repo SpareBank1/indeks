@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { useContext, type JSX, type ReactNode } from 'react';
 import { TabsContext } from './TabsContext';
 
@@ -30,7 +30,7 @@ export function TabsTab({ value, children, ariaLabel, className }: TabsTabProps)
 
     return (
         <ix-tab
-            class={clsx('ix-tabs__tab', className)}
+            class={cn('ix-tabs__tab', className)}
             data-value={value}
             aria-selected={selected ? 'true' : 'false'}
             aria-label={ariaLabel}

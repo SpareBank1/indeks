@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, JSX } from 'react';
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 
 export type ProgressBarState = 'active' | 'success' | 'error';
 
@@ -57,7 +57,7 @@ export function ProgressBar({
 }: ProgressBarProps): JSX.Element {
     return (
         <ix-progress-bar
-            class={clsx('ix-progress-bar', className)}
+            class={cn('ix-progress-bar', className)}
             value={value}
             data-state={state !== 'active' ? state : undefined}
             label={label}

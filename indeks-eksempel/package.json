@@ -23,7 +23,6 @@
         "@sb1/indeks-tokens": "workspace:*",
         "@sb1/indeks-utils": "workspace:*",
         "@sb1/indeks-web": "workspace:*",
-        "clsx": "^2.1.1",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
         "react-hook-form": "7.82.0",

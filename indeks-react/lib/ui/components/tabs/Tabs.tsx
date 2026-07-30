@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { ForwardRefExoticComponent, JSX, ReactNode, RefAttributes } from 'react';
 import { TabsContext } from './TabsContext';
@@ -74,7 +74,7 @@ export const Tabs = forwardRef<HTMLElement, TabsProps>(function Tabs(
                     if (typeof ref === 'function') ref(node);
                     else if (ref) ref.current = node;
                 }}
-                class={clsx('ix-tabs', className)}
+                class={cn('ix-tabs', className)}
             >
                 {children}
             </ix-tabs>

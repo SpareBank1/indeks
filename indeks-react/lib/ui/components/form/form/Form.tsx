@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from '../../../../cn';
 import type { FormHTMLAttributes, JSX, ReactNode } from "react";
 
 export type FormProps = {
@@ -12,7 +12,7 @@ export function Form(props: FormProps): JSX.Element {
   };
 
   return (
-    <form className={clsx("ix-form", className)} {...restProps}>
+    <form className={cn("ix-form", className)} {...restProps}>
       {children}
     </form>
   );

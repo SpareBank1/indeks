@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../../cn';
 import { forwardRef, type LabelHTMLAttributes, type ReactNode } from 'react';
 
 export type LabelProps = {
@@ -11,7 +11,7 @@ export const Label = forwardRef<HTMLLabelElement, LabelProps>(function Label(
     ref
 ) {
     return (
-        <label ref={ref} {...restProps} className={clsx('ix-label', className)}>
+        <label ref={ref} {...restProps} className={cn('ix-label', className)}>
             {children}
         </label>
     );

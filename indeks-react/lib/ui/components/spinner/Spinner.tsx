@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, JSX } from 'react';
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import type { ComponentSize } from '../../../types/types';
 
 export type SpinnerProps = {
@@ -22,7 +22,7 @@ export function Spinner({
         <div
             role="status"
             aria-label={loadingLabel ?? label ?? 'Laster...'}
-            className={clsx('ix-spinner', className)}
+            className={cn('ix-spinner', className)}
             data-size={size}
             {...rest}
         >

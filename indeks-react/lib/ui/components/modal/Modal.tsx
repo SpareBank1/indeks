@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ForwardRefExoticComponent, JSX, ReactNode, RefAttributes } from 'react';
 import { ModalContext } from './ModalContext';
@@ -188,7 +188,7 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
     return (
         <dialog
             ref={setRef}
-            className={clsx('ix-modal', className)}
+            className={cn('ix-modal', className)}
             data-size={SIZE_ATTR[size]}
             data-no-close-on-backdrop={closeOnBackdropClick ? undefined : ''}
             aria-labelledby={titleId ?? undefined}

@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../../cn';
 import {
     forwardRef,
     useState,
@@ -105,7 +105,7 @@ export const RadioGroup = forwardRef<HTMLInputElement, RadioGroupProps>(function
     return (
         <ix-radio-group
             name={name}
-            class={clsx(className) || undefined}
+            class={cn(className) || undefined}
             data-variant={variant}
             data-size={variant === 'chip' && size !== 'md' ? size : undefined}
             data-orientation={orientation !== 'vertical' ? orientation : undefined}
