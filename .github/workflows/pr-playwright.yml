@@ -1,15 +1,13 @@
 name: PR - Playwright-tester
 
+# Kjører ALLTID (ingen paths-filter på trigger) slik at den påkrevde checken
+# "playwright-tests" alltid fullføres – også på docs-only-PR-er. De tunge
+# stegene hoppes over internt når ingen kode-paths er endret, så docs-PR-er
+# fullfører på sekunder i stedet for å henge evig på BLOCKED.
+
 on:
     pull_request:
         branches: [main]
-        paths:
-            - 'indeks-storybook/**'
-            - 'indeks-react/**'
-            - 'indeks-web/**'
-            - 'indeks-css/**'
-            - 'indeks-tokens/**'
-            - 'indeks-utils/**'
 
 concurrency:
     group: playwright-${{ github.head_ref || github.ref }}
@@ -29,28 +27,50 @@ jobs:
               with:
                   persist-credentials: false
 
+            - name: Sjekk om kode-paths er endret
+              id: changes
+              uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+              with:
+                  filters: |
+                      code:
+                          - 'indeks-storybook/**'
+                          - 'indeks-react/**'
+                          - 'indeks-web/**'
+                          - 'indeks-css/**'
+                          - 'indeks-tokens/**'
+                          - 'indeks-utils/**'
+
+            - name: Ingen kode-endringer – hopper over Playwright
+              if: steps.changes.outputs.code != 'true'
+              run: echo "Ingen endringer i kode-pathene; Playwright-tester er ikke nødvendig."
+
             - name: Install pnpm
+              if: steps.changes.outputs.code == 'true'
               uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
             - name: Set up Node.js
+              if: steps.changes.outputs.code == 'true'
               uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
               with:
                   node-version: '24'
                   cache: 'pnpm'
 
             - name: Install dependencies
+              if: steps.changes.outputs.code == 'true'
               run: pnpm install --frozen-lockfile --ignore-scripts
 
             - name: Build Storybook (med avhengigheter)
+              if: steps.changes.outputs.code == 'true'
               run: pnpm build-storybook
 
             - name: Run Playwright tests in Docker
+              if: steps.changes.outputs.code == 'true'
               working-directory: ./indeks-storybook
               run: docker compose run --rm playwright
 
             - name: Last opp Playwright-rapport
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-              if: always()
+              if: always() && steps.changes.outputs.code == 'true'
               with:
                   name: playwright-report
                   path: indeks-storybook/playwright-report/
@@ -58,7 +78,7 @@ jobs:
 
             - name: Last opp testresultater
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-              if: always()
+              if: always() && steps.changes.outputs.code == 'true'
               with:
                   name: test-results
                   path: indeks-storybook/test-results/
