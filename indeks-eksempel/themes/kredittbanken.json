@@ -1,0 +1,29 @@
+{
+    "name": "kredittbanken",
+    "figmaName": "Kredittbanken",
+    "identityColor": "#11363f",
+    "colors": {
+        "brand": "#11363f",
+        "gray": "#C5BCB0",
+        "warning": "#3D2A00",
+        "success": "#253318",
+        "danger": "#4A200E",
+        "info": "#163142",
+        "neutral": "#AC7944"
+    },
+    "themeable": {
+        "font-family": {
+            "normal": "Work Sans",
+            "heading": "Satoshi"
+        },
+        "font-weight": {
+            "regular": 400,
+            "medium": 600
+        },
+        "border": {
+            "radius": {
+                "button": "24px"
+            }
+        }
+    }
+}

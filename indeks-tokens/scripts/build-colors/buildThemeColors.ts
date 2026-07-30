@@ -1,9 +1,9 @@
 import Color from 'colorjs.io';
-import { Theme } from '../../themes';
-import {
+import { DEFAULT_STEPS } from '../../themes/types';
+import type { Theme } from '../../themes';
+import type {
     BuiltTheme,
     BuiltThemeColors,
-    DEFAULT_STEPS,
     OriginColor,
     OriginScaleNames,
     ThemeColors,
@@ -60,7 +60,7 @@ export function buildTheme(theme: Theme): BuiltTheme {
     return {
         name: theme.name,
         colors: buildColorScales(theme.colors),
-        themeable: theme.themeable,
+        themeable: theme.themeable ?? {},
         figmaName: theme.figmaName,
         identityColor: theme.identityColor,
     };

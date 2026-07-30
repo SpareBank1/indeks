@@ -7,7 +7,7 @@
     "scripts": {
         "dev": "npm run cp:themes && vite --open",
         "build": "tsc --noEmit && npm run cp:themes && vite build",
-        "cp:themes": "mkdir -p ./public/themes && cp -r ../indeks-tokens/.build/css/themes/* ./public/themes",
+        "cp:themes": "mkdir -p ./public/themes && cp -r ../indeks-tokens/.build/css/themes/* ./public/themes && node ../indeks-tokens/dist/cli.js build-colors platform=web path=./.theme-build theme=./themes/kredittbanken.json && cp ./.theme-build/themes/kredittbanken.css ./public/themes/",
         "lint": "eslint .",
         "update-packages": "npx npm-check-updates -i --format group",
         "preview": "vite preview",

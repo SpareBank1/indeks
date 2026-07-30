@@ -1,10 +1,9 @@
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { writeFileSyncEnsureDir } from '../../../../shared/tokens/utils.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Pakkeversjon injiseres ved bygg (esbuild --define). Under test/tsx finnes den
+// ikke, så vi faller tilbake til 'dev' via typeof-guard (unngår ReferenceError).
+declare const __PKG_VERSION__: string;
+const PKG_VERSION = typeof __PKG_VERSION__ !== 'undefined' ? __PKG_VERSION__ : 'dev';
 
 const removeHash = (value: string) => (value.startsWith('#') ? value.slice(1) : value);
 const cssHexToAndroidHex = (str: string) => str.slice(-2) + str.slice(0, -2);
@@ -35,13 +34,9 @@ interface Colors {
 }
 
 function generateAndroidColorFileContent(colors: Colors): string {
-    const packageJsonPath = join(__dirname, '../../../package.json');
-    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
-    const version = packageJson.version;
-
     return `
 /* Generated from Figma tokens */
-/* Fargene er bygget fra Indeks Tokens versjon: ${version} */
+/* Fargene er bygget fra Indeks Tokens versjon: ${PKG_VERSION} */
 
 object Colors {
 

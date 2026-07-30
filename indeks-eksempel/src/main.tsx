@@ -12,6 +12,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import OpenPagesWrapper from './components/OpenPagesWrapper';
 import FargeskalaerEksempler from './pages/openPages/FargeskalaerEksempler';
 import FormValidering from './pages/openPages/FormValidering';
+import GenererFarger from './pages/openPages/GenererFarger';
 import OpenPagesOverview from './pages/openPages/Oversikt';
 import ResponsivLayout from './pages/openPages/ResponsivLayout';
 import ResponsivSpacing from './pages/openPages/ResponsivSpacing';
@@ -86,6 +87,10 @@ const router = createHashRouter([
                     {
                         path: 'form-validering',
                         element: <FormValidering />,
+                    },
+                    {
+                        path: 'generer-farger',
+                        element: <GenererFarger />,
                     },
                 ],
             },

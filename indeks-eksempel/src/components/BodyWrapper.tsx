@@ -1,12 +1,22 @@
 import React, { useEffect } from 'react';
+import { ColorOverrideProvider, useColorOverrides } from '../contexts/ColorOverrideContext';
 import { SpacingProvider, useSpacing } from '../contexts/SpacingContext';
 import Layout from './Layout';
 import { SettingsPopover } from './SettingsPopover';
+import { DEFAULT_THEME, isValidTheme, themeStylesheetHref } from './themeConfig';
+
+const THEME_STORAGE_KEY = 'indeks-eksempel-theme';
+const THEME_LINK_ID = 'active-theme-stylesheet';
 
 const BodyContent: React.FC = () => {
     const { updateSpacing } = useSpacing();
+    const { resetColors } = useColorOverrides();
     const [fontSize, setFontSize] = React.useState(16);
     const [nativeMode, setNativeMode] = React.useState(false);
+    const [theme, setTheme] = React.useState(() => {
+        const stored = localStorage.getItem(THEME_STORAGE_KEY);
+        return isValidTheme(stored) ? stored : DEFAULT_THEME;
+    });
 
     useEffect(() => {
         if (nativeMode) {
@@ -16,11 +26,25 @@ const BodyContent: React.FC = () => {
         }
     }, [nativeMode]);
 
+    // Behold valgt theme på tvers av sidebytte og reload: bruk én styrt <link>
+    // og persistér valget i localStorage.
+    useEffect(() => {
+        let link = document.getElementById(THEME_LINK_ID) as HTMLLinkElement | null;
+        if (!link) {
+            link = document.createElement('link');
+            link.id = THEME_LINK_ID;
+            link.rel = 'stylesheet';
+            document.head.appendChild(link);
+        }
+        // href bygges fra allowlist-konstanten, ikke fra theme-strengen selv, så
+        // ingen untrusted localStorage-tekst kan flyte inn i <link href>.
+        link.href = themeStylesheetHref(theme);
+        localStorage.setItem(THEME_STORAGE_KEY, theme);
+    }, [theme]);
+
     const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const style = document.createElement('link');
-        style.setAttribute('href', `./themes/${event.target.value}.css`);
-        style.setAttribute('rel', 'stylesheet');
-        document.head.appendChild(style);
+        const value = event.target.value;
+        setTheme(isValidTheme(value) ? value : DEFAULT_THEME);
     };
 
     const handleDensityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -52,8 +76,10 @@ const BodyContent: React.FC = () => {
                 onFontSizeChange={handleFontSizeChange}
                 onThemeChange={handleThemeChange}
                 onNativeChange={setNativeMode}
+                onResetColors={resetColors}
                 fontSize={fontSize}
                 nativeMode={nativeMode}
+                theme={theme}
             />
             <Layout />
         </div>
@@ -63,7 +89,9 @@ const BodyContent: React.FC = () => {
 const BodyWrapper: React.FC = () => {
     return (
         <SpacingProvider>
-            <BodyContent />
+            <ColorOverrideProvider>
+                <BodyContent />
+            </ColorOverrideProvider>
         </SpacingProvider>
     );
 };
