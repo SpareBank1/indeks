@@ -1,83 +1,65 @@
+/* Tag — liten visuell etikett med semantisk status-farge.
+ *
+ * Farge kobles via `data-status` (info/success/warning/danger/neutral) som
+ * hekter seg på status-farge-kaskaden i @sb1/indeks-utils/css/status-colors.css
+ * — samme mønster som Message, ProgressBar m.fl. Kaskaden gir automatisk
+ * --ix-color-status-fill (mettet), --ix-color-status-fill-subtle (pastell) og
+ * --ix-color-status-border. Uten `data-status` faller kaskaden til nøytral.
+ *
+ * `data-variant` velger visuell profil:
+ *   emphasis (default) → mettet flate + invers (hvit) tekst
+ *   subtle             → pastell-flate + farget tekst + border
+ *
+ * Ingen web component: Tag er en ren etikett uten atferd, så rotselektoren
+ * treffer kun klassen (.ix-tag) — det finnes ingen <ix-tag>-tag i DOM.
+ */
 :where(.ix-tag) {
-    --background-color: var(--ix-color-fill-neutral-default);
-    --text-color: var(--ix-color-foreground-main-default);
-    --border-color: var(--ix-color-border-main-default);
+    /* Lokale variabler går igjen på flate, tekst og border på tvers av
+       variant-reglene under — derfor lokale props, ikke direkte tokens. */
+    --ix-tag-background: var(--ix-color-status-fill);
+    --ix-tag-color: var(--ix-color-foreground-inverse-default);
+    --ix-tag-border-color: transparent;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--ix-spacing-2xs) var(--ix-spacing-sm);
-    gap: var(--ix-spacing-2xs);
-    border-radius: var(--ix-border-radius-sm);
-    font-size: var(--ix-font-size-md);
     width: fit-content;
-    background-color: var(--background-color);
-    color: var(--text-color);
     height: fit-content;
-    border: var(--ix-border-width-default) solid var(--border-color);
+    gap: var(--ix-spacing-2xs);
+    padding: var(--ix-spacing-2xs) var(--ix-spacing-sm);
+    font-size: var(--ix-font-size-md);
+    color: var(--ix-tag-color);
+    background-color: var(--ix-tag-background);
+    border: var(--ix-border-width-default) solid var(--ix-tag-border-color);
+    border-radius: var(--ix-border-radius-sm);
 }
 
-:where(.ix-tag[data-size="sm"]) {
+/* Ikon arver tekstfargen (både emphasis-invers og subtle-farget). */
+:where(.ix-tag .ix-icon),
+:where(.ix-tag ix-icon) {
+    color: var(--ix-tag-color);
+}
+
+:where(.ix-tag[data-size='sm']) {
     font-size: var(--ix-font-size-sm);
 }
 
-:where(.ix-tag[data-size="lg"]) {
+:where(.ix-tag[data-size='lg']) {
     font-size: var(--ix-font-size-lg);
 }
 
-:where(.ix-tag .ix-icon) {
-    color: var(--text-color);
-}
-
-:where(.ix-tag--info-emphasis) {
-    --background-color: var(--ix-color-fill-info-default);
-    --text-color: var(--ix-color-foreground-inverse-default);
-    --border-color: var(--ix-color-border-info-default);
-}
-
-:where(.ix-tag--info-subtle) {
-    --background-color: var(--ix-color-fill-info-subtle);
-    --border-color: var(--ix-color-border-info-default);
-}
-
-:where(.ix-tag--success-emphasis) {
-    --background-color: var(--ix-color-fill-success-default);
-    --text-color: var(--ix-color-foreground-inverse-default);
-    --border-color: var(--ix-color-border-success-default);
-}
-
-:where(.ix-tag--success-subtle) {
-    --background-color: var(--ix-color-fill-success-subtle);
-    --border-color: var(--ix-color-border-success-default);
-}
-
-:where(.ix-tag--warning-emphasis) {
-    --background-color: var(--ix-color-fill-warning-default);
-    --text-color: var(--ix-color-foreground-inverse-default);
-    --border-color: var(--ix-color-border-warning-default);
-}
-
-:where(.ix-tag--warning-subtle) {
-    --background-color: var(--ix-color-fill-warning-subtle);
-    --border-color: var(--ix-color-border-warning-default);
-}
-
-:where(.ix-tag--danger-emphasis) {
-    --background-color: var(--ix-color-fill-danger-default);
-    --text-color: var(--ix-color-foreground-inverse-default);
-    --border-color: var(--ix-color-border-danger-default);
-}
-
-:where(.ix-tag--danger-subtle) {
-    --background-color: var(--ix-color-fill-danger-subtle);
-    --border-color: var(--ix-color-border-danger-default);
-}
-
-:where(.ix-tag--neutral-emphasis) {
-    --background-color: var(--ix-color-fill-neutral-default);
-    --text-color: var(--ix-color-foreground-inverse-default);
-}
-
-:where(.ix-tag--neutral-subtle) {
-    --background-color: var(--ix-color-fill-neutral-subtle);
+/* ── Subtle: pastell-flate, farget border, mørk tekst ─────────────────────
+ *
+ * Fargen bæres av flate (--ix-color-status-fill-subtle) og border
+ * (--ix-color-status-border). Teksten er mørk main-tekst i ALLE statuser.
+ *
+ * Hvorfor ikke farget tekst (som i designskissen): token-systemet har ingen
+ * per-status foreground mørk nok til å nå WCAG 1.4.3 (4.5:1) på de lyse
+ * subtle-flatene. Målt mot ekte token-verdier gir en mettet per-status-farge
+ * kun 1.5–4.5:1 (info faller helt til 1.48:1). Mørk main-tekst gir 10.8–13.2:1
+ * på alle subtle-flater — trygt og konsistent. Se accessibility/tag.json. */
+:where(.ix-tag[data-variant='subtle']) {
+    --ix-tag-background: var(--ix-color-status-fill-subtle);
+    --ix-tag-color: var(--ix-color-foreground-main-default);
+    --ix-tag-border-color: var(--ix-color-status-border);
 }

@@ -1,0 +1,250 @@
+---
+title: Tag
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/tag.json';
+
+# Tag
+
+:::info TODO — diskusjon: farget subtle-tekst per status
+
+Etter Figma-designet skal subtle-varianten ha _farget_ tekst per status (blå på
+lyseblå, grønn på lysegrønn osv.). Implementasjonen bruker i stedet mørk tekst i
+alle subtle-statuser: de mettede fyll-fargene (`-550`) gir kun 3.3–3.9:1 mot
+pastell-flatene og bryter WCAG 1.4.3 (4.5:1), og systemet mangler
+foreground-tokens for `info`, `warning` og `neutral` (kun `success`/`danger`
+finnes). En mørkere per-status foreground (~`-700`, 7–11:1) ville latt oss matche
+Figma WCAG-trygt. Avventer beslutning om å legge til de manglende tokenene — se
+[Status-foreground i fargedokumentasjonen](/docs/retningslinjer/farger/#status).
+
+Et designsystem som gjør nettopp dette:
+[Digdir Designsystemet — Tag](https://storybook.designsystemet.no/?path=/docs/komponenter-tag--docs)
+bruker `data-color` med tonet flate og mørkere tekst i samme fargetone per status
+(og en `outline`-variant for enda roligere uttrykk).
+
+:::
+
+Tag er en liten, ikke-interaktiv etikett som merker eller kategoriserer innhold — for eksempel en status, en egenskap eller et nøkkelord. Taggen bærer betydningen i teksten sin, og fargen støtter opp om hvilken type informasjon det er.
+
+## Egnet til
+
+- Vise status på et element (f.eks. «Utløpt», «Ny», «Til behandling»)
+- Merke eller kategorisere innhold med korte nøkkelord
+- Fremheve en egenskap eller et attributt kompakt
+- Gi et visuelt hint om alvorlighetsgrad sammen med tekst
+
+## Uegnet til
+
+- Handlinger brukeren kan klikke på — bruk [Chip](./chip) eller [Button](./button)
+- Fjernbare valg eller filtre — bruk [Removable chip](./chip/removable)
+- Lange tekster eller forklaringer — taggen er ment for korte etiketter
+- Å formidle status med farge alene uten forklarende tekst
+
+## Varianter
+
+Taggen har fem semantiske statuser — `neutral`, `info`, `success`, `warning` og `danger` — i to visuelle profiler:
+
+- **Emphasis** (standard): mettet flate med invers (lys) tekst. Brukes når taggen skal trekke blikket.
+- **Subtle**: pastell-flate med mørk tekst og farget border. Roligere uttrykk som passer i tettpakket innhold.
+
+I HTML velges status med `data-status`, profil med `data-variant` og størrelse med `data-size`. I React er dette henholdsvis `variant`-, `type`- og `size`-props.
+
+## Eksempel
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<span class="ix-tag" data-status="info" data-variant="emphasis">Ny</span>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Tag variant="info">Ny</Tag>
+```
+
+</TabItem>
+</Tabs>
+
+### Alle statuser
+
+Hver status finnes i begge profiler. Emphasis øverst, subtle under.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack gap="md">
+  <ix-stack horizontal gap="sm">
+    <span class="ix-tag" data-status="neutral" data-variant="emphasis">Neutral</span>
+    <span class="ix-tag" data-status="info" data-variant="emphasis">Info</span>
+    <span class="ix-tag" data-status="success" data-variant="emphasis">Success</span>
+    <span class="ix-tag" data-status="warning" data-variant="emphasis">Warning</span>
+    <span class="ix-tag" data-status="danger" data-variant="emphasis">Danger</span>
+  </ix-stack>
+  <ix-stack horizontal gap="sm">
+    <span class="ix-tag" data-status="neutral" data-variant="subtle">Neutral</span>
+    <span class="ix-tag" data-status="info" data-variant="subtle">Info</span>
+    <span class="ix-tag" data-status="success" data-variant="subtle">Success</span>
+    <span class="ix-tag" data-status="warning" data-variant="subtle">Warning</span>
+    <span class="ix-tag" data-status="danger" data-variant="subtle">Danger</span>
+  </ix-stack>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="md">
+  <HStack gap="sm">
+    <Tag variant="neutral">Neutral</Tag>
+    <Tag variant="info">Info</Tag>
+    <Tag variant="success">Success</Tag>
+    <Tag variant="warning">Warning</Tag>
+    <Tag variant="danger">Danger</Tag>
+  </HStack>
+  <HStack gap="sm">
+    <Tag variant="neutral" type="subtle">Neutral</Tag>
+    <Tag variant="info" type="subtle">Info</Tag>
+    <Tag variant="success" type="subtle">Success</Tag>
+    <Tag variant="warning" type="subtle">Warning</Tag>
+    <Tag variant="danger" type="subtle">Danger</Tag>
+  </HStack>
+</VStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Subtle-profil
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<span class="ix-tag" data-status="success" data-variant="subtle">Godkjent</span>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Tag variant="success" type="subtle">Godkjent</Tag>
+```
+
+</TabItem>
+</Tabs>
+
+### Med ikon
+
+Ikonet er dekorativt og skal støtte teksten, ikke erstatte den. Merk `<ix-icon>` med `aria-hidden="true"` slik at skjermleser ikke leser det.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<span class="ix-tag" data-status="warning" data-variant="subtle">
+  <ix-icon name="home" aria-hidden="true" class="ix-icon"></ix-icon>
+  Bolig
+</span>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Tag variant="warning" type="subtle">
+  <Icon name="home" size="sm" />
+  Bolig
+</Tag>
+```
+
+</TabItem>
+</Tabs>
+
+### Størrelser
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack horizontal gap="sm">
+  <span class="ix-tag" data-status="info" data-size="sm">Liten</span>
+  <span class="ix-tag" data-status="info">Standard</span>
+  <span class="ix-tag" data-status="info" data-size="lg">Stor</span>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="sm">
+  <Tag variant="info" size="sm">Liten</Tag>
+  <Tag variant="info">Standard</Tag>
+  <Tag variant="info" size="lg">Stor</Tag>
+</HStack>
+```
+
+</TabItem>
+</Tabs>
+
+## Props
+
+Props-dokumentasjonen genereres automatisk fra Storybook.
+
+## Tilpasning med CSS
+
+Trenger du `ix-tag`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassen direkte på elementet ditt. Farge kobles via `data-status`, som setter status-farge-variablene (`--ix-color-status-*`) automatisk, på samme måte som i Message.
+
+### Tilgjengelige klasser og attributter
+
+| Element/tilstand | Selektor / attributt |
+|------------------|----------------------|
+| Tag | `.ix-tag` |
+| Status (farge) | `data-status="neutral \| info \| success \| warning \| danger"` |
+| Visuell profil | `data-variant="emphasis \| subtle"` |
+| Størrelse | `data-size="sm \| lg"` (utelates for standard `md`) |
+| Ikon | `.ix-tag .ix-icon` / `.ix-tag ix-icon` (arver tekstfarge) |
+
+### Eksempel: bruk i egen HTML-struktur
+
+```html
+<span class="ix-tag" data-status="danger" data-variant="subtle" data-size="sm">
+  <ix-icon name="warning" aria-hidden="true" class="ix-icon"></ix-icon>
+  Utløpt
+</span>
+```
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Ikke formidle status med farge alene.** Skriv betydningen i teksten — «Utløpt», «Godkjent» — ikke bare en rød eller grønn tag (WCAG 1.4.1).
+- **Skriv kort, meningsfull tekst** på brukerens språk. Taggen har ingen hardkodet tekst, og innholdet leses som vanlig tekst uten rolle-annonsering.
+- **Merk ikoner som dekorative** med `aria-hidden="true"`. Et ikon uten tekst gjør taggen meningsløs for skjermlesere.
+- **Gjør du taggen interaktiv** med `as="a"` eller `as="button"`, er du selv ansvarlig for meningsfull lenketekst/handling og at fokus- og tastaturatferd gir mening.
+
+### Hva komponenten gjør automatisk
+
+- Velger tekstfarge mot bakgrunnen i hver variant slik at kontrasten når 4.5:1: emphasis bruker lys tekst mot mettet flate, subtle bruker mørk tekst mot pastell-flate.
+- Reflower korrekt ned til 320 px viewport — taggen har ingen fast bredde.
+- Kobler status-farge-variablene automatisk via `data-status`.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Relatert
+
+- [Chip](./chip) — for interaktive valg og handlinger
+- [Message](./message) — for statusmeldinger med mer innhold
+- [Button](./button) — for handlinger
