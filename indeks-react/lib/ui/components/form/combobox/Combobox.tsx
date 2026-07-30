@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useId, useRef } from 'react';
 import type { IxCombobox } from '@sb1/indeks-web';
 import { Field } from '../field/Field';
+import { createFieldEvent, type SyntheticFieldEvent } from '../synthetic-events';
 
 export type ComboboxOption = {
     value: string;
@@ -28,8 +29,19 @@ export type ComboboxProps = {
     value?: string | string[];
     /** Ukontrollert startverdi. String i single, string[] i multi. */
     defaultValue?: string | string[];
-    /** Kalles med ny verdi (string i single, string[] i multi) ved valg/fjerning. */
-    onChange?: (value: string | string[]) => void;
+    /**
+     * Kalles ved valg/fjerning med et syntetisk change-event. Verdien ligger i
+     * `event.target.value` (string i single, string[] i multi). Formen matcher
+     * React Hook Form, så `{...register('felt')}` kan spres rett på komponenten;
+     * med `<Controller>` binder du `field.onChange` direkte.
+     */
+    onChange?: (event: ComboboxChangeEvent) => void;
+    /**
+     * Kalles når fokus forlater komponenten (ikke ved intern fokusflytting mellom
+     * input, chips og liste) med et syntetisk blur-event. Brukes bl.a. av React
+     * Hook Form `register` for touched-state og `mode: 'onBlur'`.
+     */
+    onBlur?: (event: ComboboxBlurEvent) => void;
     /** Placeholder i inputfeltet. */
     placeholder?: string;
     description?: string;
@@ -60,6 +72,21 @@ export type ComboboxProps = {
     id?: string;
 };
 
+/**
+ * Syntetisk change/blur-event Combobox sender. Formen (`target.name`, `target.value`)
+ * er den samme React Hook Form selv bygger for `<Controller>`, og er det både
+ * `register()` og `<Controller>` leser verdien fra via `getEventValue`
+ * (`event.target.value`). Vi kan ikke videresende det ekte `<select>`-eventet:
+ * en native select har `.type`, som får `register` til å lese verdien fra ref-en i
+ * stedet, og `.value` på en multiple-select gir kun første valgte option — begge
+ * gir feil verdi i multi. `value` er `string` i single, `string[]` i multi.
+ * Delt form med de andre felt-komponentene, se `../synthetic-events`.
+ */
+export type ComboboxChangeEvent = SyntheticFieldEvent<string | string[]>;
+
+/** Syntetisk blur-event Combobox sender til `onBlur` (touched-state i RHF). */
+export type ComboboxBlurEvent = SyntheticFieldEvent<string | string[]>;
+
 function toValueArray(value: string | string[] | undefined): string[] {
     if (value === undefined) return [];
     return Array.isArray(value) ? value : value ? [value] : [];
@@ -80,6 +107,7 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
         value: controlledValue,
         defaultValue,
         onChange,
+        onBlur,
         placeholder,
         description,
         errorMessage,
@@ -137,15 +165,38 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
     useEffect(() => {
         const host = hostRef.current;
         if (!host || !onChange) return;
-        const handler = () => {
+        const handler = (event: Event) => {
             const selected = Array.from(host.querySelectorAll<HTMLElement>('.ix-combobox__option'))
                 .filter((o) => o.getAttribute('aria-selected') === 'true')
                 .map((o) => o.getAttribute('data-value') ?? '');
-            onChange(multiple ? selected : (selected[0] ?? ''));
+            const value = multiple ? selected : (selected[0] ?? '');
+            onChange(createFieldEvent('change', { name, value }, event));
         };
         host.addEventListener('change', handler);
         return () => host.removeEventListener('change', handler);
-    }, [onChange, multiple]);
+    }, [onChange, multiple, name]);
+
+    // Rapporter blur til konsumenten kun når fokus forlater HELE komponenten —
+    // ikke ved intern flytting mellom input, chips og liste (focusout bobler, så
+    // relatedTarget innenfor host betyr fortsatt fokusert). RHF `register` bruker
+    // dette til touched-state og `mode: 'onBlur'`.
+    useEffect(() => {
+        const host = hostRef.current;
+        if (!host || !onBlur) return;
+        const handler = (event: FocusEvent) => {
+            const next = event.relatedTarget as Node | null;
+            if (next && host.contains(next)) return;
+            // Blur bærer value på samme form som change, så en felles handler kan lese
+            // event.target.value på begge.
+            const selected = Array.from(host.querySelectorAll<HTMLElement>('.ix-combobox__option'))
+                .filter((o) => o.getAttribute('aria-selected') === 'true')
+                .map((o) => o.getAttribute('data-value') ?? '');
+            const value = multiple ? selected : (selected[0] ?? '');
+            onBlur(createFieldEvent('blur', { name, value }, event));
+        };
+        host.addEventListener('focusout', handler);
+        return () => host.removeEventListener('focusout', handler);
+    }, [onBlur, multiple, name]);
 
     const dataState = errorMessage ? 'error' : readOnly ? 'readonly' : disabled ? 'disabled' : undefined;
 

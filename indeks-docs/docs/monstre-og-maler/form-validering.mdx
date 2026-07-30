@@ -1,0 +1,191 @@
+import EksempelLink from '@site/src/components/EksempelLink';
+
+# Form-validering
+
+Indeks sine form-komponenter er **bring-your-own-validation**: hver komponent tar en ferdig `errorMessage`-streng og viser den (og setter `aria-invalid` selv). Selve valideringen — reglene og feilmeldingene — overlater vi til et form-rammeverk og et skjema. Denne siden viser det anbefalte oppsettet med [React Hook Form](https://react-hook-form.com/) (RHF) og [Valibot](https://valibot.dev/).
+
+:::tip Se det i praksis
+Et fullstendig, kjørbart eksempel med alle felttyper ligger i eksempelappen: <EksempelLink to="internTesting/form-validering">åpne Form-validering</EksempelLink>. Kildekoden: [`indeks-eksempel/src/pages/openPages/FormValidering.tsx`](https://github.com/SpareBank1/indeks/blob/main/indeks-eksempel/src/pages/openPages/FormValidering.tsx). Eksemplet dekkes også av en funksjonell Playwright-e2e-test ([`indeks-eksempel/tests/form-validering.spec.ts`](https://github.com/SpareBank1/indeks/blob/main/indeks-eksempel/tests/form-validering.spec.ts)).
+:::
+
+## Oppsett
+
+```bash
+pnpm add react-hook-form @hookform/resolvers valibot
+```
+
+Definér et Valibot-skjema med norske feilmeldinger, og koble det til RHF via `valibotResolver`:
+
+```tsx
+import { valibotResolver } from '@hookform/resolvers/valibot';
+import { useForm } from 'react-hook-form';
+import * as v from 'valibot';
+
+const schema = v.object({
+    navn: v.pipe(v.string(), v.trim(), v.minLength(2, 'Navn må ha minst 2 tegn')),
+    epost: v.pipe(v.string(), v.trim(), v.nonEmpty('E-post er påkrevd'), v.email('Ugyldig e-postadresse')),
+});
+
+const { register, handleSubmit, control, formState: { errors } } = useForm({
+    resolver: valibotResolver(schema),
+    defaultValues: { navn: '', epost: '' },
+});
+```
+
+`control` trenger du bare hvis du kobler et felt med `<Controller>` — se [Felt som trenger to-veis binding](#felt-som-trenger-to-veis-binding-controller).
+
+## Koble et felt til skjemaet
+
+Alle Indeks sine form-komponenter kobles på samme måte: **spre `register('feltnavn')` rett på komponenten** og send `errors.feltnavn?.message` til `errorMessage`. Ingen wrapper, ingen ekstra re-render per tastetrykk.
+
+```tsx
+<TextField label="Navn" {...register('navn')} errorMessage={errors.navn?.message} />
+<TextField label="E-post" type="email" {...register('epost')} errorMessage={errors.epost?.message} />
+<Select label="Fra konto" options={kontoOptions} {...register('fraKonto')} errorMessage={errors.fraKonto?.message} />
+<Checkbox label="Jeg godtar vilkårene" {...register('samtykke')} errorMessage={errors.samtykke?.message} />
+<TextArea label="Melding" {...register('melding')} errorMessage={errors.melding?.message} />
+<RadioGroup legend="Kontotype" options={kontotypeOptions} {...register('kontotype')} errorMessage={errors.kontotype?.message} />
+<CheckboxGroup legend="Tjenester" options={tjenesteOptions} {...register('tjenester')} errorMessage={errors.tjenester?.message} />
+<Combobox label="Land" options={landOptions} noHitsText="Ingen treff" {...register('land')} errorMessage={errors.land?.message} />
+```
+
+Dette holder for de aller fleste skjemaer. `register()` gir én-veis binding (UI → skjema) — verdien flyter inn i RHF, og RHF validerer og sender inn. De to avsnittene under dekker to spesialtilfeller du kan møte: gruppevalg (radio/checkbox) og felt som trenger to-veis binding.
+
+### Komplett eksempel
+
+```tsx
+import { valibotResolver } from '@hookform/resolvers/valibot';
+import { useForm } from 'react-hook-form';
+import * as v from 'valibot';
+import { Button, Form, TextField } from '@sb1/indeks-react';
+
+const schema = v.object({
+    navn: v.pipe(v.string(), v.trim(), v.minLength(2, 'Navn må ha minst 2 tegn')),
+    epost: v.pipe(v.string(), v.trim(), v.nonEmpty('E-post er påkrevd'), v.email('Ugyldig e-postadresse')),
+});
+
+function Kontaktskjema() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: valibotResolver(schema),
+        defaultValues: { navn: '', epost: '' },
+    });
+
+    return (
+        <Form onSubmit={handleSubmit((data) => console.log(data))} noValidate>
+            <TextField label="Navn" {...register('navn')} errorMessage={errors.navn?.message} />
+            <TextField label="E-post" type="email" {...register('epost')} errorMessage={errors.epost?.message} />
+            <Button type="submit">Send inn</Button>
+        </Form>
+    );
+}
+```
+
+## Gruppevalg: `RadioGroup` og `CheckboxGroup`
+
+Begge kobles med `register()` som over. Under panseret rendrer de ekte native inputs (`<input type="radio">` / `<input type="checkbox">`, alle med samme `name`), og `register`-objektet rutes rett ned på hver input — akkurat slik `register()` er *bygget* for radio- og checkbox-grupper. RHF eier `checked` via de native refene.
+
+To ting følger av dette:
+
+- **Forhåndsvalg kommer gratis fra `defaultValues`.** RHF skriver `checked` fra `useForm`-`defaultValues` inn på inputene ved mount — du trenger ikke sette `defaultValue` på selve gruppen.
+- **`RadioGroup` gir én verdi (`string`), `CheckboxGroup` gir et array (`string[]`).** RHF bygger arrayet fra `checked`+`value` på inputene som deler `name`.
+
+```tsx
+const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: valibotResolver(schema),
+    defaultValues: { kontotype: 'privat', tjenester: ['nettbank'] },
+});
+
+<RadioGroup
+    legend="Kontotype"
+    options={[
+        { value: 'privat', label: 'Privatkonto' },
+        { value: 'bedrift', label: 'Bedriftskonto' },
+    ]}
+    {...register('kontotype')}
+    errorMessage={errors.kontotype?.message}
+/>
+<CheckboxGroup
+    legend="Tjenester"
+    options={[
+        { value: 'nettbank', label: 'Nettbank' },
+        { value: 'kort', label: 'Kort' },
+    ]}
+    {...register('tjenester')}
+    errorMessage={errors.tjenester?.message}
+/>
+```
+
+## Felt som trenger to-veis binding: `<Controller>`
+
+`register()` binder én vei (UI → skjema). Trenger du at skjemaet også skal styre UI-et — for eksempel at `reset()`/`setValue()` skal oppdatere det synlige valget, eller at du vil kontrollere verdien fullt ut i React — bruk RHF sin `<Controller>` og bind `value` + `field.onChange`.
+
+Dette er særlig relevant for `Combobox`. Med `register()` peker `ref` på web-komponenten (som eier fokus ved valideringsfeil), og verdien flyter inn via et syntetisk change-event — men RHF har ingen native input å *skrive tilbake* gjennom, så `reset()`/`setValue()` oppdaterer ikke det synlige valget. `<Controller>` løser det:
+
+```tsx
+import { Controller, useForm } from 'react-hook-form';
+import { Combobox } from '@sb1/indeks-react';
+
+<Controller
+    control={control}
+    name="land"
+    render={({ field, fieldState }) => (
+        <Combobox
+            label="Land"
+            options={landOptions}
+            noHitsText="Ingen treff"
+            value={field.value}
+            onChange={(event) => field.onChange(event.target.value)}
+            onBlur={field.onBlur}
+            errorMessage={fieldState.error?.message}
+        />
+    )}
+/>
+```
+
+`Combobox` sitt `onChange` sender et event der verdien ligger i `event.target.value` (`string` i single, `string[]` i multi) — samme form som `register()` leser, så mappingen til `field.onChange` er triviell. `RadioGroup` og `CheckboxGroup` støtter også `<Controller>` på samme vis, men der holder `register()` nesten alltid.
+
+:::note `Combobox` med `register()` — initialverdi
+Bruker du `register()` (ikke `<Controller>`) og vil vise et forhåndsvalgt alternativ: sett `defaultValue` på `Combobox` i tillegg til `defaultValues` i `useForm`, og hold dem i synk. `defaultValues` alene pushes ikke inn i web-komponenten.
+:::
+
+## `TextField` med formatering
+
+Et formatert `TextField` (`format` eller `formatPattern`) bindes **på samme måte som et uformatert** — spre `register('felt')` rett på:
+
+```tsx
+<TextField
+    label="Kontonummer"
+    inputMode="numeric"
+    format="account"
+    {...register('kontonummer')}
+    errorMessage={errors.kontonummer?.message}
+/>
+```
+
+Bak kulissene eier den underliggende `ix-field`-web-komponenten den synlige DOM-verdien (den viser formatert tekst), mens den **rå** verdien lever i en skjult mirror. For at `register()` skal lese/skrive rå verdi videresender `TextField` derfor et lite proxy-objekt til `ref` i formatter-modus — ikke den native inputen. Det er en intern detalj; du binder feltet likt uansett. `onChange`/`onBlur` er syntetiske events der verdien ligger i `event.target.value`.
+
+**Innsendt verdi er rå** (uten separatorer): visningen er `1234 56 78901`, men skjemaet får `12345678901`. Valider derfor mot den rå formen:
+
+```tsx
+kontonummer: v.pipe(v.string(), v.regex(/^\d{11}$/, 'Kontonummer må være 11 siffer')),
+```
+
+## Innsending
+
+Send skjemaet via `handleSubmit`, som kjører valideringen før din `onValid`-callback:
+
+```tsx
+<Form onSubmit={handleSubmit(onValid)} noValidate>
+    {/* felt ... */}
+    <Button type="submit">Send inn</Button>
+</Form>
+```
+
+## Se også
+
+- [ValidationMessage](/docs/komponenter/skjema/validation-message) — komponenten som viser feilmeldingen
+- [TextField](/docs/komponenter/skjema/textfield) og [formatering av TextField](/docs/komponenter/skjema/textfield-formatering)

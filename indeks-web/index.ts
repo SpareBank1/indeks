@@ -30,8 +30,8 @@ export { IxTabs, IxTabList, IxTab, IxTabPanel };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
 
-export { createPatternFormatter, createAmountFormatter, amountFormatterForLocale, registerFormat, resolveFormat } from './lib/components/field/formats.js';
-export type { FieldFormatter } from './lib/components/field/formats.js';
+export { createPatternFormatter, createAmountFormatter, amountFormatterForLocale, registerFormat, resolveFormat, BUILTIN_FORMAT_NAMES } from './lib/components/field/formats.js';
+export type { FieldFormatter, BuiltInFormatName } from './lib/components/field/formats.js';
 
 declare global {
     interface HTMLElementTagNameMap {

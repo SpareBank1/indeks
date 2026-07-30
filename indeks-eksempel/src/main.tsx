@@ -1,12 +1,17 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
+// Registrerer alle ix-* custom elements fra lokal indeks-web (via vite-alias),
+// slik at eksempelappen alltid kjører repoets nåværende WC-kode i stedet for en
+// pinnet CDN-versjon. Må importeres før React rendrer så elementene er definert.
+import '@sb1/indeks-web';
 import './index.css';
 
 import BodyWrapper from './components/BodyWrapper';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import OpenPagesWrapper from './components/OpenPagesWrapper';
 import FargeskalaerEksempler from './pages/openPages/FargeskalaerEksempler';
+import FormValidering from './pages/openPages/FormValidering';
 import OpenPagesOverview from './pages/openPages/Oversikt';
 import ResponsivLayout from './pages/openPages/ResponsivLayout';
 import ResponsivSpacing from './pages/openPages/ResponsivSpacing';
@@ -77,6 +82,10 @@ const router = createHashRouter([
                     {
                         path: 'fargeskalaer-eksempler',
                         element: <FargeskalaerEksempler />,
+                    },
+                    {
+                        path: 'form-validering',
+                        element: <FormValidering />,
                     },
                 ],
             },

@@ -15,6 +15,10 @@ Feil fanges derfor av **validering**, ikke ved å droppe tegn. Den rå verdien b
 Formateringen er kun presentasjon. `onChange`, `ix-field.rawValue` og form-innsending gir deg verdien uten separatorer (`"12345678"`, ikke `"123 45 678"`). Du lagrer og validerer den rå verdien.
 :::
 
+:::note Bruk med React Hook Form
+Et formatert felt kobles med `{...register('felt')}` akkurat som et uformatert (Mønster A) — se [Form-validering](/docs/monstre-og-maler/form-validering#textfield-med-formatering). I formatter-modus videresender `TextField` et lite **proxy-objekt** til `ref` i stedet for den native `<input>` (siden `ix-field` eier den synlige DOM-verdien): proxyens `value` er alltid rå, og `focus()` delegerer til den synlige inputen. Det er en intern detalj — trenger du verdien selv, les den via `onChange` (`event.target.value`) eller `ix-field.rawValue`, ikke via `ref.value` direkte.
+:::
+
 ## To moduser: blur (standard) og live (opt-in)
 
 - **Blur (standard):** feltet viser formatert verdi **når det ikke har fokus**, og den rå (uformaterte) verdien når det får fokus, slik at brukeren kan redigere fritt uten at markøren hopper. Egne pattern-strenger og `{format,parse}`-objekter er blur med mindre de opter inn på live.

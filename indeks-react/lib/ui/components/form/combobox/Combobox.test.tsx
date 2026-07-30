@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { lastEvent } from '../test-events';
 import { Combobox, type ComboboxOption } from './Combobox';
 
 const OPTIONS: ComboboxOption[] = [
@@ -123,22 +124,49 @@ describe('Combobox', () => {
         expect(container.querySelector('[data-value="se"]')?.getAttribute('aria-selected')).toBe('true');
     });
 
-    it('kaller onChange med valgt verdi når WC emitter change (single)', () => {
+    it('kaller onChange med syntetisk event (verdi i target.value, single)', () => {
         const onChange = vi.fn();
-        const { container } = renderCombobox({ onChange });
+        const { container } = renderCombobox({ name: 'land', onChange });
         const no = container.querySelector<HTMLElement>('[data-value="no"]')!;
         no.setAttribute('aria-selected', 'true');
         container.querySelector('ix-combobox')!.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        expect(onChange).toHaveBeenCalledWith('no');
+        expect(lastEvent(onChange).type).toBe('change');
+        expect(lastEvent(onChange).target).toMatchObject({ name: 'land', value: 'no' });
     });
 
-    it('kaller onChange med array i multi', () => {
+    it('kaller onChange med array i target.value i multi', () => {
         const onChange = vi.fn();
-        const { container } = renderCombobox({ multiple: true, onChange });
+        const { container } = renderCombobox({ name: 'land', multiple: true, onChange });
         container.querySelector('[data-value="no"]')!.setAttribute('aria-selected', 'true');
         container.querySelector('[data-value="se"]')!.setAttribute('aria-selected', 'true');
         container.querySelector('ix-combobox')!.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        expect(onChange).toHaveBeenCalledWith(['no', 'se']);
+        expect(lastEvent(onChange).type).toBe('change');
+        expect(lastEvent(onChange).target).toMatchObject({ name: 'land', value: ['no', 'se'] });
+    });
+
+    it('kaller onBlur når fokus forlater komponenten', () => {
+        const onBlur = vi.fn();
+        const { container } = renderCombobox({ onBlur });
+        const host = container.querySelector('ix-combobox')!;
+        // relatedTarget utenfor host → fokus forlater komponenten.
+        const outside = document.createElement('button');
+        document.body.appendChild(outside);
+        host.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: outside }));
+        expect(onBlur).toHaveBeenCalledTimes(1);
+        expect(lastEvent(onBlur).type).toBe('blur');
+        // Delt syntetisk form: blur bærer nå også value (single, ingen valgt → '').
+        expect(lastEvent(onBlur).target).toMatchObject({ name: '', value: '' });
+        outside.remove();
+    });
+
+    it('kaller ikke onBlur ved intern fokusflytting innad i komponenten', () => {
+        const onBlur = vi.fn();
+        const { container } = renderCombobox({ onBlur });
+        const host = container.querySelector('ix-combobox')!;
+        // relatedTarget innenfor host (f.eks. input → toggle-knapp) → fortsatt fokusert.
+        const toggle = container.querySelector('.ix-combobox__toggle')!;
+        host.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: toggle }));
+        expect(onBlur).not.toHaveBeenCalled();
     });
 
     it('rendrer error-span og aria-invalid ved feilmelding', () => {
