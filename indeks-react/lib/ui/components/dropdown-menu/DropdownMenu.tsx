@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef, isValidElement, useEffect, useRef } from 'react';
 import type {
     ButtonHTMLAttributes,
@@ -69,7 +69,7 @@ export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(function 
                 if (typeof ref === 'function') ref(node);
                 else if (ref) ref.current = node;
             }}
-            class={clsx('ix-dropdown', className)}
+            class={cn('ix-dropdown', className)}
             placement={placement}
             open={defaultOpen ? '' : undefined}
         >
@@ -118,7 +118,7 @@ export type DropdownMenuContentProps = HTMLAttributes<HTMLDivElement> & {
 const DropdownMenuContent = forwardRef<HTMLDivElement, DropdownMenuContentProps>(
     function DropdownMenuContent({ children, className, ...rest }, ref): JSX.Element {
         return (
-            <div ref={ref} className={clsx('ix-dropdown__menu', className)} role="menu" {...rest}>
+            <div ref={ref} className={cn('ix-dropdown__menu', className)} role="menu" {...rest}>
                 {children}
             </div>
         );
@@ -159,7 +159,7 @@ const DropdownMenuItem = forwardRef<HTMLButtonElement, DropdownMenuItemProps>(
                 ref={ref}
                 type="button"
                 role="menuitem"
-                className={clsx('ix-dropdown__item', className)}
+                className={cn('ix-dropdown__item', className)}
                 data-danger={danger ? '' : undefined}
                 disabled={disabled}
                 aria-disabled={disabled ? 'true' : undefined}
@@ -187,7 +187,7 @@ const DropdownMenuDivider = forwardRef<HTMLHRElement, DropdownMenuDividerProps>(
             <hr
                 ref={ref}
                 role="separator"
-                className={clsx('ix-dropdown__divider', className)}
+                className={cn('ix-dropdown__divider', className)}
                 {...rest}
             />
         );
@@ -250,7 +250,7 @@ const DropdownMenuSub = forwardRef<HTMLElement, DropdownMenuSubProps>(function D
                 if (typeof ref === 'function') ref(node);
                 else if (ref) ref.current = node;
             }}
-            class={clsx('ix-dropdown', className)}
+            class={cn('ix-dropdown', className)}
             data-submenu=""
         >
             {children}
@@ -277,7 +277,7 @@ const DropdownMenuSubTrigger = forwardRef<HTMLButtonElement, DropdownMenuSubTrig
                 ref={ref}
                 type="button"
                 role="menuitem"
-                className={clsx('ix-dropdown__item', 'ix-dropdown__submenu-trigger', className)}
+                className={cn('ix-dropdown__item', 'ix-dropdown__submenu-trigger', className)}
                 disabled={disabled}
                 aria-disabled={disabled ? 'true' : undefined}
                 {...rest}
@@ -303,7 +303,7 @@ export type DropdownMenuSubContentProps = HTMLAttributes<HTMLDivElement> & {
 const DropdownMenuSubContent = forwardRef<HTMLDivElement, DropdownMenuSubContentProps>(
     function DropdownMenuSubContent({ children, className, ...rest }, ref): JSX.Element {
         return (
-            <div ref={ref} className={clsx('ix-dropdown__menu', className)} role="menu" {...rest}>
+            <div ref={ref} className={cn('ix-dropdown__menu', className)} role="menu" {...rest}>
                 {children}
             </div>
         );
