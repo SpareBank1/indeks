@@ -51,13 +51,13 @@
     border: var(--ix-border-default);
     border-radius: var(--ix-border-radius-lg);
     overflow: hidden;
+    flex-direction: column;
 }
 
-/* Kolonnelayout kun når dialogen er åpen — [open] settes av showModal(). En lukket
+/* display:flex kun når dialogen er åpen — [open] settes av showModal(). En lukket
  * <dialog> har display:none fra native styling, og den arven skal bevares. */
 :where(.ix-modal[open]) {
     display: flex;
-    flex-direction: column;
 }
 
 /* Backdrop = den mørke flaten bak dialogen. Native ::backdrop er ikke en egen
@@ -167,11 +167,11 @@
     padding: var(--ix-spacing-lg);
 }
 
-:where(.ix-modal__body) > :first-child {
+:where(.ix-modal__body)> :first-child {
     margin-top: 0;
 }
 
-:where(.ix-modal__body) > :last-child {
+:where(.ix-modal__body)> :last-child {
     margin-bottom: 0;
 }
 
@@ -241,6 +241,7 @@
     /* Deterministiske Playwright-snapshots + WCAG 2.3.3: stabilt endepunkt uten
      * bevegelse. Dialogen er synlig umiddelbart. */
     @media (prefers-reduced-motion: reduce) {
+
         :where(.ix-modal),
         :where(.ix-modal)::backdrop {
             opacity: 1;
@@ -249,4 +250,5 @@
         }
     }
 }
+
 /* stylelint-enable plugin/no-unsupported-browser-features */
