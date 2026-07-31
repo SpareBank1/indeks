@@ -14,7 +14,7 @@
     },
     {
       "summary": "Oversett all tekst i menyen",
-      "details": "All tekst i trigger-knappen og meny-elementene kommer fra deg og skal være på brukerens spraak (bokmal, nynorsk, engelsk). Komponenten har ingen hardkodet fallback-tekst.",
+      "details": "All tekst i trigger-knappen og meny-elementene kommer fra deg og skal være på brukerens språk (bokmål, nynorsk, engelsk). Komponenten har ingen hardkodet fallback-tekst.",
       "wcag": ["3.1.2"]
     },
     {
