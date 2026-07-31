@@ -9,6 +9,17 @@ export type { Status } from '../../types/types';
 export { Button } from './button/Button';
 export { Chip } from './chip/Chip';
 export type { ChipProps } from './chip/Chip';
+export { DropdownMenu } from './dropdown-menu/DropdownMenu';
+export type {
+    DropdownMenuProps,
+    DropdownMenuTriggerProps,
+    DropdownMenuContentProps,
+    DropdownMenuItemProps,
+    DropdownMenuDividerProps,
+    DropdownMenuSubProps,
+    DropdownMenuSubTriggerProps,
+    DropdownMenuSubContentProps,
+} from './dropdown-menu/DropdownMenu';
 export { RemovableChip } from './chip/RemovableChip';
 export type { RemovableChipProps } from './chip/RemovableChip';
 export { Message } from './message/Message';

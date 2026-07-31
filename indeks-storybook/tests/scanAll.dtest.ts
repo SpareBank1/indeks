@@ -17,6 +17,7 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Components/Accordion',
   'Components/Button',
   'Components/Chip',
+  'Components/DropdownMenu',
   'Components/InteractiveIcon',
   'Components/Message',
   'Components/Modal',

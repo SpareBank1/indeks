@@ -3,6 +3,7 @@
 import type {
     IxCheckboxGroup,
     IxCombobox,
+    IxDropdown,
     IxField,
     IxIcon,
     IxProgressBar,
@@ -58,6 +59,12 @@ declare module 'react' {
                 'data-remove-chip-label'?: string;
                 'data-chips-label'?: string;
                 'data-results-text'?: string;
+            };
+            'ix-dropdown': React.DetailedHTMLProps<React.HTMLAttributes<IxDropdown>, IxDropdown> & {
+                class?: string;
+                open?: '' | boolean;
+                placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+                'data-submenu'?: '' | boolean;
             };
             'ix-progress-bar': React.DetailedHTMLProps<React.HTMLAttributes<IxProgressBar>, IxProgressBar> & {
                 value?: number;
