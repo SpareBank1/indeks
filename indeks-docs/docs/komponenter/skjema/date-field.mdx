@@ -12,7 +12,7 @@ import a11yData from './accessibility/date-field.json';
 DateField lar brukeren taste en dato i norsk format (`dd.mm.åååå`) eller åpne enhetens innebygde kalender via en knapp i feltet. Verdien som sendes videre er alltid ISO (`åååå-mm-dd`), uavhengig av hva som vises i feltet.
 
 :::info Norsk format, ISO-verdi
-Brukeren ser og taster `dd.mm.åååå`. Selve verdien — det som sendes ved innsending og gjennom `onChange` — er ISO (`åååå-mm-dd`). Det unngår den amerikanske `mm/dd/åååå`-tvetydigheten samtidig som datoen er maskinlesbar.
+Brukeren ser og taster `dd.mm.åååå`. Selve verdien — det som sendes ved innsending og som ligger i `event.target.value` i `onChange` — er ISO (`åååå-mm-dd`). Det unngår den amerikanske `mm/dd/åååå`-tvetydigheten samtidig som datoen er maskinlesbar.
 :::
 
 ## Egnet til
@@ -294,6 +294,19 @@ DateField sperrer ikke for vanlige HTML-skjemaer. `name` når den genererte nati
 </form>
 ```
 
+### React Hook Form
+
+`onChange` er event-basert (ISO i `event.target.value`) og `ref` er en register-kompatibel proxy, så feltet bindes som et hvilket som helst annet — spre `{...register('felt')}` rett på. RHF leser/skriver ISO via proxy-en (`reset`/`setValue`/`defaultValues` fungerer), og `onBlur` gir touched-state.
+
+```tsx
+<DateField
+  label="Fødselsdato"
+  openLabel="Åpne kalender"
+  {...register('fodselsdato')}
+  errorMessage={errors.fodselsdato?.message}
+/>
+```
+
 ## Retningslinjer
 
 ### Vis alltid formatet som tekst
@@ -392,9 +405,10 @@ Trenger du `ix-date-field`-stylingen på HTML du setter sammen selv — uten Rea
 | `name` | `string` | Nei | | Navn på det innsendte feltet. Verdien er ISO (`åååå-mm-dd`) |
 | `value` | `string` | Nei | | Kontrollert verdi i ISO. Kombiner med `onChange` |
 | `defaultValue` | `string` | Nei | | Ukontrollert startverdi i ISO |
-| `onChange` | `(value: string) => void` | Nei | | Kalles med ny verdi i ISO (tom streng når ufullstendig) |
-| `min` | `string` | Nei | | Tidligste valgbare dato i ISO |
-| `max` | `string` | Nei | | Seneste valgbare dato i ISO |
+| `onChange` | `ChangeEventHandler<HTMLInputElement>` | Nei | | Event-basert. ISO-verdien ligger i `event.target.value` (tom streng når ufullstendig), så `{...register('felt')}` kan spres rett på |
+| `onBlur` | `FocusEventHandler<HTMLInputElement>` | Nei | | Kalles når fokus forlater feltet (RHF touched-state, `mode: 'onBlur'`) |
+| `min` | `string \| number` | Nei | | Tidligste valgbare dato i ISO |
+| `max` | `string \| number` | Nei | | Seneste valgbare dato i ISO |
 | `description` | `string` | Nei | | Hjelpetekst under label (bruk til formathint) |
 | `errorMessage` | `string` | Nei | | Feilmelding. Trigger `aria-invalid` når den har innhold |
 | `disabled` | `boolean` | Nei | | Deaktiverer feltet |
@@ -406,7 +420,7 @@ Trenger du `ix-date-field`-stylingen på HTML du setter sammen selv — uten Rea
 | `tooltipPlacement` | `string` | Nei | | Plassering av tooltip |
 | `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
 | `id` | `string` | Nei | | Id på inputfeltet. Genereres automatisk om utelatt |
-| `ref` | `Ref<IxDateField>` | Nei | | Ref videresendes til `<ix-date-field>`-elementet |
+| `ref` | `Ref<HTMLInputElement>` | Nei | | Register-kompatibel proxy: `ref.value` gir/setter ISO, `ref.focus()` fokuserer feltet. (Ikke `ix-date-field`-elementet — verdien eies av web-komponenten) |
 
 </TabItem>
 </Tabs>

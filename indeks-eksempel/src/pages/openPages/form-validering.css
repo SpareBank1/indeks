@@ -1,0 +1,6 @@
+/* Felt som ikke trenger full skjemabredde: en kontovelger og et telefonnummer er
+   korte, så vi begrenser bredden. Andre felt (navn, e-post, melding) beholder full
+   bredde. className videresendes til host-elementet i hver komponent. */
+.form-validering__narrow {
+    max-width: 20rem;
+}

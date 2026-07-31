@@ -26,6 +26,10 @@ test('tomt submit viser feilmeldinger per felt', async ({ page }) => {
     await expect(page.getByText('Velg en kontotype')).toBeVisible();
     await expect(page.getByText('Velg minst én tjeneste')).toBeVisible();
     await expect(page.getByText('Velg et land')).toBeVisible();
+    await expect(page.getByText('Velg en gyldig dato')).toBeVisible();
+    // PhoneNumberField er to uavhengige felt → én feilmelding per felt.
+    await expect(page.getByText('Velg landkode')).toBeVisible();
+    await expect(page.getByText('Telefonnummer må være 8 siffer')).toBeVisible();
     await expect(page.getByText('Du må godta vilkårene')).toBeVisible();
 
     // Ingen innsendt-blokk skal vises når validering feiler.
@@ -61,7 +65,8 @@ test('Combobox via register: tomt submit flytter fokus til søkefeltet', async (
 
     await expect(page.getByText('Velg et land')).toBeVisible();
     // Fokus skal ha havnet på combobox-søkefeltet (ikke på den skjulte selecten).
-    await expect(page.getByLabel('Land')).toBeFocused();
+    // exact: true — «Land» er ellers en delstreng av «Landkode» (PhoneNumberField).
+    await expect(page.getByLabel('Land', { exact: true })).toBeFocused();
 });
 
 test('korrekt utfylling sender inn RÅ verdier', async ({ page }) => {
@@ -89,10 +94,23 @@ test('korrekt utfylling sender inn RÅ verdier', async ({ page }) => {
 
     // Combobox (register) — skriv og velg fra lista (tastatur/klikk). Verdien
     // flyter via det syntetiske change-eventet inn i RHF på lik linje med Mønster A.
-    const land = page.getByLabel('Land');
+    // exact: true — «Land» matcher ellers også «Landkode» (PhoneNumberField).
+    const land = page.getByLabel('Land', { exact: true });
     await land.click();
     await land.fill('Norge');
     await page.getByRole('option', { name: 'Norge' }).click();
+
+    // DateField (register, proxy-ref): skriv i den synlige dd.mm.åååå-inputen,
+    // innsendt/validert verdi er ISO (åååå-mm-dd).
+    await page.getByLabel('Fødselsdato').fill('17.05.1990');
+
+    // PhoneNumberField — to felt: velg landkode og skriv nummeret. Det smale
+    // landfeltet har chevron-knappen liggende oppå inputen, så et klikk midt på
+    // inputen fanges av knappen — vi åpner lista via chevronen (naturlig interaksjon).
+    await page.getByRole('button', { name: 'Vis landkoder' }).click();
+    await page.getByRole('option', { name: '+47' }).click();
+    // Nummerfeltet formateres visuelt («123 45 678»), men innsendt verdi er rå.
+    await page.getByLabel('Telefonnummer').fill('12345678');
 
     await page.getByText('Jeg godtar vilkårene').click();
     await expect(page.getByLabel('Jeg godtar vilkårene')).toBeChecked();
@@ -112,6 +130,9 @@ test('korrekt utfylling sender inn RÅ verdier', async ({ page }) => {
         kontotype: 'privat',
         tjenester: ['nettbank', 'mobilbank'],
         land: 'no',
+        fodselsdato: '1990-05-17', // ISO — visning var dd.mm.åååå
+        landkode: '47',
+        tlf: '12345678', // RÅ — ingen mellomrom
         samtykke: true,
     });
 });
