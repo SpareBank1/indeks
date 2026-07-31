@@ -1,5 +1,49 @@
 # @sb1/indeks-web
 
+## 0.18.0
+
+### Minor Changes
+
+-   bb77cc9: Ny intern `cn`-util erstatter den eksterne `clsx`-avhengigheten. `cn` bor i `@sb1/indeks-web` (`lib/utils/cn.ts`), re-eksporteres fra pakken og eksponeres på `globalThis.cn` slik at den er tilgjengelig i web components og for andre konsumenter — også uten import når indeks-web er lastet. `@sb1/indeks-react` får en bevisst duplisert kopi (React runtime-importerer ikke web) som holdes i synk via `cn.sync.test.ts`, re-eksporterer `cn` fra sitt public API, og har fjernet `clsx` som avhengighet. `ProgressBarState` er nå eksportert fra web og synk-testet mot React-kopien.
+-   e42af9e: Combobox fungerer nå med React Hook Form `register()`, ikke bare `<Controller>` — og form-innsending blir mer robust for alle rammeverk.
+
+    -   **indeks-web:** `ix-combobox` fyrer nå et native `change`-event på det skjulte, navngitte `<select>`-feltet (i tillegg til host-eventet), slik at lyttere på form-elementet (ren HTML, Vue, Angular, RHF `register`) hører verdiendringer. `focus()` på elementet delegerer nå til det synlige søkefeltet, så «fokusér første felt med feil» fungerer.
+    -   **indeks-react:** `Combobox` sin `onChange` sender nå et syntetisk change-event på RHF-form (`{ target: { name, value } }`) i stedet for å kalles med verdien direkte, og en ny `onBlur`-prop fyrer når fokus forlater komponenten. Sammen med web-endringene lar dette `{...register('felt')}` binde direkte.
+
+        **Breaking (React):** `onChange` får nå et event, ikke verdien. Med `<Controller>` binder du `field.onChange` direkte (uendret). Leste du verdien selv, bytt `onChange={(value) => …}` til `onChange={(e) => { const value = e.target.value; … }}`.
+
+-   4d69f00: Forbedringer i DateField og live input-formatering.
+
+    **Separator dukker opp med én gang gruppen er full (live-formatene).** Den delte pattern-formatteren (`data-format` for `phone`, `ssn`, `account`, `orgnr`) setter nå inn separatoren så snart gruppen foran er fylt — `24` → `24.`, `2412` → `24.12.` — i stedet for å vente på neste siffer. Det gjør at brukeren aldri trenger å taste skilletegnet selv (å taste `.` blir en ufarlig no-op), og fjerner den forvirrende «henger ett tegn etter»-følelsen. Separatoren dobles ikke ved innliming av allerede formatert tekst, og dikter seg ikke opp for en halvfylt gruppe. Markøren hopper forbi den auto-innsatte separatoren når en gruppe fylles, så neste tegn havner rett — mens sletting (backspace) fortsatt kommer forbi separatoren som før.
+
+    **`date` godtar fleksibel inntasting og formaterer på blur.** `data-format="date"` er ikke lenger en live posisjonsmaske, men en skilletegn-bevisst formatter i blur-modus: brukeren kan taste `1.1.2026` like gjerne som `01.01.2026` (eller `01012026` uten skilletegn), teksten står urørt mens man skriver, og feltet normaliserer/nullutfyller til `dd.mm.åååå` når det mister fokus. Det tastede punktumet tolkes som en meningsfull segment-grense — ingen tegn strippes eller omrokeres — så `1.1.2026` blir korrekt `01.01.2026`, ikke `11.20.26`. Året kan tastes med 4 sifre (`2026`) eller 2 sifre som utvides til `20xx` (`1.1.26` → `01.01.2026`); ufullstendige/tvetydige verdier (`1.1.`, `112026`) vises verbatim og gir ingen ISO-verdi. `phone`/`ssn`/`account`/`orgnr`/`amount` er fast-bredde og formaterer fortsatt live.
+
+    **Kalenderknappen virker nå i Firefox med peker.** På desktop lar den gjennomsiktige native date-inputen pekeren gå gjennom til knappen (`pointer-events: none`), som kaller `showPicker()`. Firefox åpner ikke kalenderen ved klikk i «kroppen» av en `opacity:0` date-input, så knappen var tidligere effektivt utilgjengelig for peker der. Web-komponenten reflekterer nå touch-plattform som `data-touch` på verten; på touch beholdes tap-på-native-overlay som før.
+
+    **Nytt opt-in-flagg `nativePickerOnMobile` (HTML: `data-native-picker-mobile`).** Lar et tapp hvor som helst i feltet åpne enhetens innebygde datovelger. Kun aktivt på touch-enheter; standard av, så desktop og eksisterende bruk er uendret.
+
+    **Feltet kappes til innholdsbredde.** Datoen har fast lengde (`dd.mm.åååå`), så `.ix-date-field` har nå et `max-width`-tak i stedet for å flyte ut i full bredde med mye luft. I en smalere beholder krymper feltet fortsatt, og konsumenten kan overstyre med egen `width`/`max-width` (React: `className`).
+
+    Docs: eksemplene ligger i en stack, og et nytt mobilvelger-eksempel er lagt til.
+
+-   4d69f00: Legg til DateField — et datofelt der brukeren taster i norsk format (`dd.mm.åååå`) eller åpner enhetens innebygde kalender via en knapp i feltet. Verdien utad er alltid ISO (`åååå-mm-dd`), både gjennom `onChange`, `value` og ved skjema-innsending, så den amerikanske `mm/dd/åååå`-tvetydigheten unngås samtidig som datoen er maskinlesbar.
+
+    Ny `<ix-date-field>`-web component er en hybrid: den nøstes inne i `ix-field` (som `ix-combobox`) og lar `ix-field` gjøre ARIA-limet og formateringen (`data-format="date"` → normaliserer til `dd.mm.åååå` på blur; brukeren kan taste `1.1.2026` like gjerne som `01.01.2026`, og teksten står urørt mens man skriver), mens den selv genererer to instrumentelle elementer inn i `.ix-text-field` (idempotent): en kalenderknapp (`.ix-date-field__toggle`) og en overlagt gjennomsiktig native `<input type="date">` (`.ix-date-field__native`) som bærer ISO-verdien, gir `min`/`max`-validering og åpner OS-kalenderen. Komponenten synkroniserer den synlige `dd.mm.åååå`-verdien og den native ISO-verdien begge veier med guard mot event-løkke, speiler `min`/`max`/`disabled`/`readonly` til den native inputen, flytter `name` til den native inputen (så innsending gir ISO), og emitter én `change` per faktisk endring.
+
+    Kalenderen åpnes robust helt ned til nettleser-baselinen (Safari 15.4 / Firefox 100): der `showPicker()` finnes brukes den, ellers fanger den overlagte native-inputen tap/klikk direkte. På desktop er kalenderknappen et eget tab-stopp, så tastaturbrukere kan tabbe til den og åpne kalenderen med Enter/Mellomrom (i tillegg til å taste datoen direkte). På touch-enheter skjules knappen fra skjermleser og tas ut av tab-rekkefølgen (`IS_TOUCH` → `aria-hidden` + `tabindex="-1"`) så en swipe ikke treffer to mål — der er tasting og tap primærveien. Den overlagte native inputen er alltid `tabindex="-1"`.
+
+    React via `<DateField label="…" openLabel="…" />` med kontrollert (`value` + `onChange`) eller ukontrollert (`defaultValue`) verdi i ISO. CSS via `ix-date-field`/`.ix-date-field` (dual-target); den synlige inputen gjenbruker `.ix-text-field`-stilen. Ingen hardkodet tekst — `openLabel` (HTML: `data-open-label`) er påkrevd i18n-tekst for kalenderknappens tilgjengelige navn.
+
+    Kjent begrensning (fase 1): støtter `min`/`max`, men ikke sperring av enkeltdager eller helger, og bruker enhetens innebygde kalender. En egen kalendervelger for desktop er planlagt i en senere fase.
+
+-   e42af9e: `TextField`-propen `format` er nå typet med navnene på de innebygde variantene (`"phone"`, `"amount"`, `"account"`, `"orgnr"`, `"ssn"`, `"date"`) i stedet for bare `string`. Du får autocomplete på dem, men kan fortsatt sende egne navn registrert via `registerFormat` (typen er `BuiltInFormatName | (string & {})`, så vilkårlige strenger godtas uten runtime-validering).
+
+    `indeks-web` eksporterer nå `BUILTIN_FORMAT_NAMES` (og typen `BuiltInFormatName`) som registreringene drives fra, slik at React-lagets dupliserte liste holdes i synk via en sync-test.
+
+### Patch Changes
+
+-   4d69f00: DateField godtar nå 2-sifret år og utvider det til `20xx`: `1.1.26` tolkes som `01.01.2026` (`99` → `2099`, `00` → `2000`). Utvidingen gjelder kun punktum-formen; den tvetydige skilletegnsløse 6-sifrede formen (`112026`) avvises fortsatt. Både den synlige blur-formateringen og den native ISO-verdien går gjennom samme kanoniske `parseDate`, så de holder seg i synk.
+
 ## 0.17.0
 
 ## 0.16.0

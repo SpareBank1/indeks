@@ -1,5 +1,105 @@
 # @sb1/indeks-react
 
+## 0.18.0
+
+### Minor Changes
+
+-   e42af9e: `CheckboxGroup` fungerer nå med React Hook Form `register()`, ikke bare `<Controller>`.
+
+    CheckboxGroup rendrer ekte native `<input type="checkbox">` (alle med samme `name`), så `register`-objektet (`ref`/`onChange`/`onBlur`) rutes rett ned på hver input — akkurat slik `register()` er bygget for checkbox-grupper. RHF akkumulerer refene, eier `checked` via dem, og samler de avmerkede verdiene til et `string[]` ved å lese `checked`+`value` fra alle inputs som deler `name` (og skriver `defaultValues` inn ved mount, så du trenger ingen egen `defaultValue` i register-modus). Spre `{...register('felt')}` rett på `<CheckboxGroup>`. Etter dette er hele form-settet på `register()`; ingen komponent krever `<Controller>`.
+
+    **Breaking (React):** `onChange` er nå event-basert (`ChangeEventHandler<HTMLInputElement>`) — den får det native change-eventet (toggl-verdien i `event.target.value`, av/på i `event.target.checked`) i stedet for å kalles med hele det oppdaterte `string[]`-arrayet. En ny `onBlur`-prop videresendes til hver input (RHF touched-state), og komponenten er nå `forwardRef` som ruter `ref` ned på inputene.
+
+    -   Med `register()` eller `<Controller>` spres/bindes koblingen rett på — RHF bygger `string[]` selv.
+    -   Bygde du selv arrayet i kontrollert modus, bytt `onChange={(values) => setVals(values)}` til `onChange={(e) => setVals((prev) => e.target.checked ? [...prev, e.target.value] : prev.filter((v) => v !== e.target.value))}`.
+
+-   e42af9e: Nye eksporter for kontrollert `CheckboxGroup` uten React Hook Form: `toggleValue` og `useCheckboxGroup`.
+
+    -   `toggleValue(prev, event)` — ren funksjon som legger til eller fjerner `event.target.value` i et `string[]` basert på `event.target.checked`. Brukes internt av `CheckboxGroup` som eneste kilde til sannhet, og kan brukes direkte i egne event-handlere.
+    -   `useCheckboxGroup(initial?)` — hook som returnerer `{ value, setValue, onChange }` klart til å spres på `<CheckboxGroup>` i kontrollert modus. Dekker use-caset «skjul/vis seksjoner basert på hvilke checkboxer som er valgt» uten RHF.
+
+    Med RHF er `watch('felt')` fortsatt den idiomatiske veien til skjul/vis — hooken er for kontrollert bruk _uten_ RHF.
+
+-   bb77cc9: Ny intern `cn`-util erstatter den eksterne `clsx`-avhengigheten. `cn` bor i `@sb1/indeks-web` (`lib/utils/cn.ts`), re-eksporteres fra pakken og eksponeres på `globalThis.cn` slik at den er tilgjengelig i web components og for andre konsumenter — også uten import når indeks-web er lastet. `@sb1/indeks-react` får en bevisst duplisert kopi (React runtime-importerer ikke web) som holdes i synk via `cn.sync.test.ts`, re-eksporterer `cn` fra sitt public API, og har fjernet `clsx` som avhengighet. `ProgressBarState` er nå eksportert fra web og synk-testet mot React-kopien.
+-   e42af9e: Combobox fungerer nå med React Hook Form `register()`, ikke bare `<Controller>` — og form-innsending blir mer robust for alle rammeverk.
+
+    -   **indeks-web:** `ix-combobox` fyrer nå et native `change`-event på det skjulte, navngitte `<select>`-feltet (i tillegg til host-eventet), slik at lyttere på form-elementet (ren HTML, Vue, Angular, RHF `register`) hører verdiendringer. `focus()` på elementet delegerer nå til det synlige søkefeltet, så «fokusér første felt med feil» fungerer.
+    -   **indeks-react:** `Combobox` sin `onChange` sender nå et syntetisk change-event på RHF-form (`{ target: { name, value } }`) i stedet for å kalles med verdien direkte, og en ny `onBlur`-prop fyrer når fokus forlater komponenten. Sammen med web-endringene lar dette `{...register('felt')}` binde direkte.
+
+        **Breaking (React):** `onChange` får nå et event, ikke verdien. Med `<Controller>` binder du `field.onChange` direkte (uendret). Leste du verdien selv, bytt `onChange={(value) => …}` til `onChange={(e) => { const value = e.target.value; … }}`.
+
+-   4d69f00: Forbedringer i DateField og live input-formatering.
+
+    **Separator dukker opp med én gang gruppen er full (live-formatene).** Den delte pattern-formatteren (`data-format` for `phone`, `ssn`, `account`, `orgnr`) setter nå inn separatoren så snart gruppen foran er fylt — `24` → `24.`, `2412` → `24.12.` — i stedet for å vente på neste siffer. Det gjør at brukeren aldri trenger å taste skilletegnet selv (å taste `.` blir en ufarlig no-op), og fjerner den forvirrende «henger ett tegn etter»-følelsen. Separatoren dobles ikke ved innliming av allerede formatert tekst, og dikter seg ikke opp for en halvfylt gruppe. Markøren hopper forbi den auto-innsatte separatoren når en gruppe fylles, så neste tegn havner rett — mens sletting (backspace) fortsatt kommer forbi separatoren som før.
+
+    **`date` godtar fleksibel inntasting og formaterer på blur.** `data-format="date"` er ikke lenger en live posisjonsmaske, men en skilletegn-bevisst formatter i blur-modus: brukeren kan taste `1.1.2026` like gjerne som `01.01.2026` (eller `01012026` uten skilletegn), teksten står urørt mens man skriver, og feltet normaliserer/nullutfyller til `dd.mm.åååå` når det mister fokus. Det tastede punktumet tolkes som en meningsfull segment-grense — ingen tegn strippes eller omrokeres — så `1.1.2026` blir korrekt `01.01.2026`, ikke `11.20.26`. Året kan tastes med 4 sifre (`2026`) eller 2 sifre som utvides til `20xx` (`1.1.26` → `01.01.2026`); ufullstendige/tvetydige verdier (`1.1.`, `112026`) vises verbatim og gir ingen ISO-verdi. `phone`/`ssn`/`account`/`orgnr`/`amount` er fast-bredde og formaterer fortsatt live.
+
+    **Kalenderknappen virker nå i Firefox med peker.** På desktop lar den gjennomsiktige native date-inputen pekeren gå gjennom til knappen (`pointer-events: none`), som kaller `showPicker()`. Firefox åpner ikke kalenderen ved klikk i «kroppen» av en `opacity:0` date-input, så knappen var tidligere effektivt utilgjengelig for peker der. Web-komponenten reflekterer nå touch-plattform som `data-touch` på verten; på touch beholdes tap-på-native-overlay som før.
+
+    **Nytt opt-in-flagg `nativePickerOnMobile` (HTML: `data-native-picker-mobile`).** Lar et tapp hvor som helst i feltet åpne enhetens innebygde datovelger. Kun aktivt på touch-enheter; standard av, så desktop og eksisterende bruk er uendret.
+
+    **Feltet kappes til innholdsbredde.** Datoen har fast lengde (`dd.mm.åååå`), så `.ix-date-field` har nå et `max-width`-tak i stedet for å flyte ut i full bredde med mye luft. I en smalere beholder krymper feltet fortsatt, og konsumenten kan overstyre med egen `width`/`max-width` (React: `className`).
+
+    Docs: eksemplene ligger i en stack, og et nytt mobilvelger-eksempel er lagt til.
+
+-   ecbb4e8: `DateField` fungerer nå med React Hook Form `register()`, ikke bare `<Controller>`.
+
+    ISO-verdien eies av web-komponenten (den synlige `dd.mm.åååå`-inputen er formatert, og en generert `<input type="date">` bærer ISO), så `register` sin ref-sentriske lesing/skriving kan ikke peke på et enkelt native element. `DateField` videresender derfor en proxy til `ref` — samme grep som `TextField` i formatter-modus: `ref.value` gir ISO (`åååå-mm-dd`), `ref.value = '1990-05-17'` seeder både synlig og native input, og `ref.focus()` fokuserer den synlige inputen. Spre `{...register('felt')}` rett på `<DateField>`.
+
+    **Breaking (React):** `onChange` er nå event-basert — den får et syntetisk change-event med ISO-verdien i `event.target.value` (tom streng når datoen er ufullstendig) i stedet for å kalles med ISO-strengen direkte. En ny `onBlur`-prop emitteres når fokus forlater hele feltet (RHF touched-state, `mode: 'onBlur'`), og `ref` gir nå proxy-en, ikke `ix-date-field`-elementet.
+
+    -   Med `<Controller>` binder du `field.onChange` direkte (uendret — RHF bygger samme event-form).
+    -   Leste du verdien selv, bytt `onChange={(iso) => …}` til `onChange={(e) => { const iso = e.target.value; … }}`.
+
+-   4d69f00: Legg til DateField — et datofelt der brukeren taster i norsk format (`dd.mm.åååå`) eller åpner enhetens innebygde kalender via en knapp i feltet. Verdien utad er alltid ISO (`åååå-mm-dd`), både gjennom `onChange`, `value` og ved skjema-innsending, så den amerikanske `mm/dd/åååå`-tvetydigheten unngås samtidig som datoen er maskinlesbar.
+
+    Ny `<ix-date-field>`-web component er en hybrid: den nøstes inne i `ix-field` (som `ix-combobox`) og lar `ix-field` gjøre ARIA-limet og formateringen (`data-format="date"` → normaliserer til `dd.mm.åååå` på blur; brukeren kan taste `1.1.2026` like gjerne som `01.01.2026`, og teksten står urørt mens man skriver), mens den selv genererer to instrumentelle elementer inn i `.ix-text-field` (idempotent): en kalenderknapp (`.ix-date-field__toggle`) og en overlagt gjennomsiktig native `<input type="date">` (`.ix-date-field__native`) som bærer ISO-verdien, gir `min`/`max`-validering og åpner OS-kalenderen. Komponenten synkroniserer den synlige `dd.mm.åååå`-verdien og den native ISO-verdien begge veier med guard mot event-løkke, speiler `min`/`max`/`disabled`/`readonly` til den native inputen, flytter `name` til den native inputen (så innsending gir ISO), og emitter én `change` per faktisk endring.
+
+    Kalenderen åpnes robust helt ned til nettleser-baselinen (Safari 15.4 / Firefox 100): der `showPicker()` finnes brukes den, ellers fanger den overlagte native-inputen tap/klikk direkte. På desktop er kalenderknappen et eget tab-stopp, så tastaturbrukere kan tabbe til den og åpne kalenderen med Enter/Mellomrom (i tillegg til å taste datoen direkte). På touch-enheter skjules knappen fra skjermleser og tas ut av tab-rekkefølgen (`IS_TOUCH` → `aria-hidden` + `tabindex="-1"`) så en swipe ikke treffer to mål — der er tasting og tap primærveien. Den overlagte native inputen er alltid `tabindex="-1"`.
+
+    React via `<DateField label="…" openLabel="…" />` med kontrollert (`value` + `onChange`) eller ukontrollert (`defaultValue`) verdi i ISO. CSS via `ix-date-field`/`.ix-date-field` (dual-target); den synlige inputen gjenbruker `.ix-text-field`-stilen. Ingen hardkodet tekst — `openLabel` (HTML: `data-open-label`) er påkrevd i18n-tekst for kalenderknappens tilgjengelige navn.
+
+    Kjent begrensning (fase 1): støtter `min`/`max`, men ikke sperring av enkeltdager eller helger, og bruker enhetens innebygde kalender. En egen kalendervelger for desktop er planlagt i en senere fase.
+
+-   e42af9e: Eksporterer nå `TextFieldProps` og `TextAreaProps` fra pakkeroten, på linje med de øvrige skjemakomponentene (`CheckboxProps`, `SelectProps`, `RadioGroupProps` osv.). Typene fantes allerede internt, men var ikke re-eksportert — konsumenter måtte inline-type props eller importere fra interne stier. Nyttig bl.a. for typede feltwrappere over React Hook Form.
+-   e42af9e: `Form` godtar nå native `<form>`-attributter (`onSubmit`, `noValidate`, `id`, `aria-*`, ...) via props. Komponenten videresendte disse til `<form>` allerede, men typen tillot bare `children`/`className`. `FormProps` utvides nå med `FormHTMLAttributes<HTMLFormElement>` slik at f.eks. `onSubmit={handleSubmit(...)}` fra React Hook Form kan brukes uten typefeil.
+-   ecbb4e8: `PhoneNumberField` fungerer nå med React Hook Form `register()` som to uavhengige felt (landkode + nummer), ikke bare `<Controller>`.
+
+    Komponenten er to felt i én: en landvelger og et nummerfelt. Begge de indre komponentene (`Combobox` og `TextField`) er allerede register-kompatible, så bindingen skjer via to register-spread-props — `countryField={register('landkode')}` og `numberField={register('tlf')}` — som spres rett på hvert delfelt. `countryField.onChange` får landkoden (uten `+`) i `event.target.value`; `numberField.onChange` får det RÅ nummeret (uten separatorer).
+
+    Feilmeldinger er nå per felt: `errorMessage` vises under nummeret, `countryErrorMessage` under landvelgeren, hver med egen `aria-invalid`. En latent feil der den indre landvelgerens `onChange` behandlet event-objektet som en verdi er samtidig rettet.
+
+    **Breaking (React):** verdi-baserte props er fjernet til fordel for de to register-gruppene:
+
+    -   `name` → `numberField={{ name: 'tlf' }}` (eller `register('tlf')`).
+    -   `countryName` → `countryField={{ name: 'landkode' }}`.
+    -   `onChange={(value) => …}` → `numberField={{ onChange: (e) => { const raw = e.target.value; … } }}`.
+    -   `onCountryCodeChange={(code) => …}` → `countryField={{ onChange: (e) => { const code = e.target.value; … } }}`.
+    -   `value` / `countryCode` (kontrollerte verdier) er borte — bruk `<Controller>` for kontrollert bruk, eller `defaultValue` / `defaultCountryCode` for forhåndsvalg.
+    -   `errorMessage` gjelder nå kun nummer-feltet (var felles gruppe-melding); bruk `countryErrorMessage` for landkode.
+
+-   e42af9e: `RadioGroup` fungerer nå med React Hook Form `register()`, ikke bare `<Controller>`.
+
+    RadioGroup rendrer ekte native `<input type="radio">`, så `register`-objektet (`ref`/`onChange`/`onBlur`) rutes rett ned på hver input — akkurat slik `register()` er bygget for radios. RHF akkumulerer refene og eier `checked` via dem, og skriver `defaultValues` inn ved mount (så du trenger ingen egen `defaultValue` i register-modus). Spre `{...register('felt')}` rett på `<RadioGroup>`.
+
+    **Breaking (React):** `onChange` er nå event-basert — den får det native change-eventet (verdien ligger i `event.target.value`) i stedet for å kalles med verdien direkte. En ny `onBlur`-prop videresendes til hver input (RHF touched-state), og komponenten er nå `forwardRef` som ruter `ref` ned på inputene.
+
+    -   Med `<Controller>` binder du `field.onChange` direkte (uendret — RHF bygger samme event-form).
+    -   Leste du verdien selv, bytt `onChange={(value) => …}` til `onChange={(e) => { const value = e.target.value; … }}`.
+
+-   dd6ebf8: Tag er redesignet til å bruke `data-status`-farge-kaskaden (samme mønster som Message, ProgressBar m.fl.) i stedet for BEM-modifikatorer. Farge velges nå med `data-status` (`neutral | info | success | warning | danger`), visuell profil med `data-variant` (`emphasis | subtle`) og størrelse med `data-size` (`sm | lg`). I React er dette henholdsvis `variant`-, `type`- og `size`-props. Emphasis bruker invers tekst på mettet flate; subtle bruker mørk tekst på pastell-flate med farget border — begge profiler verifisert mot WCAG 1.4.3 (4.5:1). Tag er nå polymorf via `as`-prop (Aksel `OverridableComponent`-mønster) slik at den kan rendres som f.eks. `<a>` eller `<button>` ved behov.
+-   e42af9e: `TextField`-propen `format` er nå typet med navnene på de innebygde variantene (`"phone"`, `"amount"`, `"account"`, `"orgnr"`, `"ssn"`, `"date"`) i stedet for bare `string`. Du får autocomplete på dem, men kan fortsatt sende egne navn registrert via `registerFormat` (typen er `BuiltInFormatName | (string & {})`, så vilkårlige strenger godtas uten runtime-validering).
+
+    `indeks-web` eksporterer nå `BUILTIN_FORMAT_NAMES` (og typen `BuiltInFormatName`) som registreringene drives fra, slik at React-lagets dupliserte liste holdes i synk via en sync-test.
+
+-   e42af9e: `TextField` i formatter-modus (`format`/`formatPattern`) fungerer nå med React Hook Form `register()`, ikke bare `<Controller>`.
+
+    Et formatert felt bindes nå identisk med et uformatert — spre `{...register('felt')}` rett på `<TextField>`. Tidligere krevde formatering `<Controller>` fordi den underliggende `ix-field` eier den synlige DOM-verdien og den rå verdien lever i en skjult mirror.
+
+    For å få dette til videresender `TextField` i formatter-modus et lite **proxy-objekt** til `ref` i stedet for den native `<input>`: proxyens `value` er alltid den rå verdien (så RHF leser/validerer rå), `set value` re-formaterer via `ix-field` (så `reset`/`setValue`/defaultValues virker), og `focus()` delegerer til den synlige inputen (fokus-ved-feil). `onChange`/`onBlur` er syntetiske events der verdien ligger i `event.target.value` under det opprinnelige feltnavnet.
+
+    **Breaking (React):** I formatter-modus er den videresendte `ref` nå et proxy-objekt (`{ value, focus(), name }`), ikke `<input>`-elementet. Trenger du verdien selv, les den via `onChange` eller `ix-field.rawValue` — ikke `ref.value` direkte. Uformaterte felt er uendret (`ref` er fortsatt den native `<input>`).
+
 ## 0.17.0
 
 ### Minor Changes
