@@ -5,8 +5,10 @@ import {
     Checkbox,
     CheckboxGroup,
     Combobox,
+    DateField,
     Form,
     Heading,
+    PhoneNumberField,
     RadioGroup,
     Select,
     TextArea,
@@ -15,6 +17,7 @@ import {
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as v from 'valibot';
+import './form-validering.css';
 
 /*
  * Referanse-eksempel: Indeks-form-komponenter + React Hook Form (RHF) + Valibot.
@@ -65,6 +68,17 @@ const schema = v.object({
         v.minLength(1, 'Velg minst én tjeneste')
     ),
     land: v.pipe(v.string(), v.nonEmpty('Velg et land')),
+    // DateField sender/validerer ISO (åååå-mm-dd); den synlige inputen viser dd.mm.åååå.
+    fodselsdato: v.pipe(
+        v.string(),
+        v.regex(/^\d{4}-\d{2}-\d{2}$/, 'Velg en gyldig dato')
+    ),
+    // PhoneNumberField er to uavhengige felt: landkode + rå nummer (8 siffer).
+    landkode: v.pipe(v.string(), v.nonEmpty('Velg landkode')),
+    tlf: v.pipe(
+        v.string(),
+        v.regex(/^\d{8}$/, 'Telefonnummer må være 8 siffer')
+    ),
     // v.boolean + check (ikke v.literal(true)) → verditypen forblir boolean, så
     // avkrysningsboksen kan starte umarkert (false) og feile ved tomt submit.
     samtykke: v.pipe(
@@ -84,6 +98,9 @@ const defaultValues: FormData = {
     kontotype: '',
     tjenester: [],
     land: '',
+    fodselsdato: '',
+    landkode: '',
+    tlf: '',
     samtykke: false,
 };
 
@@ -151,6 +168,7 @@ export default function FormValidering() {
 
                     <TextField
                         label="Kontonummer"
+                        className="form-validering__narrow"
                         inputMode="numeric"
                         format="account"
                         {...register('kontonummer')}
@@ -160,13 +178,19 @@ export default function FormValidering() {
                     <Select
                         label="Fra konto"
                         placeholder="Velg konto"
+                        className="form-validering__narrow"
                         options={kontoOptions}
                         {...register('fraKonto')}
                         errorMessage={errors.fraKonto?.message}
                     />
 
+                    {/* maxLength/minLength aktiverer ix-field sin tegnteller automatisk
+                        (viser «0/200» / «0 tegn (minimum 5)»). */}
                     <TextArea
                         label="Melding"
+                        description="Skriv en kort melding"
+                        minLength={5}
+                        maxLength={200}
                         {...register('melding')}
                         errorMessage={errors.melding?.message}
                     />
@@ -174,6 +198,7 @@ export default function FormValidering() {
 
                     <RadioGroup
                         legend="Kontotype"
+                        orientation="horizontal"
                         options={kontotypeOptions}
                         {...register('kontotype')}
                         errorMessage={errors.kontotype?.message}
@@ -191,11 +216,38 @@ export default function FormValidering() {
                     <Combobox
                         label="Land"
                         placeholder="Søk etter land"
+                        className="form-validering__narrow"
                         options={landOptions}
                         noHitsText="Ingen treff"
                         defaultValue={defaultValues.land}
                         {...register('land')}
                         errorMessage={errors.land?.message}
+                    />
+
+                    {/* Event-basert onChange (ISO i target.value) + proxy-ref, så
+                        {...register()} spres rett på — som de øvrige feltene. */}
+                    <DateField
+                        label="Fødselsdato"
+                        description="Format: dd.mm.åååå"
+                        openLabel="Åpne kalender"
+                        {...register('fodselsdato')}
+                        errorMessage={errors.fodselsdato?.message}
+                    />
+
+                    {/* To uavhengige RHF-felt: landkode + rå nummer. Hver binder via sin
+                        egen register-spread, og har sin egen feilmelding. */}
+                    <PhoneNumberField
+                        label="Mobilnummer"
+                        className="form-validering__narrow"
+                        description="Format: 8 siffer, f.eks. 123 45 678"
+                        countryLabel="Landkode"
+                        numberLabel="Telefonnummer"
+                        noHitsText="Ingen treff"
+                        toggleLabel="Vis landkoder"
+                        countryField={register('landkode')}
+                        numberField={register('tlf')}
+                        errorMessage={errors.tlf?.message}
+                        countryErrorMessage={errors.landkode?.message}
                     />
 
                     <Checkbox

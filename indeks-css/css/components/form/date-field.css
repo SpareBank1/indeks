@@ -18,6 +18,16 @@
     display: block;
     position: relative;
 
+    /* Egen stacking-kontekst så feltets interne z-index (kalenderknapp på overlay,
+       overlagt native-input på dialog) holdes INNE i feltet. Uten dette konkurrerer
+       de direkte i skjemaets felles stacking-kontekst: en søsken-Combobox sin
+       nedtrekksliste (også z-index: overlay) og knappen vår havner på samme nivå, og
+       DOM-rekkefølgen avgjør — så et datofelt som står under en Combobox lot
+       kalenderikonet stikke opp OVER den åpne lista. Med isolate maler søsken-lista
+       (positivt z-index i rot-konteksten) over hele feltet. Intern rekkefølge
+       (native over knapp) er upåvirket. */
+    isolation: isolate;
+
     /* Datoen har fast lengde (dd.mm.åååå = 10 tegn) + kalenderikon, så feltet
        trenger aldri full bredde — uten et tak flyter det ut med mye luft. Vi
        kapper til innholdet + ikon + venstre/høyre padding. Bare et tak: i en

@@ -1,8 +1,31 @@
-import { forwardRef, useId } from 'react';
+import { forwardRef, useId, type Ref } from 'react';
 import type { IxPhoneNumberField as IxPhoneNumberFieldElement } from '@sb1/indeks-web';
 import { Combobox } from '../combobox/Combobox';
 import { TextField, type FieldFormatter } from '../text-field/TextField';
-import { ValidationMessage } from '../validation-message/ValidationMessage';
+
+/**
+ * Én React Hook Form-registrering (`{...register('felt')}`). Struktur-type — pakka
+ * har INGEN RHF-avhengighet; alt som matcher formen (name/onChange/onBlur/ref)
+ * fungerer, også en manuell `<Controller>`-kobling eller egne handlers. Spres rett
+ * på hvert delfelt: PhoneNumberField er to uavhengige RHF-felt (landkode + nummer).
+ *
+ * `onChange`/`onBlur` bruker `event: any` med vilje — akkurat som RHFs egen
+ * `ChangeHandler` — slik at én registrering kan spres på BÅDE den indre Combobox
+ * (som sender et syntetisk `ComboboxChangeEvent`) og den indre TextField (native
+ * event). En konkret `ChangeEvent<HTMLInputElement>`-signatur ville kollidert med
+ * Combobox' event-type under `strictFunctionTypes`.
+ */
+export type FieldRegistration = {
+    name?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onChange?: (event: any) => unknown;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onBlur?: (event: any) => unknown;
+    // `ref` treffer host-elementet i hvert delfelt (IxCombobox / HTMLInputElement-proxy).
+    // Løst typet (som RHFs egen `RefCallBack`) så samme registrering kan spres på begge.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ref?: Ref<any>;
+};
 
 /**
  * Landvalg for PhoneNumberField. `value` er landkoden (uten `+`), `label` er
@@ -23,8 +46,18 @@ export type PhoneNumberFieldProps = {
     label: string;
     /** Felles hjelpetekst under label. */
     description?: string;
-    /** Felles valideringsmelding for hele komponenten. Tom → ingen feil. */
+    /**
+     * Valideringsmelding for NUMMER-feltet. Tom → ingen feil. De to delfeltene er
+     * uavhengige RHF-felt, så feil vises per felt: `errorMessage` under nummeret,
+     * `countryErrorMessage` under landvelgeren. Bruk `errors.tlf?.message` her.
+     */
     errorMessage?: string;
+    /**
+     * Valideringsmelding for LANDKODE-feltet. Tom → ingen feil. Vises under
+     * landvelgeren, uavhengig av nummer-feltets `errorMessage`. Bruk
+     * `errors.landkode?.message` her.
+     */
+    countryErrorMessage?: string;
 
     /** Tilgjengelig navn på landvelgeren (i18n, f.eks. «Landkode»). */
     countryLabel: string;
@@ -43,19 +76,26 @@ export type PhoneNumberFieldProps = {
     /** Mal for skjermleser-annonsering av antall treff i landlista (i18n), `{n}` = antall. */
     resultsText?: string;
 
-    /** Kontrollert landkode (uten `+`, f.eks. `"47"`). */
-    countryCode?: string;
-    /** Ukontrollert start-landkode. */
+    /**
+     * RHF-registrering for LANDKODE-feltet: `countryField={register('landkode')}`.
+     * Spres på den indre landvelgeren (Combobox), som er register-kompatibel.
+     * `onChange` får et syntetisk change-event med landkoden (uten `+`) i
+     * `event.target.value`. Utelates → feltet er ukontrollert (bruk
+     * `defaultCountryCode` for forhåndsvalg).
+     */
+    countryField?: FieldRegistration;
+    /** Forhåndsvalgt landkode (uten `+`, f.eks. `"47"`) når `countryField` ikke eier verdien. */
     defaultCountryCode?: string;
-    /** Kalles med ny landkode når bruker velger et land. */
-    onCountryCodeChange?: (countryCode: string) => void;
 
-    /** Kontrollert nummer (rå verdi uten separatorer). */
-    value?: string;
-    /** Ukontrollert start-nummer (rå verdi). */
+    /**
+     * RHF-registrering for NUMMER-feltet: `numberField={register('tlf')}`. Spres på
+     * det indre nummer-feltet (TextField i formatter-modus), som er register-kompatibelt.
+     * `onChange` får et syntetisk change-event med RÅ nummer (uten separatorer) i
+     * `event.target.value`. Utelates → feltet er ukontrollert (bruk `defaultValue`).
+     */
+    numberField?: FieldRegistration;
+    /** Ukontrollert start-nummer (rå verdi) når `numberField` ikke eier verdien. */
     defaultValue?: string;
-    /** Kalles med rå nummer-verdi (uten separatorer) når feltet endres. */
-    onChange?: (value: string) => void;
 
     /**
      * Landliste. Utelates → web-komponenten fyller inn sin innebygde standardliste
@@ -81,10 +121,6 @@ export type PhoneNumberFieldProps = {
     disabled?: boolean;
     readOnly?: boolean;
     required?: boolean;
-    /** Navn på nummerfeltet ved form-innsending. */
-    name?: string;
-    /** Navn på landkode-feltet ved form-innsending. */
-    countryName?: string;
     className?: string;
     id?: string;
 };
@@ -101,18 +137,17 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
         label,
         description,
         errorMessage,
+        countryErrorMessage,
         countryLabel,
         numberLabel,
         placeholder,
         noHitsText,
         toggleLabel,
         resultsText,
-        countryCode,
+        countryField,
         defaultCountryCode,
-        onCountryCodeChange,
-        value,
+        numberField,
         defaultValue,
-        onChange,
         countries,
         locale = 'nb',
         numberFormat = 'phone',
@@ -121,8 +156,6 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
         disabled,
         readOnly,
         required,
-        name,
-        countryName,
         className,
         id,
     },
@@ -141,7 +174,6 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
             readonly={readOnly || undefined}
             required={required || undefined}
             data-locale={locale}
-            data-country-code={countryCode}
             data-default-country-code={defaultCountryCode}
             data-countries={countries ? JSON.stringify(countries) : undefined}
         >
@@ -152,15 +184,15 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
             <div data-field="items">
                 <div data-field="country">
                     {/* Tom options-liste: web-komponenten injiserer landlista og
-                        forhåndsvalg (fra data-*-country-code på host). Kontrollert
-                        countryCode speiles fortsatt inn av Combobox sin useEffect. */}
+                        forhåndsvalg (fra data-default-country-code på host).
+                        `{...countryField}` spres for RHF-binding (name/onChange/onBlur/ref)
+                        — Combobox er register-kompatibel, så ingen adapter trengs. */}
                     <Combobox
                         ariaLabel={countryLabel}
                         options={[]}
-                        name={countryName}
-                        value={countryCode}
                         defaultValue={defaultCountryCode}
-                        onChange={(v) => onCountryCodeChange?.(Array.isArray(v) ? (v[0] ?? '') : v)}
+                        {...countryField}
+                        errorMessage={countryErrorMessage}
                         noHitsText={noHitsText}
                         toggleLabel={toggleLabel}
                         resultsText={resultsText}
@@ -170,15 +202,15 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
                 </div>
                 <div data-field="number">
                     {/* type/inputmode/autocomplete/data-format stampes av web-komponenten.
-                        format sendes fra React så TextFields kontrollerte-verdi-logikk
-                        (hasFormatter) beholdes. */}
+                        format sendes fra React så TextFields formatter-modus (proxy-ref +
+                        rå-mirror) beholdes. `{...numberField}` spres for RHF-binding —
+                        onChange/ref gir RÅ nummer. */}
                     <TextField
                         ariaLabel={numberLabel}
                         placeholder={placeholder}
-                        name={name}
-                        value={value}
                         defaultValue={defaultValue}
-                        onChange={(e) => onChange?.(e.target.value)}
+                        {...numberField}
+                        errorMessage={errorMessage}
                         format={numberFormat}
                         formatPattern={numberFormatPattern}
                         formatLive={numberFormatLive}
@@ -187,7 +219,6 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
                     />
                 </div>
             </div>
-            <ValidationMessage>{errorMessage}</ValidationMessage>
         </ix-phone-number-field>
     );
 });

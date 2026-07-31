@@ -1,5 +1,7 @@
 import { render } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { createRef } from 'react';
+import { describe, expect, it, vi } from 'vitest';
+import { lastEvent } from '../test-events';
 import { PhoneNumberField } from './PhoneNumberField';
 
 // De indre custom-elementene (ix-field / ix-combobox / ix-phone-number-field)
@@ -60,16 +62,30 @@ describe('PhoneNumberField', () => {
         expect(document.querySelectorAll('label').length).toBe(0);
     });
 
-    it('rendrer felles feilmelding i gruppens error-felt', () => {
+    it('rendrer nummer-feilmelding i nummer-feltets eget error-felt (ikke gruppe-nivå)', () => {
         renderField({ errorMessage: 'Skriv inn et gyldig telefonnummer' });
-        const group = document.querySelector('ix-phone-number-field')!;
-        const error = group.querySelector(':scope > [data-field="error"]');
+        const numberField = document.querySelector('[data-field="number"]')!;
+        const error = numberField.querySelector('[data-field="error"]');
         expect(error?.textContent).toContain('Skriv inn et gyldig telefonnummer');
+        // Nummer-inputen får aria-invalid fra sitt eget ix-field.
+        const input = numberField.querySelector('input');
+        expect(input?.getAttribute('aria-invalid')).toBe('true');
     });
 
-    it('setter data-state="error" når errorMessage er satt', () => {
-        renderField({ errorMessage: 'Feil' });
-        expect(document.querySelector('ix-phone-number-field')?.getAttribute('data-state')).toBe('error');
+    it('rendrer landkode-feilmelding i landvelgerens eget error-felt', () => {
+        renderField({ countryErrorMessage: 'Velg landkode' });
+        const country = document.querySelector('[data-field="country"]')!;
+        const error = country.querySelector('[data-field="error"]');
+        expect(error?.textContent).toContain('Velg landkode');
+        expect(country.querySelector('input')?.getAttribute('aria-invalid')).toBe('true');
+    });
+
+    it('holder de to feilmeldingene uavhengige (kun landkode feiler)', () => {
+        renderField({ countryErrorMessage: 'Velg landkode' });
+        const numberError = document.querySelector('[data-field="number"] [data-field="error"]');
+        // Nummer-feltet har ingen feil → ingen aria-invalid der.
+        expect(numberError?.textContent).toBe('');
+        expect(document.querySelector('[data-field="number"] input')?.getAttribute('aria-invalid')).toBeNull();
     });
 
     it('bruker innebygd landliste som default (Norge øverst, kallekode som label)', () => {
@@ -108,8 +124,8 @@ describe('PhoneNumberField', () => {
         expect(input.defaultValue).toBe('12345678');
     });
 
-    it('propagerer name og countryName til de skjulte select/inputene', () => {
-        renderField({ name: 'tlf', countryName: 'landkode' });
+    it('propagerer navn fra numberField/countryField til de skjulte select/inputene', () => {
+        renderField({ numberField: { name: 'tlf' }, countryField: { name: 'landkode' } });
         // I formatter-modus gir ix-field den synlige inputen `${name}_formatted` og
         // legger en skjult mirror med det opprinnelige navnet som bærer RÅ verdi
         // ved form-submit. Rå-verdien sendes altså under `tlf`.
@@ -151,18 +167,59 @@ describe('PhoneNumberField', () => {
         expect(raw).toBe(JSON.stringify(countries));
     });
 
-    it('videresender countryCode/defaultCountryCode som data-*-country-code', () => {
-        const { rerender } = renderField({ defaultCountryCode: '45' });
+    it('videresender defaultCountryCode som data-default-country-code', () => {
+        renderField({ defaultCountryCode: '45' });
         expect(document.querySelector('ix-phone-number-field')?.getAttribute('data-default-country-code')).toBe('45');
-        rerender(
-            <PhoneNumberField
-                label="Mobilnummer"
-                countryLabel="Landkode"
-                numberLabel="Telefonnummer"
-                noHitsText="Ingen treff"
-                countryCode="46"
-            />
-        );
-        expect(document.querySelector('ix-phone-number-field')?.getAttribute('data-country-code')).toBe('46');
+    });
+
+    describe('register()-binding (to uavhengige RHF-felt)', () => {
+        // PhoneNumberField er to felt: `countryField={register('landkode')}` spres på
+        // den indre Combobox, `numberField={register('tlf')}` på den indre TextField.
+        // Begge indre komponenter er allerede register-kompatible, så testene her
+        // verifiserer at spreadene når fram (navn, event-basert onChange, ref).
+
+        it('ruter numberField.ref til nummer-feltets proxy (formatter-modus)', () => {
+            const ref = createRef<HTMLInputElement>();
+            renderField({ numberField: { name: 'tlf', ref } });
+            // Formatter-modus videresender en proxy (ikke den native inputen), med value/name.
+            expect(ref.current).not.toBeInstanceOf(HTMLInputElement);
+            expect(ref.current?.name).toBe('tlf');
+            expect(typeof ref.current?.value).toBe('string');
+        });
+
+        it('ruter countryField.ref til den indre ix-combobox', () => {
+            const ref = createRef<HTMLElement>();
+            renderField({ countryField: { name: 'landkode', ref: ref as never } });
+            expect(ref.current?.tagName.toLowerCase()).toBe('ix-combobox');
+        });
+
+        it('numberField.onChange får RÅ nummer i target.value', () => {
+            const onChange = vi.fn();
+            renderField({ numberField: { name: 'tlf', onChange }, defaultValue: '' });
+            const input = document.querySelector<HTMLInputElement>('[data-field="number"] input')!;
+            input.value = '12345678';
+            input.setSelectionRange(8, 8);
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            expect(lastEvent(onChange).target).toMatchObject({ name: 'tlf', value: '12345678' });
+        });
+
+        it('countryField.onChange får landkode i target.value', () => {
+            const onChange = vi.fn();
+            renderField({ countryField: { name: 'landkode', onChange } });
+            const no = document.querySelector<HTMLElement>('.ix-combobox__option[data-value="47"]')!;
+            no.setAttribute('aria-selected', 'true');
+            document.querySelector('ix-combobox')!.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+            expect(lastEvent(onChange).type).toBe('change');
+            expect(lastEvent(onChange).target).toMatchObject({ name: 'landkode', value: '47' });
+        });
+
+        it('numberField.onBlur emitteres når fokus forlater nummer-feltet', () => {
+            const onBlur = vi.fn();
+            renderField({ numberField: { name: 'tlf', onBlur }, defaultValue: '12345678' });
+            const input = document.querySelector<HTMLInputElement>('[data-field="number"] input')!;
+            input.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
+            expect(onBlur).toHaveBeenCalledTimes(1);
+            expect(lastEvent(onBlur).type).toBe('blur');
+        });
     });
 });
