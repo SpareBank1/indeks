@@ -88,7 +88,7 @@ describe('CheckboxButton', () => {
             expect(inputs[1].checked).toBe(false);
         });
 
-        it('kaller gruppe-onChange med oppdatert array ved klikk', () => {
+        it('videresender ekte change-event til gruppe-onChange ved klikk', () => {
             const onChange = vi.fn();
             const { container } = render(
                 <CheckboxGroup legend="Velg" value={['a']} onChange={onChange}>
@@ -98,7 +98,7 @@ describe('CheckboxButton', () => {
             );
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
             fireEvent.click(inputs[1]);
-            expect(onChange).toHaveBeenCalledWith(['a', 'b']);
+            expect(onChange.mock.calls[0][0].target.value).toBe('b');
         });
 
         it('group-disabled på host propagerer til alle inputs (WC)', () => {

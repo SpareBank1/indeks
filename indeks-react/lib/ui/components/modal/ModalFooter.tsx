@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type { HTMLAttributes, JSX } from 'react';
 
@@ -13,7 +13,7 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(function
     ref,
 ): JSX.Element {
     return (
-        <div ref={ref} className={clsx('ix-modal__footer', className)} {...props}>
+        <div ref={ref} className={cn('ix-modal__footer', className)} {...props}>
             {children}
         </div>
     );

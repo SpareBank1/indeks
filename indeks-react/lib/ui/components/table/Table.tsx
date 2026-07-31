@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from '../../../cn';
 import type { JSX, ReactNode } from "react";
 import {
   type ComponentSize
@@ -21,7 +21,7 @@ export function Table(props: TableProps): JSX.Element {
 
   return (
     <table
-      className={clsx(
+      className={cn(
         "ix-table",
         [`ix-table--${size}`],
         className

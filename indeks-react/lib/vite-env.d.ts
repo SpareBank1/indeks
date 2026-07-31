@@ -3,9 +3,11 @@
 import type {
     IxCheckboxGroup,
     IxCombobox,
+    IxDateField,
     IxDropdown,
     IxField,
     IxIcon,
+    IxPhoneNumberField,
     IxProgressBar,
     IxRadioGroup,
     IxTabs,
@@ -60,11 +62,30 @@ declare module 'react' {
                 'data-chips-label'?: string;
                 'data-results-text'?: string;
             };
+            'ix-date-field': React.DetailedHTMLProps<React.HTMLAttributes<IxDateField>, IxDateField> & {
+                name?: string;
+                class?: string;
+                min?: string;
+                max?: string;
+                value?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                'data-state'?: 'error' | 'readonly' | 'disabled';
+                'data-open-label'?: string;
+                'data-native-picker-mobile'?: boolean | '';
+            };
             'ix-dropdown': React.DetailedHTMLProps<React.HTMLAttributes<IxDropdown>, IxDropdown> & {
                 class?: string;
                 open?: '' | boolean;
                 placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
                 'data-submenu'?: '' | boolean;
+            };
+            'ix-phone-number-field': React.DetailedHTMLProps<React.HTMLAttributes<IxPhoneNumberField>, IxPhoneNumberField> & {
+                class?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                required?: boolean | '';
+                'data-state'?: 'error' | 'readonly' | 'disabled';
             };
             'ix-progress-bar': React.DetailedHTMLProps<React.HTMLAttributes<IxProgressBar>, IxProgressBar> & {
                 value?: number;

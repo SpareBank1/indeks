@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type { JSX, ReactNode } from 'react';
 
@@ -34,7 +34,7 @@ export const ReadMore = forwardRef<HTMLDetailsElement, ReadMoreProps>(function R
     return (
         <details
             ref={ref}
-            className={clsx('ix-read-more', className)}
+            className={cn('ix-read-more', className)}
             // `open` brukes som start-tilstand (uncontrolled); native <details>
             // styrer videre åpne/lukke. `|| undefined` holder attributtet ute av
             // DOM når seksjonen ikke er åpen.

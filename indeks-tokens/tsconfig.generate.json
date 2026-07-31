@@ -1,0 +1,11 @@
+{
+    "$comment": "Emitter kun .d.ts for runtime-API-et (scripts/build-colors/generate.ts). JS-en bygges av esbuild (build:generate).",
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "noEmit": false,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "outDir": "./dist"
+    },
+    "include": ["scripts/build-colors/generate.ts"]
+}

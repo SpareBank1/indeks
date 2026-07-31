@@ -1,10 +1,10 @@
-import clsx from "clsx";
-import type { JSX, ReactNode } from "react";
+import { cn } from '../../../../cn';
+import type { FormHTMLAttributes, JSX, ReactNode } from "react";
 
 export type FormProps = {
   children?: ReactNode;
   className?: string;
-};
+} & Omit<FormHTMLAttributes<HTMLFormElement>, "className" | "children">;
 
 export function Form(props: FormProps): JSX.Element {
   const { children, className, ...restProps } = {
@@ -12,7 +12,7 @@ export function Form(props: FormProps): JSX.Element {
   };
 
   return (
-    <form className={clsx("ix-form", className)} {...restProps}>
+    <form className={cn("ix-form", className)} {...restProps}>
       {children}
     </form>
   );

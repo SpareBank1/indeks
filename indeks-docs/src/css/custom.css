@@ -42,6 +42,16 @@
     min-height: calc(100vh - (var(--ifm-navbar-height) + 240px));
 }
 
+/* Live Playground-preview: hvit flate i stedet for Docusaurus-standardens grå
+   (--ifm-pre-background), som lå så nær en av våre farger at det så ut som et
+   WCAG-kontrastbrudd. Semantisk token gir hvit i lyst tema, mørk flate i mørkt.
+   Scopet til playground-containeren så vanlige <pre>-kodeblokker er urørt;
+   spesifisitet (0,2,0) slår temaets .playgroundPreview (0,1,0). CSS-modul-
+   klassenavnene er stabile, kun hash-suffikset varierer → substring-selektor. */
+[class*='playgroundContainer'] [class*='playgroundPreview'] {
+    background-color: var(--ix-color-background-default);
+}
+
 /* Restore list styling for markdown content */
 .markdown ul,
 .markdown ol {
@@ -114,4 +124,23 @@ body:not(.navigation-with-keyboard) .ix-text-area textarea:focus {
 .ix-card--clickable:hover {
     color: inherit;
     text-decoration: none;
+}
+
+.hb-demo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ix-spacing-2xl);
+    padding: var(--ix-spacing-2xl);
+}
+
+.hb-demo > div {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background: var(--ix-color-surface-main-default);
+    border: 1px solid var(--ix-color-border-main-default);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    cursor: pointer;
 }

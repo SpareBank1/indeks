@@ -5,16 +5,15 @@ import Layout from '@theme/Layout';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
+import { eksempelHref } from '../components/EksempelLink';
 import styles from './index.module.css';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
-    // Detect localhost for Storybook and Eksempel links
+    // Lokalt kjører Storybook/docs/eksempel på egne dev-servere; i bygget nettsted som
+    // underkataloger. eksempelHref() deler denne logikken med <EksempelLink> i docs.
     const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
     const storybookHref = isLocalhost ? 'http://localhost:6006' : './storybook/';
-    const eksempelHref = isLocalhost
-        ? 'http://localhost:5173/eksempel/#/eksempelsider/oversikt'
-        : './eksempel/#/eksempelsider/oversikt';
     const docsHref = isLocalhost ? 'http://localhost:3000/docs/hjem/' : './docs/hjem';
     return (
         <main className={clsx('hero hero--primary ix-flex ix-flex-grow ix-justify-center ix-items-center', styles.heroBanner)}>
@@ -30,7 +29,7 @@ function HomepageHeader() {
                     <Button as="a" size="lg" variant="primary" href={storybookHref}>
                         Storybook
                     </Button>
-                    <Button as="a" size="lg" variant="primary" href={eksempelHref}>
+                    <Button as="a" size="lg" variant="primary" href={eksempelHref('eksempelsider/oversikt')}>
                         Eksempel App
                     </Button>
                 </div>

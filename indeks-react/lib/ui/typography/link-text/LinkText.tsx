@@ -3,7 +3,7 @@ import type {
   JSX,
   ComponentPropsWithoutRef,
 } from "react";
-import clsx from "clsx";
+import { cn } from '../../../cn';
 import type { ComponentSize } from "../../../types/types";
 
 export type LinkTextProps<As extends ElementType = "a"> = {
@@ -30,7 +30,7 @@ export function LinkText<As extends ElementType = "a">(
     <Component
       {...restProps}
       data-size={size}
-      className={clsx(
+      className={cn(
         "ix-link-text",
         { "ix-link-text--no-underline": !underline },
         { "ix-link-text--active": isActive },

@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 import type { GapSize } from '../../../types/types';
 
@@ -26,7 +26,7 @@ export function VStack<As extends ElementType = 'div'>({
         const alignClass = align === 'start' ? undefined : `ix-stack-vertical-${align}`;
         const gapClass = gap ? `ix-gap-${gap}` : undefined;
         return (
-            <Component className={clsx('ix-stack', alignClass, gapClass, className)} {...restProps}>
+            <Component className={cn('ix-stack', alignClass, gapClass, className)} {...restProps}>
                 {children}
             </Component>
         );

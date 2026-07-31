@@ -1,14 +1,11 @@
 name: PR - Playwright-tester
 
+# Kjører på alle PR-er mot main (ingen paths-filter). playwright-tests er en
+# påkrevd check i main-rulesettet; en path-filtrert trigger ville aldri
+# fullføre checken på PR-er utenfor kode-pathene, og de ville henge på BLOCKED.
 on:
     pull_request:
         branches: [main]
-        paths:
-            - 'indeks-storybook/**'
-            - 'indeks-react/**'
-            - 'indeks-web/**'
-            - 'indeks-css/**'
-            - 'indeks-tokens/**'
 
 concurrency:
     group: playwright-${{ github.head_ref || github.ref }}

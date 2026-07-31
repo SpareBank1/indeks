@@ -5,8 +5,9 @@ import a11yData from './accessibility/card.json';
 
 # Card
 
-Card grupperer relatert innhold i en avgrenset flate. Et kort kan være rent statisk
-(en beholder for innhold) eller klikkbart (navigerer til en side eller utfører en handling).
+Card er én ting: en avgrenset, selvstendig innholdsenhet med fast ramme og bakgrunn. Et kort kan
+være rent statisk (en beholder for innhold) eller klikkbart (navigerer til en side eller utfører
+en handling).
 
 ## Egnet til
 
@@ -19,6 +20,7 @@ Card grupperer relatert innhold i en avgrenset flate. Et kort kan være rent sta
 - Som erstatning for en knapp i et skjema — bruk [Button](./button)
 - Dypt nøstede interaktive elementer inni et klikkbart kort (ugyldig HTML)
 - Når innholdet ikke hører naturlig sammen — da skaper kortet falsk gruppering
+- Kun en flate å gruppere eller skille ut flere elementer på, uten avgrensning eller klikk — bruk [Surface](./surface)
 
 ## Statisk vs. klikkbart — og hvorfor det er synlig på mobil
 
@@ -41,20 +43,24 @@ Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `on
 <TabItem value="react" label="React">
 
 ```tsx live
-<Card padding="md">
-  <Heading as="h3" size="sm">Statisk kort</Heading>
-  <Text>Et kort uten href eller onClick er bare en beholder.</Text>
-</Card>
+<VStack align="start">
+  <Card padding="md">
+    <Heading as="h3" size="sm">Statisk kort</Heading>
+    <Text>Et kort uten href eller onClick er bare en beholder.</Text>
+  </Card>
+</VStack>
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<div class="ix-card ix-p-md">
-  <h3>Statisk kort</h3>
-  <p>Et kort uten interaktivitet er bare en beholder.</p>
-</div>
+<ix-stack horizontal="start">
+  <div class="ix-card ix-p-md">
+    <h3>Statisk kort</h3>
+    <p>Et kort uten interaktivitet er bare en beholder.</p>
+  </div>
+</ix-stack>
 ```
 
 </TabItem>
@@ -71,7 +77,7 @@ trenger ikke peke på det for å forstå at det kan trykkes.
 <TabItem value="react" label="React">
 
 ```tsx live
-<HStack gap="md">
+<HStack gap="md" align="start">
   <Card padding="md">
     <Heading as="h3" size="sm">Statisk</Heading>
     <Text>Flat, ingen chevron.</Text>
@@ -87,7 +93,7 @@ trenger ikke peke på det for å forstå at det kan trykkes.
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-stack horizontal gap="md">
+<ix-stack horizontal="start" gap="md">
   <div class="ix-card ix-p-md">
     <h3>Statisk</h3>
     <p>Flat, ingen chevron.</p>
@@ -111,21 +117,25 @@ Sett `href` når kortet navigerer til en URL. Det rendres som `<a>` og får rikt
 <TabItem value="react" label="React">
 
 ```tsx live
-<Card padding="md" href="https://www.sparebank1.no">
-  <Heading as="h3" size="sm">Sparekonto</Heading>
-  <Text>Se saldo og renter</Text>
-</Card>
+<VStack align="start">
+  <Card padding="md" href="https://www.sparebank1.no">
+    <Heading as="h3" size="sm">Sparekonto</Heading>
+    <Text>Se saldo og renter</Text>
+  </Card>
+</VStack>
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
-  <h3>Sparekonto</h3>
-  <p>Se saldo og renter</p>
-  <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
-</a>
+<ix-stack horizontal="start">
+  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
+    <h3>Sparekonto</h3>
+    <p>Se saldo og renter</p>
+    <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
+  </a>
+</ix-stack>
 ```
 
 </TabItem>
@@ -139,21 +149,25 @@ Bruk et `<button>` når kortet utfører en handling. I React rendres `<button>` 
 <TabItem value="react" label="React">
 
 ```tsx live
-<Card padding="md" onClick={() => alert('Kort klikket')}>
-  <Heading as="h3" size="sm">Vis detaljer</Heading>
-  <Text>Åpner et panel</Text>
-</Card>
+<VStack align="start">
+  <Card padding="md" onClick={() => alert('Kort klikket')}>
+    <Heading as="h3" size="sm">Vis detaljer</Heading>
+    <Text>Åpner et panel</Text>
+  </Card>
+</VStack>
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<button type="button" class="ix-card ix-card--clickable ix-p-md">
-  <h3>Vis detaljer</h3>
-  <p>Åpner et panel</p>
-  <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
-</button>
+<ix-stack horizontal="start">
+  <button type="button" class="ix-card ix-card--clickable ix-p-md">
+    <h3>Vis detaljer</h3>
+    <p>Åpner et panel</p>
+    <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
+  </button>
+</ix-stack>
 ```
 
 </TabItem>
@@ -170,21 +184,25 @@ chevron-ikonet selv.
 <TabItem value="react" label="React">
 
 ```tsx live
-<Card padding="md" href="https://www.sparebank1.no" openInNewTab chevronIcon="open_in_new">
-  <Heading as="h3" size="sm">Åpner i ny fane</Heading>
-  <Text>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</Text>
-</Card>
+<VStack align="start">
+  <Card padding="md" href="https://www.sparebank1.no" openInNewTab chevronIcon="open_in_new">
+    <Heading as="h3" size="sm">Åpner i ny fane</Heading>
+    <Text>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</Text>
+  </Card>
+</VStack>
 ```
 
 </TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no" target="_blank" rel="noopener noreferrer">
-  <h3>Åpner i ny fane</h3>
-  <p>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</p>
-  <ix-icon class="ix-card__chevron" name="open_in_new" data-size="lg" aria-hidden="true"></ix-icon>
-</a>
+<ix-stack horizontal="start">
+  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no" target="_blank" rel="noopener noreferrer">
+    <h3>Åpner i ny fane</h3>
+    <p>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</p>
+    <ix-icon class="ix-card__chevron" name="open_in_new" data-size="lg" aria-hidden="true"></ix-icon>
+  </a>
+</ix-stack>
 ```
 
 </TabItem>
@@ -292,6 +310,7 @@ aria-hidden="true">`.
 
 ## Relatert
 
+- [Surface](./surface) — flaten et kort kan ligge oppå; for å gruppere og skille ut innhold uten avgrensning eller klikk
 - [Button](./button) — for handlinger og navigasjon med knappe-styling
 - [Farger](../retningslinjer/farger) — fargetokens for surface og status
 - [Spacing](../grunnleggende/tokens/spacing) — padding-tokens

@@ -16,8 +16,8 @@ RadioGroup lar brukeren velge ett alternativ fra en liste av gjensidig utelukken
 
 ## Uegnet til
 
-- Når flere valg skal kunne velges (bruk `Checkbox`)
-- Lange lister med mange alternativer (vurder `Select`)
+- Når flere valg skal kunne velges (bruk [Checkbox](./checkbox))
+- Lange lister med mange alternativer (vurder [Select](./select))
 - Når det ikke er nødvendig å vise alle alternativer samtidig
 - Situasjoner der det er naturlig å kunne angre eller fjerne valg uten å velge et nytt
 
@@ -67,7 +67,7 @@ RadioGroup lar brukeren velge ett alternativ fra en liste av gjensidig utelukken
 
 For enkle lister er `options`-propen den raskeste veien — på samme måte som `Select`. Hver option har `value` og `label`.
 
-I praksis vil du som regel holde valgt verdi i state og koble den via `value`/`onChange`:
+I praksis vil du som regel holde valgt verdi i state og koble den via `value`/`onChange`. `onChange` er event-basert (verdien ligger i `event.target.value`), slik at et `{...register('felt')}` fra React Hook Form kan spres rett på komponenten — se [Form-validering](../../monstre-og-maler/form-validering):
 
 ```tsx
 const [kundetype, setKundetype] = useState<string>('privat');
@@ -76,7 +76,7 @@ const [kundetype, setKundetype] = useState<string>('privat');
   legend="Velg kundetype"
   name="kundetype"
   value={kundetype}
-  onChange={setKundetype}
+  onChange={(event) => setKundetype(event.target.value)}
   options={[
     { value: 'privat', label: 'Privat' },
     { value: 'bedrift', label: 'Bedrift' },
@@ -502,7 +502,9 @@ Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for 
 | `name` | `string` | Nei | auto-generert | `name`-attributtet på alle inputs. Genereres hvis utelatt |
 | `value` | `string` | Nei | | Kontrollert modus: hvilket alternativ som er valgt. Bruk sammen med `onChange` |
 | `defaultValue` | `string` | Nei | | Ukontrollert modus: initiell verdi. Brukeren kan endre fritt |
-| `onChange` | `(value: string) => void` | Nei | | Kalles med ny value når brukeren velger |
+| `onChange` | `ChangeEventHandler<HTMLInputElement>` | Nei | | Event-basert. Kalles med det native change-eventet — valgt verdi ligger i `event.target.value`. Lar `{...register()}` spres rett på |
+| `onBlur` | `FocusEventHandler<HTMLInputElement>` | Nei | | Videresendes til hver input (RHF touched-state ved `mode: 'onBlur'`) |
+| `ref` | `Ref<HTMLInputElement>` | Nei | | Rutes ned på hver native radio-input. RHF akkumulerer dem og eier `checked` (register-modus) |
 | `required` | `boolean` | Nei | `false` | Setter `required` på alle inputs |
 | `disabled` | `boolean` | Nei | `false` | Deaktiverer hele gruppen |
 | `readOnly` | `boolean` | Nei | `false` | Skrivebeskytter hele gruppen |

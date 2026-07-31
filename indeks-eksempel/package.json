@@ -7,19 +7,30 @@
     "scripts": {
         "dev": "npm run cp:themes && vite --open",
         "build": "tsc --noEmit && npm run cp:themes && vite build",
-        "cp:themes": "mkdir -p ./public/themes && cp -r ../indeks-tokens/.build/css/themes/* ./public/themes",
+        "cp:themes": "mkdir -p ./public/themes && cp -r ../indeks-tokens/.build/css/themes/* ./public/themes && node ../indeks-tokens/dist/cli.js build-colors platform=web path=./.theme-build theme=./themes/kredittbanken.json && cp ./.theme-build/themes/kredittbanken.css ./public/themes/",
         "lint": "eslint .",
         "update-packages": "npx npm-check-updates -i --format group",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "test:e2e": "playwright test",
+        "test:e2e:ui": "playwright test --ui",
+        "docker:run-e2e": "docker compose run --rm playwright",
+        "test:e2e:docker": "pnpm run build && pnpm run docker:run-e2e"
     },
     "dependencies": {
+        "@hookform/resolvers": "5.4.0",
+        "@sb1/indeks-css": "workspace:*",
         "@sb1/indeks-react": "workspace:*",
-        "clsx": "^2.1.1",
+        "@sb1/indeks-tokens": "workspace:*",
+        "@sb1/indeks-utils": "workspace:*",
+        "@sb1/indeks-web": "workspace:*",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
-        "react-router-dom": "^7.18.1"
+        "react-hook-form": "7.82.0",
+        "react-router-dom": "^7.18.1",
+        "valibot": "1.4.2"
     },
     "devDependencies": {
+        "@playwright/test": "1.61.1",
         "@types/node": "^26.0.1",
         "@types/react": "^19.2.17",
         "@types/react-dom": "^19.2.3",

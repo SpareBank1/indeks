@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 public/themes
+.theme-build
+
+# Playwright
+playwright-report
+test-results
+.playwright
 
 # Editor directories and files
 .vscode/*

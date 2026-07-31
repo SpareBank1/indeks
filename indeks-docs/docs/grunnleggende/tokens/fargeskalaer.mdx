@@ -1,0 +1,33 @@
+import Term from '@site/src/components/Term';
+
+# Fargeskalaer
+
+Et theme defineres med sju **basisfarger** — `brand`, `success`, `info`, `danger`, `warning`, `gray` og `neutral`. Ved build utvides hver av disse til en **20-trinns fargeskala** (0–950), som blir til primitivene (`--ii-primitive-*`) de semantiske fargene peker på.
+
+Skalaene genereres i <Term>OKLCH</Term>, et <Term>perseptuelt uniform</Term>t fargerom. Det betyr at samme trinn gir samme opplevde lysstyrke på tvers av fargetoner, slik at de semantiske mappingene (hvilke trinn som brukes til tekst, bakgrunn osv.) fungerer likt for alle basisfarger.
+
+## Hva basisfargen faktisk styrer
+
+Generatoren bruker **ikke** basisfargen som den er og lysner/mørkner rundt den. Den konverterer basisfargen til OKLCH og bruker bare deler av den:
+
+- **Fargetone (hue)** — beholdes uendret gjennom hele skalaen.
+- **Metning (chroma)** — brukes fra basisfargen, men skaleres langs en fast kurve som er lav i endene og høyest på midten av skalaen.
+- **Lyshet (lightness)** — **overstyres** med en fast verdi per trinn (fra ~0.99 på trinn 0 til ~0.17 på trinn 950). Basisfargens egen lyshet brukes ikke.
+
+:::tip Å justere mørkhetsgraden på en basisfarge har ingen effekt
+Fordi lysheten settes per trinn, endrer det **ikke** skalaen om du gjør basisfargen lysere eller mørkere — to hex-verdier med samme fargetone og metning, men ulik lyshet, gir nøyaktig samme skala.
+
+Trenger du en lysere eller mørkere farge i grensesnittet, velg et **annet trinn** på skalaen. Endre selve basis-hexen kun når du vil endre **fargetone eller metning**.
+:::
+
+Ett unntak: `gray-0` tvinges alltid til `#FFFFFF`, uavhengig av `gray`-basisfargen.
+
+## Se skalaene
+
+Alle sju skalaene med alle 20 trinn vises i eksempelappen — trinn 600 er markert som nøkkelfargen:
+
+**[Fargeskalaer i eksempelappen →](https://design.sparebank1.no/eksempel/#/internTesting/fargeskalaer-eksempler)**
+
+## Mer om beslutningen
+
+Bakgrunnen for valget av OKLCH — hvorfor HSL ble forkastet, hvorfor de publiserte tokenene er frosne hex-verdier (ikke `oklch()` i runtime), og hvordan dark mode bruker andre trinn i samme skala — er dokumentert i [ADR-DS-007: Fargesystem](../../adr/ADR-DS-007-fargesystem).

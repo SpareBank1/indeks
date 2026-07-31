@@ -1,12 +1,15 @@
 import { IxCheckboxGroup } from './lib/components/checkbox-group/IxCheckboxGroup.js';
 import { IxCombobox } from './lib/components/combobox/IxCombobox.js';
+import { IxDateField } from './lib/components/date-field/IxDateField.js';
 import { IxDropdown } from './lib/components/dropdown/IxDropdown.js';
 import { IxField } from './lib/components/field/IxField.js';
 import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
+import { IxPhoneNumberField } from './lib/components/phone-number-field/IxPhoneNumberField.js';
 import { IxProgressBar } from './lib/components/progress-bar/IxProgressBar.js';
 import { IxRadioGroup } from './lib/components/radio-group/IxRadioGroup.js';
 import { IxTabs, IxTabList, IxTab, IxTabPanel } from './lib/components/tabs/IxTabs.js';
+import { cn } from './lib/utils/cn.js';
 import './lib/modal/modal.js';
 import './lib/tooltip/tooltip.js';
 
@@ -15,12 +18,18 @@ customElements.define('ix-icon', IxIcon);
 customElements.define('ix-radio-group', IxRadioGroup);
 customElements.define('ix-checkbox-group', IxCheckboxGroup);
 customElements.define('ix-combobox', IxCombobox);
+customElements.define('ix-date-field', IxDateField);
 customElements.define('ix-dropdown', IxDropdown);
+customElements.define('ix-phone-number-field', IxPhoneNumberField);
 customElements.define('ix-progress-bar', IxProgressBar);
 customElements.define('ix-tabs', IxTabs);
 customElements.define('ix-tab-list', IxTabList);
 customElements.define('ix-tab', IxTab);
 customElements.define('ix-tab-panel', IxTabPanel);
+
+// Eksponer cn globalt slik at web components og annen ikke-modul-kode kan bruke
+// `cn(...)` uten import når indeks-web er lastet (f.eks. via CDN). Idempotent.
+globalThis.cn = cn;
 
 export { IxField };
 export { IxIcon };
@@ -28,22 +37,35 @@ export { IxRadioGroup };
 export { IxCheckboxGroup };
 export { IxCombobox };
 export { IxDropdown };
+export { IxDateField };
+export { IxDropdown };
+export { IxPhoneNumberField };
 export { IxProgressBar };
+export type { ProgressBarState } from './lib/components/progress-bar/IxProgressBar.js';
 export { IxTabs, IxTabList, IxTab, IxTabPanel };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
 
-export { createPatternFormatter, createAmountFormatter, amountFormatterForLocale, registerFormat, resolveFormat } from './lib/components/field/formats.js';
-export type { FieldFormatter } from './lib/components/field/formats.js';
+export { createPatternFormatter, createAmountFormatter, amountFormatterForLocale, registerFormat, resolveFormat, BUILTIN_FORMAT_NAMES } from './lib/components/field/formats.js';
+export type { FieldFormatter, BuiltInFormatName } from './lib/components/field/formats.js';
+
+export { cn } from './lib/utils/cn.js';
+export type { ClassValue, ClassDictionary } from './lib/utils/cn.js';
 
 declare global {
+    // Gjør bar `cn(...)` tilgjengelig uten import i web-kode. `var` er mønsteret
+    // for å augmentere globalThis (jf. globalThis.cn-tilordningen over).
+    var cn: (...inputs: import('./lib/utils/cn.js').ClassValue[]) => string;
+
     interface HTMLElementTagNameMap {
         'ix-field': IxField;
         'ix-icon': IxIcon;
         'ix-radio-group': IxRadioGroup;
         'ix-checkbox-group': IxCheckboxGroup;
         'ix-combobox': IxCombobox;
+        'ix-date-field': IxDateField;
         'ix-dropdown': IxDropdown;
+        'ix-phone-number-field': IxPhoneNumberField;
         'ix-progress-bar': IxProgressBar;
         'ix-tabs': IxTabs;
         'ix-tab-list': IxTabList;
@@ -73,6 +95,18 @@ declare global {
                 class?: string;
                 children?: unknown;
             };
+            'ix-phone-number-field': {
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                required?: boolean | '';
+                'data-state'?: 'error' | 'readonly' | 'disabled';
+                'data-locale'?: 'nb' | 'nn' | 'en';
+                'data-countries'?: string;
+                'data-country-code'?: string;
+                'data-default-country-code'?: string;
+                class?: string;
+                children?: unknown;
+            };
             'ix-combobox': {
                 name?: string;
                 multiple?: boolean | '';
@@ -86,12 +120,22 @@ declare global {
                 class?: string;
                 children?: unknown;
             };
+            'ix-date-field': {
+                name?: string;
+                min?: string;
+                max?: string;
+                value?: string;
+                disabled?: boolean | '';
+                readonly?: boolean | '';
+                'data-open-label'?: string;
+                'data-native-picker-mobile'?: boolean | '';
+                class?: string;
+                children?: unknown;
+            };
             'ix-dropdown': {
                 open?: boolean | '';
                 placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
                 'data-submenu'?: boolean | '';
-                class?: string;
-                children?: unknown;
             };
             'ix-icon': {
                 name?: IconName;

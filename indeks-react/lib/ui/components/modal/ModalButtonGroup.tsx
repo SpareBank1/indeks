@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type { HTMLAttributes, JSX } from 'react';
 
@@ -11,7 +11,7 @@ export type ModalButtonGroupProps = HTMLAttributes<HTMLDivElement>;
 export const ModalButtonGroup = forwardRef<HTMLDivElement, ModalButtonGroupProps>(
     function ModalButtonGroup({ children, className, ...props }, ref): JSX.Element {
         return (
-            <div ref={ref} className={clsx('ix-modal__button-group', className)} {...props}>
+            <div ref={ref} className={cn('ix-modal__button-group', className)} {...props}>
                 {children}
             </div>
         );

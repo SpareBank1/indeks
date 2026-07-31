@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type {
     ButtonHTMLAttributes,
@@ -38,7 +38,7 @@ export const Chip: OverridableComponent<ChipProps, HTMLButtonElement> = forwardR
     return (
         <Component
             ref={ref}
-            className={clsx('ix-chip', className)}
+            className={cn('ix-chip', className)}
             data-size={size !== 'md' ? size : undefined}
             type={Component === 'button' ? (type ?? 'button') : type}
             {...props}

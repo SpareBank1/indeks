@@ -4,6 +4,7 @@ import {
     IxCheckboxGroup,
     IxCombobox,
     IxIcon,
+    IxPhoneNumberField,
     IxProgressBar,
     IxRadioGroup,
     IxTabs,
@@ -26,6 +27,9 @@ if (!customElements.get('ix-combobox')) {
 }
 if (!customElements.get('ix-icon')) {
     customElements.define('ix-icon', IxIcon);
+}
+if (!customElements.get('ix-phone-number-field')) {
+    customElements.define('ix-phone-number-field', IxPhoneNumberField);
 }
 if (!customElements.get('ix-progress-bar')) {
     customElements.define('ix-progress-bar', IxProgressBar);

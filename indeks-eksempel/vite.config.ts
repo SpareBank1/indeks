@@ -22,6 +22,13 @@ export default mergeConfig(sharedConfig, {
             '@': resolve(__dirname, 'src'),
             // Use source files in dev for fast HMR, built files for production
             '@sb1/indeks-react': resolve(__dirname, '../indeks-react/lib/main.ts'),
+            // Last web components fra lokal kilde (ikke CDN) så eksempelappen alltid
+            // speiler repoets nåværende WC-kode — samme mønster som react/css over.
+            '@sb1/indeks-web': resolve(__dirname, '../indeks-web/index.ts'),
+            '@sb1/indeks-tokens/generate': resolve(
+                __dirname,
+                '../indeks-tokens/scripts/build-colors/generate.ts'
+            ),
             '@sb1/indeks-css': resolve(__dirname, '../indeks-css/index.css'),
             '@sb1/indeks-utils': resolve(__dirname, '../indeks-utils/index.css'),
             // Ensure React imports resolve from node_modules during build

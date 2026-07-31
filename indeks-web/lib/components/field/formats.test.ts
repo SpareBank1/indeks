@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 import {
     amountFormatterForLocale,
     createAmountFormatter,
+    createDateFormatter,
     createPatternFormatter,
+    isoFromDate,
+    normalizeDateDisplay,
+    parseDate,
     registerFormat,
     resolveFormat,
     type FieldFormatter,
@@ -16,8 +20,10 @@ describe('createPatternFormatter', () => {
             expect(fmt.format('12345678')).toBe('123 45 678');
         });
 
-        it('formaterer delvis nummer uten dinglende separator', () => {
-            expect(fmt.format('123')).toBe('123');
+        it('setter separator så snart gruppen foran er full', () => {
+            // Full første gruppe (3 siffer) → separatoren dukker opp med én gang.
+            expect(fmt.format('123')).toBe('123 ');
+            // Halvfylt andre gruppe → ingen ny separator ennå.
             expect(fmt.format('1234')).toBe('123 4');
         });
 
@@ -71,13 +77,30 @@ describe('createPatternFormatter', () => {
             expect(fmt.format('24122026')).toBe('24.12.2026');
         });
 
-        it('formaterer delvis uten dinglende punktum', () => {
-            expect(fmt.format('24')).toBe('24');
-            expect(fmt.format('2412')).toBe('24.12');
+        it('setter punktum så snart gruppen foran er full', () => {
+            // Full dag (2 siffer) → punktum dukker opp med én gang.
+            expect(fmt.format('24')).toBe('24.');
+            // Full dag + måned → begge punktum, klar for år.
+            expect(fmt.format('2412')).toBe('24.12.');
+            // Halvfylt dag → intet punktum ennå.
+            expect(fmt.format('2')).toBe('2');
         });
 
         it('parse fjerner punktum', () => {
             expect(fmt.parse('24.12.2026')).toBe('24122026');
+        });
+
+        it('dikter ikke opp separator når neste tegn ikke passer (vist verbatim)', () => {
+            // Gruppen er full, men neste tegn er ugyldig ⇒ vi stopper og legger
+            // resten uformatert på uten å tvinge inn et punktum (unngår også
+            // dobling ved innliming av allerede formatert tekst).
+            expect(fmt.format('24a')).toBe('24a');
+        });
+
+        it('round-trip holder med etterhengende separator', () => {
+            for (const raw of ['', '2', '24', '2412', '24122026']) {
+                expect(fmt.parse(fmt.format(raw))).toBe(raw);
+            }
         });
     });
 
@@ -90,6 +113,89 @@ describe('createPatternFormatter', () => {
             expect(fmt.parse('ab-cd')).toBe('abcd');
             expect(fmt.format('abcd')).toBe('ab-cd');
         });
+    });
+});
+
+describe('createDateFormatter', () => {
+    const fmt = createDateFormatter();
+
+    it('nullutfyller enkeltsifret dag/måned til dd.mm.åååå', () => {
+        expect(fmt.format('1.1.2026')).toBe('01.01.2026');
+        expect(fmt.format('1.12.2026')).toBe('01.12.2026');
+        expect(fmt.format('24.1.2026')).toBe('24.01.2026');
+    });
+
+    it('lar allerede komplett dato stå (idempotent)', () => {
+        expect(fmt.format('01.01.2026')).toBe('01.01.2026');
+        expect(fmt.format('24.12.2026')).toBe('24.12.2026');
+        expect(fmt.format(fmt.format('1.1.2026'))).toBe('01.01.2026');
+    });
+
+    it('godtar 8 sifre uten skilletegn som ddmmåååå', () => {
+        expect(fmt.format('01012026')).toBe('01.01.2026');
+        expect(fmt.format('24122026')).toBe('24.12.2026');
+    });
+
+    it('utvider 2-sifret år til 20xx', () => {
+        expect(fmt.format('1.1.26')).toBe('01.01.2026');
+        expect(fmt.format('24.12.99')).toBe('24.12.2099');
+        expect(fmt.format('1.1.00')).toBe('01.01.2000');
+    });
+
+    it('viser ufullstendig dato verbatim (dropper aldri tegn)', () => {
+        // Mangler år → ikke komplett, vis som skrevet.
+        expect(fmt.format('1.1.')).toBe('1.1.');
+        expect(fmt.format('24.12')).toBe('24.12');
+        // 6 sifre uten skilletegn er tvetydig (vet ikke hvor grensene går).
+        expect(fmt.format('112026')).toBe('112026');
+    });
+
+    it('formaterer ikke ugyldig innhold — vises verbatim', () => {
+        expect(fmt.format('1.a.2026')).toBe('1.a.2026');
+        expect(fmt.format('1.1.1.2026')).toBe('1.1.1.2026');
+        expect(fmt.format('abc')).toBe('abc');
+    });
+
+    it('parse er identitet — punktumet er meningsfullt, ikke separator', () => {
+        expect(fmt.parse('01.01.2026')).toBe('01.01.2026');
+        expect(fmt.parse('1.1.2026')).toBe('1.1.2026');
+    });
+
+    it('formaterer på blur (live utelatt)', () => {
+        expect(fmt.live).toBeUndefined();
+    });
+});
+
+describe('parseDate / isoFromDate / normalizeDateDisplay', () => {
+    it('parseDate nullutfyller og godtar 2- eller 4-sifret år', () => {
+        expect(parseDate('1.1.2026')).toEqual({ day: '01', month: '01', year: '2026' });
+        expect(parseDate('24.12.2026')).toEqual({ day: '24', month: '12', year: '2026' });
+        expect(parseDate('01012026')).toEqual({ day: '01', month: '01', year: '2026' });
+    });
+
+    it('parseDate utvider 2-sifret år til 20xx', () => {
+        expect(parseDate('1.1.26')).toEqual({ day: '01', month: '01', year: '2026' });
+        expect(parseDate('24.12.99')).toEqual({ day: '24', month: '12', year: '2099' });
+        expect(parseDate('1.1.00')).toEqual({ day: '01', month: '01', year: '2000' });
+    });
+
+    it('parseDate gir null for ufullstendig/tvetydig/ugyldig', () => {
+        expect(parseDate('1.1.')).toBeNull();
+        expect(parseDate('112026')).toBeNull();
+        expect(parseDate('1.a.2026')).toBeNull();
+        expect(parseDate('1.1.1.2026')).toBeNull();
+        expect(parseDate('')).toBeNull();
+    });
+
+    it('isoFromDate bygger ISO fra komplett dato, ellers tom', () => {
+        expect(isoFromDate('1.1.2026')).toBe('2026-01-01');
+        expect(isoFromDate('24.12.2026')).toBe('2026-12-24');
+        expect(isoFromDate('1.1.26')).toBe('2026-01-01');
+    });
+
+    it('normalizeDateDisplay nullutfyller komplett, ellers verbatim', () => {
+        expect(normalizeDateDisplay('1.1.2026')).toBe('01.01.2026');
+        expect(normalizeDateDisplay('1.1.')).toBe('1.1.');
     });
 });
 
@@ -183,10 +289,14 @@ describe('registry', () => {
 });
 
 describe('live-flagg', () => {
-    it('de innebygde variantene formaterer live', () => {
-        for (const name of ['phone', 'ssn', 'date', 'account', 'orgnr', 'amount']) {
+    it('de fast-bredde variantene formaterer live', () => {
+        for (const name of ['phone', 'ssn', 'account', 'orgnr', 'amount']) {
             expect(resolveFormat(name)!.live, name).toBe(true);
         }
+    });
+
+    it('date formaterer på blur (variabel-bredde, skilletegn-bevisst)', () => {
+        expect(resolveFormat('date')!.live).toBeFalsy();
     });
 
     it('egne pattern-/beløps-formattere er blur (live utelatt)', () => {

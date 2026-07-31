@@ -32,7 +32,9 @@
     border: 1px solid var(--ix-color-border-main-default);
     border-radius: var(--ix-border-radius-md);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    min-width: 260px;
+    min-width: 300px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
 }
 
 .settings-popover label {

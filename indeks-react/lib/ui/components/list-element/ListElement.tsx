@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from '../../../cn';
 import type {
   ElementType,
   JSX,
@@ -31,7 +31,7 @@ export function ListElement<As extends ElementType = "div">(
   return (
     <Component
       {...restProps}
-      className={clsx(
+      className={cn(
         "ix-list-element",
         className
       )}

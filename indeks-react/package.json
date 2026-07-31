@@ -1,6 +1,6 @@
 {
     "name": "@sb1/indeks-react",
-    "version": "0.16.0",
+    "version": "0.17.0",
     "type": "module",
     "description": "React components for Indeks design system",
     "homepage": "https://design.sparebank1.no",
@@ -50,9 +50,6 @@
     },
     "author": "",
     "license": "MIT",
-    "dependencies": {
-        "clsx": "^2.1.1"
-    },
     "peerDependencies": {
         "react": "^18.0.0 || ^19.0.0",
         "react-dom": "^18.0.0 || ^19.0.0"

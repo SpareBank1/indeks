@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../cn';
 
 /**
  * Statustema som kobles via `data-status` og `--ix-color-status-*`
@@ -59,7 +59,7 @@ export function extractSpacingClassnameFromProps(props: SpacingProps) {
     } = {
         ...props,
     };
-    const cls = clsx({
+    const cls = cn({
         [`ix-m-${margin}`]: margin,
         [`ix-mx-${marginX}`]: marginX,
         [`ix-mt-${marginTop}`]: marginTop,

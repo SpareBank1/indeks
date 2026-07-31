@@ -1,0 +1,65 @@
+name: PR - Eksempel e2e
+
+on:
+    pull_request:
+        branches: [main]
+        paths:
+            - 'indeks-eksempel/**'
+            - 'indeks-react/**'
+            - 'indeks-web/**'
+            - 'indeks-css/**'
+            - 'indeks-tokens/**'
+            - 'indeks-utils/**'
+
+concurrency:
+    group: eksempel-e2e-${{ github.head_ref || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    eksempel-e2e:
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        permissions:
+            contents: read
+            pull-requests: read
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+            - name: Set up Node.js
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
+              with:
+                  node-version: '24'
+                  cache: 'pnpm'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile --ignore-scripts
+
+            - name: Bygg eksempelappen (med avhengigheter)
+              run: pnpm --filter @sb1/indeks-eksempel... build
+
+            - name: Kjør e2e i Docker
+              working-directory: ./indeks-eksempel
+              run: docker compose run --rm playwright
+
+            - name: Last opp Playwright-rapport
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+              if: always()
+              with:
+                  name: eksempel-e2e-report
+                  path: indeks-eksempel/playwright-report/
+                  retention-days: 30
+
+            - name: Last opp testresultater
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+              if: always()
+              with:
+                  name: eksempel-e2e-test-results
+                  path: indeks-eksempel/test-results/
+                  retention-days: 30

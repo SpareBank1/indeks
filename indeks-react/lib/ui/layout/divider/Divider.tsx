@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 import { type ComponentSize } from '../../../types/types';
 
@@ -19,5 +19,5 @@ export function Divider<As extends ElementType = 'div'>(props: DividerProps<As>)
         ...props,
     };
 
-    return <Component {...restProps} className={clsx('ix-divider', className)} />;
+    return <Component {...restProps} className={cn('ix-divider', className)} />;
 }

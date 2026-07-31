@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../../cn';
 import React, { type ComponentPropsWithoutRef } from 'react';
 
 type HeadingElement = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -53,7 +53,7 @@ export const Heading = ({ as, className, size, addRecommendedSpacing, ...rest }:
     return (
         <Component
             data-size={headingSize}
-            className={clsx('ix-heading', { [getSpacingFromElement(headingSize)]: addRecommendedSpacing }, className)}
+            className={cn('ix-heading', { [getSpacingFromElement(headingSize)]: addRecommendedSpacing }, className)}
             {...rest}
         />
     );

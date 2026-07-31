@@ -1,5 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
+import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { firstEvent } from '../test-events';
 import { CheckboxButton } from './CheckboxButton';
 import { CheckboxGroup } from './CheckboxGroup';
 
@@ -104,20 +106,24 @@ describe('CheckboxGroup', () => {
             expect(inputs[2].checked).toBe(true);
         });
 
-        it('kaller onChange med oppdatert array når et valg legges til', () => {
+        // NB: på en KONTROLLERT checkbox holder React `checked`-propen, så
+        // `event.target.checked` er upålitelig i jsdom (React restaurerer state).
+        // Vi asserter derfor kun target.value her; checked verifiseres i register-
+        // /uncontrolled-modus der DOM-toggelen er ekte (som RadioGroup gjør for value).
+        it('videresender ekte change-event (target.value) når et valg legges til', () => {
             const onChange = vi.fn();
             const { container } = renderGroup({ value: ['epost'], onChange });
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
             fireEvent.click(inputs[1]);
-            expect(onChange).toHaveBeenCalledWith(['epost', 'sms']);
+            expect(firstEvent(onChange).target.value).toBe('sms');
         });
 
-        it('kaller onChange med array uten verdien når et valg fjernes', () => {
+        it('videresender ekte change-event (target.value) når et valg fjernes', () => {
             const onChange = vi.fn();
             const { container } = renderGroup({ value: ['epost', 'sms'], onChange });
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
             fireEvent.click(inputs[0]);
-            expect(onChange).toHaveBeenCalledWith(['sms']);
+            expect(firstEvent(onChange).target.value).toBe('epost');
         });
 
         it('ukontrollert: defaultValue krysser av riktige valg', () => {
@@ -126,13 +132,67 @@ describe('CheckboxGroup', () => {
             expect(inputs[1].checked).toBe(true);
         });
 
-        it('ukontrollert: klikk toggler tilstand', () => {
+        it('ukontrollert: klikk toggler intern array-state', () => {
             const { container } = renderGroup({ defaultValue: [] });
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
             fireEvent.click(inputs[0]);
             expect(inputs[0].checked).toBe(true);
             fireEvent.click(inputs[0]);
             expect(inputs[0].checked).toBe(false);
+        });
+    });
+
+    describe('register-modus (ref satt)', () => {
+        it('setter ikke checked fra React når ref er satt (RHF eier checked)', () => {
+            const ref = createRef<HTMLInputElement>();
+            // defaultValue skal IKKE gi checked i register-modus — RHF styrer det.
+            const { container } = renderGroup({ ref, defaultValue: ['sms'] });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            for (const input of inputs) {
+                expect(input.checked).toBe(false);
+            }
+        });
+
+        it('ruter ref til hver native input (RHF akkumulerer refs)', () => {
+            // Callback-ref kalles én gang per input med samme funksjon.
+            const seen: HTMLInputElement[] = [];
+            const ref = (node: HTMLInputElement | null) => {
+                if (node) seen.push(node);
+            };
+            const { container } = renderGroup({ ref });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            expect(seen).toHaveLength(inputs.length);
+            expect(seen).toEqual(Array.from(inputs));
+        });
+
+        it('videresender onBlur til inputene', () => {
+            const onBlur = vi.fn();
+            const ref = createRef<HTMLInputElement>();
+            const { container } = renderGroup({ ref, onBlur });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            fireEvent.blur(inputs[0]);
+            expect(onBlur).toHaveBeenCalledTimes(1);
+        });
+
+        it('onChange får ekte event med target.value + checked i register-modus', () => {
+            const onChange = vi.fn();
+            const ref = createRef<HTMLInputElement>();
+            const { container } = renderGroup({ ref, onChange });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            fireEvent.click(inputs[2]);
+            expect(firstEvent(onChange).target.value).toBe('telefon');
+            expect(firstEvent(onChange).target.checked).toBe(true);
+        });
+
+        it('kontrollert value vinner over ref (ref slår ikke på register-modus)', () => {
+            // Konsument som styrer verdien selv OG holder en ref (f.eks. for fokus/scroll):
+            // `value` skal fortsatt styre checked, ikke ignoreres til fordel for register.
+            const ref = createRef<HTMLInputElement>();
+            const { container } = renderGroup({ ref, value: ['sms'], onChange: vi.fn() });
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            expect(inputs[0].checked).toBe(false);
+            expect(inputs[1].checked).toBe(true);
+            expect(inputs[2].checked).toBe(false);
         });
     });
 
@@ -189,7 +249,7 @@ describe('CheckboxGroup', () => {
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
             expect(inputs[1].checked).toBe(true);
             fireEvent.click(inputs[0]);
-            expect(onChange).toHaveBeenCalledWith(['b', 'a']);
+            expect(firstEvent(onChange).target.value).toBe('a');
         });
     });
 });

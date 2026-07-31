@@ -131,7 +131,7 @@ Checkbox chip er `CheckboxGroup` med `variant="chip"`. Se [CheckboxGroup](../skj
 | `name` | `string` | | Felles `name` for alle checkboxene. Propageres når satt |
 | `value` | `string[]` | | Valgte verdier (kontrollert) |
 | `defaultValue` | `string[]` | | Valgte verdier (ukontrollert) |
-| `onChange` | `(values: string[]) => void` | | Kalles med hele det oppdaterte arrayet når brukeren toggler |
+| `onChange` | `ChangeEventHandler<HTMLInputElement>` | | Event-basert — toggl-verdien i `event.target.value`, av/på i `event.target.checked`. Lar `{...register()}` spres rett på |
 | `size` | `'sm' \| 'md'` | `'md'` | Størrelse — kun relevant for `variant="chip"` |
 | `description` | `string` | | Hjelpetekst over alternativene |
 | `errorMessage` | `string` | | Feilmelding — setter `aria-invalid` på gruppen |

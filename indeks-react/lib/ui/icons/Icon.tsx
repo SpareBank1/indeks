@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '../../cn';
 import type { ElementType, JSX } from 'react';
 import type { IconName } from './icon-types';
 
@@ -28,7 +28,7 @@ export function Icon<As extends ElementType = 'ix-icon'>(props: IconProps<As>): 
             {...restProps}
             name={name}
             data-size={size !== 'md' ? size : undefined}
-            className={clsx('ix-icon', className)}
+            className={cn('ix-icon', className)}
         />
     );
 }

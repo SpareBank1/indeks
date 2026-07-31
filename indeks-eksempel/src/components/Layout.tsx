@@ -23,6 +23,8 @@ export default function Layout() {
         { path: 'grid-komponent', label: 'Grid-komponent' },
         { path: 'typografi-eksempler', label: 'Typografi-eksempler' },
         { path: 'fargeskalaer-eksempler', label: 'Fargeskalaer' },
+        { path: 'form-validering', label: 'Form-validering' },
+        { path: 'generer-farger', label: 'Generer farger' },
     ];
 
     return (

@@ -259,6 +259,23 @@ describe('IxCombobox', () => {
             expect(sel.value).toBe('47');
             expect(sel.multiple).toBe(false);
         });
+
+        it('fyrer native change på den skjulte selecten ved valg', () => {
+            const el = single();
+            const sel = el.querySelector('select')!;
+            const onChange = vi.fn();
+            sel.addEventListener('change', onChange);
+            press(el, 'ArrowDown');
+            options(el)[0].click();
+            expect(onChange).toHaveBeenCalledTimes(1);
+            expect(sel.value).toBe('47');
+        });
+
+        it('focus() delegerer til den synlige inputen', () => {
+            const el = single();
+            el.focus();
+            expect(document.activeElement).toBe(input(el));
+        });
     });
 
     describe('multi-valg + chips', () => {

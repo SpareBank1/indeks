@@ -1,6 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
 import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { firstEvent } from '../test-events';
 import { RadioButton } from './RadioButton';
 import { RadioGroup } from './RadioGroup';
 
@@ -103,7 +104,7 @@ describe('RadioButton', () => {
             expect(inputs[1].checked).toBe(false);
         });
 
-        it('kaller gruppe-onChange med value ved klikk', () => {
+        it('kaller gruppe-onChange med event (verdi i target.value) ved klikk', () => {
             const onChange = vi.fn();
             const { container } = render(
                 <RadioGroup legend="Velg" value="a" onChange={onChange}>
@@ -113,7 +114,7 @@ describe('RadioButton', () => {
             );
             const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
             fireEvent.click(inputs[1]);
-            expect(onChange).toHaveBeenCalledWith('b');
+            expect(firstEvent(onChange).target.value).toBe('b');
         });
 
         it('group-disabled på host propagerer til alle inputs (WC)', () => {
