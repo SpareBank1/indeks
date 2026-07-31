@@ -1,5 +1,11 @@
 # @sb1/indeks-tokens
 
+## 0.8.1
+
+### Patch Changes
+
+-   174fd7e: Legg `typescript` til som `devDependency` i `@sb1/indeks-tokens`. `build:types`-steget (`tsc -p tsconfig.generate.json`) feilet med `sh: 1: tsc: not found` i en ren install, fordi TypeScript ikke lå i pakkens egne avhengigheter. Ingen endring i publisert output.
+
 ## 0.8.0
 
 ### Minor Changes
