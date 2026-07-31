@@ -1,5 +1,12 @@
 # @sb1/indeks-utils
 
+## 0.8.1
+
+### Patch Changes
+
+-   Updated dependencies [09cda01]
+    -   @sb1/indeks-tokens@0.8.0
+
 ## 0.8.0
 
 ### Minor Changes
