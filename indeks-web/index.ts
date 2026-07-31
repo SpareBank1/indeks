@@ -36,7 +36,6 @@ export { IxIcon };
 export { IxRadioGroup };
 export { IxCheckboxGroup };
 export { IxCombobox };
-export { IxDropdown };
 export { IxDateField };
 export { IxDropdown };
 export { IxPhoneNumberField };
