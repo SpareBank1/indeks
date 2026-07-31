@@ -17,7 +17,7 @@ export type { RadioGroupProps, RadioOption } from './radio-group/RadioGroup';
 export { RadioButton } from './radio-group/RadioButton';
 export type { RadioButtonProps } from './radio-group/RadioButton';
 export { PhoneNumberField } from './phone-number-field/PhoneNumberField';
-export type { PhoneNumberFieldProps, CountryOption, CountryLocale } from './phone-number-field/PhoneNumberField';
+export type { PhoneNumberFieldProps, CountryOption, CountryLocale, FieldRegistration } from './phone-number-field/PhoneNumberField';
 export { Select } from './select/Select';
 export type { SelectProps, SelectOption, SelectOptionGroup } from './select/Select';
 export { TextField } from './text-field/TextField';
