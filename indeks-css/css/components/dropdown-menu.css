@@ -88,12 +88,6 @@
     background-color: var(--ix-color-fill-info-default);
 }
 
-/* Focus-ring på tastaturnavigasjon. */
-/* :where(.ix-dropdown__item:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: calc(-1 * var(--ix-outline-offset-default));
-} */
-
 /* Disabled item. */
 :where(.ix-dropdown__item[disabled]),
 :where(.ix-dropdown__item[aria-disabled='true']) {
