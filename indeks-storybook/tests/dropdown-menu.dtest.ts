@@ -15,7 +15,8 @@ async function openDropdown(page: Page): Promise<{ trigger: Locator; menu: Locat
 test.describe('DropdownMenu', () => {
     // Dropdown-tester kjører kun på desktop-chromium.
     // Mobil: tastaturnavigasjon ikke relevant. Firefox/Webkit: ustabil i Docker.
-    test.beforeEach(async (_fixtures, testInfo) => {
+    // eslint-disable-next-line no-empty-pattern -- Playwright krever objekt-destrukturering
+    test.beforeEach(async ({ }, testInfo) => {
         test.skip(testInfo.project.name !== 'desktop-chromium', 'Kun desktop-chromium');
     });
 
