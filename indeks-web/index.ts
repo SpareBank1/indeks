@@ -1,6 +1,7 @@
 import { IxCheckboxGroup } from './lib/components/checkbox-group/IxCheckboxGroup.js';
 import { IxCombobox } from './lib/components/combobox/IxCombobox.js';
 import { IxDateField } from './lib/components/date-field/IxDateField.js';
+import { IxDropdown } from './lib/components/dropdown/IxDropdown.js';
 import { IxField } from './lib/components/field/IxField.js';
 import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
@@ -18,6 +19,7 @@ customElements.define('ix-radio-group', IxRadioGroup);
 customElements.define('ix-checkbox-group', IxCheckboxGroup);
 customElements.define('ix-combobox', IxCombobox);
 customElements.define('ix-date-field', IxDateField);
+customElements.define('ix-dropdown', IxDropdown);
 customElements.define('ix-phone-number-field', IxPhoneNumberField);
 customElements.define('ix-progress-bar', IxProgressBar);
 customElements.define('ix-tabs', IxTabs);
@@ -35,6 +37,7 @@ export { IxRadioGroup };
 export { IxCheckboxGroup };
 export { IxCombobox };
 export { IxDateField };
+export { IxDropdown };
 export { IxPhoneNumberField };
 export { IxProgressBar };
 export type { ProgressBarState } from './lib/components/progress-bar/IxProgressBar.js';
@@ -60,6 +63,7 @@ declare global {
         'ix-checkbox-group': IxCheckboxGroup;
         'ix-combobox': IxCombobox;
         'ix-date-field': IxDateField;
+        'ix-dropdown': IxDropdown;
         'ix-phone-number-field': IxPhoneNumberField;
         'ix-progress-bar': IxProgressBar;
         'ix-tabs': IxTabs;
@@ -126,6 +130,11 @@ declare global {
                 'data-native-picker-mobile'?: boolean | '';
                 class?: string;
                 children?: unknown;
+            };
+            'ix-dropdown': {
+                open?: boolean | '';
+                placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+                'data-submenu'?: boolean | '';
             };
             'ix-icon': {
                 name?: IconName;

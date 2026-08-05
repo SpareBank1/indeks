@@ -1,0 +1,402 @@
+---
+title: DropdownMenu
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/dropdown-menu.json';
+
+# DropdownMenu
+
+DropdownMenu er en nedtrekksmeny for handlinger eller navigasjon. Menyen vises når brukeren interagerer med en trigger-knapp og lukkes automatisk ved valg, klikk utenfor eller Escape.
+
+## Egnet til
+
+- Handlinger knyttet til et objekt (rediger, dupliser, slett)
+- Sekundære valg som ikke trenger synlige knapper
+- Kontekstmenyer med flere relaterte handlinger
+- Hierarkisk organisering av valg via submenyer
+
+## Uegnet til
+
+- Primærhandlinger som bør være umiddelbart synlige (bruk Button)
+- Valg i skjemaer (bruk Select eller RadioGroup)
+- Navigasjon mellom seksjoner (bruk Tabs eller vanlige lenker)
+- Svært lange lister (vurder Combobox med søk)
+
+## Kom i gang
+
+En DropdownMenu bygges opp av en trigger-knapp og et menypanel med elementer. Klikk eller tastaturnavigasjon (Enter/Space/piler) åpner menyen og aktiverer valg. Menyen lukkes ved valg, klikk utenfor eller Escape.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+Web componenten `<ix-dropdown>` håndterer ARIA-attributter, tastaturnavigasjon og posisjonering automatisk. Triggeren er det første elementet som ikke er menyen. Menyen må ha klassen `.ix-dropdown__menu` og `role="menu"`.
+
+```jsx live
+<ix-dropdown>
+  <button class="ix-button" data-variant="secondary">Handlinger</button>
+  <div class="ix-dropdown__menu" role="menu">
+    <button class="ix-dropdown__item" role="menuitem">Rediger</button>
+    <button class="ix-dropdown__item" role="menuitem">Dupliser</button>
+    <button class="ix-dropdown__item" role="menuitem">Del</button>
+  </div>
+</ix-dropdown>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+React-komponenten er bygget opp som compound components: `DropdownMenu.Trigger`, `DropdownMenu.Content`, `DropdownMenu.Item`, `DropdownMenu.Divider` og sub-komponenter for nøstede menyer.
+
+```tsx live
+<DropdownMenu>
+  <DropdownMenu.Trigger>
+    <Button variant="secondary">Handlinger</Button>
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item onSelect={() => alert('Rediger')}>Rediger</DropdownMenu.Item>
+    <DropdownMenu.Item onSelect={() => alert('Dupliser')}>Dupliser</DropdownMenu.Item>
+    <DropdownMenu.Item onSelect={() => alert('Del')}>Del</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Med ikoner
+
+Ikoner kan legges til foran teksten for å gjøre handlinger lettere å skanne.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-dropdown>
+  <button class="ix-button" data-variant="secondary">Handlinger</button>
+  <div class="ix-dropdown__menu" role="menu">
+    <button class="ix-dropdown__item" role="menuitem">
+      <ix-icon name="edit" aria-hidden="true"></ix-icon>
+      Rediger
+    </button>
+    <button class="ix-dropdown__item" role="menuitem">
+      <ix-icon name="copy" aria-hidden="true"></ix-icon>
+      Dupliser
+    </button>
+    <button class="ix-dropdown__item" role="menuitem">
+      <ix-icon name="share" aria-hidden="true"></ix-icon>
+      Del
+    </button>
+  </div>
+</ix-dropdown>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<DropdownMenu>
+  <DropdownMenu.Trigger>
+    <Button variant="secondary">Handlinger</Button>
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item icon={<Icon name="edit" />} onSelect={() => alert('Rediger')}>
+      Rediger
+    </DropdownMenu.Item>
+    <DropdownMenu.Item icon={<Icon name="copy" />} onSelect={() => alert('Dupliser')}>
+      Dupliser
+    </DropdownMenu.Item>
+    <DropdownMenu.Item icon={<Icon name="share" />} onSelect={() => alert('Del')}>
+      Del
+    </DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu>
+```
+
+</TabItem>
+</Tabs>
+
+### Med destruktive handlinger
+
+Bruk `data-danger` (HTML) eller `danger`-prop (React) for destruktive handlinger. Elementet får rød tekstfarge som visuell indikasjon.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-dropdown>
+  <button class="ix-button" data-variant="secondary">Handlinger</button>
+  <div class="ix-dropdown__menu" role="menu">
+    <button class="ix-dropdown__item" role="menuitem">Rediger</button>
+    <button class="ix-dropdown__item" role="menuitem">Dupliser</button>
+    <hr class="ix-dropdown__divider" role="separator" />
+    <button class="ix-dropdown__item" role="menuitem" data-danger>Slett</button>
+  </div>
+</ix-dropdown>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<DropdownMenu>
+  <DropdownMenu.Trigger>
+    <Button variant="secondary">Handlinger</Button>
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item onSelect={() => alert('Rediger')}>Rediger</DropdownMenu.Item>
+    <DropdownMenu.Item onSelect={() => alert('Dupliser')}>Dupliser</DropdownMenu.Item>
+    <DropdownMenu.Divider />
+    <DropdownMenu.Item danger onSelect={() => alert('Slett')}>Slett</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu>
+```
+
+</TabItem>
+</Tabs>
+
+### Med gruppering
+
+Bruk dividers for å visuelt skille grupper av relaterte handlinger.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-dropdown>
+  <button class="ix-button" data-variant="secondary">Rediger</button>
+  <div class="ix-dropdown__menu" role="menu">
+    <button class="ix-dropdown__item" role="menuitem">Klipp ut</button>
+    <button class="ix-dropdown__item" role="menuitem">Kopier</button>
+    <button class="ix-dropdown__item" role="menuitem">Lim inn</button>
+    <hr class="ix-dropdown__divider" role="separator" />
+    <button class="ix-dropdown__item" role="menuitem">Angre</button>
+    <button class="ix-dropdown__item" role="menuitem">Endre</button>
+  </div>
+</ix-dropdown>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<DropdownMenu>
+  <DropdownMenu.Trigger>
+    <Button variant="secondary">Rediger</Button>
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item onSelect={() => alert('Klipp')}>Klipp ut</DropdownMenu.Item>
+    <DropdownMenu.Item onSelect={() => alert('Kopier')}>Kopier</DropdownMenu.Item>
+    <DropdownMenu.Item onSelect={() => alert('Lim')}>Lim inn</DropdownMenu.Item>
+    <DropdownMenu.Divider />
+    <DropdownMenu.Item onSelect={() => alert('Angre')}>Angre</DropdownMenu.Item>
+    <DropdownMenu.Item onSelect={() => alert('Endre')}>Endre</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu>
+```
+
+</TabItem>
+</Tabs>
+
+### Med submeny
+
+For hierarkiske valg kan du nøste en submeny. Submenyen åpnes med ArrowRight og lukkes med ArrowLeft. Begrens til ett nivå med nøsting for god brukervennlighet.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-dropdown>
+  <button class="ix-button" data-variant="secondary">Handlinger</button>
+  <div class="ix-dropdown__menu" role="menu">
+    <button class="ix-dropdown__item" role="menuitem">Rediger</button>
+    <ix-dropdown data-submenu>
+      <button class="ix-dropdown__item ix-dropdown__submenu-trigger" role="menuitem">
+        Eksporter som
+        <span class="ix-dropdown__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="ix-dropdown__menu" role="menu">
+        <button class="ix-dropdown__item" role="menuitem">PDF</button>
+        <button class="ix-dropdown__item" role="menuitem">CSV</button>
+        <button class="ix-dropdown__item" role="menuitem">Excel</button>
+      </div>
+    </ix-dropdown>
+    <hr class="ix-dropdown__divider" role="separator" />
+    <button class="ix-dropdown__item" role="menuitem" data-danger>Slett</button>
+  </div>
+</ix-dropdown>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<DropdownMenu>
+  <DropdownMenu.Trigger>
+    <Button variant="secondary">Handlinger</Button>
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item onSelect={() => alert('Rediger')}>Rediger</DropdownMenu.Item>
+    <DropdownMenu.Sub>
+      <DropdownMenu.SubTrigger>Eksporter som</DropdownMenu.SubTrigger>
+      <DropdownMenu.SubContent>
+        <DropdownMenu.Item onSelect={() => alert('PDF')}>PDF</DropdownMenu.Item>
+        <DropdownMenu.Item onSelect={() => alert('CSV')}>CSV</DropdownMenu.Item>
+        <DropdownMenu.Item onSelect={() => alert('Excel')}>Excel</DropdownMenu.Item>
+      </DropdownMenu.SubContent>
+    </DropdownMenu.Sub>
+    <DropdownMenu.Divider />
+    <DropdownMenu.Item danger onSelect={() => alert('Slett')}>Slett</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu>
+```
+
+</TabItem>
+</Tabs>
+
+### Med deaktiverte elementer
+
+Bruk `disabled` for elementer som ikke kan velges i nåværende tilstand. Deaktiverte elementer hoppes over ved tastaturnavigasjon.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-dropdown>
+  <button class="ix-button" data-variant="secondary">Handlinger</button>
+  <div class="ix-dropdown__menu" role="menu">
+    <button class="ix-dropdown__item" role="menuitem">Rediger</button>
+    <button class="ix-dropdown__item" role="menuitem" disabled aria-disabled="true">Dupliser (ikke tilgjengelig)</button>
+    <button class="ix-dropdown__item" role="menuitem">Del</button>
+  </div>
+</ix-dropdown>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<DropdownMenu>
+  <DropdownMenu.Trigger>
+    <Button variant="secondary">Handlinger</Button>
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item onSelect={() => alert('Rediger')}>Rediger</DropdownMenu.Item>
+    <DropdownMenu.Item disabled>Dupliser (ikke tilgjengelig)</DropdownMenu.Item>
+    <DropdownMenu.Item onSelect={() => alert('Del')}>Del</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Bruk korte og tydelige etiketter
+
+Meny-etiketter bør være korte verb eller handlingsbeskrivelser: «Rediger», «Slett», «Eksporter som PDF». Unngå vage etiketter som «Mer» eller «Handlinger» inne i selve menyen.
+
+### Grupper relaterte handlinger
+
+Bruk dividers for å skille grupper av handlinger som hører sammen. Det gjør menyen lettere å skanne. Plasser destruktive handlinger (slett, fjern) nederst og skill dem fra andre handlinger med en divider.
+
+### Begrens antall valg
+
+En meny med for mange valg er vanskelig å navigere. Vurder å gruppere, bruke submenyer eller redesigne flyten dersom menyen overstiger 7-10 elementer.
+
+### Unngå dyp nøsting
+
+Submenyer kan brukes for hierarkisk organisering, men begrens til ett nivå. Dypere nøsting gjør navigasjon vanskelig, spesielt med tastatur.
+
+## Props / API
+
+### `DropdownMenu`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `open` | `boolean` | | Kontrollert åpen-tilstand. Utelat for ukontrollert bruk |
+| `defaultOpen` | `boolean` | `false` | Startverdi i ukontrollert modus |
+| `onOpenChange` | `(open: boolean) => void` | | Kalles når menyen åpnes eller lukkes |
+| `placement` | `'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | Posisjon relativt til trigger |
+| `children` | `ReactNode` | | Typisk `DropdownMenu.Trigger` og `DropdownMenu.Content` |
+| `className` | `string` | | Ekstra CSS-klasser på `<ix-dropdown>` |
+
+### `DropdownMenu.Item`
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `onSelect` | `() => void` | | Kalles når elementet velges |
+| `danger` | `boolean` | `false` | Destruktiv handling (rød tekst) |
+| `disabled` | `boolean` | `false` | Deaktiverer elementet |
+| `icon` | `ReactNode` | | Ikon foran teksten |
+| `children` | `ReactNode` | | Tekst/innhold i elementet |
+
+### `DropdownMenu.Divider`
+
+Ingen props. Rendrer en visuell separator med `role="separator"`.
+
+### `DropdownMenu.Sub`, `DropdownMenu.SubTrigger`, `DropdownMenu.SubContent`
+
+Disse komponentene bygger opp nøstede submenyer. `Sub` wrapper `SubTrigger` og `SubContent`. `SubTrigger` viser chevron-ikonet automatisk.
+
+## Tilpasning med CSS
+
+Trenger du `ix-dropdown`-stylingen på HTML du setter sammen selv kan du bruke klassene direkte. Web componenten `<ix-dropdown>` håndterer ARIA og tastaturnavigasjon.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Host/wrapper | `ix-dropdown` eller `.ix-dropdown` |
+| Meny-panel | `.ix-dropdown__menu` |
+| Meny-element | `.ix-dropdown__item` |
+| Separator | `.ix-dropdown__divider` |
+| Submeny-trigger | `.ix-dropdown__submenu-trigger` |
+| Chevron-ikon | `.ix-dropdown__chevron` |
+| Danger-variant | `[data-danger]` på `.ix-dropdown__item` |
+| Disabled | `[disabled]` eller `[aria-disabled="true"]` på `.ix-dropdown__item` |
+
+### Eksempel: ren HTML
+
+```html
+<ix-dropdown>
+  <button class="ix-button" data-variant="secondary">Handlinger</button>
+  <div class="ix-dropdown__menu" role="menu">
+    <button class="ix-dropdown__item" role="menuitem">Rediger</button>
+    <button class="ix-dropdown__item" role="menuitem">Dupliser</button>
+    <hr class="ix-dropdown__divider" role="separator" />
+    <button class="ix-dropdown__item" role="menuitem" data-danger>Slett</button>
+  </div>
+</ix-dropdown>
+```
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Bruk en tydelig trigger-knapp** — teksten eller `aria-label` skal fortelle hva menyen inneholder. Komponenten setter `aria-haspopup` og `aria-expanded` automatisk.
+- **Skriv korte og beskrivende meny-etiketter** — hvert element bør ha presis tekst som beskriver handlingen. Unngå vage etiketter.
+- **Oversett all tekst** — trigger-tekst og meny-etiketter kommer fra deg og må være på brukerens språk.
+- **Begrens nesting** — dyp nøsting gjør navigasjon vanskelig. Hold deg til maksimalt ett nivå med submenyer.
+- **Unngå for mange valg** — en lang meny er vanskelig å navigere. Grupper med dividers eller redesign flyten.
+
+### Hva komponenten gjør automatisk
+
+- **ARIA-attributter** — `aria-haspopup="menu"` og `aria-expanded` settes på trigger. `role="menu"` på menyen, `role="menuitem"` på elementer, `role="separator"` på dividers.
+- **Tastaturnavigasjon** — Enter/Space åpner, piltaster navigerer, Escape lukker. Home/End hopper til første/siste. ArrowRight åpner submeny, ArrowLeft lukker den.
+- **Fokushåndtering** — fokus flyttes til første element ved åpning og tilbake til trigger ved lukking. Roving tabindex gjør at kun ett element har tabindex="0".
+- **Typeahead** — skriv bokstaver for å hoppe til matchende element.
+- **Posisjonering** — menyen plasseres med viewport-clamp og flipper ved plassmangel.
+- **Touch-mål** — alle elementer har minimum 32px høyde.
+- **Fokusindikator** — tydelig `:focus-visible` på alle interaktive elementer.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />

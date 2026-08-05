@@ -1,0 +1,106 @@
+{
+  "component": "DropdownMenu",
+  "lastReviewed": "2026-07-28",
+  "consumerResponsibilities": [
+    {
+      "summary": "Bruk en tydelig trigger-knapp",
+      "details": "Triggerknappen skal ha meningsfull tekst eller et tilgjengelig navn (aria-label) som forteller hva menyen inneholder. Brukeren skal forstå hva de kan forvente i menyen basert på triggeren. Komponenten setter automatisk aria-haspopup=\"menu\" og aria-expanded på triggeren.",
+      "wcag": ["4.1.2", "2.4.6"]
+    },
+    {
+      "summary": "Skriv korte og beskrivende meny-etiketter",
+      "details": "Hvert meny-element bør ha en kort og presis tekst som beskriver handlingen eller valget. Unngå vage etiketter som \"Klikk her\" eller \"Mer\". For destruktive handlinger, bruk danger-prop og tydelig tekst som \"Slett\" eller \"Fjern\".",
+      "wcag": ["2.4.6", "3.3.2"]
+    },
+    {
+      "summary": "Oversett all tekst i menyen",
+      "details": "All tekst i trigger-knappen og meny-elementene kommer fra deg og skal være på brukerens språk (bokmål, nynorsk, engelsk). Komponenten har ingen hardkodet fallback-tekst.",
+      "wcag": ["3.1.2"]
+    },
+    {
+      "summary": "Begrens nesting til ett niva",
+      "details": "Submenyer kan brukes for a organisere valg hierarkisk, men dyp nesting (submeny i submeny i submeny) gjor navigasjon vanskelig, saerlig med tastatur og skjermleser. Begrens til maksimalt ett niva med submenyer der det er praktisk mulig.",
+      "wcag": ["2.4.3", "2.4.8"]
+    },
+    {
+      "summary": "Unnga for mange valg",
+      "details": "En lang meny med mange valg er vanskelig a navigere. Vurder a gruppere med dividers, bruke submenyer for relaterte valg, eller redesigne flyten dersom menyen blir for lang (mer enn 7-10 elementer).",
+      "wcag": ["3.2.3"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Menyen har role=\"menu\", hvert element har role=\"menuitem\", og separatorer har role=\"separator\". aria-haspopup=\"menu\" og aria-expanded settes automatisk pa triggeren. Submenyer har aria-haspopup pa sin trigger." },
+    { "id": "1.3.2", "notes": "Menyelementene vises i DOM-rekkefølge, og tastaturnavigasjon folger samme rekkefølge. Submenyer apnes til hoyre (eller venstre ved plassmangel) i leserekkefølge." },
+    { "id": "1.4.3", "notes": "Tekst bruker --ix-color-foreground-main-default pa --ix-color-surface-main-default. Danger-variant bruker --ix-color-foreground-danger-default som oppfyller kontrastkravet." },
+    { "id": "1.4.4", "notes": "Relative enheter (font-size-tokens) — tekst skalerer korrekt ved 200% zoom. Menyen har max-height og scroller ved behov." },
+    { "id": "1.4.10", "notes": "Mobile-first uten faste bredder — menyen posisjoneres med viewport-clamp og flipper til andre siden ved plassmangel. Fungerer pa 320px viewport uten horisontal scroll." },
+    { "id": "1.4.11", "notes": "Fokusindikator pa menyelementer oppfyller 3:1 kontrastkrav via data-active. Hover-tilstand har subtil bakgrunnsendring som ikke er informasjonsbaerende." },
+    { "id": "1.4.13", "notes": "Menyen forblir synlig til brukeren aktivt lukker den (klikk, Escape, Tab ut, eller valg). Ingen innhold forsvinner utilsiktet." },
+    { "id": "2.1.1", "notes": "Fullt tastaturopererbar: Enter/Space apner menyen, piltaster navigerer, Enter/Space velger, Escape lukker. Ingen museavhengige interaksjoner." },
+    { "id": "2.1.2", "notes": "Ingen tastaturfelle. Fokus holdes i menyen mens den er apen, men Escape lukker og Tab flytter fokus ut av menyen. ArrowLeft lukker submenyer og returnerer fokus til forelder-trigger." },
+    { "id": "2.4.3", "notes": "Fokus flyttes til første menyelement ved apning. Ved lukking returneres fokus til triggeren. Tab-rekkefølge folger DOM inne i menyen. Roving tabindex gjor at kun ett element har tabindex=\"0\" om gangen." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator pa alle menyelementer via data-active. Fokus er visuelt distinkt fra hover-tilstand." },
+    { "id": "2.4.11", "notes": "Menyen har z-index-overlay og posisjoneres med getBoundingClientRect slik at den aldri dekkes av annet innhold. Fokuserte elementer i menyen er alltid synlige." },
+    { "id": "2.5.8", "notes": "Alle menyelementer har minimum 32px høyde for touch-mal (WCAG 2.5.8 AA). Full bredde gjor hele elementet klikkbart." },
+    { "id": "3.2.1", "notes": "Ingen kontekstendring ved fokus. A navigere mellom menyelementer trigger ingen handling — kun aktivering (Enter/Space/klikk) gjor det." },
+    { "id": "3.2.2", "notes": "Ingen uventet kontekstendring ved input. Menyen lukkes og handlingen utføres ved eksplisitt aktivering, ikke ved navigasjon." },
+    { "id": "4.1.2", "notes": "Trigger har aria-haspopup=\"menu\", aria-expanded og aria-controls. Menu har role=\"menu\". Items har role=\"menuitem\" med disabled-state via aria-disabled. Submenytriggere har aria-haspopup=\"menu\" og aria-expanded." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Ikoner i menyelementer er dekorative (aria-hidden) og supplementerer teksten. Chevron pa submenu-trigger er rent visuelt (teksten indikerer at det er en submeny)." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Formidler ikke instruksjoner basert pa sensoriske egenskaper." },
+    { "id": "1.3.4", "reason": "Menyen laser ikke visningsretning." },
+    { "id": "1.3.5", "reason": "Komponenten er ikke et inndatafelt." },
+    { "id": "1.4.1", "reason": "Formidler ikke informasjon med farge alene. Danger-elementer har ogsa tydelig tekstinnhold." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.12" },
+    { "id": "2.1.4", "reason": "Ingen enkelttegn-snarveier. Typeahead bruker flere tegn." },
+    { "id": "2.2.1", "reason": "Ingen tidsbegrensning pa menyen." },
+    { "id": "2.2.2", "reason": "Ingen automatisk oppdaterende eller blinkende innhold." },
+    { "id": "2.3.1", "reason": "Ingen animasjoner som blinker." },
+    { "id": "2.4.1", "reason": "Bypass blocks gjelder gjentakende sideblokker, ikke en enkelt meny." },
+    { "id": "2.4.2", "reason": "Dokumenttittel er sidens ansvar, ikke komponentens." },
+    { "id": "2.4.4" },
+    { "id": "2.4.5" },
+    { "id": "2.5.1", "reason": "Ingen gestbaserte interaksjoner — enkelt klikk/tap." },
+    { "id": "2.5.2", "reason": "Native knapper — nettleseren handterer pekerinteraksjon." },
+    { "id": "2.5.4", "reason": "Ingen bevegelsesaktivering." },
+    { "id": "2.5.7", "reason": "Ingen dra-baserte interaksjoner." },
+    { "id": "3.1.1", "reason": "Sidens sprak er sidens ansvar." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6", "reason": "Ingen konsekvent hjelp-mekanisme i komponenten." },
+    { "id": "3.3.1", "reason": "Komponenten har ingen validering." },
+    { "id": "3.3.2", "reason": "Komponenten er ikke et skjemafelt." },
+    { "id": "3.3.3" },
+    { "id": "3.3.7", "reason": "Ingen gjentatt inntasting." },
+    { "id": "3.3.8", "reason": "Ingen autentisering." }
+  ],
+  "keyboard": [
+    { "key": "Enter / Space", "action": "Apner menyen nar trigger har fokus. Aktiverer valgt menyelement nar menyen er apen" },
+    { "key": "ArrowDown", "action": "Apner menyen fra trigger. I apen meny: flytter fokus til neste element (hopper over disabled)" },
+    { "key": "ArrowUp", "action": "Apner menyen fra trigger. I apen meny: flytter fokus til forrige element (hopper over disabled)" },
+    { "key": "ArrowRight", "action": "Apner submeny nar fokus er pa submenu-trigger" },
+    { "key": "ArrowLeft", "action": "Lukker submeny og returnerer fokus til forelder-trigger" },
+    { "key": "Home", "action": "Flytter fokus til første menyelement" },
+    { "key": "End", "action": "Flytter fokus til siste menyelement" },
+    { "key": "Escape", "action": "Lukker menyen og returnerer fokus til trigger" },
+    { "key": "Tab", "action": "Lukker menyen og flytter fokus til neste fokuserbare element pa siden" },
+    { "key": "Bokstaver (a-z)", "action": "Typeahead: hopper til første element som starter med tastetrykket" }
+  ],
+  "screenReader": [
+    "Ved fokus pa trigger: \"[tekst], menyknapp, sammenslatt\" eller \"[tekst], menyknapp, utvidet\" (avhengig av tilstand)",
+    "Ved apning annonseres menyen med rolle, f.eks. \"meny\"",
+    "Ved navigasjon: \"[elementtekst], menyelement, [posisjon] av [total]\"",
+    "Ved disabled element: \"[elementtekst], menyelement, deaktivert\"",
+    "Ved submenu-trigger: \"[tekst], menyelement, undermeny\"",
+    "Ved lukking returneres fokus til trigger og den annonseres pa nytt"
+  ]
+}

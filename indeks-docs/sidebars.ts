@@ -139,6 +139,7 @@ const sidebars: SidebarsConfig = {
                 },
                 'komponenter/accordion',
                 'komponenter/card',
+                'komponenter/dropdown-menu',
                 {
                     type: 'category',
                     label: 'Chip',

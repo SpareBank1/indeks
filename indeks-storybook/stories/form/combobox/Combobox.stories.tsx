@@ -31,6 +31,36 @@ type Story = StoryObj<typeof meta>;
 
 export const Standard: Story = {};
 
+export const OpenLight: Story = {
+    name: 'Åpen (lys)',
+    tags: ['desktop-chromium', 'scheme-light'],
+    args: {
+        defaultOpen: true,
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ minHeight: '350px' }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
+export const OpenDark: Story = {
+    name: 'Åpen (mørk)',
+    tags: ['desktop-chromium', 'scheme-dark'],
+    args: {
+        defaultOpen: true,
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ minHeight: '350px' }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
 export const MedForhåndsvalgtVerdi: Story = {
     args: {
         defaultValue: '47',

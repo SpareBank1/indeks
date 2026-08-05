@@ -19,6 +19,7 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Components/Accordion',
   'Components/Button',
   'Components/Chip',
+  'Components/DropdownMenu',
   'Components/InteractiveIcon',
   'Components/Message',
   'Components/Modal',
@@ -110,9 +111,11 @@ test.describe('Test all components', () => {
 
                     const isMobile = testInfo.project.name.startsWith('mobile-');
                     const device = isMobile ? 'mobile' : 'desktop';
-                    console.log(`Testing story: ${story.name} (${device})`);
+                    const tags = story.tags ?? [];
+                    const scheme = tags.includes('scheme-light') ? 'light' : tags.includes('scheme-dark') ? 'dark' : 'both';
+                    console.log(`Testing story: ${story.name} (${device}, ${scheme})`);
                     await page.goto(
-                        `http://localhost:9009/iframe.html?globals=scheme%3Aboth%3Bdevice%3A${device}&args=&id=${story.id}&viewMode=story`,
+                        `http://localhost:9009/iframe.html?globals=scheme%3A${scheme}%3Bdevice%3A${device}&args=&id=${story.id}&viewMode=story`,
                         {
                             timeout: 10000,
                         }

@@ -4,6 +4,7 @@ import type {
     IxCheckboxGroup,
     IxCombobox,
     IxDateField,
+    IxDropdown,
     IxField,
     IxIcon,
     IxPhoneNumberField,
@@ -72,6 +73,12 @@ declare module 'react' {
                 'data-state'?: 'error' | 'readonly' | 'disabled';
                 'data-open-label'?: string;
                 'data-native-picker-mobile'?: boolean | '';
+            };
+            'ix-dropdown': React.DetailedHTMLProps<React.HTMLAttributes<IxDropdown>, IxDropdown> & {
+                class?: string;
+                open?: '' | boolean;
+                placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+                'data-submenu'?: '' | boolean;
             };
             'ix-phone-number-field': React.DetailedHTMLProps<React.HTMLAttributes<IxPhoneNumberField>, IxPhoneNumberField> & {
                 class?: string;
