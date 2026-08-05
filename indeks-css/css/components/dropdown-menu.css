@@ -41,7 +41,6 @@
     background-color: var(--ix-color-surface-main-default);
     border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
     border-radius: var(--ix-border-radius-sm);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.25);
 
     z-index: var(--ix-z-index-overlay);
 
@@ -79,13 +78,12 @@
 
 :where(.ix-dropdown__item:hover),
 :where(.ix-dropdown__item[data-active]) {
-    background-color: var(--ix-color-fill-main-default);
-    color: var(--ix-color-foreground-inverse-default);
+    background-color: var(--ix-color-fill-interactive-hover);
 }
 
 /* Active (klikk/press) — mørkere bakgrunn. */
 :where(.ix-dropdown__item:active) {
-    background-color: var(--ix-color-fill-info-default);
+    background-color: var(--ix-color-fill-interactive-active);
 }
 
 /* Disabled item. */

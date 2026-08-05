@@ -407,7 +407,8 @@ export class IxCombobox extends HTMLElement {
         // Mål panelet for flip-avgjørelse.
         const ph = listbox.offsetHeight;
         const spaceBelow = vh - r.bottom;
-        const flipUp = ph > spaceBelow && r.top > spaceBelow;
+        const spaceAbove = r.top;
+        const flipUp = ph > spaceBelow && spaceAbove > spaceBelow;
 
         if (flipUp) {
             listbox.style.top = `${Math.max(8, r.top - ph - gap)}px`;

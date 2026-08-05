@@ -29,6 +29,8 @@ export type ComboboxProps = {
     value?: string | string[];
     /** Ukontrollert startverdi. String i single, string[] i multi. */
     defaultValue?: string | string[];
+    /** Åpne lista ved mount (ukontrollert). @default false */
+    defaultOpen?: boolean;
     /**
      * Kalles ved valg/fjerning med et syntetisk change-event. Verdien ligger i
      * `event.target.value` (string i single, string[] i multi). Formen matcher
@@ -106,6 +108,7 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
         multiple,
         value: controlledValue,
         defaultValue,
+        defaultOpen,
         onChange,
         onBlur,
         placeholder,
@@ -137,6 +140,15 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
     // markere aria-selected. Etterpå eier WC-en tilstanden (ukontrollert), eller
     // useEffect nedenfor synker den (kontrollert).
     const initialSelected = new Set(toValueArray(isControlled ? controlledValue : defaultValue));
+
+    // defaultOpen: åpne lista ved mount
+    useEffect(() => {
+        if (!defaultOpen) return;
+        const host = hostRef.current;
+        if (!host) return;
+        const toggle = host.querySelector<HTMLButtonElement>('.ix-combobox__toggle');
+        toggle?.click();
+    }, []);
 
     // Kontrollert modus: speil `value` inn i options' aria-selected når den endres.
     useEffect(() => {

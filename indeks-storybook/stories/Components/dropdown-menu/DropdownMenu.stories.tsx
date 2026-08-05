@@ -25,6 +25,25 @@ export const Standard: Story = {
     ),
 };
 
+export const Open: Story = {
+    name: 'Åpen',
+    render: () => (
+        <div style={{ minHeight: '200px' }}>
+            <DropdownMenu defaultOpen>
+                <DropdownMenu.Trigger>
+                    <Button variant="secondary">Handlinger</Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                    <DropdownMenu.Item onSelect={() => alert('Rediger')}>Rediger</DropdownMenu.Item>
+                    <DropdownMenu.Item onSelect={() => alert('Dupliser')}>Dupliser</DropdownMenu.Item>
+                    <DropdownMenu.Divider />
+                    <DropdownMenu.Item danger onSelect={() => alert('Slett')}>Slett</DropdownMenu.Item>
+                </DropdownMenu.Content>
+            </DropdownMenu>
+        </div>
+    ),
+};
+
 export const WithIcons: Story = {
     name: 'Med ikoner',
     render: () => (

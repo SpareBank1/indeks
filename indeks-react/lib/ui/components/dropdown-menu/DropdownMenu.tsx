@@ -35,6 +35,7 @@ export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(function 
     const hostRef = useRef<HTMLElement | null>(null);
     const isControlled = controlledOpen !== undefined;
 
+    // Kontrollert modus: synkroniser open-attributtet med prop
     useEffect(() => {
         const host = hostRef.current;
         if (!host || !isControlled) return;
@@ -46,6 +47,13 @@ export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(function 
         }
     }, [isControlled, controlledOpen]);
 
+    // defaultOpen: sett kun ved mount, ikke via JSX-attributt
+    useEffect(() => {
+        const host = hostRef.current;
+        if (!host || isControlled || !defaultOpen) return;
+        host.setAttribute('open', '');
+    }, []);
+
     useEffect(() => {
         const host = hostRef.current;
         if (!host) return;
@@ -54,23 +62,23 @@ export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(function 
             const handleOpenRequest = () => onOpenChange?.(true);
             const handleCloseRequest = () => onOpenChange?.(false);
 
-            host.addEventListener('ix-open-request', handleOpenRequest);
-            host.addEventListener('ix-close-request', handleCloseRequest);
+            host.addEventListener('open-request', handleOpenRequest);
+            host.addEventListener('close-request', handleCloseRequest);
 
             return () => {
-                host.removeEventListener('ix-open-request', handleOpenRequest);
-                host.removeEventListener('ix-close-request', handleCloseRequest);
+                host.removeEventListener('open-request', handleOpenRequest);
+                host.removeEventListener('close-request', handleCloseRequest);
             };
         } else {
             const handleOpen = () => onOpenChange?.(true);
             const handleClose = () => onOpenChange?.(false);
 
-            host.addEventListener('ix-open', handleOpen);
-            host.addEventListener('ix-close', handleClose);
+            host.addEventListener('open', handleOpen);
+            host.addEventListener('close', handleClose);
 
             return () => {
-                host.removeEventListener('ix-open', handleOpen);
-                host.removeEventListener('ix-close', handleClose);
+                host.removeEventListener('open', handleOpen);
+                host.removeEventListener('close', handleClose);
             };
         }
     }, [isControlled, onOpenChange]);
@@ -84,7 +92,6 @@ export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(function 
             }}
             class={cn('ix-dropdown', className)}
             placement={placement}
-            open={defaultOpen ? '' : undefined}
             data-controlled={isControlled ? '' : undefined}
         >
             {children}
@@ -249,23 +256,23 @@ const DropdownMenuSub = forwardRef<HTMLElement, DropdownMenuSubProps>(function D
             const handleOpenRequest = () => onOpenChange?.(true);
             const handleCloseRequest = () => onOpenChange?.(false);
 
-            host.addEventListener('ix-open-request', handleOpenRequest);
-            host.addEventListener('ix-close-request', handleCloseRequest);
+            host.addEventListener('open-request', handleOpenRequest);
+            host.addEventListener('close-request', handleCloseRequest);
 
             return () => {
-                host.removeEventListener('ix-open-request', handleOpenRequest);
-                host.removeEventListener('ix-close-request', handleCloseRequest);
+                host.removeEventListener('open-request', handleOpenRequest);
+                host.removeEventListener('close-request', handleCloseRequest);
             };
         } else {
             const handleOpen = () => onOpenChange?.(true);
             const handleClose = () => onOpenChange?.(false);
 
-            host.addEventListener('ix-open', handleOpen);
-            host.addEventListener('ix-close', handleClose);
+            host.addEventListener('open', handleOpen);
+            host.addEventListener('close', handleClose);
 
             return () => {
-                host.removeEventListener('ix-open', handleOpen);
-                host.removeEventListener('ix-close', handleClose);
+                host.removeEventListener('open', handleOpen);
+                host.removeEventListener('close', handleClose);
             };
         }
     }, [isControlled, onOpenChange]);

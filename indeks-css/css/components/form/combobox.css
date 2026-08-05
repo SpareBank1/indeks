@@ -196,7 +196,7 @@
    WCAG 1.4.1). */
 :where(.ix-combobox [role='option']:hover, .ix-combobox__option:hover),
 :where(.ix-combobox [role='option'][data-active], .ix-combobox__option[data-active]) {
-    background-color: var(--ix-color-fill-info-subtle);
+    background-color: var(--ix-color-fill-interactive-hover);
 }
 
 :where(.ix-combobox [role='option'][aria-disabled='true'], .ix-combobox__option[aria-disabled='true']) {

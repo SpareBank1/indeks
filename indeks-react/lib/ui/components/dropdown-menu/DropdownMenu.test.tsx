@@ -280,7 +280,7 @@ describe('DropdownMenu', () => {
     });
 
     describe('onOpenChange', () => {
-        it('kalles med true når ix-open-event fyres', () => {
+        it('kalles med true når open-event fyres', () => {
             const onOpenChange = vi.fn();
 
             const { container } = render(
@@ -295,12 +295,12 @@ describe('DropdownMenu', () => {
             );
 
             const host = container.querySelector('ix-dropdown')!;
-            host.dispatchEvent(new CustomEvent('ix-open', { bubbles: true }));
+            host.dispatchEvent(new CustomEvent('open', { bubbles: true }));
 
             expect(onOpenChange).toHaveBeenCalledWith(true);
         });
 
-        it('kalles med false når ix-close-event fyres', () => {
+        it('kalles med false når close-event fyres', () => {
             const onOpenChange = vi.fn();
 
             const { container } = render(
@@ -315,7 +315,7 @@ describe('DropdownMenu', () => {
             );
 
             const host = container.querySelector('ix-dropdown')!;
-            host.dispatchEvent(new CustomEvent('ix-close', { bubbles: true }));
+            host.dispatchEvent(new CustomEvent('close', { bubbles: true }));
 
             expect(onOpenChange).toHaveBeenCalledWith(false);
         });
