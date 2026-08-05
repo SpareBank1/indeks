@@ -142,6 +142,22 @@ describe('IxDropdown', () => {
             expect(el.hasAttribute('data-open')).toBe(true);
         });
 
+        it('menyen er synlig ved mount når open-attributtet er satt', () => {
+            const el = mount(`
+                <ix-dropdown open="">
+                    <button>Trigger</button>
+                    <div class="ix-dropdown__menu">
+                        <button class="ix-dropdown__item">Item 1</button>
+                    </div>
+                </ix-dropdown>
+            `);
+
+            const menu = el.querySelector<HTMLElement>('.ix-dropdown__menu')!;
+
+            expect(el.hasAttribute('data-open')).toBe(true);
+            expect(menu.hidden).toBe(false);
+        });
+
         it('lukker menyen ved andre klikk på trigger', () => {
             const el = mount(`
                 <ix-dropdown>
@@ -202,7 +218,7 @@ describe('IxDropdown', () => {
             expect(menu.hidden).toBe(true);
         });
 
-        it('emitter ix-open og ix-close events', () => {
+        it('emitter open og close events', () => {
             const el = mount(`
                 <ix-dropdown>
                     <button>Trigger</button>
@@ -216,8 +232,8 @@ describe('IxDropdown', () => {
             const openSpy = vi.fn();
             const closeSpy = vi.fn();
 
-            el.addEventListener('ix-open', openSpy);
-            el.addEventListener('ix-close', closeSpy);
+            el.addEventListener('open', openSpy);
+            el.addEventListener('close', closeSpy);
 
             trigger.click();
             expect(openSpy).toHaveBeenCalledTimes(1);

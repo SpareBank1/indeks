@@ -45,9 +45,9 @@
     "scripts": {
         "dev": "echo not implemented",
         "build": "rm -rf ./dist ./.build && pnpm run build:tokens:css && pnpm run build:colors:web && pnpm run build:colors:figma && pnpm run build:bundle && pnpm run build:cli && pnpm run build:generate && pnpm run build:types",
-        "build:cli": "esbuild scripts/build-colors/cli.ts --bundle --platform=node --format=esm --outfile=dist/cli.js --banner:js='#!/usr/bin/env node' --define:__PKG_VERSION__=\"\\\"$npm_package_version\\\"\"",
-        "build:generate": "esbuild scripts/build-colors/generate.ts --bundle --platform=neutral --format=esm --outfile=dist/generate.js",
-        "build:types": "tsc -p tsconfig.generate.json",
+        "build:cli": "pnpm exec esbuild scripts/build-colors/cli.ts --bundle --platform=node --format=esm --outfile=dist/cli.js --banner:js='#!/usr/bin/env node' --define:__PKG_VERSION__=\"\\\"$npm_package_version\\\"\"",
+        "build:generate": "pnpm exec esbuild scripts/build-colors/generate.ts --bundle --platform=neutral --format=esm --outfile=dist/generate.js",
+        "build:types": "pnpm exec tsc -p tsconfig.generate.json",
         "build:spacing": "node ./scripts/build-spacing-tokens.cjs",
         "sync-tokens": "tsx scripts/figma-api/sync_figma_to_tokens.ts",
         "test": "vitest run buildThemeColors.test.ts cli.integration.test.ts generate.test.ts",
@@ -64,6 +64,7 @@
     "license": "MIT",
     "devDependencies": {
         "@figma/rest-api-spec": "^0.41.0",
+        "typescript": "~6.0.3",
         "@types/node": "^26.0.1",
         "autoprefixer": "^10.5.4",
         "colorjs.io": "^0.7.0",

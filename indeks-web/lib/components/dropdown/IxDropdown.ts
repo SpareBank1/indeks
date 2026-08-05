@@ -49,8 +49,12 @@ export class IxDropdown extends HTMLElement {
     private _onTriggerClick: ((e: MouseEvent) => void) | null = null;
     private _onTriggerKeydown: ((e: KeyboardEvent) => void) | null = null;
     private _onMenuKeydown: ((e: KeyboardEvent) => void) | null = null;
+    private _onMenuClick: ((e: MouseEvent) => void) | null = null;
+    private _onMenuPointerenter: ((e: PointerEvent) => void) | null = null;
     private _onDocPointer: ((e: Event) => void) | null = null;
+    private _onFocusout: ((e: FocusEvent) => void) | null = null;
     private _onReposition: (() => void) | null = null;
+    private _itemObserver: MutationObserver | null = null;
 
     private _typeaheadBuffer = '';
     private _typeaheadTimer: ReturnType<typeof setTimeout> | null = null;
@@ -58,7 +62,16 @@ export class IxDropdown extends HTMLElement {
     private _openedWithKeyboard = false;
 
     static get observedAttributes(): string[] {
-        return ['open', 'placement'];
+        return ['open', 'placement', 'data-controlled'];
+    }
+
+    /**
+     * Kontrollert modus: når `data-controlled` er satt, endrer ikke komponenten
+     * egen åpen-tilstand. Den dispatcher kun `open-request` / `close-request`,
+     * og foreldren må sette `open`-attributtet for å faktisk åpne/lukke.
+     */
+    private get _isControlled(): boolean {
+        return this.hasAttribute('data-controlled');
     }
 
     connectedCallback(): void {
@@ -71,13 +84,19 @@ export class IxDropdown extends HTMLElement {
             if (this._onTriggerClick) this._trigger.removeEventListener('click', this._onTriggerClick);
             if (this._onTriggerKeydown) this._trigger.removeEventListener('keydown', this._onTriggerKeydown);
         }
-        if (this._menu && this._onMenuKeydown) {
-            this._menu.removeEventListener('keydown', this._onMenuKeydown);
+        if (this._menu) {
+            if (this._onMenuKeydown) this._menu.removeEventListener('keydown', this._onMenuKeydown);
+            if (this._onMenuClick) this._menu.removeEventListener('click', this._onMenuClick);
+            if (this._onMenuPointerenter) this._menu.removeEventListener('pointerenter', this._onMenuPointerenter, true);
         }
         if (this._onDocPointer) {
             document.removeEventListener('pointerdown', this._onDocPointer, true);
         }
+        if (this._onFocusout) {
+            this.removeEventListener('focusout', this._onFocusout);
+        }
         this._removeRepositionListeners();
+        this._itemObserver?.disconnect();
 
         if (this._typeaheadTimer) {
             clearTimeout(this._typeaheadTimer);
@@ -87,8 +106,12 @@ export class IxDropdown extends HTMLElement {
         this._onTriggerClick = null;
         this._onTriggerKeydown = null;
         this._onMenuKeydown = null;
+        this._onMenuClick = null;
+        this._onMenuPointerenter = null;
         this._onDocPointer = null;
+        this._onFocusout = null;
         this._onReposition = null;
+        this._itemObserver = null;
         this._trigger = null;
         this._menu = null;
         this._items = [];
@@ -98,8 +121,10 @@ export class IxDropdown extends HTMLElement {
         if (!this.isConnected) return;
         if (name === 'open') {
             const shouldBeOpen = newValue !== null && newValue !== 'false';
-            if (shouldBeOpen && !this._isOpen) this._open();
-            else if (!shouldBeOpen && this._isOpen) this._close();
+            if (shouldBeOpen && !this._isOpen) this._doOpen();
+            else if (!shouldBeOpen && this._isOpen) this._doClose();
+        } else if (name === 'placement' && this._isOpen) {
+            this._position();
         }
     }
 
@@ -168,6 +193,21 @@ export class IxDropdown extends HTMLElement {
         this._onMenuKeydown = (e: KeyboardEvent) => this._handleMenuKeydown(e);
         this._menu.addEventListener('keydown', this._onMenuKeydown);
 
+        this._onMenuClick = (e: MouseEvent) => {
+            const item = (e.target as HTMLElement).closest<HTMLElement>('.ix-dropdown__item');
+            if (item && this._menu?.contains(item)) this._handleItemClick(e, item);
+        };
+        this._menu.addEventListener('click', this._onMenuClick);
+
+        this._onMenuPointerenter = (e: PointerEvent) => {
+            const item = (e.target as HTMLElement).closest<HTMLElement>('.ix-dropdown__item');
+            if (item && this._menu?.contains(item)) {
+                const idx = this._items.indexOf(item);
+                if (idx !== -1) this._handleItemPointerEnter(idx);
+            }
+        };
+        this._menu.addEventListener('pointerenter', this._onMenuPointerenter, true);
+
         this._onDocPointer = (e: Event) => {
             if (!this._isOpen) return;
             const target = e.target as Node;
@@ -176,14 +216,34 @@ export class IxDropdown extends HTMLElement {
             }
         };
         document.addEventListener('pointerdown', this._onDocPointer, true);
+
+        this._onFocusout = (e: FocusEvent) => {
+            if (!this._isOpen) return;
+            const relatedTarget = e.relatedTarget as Node | null;
+            if (relatedTarget && this.contains(relatedTarget)) return;
+            // For submenyer: ikke lukk parent hvis fokus går til submenu-trigger
+            const rootDropdown = this.closest('ix-dropdown:not([data-submenu])') ?? this;
+            if (relatedTarget && rootDropdown.contains(relatedTarget)) return;
+            this._close();
+        };
+        this.addEventListener('focusout', this._onFocusout);
+
+        this._itemObserver = new MutationObserver(() => this._rewireItems());
+        this._itemObserver.observe(this._menu, { childList: true, subtree: true });
+
+        if (this.open) this._doOpen();
     }
 
     private _wireItems(): void {
+        this._rewireItems();
+    }
+
+    private _rewireItems(): void {
         if (!this._menu) return;
 
         // Finn kun direkte child-items i denne menyens panel, ikke items i nøstede submenyer.
         // Submenu-triggere ligger som direkte children av ix-dropdown[data-submenu], ikke i __menu.
-        this._items = Array.from(this._menu.children).filter(
+        const items: HTMLElement[] = Array.from(this._menu.children).filter(
             (child): child is HTMLElement =>
                 child instanceof HTMLElement && child.classList.contains('ix-dropdown__item')
         );
@@ -193,27 +253,30 @@ export class IxDropdown extends HTMLElement {
         submenus.forEach((submenu) => {
             const submenuTrigger = submenu.querySelector<HTMLElement>(':scope > .ix-dropdown__item');
             if (submenuTrigger) {
-                this._items.push(submenuTrigger);
+                items.push(submenuTrigger);
                 submenuTrigger.setAttribute('aria-haspopup', 'menu');
                 submenuTrigger.setAttribute('aria-expanded', 'false');
             }
         });
 
         // Sorter items etter DOM-rekkefølge
-        this._items.sort((a, b) => {
+        items.sort((a, b) => {
             const position = a.compareDocumentPosition(b);
             if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
             if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1;
             return 0;
         });
 
-        this._items.forEach((item, index) => {
+        items.forEach((item) => {
             if (!item.getAttribute('role')) item.setAttribute('role', 'menuitem');
             item.setAttribute('tabindex', '-1');
-
-            item.addEventListener('click', (e) => this._handleItemClick(e, item, index));
-            item.addEventListener('pointerenter', () => this._handleItemPointerEnter(index));
         });
+
+        this._menu.querySelectorAll<HTMLElement>(':scope > .ix-dropdown__divider').forEach((divider) => {
+            if (!divider.getAttribute('role')) divider.setAttribute('role', 'separator');
+        });
+
+        this._items = items;
     }
 
     private _handleTriggerKeydown(e: KeyboardEvent): void {
@@ -296,12 +359,10 @@ export class IxDropdown extends HTMLElement {
                 if (this._isSubmenu) {
                     e.preventDefault();
                     e.stopPropagation();
-                    this._close();
-                    // Fokuser og aktiver submenu-triggeren i parent-menyen
+                    // Fokuser triggeren FØR lukking — ellers trigger focusout med null relatedTarget
+                    const parentDropdown = this.parentElement?.closest('ix-dropdown') as IxDropdown | null;
                     if (this._trigger) {
                         this._trigger.focus();
-                        // Finn parent-dropdown og oppdater dens aktive index
-                        const parentDropdown = this.parentElement?.closest('ix-dropdown') as IxDropdown | null;
                         if (parentDropdown) {
                             const triggerIndex = parentDropdown._items.indexOf(this._trigger);
                             if (triggerIndex !== -1) {
@@ -309,6 +370,7 @@ export class IxDropdown extends HTMLElement {
                             }
                         }
                     }
+                    this._close();
                 }
                 break;
 
@@ -339,12 +401,12 @@ export class IxDropdown extends HTMLElement {
     }
 
     private _handleItemPointerEnter(index: number): void {
-        // Fjern data-active fra alle items når brukeren hoverer
-        this._items.forEach((item) => item.removeAttribute('data-active'));
         this._activeIndex = index;
+        // Hvis fokus allerede er i menyen (tastatur), synk fokus/roving-tabindex til hoveret item.
+        if (this._menu?.contains(document.activeElement)) this._focusItem(index);
     }
 
-    private _handleItemClick(e: MouseEvent, item: HTMLElement, index: number): void {
+    private _handleItemClick(e: MouseEvent, item: HTMLElement): void {
         if (item.hasAttribute('disabled') || item.getAttribute('aria-disabled') === 'true') {
             e.preventDefault();
             return;
@@ -356,7 +418,7 @@ export class IxDropdown extends HTMLElement {
             return;
         }
 
-        this._activeIndex = index;
+        this._activeIndex = this._items.indexOf(item);
         this._closeAll();
     }
 
@@ -435,27 +497,50 @@ export class IxDropdown extends HTMLElement {
     private _open(): void {
         if (this._isOpen || !this._menu || !this._trigger) return;
 
+        if (this._isControlled) {
+            this.dispatchEvent(new CustomEvent('open-request', { bubbles: true }));
+            return;
+        }
+
+        this._doOpen();
+    }
+
+    private _doOpen(): void {
+        if (this._isOpen || !this._menu || !this._trigger) return;
+
         this.setAttribute('data-open', '');
+        this.setAttribute('open', '');
         this._menu.hidden = false;
         this._trigger.setAttribute('aria-expanded', 'true');
 
         this._position();
         this._addRepositionListeners();
 
-        // Kun fokuser første item ved tastatur-åpning, ikke ved mus-klikk
         if (this._openedWithKeyboard) {
             this._focusItem(0);
         }
 
-        this.dispatchEvent(new CustomEvent('ix-open', { bubbles: true }));
+        this.dispatchEvent(new CustomEvent('open', { bubbles: true }));
     }
 
     private _close(): void {
         if (!this._isOpen || !this._menu || !this._trigger) return;
 
+        if (this._isControlled) {
+            this.dispatchEvent(new CustomEvent('close-request', { bubbles: true }));
+            return;
+        }
+
+        this._doClose();
+    }
+
+    private _doClose(): void {
+        if (!this._isOpen || !this._menu || !this._trigger) return;
+
         this._closeAllSubmenus();
 
         this.removeAttribute('data-open');
+        this.removeAttribute('open');
         this._menu.hidden = true;
         this._trigger.setAttribute('aria-expanded', 'false');
 
@@ -467,7 +552,7 @@ export class IxDropdown extends HTMLElement {
 
         this._removeRepositionListeners();
 
-        this.dispatchEvent(new CustomEvent('ix-close', { bubbles: true }));
+        this.dispatchEvent(new CustomEvent('close', { bubbles: true }));
     }
 
     private _toggleOpen(): void {

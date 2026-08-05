@@ -50,17 +50,30 @@ export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(function 
         const host = hostRef.current;
         if (!host) return;
 
-        const handleOpen = () => onOpenChange?.(true);
-        const handleClose = () => onOpenChange?.(false);
+        if (isControlled) {
+            const handleOpenRequest = () => onOpenChange?.(true);
+            const handleCloseRequest = () => onOpenChange?.(false);
 
-        host.addEventListener('ix-open', handleOpen);
-        host.addEventListener('ix-close', handleClose);
+            host.addEventListener('ix-open-request', handleOpenRequest);
+            host.addEventListener('ix-close-request', handleCloseRequest);
 
-        return () => {
-            host.removeEventListener('ix-open', handleOpen);
-            host.removeEventListener('ix-close', handleClose);
-        };
-    }, [onOpenChange]);
+            return () => {
+                host.removeEventListener('ix-open-request', handleOpenRequest);
+                host.removeEventListener('ix-close-request', handleCloseRequest);
+            };
+        } else {
+            const handleOpen = () => onOpenChange?.(true);
+            const handleClose = () => onOpenChange?.(false);
+
+            host.addEventListener('ix-open', handleOpen);
+            host.addEventListener('ix-close', handleClose);
+
+            return () => {
+                host.removeEventListener('ix-open', handleOpen);
+                host.removeEventListener('ix-close', handleClose);
+            };
+        }
+    }, [isControlled, onOpenChange]);
 
     return (
         <ix-dropdown
@@ -72,6 +85,7 @@ export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(function 
             class={cn('ix-dropdown', className)}
             placement={placement}
             open={defaultOpen ? '' : undefined}
+            data-controlled={isControlled ? '' : undefined}
         >
             {children}
         </ix-dropdown>
@@ -231,17 +245,30 @@ const DropdownMenuSub = forwardRef<HTMLElement, DropdownMenuSubProps>(function D
         const host = hostRef.current;
         if (!host) return;
 
-        const handleOpen = () => onOpenChange?.(true);
-        const handleClose = () => onOpenChange?.(false);
+        if (isControlled) {
+            const handleOpenRequest = () => onOpenChange?.(true);
+            const handleCloseRequest = () => onOpenChange?.(false);
 
-        host.addEventListener('ix-open', handleOpen);
-        host.addEventListener('ix-close', handleClose);
+            host.addEventListener('ix-open-request', handleOpenRequest);
+            host.addEventListener('ix-close-request', handleCloseRequest);
 
-        return () => {
-            host.removeEventListener('ix-open', handleOpen);
-            host.removeEventListener('ix-close', handleClose);
-        };
-    }, [onOpenChange]);
+            return () => {
+                host.removeEventListener('ix-open-request', handleOpenRequest);
+                host.removeEventListener('ix-close-request', handleCloseRequest);
+            };
+        } else {
+            const handleOpen = () => onOpenChange?.(true);
+            const handleClose = () => onOpenChange?.(false);
+
+            host.addEventListener('ix-open', handleOpen);
+            host.addEventListener('ix-close', handleClose);
+
+            return () => {
+                host.removeEventListener('ix-open', handleOpen);
+                host.removeEventListener('ix-close', handleClose);
+            };
+        }
+    }, [isControlled, onOpenChange]);
 
     return (
         <ix-dropdown
@@ -252,6 +279,7 @@ const DropdownMenuSub = forwardRef<HTMLElement, DropdownMenuSubProps>(function D
             }}
             class={cn('ix-dropdown', className)}
             data-submenu=""
+            data-controlled={isControlled ? '' : undefined}
         >
             {children}
         </ix-dropdown>
