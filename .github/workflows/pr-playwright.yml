@@ -42,7 +42,7 @@ jobs:
 
             - name: Run Playwright tests in Docker
               working-directory: ./indeks-storybook
-              run: docker compose run --pull always --rm playwright
+              run: docker compose run --rm playwright
 
             - name: Last opp Playwright-rapport
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
