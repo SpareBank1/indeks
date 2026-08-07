@@ -46,7 +46,7 @@ jobs:
 
             - name: Kjør e2e i Docker
               working-directory: ./indeks-eksempel
-              run: docker compose run --rm playwright
+              run: docker compose run --pull always --rm playwright
 
             - name: Last opp Playwright-rapport
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
