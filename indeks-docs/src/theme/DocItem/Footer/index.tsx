@@ -1,16 +1,26 @@
 import Footer from '@theme-original/DocItem/Footer';
 import { useDoc } from '@docusaurus/plugin-content-docs/client';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import BrowserOnly from '@docusaurus/BrowserOnly';
 import type { WrapperProps } from '@docusaurus/types';
 import type FooterType from '@theme/DocItem/Footer';
 
 type Props = WrapperProps<typeof FooterType>;
 
+function useDocSafe() {
+    try {
+        return useDoc();
+    } catch {
+        return null;
+    }
+}
+
 function ReportLink() {
-    const { metadata } = useDoc();
+    const doc = useDocSafe();
     const { siteConfig } = useDocusaurusContext();
 
+    if (!doc) return null;
+
+    const { metadata } = doc;
     const title = encodeURIComponent(`Dokumentasjonsfeil: ${metadata.title}`);
     const body = encodeURIComponent(
         `**Side:** ${siteConfig.url}${metadata.permalink}\n\n**Beskrivelse av feilen:**\n\n`,
@@ -30,7 +40,7 @@ export default function FooterWrapper(props: Props): JSX.Element {
     return (
         <>
             <Footer {...props} />
-            <BrowserOnly>{() => <ReportLink />}</BrowserOnly>
+            <ReportLink />
         </>
     );
 }
