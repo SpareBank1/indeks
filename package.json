@@ -34,7 +34,7 @@
         "cssnano": "^8.0.2",
         "eslint": "^10.8.0",
         "eslint-plugin-compat": "^7.0.2",
-        "globals": "^17.8.0",
+        "globals": "^17.9.0",
         "postcss": "^8.5.25",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^16.1.1",
@@ -42,7 +42,7 @@
         "stylelint": "^17.14.1",
         "stylelint-config-standard": "^40.0.0",
         "stylelint-no-unsupported-browser-features": "^8.1.1",
-        "turbo": "^2.10.7",
+        "turbo": "^2.10.8",
         "typescript-eslint": "^8.64.0"
     }
 }
