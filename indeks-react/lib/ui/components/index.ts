@@ -26,6 +26,15 @@ export { Message } from './message/Message';
 export type { MessageProps, MessageStatus } from './message/Message';
 export { Modal } from './modal/Modal';
 export type { ModalProps, ModalSize } from './modal/Modal';
+export { Popover } from './popover/Popover';
+export type {
+    PopoverProps,
+    PopoverTriggerProps,
+    PopoverContentProps,
+    PopoverHeadingProps,
+    PopoverBodyProps,
+    PopoverActionsProps,
+} from './popover/Popover';
 export type { ModalHeaderProps } from './modal/ModalHeader';
 export type { ModalTitleProps } from './modal/ModalTitle';
 export type { ModalDescriptionProps } from './modal/ModalDescription';

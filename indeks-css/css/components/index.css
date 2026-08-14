@@ -14,5 +14,6 @@
 @import './tabs.css';
 @import './message.css';
 @import './modal.css';
+@import './popover.css';
 @import './progress-bar.css';
 @import './form/index.css';

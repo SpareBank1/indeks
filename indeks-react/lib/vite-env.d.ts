@@ -8,6 +8,7 @@ import type {
     IxField,
     IxIcon,
     IxPhoneNumberField,
+    IxPopover,
     IxProgressBar,
     IxRadioGroup,
     IxTabs,
@@ -79,6 +80,13 @@ declare module 'react' {
                 open?: '' | boolean;
                 placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
                 'data-submenu'?: '' | boolean;
+            };
+            'ix-popover': React.DetailedHTMLProps<React.HTMLAttributes<IxPopover>, IxPopover> & {
+                class?: string;
+                open?: '' | boolean;
+                placement?: 'top' | 'bottom' | 'left' | 'right';
+                'data-arrow'?: 'true' | 'false';
+                'data-controlled'?: '' | boolean;
             };
             'ix-phone-number-field': React.DetailedHTMLProps<React.HTMLAttributes<IxPhoneNumberField>, IxPhoneNumberField> & {
                 class?: string;

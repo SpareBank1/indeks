@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import { ColorModeProvider } from '@docusaurus/theme-common/internal';
 import OriginalPlaygroundProvider from '@theme-original/Playground/Provider';
 import type { Props } from '@theme/Playground/Provider';
 
@@ -63,7 +64,11 @@ export default function PlaygroundProvider(props: Props): ReactNode {
     const transformCode = props.transformCode ?? ((code: string) => `${htmlAttrsToJsx(code)};`);
     return (
         <BrowserOnly fallback={<div>Laster...</div>}>
-            {() => <OriginalPlaygroundProvider {...props} transformCode={transformCode} />}
+            {() => (
+                <ColorModeProvider>
+                    <OriginalPlaygroundProvider {...props} transformCode={transformCode} />
+                </ColorModeProvider>
+            )}
         </BrowserOnly>
     );
 }

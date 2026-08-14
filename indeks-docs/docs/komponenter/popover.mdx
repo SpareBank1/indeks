@@ -1,0 +1,311 @@
+---
+title: Popover
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/popover.json';
+
+# Popover
+
+En Popover brukes til å vise kontekstuell informasjon eller handlinger knyttet til et spesifikt element på siden. Popoveren vises når brukeren aktiverer et tilknyttet element, og plasseres i nærheten av dette elementet slik at sammenhengen er tydelig.
+
+## Eksempel
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-popover placement="bottom">
+  <button class="ix-button">Åpne popover</button>
+  <div class="ix-popover__content">
+    <div class="ix-popover__heading">Overskrift</div>
+    <div class="ix-popover__body">Forklarende tekst som gir brukeren kontekst.</div>
+    <div class="ix-popover__actions">
+      <button class="ix-button" data-variant="secondary" data-size="sm">Avbryt</button>
+      <button class="ix-button" data-size="sm">Bekreft</button>
+    </div>
+  </div>
+</ix-popover>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Popover placement="bottom">
+  <Popover.Trigger>
+    <Button>Åpne popover</Button>
+  </Popover.Trigger>
+  <Popover.Content>
+    <Popover.Heading>Overskrift</Popover.Heading>
+    <Popover.Body>Forklarende tekst som gir brukeren kontekst.</Popover.Body>
+    <Popover.Actions>
+      <Button variant="secondary" size="sm">Avbryt</Button>
+      <Button size="sm">Bekreft</Button>
+    </Popover.Actions>
+  </Popover.Content>
+</Popover>
+```
+
+</TabItem>
+</Tabs>
+
+## Egnet til
+
+Bruk Popover når du trenger å:
+
+- Gi brukeren mer informasjon om et element uten å navigere bort fra siden
+- Presentere små mengder innhold som er relevant i øyeblikket
+- Tilby enkle handlinger som er direkte knyttet til et spesifikt element
+- Forklare valg eller konsekvenser før brukeren utfører en handling
+- Vise ekstra detaljer som ikke trenger å være synlige hele tiden
+
+## Uegnet til
+
+Ikke bruk Popover når:
+
+- Innholdet er kritisk for å forstå eller fullføre en oppgave
+- Informasjonen må være permanent synlig
+- Innholdsmengden er stor eller omfattende
+- Brukeren må gjennomføre en lengre prosess eller flere steg
+- Innholdet krever fullt fokus fra brukeren
+
+Vurder heller [Tooltip](./skjema/tooltip) for korte forklaringer uten handlinger, [Modal](./modal) for komplekse oppgaver, eller [Message](./message) for informasjon som bør være synlig på siden.
+
+## Varianter
+
+### Bare tekst
+
+Popover kan vises uten overskrift når innholdet er selvforklarende.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-popover placement="bottom">
+  <button class="ix-button">Vis info</button>
+  <div class="ix-popover__content">
+    <div class="ix-popover__body">
+      Dette er en enkel informasjonstekst uten overskrift eller handlinger.
+    </div>
+  </div>
+</ix-popover>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Popover placement="bottom">
+  <Popover.Trigger>
+    <Button>Vis info</Button>
+  </Popover.Trigger>
+  <Popover.Content>
+    <Popover.Body>
+      Dette er en enkel informasjonstekst uten overskrift eller handlinger.
+    </Popover.Body>
+  </Popover.Content>
+</Popover>
+```
+
+</TabItem>
+</Tabs>
+
+### Uten pil
+
+Pilen kan skjules når den visuelle koblingen til trigger-elementet er tydelig nok.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-popover placement="bottom" data-arrow="false">
+  <button class="ix-button">Åpne</button>
+  <div class="ix-popover__content">
+    <div class="ix-popover__heading">Ingen pil</div>
+    <div class="ix-popover__body">Denne popoveren vises uten pilmarkør.</div>
+  </div>
+</ix-popover>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Popover placement="bottom" arrow={false}>
+  <Popover.Trigger>
+    <Button>Åpne</Button>
+  </Popover.Trigger>
+  <Popover.Content>
+    <Popover.Heading>Ingen pil</Popover.Heading>
+    <Popover.Body>Denne popoveren vises uten pilmarkør.</Popover.Body>
+  </Popover.Content>
+</Popover>
+```
+
+</TabItem>
+</Tabs>
+
+## Plassering
+
+Popover støtter fire plasseringsretninger: `top`, `bottom`, `left` og `right`. Komponenten flipper automatisk til motsatt side hvis det ikke er nok plass.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+  <ix-popover placement="top">
+    <button class="ix-button" data-variant="secondary">Top</button>
+    <div class="ix-popover__content">
+      <div class="ix-popover__body">Plassert over trigger.</div>
+    </div>
+  </ix-popover>
+  <ix-popover placement="bottom">
+    <button class="ix-button" data-variant="secondary">Bottom</button>
+    <div class="ix-popover__content">
+      <div class="ix-popover__body">Plassert under trigger.</div>
+    </div>
+  </ix-popover>
+  <ix-popover placement="left">
+    <button class="ix-button" data-variant="secondary">Left</button>
+    <div class="ix-popover__content">
+      <div class="ix-popover__body">Plassert til venstre.</div>
+    </div>
+  </ix-popover>
+  <ix-popover placement="right">
+    <button class="ix-button" data-variant="secondary">Right</button>
+    <div class="ix-popover__content">
+      <div class="ix-popover__body">Plassert til høyre.</div>
+    </div>
+  </ix-popover>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+  <Popover placement="top">
+    <Popover.Trigger>
+      <Button variant="secondary">Top</Button>
+    </Popover.Trigger>
+    <Popover.Content>
+      <Popover.Body>Plassert over trigger.</Popover.Body>
+    </Popover.Content>
+  </Popover>
+  <Popover placement="bottom">
+    <Popover.Trigger>
+      <Button variant="secondary">Bottom</Button>
+    </Popover.Trigger>
+    <Popover.Content>
+      <Popover.Body>Plassert under trigger.</Popover.Body>
+    </Popover.Content>
+  </Popover>
+  <Popover placement="left">
+    <Popover.Trigger>
+      <Button variant="secondary">Left</Button>
+    </Popover.Trigger>
+    <Popover.Content>
+      <Popover.Body>Plassert til venstre.</Popover.Body>
+    </Popover.Content>
+  </Popover>
+  <Popover placement="right">
+    <Popover.Trigger>
+      <Button variant="secondary">Right</Button>
+    </Popover.Trigger>
+    <Popover.Content>
+      <Popover.Body>Plassert til høyre.</Popover.Body>
+    </Popover.Content>
+  </Popover>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Innhold
+
+- Innholdet skal være kortfattet og relevant for elementet som utløser popoveren
+- Bruk overskrift når det gir brukeren bedre forståelse av innholdet
+- Teksten skal være enkel og tydelig
+- Unngå lange tekstblokker
+- Handlingsknapper skal beskrive hva som skjer når brukeren velger dem
+
+### Handlinger
+
+- Handlinger er valgfrie — en popover kan vises uten handlinger dersom den kun skal presentere informasjon
+- Når handlinger brukes, bør antallet begrenses til de viktigste valgene
+- Primærhandling skal tydelig fremheves
+
+### Plassering
+
+- Popover skal være visuelt koblet til elementet som åpner den
+- Komponentens peker viser hvilken kontekst informasjonen tilhører
+- Velg plassering basert på tilgjengelig plass i grensesnittet
+
+### Oppførsel
+
+- Popover åpnes når brukeren aktiverer tilknyttet trigger-element
+- Popover lukkes ved Escape-tasten eller klikk utenfor komponenten
+- Bare én popover bør være åpen om gangen
+- Fokus flyttes inn i popoveren når den åpnes dersom den inneholder interaktive elementer
+
+## Tilpasning med CSS
+
+Trenger du `ix-popover`-stylingen på HTML du setter sammen selv — uten React-komponenten eller web componenten — kan du bruke klassene direkte på elementene dine.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Popover-wrapper | `ix-popover` eller `.ix-popover` |
+| Innholdspanel | `.ix-popover__content` |
+| Overskrift | `.ix-popover__heading` |
+| Brødtekst | `.ix-popover__body` |
+| Handlingsrad | `.ix-popover__actions` |
+
+### Eksempel: bruk i egen HTML-struktur
+
+```html
+<ix-popover placement="top">
+  <button class="ix-button">Åpne popover</button>
+  <div class="ix-popover__content">
+    <div class="ix-popover__heading">Overskrift</div>
+    <div class="ix-popover__body">Forklarende tekst.</div>
+    <div class="ix-popover__actions">
+      <button class="ix-button" data-size="sm">Bekreft</button>
+    </div>
+  </div>
+</ix-popover>
+```
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- Trigger-elementet må være en interaktiv kontroll (`<button>` eller `<a>`)
+- Trigger-elementet må ha et tilgjengelig navn (synlig tekst eller `aria-label`)
+- Innholdet i popoveren skal være relevant og konsist
+- Handlingsknapper må ha beskrivende tekst
+
+### Hva komponenten gjør automatisk
+
+- Setter `role="dialog"` på innholdet
+- Kobler trigger til popover via `aria-controls`
+- Oppdaterer `aria-expanded` og `aria-haspopup` på trigger
+- Håndterer tastaturnavigasjon (Enter/Space for å åpne, Escape for å lukke)
+- Flytter fokus til første focusable element ved åpning
+- Returnerer fokus til trigger ved lukking med Escape
+- Posisjonerer popover automatisk med viewport-clamp
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
