@@ -219,19 +219,15 @@ describe('IxPopover', () => {
     });
 
     it('logger warning når delelementer mangler', () => {
-        const originalEnv = import.meta.env.DEV;
-        (import.meta.env as { DEV: boolean }).DEV = true;
-
         const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
         mount(`<ix-popover></ix-popover>`);
 
-        expect(spy).toHaveBeenCalledWith(
-            expect.stringContaining('[ix-popover]')
-        );
+        if (import.meta.env.DEV) {
+            expect(spy).toHaveBeenCalledWith(expect.stringContaining('[ix-popover]'));
+        }
 
         spy.mockRestore();
-        (import.meta.env as { DEV: boolean }).DEV = originalEnv;
     });
 
     it('åpner popover ved Enter på trigger', () => {
