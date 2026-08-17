@@ -65,17 +65,17 @@
     "devDependencies": {
         "@figma/rest-api-spec": "^0.41.0",
         "typescript": "~6.0.3",
-        "@types/node": "^26.1.2",
+        "@types/node": "^26.2.0",
         "autoprefixer": "^10.5.4",
         "colorjs.io": "^0.7.1",
-        "cssnano": "^8.0.2",
+        "cssnano": "^8.0.5",
         "dotenv": "^17.4.2",
-        "esbuild": "0.28.1",
-        "postcss": "^8.5.25",
+        "esbuild": "0.28.2",
+        "postcss": "^8.5.26",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^16.1.1",
         "postcss-preset-env": "^11.3.2",
-        "tsx": "^4.23.5",
+        "tsx": "^4.23.12",
         "typescript": "~6.0.3",
         "vitest": "^4.1.10"
     }
