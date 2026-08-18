@@ -251,12 +251,11 @@ test.describe('DropdownMenu', () => {
 
             const submenuTrigger = page.locator('.ix-dropdown__item:has-text("Eksporter som")');
             await submenuTrigger.hover();
-            await submenuTrigger.click();
 
             const rootMenu = page.locator('ix-dropdown:not([data-submenu]) > .ix-dropdown__menu');
             const submenu = page.locator('ix-dropdown[data-submenu] > .ix-dropdown__menu');
 
-            await expect(submenu).toBeVisible();
+            await expect(submenu).toBeVisible({ timeout: 1000 });
 
             const rootMenuBox = await rootMenu.boundingBox();
             const submenuBox = await submenu.boundingBox();
