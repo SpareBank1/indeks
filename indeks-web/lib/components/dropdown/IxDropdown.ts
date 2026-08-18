@@ -404,6 +404,27 @@ export class IxDropdown extends HTMLElement {
         this._activeIndex = index;
         // Hvis fokus allerede er i menyen (tastatur), synk fokus/roving-tabindex til hoveret item.
         if (this._menu?.contains(document.activeElement)) this._focusItem(index);
+
+        // Åpne submeny ved hover (og lukk andre submenyer på samme nivå)
+        const item = this._items[index];
+        if (!item) return;
+
+        const submenu = item.parentElement as IxDropdown | null;
+        if (submenu?.hasAttribute('data-submenu') && item === submenu._trigger) {
+            // Lukk andre submenyer først
+            this._closeOtherSubmenus(submenu);
+            submenu._open();
+        } else {
+            // Ikke en submenu-trigger — lukk alle åpne submenyer
+            this._closeAllSubmenus();
+        }
+    }
+
+    private _closeOtherSubmenus(keep: IxDropdown): void {
+        const submenus = this._menu?.querySelectorAll<IxDropdown>('ix-dropdown[data-submenu]');
+        submenus?.forEach((submenu) => {
+            if (submenu !== keep && submenu._isOpen) submenu._close();
+        });
     }
 
     private _handleItemClick(e: MouseEvent, item: HTMLElement): void {
