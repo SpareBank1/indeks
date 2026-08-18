@@ -107,8 +107,9 @@
    Valgfri overskrift øverst i popoveren. */
 :where(.ix-popover__heading) {
     margin: 0 0 var(--ix-spacing-xs);
-    font-size: var(--ix-font-size-md);
-    font-weight: var(--ix-font-weight-semibold);
+    font-size: var(--ix-font-size-lg);
+    font-weight: var(--ii-font-weight-bold);
+    font-family: var(--ix-font-family-heading);
     color: var(--ix-color-foreground-main-default);
 }
 
