@@ -1,5 +1,22 @@
 # @sb1/indeks-css
 
+## 0.20.0
+
+### Minor Changes
+
+-   a64a806: Ny Popover-komponent for kontekstuell informasjon og handlinger
+
+    -   CSS: `.ix-popover`, `.ix-popover__content`, `.ix-popover__heading`, `.ix-popover__body`, `.ix-popover__actions`
+    -   Web component: `<ix-popover>` med ARIA-lim, posisjonering og fokushåndtering
+    -   React: `<Popover>` med sub-komponenter `Popover.Trigger`, `Popover.Content`, `Popover.Heading`, `Popover.Body`, `Popover.Actions`
+
+### Patch Changes
+
+-   b71ecc3: Fiks heading i Popover og åpning av submenyer på hover i DropdownMenu
+
+    -   Popover: Heading er nå stylet som en overskrift
+    -   DropdownMenu: Submenyer åpnes nå ved hover i tillegg til tastatur (ArrowRight)
+
 ## 0.19.0
 
 ### Minor Changes
