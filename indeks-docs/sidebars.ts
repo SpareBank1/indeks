@@ -153,6 +153,7 @@ const sidebars: SidebarsConfig = {
                 },
                 'komponenter/message',
                 'komponenter/modal',
+                'komponenter/popover',
                 'komponenter/read-more',
                 'komponenter/tabs',
                 'komponenter/tag',

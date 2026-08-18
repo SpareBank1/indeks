@@ -1,0 +1,73 @@
+{
+  "component": "Popover",
+  "lastReviewed": "2026-08-14",
+  "consumerResponsibilities": [
+    {
+      "summary": "Trigger-elementet må være en interaktiv kontroll",
+      "details": "Bruk en semantisk <button> eller <a> som trigger. Ikke bruk <div> eller <span> — disse mangler tastaturstøtte og skjermleser-rolle.",
+      "wcag": ["4.1.2"]
+    },
+    {
+      "summary": "Trigger-elementet må ha et tilgjengelig navn",
+      "details": "Sørg for at knappen som åpner popoveren har synlig tekst eller aria-label. Skjermlesere leser denne teksten sammen med 'har popup'-annonseringen.",
+      "wcag": ["4.1.2", "2.4.6"]
+    },
+    {
+      "summary": "Innholdet i popoveren må være relevant og konsist",
+      "details": "Popover-innhold skal være kort og fokusert. Lange tekster eller komplekse interaksjoner bør flyttes til en dialog eller egen side.",
+      "wcag": ["2.4.4"]
+    },
+    {
+      "summary": "Handlingsknapper må ha beskrivende tekst",
+      "details": "Knapper i popoveren skal tydelig beskrive hva handlingen gjør. Unngå generiske tekster som 'OK' eller 'Klikk her'.",
+      "wcag": ["2.4.6", "3.3.2"]
+    }
+  ],
+  "handled": [
+    {
+      "id": "1.3.1",
+      "notes": "Komponenten setter role=\"dialog\" på innholdet og kobler trigger til popover via aria-controls. Forholdet mellom trigger og popover formidles programmatisk."
+    },
+    {
+      "id": "2.1.1",
+      "notes": "Popover kan åpnes og lukkes med tastatur (Enter/Space på trigger, Escape for å lukke). Ingen museavhengige interaksjoner."
+    },
+    {
+      "id": "2.1.2",
+      "notes": "Fokus trappes ikke i popoveren — brukeren kan tabbe ut naturlig. Escape returnerer fokus til trigger."
+    },
+    {
+      "id": "2.4.3",
+      "notes": "Når popover åpnes, flyttes fokus til første focusable element (hvis det finnes). Tab-rekkefølgen følger DOM-strukturen. Ved lukking med Escape returneres fokus til trigger."
+    },
+    {
+      "id": "2.4.7",
+      "notes": "Interaktive elementer i popoveren arver fokusring fra sine respektive komponenter (Button osv.)."
+    },
+    {
+      "id": "4.1.2",
+      "notes": "Trigger får aria-expanded og aria-haspopup=\"dialog\". Disse oppdateres automatisk ved åpning/lukking."
+    }
+  ],
+  "issues": [],
+  "notRelevant": [
+    { "id": "1.2.1", "reason": "Komponenten inneholder ikke tidbasert media." },
+    { "id": "1.2.2", "reason": "Komponenten inneholder ikke tidbasert media." },
+    { "id": "1.2.3", "reason": "Komponenten inneholder ikke tidbasert media." },
+    { "id": "1.2.4", "reason": "Komponenten inneholder ikke tidbasert media." },
+    { "id": "1.2.5", "reason": "Komponenten inneholder ikke tidbasert media." },
+    { "id": "2.2.1", "reason": "Ingen tidsbegrensninger i komponenten." },
+    { "id": "2.2.2", "reason": "Ingen automatisk bevegelse eller blinking." },
+    { "id": "2.3.1", "reason": "Ingen blinkende innhold." }
+  ],
+  "keyboard": [
+    { "key": "Enter / Space", "action": "Åpner/lukker popover når trigger har fokus" },
+    { "key": "Escape", "action": "Lukker popover og returnerer fokus til trigger" },
+    { "key": "Tab", "action": "Flytter fokus mellom interaktive elementer i popoveren" }
+  ],
+  "screenReader": [
+    "Ved fokus på trigger: \"[knappetekst], knapp, har popup, dialog\"",
+    "Ved åpning: \"[knappetekst], knapp, har popup, dialog, utvidet\" — fokus flyttes til første element i popover",
+    "Ved lukking: Fokus returneres til trigger, skjermleser annonserer trigger igjen"
+  ]
+}

@@ -6,6 +6,7 @@ import { IxField } from './lib/components/field/IxField.js';
 import { IxIcon } from './lib/components/icon/IxIcon.js';
 import type { IconName } from './lib/components/icon/IxIcon.js';
 import { IxPhoneNumberField } from './lib/components/phone-number-field/IxPhoneNumberField.js';
+import { IxPopover } from './lib/components/popover/IxPopover.js';
 import { IxProgressBar } from './lib/components/progress-bar/IxProgressBar.js';
 import { IxRadioGroup } from './lib/components/radio-group/IxRadioGroup.js';
 import { IxTabs, IxTabList, IxTab, IxTabPanel } from './lib/components/tabs/IxTabs.js';
@@ -21,6 +22,7 @@ customElements.define('ix-combobox', IxCombobox);
 customElements.define('ix-date-field', IxDateField);
 customElements.define('ix-dropdown', IxDropdown);
 customElements.define('ix-phone-number-field', IxPhoneNumberField);
+customElements.define('ix-popover', IxPopover);
 customElements.define('ix-progress-bar', IxProgressBar);
 customElements.define('ix-tabs', IxTabs);
 customElements.define('ix-tab-list', IxTabList);
@@ -39,6 +41,7 @@ export { IxCombobox };
 export { IxDateField };
 export { IxDropdown };
 export { IxPhoneNumberField };
+export { IxPopover };
 export { IxProgressBar };
 export type { ProgressBarState } from './lib/components/progress-bar/IxProgressBar.js';
 export { IxTabs, IxTabList, IxTab, IxTabPanel };
@@ -65,6 +68,7 @@ declare global {
         'ix-date-field': IxDateField;
         'ix-dropdown': IxDropdown;
         'ix-phone-number-field': IxPhoneNumberField;
+        'ix-popover': IxPopover;
         'ix-progress-bar': IxProgressBar;
         'ix-tabs': IxTabs;
         'ix-tab-list': IxTabList;
@@ -135,6 +139,14 @@ declare global {
                 open?: boolean | '';
                 placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
                 'data-submenu'?: boolean | '';
+            };
+            'ix-popover': {
+                open?: boolean | '';
+                placement?: 'top' | 'bottom' | 'left' | 'right';
+                'data-arrow'?: 'true' | 'false';
+                'data-controlled'?: boolean | '';
+                class?: string;
+                children?: unknown;
             };
             'ix-icon': {
                 name?: IconName;
