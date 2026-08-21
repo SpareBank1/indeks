@@ -67,6 +67,7 @@ export const MedEllipsis: Story = {
  */
 export const MedTekstPaKnapper: Story = {
     name: 'Med tekst på knapper',
+    tags: ['scheme-light'],
     render: () => <PaginationDemo prevNextTexts />,
 };
 
