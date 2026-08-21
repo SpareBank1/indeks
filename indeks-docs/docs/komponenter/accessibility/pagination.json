@@ -1,0 +1,100 @@
+{
+  "component": "Pagination",
+  "lastReviewed": "2026-08-20",
+  "consumerResponsibilities": [
+    {
+      "summary": "Gi meningsfylte labels på brukerens språk",
+      "details": "Alle tekststrenger (ariaLabel, previousLabel, nextLabel, pageLabel) må sendes inn av konsumenten og oversettes til riktig språk. Komponenten har ingen hardkodede fallback-tekster.",
+      "wcag": ["4.1.2", "3.1.1"]
+    },
+    {
+      "summary": "Oppdater innholdet ved sidebytte",
+      "details": "Pagination håndterer kun navigasjonslogikken. Konsumenten må koble onPageChange til faktisk innholdsoppdatering og sørge for at nytt innhold lastes og vises.",
+      "wcag": ["3.2.2"]
+    },
+    {
+      "summary": "Ikke flytt fokus uventet ved sidebytte",
+      "details": "Ved sidebytte bør fokus forbli i pagination-området eller flyttes til toppen av det nye innholdet. Ikke la fokus forsvinne eller hoppe til et uventet sted.",
+      "wcag": ["2.4.3", "3.2.1"]
+    },
+    {
+      "summary": "Bruk pagination kun for sideinndelt innhold",
+      "details": "Ikke bruk pagination for sekvensielle steg i en prosess (bruk stegindikator) eller for navigasjon mellom ulike sider (bruk lenker eller meny).",
+      "wcag": ["1.3.1", "2.4.4"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Bruker semantisk <nav>-element. Aktiv side markeres med aria-current=\"page\". Liste-struktur med <ul>/<li> gir kontekst." },
+    { "id": "1.3.2", "notes": "Sidetall følger naturlig rekkefølge fra lav til høy. Forrige/neste-knapper plassert logisk på hver side." },
+    { "id": "1.4.1", "notes": "Aktiv side kommuniseres via aria-current, ikke kun farge. Deaktiverte knapper bruker disabled-attributt." },
+    { "id": "1.4.3", "notes": "Tekst- og ikonfarge bruker tokens med tilstrekkelig kontrast. Disabled-tilstand (opacity) er unntatt per WCAG." },
+    { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
+    { "id": "1.4.10", "notes": "Fleksibel layout uten fast bredde. Fungerer ned til 320 px viewport." },
+    { "id": "1.4.11", "notes": "Fokusindikator oppfyller 3:1 kontrastkrav mot bakgrunn." },
+    { "id": "2.1.1", "notes": "Alle knapper er native <button> og aktiveres med Enter og Space. Fullt opererbart med tastatur." },
+    { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab. Ingen tastaturfelle." },
+    { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
+    { "id": "2.4.4", "notes": "Alle sideknapper har beskrivende aria-label (f.eks. \"Side 3\"). Forrige/neste har egne labels." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med outline-token." },
+    { "id": "2.5.8", "notes": "Alle knapper har minimum 36×36 px klikkflate for touch." },
+    { "id": "3.2.1", "notes": "Fokus på en knapp trigger ingen kontekstendring." },
+    { "id": "4.1.2", "notes": "Native <button> med implisitt rolle. nav-element har aria-label. Aktiv side har aria-current=\"page\"." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Ikoner er dekorative og skjules med aria-hidden. Knappetekst gir tilgjengelig navn." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Komponenten formidler ikke instruksjoner." },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.12" },
+    { "id": "1.4.13" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2" },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.5" },
+    { "id": "2.4.6" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native button-element — nettleseren håndterer pekerinteraksjon." },
+    { "id": "2.5.4" },
+    { "id": "2.5.6" },
+    { "id": "2.5.7" },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.2", "reason": "Sidebytte skjer ved eksplisitt klikk, ikke ved fokusendring." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1" },
+    { "id": "3.3.2" },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" },
+    { "id": "4.1.3", "reason": "Komponenten genererer ingen statusmeldinger." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til neste knapp i pagination" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige knapp" },
+    { "key": "Enter", "action": "Aktiverer knappen (navigerer til valgt side)" },
+    { "key": "Space", "action": "Aktiverer knappen (navigerer til valgt side)" }
+  ],
+  "screenReader": [
+    "Ved fokus på nav: \"Sidenavigering, navigasjon\"",
+    "Ved fokus på sideknapp: \"Side 3, knapp\"",
+    "Ved fokus på aktiv side: \"Side 2, nåværende side, knapp\"",
+    "Ved fokus på forrige (deaktivert): \"Forrige, knapp, deaktivert\"",
+    "Ved fokus på neste: \"Neste, knapp\"",
+    "Ellipsis annonseres ikke (aria-hidden)"
+  ]
+}

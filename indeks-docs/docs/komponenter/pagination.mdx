@@ -1,0 +1,274 @@
+---
+title: Pagination
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/pagination.json';
+
+# Pagination
+
+Pagination brukes for å dele inn større mengder innhold i flere sider og gjøre det enklere å navigere mellom dem. Komponenten brukes ofte i tabeller, søkeresultater, lister og andre visninger der alt innhold ikke vises samtidig.
+
+## Egnet til
+
+- Innhold som er delt opp i flere sider
+- Navigasjon mellom resultatsider i søk eller lister
+- Tabeller og transaksjonsoversikter med mange rader
+- Situasjoner der brukeren trenger oversikt over hvor hen befinner seg i et datasett
+
+## Uegnet til
+
+- Innholdsmengder som kan vises på én side
+- Situasjoner der uendelig scrolling (infinite scroll) gir bedre brukeropplevelse
+- Innhold som lastes inn fortløpende uten tydelige sider
+- Navigasjon mellom steg i en prosess — bruk en stegindikator
+
+## Kom i gang
+
+Pagination krever `page` (nåværende side), `count` (totalt antall sider) og `onPageChange` (callback ved sidebytte). Alle tekststrenger må sendes inn for i18n-støtte.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+function PaginationDemo() {
+  const [page, setPage] = React.useState(1);
+  return (
+    <Pagination
+      page={page}
+      count={10}
+      onPageChange={setPage}
+      previousLabel="Forrige"
+      nextLabel="Neste"
+      ariaLabel="Sidenavigering"
+      pageLabel={(p) => `Side ${p}`}
+    />
+  );
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<nav className="ix-pagination" aria-label="Sidenavigering">
+  <ul className="ix-pagination__list">
+    <li>
+      <button type="button" className="ix-pagination__button" data-type="prev" disabled aria-label="Forrige side">
+        <Icon name="chevron_left" aria-hidden="true" />
+      </button>
+    </li>
+    <li>
+      <button type="button" className="ix-pagination__button" aria-current="page" aria-label="Side 1">1</button>
+    </li>
+    <li>
+      <button type="button" className="ix-pagination__button" aria-label="Side 2">2</button>
+    </li>
+    <li>
+      <button type="button" className="ix-pagination__button" aria-label="Side 3">3</button>
+    </li>
+    <li>
+      <span className="ix-pagination__ellipsis" aria-hidden="true"><Icon name="more_horiz" /></span>
+    </li>
+    <li>
+      <button type="button" className="ix-pagination__button" aria-label="Side 10">10</button>
+    </li>
+    <li>
+      <button type="button" className="ix-pagination__button" data-type="next" aria-label="Neste side">
+        <Icon name="chevron_right" aria-hidden="true" />
+      </button>
+    </li>
+  </ul>
+</nav>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Med tekst på knapper
+
+Vis tekst på forrige/neste-knappene med `prevNextTexts`. Dette kan være nyttig på desktop hvor det er god plass.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+function PaginationDemo() {
+  const [page, setPage] = React.useState(1);
+  return (
+    <Pagination
+      page={page}
+      count={10}
+      onPageChange={setPage}
+      prevNextTexts
+      previousLabel="Forrige"
+      nextLabel="Neste"
+      ariaLabel="Sidenavigering"
+      pageLabel={(p) => `Side ${p}`}
+    />
+  );
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```jsx live
+<nav className="ix-pagination" aria-label="Sidenavigering">
+  <ul className="ix-pagination__list">
+    <li>
+      <button type="button" className="ix-pagination__button" data-type="prev" data-show-text disabled>
+        <Icon name="chevron_left" aria-hidden="true" /> Forrige
+      </button>
+    </li>
+    <li>
+      <button type="button" className="ix-pagination__button" aria-current="page" aria-label="Side 1">1</button>
+    </li>
+    <li>
+      <button type="button" className="ix-pagination__button" aria-label="Side 2">2</button>
+    </li>
+    <li>
+      <button type="button" className="ix-pagination__button" data-type="next" data-show-text>
+        Neste <Icon name="chevron_right" aria-hidden="true" />
+      </button>
+    </li>
+  </ul>
+</nav>
+```
+
+</TabItem>
+</Tabs>
+
+### Med ellipsis
+
+Ved mange sider vises ellipsis (...) for å indikere at det finnes sider mellom de synlige sidetallene. Juster `siblingCount` og `boundaryCount` for å kontrollere hvor mange sider som vises.
+
+<Tabs groupId="variant">
+<TabItem value="react" label="React">
+
+```tsx live
+function PaginationDemo() {
+  const [page, setPage] = React.useState(10);
+  return (
+    <Pagination
+      page={page}
+      count={20}
+      onPageChange={setPage}
+      siblingCount={1}
+      boundaryCount={1}
+      previousLabel="Forrige"
+      nextLabel="Neste"
+      ariaLabel="Sidenavigering"
+      pageLabel={(p) => `Side ${p}`}
+    />
+  );
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Vis kun når det finnes flere sider
+
+Pagination skal kun vises når det finnes mer enn én side med innhold. Komponenten returnerer `null` når `count` er 1 eller mindre.
+
+### Vis aktiv side tydelig
+
+Den aktive siden markeres med `aria-current="page"` og en visuelt fremhevet stil (bakgrunnsfarge). Aktiv side er ikke interaktiv.
+
+### Plasser nær innholdet
+
+Pagination bør plasseres i direkte tilknytning til innholdet den styrer — typisk under en tabell eller liste. Ved lange tabeller kan den vises både over og under.
+
+### Håndter mange sider forutsigbart
+
+Når antall sider er høyt, viser komponenten:
+- Første og siste side (styrt av `boundaryCount`)
+- Sider rundt aktiv side (styrt av `siblingCount`)
+- Ellipsis mellom områder som skjules
+
+## Props
+
+| Prop | Type | Default | Beskrivelse |
+|------|------|---------|-------------|
+| `page` | `number` | — | Nåværende side (1-indeksert) |
+| `count` | `number` | — | Totalt antall sider |
+| `onPageChange` | `(page: number) => void` | — | Callback når bruker bytter side |
+| `siblingCount` | `number` | `1` | Antall synlige sider rundt aktiv side |
+| `boundaryCount` | `number` | `1` | Antall synlige sider i start og slutt |
+| `prevNextTexts` | `boolean` | `false` | Vis tekst på forrige/neste-knapper |
+| `previousLabel` | `string` | — | Tilgjengelig navn på forrige-knapp |
+| `nextLabel` | `string` | — | Tilgjengelig navn på neste-knapp |
+| `ariaLabel` | `string` | — | Tilgjengelig navn på nav-elementet |
+| `pageLabel` | `(page: number) => string` | — | Funksjon som genererer aria-label for sidetall |
+
+## Tilpasning med CSS
+
+### Tilgjengelige klasser og selektorer
+
+| Element/tilstand | Selektor / attributt |
+|------------------|----------------------|
+| Rot | `.ix-pagination` på `<nav>` |
+| Liste | `.ix-pagination__list` på `<ul>` |
+| Sideknapp | `.ix-pagination__button` på `<button>` |
+| Forrige-knapp | `.ix-pagination__button[data-type="prev"]` |
+| Neste-knapp | `.ix-pagination__button[data-type="next"]` |
+| Med tekst på prev/next | `[data-show-text]` på knappen |
+| Aktiv side | `[aria-current="page"]` på knappen |
+| Deaktivert | `:disabled` på knappen |
+| Ellipsis | `.ix-pagination__ellipsis` på `<span>` |
+
+### Eksempel: ren HTML
+
+```html
+<nav class="ix-pagination" aria-label="Sidenavigering">
+  <ul class="ix-pagination__list">
+    <li>
+      <button type="button" class="ix-pagination__button" data-type="prev" disabled aria-label="Forrige side">
+        <ix-icon name="chevron_left" aria-hidden="true"></ix-icon>
+      </button>
+    </li>
+    <li>
+      <button type="button" class="ix-pagination__button" aria-current="page" aria-label="Side 1">1</button>
+    </li>
+    <li>
+      <button type="button" class="ix-pagination__button" aria-label="Side 2">2</button>
+    </li>
+    <li>
+      <button type="button" class="ix-pagination__button" data-type="next" aria-label="Neste side">
+        <ix-icon name="chevron_right" aria-hidden="true"></ix-icon>
+      </button>
+    </li>
+  </ul>
+</nav>
+```
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Gi meningsfylte labels på brukerens språk** — alle tekststrenger (`ariaLabel`, `previousLabel`, `nextLabel`, `pageLabel`) må sendes inn og oversettes.
+- **Oppdater innholdet ved sidebytte** — komponenten håndterer kun navigasjonen; du må koble `onPageChange` til faktisk innholdsoppdatering.
+- **Ikke flytt fokus uventet** — ved sidebytte bør fokus forbli i pagination eller flyttes til toppen av det nye innholdet, ikke forsvinne.
+
+### Hva komponenten gjør automatisk
+
+- **Semantisk navigasjon** — bruker `<nav>` med `aria-label` slik at hjelpemidler forstår komponentens rolle.
+- **Aktiv side annonseres** — `aria-current="page"` på aktiv sideknapp formidler hvilken side som er valgt.
+- **Tastaturnavigasjon** — alle knapper er native `<button>` og kan nås med Tab, aktiveres med Enter/Space.
+- **Deaktiverte knapper** — forrige-knapp på første side og neste-knapp på siste side er `disabled`.
+- **Ellipsis er ikke interaktiv** — skjules fra skjermlesere med `aria-hidden="true"`.
+- **Touch-mål** — alle knapper har minimum 36×36 px klikkflate.
+- **Fokusindikator** — tydelig fokusring via `:focus-visible`.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
