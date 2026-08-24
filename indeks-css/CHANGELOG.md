@@ -1,5 +1,24 @@
 # @sb1/indeks-css
 
+## 0.21.0
+
+### Minor Changes
+
+-   3a2deb1: Ny komponent: Pagination
+
+    Pagination brukes for å dele inn større mengder innhold i flere sider og gjøre det enklere å navigere mellom dem. Komponenten viser sidetall, forrige/neste-knapper og ellipsis ved mange sider.
+
+    **CSS-klasser:**
+
+    -   `.ix-pagination` — rot-nav-element
+    -   `.ix-pagination__list` — liste med knapper
+    -   `.ix-pagination__button` — sideknapp
+    -   `.ix-pagination__ellipsis` — ellipsis-element
+
+    **React-komponent:**
+
+    -   `<Pagination>` med props for `page`, `count`, `onPageChange`, `siblingCount`, `boundaryCount`, `prevNextTexts`, og i18n-labels
+
 ## 0.20.0
 
 ### Minor Changes
