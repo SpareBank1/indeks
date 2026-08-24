@@ -1,0 +1,119 @@
+/* Pagination — navigasjon mellom sider med innhold.
+ *
+ * Brukes for å dele inn større mengder innhold i flere sider og gjøre det
+ * enklere å navigere mellom dem. Vises ofte under tabeller, søkeresultater
+ * eller lister.
+ *
+ * Struktur:
+ *   <nav class="ix-pagination" aria-label="Sidenavigering">
+ *     <ul class="ix-pagination__list">
+ *       <li><button class="ix-pagination__button" data-type="prev">...</button></li>
+ *       <li><button class="ix-pagination__button" aria-current="page">1</button></li>
+ *       <li><button class="ix-pagination__button">2</button></li>
+ *       <li><span class="ix-pagination__ellipsis">...</span></li>
+ *       <li><button class="ix-pagination__button">10</button></li>
+ *       <li><button class="ix-pagination__button" data-type="next">...</button></li>
+ *     </ul>
+ *   </nav>
+ */
+
+:where(.ix-pagination) {
+    display: flex;
+    align-items: center;
+    gap: var(--ix-spacing-md);
+}
+
+:where(.ix-pagination__list) {
+    display: flex;
+    align-items: center;
+    gap: var(--ix-spacing-2xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+:where(.ix-pagination__list > li) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+:where(.ix-pagination__list > li)::marker {
+    content: none;
+}
+
+:where(.ix-pagination__button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ix-spacing-xs);
+    min-width: 36px;
+    min-height: 36px;
+    padding: var(--ix-spacing-xs) var(--ix-spacing-sm);
+    border: none;
+    border-radius: var(--ix-border-radius-sm);
+    background-color: transparent;
+    color: var(--ix-color-component-button-tertiary-foreground-default);
+    font-size: var(--ix-font-size-md);
+    font-weight: var(--ix-font-weight-medium);
+    cursor: pointer;
+}
+
+:where(.ix-pagination__button:hover:not([aria-current='page'])) {
+    background-color: var(--ix-color-component-button-tertiary-fill-default-hover);
+    transition: background-color 0.15s ease-out;
+}
+
+:where(.ix-pagination__button:active) {
+    background-color: var(--ix-color-component-button-tertiary-fill-default-active);
+}
+
+:where(.ix-pagination__button:focus-visible) {
+    outline: var(--ix-outline-default);
+    outline-offset: var(--ix-outline-offset-default);
+}
+
+:where(.ix-pagination__button:disabled) {
+    color: var(--ix-color-foreground-main-disabled);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+:where(.ix-pagination__button[aria-current='page']) {
+    background-color: var(--ix-color-component-button-primary-fill-default);
+    color: var(--ix-color-component-button-primary-foreground-default);
+    pointer-events: none;
+}
+
+:where(.ix-pagination__button[data-type='prev']),
+:where(.ix-pagination__button[data-type='next']) {
+    min-width: auto;
+    padding: var(--ix-spacing-xs);
+}
+
+:where(.ix-pagination__button[data-type='prev'][data-show-text]),
+:where(.ix-pagination__button[data-type='next'][data-show-text]) {
+    padding: var(--ix-spacing-xs) var(--ix-spacing-sm);
+}
+
+:where(.ix-pagination__ellipsis) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    min-height: 36px;
+    color: var(--ix-color-foreground-main-subtle);
+    font-size: var(--ix-font-size-md);
+    user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :where(.ix-pagination__button:hover) {
+        transition: none;
+    }
+}
+

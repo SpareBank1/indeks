@@ -25,6 +25,8 @@ export type { RemovableChipProps } from './chip/RemovableChip';
 export { Message } from './message/Message';
 export type { MessageProps, MessageStatus } from './message/Message';
 export { Modal } from './modal/Modal';
+export { Pagination } from './pagination/Pagination';
+export type { PaginationProps } from './pagination/Pagination';
 export type { ModalProps, ModalSize } from './modal/Modal';
 export { Popover } from './popover/Popover';
 export type {

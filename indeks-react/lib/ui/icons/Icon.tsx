@@ -6,6 +6,7 @@ export type IconProps<As extends ElementType> = {
     as?: As;
     className?: string;
     ariaLabel?: React.ComponentProps<'span'>['aria-label'];
+    'aria-hidden'?: boolean | 'true' | 'false';
 
     size?: 'sm' | 'md' | 'lg' | 'xl';
     /** Material Design-ikonnavn (f.eks. `"home"`). Vanlige SB1-ikoner autofullføres; alle andre MD-navn godtas også. */
