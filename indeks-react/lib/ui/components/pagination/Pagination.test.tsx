@@ -5,6 +5,7 @@ import { Pagination } from './Pagination';
 const defaultProps = {
     page: 1,
     count: 10,
+    onPageChange: () => {},
     previousLabel: 'Forrige',
     nextLabel: 'Neste',
     ariaLabel: 'Sidenavigering',
@@ -92,5 +93,62 @@ describe('Pagination', () => {
             expect(screen.getByRole('button', { name: `Side ${i}` })).toBeDefined();
         }
         expect(container.querySelector('.ix-pagination__ellipsis')).toBeNull();
+    });
+
+    describe('getSteps layout', () => {
+        function getLayout(container: HTMLElement): (number | '...')[] {
+            const items = container.querySelectorAll('.ix-pagination__list > li');
+            const layout: (number | '...')[] = [];
+            items.forEach((li) => {
+                const ellipsis = li.querySelector('.ix-pagination__ellipsis');
+                const button = li.querySelector('.ix-pagination__button:not([data-type])');
+                if (ellipsis) layout.push('...');
+                else if (button) layout.push(Number(button.textContent));
+            });
+            return layout;
+        }
+
+        it('viser korrekt layout med default siblingCount=1, boundaryCount=1 midt i', () => {
+            const { container } = render(<Pagination {...defaultProps} page={10} count={20} />);
+            expect(getLayout(container)).toEqual([1, '...', 9, 10, 11, '...', 20]);
+        });
+
+        it('viser korrekt layout nær starten (side 2)', () => {
+            const { container } = render(<Pagination {...defaultProps} page={2} count={20} />);
+            expect(getLayout(container)).toEqual([1, 2, 3, 4, 5, '...', 20]);
+        });
+
+        it('viser korrekt layout nær slutten (side 19)', () => {
+            const { container } = render(<Pagination {...defaultProps} page={19} count={20} />);
+            expect(getLayout(container)).toEqual([1, '...', 16, 17, 18, 19, 20]);
+        });
+
+        it('viser korrekt layout med siblingCount=2', () => {
+            const { container } = render(
+                <Pagination {...defaultProps} page={10} count={20} siblingCount={2} />,
+            );
+            expect(getLayout(container)).toEqual([1, '...', 8, 9, 10, 11, 12, '...', 20]);
+        });
+
+        it('viser korrekt layout med boundaryCount=2', () => {
+            const { container } = render(
+                <Pagination {...defaultProps} page={10} count={20} boundaryCount={2} />,
+            );
+            expect(getLayout(container)).toEqual([1, 2, '...', 9, 10, 11, '...', 19, 20]);
+        });
+
+        it('viser korrekt layout med siblingCount=2 og boundaryCount=2', () => {
+            const { container } = render(
+                <Pagination {...defaultProps} page={10} count={20} siblingCount={2} boundaryCount={2} />,
+            );
+            expect(getLayout(container)).toEqual([1, 2, '...', 8, 9, 10, 11, 12, '...', 19, 20]);
+        });
+
+        it('viser alle sider uten ellipsis når count er liten nok', () => {
+            const { container } = render(
+                <Pagination {...defaultProps} page={5} count={7} siblingCount={1} boundaryCount={1} />,
+            );
+            expect(getLayout(container)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+        });
     });
 });

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ComponentProps } from 'react';
 import { useState } from 'react';
 
 import { Pagination, Icon } from '@sb1/indeks-react';
@@ -8,7 +9,9 @@ const meta = {
     component: Pagination,
     tags: ['autodocs'],
     args: {
+        page: 1,
         count: 10,
+        onPageChange: () => {},
         previousLabel: 'Forrige',
         nextLabel: 'Neste',
         ariaLabel: 'Sidenavigering',
@@ -19,28 +22,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function PaginationDemo({
-    count = 10,
-    initialPage = 1,
-    prevNextTexts = false,
-}: {
-    count?: number;
+type PaginationDemoProps = Omit<ComponentProps<typeof Pagination>, 'page' | 'onPageChange'> & {
     initialPage?: number;
-    prevNextTexts?: boolean;
-}) {
+};
+
+function PaginationDemo({ initialPage = 1, ...props }: PaginationDemoProps) {
     const [page, setPage] = useState(initialPage);
-    return (
-        <Pagination
-            page={page}
-            count={count}
-            onPageChange={setPage}
-            previousLabel="Forrige"
-            nextLabel="Neste"
-            ariaLabel="Sidenavigering"
-            pageLabel={(p) => `Side ${p}`}
-            prevNextTexts={prevNextTexts}
-        />
-    );
+    return <Pagination {...props} page={page} onPageChange={setPage} />;
 }
 
 /**
@@ -49,7 +37,7 @@ function PaginationDemo({
  * knapper og ellipsis ved mange sider.
  */
 export const Standard: Story = {
-    render: () => <PaginationDemo />,
+    render: (args) => <PaginationDemo {...args} />,
 };
 
 /**
@@ -58,7 +46,10 @@ export const Standard: Story = {
  */
 export const MedEllipsis: Story = {
     name: 'Med ellipsis',
-    render: () => <PaginationDemo count={20} initialPage={5} />,
+    args: {
+        count: 20,
+    },
+    render: (args) => <PaginationDemo {...args} initialPage={5} />,
 };
 
 /**
@@ -68,7 +59,10 @@ export const MedEllipsis: Story = {
 export const MedTekstPaKnapper: Story = {
     name: 'Med tekst på knapper',
     tags: ['scheme-light'],
-    render: () => <PaginationDemo prevNextTexts />,
+    args: {
+        prevNextTexts: true,
+    },
+    render: (args) => <PaginationDemo {...args} />,
 };
 
 /**
@@ -76,7 +70,10 @@ export const MedTekstPaKnapper: Story = {
  */
 export const FaSider: Story = {
     name: 'Få sider',
-    render: () => <PaginationDemo count={5} />,
+    args: {
+        count: 5,
+    },
+    render: (args) => <PaginationDemo {...args} />,
 };
 
 /**

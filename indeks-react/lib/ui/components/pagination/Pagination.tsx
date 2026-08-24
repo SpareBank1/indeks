@@ -8,7 +8,7 @@ export type PaginationProps = {
     /** Totalt antall sider. */
     count: number;
     /** Callback når bruker bytter side. */
-    onPageChange?: (page: number) => void;
+    onPageChange: (page: number) => void;
     /** Antall synlige sider rundt aktiv side. @default 1 */
     siblingCount?: number;
     /** Antall synlige sider i start og slutt. @default 1 */
@@ -107,7 +107,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
                         data-show-text={prevNextTexts || undefined}
                         disabled={isFirstPage}
                         aria-label={prevNextTexts ? undefined : previousLabel}
-                        onClick={() => onPageChange?.(page - 1)}
+                        onClick={() => onPageChange(page - 1)}
                     >
                         <Icon name="chevron_left" aria-hidden="true" />
                         {prevNextTexts && previousLabel}
@@ -127,7 +127,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
                                 className="ix-pagination__button"
                                 aria-current={page === step ? 'page' : undefined}
                                 aria-label={pageLabel(step)}
-                                onClick={() => onPageChange?.(step)}
+                                onClick={() => onPageChange(step)}
                             >
                                 {step}
                             </button>
@@ -142,7 +142,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
                         data-show-text={prevNextTexts || undefined}
                         disabled={isLastPage}
                         aria-label={prevNextTexts ? undefined : nextLabel}
-                        onClick={() => onPageChange?.(page + 1)}
+                        onClick={() => onPageChange(page + 1)}
                     >
                         {prevNextTexts && nextLabel}
                         <Icon name="chevron_right" aria-hidden="true" />
