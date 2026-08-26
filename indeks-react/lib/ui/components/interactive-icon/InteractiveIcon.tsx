@@ -13,8 +13,8 @@ export type InteractiveIconProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     'aria-label': string;
     /** Fargetema for hover/pressed/focus. @default "default" */
     status?: InteractiveIconStatus;
-    /** Størrelse på ikonet. Følger `Icon`-skalaen. @default "md" */
-    size?: 'sm' | 'md' | 'lg' | 'xl';
+    /** Størrelse på knappen og ikonet. @default "md" */
+    size?: 'xs' | 'sm' | 'md' | 'lg';
 };
 
 export const InteractiveIcon = forwardRef<HTMLButtonElement, InteractiveIconProps>(
@@ -27,10 +27,11 @@ export const InteractiveIcon = forwardRef<HTMLButtonElement, InteractiveIconProp
                 ref={ref}
                 type="button"
                 className={cn('ix-interactive-icon', className)}
+                data-size={size !== 'md' ? size : undefined}
                 data-status={status !== 'default' ? status : undefined}
                 {...props}
             >
-                <Icon name={name} size={size} aria-hidden />
+                <Icon name={name} size={size === 'xs' ? 'sm' : size} aria-hidden />
             </button>
         );
     },

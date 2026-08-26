@@ -36,10 +36,10 @@ export const Statuser: Story = {
 export const Størrelser: Story = {
     render: (args) => (
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <InteractiveIcon {...args} size="xs" aria-label="Ekstra liten" />
             <InteractiveIcon {...args} size="sm" aria-label="Liten" />
             <InteractiveIcon {...args} size="md" aria-label="Medium" />
             <InteractiveIcon {...args} size="lg" aria-label="Stor" />
-            <InteractiveIcon {...args} size="xl" aria-label="Ekstra stor" />
         </div>
     ),
 };
