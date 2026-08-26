@@ -115,7 +115,7 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(function Message
                 <InteractiveIcon
                     className="ix-message__close"
                     name="close"
-                    size="sm"
+                    size="md"
                     aria-label={closeLabel}
                     onClick={handleClose}
                 />
