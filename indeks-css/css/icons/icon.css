@@ -2,8 +2,8 @@
     background-color: currentColor;
     /* setter fargen til ikonet */
     color: inherit;
-    width: var(--ix-font-size-xl);
-    height: var(--ix-font-size-xl);
+    width: 20px;
+    height: 20px;
     display: inline-block;
     /* stylelint-disable plugin/no-unsupported-browser-features */
     mask-size: cover;
@@ -18,8 +18,8 @@
 }
 
 :where(ix-icon[data-size="sm"], .ix-icon[data-size="sm"]) {
-    width: var(--ix-font-size-lg);
-    height: var(--ix-font-size-lg);
+    width: 18px;
+    height: 18px;
 }
 
 /* Badge: glyf på en farget sirkel. Selve elementet blir sirkelen (umaskert),
@@ -65,11 +65,11 @@
 }
 
 :where(ix-icon[data-size="lg"], .ix-icon[data-size="lg"]) {
-    width: var(--ix-font-size-2xl);
-    height: var(--ix-font-size-2xl);
+    width: 24px;
+    height: 24px;
 }
 
 :where(ix-icon[data-size="xl"], .ix-icon[data-size="xl"]) {
-    width: var(--ix-font-size-3xl);
-    height: var(--ix-font-size-3xl);
+    width: 32px;
+    height: 32px;
 }

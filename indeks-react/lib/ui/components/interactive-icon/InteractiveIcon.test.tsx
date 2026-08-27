@@ -53,4 +53,24 @@ describe('InteractiveIcon', () => {
         render(<InteractiveIcon name="home" aria-label="Hjem" disabled />);
         expect(screen.getByRole('button')).toHaveProperty('disabled', true);
     });
+
+    it('setter data-size for sm', () => {
+        render(<InteractiveIcon name="home" aria-label="Hjem" size="sm" />);
+        expect(screen.getByRole('button').getAttribute('data-size')).toBe('sm');
+    });
+
+    it('utelater data-size for md (default)', () => {
+        render(<InteractiveIcon name="home" aria-label="Hjem" size="md" />);
+        expect(screen.getByRole('button').hasAttribute('data-size')).toBe(false);
+    });
+
+    it('setter data-size for lg', () => {
+        render(<InteractiveIcon name="home" aria-label="Hjem" size="lg" />);
+        expect(screen.getByRole('button').getAttribute('data-size')).toBe('lg');
+    });
+
+    it('setter data-size for xl', () => {
+        render(<InteractiveIcon name="home" aria-label="Hjem" size="xl" />);
+        expect(screen.getByRole('button').getAttribute('data-size')).toBe('xl');
+    });
 });

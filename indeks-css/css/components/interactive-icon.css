@@ -9,11 +9,33 @@
     border: none;
     cursor: pointer;
     border-radius: var(--ix-border-radius-sm);
-    padding: var(--ix-spacing-xs);
-    min-width: 44px;
-    min-height: 44px;
+    padding: 0;
+    min-width: 26px;
+    min-height: 26px;
     color: inherit;
     transition: var(--ix-transition-all);
+}
+
+:where(.ix-interactive-icon[data-size='sm']) {
+    min-width: 24px;
+    min-height: 24px;
+}
+
+:where(.ix-interactive-icon[data-size='md']) {
+    min-width: 26px;
+    min-height: 26px;
+}
+
+:where(.ix-interactive-icon[data-size='lg']) {
+    min-width: 36px;
+    min-height: 36px;
+    padding: var(--ix-spacing-2xs);
+}
+
+:where(.ix-interactive-icon[data-size='xl']) {
+    min-width: 48px;
+    min-height: 48px;
+    padding: var(--ix-spacing-xs);
 }
 
 :where(.ix-interactive-icon:hover) {

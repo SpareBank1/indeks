@@ -95,24 +95,24 @@ Setter du ikke `status`, arver ikonet status fra nærmeste forelder med `data-st
 
 ### Størrelser
 
-`size` følger ikonets størrelsesskala (`sm`, `md`, `lg`, `xl`). Klikkflaten holder seg minst 44×44 px uansett ikonstørrelse.
+`size` følger ikonets størrelsesskala (`sm`, `md`, `lg`, `xl`).
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
 <>
-  <button type="button" class="ix-interactive-icon" aria-label="Liten">
-    <ix-icon name="edit" data-size="sm" aria-hidden="true" class="ix-icon"></ix-icon>
+  <button type="button" data-size="sm" class="ix-interactive-icon" aria-label="Ekstra liten">
+    <ix-icon name="edit" aria-hidden="true" data-size="sm" class="ix-icon"></ix-icon>
   </button>
-  <button type="button" class="ix-interactive-icon" aria-label="Medium">
-    <ix-icon name="edit" aria-hidden="true" class="ix-icon"></ix-icon>
+  <button type="button" data-size="md" class="ix-interactive-icon" aria-label="Liten">
+    <ix-icon name="edit" aria-hidden="true" data-size="md" class="ix-icon"></ix-icon>
   </button>
-  <button type="button" class="ix-interactive-icon" aria-label="Stor">
-    <ix-icon name="edit" data-size="lg" aria-hidden="true" class="ix-icon"></ix-icon>
+  <button type="button" data-size="lg" class="ix-interactive-icon" aria-label="Medium">
+    <ix-icon name="edit" aria-hidden="true" data-size="lg" class="ix-icon"></ix-icon>
   </button>
-  <button type="button" class="ix-interactive-icon" aria-label="Ekstra stor">
-    <ix-icon name="edit" data-size="xl" aria-hidden="true" class="ix-icon"></ix-icon>
+  <button type="button" data-size="xl" class="ix-interactive-icon" aria-label="Stor">
+    <ix-icon name="edit" aria-hidden="true" data-size="xl" class="ix-icon"></ix-icon>
   </button>
 </>
 ```
@@ -123,7 +123,7 @@ Setter du ikke `status`, arver ikonet status fra nærmeste forelder med `data-st
 ```tsx live
 <>
   <InteractiveIcon name="edit" aria-label="Liten" size="sm" />
-  <InteractiveIcon name="edit" aria-label="Medium" />
+  <InteractiveIcon name="edit" aria-label="Medium" size="md" />
   <InteractiveIcon name="edit" aria-label="Stor" size="lg" />
   <InteractiveIcon name="edit" aria-label="Ekstra stor" size="xl" />
 </>
