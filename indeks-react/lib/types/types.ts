@@ -2,9 +2,11 @@ import { cn } from '../cn';
 
 /**
  * Statustema som kobles via `data-status` og `--ix-color-status-*`
- * (se @sb1/indeks-utils/css/status-colors.css). `"neutral"` gir den nøytrale
- * `main`-flaten. Delt av Surface/Card/InteractiveIcon (Message utleder sin egen
- * uten `neutral`). Verdien settes som `data-status` direkte på elementet.
+ * (se @sb1/indeks-utils/css/status-colors.css). `"neutral"` gir nøytrale farger:
+ * flate og kantlinje fra `main`-tieren (som er hvit/grå), fyll fra
+ * `neutral`-tieren (grå, ikke brand-blå). Delt av Surface/Card/InteractiveIcon
+ * (Message utleder sin egen uten `neutral`). Verdien settes som `data-status`
+ * direkte på elementet.
  */
 export type Status = 'neutral' | 'info' | 'success' | 'warning' | 'danger';
 export type Border = 'default' | 'dashed';

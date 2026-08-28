@@ -8,7 +8,7 @@
  *
  * `data-variant` velger visuell profil:
  *   emphasis (default) → mettet flate + invers (hvit) tekst
- *   subtle             → pastell-flate + farget tekst + border
+ *   subtle             → pastell-flate + mørk tekst + farget border
  *
  * Ingen web component: Tag er en ren etikett uten atferd, så rotselektoren
  * treffer kun klassen (.ix-tag) — det finnes ingen <ix-tag>-tag i DOM.
@@ -34,7 +34,7 @@
     border-radius: var(--ix-border-radius-sm);
 }
 
-/* Ikon arver tekstfargen (både emphasis-invers og subtle-farget). */
+/* Ikon arver tekstfargen (både emphasis-invers og subtle-mørk). */
 :where(.ix-tag .ix-icon),
 :where(.ix-tag ix-icon) {
     color: var(--ix-tag-color);

@@ -1,3 +1,9 @@
+/* Nøytral/default-gruppen. Blandingen av tiere er tilsiktet: surface og border
+ * hentes fra main-tieren, som allerede er nøytral i verdi (surface-main-default
+ * er hvit, border-main-default er grå), og det finnes ingen surface-neutral-*
+ * eller border-neutral-* å bytte til. Fill hentes derimot fra neutral-tieren,
+ * fordi fill-main-default er brand-blå — en nøytral flate skal være grå, ikke
+ * blå. Se komponenter som Tag, der nøytral er standardverdien. */
 :root,
 :host,
 [data-status="default"],
@@ -9,10 +15,10 @@
     --ix-color-status-surface-hover: var(--ix-color-surface-main-hover);
     --ix-color-status-surface-active: var(--ix-color-surface-main-active);
     --ix-color-status-border: var(--ix-color-border-main-default);
-    --ix-color-status-fill: var(--ix-color-fill-main-default);
-    --ix-color-status-fill-subtle: var(--ix-color-fill-main-subtle);
-    --ix-color-status-fill-subtle-hover: var(--ix-color-fill-main-subtle-hover);
-    --ix-color-status-fill-subtle-active: var(--ix-color-fill-main-subtle-active);
+    --ix-color-status-fill: var(--ix-color-fill-neutral-default);
+    --ix-color-status-fill-subtle: var(--ix-color-fill-neutral-subtle);
+    --ix-color-status-fill-subtle-hover: var(--ix-color-fill-neutral-subtle-hover);
+    --ix-color-status-fill-subtle-active: var(--ix-color-fill-neutral-subtle-active);
 }
 
 .ix-color-status-surface {
