@@ -49,7 +49,6 @@
         "build:generate": "pnpm exec esbuild scripts/build-colors/generate.ts --bundle --platform=neutral --format=esm --outfile=dist/generate.js",
         "build:types": "pnpm exec tsc -p tsconfig.generate.json",
         "build:spacing": "node ./scripts/build-spacing-tokens.cjs",
-        "sync-tokens": "tsx scripts/figma-api/sync_figma_to_tokens.ts",
         "test": "vitest run buildThemeColors.test.ts cli.integration.test.ts generate.test.ts",
         "build:colors:web": "tsx ./scripts/build-colors/index platform=web path=./.build/css",
         "build:colors:figma": "tsx ./scripts/build-colors/index platform=figma path=./tokens/colors/from-code",
