@@ -97,9 +97,10 @@ faller fortsatt tilbake på de nøytrale verdiene via `:root`.
 
 **Nøytralt fyll er grått, ikke blått.** `fill-main-default` er brand-blå, så en nøytral flate ble
 blå der fyll var i bruk (synlig i [Tag](./tag), som har `neutral` som standardverdi). Nøytral-gruppen
-henter derfor `--ix-color-status-fill*` fra `neutral`-tieren (grå), mens `--ix-color-status-surface*`
-og `--ix-color-status-border` henter fra `main`-tieren — som allerede er nøytral i verdi (hvit flate,
-grå kantlinje), og der det ikke finnes `surface-neutral-*`/`border-neutral-*` å bytte til.
+henter derfor `--ix-color-status-fill*` fra `neutral`-tieren (grå), mens
+`--ix-color-status-surface*`, `--ix-color-status-border` og `--ix-color-status-foreground` henter fra
+`main`-tieren — som allerede er nøytral i verdi (hvit flate, grå kantlinje, nesten svart tekst), og
+der det ikke finnes `surface-`/`border-`/`foreground-neutral-*` å bytte til.
 
 **Fortsatt åpent:** blandingen av tiere over er en konsekvens av navngivningen, ikke et mål i seg
 selv. Skal `main`-tieren døpes om til `neutral` på tvers av surface/fill/border/foreground (krever

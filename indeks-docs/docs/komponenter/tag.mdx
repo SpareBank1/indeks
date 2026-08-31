@@ -9,48 +9,6 @@ import a11yData from './accessibility/tag.json';
 
 # Tag
 
-:::info TODO — diskusjon: farget subtle-tekst per status
-
-Etter Figma-designet skal subtle-varianten ha _farget_ tekst per status (blå på
-lyseblå, grønn på lysegrønn osv.). Implementasjonen bruker i stedet mørk tekst i
-alle subtle-statuser, fordi den mettede per-status-fargen bare gir 3.30–3.86:1 mot
-sin egen pastell-flate og bryter WCAG 1.4.3 (4.5:1). Systemet mangler dessuten
-foreground-tokens for `info`, `warning` og `neutral` — kun `success`/`danger`
-finnes. Se [Status-foreground i fargedokumentasjonen](/docs/retningslinjer/farger/#status).
-
-**Målt: `-650` er nok, ikke `-700`.** Kontrast mot pastell-flaten i lysmodus:
-
-| nivå | info | success | warning | danger | neutral |
-| --- | --- | --- | --- | --- | --- |
-| `-600` | **4.49** ✗ | **4.36** ✗ | 4.54 | 4.52 | 5.15 |
-| `-650` | 5.74 | 5.46 | 5.84 | 5.81 | 6.61 |
-| `-700` | 7.20 | 6.83 | 7.21 | 7.03 | 8.21 |
-
-**Fellen ligger i `-600`.** Det er nivået de eksisterende tokenene bruker
-(`--ix-color-foreground-success-default` er `success-600`), så den nærliggende
-løsningen — «fyll ut settet på samme nivå for konsistens» — gir WCAG-brudd på
-nøyaktig `info` og `success`. Bruker du dagens `foreground-success-default` til
-subtle-tekst nå, lander du på 4.36:1. `warning` og `danger` klarer 4.5:1 på `-600`,
-men med 0.02–0.04 i margin, som ryker ved enhver justering av pastell-flaten.
-
-`-600` er likevel riktig kalibrert for det tokenene faktisk er dokumentert for —
-tekst og ikon på vanlig bakgrunn, der de gir 6.67–7.59:1 mot hvit. Det er en annen
-flate enn pastell. `-650` fungerer på begge (8.35–9.76:1 mot hvit), så én farge per
-status kan dekke begge rollene om vi vil det. I mørkmodus er `-400` det speilvendte
-tynne valget (4.69–4.87:1); `-350` gir 5.80–6.05:1.
-
-Merk at `foreground`-gruppen kommer fra Figma-synket kilde
-(`02 Semantic colors.{Light,Dark}.json`, som kun har `main`, `inverse`, `link`,
-`success`, `danger`). Nye tokens må starte i Figma, ellers overskrives de ved neste
-sync — dette er ikke en ren kodeendring. Avventer designer.
-
-Et designsystem som gjør nettopp dette:
-[Digdir Designsystemet — Tag](https://storybook.designsystemet.no/?path=/docs/komponenter-tag--docs)
-bruker `data-color` med tonet flate og mørkere tekst i samme fargetone per status
-(og en `outline`-variant for enda roligere uttrykk).
-
-:::
-
 Tag er en liten, ikke-interaktiv etikett som merker eller kategoriserer innhold — for eksempel en status, en egenskap eller et nøkkelord. Taggen bærer betydningen i teksten sin, og fargen støtter opp om hvilken type informasjon det er.
 
 ## Egnet til

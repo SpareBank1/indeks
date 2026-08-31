@@ -130,10 +130,25 @@ Status-foreground fargene brukes på tekst eller ikon og skal brukes som en indi
 
 <table>
     <tbody>
+        <ForegroundStatusBlock variant="info" />
         <ForegroundStatusBlock variant="success" />
+        <ForegroundStatusBlock variant="warning" />
         <ForegroundStatusBlock variant="danger" />
     </tbody>
 </table>
+
+Fargene er kalibrert for vanlig bakgrunn (6.7–7.6:1 mot hvit) og for
+[status-surface](#surface) (5.4–6.5:1). De er **ikke** kalibrert for pastell-fyllet
+`fill-*-subtle` — der havner `info` på 4.49:1 og `success` på 4.36:1, som bryter
+WCAG 1.4.3 (4.5:1). Skal du ha tekst på et subtle fyll, bruk
+`foreground-main-default`. Vær også varsom med kombinasjonen mot
+`surface-*-active`, som er nede på 4.36–4.87:1.
+
+Statusen kan kobles automatisk via `data-status` i stedet for å velge token selv.
+Da settes `--ix-color-status-foreground` sammen med resten av
+`--ix-color-status-*`-variablene, og util-klassen `ix-color-status-foreground`
+leser den. `neutral` — og elementer uten `data-status` — får
+`foreground-main-default`, siden det ikke finnes en `foreground-neutral-*`.
 
 ## Border
 
@@ -240,7 +255,7 @@ Denne oversikten er et utgangspunkt for migrering, og ikke nødvendigvis en 1-ti
 | --ffe-color-foreground-interactive-disabled                     | ix-color-foreground-main-disabled    |
 | --ffe-color-foreground-feedback-info                            | ix-color-foreground-info-default     |
 | --ffe-color-foreground-feedback-success                         | ix-color-foreground-success-default  |
-| --ffe-color-foreground-feedback-warning                         |                                      |
+| --ffe-color-foreground-feedback-warning                         | ix-color-foreground-warning-default  |
 | --ffe-color-foreground-feedback-critical                        | ix-color-foreground-danger-default   |
 | --ffe-color-foreground-feedback-tip                             |                                      |
 | --ffe-color-border-primary-default                              | ix-color-border-main-default         |
