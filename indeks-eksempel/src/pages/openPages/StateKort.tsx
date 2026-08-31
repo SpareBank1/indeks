@@ -13,7 +13,7 @@ const randomFacts = [
 ];
 
 const StateKort: React.FC = () => {
-    const [status, setStatus] = React.useState('default');
+    const [status, setStatus] = React.useState('neutral');
 
     return (
         <VStack
@@ -40,7 +40,7 @@ const StateKort: React.FC = () => {
                     style={{ width: '100%', marginTop: 4 }}
                     className="ix-color-surface-main-default ix-border-default ix-border-radius-md ix-py-2xs"
                 >
-                    <option value="default">Default</option>
+                    <option value="neutral">Nøytral</option>
                     <option value="info">Info</option>
                     <option value="success">Suksess</option>
                     <option value="warning">Advarsel</option>

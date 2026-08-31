@@ -37,9 +37,14 @@ describe('InteractiveIcon', () => {
         expect(screen.getByRole('button').getAttribute('data-status')).toBe('danger');
     });
 
-    it('utelater data-status for default', () => {
+    it('utelater data-status når status ikke er satt, slik at status kan arves', () => {
         render(<InteractiveIcon name="home" aria-label="Hjem" />);
         expect(screen.getByRole('button').hasAttribute('data-status')).toBe(false);
+    });
+
+    it('setter data-status for neutral, som bryter arven fra forelderen', () => {
+        render(<InteractiveIcon name="home" aria-label="Hjem" status="neutral" />);
+        expect(screen.getByRole('button').getAttribute('data-status')).toBe('neutral');
     });
 
     it('videresender onClick', () => {

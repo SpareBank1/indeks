@@ -77,7 +77,7 @@ export function Surface<As extends ElementType = 'div'>(props: SurfaceProps<As>)
     );
 
     // Statustema kobles via data-status (som Card/Message): CSS leser
-    // --ix-color-status-surface. "neutral" ligger i default-gruppen i
-    // status-colors.css og gir den nøytrale flaten på elementet, uansett forelder.
+    // --ix-color-status-surface. "neutral" er nøytral-gruppen i status-colors.css
+    // og gir den nøytrale flaten på elementet, uansett forelder.
     return <Component {...propsWitoutSpacingProps} className={_className} data-status={status} />;
 }

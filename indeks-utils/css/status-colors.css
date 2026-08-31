@@ -1,12 +1,13 @@
-/* Nøytral/default-gruppen. Blandingen av tiere er tilsiktet: surface og border
- * hentes fra main-tieren, som allerede er nøytral i verdi (surface-main-default
- * er hvit, border-main-default er grå), og det finnes ingen surface-neutral-*
- * eller border-neutral-* å bytte til. Fill hentes derimot fra neutral-tieren,
- * fordi fill-main-default er brand-blå — en nøytral flate skal være grå, ikke
- * blå. Se komponenter som Tag, der nøytral er standardverdien. */
+/* Nøytral-gruppen, som også er fallback for elementer uten data-status.
+ *
+ * Blandingen av tiere er tilsiktet: surface og border hentes fra main-tieren,
+ * som allerede er nøytral i verdi (surface-main-default er hvit,
+ * border-main-default er grå), og det finnes ingen surface-neutral-* eller
+ * border-neutral-* å bytte til. Fill hentes derimot fra neutral-tieren, fordi
+ * fill-main-default er brand-blå — en nøytral flate skal være grå, ikke blå.
+ * Se komponenter som Tag, der nøytral er standardverdien. */
 :root,
 :host,
-[data-status="default"],
 [data-status="neutral"],
 .ix-dark-mode,
 .ix-light-mode,
