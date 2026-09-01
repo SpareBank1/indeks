@@ -405,29 +405,27 @@ Tellerens ID inkluderes automatisk i `aria-describedby` slik at skjermlesere få
 
 ## Retningslinjer
 
-### Tydelige labels gir forutsigbarhet
-
-Alle `TextField` skal ha en synlig og beskrivende label. Labelen skal forklare hva brukeren skal skrive inn, ikke hva de skal gjøre. "E-postadresse" er bedre enn "Skriv inn e-post".
-
-Når labelen beskriver selve dataen, kan brukeren raskt orientere seg uten å lese hele setninger. Dette er spesielt viktig i skjemaer med mange felter, der god struktur reduserer kognitiv belastning og risiko for feil.
-
 ### Unngå bruk av placeholder
 
-Placeholder forsvinner når brukeren begynner å skrive, kan forveksles med utfylt innhold, og er ikke tilstrekkelig erstatning for label eller description. Bruk `description` for eksempler og hint — det er alltid synlig.
+Placeholder forsvinner i det brukeren begynner å skrive, og et felt med grå tekst i kan
+se ut som et felt som alt er fylt ut. Bruk `description` til eksempler og hint. Den står
+der hele tiden.
 
 `description="11 siffer, f.eks. 1234 56 78903"` er bedre enn `placeholder="1234 56 78903"`.
 
-### Hjelpetekst gir støtte der det trengs
+### Hold hjelpeteksten kort
 
-Hjelpetekst brukes for å gi ekstra kontekst om krav til format eller innhold. Hold den kort, konkret og plassert nær feltet. God hjelpetekst kan redusere feil og behovet for feilmeldinger i etterkant.
+Hjelpeteksten sier hva formatet er eller hva feltet skal inneholde. Ett kort avsnitt er
+nok, og det du sparer der slipper brukeren å lese.
 
 | Gjør dette | Ikke dette |
 |------------|------------|
 | `description="11 siffer uten mellomrom"` | `description="Vennligst fyll inn kontonummeret ditt i det formatet som er korrekt for din kontotype"` |
 
-### Feilmeldinger skal hjelpe, ikke bare varsle
+### Si hva som er feil og hvordan det rettes
 
-Feilmeldingen skal forklare hva som er feil og hvordan det rettes. Generelle meldinger som "Ugyldig verdi" gir liten verdi. Klare og konkrete tilbakemeldinger gjør det enklere å komme videre.
+"Ugyldig verdi" forteller brukeren at noe er galt, ikke hva som skal til for å komme
+videre. Skriv hva kravet er.
 
 | Felt | God feilmelding | Dårlig feilmelding |
 |------|----------------|-------------------|
@@ -435,7 +433,9 @@ Feilmeldingen skal forklare hva som er feil og hvordan det rettes. Generelle mel
 | E-post | "Oppgi en gyldig e-postadresse, f.eks. ola@sparebank1.no" | "Feil format" |
 | Beløp | "Beløp må være mellom 1 og 500 000 kroner" | "Ugyldig beløp" |
 
-Komponenten har ingen innebygd validering. Feiltilstand styres utelukkende av innholdet i feilmeldingsfeltet. Sett `errorMessage` i React eller `textContent` på `[data-field="error"]` i HTML.
+Komponenten validerer ingenting selv. Feiltilstanden følger innholdet i
+feilmeldingsfeltet: sett `errorMessage` i React eller `textContent` på
+`[data-field="error"]` i HTML.
 
 | Ansvar | Hvem |
 |--------|------|
@@ -444,17 +444,21 @@ Komponenten har ingen innebygd validering. Feiltilstand styres utelukkende av in
 | Bestemme *når* validering skjer | Du |
 | Skrive *hva* feilmeldingen sier | Du |
 
-### Validering bør ikke forstyrre
+### Valider på blur eller innsending
 
-Valider når brukeren forlater feltet (blur) eller ved innsending, ikke mens de skriver. For tidlig validering kan oppleves som støy og avbryter flyten unødvendig.
+Ikke valider mens brukeren skriver. Et felt som slår ut i rødt etter tredje tegn i en
+e-postadresse har rett, men på feil tidspunkt.
 
-### Bredden på feltet påvirker forståelsen
+### Tilpass bredden til verdien
 
-Feltets bredde bør tilpasses det brukeren forventes å skrive. Smale felt signaliserer korte verdier som postnummer, bredere felt signaliserer lengre input som navn eller adresse. Variasjon i bredde gjør skjemaet lettere å skanne. Lik bredde på alle felt kan gjøre det vanskeligere å orientere seg.
+La bredden si noe om hvor lang verdien er: et smalt felt til postnummer, et bredt til
+adresse. Da kan brukeren skanne skjemaet uten å lese hver label, og et felt som ikke
+passer verdien blir et hint om at noe er feil.
 
-### Prefix og suffix må ikke stå alene
+### Gjenta prefix og suffix i labelen
 
-Prefix og suffix gir visuell kontekst, men leses ikke nødvendigvis opp av skjermlesere. Labelen må inneholde samme informasjon. Et felt med "kr" som prefix bør ha en label som "Beløp i kroner", ikke bare "Beløp".
+Prefix og suffix er visuell kontekst, og skjermlesere leser dem ikke nødvendigvis opp. Et
+felt med "kr" foran skal ha labelen "Beløp i kroner", ikke bare "Beløp".
 
 ## Universell utforming
 
@@ -674,6 +678,7 @@ Når error-span får innhold setter `ix-field` i tillegg `aria-invalid="true"` p
 
 ## Relatert
 
+- [Label](./label) — reglene for labeltekst, felles for alle skjemafelt
 - [Typografi](../../grunnleggende/typografi) — skriftstørrelser og fontvekter brukt i feltet
 - [Spacing](../../grunnleggende/tokens/spacing) — avstandene mellom label, input og feilmelding
 - [Farger](../../retningslinjer/farger) — fargetokens for feil, fokus og disabled-tilstander

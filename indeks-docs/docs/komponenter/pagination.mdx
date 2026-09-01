@@ -174,24 +174,28 @@ function PaginationDemo() {
 
 ## Retningslinjer
 
-### Vis kun når det finnes flere sider
+### Vis paginering bare når det finnes flere sider
 
-Pagination skal kun vises når det finnes mer enn én side med innhold. Komponenten returnerer `null` når `count` er 1 eller mindre.
+Én side med innhold trenger ingen navigasjon. Komponenten tar seg av det selv og rendrer
+`null` når `count` er 1 eller lavere, så du kan sende inn tallet uten å sjekke det først.
 
-### Vis aktiv side tydelig
+### Plasser pagineringen ved innholdet den styrer
 
-Den aktive siden markeres med `aria-current="page"` og en visuelt fremhevet stil (bakgrunnsfarge). Aktiv side er ikke interaktiv.
+Rett under tabellen eller listen, uten annet innhold imellom. Er tabellen så lang at
+pagineringen forsvinner ut av skjermen, gjenta den over også, så brukeren finner den både før
+og etter lesingen.
 
-### Plasser nær innholdet
+### Behold aktiv side som markør, ikke som knapp
 
-Pagination bør plasseres i direkte tilknytning til innholdet den styrer — typisk under en tabell eller liste. Ved lange tabeller kan den vises både over og under.
+Aktiv side er markert med bakgrunnsfarge og `aria-current="page"`, og er ikke trykkbar. Å
+kunne trykke seg til siden du står på gir ingenting, og for en skjermleserbruker blir det en
+knapp som ikke gjør noe.
 
-### Håndter mange sider forutsigbart
+### Styr hvor mange sidetall som vises
 
-Når antall sider er høyt, viser komponenten:
-- Første og siste side (styrt av `boundaryCount`)
-- Sider rundt aktiv side (styrt av `siblingCount`)
-- Ellipsis mellom områder som skjules
+Ved mange sider viser komponenten første og siste side, sidene rundt den aktive, og ellipsis
+der noe er utelatt. `boundaryCount` bestemmer hvor mange sidetall som beholdes i hver ende,
+`siblingCount` hvor mange som vises på hver side av den aktive.
 
 ## Universell utforming
 

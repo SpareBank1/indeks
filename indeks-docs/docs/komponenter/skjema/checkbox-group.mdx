@@ -315,40 +315,36 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
 
 ## Retningslinjer
 
-### Tydelige labels gir forutsigbarhet
+### Skriv en legend som stiller spørsmålet
 
-Hver CheckboxButton skal ha en synlig og beskrivende label. Labelen skal beskrive hva alternativet er, ikke hva brukeren skal gjøre.
+Legenden er spørsmålet alternativene svarer på: "Hvordan vil du varsles?", ikke "Varsling".
+Uten den står brukeren med en liste avkryssinger og må gjette hva de har til felles.
 
-| Gjør dette | Ikke dette |
-|------------|------------|
-| Motta nyhetsbrev | Meld meg på nyhetsbrev |
-| E-post | Velg e-post |
+Gjelder det bare ett av/på-valg, som «Jeg godtar vilkårene», bruk en enkeltstående
+[Checkbox](./checkbox).
 
-### Bruk gruppe når flere checkboxer hører sammen
+### Vis alternativene under hverandre
 
-Når flere checkboxer gjelder samme spørsmål, samles de i en gruppe med en legend som forklarer hva valget gjelder. Det gjør det tydelig at brukeren kan velge ett eller flere alternativer. En enkeltstående checkbox (f.eks. «Jeg godtar vilkårene») bruker `Checkbox` i stedet.
+Vertikal liste er hovedregelen. Én kolonne kan skannes nedover, tåler zoom og brekker ikke
+på smal skjerm, og alternativer med ulik tekstlengde ligger fortsatt på linje til venstre.
 
-### Vertikal liste gir best skannbarhet
+### Velg rekkefølgen bevisst
 
-Alternativene vises vertikalt, én under den andre. Det gjør det enklere å skanne listen og sammenligne valgene, og fungerer bedre ved zoom og smale skjermer.
+Sorter logisk eller alfabetisk, så leter ikke brukeren. I lange lister kan de mest brukte
+valgene ligge øverst, men vær klar over at det du legger først, blir valgt oftere.
 
-### Rekkefølgen påvirker hvor lett det er å finne frem
+### Del opp lange lister
 
-Sorter alternativene logisk eller alfabetisk. I lengre lister kan det være riktig å prioritere de mest brukte valgene øverst — vær bevisst på at det påvirker brukerens beslutning.
-
-### Bruk checkbox når valgene er uavhengige
-
-Checkbox signaliserer at flere valg kan kombineres fritt. Er valgene gjensidig utelukkende, bruk `RadioGroup` i stedet.
-
-### Hele raden er klikkbar
-
-Både checkboxen og labelen er klikkbar. Det gir en stor trefflate og fungerer godt på mobil og for brukere med nedsatt motorikk.
+En liste med tjue avkryssinger er tung å holde oversikt over. Del den i flere grupper med
+egne legender, eller la brukeren filtrere seg fram til det som er relevant.
 
 ### Designvalg
 
-Bak komponenten ligger en rekke tekniske valg — om hvorfor vi bruker `role="group"` istedenfor `<fieldset>`, hvordan `value` er et array, hvorfor `aria-invalid` kun settes på gruppen, og hvordan CheckboxGroup skiller seg fra RadioGroup.
+CheckboxGroup bruker `role="group"` framfor `<fieldset>`, `value` er et array, og
+`aria-invalid` settes bare på gruppen og ikke på hver checkbox.
 
-Se [Designvalg for CheckboxGroup](./checkbox-group-designvalg) hvis du er nysgjerrig på avveiningene.
+[Designvalg for CheckboxGroup](./checkbox-group-designvalg) går gjennom avveiningene, og
+hva som skiller CheckboxGroup fra RadioGroup.
 
 ## Universell utforming
 
@@ -358,7 +354,7 @@ Se [Designvalg for CheckboxGroup](./checkbox-group-designvalg) hvis du er nysgje
 - **Beskrivende labels:** hver CheckboxButton må ha en label som forklarer hva alternativet er
 - **Konkret feilmelding:** `errorMessage` viser feilen, men teksten er ditt ansvar
 - Vurder `disabled` med omtanke. Et deaktivert alternativ er ofte vanskelig å forstå
-- Bruk checkbox kun for uavhengige valg. Er valgene gjensidig utelukkende, bruk `RadioGroup`
+- Bruk checkbox kun for uavhengige valg. Er valgene gjensidig utelukkende, bruk [RadioGroup](./radio-group)
 
 ### Hva komponenten gjør automatisk
 
@@ -511,6 +507,7 @@ Inni `<ix-checkbox-group>` trengs ingen `id` eller `for` — komponenten kobler 
 ## Relatert
 
 - [Checkbox](./checkbox) — en enkeltstående checkbox
+- [Label](./label) — labeltekst for gruppen og for hvert alternativ
 - [RadioGroup](./radio-group) — når kun ett alternativ kan velges
 - [ValidationMessage](./validation-message) — feilmeldingsteksten
 - [Designvalg for CheckboxGroup](./checkbox-group-designvalg) — tekniske avveininger

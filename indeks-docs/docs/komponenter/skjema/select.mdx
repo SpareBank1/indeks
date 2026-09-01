@@ -310,47 +310,34 @@ Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
 
 ## Retningslinjer
 
-### Tydelige labels gir forutsigbarhet
+### Bruk select når listen tåler å være skjult
 
-Alle select-felter skal ha en synlig og beskrivende label. Labelen skal beskrive hvilken informasjon feltet gjelder, ikke hva brukeren skal gjøre.
+Select tar plassen til ett felt uansett hvor mange alternativer det er, og det er hele
+styrken i tette skjemaer. Prisen er at brukeren må åpne listen for å se valgene. Med tre
+eller fire alternativer er [RadioGroup](./radio-group) bedre: alt ligger synlig og kan
+sammenlignes med øyet.
 
-For eksempel bør man skrive "Land" i stedet for "Velg land". Når labelen beskriver selve dataen, blir det enklere å forstå hva som forventes.
+### Vis valgt verdi i det lukkede feltet
 
-Dette gjør skjemaet lettere å skanne og reduserer behovet for ekstra forklaring.
+Feltet skal svare på "hva står det nå?" uten at listen åpnes. Bruker du et
+placeholder-alternativ øverst, må teksten si at ingenting er valgt ennå. "Velg land" er
+tydelig, et blankt felt er ikke.
 
-### Bruk select når plass eller antall tilsier det
+### Sorter listen slik brukeren leter
 
-Select egner seg når det er mange alternativer, eller når det ikke er nødvendig å vise alle samtidig. Ved å skjule listen reduseres visuell støy, og grensesnittet blir mer kompakt.
+Alfabetisk rekkefølge er utgangspunktet i lange lister. Er noen få alternativer mye
+vanligere enn resten, legg dem i en egen `<optgroup>` øverst, så slipper brukeren å scrolle
+etter det opplagte svaret.
 
-For korte lister er det ofte bedre å bruke radio-knapper, siden de gir bedre oversikt og gjør det enklere å sammenligne valgene.
+### Grupper lange lister med optgroup
 
-### Valgt verdi må alltid være tydelig
+Fylker, kontotyper, år: deler du listen i navngitte grupper, leter brukeren i én bolk i
+stedet for i femti linjer. Gi hver `<optgroup>` en label som sier hva den samler.
 
-Når listen er lukket, skal det være tydelig hvilket alternativ som er valgt. Brukeren skal ikke være i tvil om hva som er gjeldende verdi.
+### Hold alternativene på én linje
 
-Dersom det brukes placeholder, må det være tydelig at dette ikke er et valgt alternativ.
-
-### Rekkefølge påvirker hvor lett det er å finne frem
-
-Alternativene bør som hovedregel sorteres alfabetisk, slik at brukeren raskt kan finne det de leter etter.
-
-I noen tilfeller kan det være mer hensiktsmessig å prioritere de mest relevante eller brukte valgene øverst, særlig i lange lister.
-
-### Gruppering gir bedre oversikt
-
-Dersom listen inneholder mange alternativer, bør disse grupperes logisk (for eksempel med optgroup). Dette gjør det enklere å orientere seg og finne riktig valg.
-
-### Unngå komplekst innhold i alternativer
-
-Alternativene i en select bør være korte og enkle å forstå. Lange tekster eller komplekse beskrivelser gjør det vanskeligere å skanne listen og ta et valg.
-
-Dersom alternativene krever mer forklaring, bør man vurdere en annen komponent.
-
-### Interaksjon skal være forutsigbar
-
-Når brukeren åpner listen og velger et alternativ, skal listen lukkes og verdien oppdateres umiddelbart.
-
-Brukeren skal kunne navigere med tastatur og enkelt endre valget uten unødvendige steg.
+Et alternativ er en kort tekst, ikke en forklaring. Trenger valgene utfyllende tekst,
+bruk [Combobox](./combobox), der hvert alternativ kan ha en beskrivelse under navnet.
 
 ## Universell utforming
 
@@ -471,5 +458,7 @@ I tillegg støttes alle standard HTML select-attributter (`value`, `defaultValue
 
 ## Relatert
 
+- [Combobox](./combobox) — for lange lister der brukeren bør kunne søke
+- [Label](./label) — labeltekst for feltet
 - [TextField](./textfield) — for fritekst-input
 - [TextArea](./textarea) — for lengre fritekst

@@ -225,57 +225,38 @@ layout-bugger i Safari) og kobler legend, hjelpetekst og feilmelding til gruppen
 
 ## Retningslinjer
 
-### Tydelige labels gir forutsigbarhet
+### Skriv labelen som navnet på valget
 
-Alle checkboxer skal ha en synlig og beskrivende label. Labelen skal beskrive hva som blir valgt, ikke hva brukeren skal gjøre.
+"Motta nyhetsbrev", ikke "Meld meg på nyhetsbrev". Labelen er navnet på det brukeren
+skrur på, og da er det tydelig hva avhukingen betyr. [Label](./label) har resten av
+reglene for labeltekst.
 
-For eksempel bør man skrive "Motta nyhetsbrev" i stedet for "Meld meg på nyhetsbrev". Når labelen beskriver selve valget, blir det enklere å forstå hva som skjer når checkboxen hukes av.
+### Bruk gruppe når flere valg hører sammen
 
-Dette gjør det lettere å skanne listen og reduserer risikoen for misforståelser.
+Én checkbox alene passer når brukeren bekrefter eller godtar noe: vilkår, samtykke,
+"husk innloggingen". Da er av/på-valget hele poenget, og feltet klarer seg uten
+kontekst rundt.
 
-### Checkbox bør som hovedregel brukes i gruppe
+Gjelder flere avkryssinger samme spørsmål, hører de i en
+[CheckboxGroup](./checkbox-group) med en legend som sier hva spørsmålet er. Der står også
+rådene om rekkefølge, orientering og hvor mange valg en liste tåler.
 
-Checkboxer bør som hovedregel presenteres som en del av en gruppe med flere valg. Dette gjør det tydelig for brukeren at de kan velge ett eller flere alternativer, og gir nødvendig kontekst for hva valgene gjelder.
+### Koble label til input
 
-Når flere checkboxer hører sammen, bør de grupperes både visuelt og semantisk, gjerne med en overskrift eller legend.
+Med `for`/`id` på plass er hele raden klikkbar, ikke bare den lille firkanten. Det er
+forskjellen på et felt som treffes med tommelen på bussen og et som ikke gjør det.
 
-En enkeltstående checkbox kan likevel brukes i noen tilfeller, typisk når brukeren skal bekrefte eller godta noe, som for eksempel vilkår eller samtykke. I slike situasjoner representerer checkboxen et tydelig av/på-valg, og fungerer godt alene.
+### Bruk checkbox bare når valgene er uavhengige
 
-### Hele raden skal være klikkbar
-
-Både checkboxen og tilhørende label skal være klikkbar. Dette gir en større trefflate og gjør komponenten enklere å bruke, spesielt på mobil og for brukere med nedsatt motorikk.
-
-En større klikkeflate gir en mer robust og tilgivende brukeropplevelse.
-
-### Orientering som liste gir bedre skannbarhet
-
-Alternativene skal som hovedregel vises vertikalt, én under den andre. Dette gjør det enklere å skanne listen og sammenligne valgene.
-
-Horisontal plassering gjør det vanskeligere å lese, spesielt når teksten er ulik i lengde. Det kan også skape utfordringer for brukere som zoomer inn på siden, da innholdet lettere brytes på uforutsigbare måter.
-
-### Rekkefølge påvirker hvor lett det er å finne frem
-
-I de fleste tilfeller bør alternativene sorteres alfabetisk, slik at brukeren raskt kan finne det de leter etter.
-
-I noen tilfeller kan det være mer hensiktsmessig å prioritere de mest relevante eller brukte valgene øverst. Dette kan redusere tiden det tar å gjøre et valg, særlig i lengre lister.
-
-### Bruk checkbox når valgene er uavhengige
-
-Checkboxer signaliserer at flere valg kan gjøres samtidig. Det er derfor viktig at valgene faktisk er uavhengige av hverandre.
-
-Dersom valg påvirker hverandre eller er gjensidig utelukkende, bør man vurdere andre komponenter, som RadioButton.
+En checkbox signaliserer at valgene kan kombineres fritt. Utelukker de hverandre, bruk
+[RadioGroup](./radio-group) i stedet — ellers oppdager brukeren først etter å ha huket av
+to bokser at bare én av dem gjaldt.
 
 ### Bruk indeterminate med forsiktighet
 
-Indeterminate-tilstand (delvis valgt) kan brukes i hierarkiske valg, som "velg alle". Denne tilstanden bør kun brukes når det er tydelig hva den representerer.
-
-Uten tydelig kontekst kan den være vanskelig å forstå og føre til usikkerhet hos brukeren.
-
-### Unngå for mange valg samtidig
-
-Store lister med mange checkboxer kan bli krevende å navigere i. Når antall valg øker, øker også den kognitive belastningen.
-
-Dersom listen blir lang, bør man vurdere å dele opp innholdet, bruke filtrering eller andre mekanismer for å gjøre det enklere å orientere seg.
+Delvis valgt (`indeterminate`) hører i hierarkiske lister med en "velg alle" på toppen.
+Utenfor det mønsteret er strekstilstanden vanskelig å tolke: den ser ut som en tilstand
+brukeren har satt, men den er beregnet fra barna.
 
 ## Universell utforming
 

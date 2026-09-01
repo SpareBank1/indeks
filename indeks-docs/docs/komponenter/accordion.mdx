@@ -149,19 +149,21 @@ Innholdet kan bestå av tekst, lister, lenker og andre komponenter.
 
 ## Retningslinjer
 
-### Innhold og formulering
+### Skriv headere som kan leses alene
 
-- Skriv korte, beskrivende headere som gir mening lest alene.
-- Start med det viktigste ordet i headeren — den skal være lett å skanne.
-- Unngå at brukeren må åpne seksjoner for å forstå hva de inneholder.
+Headeren er det eneste brukeren har å gå etter før hen åpner seksjonen. Sett det viktigste
+ordet først, og hold den kort nok til å skannes nedover lista. Må seksjonen åpnes for at
+headeren skal gi mening, er headeren for vag.
 
-### Unngå overdreven nøsting
+### Ikke legg accordion i accordion
 
-Accordion i accordion blir fort uoversiktlig. Vurder å dele opp innholdet på en annen måte hvis du trenger flere nivåer.
+To nivåer med åpne og lukkede seksjoner er vanskelig å holde oversikt over. Trenger du
+flere nivåer, del innholdet på egne sider eller i [faner](./tabs) i stedet.
 
-### Default-åpne seksjoner
+### Start med det viktigste åpent
 
-Marker den eller de viktigste seksjonene med `defaultOpen` slik at brukeren ser noe innhold med en gang. Seksjonene er uavhengige, så du kan starte flere åpne samtidig.
+Sett `defaultOpen` på den seksjonen folk oftest er ute etter, så møter de innhold og ikke
+bare en liste med lukkede rader. Seksjonene er uavhengige, så flere kan stå åpne fra start.
 
 ### Designvalg
 

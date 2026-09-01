@@ -430,25 +430,27 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 
 ## Retningslinjer
 
-### Tydelige labels gir forutsigbarhet
+### Bruk combobox når det er raskere å skrive enn å lete
 
-Alle combobox-felter skal ha en synlig og beskrivende label. Labelen skal beskrive hvilken informasjon feltet gjelder, ikke handlingen. Skriv "Land" i stedet for "Søk og velg land".
+Combobox lønner seg når listen er så lang at brukeren vet svaret før hen finner det: land,
+kommuner, kontoer, verdipapirer. Er det få nok alternativer å lese gjennom, gir
+[Select](./select) eller [RadioGroup](./radio-group) mindre å forholde seg til.
 
-### Bruk combobox når søk er raskere enn å skanne
+### La brukeren se hva som er valgt
 
-Combobox egner seg når listen er lang eller vanskelig å skanne. For korte lister gir radio-knapper eller Select bedre oversikt.
+I enkeltvalg står valgt verdi i feltet. I flervalg ligger valgene som chips over feltet, og
+i lista får de en hake. Haken er en form, ikke bare en farge, slik at valget også er synlig
+for den som ikke skiller fargene.
 
-### Valgt verdi må alltid være tydelig
+### Fri tekst hører ikke her
 
-I single vises valgt verdi i feltet. I flervalg vises hvert valg som en chip over feltet. I begge moduser får valgte alternativer en checkmark i lista (struktur, ikke farge alene). Brukeren skal aldri være i tvil om hva som er valgt.
-
-### "Kun velg fra liste"
-
-Komponenten lar brukeren velge blant eksisterende alternativer — ikke skrive inn frie verdier. Trenger du fri tekst, bruk et vanlig tekstfelt.
+Brukeren kan bare velge blant alternativene i lista. Skal verdien kunne være noe annet enn
+det du har definert, bruk et vanlig [tekstfelt](./textfield).
 
 ### Sorter alternativene forutsigbart
 
-Alternativene bør sorteres alfabetisk, eller med de mest relevante øverst i lange lister, slik at brukeren raskt finner frem.
+Alfabetisk er utgangspunktet. I lange lister kan de mest brukte alternativene ligge øverst,
+så treffer brukeren dem uten å skrive noe.
 
 ## Universell utforming
 
@@ -573,4 +575,5 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 
 - [Combobox i ren HTML](./combobox-html) — full gjennomgang av HTML-markup, forhåndsvalg og form-innsending
 - [Select](./select) — for enkelt valg fra kort/mellomlang liste uten søk
+- [Label](./label) — labeltekst for feltet
 - [Chip](../chip) — chip-stilen som gjenbrukes for valgte alternativer i flervalg
