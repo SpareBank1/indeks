@@ -394,9 +394,7 @@ For tilfeller der du ikke bruker `Text`-komponenten, finnes det utility-klasser 
 | `.ix-text-bold`   | Setter `font-weight: medium`. Tilsvarer effekten av `<strong>` og `<b>`. |
 | `.ix-text-italic` | Setter `font-style: italic`. Tilsvarer effekten av `<em>` og `<i>`.      |
 
-:::tip
-`strong` og `b` arver automatisk bold-stilen fra `.ix-body`. Det samme gjelder `em` og `i` for kursiv. Utility-klassene er nyttige når du ikke kan endre HTML-semantikken.
-:::
+`strong` og `b` arver bold-stilen fra `.ix-body` automatisk, og `em` og `i` arver kursiv. Utility-klassene er der for tilfellene der du ikke kan endre HTML-semantikken.
 
 ---
 
@@ -414,7 +412,7 @@ Typografi i Indeks er ikke bygget rundt én blokkklasse — stilene er i stedet 
 
 Se fullstendig klasseliste med beskrivelse under Props-tabellene i HTML-fanene ovenfor.
 
-### Eksempel: bruk i eigen HTML-struktur
+### Eksempel: bruk i egen HTML-struktur
 
 ```html
 <h1 class="ix-heading" data-size="2xl">Renter og betingelser</h1>

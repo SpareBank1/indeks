@@ -7,7 +7,7 @@ import a11yData from './accessibility/combobox.json';
 
 Combobox lar brukeren søke etter og velge ett eller flere alternativer fra en liste. Brukeren skriver for å filtrere, og valgte alternativer vises enten som verdi i feltet (single) eller som chips over feltet (flervalg).
 
-:::tip Skriver du ren HTML eller Astro?
+:::info Skriver du ren HTML eller Astro?
 Combobox er en sammensatt komponent med en del markup. [Combobox i ren HTML](./combobox-html) gir en full gjennomgang av anatomien, hvordan et valg fungerer, forhåndsvalg og form-innsending.
 :::
 
@@ -34,7 +34,7 @@ Combobox er en sammensatt komponent med en del markup. [Combobox i ren HTML](./c
   <label for="land-html">Land</label>
   <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
     <div class="ix-text-field">
-      <input id="land-html" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <input id="land-html" class="ix-text-field__input" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -69,7 +69,6 @@ Combobox er en sammensatt komponent med en del markup. [Combobox i ren HTML](./c
 ```tsx live
 <Combobox
   label="Land"
-  placeholder="Søk etter land …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   options={[
@@ -99,7 +98,7 @@ I React setter du startverdi med `defaultValue` (ukontrollert) eller `value` (ko
   <label for="land-preselect">Land</label>
   <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
     <div class="ix-text-field">
-      <input id="land-preselect" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <input id="land-preselect" class="ix-text-field__input" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -134,7 +133,6 @@ Norge vises i feltet fra start fordi optionen har `aria-selected="true"`. Verken
 ```tsx live
 <Combobox
   label="Land"
-  placeholder="Søk etter land …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   defaultValue="47"
@@ -183,7 +181,7 @@ function KontrollertLand() {
 }
 ```
 
-:::note Filtrering er ikke konfigurerbar
+:::info Filtrering er ikke konfigurerbar
 Søk/filtrering skjer inne i web-komponenten (locale-bevisst, treffer label, verdi og beskrivelse) og kan ikke overstyres med en prop fra React. Ved 0 treff vises `noHitsText` i en `role="status"`-region.
 :::
 
@@ -207,7 +205,7 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
   >
     <div class="ix-combobox__chips" data-field="chips"></div>
     <div class="ix-text-field">
-      <input id="land-multi" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <input id="land-multi" class="ix-text-field__input" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -241,7 +239,6 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 <Combobox
   label="Land"
   multiple
-  placeholder="Søk etter land …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   removeChipLabel="fjern"
@@ -269,7 +266,7 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
   <span data-field="description">Søk og velg landet du bor i</span>
   <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
     <div class="ix-text-field">
-      <input id="land-desc" class="ix-text-field__input" placeholder="Søk …" />
+      <input id="land-desc" class="ix-text-field__input" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -303,7 +300,6 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 <Combobox
   label="Land"
   description="Søk og velg landet du bor i"
-  placeholder="Søk …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   options={[
@@ -327,7 +323,7 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
   <label for="land-error">Land</label>
   <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
     <div class="ix-text-field">
-      <input id="land-error" class="ix-text-field__input" placeholder="Søk …" aria-invalid="true" />
+      <input id="land-error" class="ix-text-field__input" aria-invalid="true" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -361,7 +357,6 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 <Combobox
   label="Land"
   errorMessage="Du må velge et land for å fortsette"
-  placeholder="Søk …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   options={[
@@ -533,7 +528,7 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 | `value` | `string \| string[]` | Nei | | Kontrollert verdi. `string` i single, `string[]` i multi |
 | `defaultValue` | `string \| string[]` | Nei | | Ukontrollert startverdi. Virker kun ved mount |
 | `onChange` | `(value: string \| string[]) => void` | Nei | | Kalles ved valg/avmarkering/fjerning. Får `string` i single (`''` når tomt), `string[]` i multi |
-| `placeholder` | `string` | Nei | | Placeholder i inputfeltet |
+| `placeholder` | `string` | Nei | | Frarådes: placeholder forsvinner når brukeren skriver. Bruk `description` til hint |
 | `description` | `string` | Nei | | Hjelpetekst under label |
 | `errorMessage` | `string` | Nei | | Feilmelding. Trigger `aria-invalid` når den har innhold |
 | `disabled` | `boolean` | Nei | | Deaktiverer feltet |

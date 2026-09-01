@@ -20,10 +20,10 @@ DropdownMenu er en nedtrekksmeny for handlinger eller navigasjon. Menyen vises n
 
 ## Uegnet til
 
-- Primærhandlinger som bør være umiddelbart synlige (bruk Button)
-- Valg i skjemaer (bruk Select eller RadioGroup)
-- Navigasjon mellom seksjoner (bruk Tabs eller vanlige lenker)
-- Svært lange lister (vurder Combobox med søk)
+- Primærhandlinger som bør være umiddelbart synlige (bruk [Button](./button))
+- Valg i skjemaer (bruk [Select](./skjema/select) eller [RadioGroup](./skjema/radio-group))
+- Navigasjon mellom seksjoner (bruk [Tabs](./tabs) eller vanlige lenker)
+- Svært lange lister (vurder [Combobox](./skjema/combobox) med søk)
 
 ## Bruk
 
@@ -317,21 +317,21 @@ Submenyer kan brukes for hierarkisk organisering, men begrens til ett nivå. Dyp
 
 ### Hva du selv må sørge for
 
-- **Bruk en tydelig trigger-knapp** — teksten eller `aria-label` skal fortelle hva menyen inneholder. Komponenten setter `aria-haspopup` og `aria-expanded` automatisk.
-- **Skriv korte og beskrivende meny-etiketter** — hvert element bør ha presis tekst som beskriver handlingen. Unngå vage etiketter.
-- **Oversett all tekst** — trigger-tekst og meny-etiketter kommer fra deg og må være på brukerens språk.
-- **Begrens nesting** — dyp nøsting gjør navigasjon vanskelig. Hold deg til maksimalt ett nivå med submenyer.
-- **Unngå for mange valg** — en lang meny er vanskelig å navigere. Grupper med dividers eller redesign flyten.
+- Bruk en tydelig trigger-knapp. Teksten eller `aria-label` skal fortelle hva menyen inneholder. Komponenten setter `aria-haspopup` og `aria-expanded` automatisk.
+- Skriv korte og beskrivende meny-etiketter. Hvert element bør ha presis tekst som beskriver handlingen. Unngå vage etiketter.
+- **Oversett all tekst:** trigger-tekst og meny-etiketter kommer fra deg og må være på brukerens språk.
+- Begrens nesting. Dyp nøsting gjør navigasjon vanskelig. Hold deg til maksimalt ett nivå med submenyer.
+- Unngå for mange valg. En lang meny er vanskelig å navigere. Grupper med dividers eller redesign flyten.
 
 ### Hva komponenten gjør automatisk
 
-- **ARIA-attributter** — `aria-haspopup="menu"` og `aria-expanded` settes på trigger. `role="menu"` på menyen, `role="menuitem"` på elementer, `role="separator"` på dividers.
-- **Tastaturnavigasjon** — Enter/Space åpner, piltaster navigerer, Escape lukker. Home/End hopper til første/siste. ArrowRight åpner submeny, ArrowLeft lukker den.
-- **Fokushåndtering** — fokus flyttes til første element ved åpning og tilbake til trigger ved lukking. Roving tabindex gjør at kun ett element har tabindex="0".
-- **Typeahead** — skriv bokstaver for å hoppe til matchende element.
-- **Posisjonering** — menyen plasseres med viewport-clamp og flipper ved plassmangel.
-- **Touch-mål** — alle elementer har minimum 32px høyde.
-- **Fokusindikator** — tydelig `:focus-visible` på alle interaktive elementer.
+- **ARIA-attributter:** `aria-haspopup="menu"` og `aria-expanded` settes på trigger. `role="menu"` på menyen, `role="menuitem"` på elementer, `role="separator"` på dividers.
+- **Tastaturnavigasjon:** Enter/Space åpner, piltaster navigerer, Escape lukker. Home/End hopper til første/siste. ArrowRight åpner submeny, ArrowLeft lukker den.
+- **Fokushåndtering:** fokus flyttes til første element ved åpning og tilbake til trigger ved lukking. Roving tabindex gjør at kun ett element har tabindex="0".
+- **Typeahead:** skriv bokstaver for å hoppe til matchende element.
+- **Posisjonering:** menyen plasseres med viewport-clamp og flipper ved plassmangel.
+- **Touch-mål:** alle elementer har minimum 32px høyde.
+- **Fokusindikator:** tydelig `:focus-visible` på alle interaktive elementer.
 
 <KeyboardAndScreenReader data={a11yData} />
 

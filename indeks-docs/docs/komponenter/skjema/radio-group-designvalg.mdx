@@ -8,7 +8,7 @@ Denne siden forklarer *hvorfor* RadioGroup er bygget som den er. Den er ment for
 
 ## WC eier ARIA og DOM-synk; React-laget er bevisst tynt
 
-Hele ARIA-koblingsapparatet — id-generering, `htmlFor`, `name`-synkronisering, `aria-labelledby`/`describedby`/`invalid`/`required`, disabled-propagering og readonly-tastaturblokk — ligger i `<ix-radio-group>`. React-wrapperen eksponerer kun props-API, kontrollert state og presentasjons-attributter (`data-state`, `data-orientation`, `className`).
+Hele ARIA-koblingsapparatet ligger i `<ix-radio-group>`: id-generering, `htmlFor`, `name`-synkronisering, `aria-labelledby`/`describedby`/`invalid`/`required`, disabled-propagering og readonly-tastaturblokk. React-wrapperen eksponerer kun props-API, kontrollert state og presentasjons-attributter (`data-state`, `data-orientation`, `className`).
 
 *Hvorfor:* HTML- og React-bruk får identisk a11y-oppførsel uten duplisering. *Vurdert:* eie ARIA i React og late web component-en være ren styling — ville gjort HTML-bruken systematisk dårligere.
 
@@ -26,7 +26,7 @@ API-et i React er `<RadioGroup>` med `<RadioButton>`-barn, ikke en prop-array (`
 
 ## Context bærer de native felt-koblingene, ikke `disabled`/`readOnly`/`required`
 
-`RadioGroupContext` propagerer det React må rute ned på hver native `<input>`: gruppens `name`, valgt verdi (kontrollert modus), den event-baserte `onChange`, `onBlur`, og — i register-modus — RHF sin `ref` (samme objekt på alle inputs, som RHF akkumulerer) pluss et `uncontrolled`-flagg. `disabled`, `readOnly` og `required` ligger *ikke* i Context — de settes som HTML-attributter på `<ix-radio-group>`, og web component-en propagerer dem ned til hver `<input>`.
+`RadioGroupContext` propagerer det React må rute ned på hver native `<input>`: gruppens `name`, valgt verdi (kontrollert modus), den event-baserte `onChange`, `onBlur`, og i register-modus også RHF sin `ref` (samme objekt på alle inputs, som RHF akkumulerer) pluss et `uncontrolled`-flagg. `disabled`, `readOnly` og `required` ligger *ikke* i Context. De settes som HTML-attributter på `<ix-radio-group>`, og web component-en propagerer dem ned til hver `<input>`.
 
 *Hvorfor:* radioene er ekte native input-elementer, så `register()` kobles slik det er bygget for radios — `ref`/`onChange`/`onBlur` rutes rett ned på inputene, og RHF eier `checked` via de native refene. Context er kanalen for den rutingen. `disabled` m.fl. holdes utenfor for å unngå dobbelt sannhet: WC må uansett vite om disabled for per-knapp bevaring (se under), så å duplisere det i Context ville bare gitt to kilder å holde i synk.
 

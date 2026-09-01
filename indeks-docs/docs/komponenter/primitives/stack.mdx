@@ -266,7 +266,7 @@ Tilgjengelige størrelser for `gap`-attributt: `none`, `2xs`, `xs`, `sm`, `md`, 
 
 ### Hva du selv må sørge for
 
-- **Bruk semantiske elementer når konteksten krever det** — `ix-stack` er et ukjent HTML-element uten semantisk rolle. Nettleseren behandler det som generisk blokkinnhold, på samme måte som `<div>`. Bruk `as`-prop i React (f.eks. `<HStack as="nav">`) eller CSS-klasser direkte på et native element når innholdet krever semantikk.
+- Bruk semantiske elementer når konteksten krever det. `ix-stack` er et ukjent HTML-element uten semantisk rolle. Nettleseren behandler det som generisk blokkinnhold, på samme måte som `<div>`. Bruk `as`-prop i React (f.eks. `<HStack as="nav">`) eller CSS-klasser direkte på et native element når innholdet krever semantikk.
 
 På native elementer (ikke `<ix-stack>`) virker **ikke** attributter — bruk modifier-klasser:
 

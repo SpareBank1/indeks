@@ -313,10 +313,10 @@ Knappetekst skal være kort og presis. Korte tekster gjør knapper lettere å sk
 
 Knapper skal ha et tydelig visuelt hierarki som viser hva som er viktigst å gjøre:
 
-- **Primærknapp** — hovedhandlingen i en visning
-- **Sekundærknapp** — alternative handlinger
-- **Tertiærknapp** — mindre viktige eller støttende handlinger
-- **Destruktiv knapp** — handlinger som sletter eller endrer data permanent
+- **Primærknapp:** hovedhandlingen i en visning
+- **Sekundærknapp:** alternative handlinger
+- **Tertiærknapp:** mindre viktige eller støttende handlinger
+- **Destruktiv knapp:** handlinger som sletter eller endrer data permanent
 
 Dersom en tertiær knapp brukes alene, skal den alltid kombineres med ikon. Dette sikrer at den fremstår som en handling og ikke forveksles med vanlig tekst.
 
@@ -348,12 +348,12 @@ Knapper bør som hovedregel tilpasse seg innholdet sitt. Full bredde kan brukes 
 
 ### Hva du selv må sørge for
 
-- **Ikonknapper må ha `aria-label`** — knapper uten synlig tekst er meningsløse for skjermlesere uten en beskrivende label. Labelen skal beskrive handlingen, ikke ikonet: `aria-label="Slett melding"`, ikke `aria-label="Søppelkasse-ikon"`.
-- **Gi `loadingLabel` ved loading-tilstand** — uten denne er knappen anonym for skjermlesere mens den laster.
-- **Unngå disabled som standard** — disabled-knapper sier ikke brukeren hva som mangler. Der det er mulig, la knappen være aktiv og gi tydelig feilmelding ved innsending.
-- **Bruk riktig element** — bruk `<button>` (standard) for handlinger og `as="a"` / `<a>` for navigasjon. Ikke legg click-handlers på `<div>` eller `<span>`.
-- **Ikke stol på farge alene** — forskjeller mellom knappetyper må ikke kun kommuniseres med farge. Tekst og eventuelt ikon må også skille dem fra hverandre.
-- **Gi tilbakemelding på handling** — når en knapp aktiveres, skal brukeren få tydelig tilbakemelding. Bruk `loading`-tilstanden for asynkrone operasjoner for å hindre usikkerhet og gjentatte klikk.
+- Ikonknapper må ha `aria-label`. Knapper uten synlig tekst er meningsløse for skjermlesere uten en beskrivende label. Labelen skal beskrive handlingen, ikke ikonet: `aria-label="Slett melding"`, ikke `aria-label="Søppelkasse-ikon"`.
+- Gi `loadingLabel` ved loading-tilstand. Uten denne er knappen anonym for skjermlesere mens den laster.
+- Unngå disabled som standard. Disabled-knapper sier ikke brukeren hva som mangler. Der det er mulig, la knappen være aktiv og gi tydelig feilmelding ved innsending.
+- Bruk riktig element: `<button>` (standard) for handlinger og `as="a"` / `<a>` for navigasjon. Ikke legg click-handlers på `<div>` eller `<span>`.
+- Ikke stol på farge alene. Forskjeller mellom knappetyper må ikke kun kommuniseres med farge. Tekst og eventuelt ikon må også skille dem fra hverandre.
+- Gi tilbakemelding på handling. Når en knapp aktiveres, skal brukeren få tydelig tilbakemelding. Bruk `loading`-tilstanden for asynkrone operasjoner for å hindre usikkerhet og gjentatte klikk.
 
 ### Hva komponenten gjør automatisk
 
@@ -388,9 +388,9 @@ I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `
 
 ## Tilpasning med CSS
 
-Trenger du `ix-button`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte.
+Trenger du `ix-button`-stylingen på HTML du setter sammen selv, uten React-komponenten, kan du bruke klassene direkte.
 
-### Tilgjengelige klasser og data-attributter
+### Tilgjengelige klasser og selektorer
 
 | Element/tilstand | Selektor / attributt |
 |-----------------|----------------------|

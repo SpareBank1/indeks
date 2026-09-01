@@ -305,8 +305,8 @@ Tilgjengelige størrelser for `gap`-attributt: `none`, `2xs`, `xs`, `sm`, `md`, 
 
 ### Hva du selv må sørge for
 
-- **Bruk semantiske elementer når konteksten krever det** — `ix-grid` er et ukjent HTML-element uten semantisk rolle. Nettleseren behandler det som generisk blokkinnhold, på samme måte som `<div>`. Bruk `as`-prop i React (f.eks. `<Grid as="section">`) eller CSS-klasser direkte på et native element når innholdet krever semantikk.
-- **Pass på DOM-rekkefølgen** — CSS Grid kan endre visuell rekkefølge uten å endre DOM-rekkefølgen. Skjermlesere og tastaturnavigasjon følger DOM. Sørg for at DOM-rekkefølgen gir mening uavhengig av visuell presentasjon.
+- Bruk semantiske elementer når konteksten krever det. `ix-grid` er et ukjent HTML-element uten semantisk rolle. Nettleseren behandler det som generisk blokkinnhold, på samme måte som `<div>`. Bruk `as`-prop i React (f.eks. `<Grid as="section">`) eller CSS-klasser direkte på et native element når innholdet krever semantikk.
+- Pass på DOM-rekkefølgen. CSS Grid kan endre visuell rekkefølge uten å endre DOM-rekkefølgen. Skjermlesere og tastaturnavigasjon følger DOM. Sørg for at DOM-rekkefølgen gir mening uavhengig av visuell presentasjon.
 
 På native elementer (ikke `<ix-grid>`) virker **ikke** attributter — bruk modifier-klasser:
 

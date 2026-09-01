@@ -197,19 +197,19 @@ Når antall sider er høyt, viser komponenten:
 
 ### Hva du selv må sørge for
 
-- **Gi meningsfylte labels på brukerens språk** — alle tekststrenger (`ariaLabel`, `previousLabel`, `nextLabel`, `pageLabel`) må sendes inn og oversettes.
-- **Oppdater innholdet ved sidebytte** — komponenten håndterer kun navigasjonen; du må koble `onPageChange` til faktisk innholdsoppdatering.
-- **Ikke flytt fokus uventet** — ved sidebytte bør fokus forbli i pagination eller flyttes til toppen av det nye innholdet, ikke forsvinne.
+- Gi meningsfylte labels på brukerens språk. Alle tekststrenger (`ariaLabel`, `previousLabel`, `nextLabel`, `pageLabel`) må sendes inn og oversettes.
+- Oppdater innholdet ved sidebytte. Komponenten håndterer kun navigasjonen; du må koble `onPageChange` til faktisk innholdsoppdatering.
+- Ikke flytt fokus uventet. Ved sidebytte bør fokus forbli i pagination eller flyttes til toppen av det nye innholdet, ikke forsvinne.
 
 ### Hva komponenten gjør automatisk
 
-- **Semantisk navigasjon** — bruker `<nav>` med `aria-label` slik at hjelpemidler forstår komponentens rolle.
-- **Aktiv side annonseres** — `aria-current="page"` på aktiv sideknapp formidler hvilken side som er valgt.
-- **Tastaturnavigasjon** — alle knapper er native `<button>` og kan nås med Tab, aktiveres med Enter/Space.
-- **Deaktiverte knapper** — forrige-knapp på første side og neste-knapp på siste side er `disabled`.
-- **Ellipsis er ikke interaktiv** — skjules fra skjermlesere med `aria-hidden="true"`.
-- **Touch-mål** — alle knapper har minimum 36×36 px klikkflate.
-- **Fokusindikator** — tydelig fokusring via `:focus-visible`.
+- **Semantisk navigasjon:** bruker `<nav>` med `aria-label` slik at hjelpemidler forstår komponentens rolle.
+- **Aktiv side annonseres:** `aria-current="page"` på aktiv sideknapp formidler hvilken side som er valgt.
+- **Tastaturnavigasjon:** alle knapper er native `<button>` og kan nås med Tab, aktiveres med Enter/Space.
+- **Deaktiverte knapper:** forrige-knapp på første side og neste-knapp på siste side er `disabled`.
+- Ellipsis er ikke interaktiv. Skjules fra skjermlesere med `aria-hidden="true"`.
+- **Touch-mål:** alle knapper har minimum 36×36 px klikkflate.
+- **Fokusindikator:** tydelig fokusring via `:focus-visible`.
 
 <KeyboardAndScreenReader data={a11yData} />
 

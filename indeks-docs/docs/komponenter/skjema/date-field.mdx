@@ -12,7 +12,7 @@ import a11yData from './accessibility/date-field.json';
 DateField lar brukeren taste en dato i norsk format (`dd.mm.åååå`) eller åpne enhetens innebygde kalender via en knapp i feltet. Verdien som sendes videre er alltid ISO (`åååå-mm-dd`), uavhengig av hva som vises i feltet.
 
 :::info Norsk format, ISO-verdi
-Brukeren ser og taster `dd.mm.åååå`. Selve verdien — det som sendes ved innsending og som ligger i `event.target.value` i `onChange` — er ISO (`åååå-mm-dd`). Det unngår den amerikanske `mm/dd/åååå`-tvetydigheten samtidig som datoen er maskinlesbar.
+Brukeren ser og taster `dd.mm.åååå`. Selve verdien er ISO (`åååå-mm-dd`). Det er den som sendes ved innsending, og den som ligger i `event.target.value` i `onChange`. Det unngår den amerikanske `mm/dd/åååå`-tvetydigheten samtidig som datoen er maskinlesbar.
 :::
 
 ## Egnet til
@@ -29,7 +29,7 @@ Brukeren ser og taster `dd.mm.åååå`. Selve verdien — det som sendes ved in
 
 ## Bruk
 
-I feltet taster brukeren datoen. Feltet er skilletegn-bevisst og fleksibelt: du kan taste `1.1.2026` like gjerne som `01.01.2026` (eller `01012026` uten skilletegn). Teksten står urørt mens du skriver, og feltet normaliserer til `dd.mm.åååå` — nullutfyller enkeltsifret dag/måned — når det mister fokus (`1.1.2026` → `01.01.2026`). Året kan tastes med fire sifre (`2026`) eller to sifre som utvides til `20xx` — `1.1.26` blir `01.01.2026`. Kalenderknappen til høyre åpner enhetens innebygde datovelger. På desktop kaller knappen `showPicker()`; på touch fanges tappet av en gjennomsiktig native date-input som ligger oppå knappen, så kalenderen åpnes robust.
+I feltet taster brukeren datoen. Feltet er skilletegn-bevisst og fleksibelt: du kan taste `1.1.2026` like gjerne som `01.01.2026` (eller `01012026` uten skilletegn). Teksten står urørt mens du skriver. Når feltet mister fokus, normaliserer det til `dd.mm.åååå` og nullutfyller enkeltsifret dag og måned (`1.1.2026` → `01.01.2026`). Året kan tastes med fire sifre (`2026`) eller to sifre som utvides til `20xx`, så `1.1.26` blir `01.01.2026`. Kalenderknappen til høyre åpner enhetens innebygde datovelger. På desktop kaller knappen `showPicker()`; på touch fanges tappet av en gjennomsiktig native date-input som ligger oppå knappen, så kalenderen åpnes robust.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -410,7 +410,7 @@ Denne versjonen støtter `min`/`max`, men ikke sperring av enkeltdager eller hel
 
 ## Tilpasning med CSS
 
-Trenger du `ix-date-field`-stylingen på HTML du setter sammen selv — uten React-komponenten — bruker du klassene direkte. Den synlige inputen gjenbruker `.ix-text-field`; kalenderknappen og den native inputen genereres av web-komponenten og trenger ikke skrives for hånd.
+Trenger du `ix-date-field`-stylingen på HTML du setter sammen selv, uten React-komponenten, bruker du klassene direkte. Den synlige inputen gjenbruker `.ix-text-field`; kalenderknappen og den native inputen genereres av web-komponenten og trenger ikke skrives for hånd.
 
 ### Tilgjengelige klasser og selektorer
 

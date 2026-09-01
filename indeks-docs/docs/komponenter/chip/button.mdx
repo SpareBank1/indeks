@@ -144,18 +144,18 @@ Bruk `as="a"` når chipen navigerer til en URL. Den beholder chip-styling, men r
 
 ### Hva du selv må sørge for
 
-- **Gi chipen en kort og tydelig label** — teksten er det tilgjengelige navnet. Den skal beskrive handlingen.
-- **Bruk chips i grupper** — en enkeltstående chip gir lite kontekst. Presenter relaterte chips sammen.
-- **Bruk riktig element** — `<button>` (standard) for handlinger og `as="a"` / `<a>` for navigasjon. Ikke legg click-handlers på `<div>` eller `<span>`.
-- **Ikke stol på farge alene** — teksten må alltid være den primære informasjonsbæreren.
-- **Unngå disabled som standard** — en disabled chip sier ikke hva som mangler. La heller chipen være aktiv og forklar konteksten.
+- Gi chipen en kort og tydelig label. Teksten er det tilgjengelige navnet. Den skal beskrive handlingen.
+- Bruk chips i grupper. En enkeltstående chip gir lite kontekst. Presenter relaterte chips sammen.
+- Bruk riktig element. `<button>` (standard) for handlinger og `as="a"` / `<a>` for navigasjon. Ikke legg click-handlers på `<div>` eller `<span>`.
+- Ikke stol på farge alene. Teksten må alltid være den primære informasjonsbæreren.
+- Unngå disabled som standard. En disabled chip sier ikke hva som mangler. La heller chipen være aktiv og forklar konteksten.
 
 ### Hva komponenten gjør automatisk
 
 - **`type="button"`** settes som standard på `<button>`-elementer så chipen ikke sender inn skjema utilsiktet.
 - **Tilgjengelig navn** hentes fra tekst-innholdet i chipen.
 - **Fokusindikator** via `:focus-visible` — synlig for tastaturbrukere, ikke for mus.
-- **Tilstand med fyll og kant** — hover og active kommuniseres med mer enn farge.
+- Tilstand med fyll og kant. Hover og active kommuniseres med mer enn farge.
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -179,7 +179,7 @@ I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `
 
 Trenger du button chip-stylingen på HTML du setter sammen selv, kan du bruke `.ix-chip`-klassen direkte på elementene dine.
 
-### Tilgjengelige klasser og attributter
+### Tilgjengelige klasser og selektorer
 
 | Element/tilstand | Selektor / attributt |
 |-----------------|----------------------|

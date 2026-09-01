@@ -9,7 +9,7 @@ import a11yData from './accessibility/phone-number-field.json';
 
 # PhoneNumberField
 
-PhoneNumberField lar brukeren oppgi et telefonnummer med landkode. Komponenten setter sammen en søkbar **landvelger** (der brukeren velger _land_, ikke skriver tallkode) og et **nummerfelt** som formateres mens man skriver — under én felles label. De to er uavhengige felt: hver kan ha sin egen feilmelding, og i React bindes de som to separate React Hook Form-felt.
+PhoneNumberField lar brukeren oppgi et telefonnummer med landkode. Komponenten setter sammen en søkbar **landvelger** (der brukeren velger _land_, ikke skriver tallkode) og et **nummerfelt** som formateres mens brukeren skriver — under én felles label. De to er uavhengige felt: hver kan ha sin egen feilmelding, og i React bindes de som to separate React Hook Form-felt.
 
 :::info Sammensatt komponent
 PhoneNumberField reimplementerer ingenting selv: den grupperer en [Combobox](./combobox) (landkode) og et [TextField](./textfield) med [formatering](./textfield-formatering) (nummer). All filtrering, virtual focus, formatering og form-synk kommer uendret fra de to.
@@ -58,7 +58,7 @@ PhoneNumberField reimplementerer ingenting selv: den grupperer en [Combobox](./c
 
 Du skriver minimal markup: en **tom** `<ix-combobox>` (bare input + chevron + tom `.ix-combobox__listbox`) og et bart nummer-`<input>`. `<ix-phone-number-field>` gjør resten:
 
-- **Fyller landlista** fra den innebygde, lokaliserbare lista (`data-locale`) — eller din egen `data-countries`-JSON — og setter forhåndsvalg via `data-default-country-code`/`data-country-code`.
+- **Fyller landlista** fra den innebygde, lokaliserbare lista (`data-locale`) eller fra din egen `data-countries`-JSON, og setter forhåndsvalg via `data-default-country-code`/`data-country-code`.
 - **Stamper nummer-feltet** med `type="tel"`, `inputmode="numeric"`, `autocomplete="tel-national"` og `data-format="phone"` når de mangler.
 - **Setter gruppe-ARIA:** `role="group"`, kobler `data-field="legend"` via `aria-labelledby`, `data-field="error"` via `aria-describedby` + `aria-live="polite"`, og propagerer `disabled`/`readonly`/`required` til begge kontrollene.
 
@@ -137,10 +137,10 @@ Landvelgeren bruker den innebygde landlista (Norge øverst, så Norden, så alfa
 
 ### To felt i React Hook Form
 
-Komponenten er **to uavhengige felt**: landkode og nummer. I React bindes de med hver sin registrering — `countryField` og `numberField` — som spres rett på delfeltene. Begge indre komponenter (Combobox og TextField) er register-kompatible, så `{...register()}` fungerer uten lim-kode:
+Komponenten er **to uavhengige felt**: landkode og nummer. I React binder du dem med hver sin registrering, `countryField` og `numberField`, som spres rett på delfeltene. Begge indre komponenter (Combobox og TextField) er register-kompatible, så `{...register()}` fungerer uten lim-kode:
 
-- **`countryField={register('landkode')}`** — `onChange` får landkoden (uten `+`) i `event.target.value`.
-- **`numberField={register('tlf')}`** — `onChange` får den **rå** nummer-verdien (uten separatorer) i `event.target.value`.
+- **`countryField={register('landkode')}`:** `onChange` får landkoden (uten `+`) i `event.target.value`.
+- **`numberField={register('tlf')}`:** `onChange` får den **rå** nummer-verdien (uten separatorer) i `event.target.value`.
 
 Feilmeldinger er per felt: `errorMessage` vises under nummeret, `countryErrorMessage` under landvelgeren. `defaultCountryCode` gir et forhåndsvalgt land når registreringen ikke selv seeder verdien.
 
