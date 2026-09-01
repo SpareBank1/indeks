@@ -99,39 +99,58 @@ Se [Tooltip](./tooltip) for full dokumentasjon av props og retningslinjer.
 
 ## Retningslinjer
 
-### Kort og presis
+Dette er reglene for labeltekst i Indeks. De gjelder alle skjemafelt: tekstfelt,
+nedtrekkslister, søkefelt, checkboxer og radioknapper.
 
-1–3 ord er ideelt. Labelen skal navngi dataen, ikke beskrive handlingen.
+### Navngi dataen, ikke handlingen
+
+1–3 ord er nok. Labelen sier hva feltet inneholder, ikke hva brukeren skal gjøre.
 
 | Gjør dette | Ikke dette |
 |------------|------------|
 | Kontonummer | Vennligst oppgi kontonummeret ditt |
 | E-postadresse | Skriv inn e-post |
 | Fødselsdato | Dato |
+| Land | Velg land |
 
-### Setningsformat uten kolon
+### Navngi valget på checkbox og radioknapp
 
-Stor forbokstav, ingen kolon på slutten. 
+For checkbox og radioknapp er labelen navnet på alternativet, ikke oppfordringen til å
+velge det. Da ser brukeren hva avhukingen betyr.
 
-### Formatkrav hører hjemme i description
+| Gjør dette | Ikke dette |
+|------------|------------|
+| Motta nyhetsbrev | Meld meg på nyhetsbrev |
+| Privat | Velg privat |
+| Bedrift | Trykk her for bedrift |
 
-Ikke gjør labelen lang for å få plass til krav eller eksempler. Bruk en description under feltet i stedet.
+### Skriv med stor forbokstav og uten kolon
+
+Labelen er ikke en overskrift og ikke en setning. Ingen kolon på slutten.
+
+### Legg formatkrav i description
+
+Ikke strekk labelen for å få plass til krav eller eksempler. Det hører i en description
+under feltet.
 
 | Gjør dette | Ikke dette |
 |------------|------------|
 | Label: "Kontonummer" + description: "11 siffer uten mellomrom" | Label: "Kontonummer (11 siffer uten mellomrom)" |
 
-### Visuell nærhet
+### Plasser labelen tett over feltet
 
-Label skal stå tett over feltet den tilhører. Kortere avstand mellom label og input enn mellom to felt gjør koblingen tydelig for øyet.
+Avstanden mellom label og felt skal være kortere enn avstanden mellom to felt. Da ser
+øyet hvilken label som hører til hvilket felt, før noen leser et ord.
 
 ### Merk unntaket, ikke regelen
 
-I banksammenheng er nesten alle felt påkrevd. Merk valgfrie felt med "(valgfritt)" i labelteksten. Ikke merk påkrevde felt med stjerne.
+I banksammenheng er nesten alle felt påkrevd. Merk de valgfrie med "(valgfritt)" i
+labelteksten, og la de påkrevde stå uten stjerne.
 
 ### Unngå forkortelser og intern sjargong
 
-Skriv ut ord med mindre målgruppen er fagpersoner som kjenner dem godt. "Organisasjonsnummer", ikke "Org.nr." — med mindre skjemaet er rettet mot regnskapsførere eller lignende.
+Skriv "Organisasjonsnummer", ikke "Org.nr.". Forkortelser kan du bruke når skjemaet er
+laget for folk som jobber med feltet daglig, som regnskapsførere.
 
 ## Universell utforming
 

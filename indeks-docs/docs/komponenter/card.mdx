@@ -195,44 +195,37 @@ chevron-ikonet selv.
 
 ## Retningslinjer
 
-### Skill statisk og klikkbart tydelig
+### Vis klikkbarheten i hviletilstand
 
-Et klikkbart kort skal alltid bære en chevron — ikke gjør et statisk kort trykkbart uten å gi det
-dette signalet. Skill aldri klikkbart fra statisk kun på farge eller kantlinje; det er for svakt
-på touch og bryter med kontrastkrav. Chevronen er en form, ikke bare en farge, og holder derfor
-kontrastkravet.
+Et klikkbart kort må se annerledes ut enn et statisk kort før noen peker på det. På desktop
+kan hover antyde det, men hover finnes ikke på touch. Derfor bærer det klikkbare kortet
+signalene sine hele tiden:
 
-### Bruk riktig semantikk: navigasjon vs. handling
+- **Chevron (›):** hovedsignalet, alltid synlig. En form, ikke bare en farge, så det holder
+  kontrastkravet.
+- Hover gir kortet en bakgrunns-tint på desktop.
+- Pressed-tint bekrefter trykket på touch.
+- Fokusring vises for tastaturbrukere via `:focus-visible`.
 
-Bruk `href` når kortet fører brukeren til en ny side, og `onClick` når kortet utfører en handling
-i grensesnittet. Dette samsvarer med brukerens forventning og gir riktig skjermleser-annonsering
-(«lenke» vs. «knapp»).
+Ikke skill klikkbart fra statisk på farge eller kantlinje alene. Det er for svakt på touch,
+og det faller igjennom på kontrastkrav.
+
+### Sett href for navigasjon, onClick for handling
+
+`href` gir en `<a>` og fører brukeren til en ny side. `onClick` gir en `<button>` og gjør
+noe i grensesnittet. Skjermleseren annonserer «lenke» eller «knapp» ut fra det du velger, og
+chevronen legges på automatisk i begge tilfeller.
 
 ### Ikke nøst interaktive elementer
 
-Et klikkbart kort er allerede en lenke eller knapp. Å plassere knapper eller lenker inni gir
-ugyldig, nøstet interaktivt innhold. Trenger du flere handlinger, bruk et statisk kort med egne
-knapper i stedet — ikke gjør hele flaten klikkbar.
+Et klikkbart kort er selv en lenke eller en knapp, og knapper inni knapper er ugyldig HTML.
+Trenger innholdet flere handlinger, bruk et statisk kort med egne knapper og la flaten være
+i fred.
 
 ### Gi nok klikkflate
 
-Hele kortet er trykkbart. Gi kortet tilstrekkelig `padding` slik at klikkflaten blir komfortabel
-på touch (sikt mot minst 44×44 px).
-
-### Statisk vs. klikkbart — og hvorfor det er synlig på mobil
-
-Et klikkbart kort må se annerledes ut enn et statisk kort **uten** at man trenger å peke på det.
-På desktop kan klikkbarhet antydes med hover, men hover finnes ikke på touch. Derfor bærer det
-klikkbare kortet sin affordanse i hviletilstand:
-
-- **Chevron (›):** et eksplisitt «dette gjør noe»-signal, synlig hele tiden. Dette er
-  hovedsignalet: en form, ikke bare en farge, så det holder også kontrastkravet.
-- **Hover:** på desktop får kortet en bakgrunns-tint når du peker på det.
-- **Pressed-state:** ved trykk får kortet en tint, som bekrefter klikket på touch.
-- **Fokusring:** synlig for tastaturbrukere via `:focus-visible`.
-
-Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `onClick` (handling →
-`<button>`). Chevronen legges på automatisk.
+Hele kortet er trykkbart, så `padding` er det som bestemmer hvor stort målet blir. Sikt mot
+minst 44 × 44 px, som er terskelen for komfortabel treffsikkerhet på touch.
 
 ## Universell utforming
 

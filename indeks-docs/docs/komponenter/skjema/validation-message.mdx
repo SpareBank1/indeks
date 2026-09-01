@@ -100,11 +100,15 @@ Beskriv hva brukeren må gjøre, ikke hva som er feil i abstrakte termer.
 
 ### Hold meldingen kort
 
-Én setning er nok. Detaljerte krav hører hjemme i `description`, ikke i feilmeldingen.
+Én setning er nok. Skal brukeren vite formatkravet på forhånd, hører det i `description` over
+feltet, ikke i feilmeldingen etterpå.
 
-### Hold elementet i DOM
+### Behold elementet i DOM
 
-Når du veksler mellom feil og ingen feil, behold `<span data-field="error">` i DOM og endre kun innholdet. Hvis elementet legges til/fjernes dynamisk, kan skjermleseren miste oppdateringen — `aria-live`-regioner må være i DOM før innholdet endres.
+Veksler du mellom feil og ingen feil, la `<span data-field="error">` stå og endre bare
+innholdet. En `aria-live`-region må ligge i DOM før teksten endres. Settes elementet inn
+samtidig med meldingen, rekker ikke skjermleseren å registrere endringen, og brukeren hører
+ingenting.
 
 ## Universell utforming
 

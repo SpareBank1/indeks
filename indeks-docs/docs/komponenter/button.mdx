@@ -293,56 +293,66 @@ Bruk `as="a"` når knappen navigerer til en URL. Den beholder button-styling, me
 
 ## Retningslinjer
 
-### Bruk riktig komponent: handling vs. navigasjon
+### Bruk knapp til handling, lenke til navigasjon
 
-Knapper skal brukes når brukeren utfører en handling som påvirker systemet — som å lagre, sende eller bekrefte noe. Dersom brukeren kun skal navigere til en ny side uten at noe behandles, skal lenke brukes i stedet. Skillet er viktig både for brukerens forventninger og for tilgjengelighet.
+En knapp gjør noe: lagrer, sender, bekrefter. En lenke flytter brukeren et annet sted. Ser
+de like ut, gjetter brukeren, og skjermleseren annonserer feil type element.
 
-### Tydelig handling i label gir forutsigbarhet
+### Skriv hva knappen gjør
 
-Knappetekst skal beskrive hva som skjer når brukeren klikker. Den bør være handlingsorientert og konkret. "Lagre endringer" er tydeligere enn "OK", fordi den forklarer hva handlingen faktisk gjør.
+"Lagre endringer" er tydeligere enn "OK", og "Send søknad" tydeligere enn "Send". Teksten
+skal kunne leses alene, uten hjelp fra det som står rundt: en skjermleserbruker som
+navigerer mellom knapper hører bare labelen.
 
-### Unngå generiske labels
+Hold den samtidig kort nok til å stå på én linje. To ord er ofte nok, og da holder også
+layouten seg stabil på smale skjermer.
 
-Generiske tekster som "OK", "Send" eller "Neste" kan være uklare uten kontekst. Der det er mulig, bør teksten spesifisere hva som skjer — som "Send søknad" eller "Gå til betaling".
+### Bruk hierarkiet til å vise hva som er viktigst
 
-### Teksten skal være kort og énlinjet
+Knappene har fire nivåer, og de er der for å prioritere:
 
-Knappetekst skal være kort og presis. Korte tekster gjør knapper lettere å skanne og sikrer at layouten holder seg stabil på tvers av skjermstørrelser.
+| Nivå | Brukes til |
+|------|------------|
+| Primær | hovedhandlingen i visningen |
+| Sekundær | alternative handlinger |
+| Tertiær | støttende handlinger av mindre betydning |
+| Destruktiv | sletting og andre endringer som ikke kan angres |
 
-### Hierarki skaper struktur og prioritering
+Står en tertiærknapp alene, gi den et ikon. Uten ikon ser den ut som vanlig tekst, og folk
+oppdager ikke at den kan trykkes.
 
-Knapper skal ha et tydelig visuelt hierarki som viser hva som er viktigst å gjøre:
+### Bruk én primærknapp per visning
 
-- **Primærknapp:** hovedhandlingen i en visning
-- **Sekundærknapp:** alternative handlinger
-- **Tertiærknapp:** mindre viktige eller støttende handlinger
-- **Destruktiv knapp:** handlinger som sletter eller endrer data permanent
+Én knapp skal svare på "hva gjør jeg nå?". Er det to primærknapper på samme skjerm,
+konkurrerer de, og brukeren må ta et valg du egentlig kunne tatt selv.
 
-Dersom en tertiær knapp brukes alene, skal den alltid kombineres med ikon. Dette sikrer at den fremstår som en handling og ikke forveksles med vanlig tekst.
+### Plasser primærknappen først
 
-### Én primær handling per visning
+Ligger flere knapper på rad, kommer primærknappen først. Unntaket er stegvis navigasjon:
+der står "Forrige" til venstre for "Neste", fordi rekkefølgen følger retningen brukeren
+beveger seg i.
 
-Hver side eller seksjon bør ha én tydelig primær handling. Denne bør fremheves visuelt slik at det er klart hva brukeren skal gjøre videre. Flere primære knapper skaper konkurranse om oppmerksomheten og gjør det vanskeligere å ta en beslutning.
+### Gi ikonknapper en aria-label
 
-### Plassering og rekkefølge påvirker valg
-
-Når flere knapper plasseres ved siden av hverandre, skal primærknappen stå først. Et unntak er navigasjon mellom steg, som "Forrige" og "Neste" — der skal den sekundære knappen "Forrige" stå først. Dette samsvarer med brukerens forventning om retning og progresjon.
-
-### Ikonknapper krever ekstra tydelighet
-
-Knapper som kun består av ikon er forbeholdt løsninger for mer erfarne brukere, siden handlingen ikke beskrives med tekst. Unntak kan gjøres for godt etablerte ikoner som lukk eller slett — men knappen må alltid ha en tilgjengelig tekst via `aria-label`.
+En knapp med bare ikon sier ingenting til en skjermleser før du gir den `aria-label`. Selv
+med labelen på plass krever den at brukeren kjenner ikonet, så hold deg til de innarbeidede
+(lukk, slett, rediger) eller sett tekst på knappen.
 
 ### Bekreft destruktive handlinger
 
-Handlinger som sletter eller endrer data permanent bør enten kreve en ekstra bekreftelse (f.eks. en modal) eller tydelig merkes som destruktive med `danger`-prop.
+Sletting og andre endringer som ikke kan angres, skal enten bekreftes i en
+[Modal](./modal) eller merkes med `danger`-prop. Helst begge: fargen varsler, dialogen
+stopper.
 
 ### Ikke bruk disabled uten forklaring
 
-Disabled-knapper kan være vanskelig å forstå hvis det ikke er tydelig hvorfor de ikke kan brukes. Vurder om handlingen heller bør skjules, eller om det bør forklares hva som mangler for at knappen skal bli aktiv.
+En grå knapp uten forklaring er en blindvei. Skriv hva som mangler for at den skal bli
+aktiv, eller skjul handlingen til den er relevant.
 
-### Tilpass bredde til innhold og kontekst
+### Tilpass bredden til innholdet
 
-Knapper bør som hovedregel tilpasse seg innholdet sitt. Full bredde kan brukes der det gir mening — for eksempel på mobil — men bør brukes bevisst for å unngå at alle handlinger fremstår som like viktige.
+Knapper følger teksten sin. Full bredde er nyttig i mobile skjemaer og modaler, men brukt
+overalt gjør det at alle handlinger ser like viktige ut.
 
 ## Universell utforming
 

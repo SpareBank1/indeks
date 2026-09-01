@@ -248,33 +248,39 @@ Sett `fullWidth` (React) / `data-full-width` (HTML) for at meldingen skal strekk
 
 ## Retningslinjer
 
-### Velg riktig variant basert på budskap
+### Velg status etter hva brukeren skal gjøre
 
-Statusen skal reflektere alvorlighetsgrad og forventet reaksjon. `info` gir nøytral kontekst, `success` bekrefter en vellykket handling, `warning` gjør brukeren oppmerksom på noe, og `danger` signaliserer at noe har gått galt og bør følges opp.
+`info` gir kontekst uten å kreve noe. `success` bekrefter at handlingen gikk gjennom. `warning`
+ber brukeren se opp for noe. `danger` sier at noe er galt og må ryddes opp i. Velger du etter
+farge istedenfor etter budskap, blir alt viktig.
 
-### Bruk full bredde når meldingen skal fylle bredden
+### Plasser meldingen ved det den gjelder
 
-Full bredde passer når meldingen ligger i en kolonne-layout (f.eks. en vertikal `VStack`/`ix-stack`) og skal fylle bredden i stedet for å krympe til innholdsbredden — typisk en melding som gjelder hele seksjonen den står i. La meldingen krympe til innholdsbredden når den hører til et smalt, avgrenset innhold.
+En melding om et felt hører ved feltet, en melding om siden hører øverst på siden. Gjelder
+budskapet hele seksjonen eller kolonnen, sett `fullWidth` så meldingen fyller bredden i stedet
+for å krympe til teksten sin. Hører den til et avgrenset innhold, la den krympe.
 
-### Plasser meldingen i riktig kontekst
+### Skriv kort, og uten teknisk språk
 
-Message skal stå nær innholdet den forklarer eller støtter. En melding i full bredde hører naturlig hjemme der budskapet gjelder hele seksjonen eller kolonnen den ligger i.
-
-### Hold tekst og innhold kort og tydelig
-
-Bruk korte, forklarende titler og konsis brødtekst. Unngå teknisk språk.
+Én tittel som sier hva som skjedde, og noen få setninger som sier hva brukeren gjør nå.
+Feilkoder og systemnavn hjelper ingen som ikke har lest koden.
 
 ### Ikke avslutt tittel eller enkeltsetning med punktum
 
-Titler avsluttes aldri med punktum. Når selve meldingen er én enkelt setning, sløyfer du også punktumet — det leses som en kort beskjed, ikke en tekstblokk. Først når brødteksten består av flere setninger setter du punktum som normalt.
+Titler står alltid uten punktum. Er meldingen én setning, sløyfer du punktumet der også: det
+leses som en beskjed, ikke som en tekstblokk. Er brødteksten flere setninger, setter du
+punktum som normalt.
 
-### Unngå overbruk
+### Bruk færre meldinger
 
-For mange Message-komponenter på samme side kan oppleves som støy. Bruk dem bevisst.
+Fem meldinger på en side er fem ting brukeren skal veie mot hverandre, og da veier ingen av
+dem noe. Slå sammen det som hører sammen, og fjern det som bare bekrefter det åpenbare.
 
-### Bruk ikon med omtanke
+### La teksten bære budskapet
 
-Ikonet støtter forståelsen av budskapet, men skal aldri være eneste informasjonsbærer. Teksten er alltid viktigst, og containeren skal verken være klikkbar eller ha hover-state.
+Ikonet og fargen sier hvilken type melding det er, men aldri hva den handler om. En bruker som
+ikke skiller rødt fra grønt, skal få akkurat samme beskjed. Selve flaten er ikke
+interaktiv, så en handling må ligge i en knapp eller lenke inni meldingen.
 
 ### Designvalg
 

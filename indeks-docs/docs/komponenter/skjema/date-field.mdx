@@ -29,7 +29,7 @@ Brukeren ser og taster `dd.mm.åååå`. Selve verdien er ISO (`åååå-mm-dd`)
 
 ## Bruk
 
-I feltet taster brukeren datoen. Feltet er skilletegn-bevisst og fleksibelt: du kan taste `1.1.2026` like gjerne som `01.01.2026` (eller `01012026` uten skilletegn). Teksten står urørt mens du skriver. Når feltet mister fokus, normaliserer det til `dd.mm.åååå` og nullutfyller enkeltsifret dag og måned (`1.1.2026` → `01.01.2026`). Året kan tastes med fire sifre (`2026`) eller to sifre som utvides til `20xx`, så `1.1.26` blir `01.01.2026`. Kalenderknappen til høyre åpner enhetens innebygde datovelger. På desktop kaller knappen `showPicker()`; på touch fanges tappet av en gjennomsiktig native date-input som ligger oppå knappen, så kalenderen åpnes robust.
+I feltet taster brukeren datoen. Feltet er skilletegn-bevisst og fleksibelt: du kan taste `1.1.2026` like gjerne som `01.01.2026` (eller `01012026` uten skilletegn). Teksten står urørt mens du skriver. Når feltet mister fokus, normaliserer det til `dd.mm.åååå` og nullutfyller enkeltsifret dag og måned (`1.1.2026` → `01.01.2026`). Året kan tastes med fire sifre (`2026`) eller to sifre som utvides til `20xx`, så `1.1.26` blir `01.01.2026`. Kalenderknappen til høyre åpner enhetens innebygde datovelger. På desktop kaller knappen `showPicker()`; på touch fanges tappet av en gjennomsiktig native date-input som ligger oppå knappen, så kalenderen åpnes også der `showPicker()` ikke er støttet.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -315,7 +315,7 @@ Skriv `dd.mm.åååå` i `description`. Formateringen vises først når brukeren
 
 ### Bruk min og maks fremfor etterkontroll der det går
 
-Når gyldige datoer har en naturlig grense (f.eks. ikke frem i tid), sett `min`/`max` slik at OS-kalenderen sperrer dem. Regler som ikke kan uttrykkes med et intervall — enkeltdager, helger — valideres på blur/innsending med en `errorMessage`.
+Når gyldige datoer har en naturlig grense (f.eks. ikke frem i tid), sett `min`/`max` slik at OS-kalenderen sperrer dem. Regler som ikke kan uttrykkes som et intervall, som enkeltdager eller helger, valideres på blur eller innsending med en `errorMessage`.
 
 ### Én dato per felt
 

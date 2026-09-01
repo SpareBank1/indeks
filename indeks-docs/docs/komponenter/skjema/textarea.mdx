@@ -270,57 +270,41 @@ Tellerens ID inkluderes automatisk i `aria-describedby` slik at skjermlesere få
 
 ## Retningslinjer
 
-### Tydelige labels gir forutsigbarhet
+### Si hva teksten skal inneholde
 
-Alle TextArea skal ha en synlig og beskrivende label. Labelen skal beskrive hvilken informasjon brukeren skal skrive inn, ikke hva de skal gjøre.
+Et tomt, stort felt gir få holdepunkter. Bruk label og hjelpetekst til å si hva du er ute
+etter, og gjerne hvor mye: "Beskriv hva som skjedde, og når" sier mer enn "Beskrivelse".
 
-Skriv "Beskrivelse av hendelsen" i stedet for "Skriv en beskrivelse". Dette gjør det enklere å forstå hva som forventes og gir bedre støtte når brukeren skal formulere seg.
+Hjelpeteksten er stedet for eksempler og krav, ikke placeholder. Placeholder-teksten
+forsvinner i det brukeren begynner å skrive, og i et langt svar er det nettopp underveis
+veiledningen trengs.
 
-### Gi tydelige forventninger til innhold
+### Tilpass høyden til svaret du venter
 
-Når brukeren skal skrive lengre tekst, er det ekstra viktig å gi føringer for hva som forventes. Dette kan gjøres gjennom label eller hjelpetekst.
+Sett `rows` etter hvor mye tekst du regner med. Høyden er det første signalet brukeren får
+om omfanget: tre linjer inviterer til en setning, tolv linjer til en historie.
 
-Uten tydelig retning kan brukeren bli usikker på hva de skal skrive, hvor mye som forventes, og hva som er relevant informasjon.
+Brukeren kan dra feltet høyere selv. Horisontal resize er slått av for at feltet ikke skal
+sprenge layouten, og `disabled` og `readOnly` skjuler håndtaket.
 
-### Unngå placeholder som informasjonsbærer
+### Håndter lange tekster
 
-Placeholder anbefales ikke brukt som bærer av viktig informasjon. Når brukeren begynner å skrive, forsvinner teksten.
+Blir teksten lang, må den fortsatt være lett å lese og redigere. Scroll i feltet eller
+automatisk utvidelse fungerer begge, men en auto-resize som flytter knappene under feltet
+mens brukeren skriver, er verre enn scroll.
 
-Bruk heller label og hjelpetekst for å gi varig veiledning.
+### Valider når brukeren er ferdig
 
-### Hjelpetekst gir støtte underveis
+I et felt for løpende tekst er halvskrevne setninger normaltilstanden. Valider på blur
+eller ved innsending, ikke mens brukeren holder på.
 
-Hjelpetekst kan brukes for å gi eksempler eller forklare hva som bør inkluderes. Dette er spesielt nyttig i TextArea, der oppgaven ofte er mer åpen.
+### Vis tegngrensen hvis det finnes en
 
-Kort og konkret veiledning kan redusere usikkerhet og forbedre kvaliteten på input. "Maks 500 tegn" er bedre enn ingen veiledning.
+Sett `maxlength`, så får feltet en teller som viser hvor mange tegn som er igjen. En
+grense som stille kutter teksten er det verste alternativet: brukeren mister ord uten å
+få vite hvorfor.
 
-### Tilpass høyde til forventet innhold
-
-Høyden på TextArea bør reflektere hvor mye tekst som forventes. Bruk `rows` for å sette en passende standardhøyde.
-
-Et for lite felt kan oppleves begrensende, mens et for stort felt kan virke overveldende. Riktig høyde gir en visuell indikasjon på omfanget av oppgaven og gjør det lettere å komme i gang.
-
-### Resize
-
-Brukere kan endre høyden på feltet vertikalt. Horisontal resize er deaktivert for å unngå brudd i layout. `disabled` og `readOnly` skjuler resize-håndtaket.
-
-### Håndter lange tekster på en god måte
-
-Når innholdet blir langt, må det være enkelt å lese og redigere teksten.
-
-Dette kan løses med scrolling eller automatisk utvidelse av feltet. Dersom auto-resize brukes, må det skje på en måte som ikke bryter layout eller flytter innhold uforutsigbart.
-
-### Validering bør ikke forstyrre skrivingen
-
-Siden brukeren ofte skriver sammenhengende tekst, bør validering ikke skje mens de skriver.
-
-Valider heller ved blur eller innsending, slik at brukeren får skrive ferdig før de får tilbakemelding.
-
-### Vurder behov for tegnbegrensning
-
-Dersom det er en maksgrense for tekst, bør dette kommuniseres tydelig. Sett `maxlength` på textarea — da får brukeren automatisk en tegnteller som viser gjenværende tegn. En stille grense som kutter teksten uten tilbakemelding er forvirrende.
-
-`minlength` kan brukes når et minimum antall tegn forventes — telleren viser da hvor mange tegn som er skrevet inn så langt.
+`minlength` gir samme teller, men den teller oppover mot minimumet.
 
 ## Universell utforming
 
@@ -501,5 +485,6 @@ Når error-span får innhold setter `ix-field` i tillegg `aria-invalid="true"` p
 ## Relatert
 
 - [TextField](./textfield) — for kortere tekstinput på én linje
+- [Label](./label) — hvordan du navngir feltet
 - [Typografi](../../grunnleggende/typografi) — skriftstørrelser og fontvekter brukt i feltet
 - [Spacing](../../grunnleggende/tokens/spacing) — avstandene mellom label, textarea og feilmelding

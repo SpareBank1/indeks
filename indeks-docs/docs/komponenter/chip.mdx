@@ -33,29 +33,36 @@ Velg type ut fra hva brukeren skal gjøre. Hver type har egen dokumentasjon med 
 
 ## Retningslinjer
 
-### Bruk chip for raske og enkle valg
+### Bruk chip til raske valg
 
-Chips egner seg for enkle interaksjoner der brukeren raskt skal kunne velge, filtrere eller utføre en handling. De fungerer best når valgene er korte, tydelige og enkle å forstå.
+Chips er til for å velge, filtrere eller utløse noe med ett trykk. De fungerer når valget
+kan leses i farten, og dårlig når det trenger en forklaring først.
 
-### Velg riktig type chip basert på behov
+### Velg type etter hva valget gjør
 
-Valg av type påvirker både hvordan komponenten oppfører seg og hvordan brukeren forstår den. Bruk radio chip for ett valg, checkbox chip for flere, removable chip for aktive valg som kan fjernes, og button chip for å trigge en handling.
+Typen bestemmer både oppførsel og hva brukeren tror hen får: [radio](./chip/radio) for ett
+valg, [checkbox](./chip/checkbox) for flere, [removable](./chip/removable) for aktive valg
+som kan fjernes, og [button](./chip/button) for en handling.
 
-### Teksten skal være kort og tydelig
+### Hold labelen kort
 
-Chips skal ha korte labels som er enkle å skanne. Unngå lange tekster — chips er ment for raske valg, ikke forklaringer.
+Ett til tre ord. En chip med en hel setning i mister poenget: den skal kunne skannes på
+langs av en rad, ikke leses.
 
-### Chips bør brukes i grupper
+### Bruk chips i grupper
 
-Chips gir mest verdi når de presenteres sammen i en gruppe. Enkeltstående chips kan brukes, men da primært som button chip for å trigge en handling.
+En rad med chips viser hva som finnes å velge mellom. Alene fungerer stort sett bare
+button chip, som utløser en handling og ikke inngår i et valg.
 
 ### Unngå for mange chips samtidig
 
-Store mengder chips kan bli vanskelig å skanne og bruke. Dersom det er mange valg, bør de grupperes eller presenteres på en annen måte.
+Blir raden lang, tar den over skjermen og slutter å være rask. Del valgene i grupper med
+egne overskrifter, eller flytt dem til en liste med søk.
 
-### Bruk ikon med omtanke
+### La ikonet støtte teksten
 
-Ikoner kan støtte forståelsen, men skal ikke erstatte tekst. Tekst er alltid den viktigste informasjonsbæreren.
+Et ikon kan gjøre valget raskere å kjenne igjen, men teksten bærer meningen. En chip med
+bare ikon sier ingenting til den som ikke kjenner symbolet.
 
 ## Tilpasning med CSS
 

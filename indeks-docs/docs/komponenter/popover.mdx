@@ -229,32 +229,30 @@ Popover støtter fire plasseringsretninger: `top`, `bottom`, `left` og `right`. 
 
 ## Retningslinjer
 
-### Innhold
+### Svar på det brukeren nettopp trykket på
 
-- Innholdet skal være kortfattet og relevant for elementet som utløser popoveren
-- Bruk overskrift når det gir brukeren bedre forståelse av innholdet
-- Teksten skal være enkel og tydelig
-- Unngå lange tekstblokker
-- Handlingsknapper skal beskrive hva som skjer når brukeren velger dem
+Innholdet skal handle om trigger-elementet og ingenting annet. En overskrift hjelper når
+panelet inneholder mer enn et par setninger, men lange tekstblokker hører på siden: en popover
+legger seg over innholdet og skal kunne leses ferdig raskt.
 
-### Handlinger
+### Hold handlingene til de viktigste
 
-- Handlinger er valgfrie — en popover kan vises uten handlinger dersom den kun skal presentere informasjon
-- Når handlinger brukes, bør antallet begrenses til de viktigste valgene
-- Primærhandling skal tydelig fremheves
+En popover klarer seg fint uten knapper hvis den bare forklarer noe. Har den knapper, skal
+teksten på dem si hva som skjer («Bytt konto», ikke «OK»), og én av dem skal være tydelig
+primær. Blir det mange valg, hører de i en [DropdownMenu](./dropdown-menu) eller en
+[Modal](./modal).
 
-### Plassering
+### La pekeren peke på riktig element
 
-- Popover skal være visuelt koblet til elementet som åpner den
-- Komponentens peker viser hvilken kontekst informasjonen tilhører
-- Velg plassering basert på tilgjengelig plass i grensesnittet
+Pekeren er koblingen mellom panelet og det brukeren trykket på. Velg plassering etter hvor det
+er plass på skjermen, og sjekk at pekeren fortsatt treffer trigger-elementet når panelet
+clampes mot kanten av viewporten.
 
-### Oppførsel
+### Hold én popover åpen om gangen
 
-- Popover åpnes når brukeren aktiverer tilknyttet trigger-element
-- Popover lukkes ved Escape-tasten eller klikk utenfor komponenten
-- Bare én popover bør være åpen om gangen
-- Fokus flyttes inn i popoveren når den åpnes dersom den inneholder interaktive elementer
+Panelet åpnes fra trigger-elementet og lukkes med Escape eller klikk utenfor. Åpner du en ny
+mens en annen står åpen, konkurrerer to paneler om samme oppmerksomhet, og brukeren mister
+sporet av hva Escape lukker.
 
 ## Universell utforming
 

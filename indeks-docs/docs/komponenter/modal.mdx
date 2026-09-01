@@ -251,41 +251,41 @@ Et utilsiktet klikk utenfor dialogen lukker den umiddelbart. For skjemaer med ul
 
 ## Retningslinjer
 
-### Bruk modal med omtanke
+### Åpne modal bare når brukeren må svare først
 
-Modal avbryter brukerens flyt og bør derfor kun brukes når det er nødvendig. Den egner seg best når brukeren må ta stilling til noe før de kan fortsette, eller når det er viktig å redusere distraksjoner.
+En modal stopper alt annet: bakgrunnen er utilgjengelig, og fokus er låst inne. Det er riktig
+når svaret må gis før flyten kan gå videre, og feil når innholdet like godt kunne stått på
+siden. Trenger du bare å vise litt mer, bruk [Popover](./popover) eller
+[ReadMore](./read-more).
 
-### Modalen får mening gjennom innholdet
+### Åpne med en tittel som sier hvorfor
 
-Modal-komponenten er i seg selv kun en container. Det er innholdet som avgjør hvordan den oppleves og brukes. Det er derfor viktig å strukturere innholdet tydelig med tittel, beskrivelse og eventuelle handlinger.
+`Modal.Title` er det første en skjermleser leser opp, og det første øyet finner. Skriv den som
+et svar på «hvorfor kom dette opp?». Trenger svaret en setning mer, legg den i
+`Modal.Description` — da kobles den automatisk som beskrivelse av dialogen.
 
-### Gi tydelig kontekst med en gang
+### Hold innholdet fokusert
 
-Brukeren skal raskt forstå hvorfor modalen vises. En tydelig tittel og eventuell beskrivelse gjør det enklere å ta stilling til innholdet og hva som forventes.
+Én oppgave per modal. Blir innholdet så mye at du strekker deg mot `size="large"` eller
+`"full"`, er det et tegn på at dette hører på en egen side. Velg `size` etter hvor mye
+innholdet faktisk trenger, ikke etter hvor viktig saken er.
 
-### Unngå overfylte modaler
+### Gi én primær handling og én vei tilbake
 
-Modaler bør være fokuserte og inneholde kun det som er nødvendig. For mye innhold kan gjøre det vanskelig å orientere seg og øker kognitiv belastning.
+Én knapp fører oppgaven i mål, og én lar brukeren komme seg ut. Flere likestilte knapper gjør
+at brukeren må lese alle før hen tør trykke. Lukkeknappen (`Modal.CloseButton` med `label`)
+skal alltid være der, i tillegg til Escape.
 
-### Handlinger skal være tydelige og få
+### Send brukeren tilbake dit hen kom fra
 
-Modaler inneholder ofte handlinger, og disse bør være enkle å forstå og tydelig prioritert. Som hovedregel bør det være én primær handling, og eventuelt en sekundær handling for å avbryte.
+Når modalen lukkes, skal brukeren stå på samme sted i flyten som da den åpnet, med samme
+rulleposisjon og samme skjemadata. Komponenten flytter fokus tilbake til trigger-knappen, men
+tilstanden i siden er ditt ansvar.
 
-### Gjør det enkelt å lukke modalen
+### Ikke åpne modal over modal
 
-Brukeren skal alltid ha en tydelig måte å lukke modalen på. Dette inkluderer en synlig lukkeknapp, og ofte også støtte for Esc og klikk utenfor.
-
-### Bevar brukerens kontekst
-
-Når modalen lukkes, skal brukeren returnere til samme sted i flyten som de kom fra. Dette gir en forutsigbar opplevelse og gjør det enklere å fortsette.
-
-### Unngå flere modaler samtidig
-
-Flere åpne modaler skaper forvirring og gjør det vanskelig å navigere. Det skal som hovedregel kun være én modal åpen om gangen.
-
-### Tilpass størrelse til innhold
-
-Modalens størrelse bør tilpasses innholdet. For små modaler kan føles trange, mens for store modaler kan oppleves som unødvendig dominerende.
+To lag med fanget fokus gir brukeren ingen holdepunkt for hvor hen er eller hva Escape lukker.
+Trenger du et steg videre, bytt innholdet i den samme modalen.
 
 ### Designvalg
 

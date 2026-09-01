@@ -205,23 +205,29 @@ Faner uten synlig tekst må ha et tilgjengelig navn (på brukerens språk) — e
 
 ## Retningslinjer
 
-### Innhold og formulering
+### Navngi fanene med ett eller to ord
 
-- Skriv korte, beskrivende fane-etiketter som gir mening lest alene.
-- Start med det viktigste ordet — lista skal være lett å skanne.
-- Bruk konsistent nivå på etikettene (f.eks. alle substantiv) i samme fane-sett.
+Fanenavnet leses på tvers av en rad, ikke nedover, så det viktigste ordet må komme først.
+Hold navnene på samme form gjennom hele settet: enten alle substantiv («Oversikt»,
+«Transaksjoner») eller alle verb, aldri en blanding.
 
-### Manuell aktivering
+### La brukeren aktivere fanen selv
 
-Å flytte fokus mellom faner med piltast bytter *ikke* panel automatisk — brukeren aktiverer den fokuserte fanen med Enter eller Mellomrom (eller klikk). Det gir forutsigbar oppførsel og unngår at skjermleserbrukere hopper gjennom flere paneler ved ren navigasjon.
+Piltast flytter fokus mellom fanene uten å bytte panel. Panelet skifter først når brukeren
+trykker Enter, Mellomrom eller klikker. Da kan en skjermleserbruker gå gjennom hele raden og
+høre hvilke faner som finnes, uten å laste og få opplest fire paneler på veien.
 
-### Mange faner
+### Del innholdet når fanene blir mange
 
-Ved plassmangel scroller fane-lista horisontalt i én rad — rekkefølgen bevares og siden får ingen horisontal scroll. Har du svært mange seksjoner, vurder om innholdet heller bør deles på flere sider.
+Er det ikke plass til hele raden, scroller den horisontalt i én linje. Rekkefølgen holder seg,
+og siden får ingen horisontal scroll. Men en rad du må dra i for å se, skjuler valg: har du
+mange seksjoner, hører de på egne sider.
 
-### Kontrollert og ukontrollert
+### Velg kontrollert modus når fanen styres utenfra
 
-I React kan `Tabs` være ukontrollert (`defaultValue` — web componenten eier videre tilstand) eller kontrollert (`value` + `onChange` — React eier tilstanden). Bruk kontrollert modus når valgt fane må styres utenfra, f.eks. synkronisert med URL.
+Ukontrollert (`defaultValue`) lar web componenten eie tilstanden, og er nok i de fleste
+tilfeller. Kontrollert (`value` + `onChange`) gir React eierskapet, og er det du trenger når
+valgt fane skal henge sammen med noe annet, som URL-en.
 
 ```tsx
 function Konto() {

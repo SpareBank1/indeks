@@ -313,21 +313,28 @@ Feilene er uavhengige: `errorMessage` vises under nummeret, `countryErrorMessage
 
 ## Retningslinjer
 
-### Velg land — ikke skriv tallkode
+### La brukeren velge land, ikke skrive tallkode
 
-Poenget med komponenten er at brukeren skal velge _land_ i lista, ikke måtte kjenne tallkoden på forhånd. I lista er kallekoden (`+47`) primærtekst og landnavnet vises som sekundær beskrivelse — slik at valgt verdi i det smale landfeltet blir kort og entydig (`+47`), mens landnavnet gir kontekst når man leter. Brukeren kan søke på både landnavn og kode.
+Ingen skal måtte huske at Sverige er `+46`. I lista står kallekoden som primærtekst med
+landnavnet under, og brukeren kan søke på begge. Da blir verdien i det smale landfeltet
+kort og entydig (`+47`), mens landnavnet er der som kontekst i lista.
 
 ### Ikke bruk emoji-flagg
 
-Emoji-flagg vises ikke på Windows (viser «NO»/«SE» i stedet), leses inkonsistent av skjermlesere, og små flagg er visuelt tvetydige (Norge/Island). Komponenten er derfor bevisst laget uten flagg — vi viser kallekode + landnavn som tekst. Slik oppfører den seg likt på tvers av alle tjenester.
+Windows viser dem som «NO» og «SE», skjermlesere leser dem ulikt, og i liten størrelse er
+Norge og Island samme flagg. Komponenten er derfor laget uten flagg: kallekode og landnavn
+som tekst oppfører seg likt i alle tjenester.
 
-### Ett tydelig nummerfelt
+### Gjør nummerfeltet bredere enn landvelgeren
 
-Nummerfeltet skal være bredere enn landvelgeren, slik at det er åpenbart hvor nummeret skrives. Det unngår den klassiske feilen der landkode- og nummerfelt er like brede og brukeren skriver i feil felt.
+Er de to feltene like brede, ser de ut som to like felt, og brukeren begynner å skrive
+nummeret i det første. Bredden er det som viser hvilket felt som er hovedfeltet.
 
-### Formatet er norsk-spesifikt i v1
+### Send eget format for andre land enn Norge
 
-Standardformatet er norsk 8-sifret (`123 45 678`) uansett valgt land. For andre lands nummerlengder må du sende eget `numberFormat`/`numberFormatPattern`. Formateringen er kun visuell — rå verdi (uten mellomrom) er alltid det som sendes.
+Standarden er norsk 8-sifret (`123 45 678`) uansett hvilket land som er valgt. Andre
+nummerlengder krever at du sender inn `numberFormat`/`numberFormatPattern`. Formateringen er
+bare visuell: verdien som sendes, er alltid rå og uten mellomrom.
 
 ## Universell utforming
 
