@@ -102,7 +102,7 @@ const config: Config = {
 
     themeConfig: {
         tableOfContents: {
-            maxHeadingLevel: 2,
+            maxHeadingLevel: 3,
         },
         // Replace with your project's social card
         image: 'img/docusaurus-social-card.jpg',
