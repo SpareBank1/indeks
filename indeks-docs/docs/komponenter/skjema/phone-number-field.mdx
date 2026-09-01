@@ -26,7 +26,7 @@ PhoneNumberField reimplementerer ingenting selv: den grupperer en [Combobox](./c
 - Rene norske nummer der landkode er unødvendig (bruk et vanlig [TextField](./textfield) med `format="phone"`)
 - Fri tekst / nummer som ikke skal valideres som telefon
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -329,7 +329,7 @@ Nummerfeltet skal være bredere enn landvelgeren, slik at det er åpenbart hvor 
 
 Standardformatet er norsk 8-sifret (`123 45 678`) uansett valgt land. For andre lands nummerlengder må du sende eget `numberFormat`/`numberFormatPattern`. Formateringen er kun visuell — rå verdi (uten mellomrom) er alltid det som sendes.
 
-## Tilgjengelighet / universell utforming
+## Universell utforming
 
 ### Gruppe med felles navn
 
@@ -360,6 +360,32 @@ Tab flytter fokus fra landvelger til nummerfelt (samme som leserekkefølgen). La
 ## Props / API
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### `<ix-phone-number-field>`
+
+| Attributt | Påkrevd | Beskrivelse |
+|-----------|---------|-------------|
+| `disabled` | Nei | Deaktiverer begge kontrollene |
+| `readonly` | Nei | Skrivebeskytter begge kontrollene |
+| `required` | Nei | Markerer begge de indre `<input>`-ene som påkrevd (propageres) |
+| `data-locale` | Nei | Språk for den innebygde landlista (`nb` \| `nn` \| `en`, standard `nb`) |
+| `data-countries` | Nei | JSON-array som overstyrer landlista (`{value,label,description}[]`) |
+| `data-country-code` | Nei | Kontrollert forhåndsvalgt landkode (uten `+`) |
+| `data-default-country-code` | Nei | Ukontrollert start-landkode (uten `+`) |
+
+### Delelementer (light DOM)
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `[data-field="legend"]` | Ja | Felles label. Kobles via `aria-labelledby` |
+| `[data-field="description"]` | Nei | Felles hjelpetekst. Kobles via `aria-describedby` |
+| `[data-field="items"]` | Ja | Wrapper for de to feltene (styrer side-ved-side-layout) |
+| `[data-field="country"] > ix-combobox` | Ja | Landvelgeren. Skriv den **tom** (input + chevron + tom `.ix-combobox__listbox`) — web-komponenten fyller lista. Gi input `aria-label` og et `name` (ikke egen `<label>`) |
+| `[data-field="number"] > ix-field` | Ja | Nummerfeltet. Et bart `<input>` holder — web-komponenten stamper `type="tel"`, `inputmode="numeric"`, `autocomplete="tel-national"` og `data-format="phone"`. Gi input `aria-label` |
+| `[data-field="error"]` | Nei | Felles feilmelding. Ikke-tomt innhold → `aria-invalid` på host + polite annonsering |
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ### PhoneNumberFieldProps
@@ -412,32 +438,6 @@ Samme form som `ComboboxOption`. Utelates `countries` fyller web-komponenten inn
 | `value` | `string` | Landkoden uten `+` (verdien landvelgeren sender) |
 | `label` | `string` | Kallekoden, f.eks. `+47` — vist som valgt verdi (primærtekst) |
 | `description` | `string` | Landnavnet (sekundær tekst i lista) |
-
-</TabItem>
-<TabItem value="html" label="HTML">
-
-### `<ix-phone-number-field>`
-
-| Attributt | Påkrevd | Beskrivelse |
-|-----------|---------|-------------|
-| `disabled` | Nei | Deaktiverer begge kontrollene |
-| `readonly` | Nei | Skrivebeskytter begge kontrollene |
-| `required` | Nei | Markerer begge de indre `<input>`-ene som påkrevd (propageres) |
-| `data-locale` | Nei | Språk for den innebygde landlista (`nb` \| `nn` \| `en`, standard `nb`) |
-| `data-countries` | Nei | JSON-array som overstyrer landlista (`{value,label,description}[]`) |
-| `data-country-code` | Nei | Kontrollert forhåndsvalgt landkode (uten `+`) |
-| `data-default-country-code` | Nei | Ukontrollert start-landkode (uten `+`) |
-
-### Delelementer (light DOM)
-
-| Del | Påkrevd | Beskrivelse |
-|-----|---------|-------------|
-| `[data-field="legend"]` | Ja | Felles label. Kobles via `aria-labelledby` |
-| `[data-field="description"]` | Nei | Felles hjelpetekst. Kobles via `aria-describedby` |
-| `[data-field="items"]` | Ja | Wrapper for de to feltene (styrer side-ved-side-layout) |
-| `[data-field="country"] > ix-combobox` | Ja | Landvelgeren. Skriv den **tom** (input + chevron + tom `.ix-combobox__listbox`) — web-komponenten fyller lista. Gi input `aria-label` og et `name` (ikke egen `<label>`) |
-| `[data-field="number"] > ix-field` | Ja | Nummerfeltet. Et bart `<input>` holder — web-komponenten stamper `type="tel"`, `inputmode="numeric"`, `autocomplete="tel-national"` og `data-format="phone"`. Gi input `aria-label` |
-| `[data-field="error"]` | Nei | Felles feilmelding. Ikke-tomt innhold → `aria-invalid` på host + polite annonsering |
 
 </TabItem>
 </Tabs>

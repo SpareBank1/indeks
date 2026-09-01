@@ -1,5 +1,7 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import AccessibilityTable from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/surface.json';
 
 # Surface
 
@@ -24,7 +26,7 @@ slik at du slipper å forholde deg til klassenavnene direkte.
 - Innhold som skal fremstå som en avgrenset, klikkbar enhet — bruk [Card](./card)
 - Komplekse layouter med retning og innrykk — vurder [Stack](./primitives/stack)
 
-## Surface vs. Card
+### Surface vs. Card
 
 Surface og [Card](./card) virker på ulike nivåer:
 
@@ -36,7 +38,7 @@ Surface og [Card](./card) virker på ulike nivåer:
 Et Card kan ligge oppå en Surface — de konkurrerer ikke, de virker på ulike nivåer. Trenger du at
 selve flaten kan trykkes, velg Card. Skal flaten bare gruppere og skille ut innhold, velg Surface.
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -225,6 +227,23 @@ rask layout uten egen CSS.
 </TabItem>
 </Tabs>
 
+## Universell utforming
+
+Surface er en ikke-interaktiv container og tilfører ingen rolle eller fokus-håndtering selv.
+
+### Hva du selv må sørge for
+
+- **Velg semantisk element** med `as` der det er relevant — f.eks. `as="section"` for en seksjon.
+  Standard `<div>` er korrekt når flaten kun er visuell gruppering.
+- **Ikke kommuniser mening med farge alene** — statusfargen er dekorativ. Innhold som bærer
+  betydning må også ha tekst eller annet ikke-visuelt signal.
+- **Trenger flaten å være klikkbar**, er Surface feil verktøy — bruk [Card](./card), som gir
+  riktig semantikk (`<a>`/`<button>`), tastaturstøtte og fokusring.
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
 ## Props / API
 
 | Prop | Type | Standard | Beskrivelse |
@@ -266,17 +285,6 @@ statusfarge kobles med `data-status`, resten er utility-klasser:
   <p>Innhold</p>
 </section>
 ```
-
-## Universell utforming
-
-Surface er en ikke-interaktiv container og tilfører ingen rolle eller fokus-håndtering selv.
-
-- **Velg semantisk element** med `as` der det er relevant — f.eks. `as="section"` for en seksjon.
-  Standard `<div>` er korrekt når flaten kun er visuell gruppering.
-- **Ikke kommuniser mening med farge alene** — statusfargen er dekorativ. Innhold som bærer
-  betydning må også ha tekst eller annet ikke-visuelt signal.
-- **Trenger flaten å være klikkbar**, er Surface feil verktøy — bruk [Card](./card), som gir
-  riktig semantikk (`<a>`/`<button>`), tastaturstøtte og fokusring.
 
 ## Relatert
 

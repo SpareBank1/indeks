@@ -21,7 +21,7 @@ CheckboxGroup samler flere relaterte checkboxer i én gruppe der brukeren kan ve
 - Situasjoner der valgene er gjensidig utelukkende
 - En enkeltstående checkbox uten gruppe-kontekst (bruk [Checkbox](./checkbox))
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -344,6 +344,12 @@ Checkbox signaliserer at flere valg kan kombineres fritt. Er valgene gjensidig u
 
 Både checkboxen og labelen er klikkbar. Det gir en stor trefflate og fungerer godt på mobil og for brukere med nedsatt motorikk.
 
+### Designvalg
+
+Bak komponenten ligger en rekke tekniske valg — om hvorfor vi bruker `role="group"` istedenfor `<fieldset>`, hvordan `value` er et array, hvorfor `aria-invalid` kun settes på gruppen, og hvordan CheckboxGroup skiller seg fra RadioGroup.
+
+Se [Designvalg for CheckboxGroup](./checkbox-group-designvalg) hvis du er nysgjerrig på avveiningene.
+
 ## Universell utforming
 
 ### Hva du selv må sørge for
@@ -503,12 +509,6 @@ Inni `<ix-checkbox-group>` trengs ingen `id` eller `for` — komponenten kobler 
   <span data-field="error"></span>
 </ix-checkbox-group>
 ```
-
-## Designvalg
-
-Bak komponenten ligger en rekke tekniske valg — om hvorfor vi bruker `role="group"` istedenfor `<fieldset>`, hvordan `value` er et array, hvorfor `aria-invalid` kun settes på gruppen, og hvordan CheckboxGroup skiller seg fra RadioGroup.
-
-Se [Designvalg for CheckboxGroup](./checkbox-group-designvalg) hvis du er nysgjerrig på avveiningene.
 
 ## Relatert
 

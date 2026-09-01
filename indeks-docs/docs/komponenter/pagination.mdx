@@ -25,31 +25,11 @@ Pagination brukes for å dele inn større mengder innhold i flere sider og gjør
 - Innhold som lastes inn fortløpende uten tydelige sider
 - Navigasjon mellom steg i en prosess — bruk en stegindikator
 
-## Kom i gang
+## Bruk
 
 Pagination krever `page` (nåværende side), `count` (totalt antall sider) og `onPageChange` (callback ved sidebytte). Alle tekststrenger må sendes inn for i18n-støtte.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-function PaginationDemo() {
-  const [page, setPage] = React.useState(1);
-  return (
-    <Pagination
-      page={page}
-      count={10}
-      onPageChange={setPage}
-      previousLabel="Forrige"
-      nextLabel="Neste"
-      ariaLabel="Sidenavigering"
-      pageLabel={(p) => `Side ${p}`}
-    />
-  );
-}
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -85,15 +65,6 @@ function PaginationDemo() {
 ```
 
 </TabItem>
-</Tabs>
-
-## Eksempler
-
-### Med tekst på knapper
-
-Vis tekst på forrige/neste-knappene med `prevNextTexts`. Dette kan være nyttig på desktop hvor det er god plass.
-
-<Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ```tsx live
@@ -104,7 +75,6 @@ function PaginationDemo() {
       page={page}
       count={10}
       onPageChange={setPage}
-      prevNextTexts
       previousLabel="Forrige"
       nextLabel="Neste"
       ariaLabel="Sidenavigering"
@@ -115,6 +85,15 @@ function PaginationDemo() {
 ```
 
 </TabItem>
+</Tabs>
+
+## Eksempler
+
+### Med tekst på knapper
+
+Vis tekst på forrige/neste-knappene med `prevNextTexts`. Dette kan være nyttig på desktop hvor det er god plass.
+
+<Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -138,6 +117,27 @@ function PaginationDemo() {
     </li>
   </ul>
 </nav>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+function PaginationDemo() {
+  const [page, setPage] = React.useState(1);
+  return (
+    <Pagination
+      page={page}
+      count={10}
+      onPageChange={setPage}
+      prevNextTexts
+      previousLabel="Forrige"
+      nextLabel="Neste"
+      ariaLabel="Sidenavigering"
+      pageLabel={(p) => `Side ${p}`}
+    />
+  );
+}
 ```
 
 </TabItem>
@@ -193,7 +193,31 @@ Når antall sider er høyt, viser komponenten:
 - Sider rundt aktiv side (styrt av `siblingCount`)
 - Ellipsis mellom områder som skjules
 
-## Props
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Gi meningsfylte labels på brukerens språk** — alle tekststrenger (`ariaLabel`, `previousLabel`, `nextLabel`, `pageLabel`) må sendes inn og oversettes.
+- **Oppdater innholdet ved sidebytte** — komponenten håndterer kun navigasjonen; du må koble `onPageChange` til faktisk innholdsoppdatering.
+- **Ikke flytt fokus uventet** — ved sidebytte bør fokus forbli i pagination eller flyttes til toppen av det nye innholdet, ikke forsvinne.
+
+### Hva komponenten gjør automatisk
+
+- **Semantisk navigasjon** — bruker `<nav>` med `aria-label` slik at hjelpemidler forstår komponentens rolle.
+- **Aktiv side annonseres** — `aria-current="page"` på aktiv sideknapp formidler hvilken side som er valgt.
+- **Tastaturnavigasjon** — alle knapper er native `<button>` og kan nås med Tab, aktiveres med Enter/Space.
+- **Deaktiverte knapper** — forrige-knapp på første side og neste-knapp på siste side er `disabled`.
+- **Ellipsis er ikke interaktiv** — skjules fra skjermlesere med `aria-hidden="true"`.
+- **Touch-mål** — alle knapper har minimum 36×36 px klikkflate.
+- **Fokusindikator** — tydelig fokusring via `:focus-visible`.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
 
 | Prop | Type | Default | Beskrivelse |
 |------|------|---------|-------------|
@@ -248,27 +272,3 @@ Når antall sider er høyt, viser komponenten:
   </ul>
 </nav>
 ```
-
-## Universell utforming
-
-### Hva du selv må sørge for
-
-- **Gi meningsfylte labels på brukerens språk** — alle tekststrenger (`ariaLabel`, `previousLabel`, `nextLabel`, `pageLabel`) må sendes inn og oversettes.
-- **Oppdater innholdet ved sidebytte** — komponenten håndterer kun navigasjonen; du må koble `onPageChange` til faktisk innholdsoppdatering.
-- **Ikke flytt fokus uventet** — ved sidebytte bør fokus forbli i pagination eller flyttes til toppen av det nye innholdet, ikke forsvinne.
-
-### Hva komponenten gjør automatisk
-
-- **Semantisk navigasjon** — bruker `<nav>` med `aria-label` slik at hjelpemidler forstår komponentens rolle.
-- **Aktiv side annonseres** — `aria-current="page"` på aktiv sideknapp formidler hvilken side som er valgt.
-- **Tastaturnavigasjon** — alle knapper er native `<button>` og kan nås med Tab, aktiveres med Enter/Space.
-- **Deaktiverte knapper** — forrige-knapp på første side og neste-knapp på siste side er `disabled`.
-- **Ellipsis er ikke interaktiv** — skjules fra skjermlesere med `aria-hidden="true"`.
-- **Touch-mål** — alle knapper har minimum 36×36 px klikkflate.
-- **Fokusindikator** — tydelig fokusring via `:focus-visible`.
-
-<KeyboardAndScreenReader data={a11yData} />
-
-### WCAG-kriterier
-
-<AccessibilityTable data={a11yData} />

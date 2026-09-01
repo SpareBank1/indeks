@@ -16,16 +16,9 @@ Ikon-komponenten viser SVG-ikoner fra SpareBank 1s CDN ved hjelp av CSS `mask-im
 
 - Ikoner som eneste interaktive element uten tilgjengelig navn — bruk en [Button](./button) med `aria-label` rundt ikonet
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Icon name="home" />
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```html live
@@ -35,6 +28,13 @@ Ikon-komponenten viser SVG-ikoner fra SpareBank 1s CDN ved hjelp av CSS `mask-im
 `name` er Material Design-ikonnavnet direkte (uten `.svg`) — det samme for både web componenten og React-komponenten.
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Icon name="home" />
+```
+
+</TabItem>
 </Tabs>
 
 ## Eksempler
@@ -42,18 +42,6 @@ Ikon-komponenten viser SVG-ikoner fra SpareBank 1s CDN ved hjelp av CSS `mask-im
 ### Størrelser
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<HStack alignItems="center">
-  <Icon name="home" size="sm" />
-  <Icon name="home" size="md" />
-  <Icon name="home" size="lg" />
-  <Icon name="home" size="xl" />
-</HStack>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```html live
@@ -66,6 +54,18 @@ Ikon-komponenten viser SVG-ikoner fra SpareBank 1s CDN ved hjelp av CSS `mask-im
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack alignItems="center">
+  <Icon name="home" size="sm" />
+  <Icon name="home" size="md" />
+  <Icon name="home" size="lg" />
+  <Icon name="home" size="xl" />
+</HStack>
+```
+
+</TabItem>
 </Tabs>
 
 ### Semantisk ikon
@@ -73,17 +73,17 @@ Ikon-komponenten viser SVG-ikoner fra SpareBank 1s CDN ved hjelp av CSS `mask-im
 Bruk `ariaLabel` når ikonet formidler informasjon som ikke er tilgjengelig andre steder:
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Icon name="home" ariaLabel="Gå til forsiden" />
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```html live
 <ix-icon name="home" aria-label="Gå til forsiden"></ix-icon>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Icon name="home" ariaLabel="Gå til forsiden" />
 ```
 
 </TabItem>
@@ -94,18 +94,6 @@ Bruk `ariaLabel` når ikonet formidler informasjon som ikke er tilgjengelig andr
 Sett `data-badge` for å vise ikonet som en glyf på en farget sirkel. Selve elementet blir sirkelen, og glyfen tegnes oppå. Standardstørrelsen er 32&nbsp;px. Glyfen bruker den inverse forgrunnsfargen. Setter du i tillegg `data-status`, bruker sirkelen statusfargen automatisk (`--ix-color-status-fill` kobles av `data-status`). Brukes blant annet av statusikonet i [Message](./message).
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<HStack alignItems="center">
-  <Icon name="info_i" data-badge data-status="info" />
-  <Icon name="check" data-badge data-status="success" />
-  <Icon name="priority_high" data-badge data-status="warning" />
-  <Icon name="priority_high" data-badge data-status="danger" />
-</HStack>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```html live
@@ -115,6 +103,18 @@ Sett `data-badge` for å vise ikonet som en glyf på en farget sirkel. Selve ele
   <ix-icon name="priority_high" data-badge data-status="warning"></ix-icon>
   <ix-icon name="priority_high" data-badge data-status="danger"></ix-icon>
 </div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack alignItems="center">
+  <Icon name="info_i" data-badge data-status="info" />
+  <Icon name="check" data-badge data-status="success" />
+  <Icon name="priority_high" data-badge data-status="warning" />
+  <Icon name="priority_high" data-badge data-status="danger" />
+</HStack>
 ```
 
 </TabItem>
@@ -148,6 +148,25 @@ Ikonet skal kommunisere gjennom form, ikke farge alene. Brukere med fargeblindhe
 
 `sm` egner seg til kompakt UI som etiketter og badges. `md` (standard) passer ved siden av tekst i løpende innhold. `lg` og `xl` brukes til frittstående ikoner, navigasjon og illustrerende elementer.
 
+### Unngå "blink" før web componenten laster
+
+Ikonet tegnes av CSS via `mask-image: var(--ii-icon-url)`. Det er web componenten som setter `--ii-icon-url` i sin `connectedCallback`. Frem til den kjører er variabelen ikke satt, og CSS faller tilbake til en gjennomsiktig maske — ikonet er da usynlig, ikke en farget boks.
+
+I React har dette ingen praktisk betydning: web componenten er allerede lastet når komponentene rendres. Men i ren HTML uten rammeverk — særlig sider som vises før `indeks-web`-scriptet er ferdig lastet fra CDN — kan ikonet blinke inn et lite øyeblikk etterpå.
+
+Du kan fjerne blinket helt ved å sette `--ii-icon-url` inline selv. Da tegnes ikonet umiddelbart, og web componenten overtar variabelen (og legger til aria) når den laster:
+
+```html live
+<ix-icon
+  name="home"
+  style="--ii-icon-url: url('https://cdn.sparebank1.no/icons/home.svg')"
+></ix-icon>
+```
+
+:::note Hacky, men trygt som fallback
+`--ii-icon-url` er en intern variabel (`--ii-`-prefiks). Den er ikke et offisielt API og kan i teorien endres. Bruk dette kun som en bevisst optimalisering for ikke-React-sider der blinket er et problem. `name` er Material Design-filnavnet direkte, så URL-en er `.../{name}.svg` (f.eks. `home` → `home.svg`).
+:::
+
 ## Universell utforming
 
 ### Hva du selv må sørge for
@@ -170,6 +189,16 @@ Ikonet skal kommunisere gjennom form, ikke farge alene. Brukere med fargeblindhe
 ## Props / API
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+| Attributt | Type | Standard | Beskrivelse |
+|-----------|------|----------|-------------|
+| `name` | `IconName` | | Material Design-ikonnavn (f.eks. `"home"`). Brukes direkte som SVG-filnavn. |
+| `data-size` | `sm \| md \| lg \| xl` | `md` | Størrelse på ikonet |
+| `data-badge` | (flagg) | | Viser ikonet som en glyf på en farget sirkel (badge) |
+| `aria-label` | `string` | | Tilgjengelig navn for semantiske ikoner |
+
+</TabItem>
 <TabItem value="react" label="React">
 
 | Prop | Type | Påkrevd | Standard | Beskrivelse |
@@ -182,36 +211,7 @@ Ikonet skal kommunisere gjennom form, ikke farge alene. Brukere med fargeblindhe
 | `className` | `string` | Nei | | Ekstra CSS-klasser |
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-| Attributt | Type | Standard | Beskrivelse |
-|-----------|------|----------|-------------|
-| `name` | `IconName` | | Material Design-ikonnavn (f.eks. `"home"`). Brukes direkte som SVG-filnavn. |
-| `data-size` | `sm \| md \| lg \| xl` | `md` | Størrelse på ikonet |
-| `data-badge` | (flagg) | | Viser ikonet som en glyf på en farget sirkel (badge) |
-| `aria-label` | `string` | | Tilgjengelig navn for semantiske ikoner |
-
-</TabItem>
 </Tabs>
-
-## Unngå "blink" før web componenten laster
-
-Ikonet tegnes av CSS via `mask-image: var(--ii-icon-url)`. Det er web componenten som setter `--ii-icon-url` i sin `connectedCallback`. Frem til den kjører er variabelen ikke satt, og CSS faller tilbake til en gjennomsiktig maske — ikonet er da usynlig, ikke en farget boks.
-
-I React har dette ingen praktisk betydning: web componenten er allerede lastet når komponentene rendres. Men i ren HTML uten rammeverk — særlig sider som vises før `indeks-web`-scriptet er ferdig lastet fra CDN — kan ikonet blinke inn et lite øyeblikk etterpå.
-
-Du kan fjerne blinket helt ved å sette `--ii-icon-url` inline selv. Da tegnes ikonet umiddelbart, og web componenten overtar variabelen (og legger til aria) når den laster:
-
-```html live
-<ix-icon
-  name="home"
-  style="--ii-icon-url: url('https://cdn.sparebank1.no/icons/home.svg')"
-></ix-icon>
-```
-
-:::note Hacky, men trygt som fallback
-`--ii-icon-url` er en intern variabel (`--ii-`-prefiks). Den er ikke et offisielt API og kan i teorien endres. Bruk dette kun som en bevisst optimalisering for ikke-React-sider der blinket er et problem. `name` er Material Design-filnavnet direkte, så URL-en er `.../{name}.svg` (f.eks. `home` → `home.svg`).
-:::
 
 ## Tilpasning med CSS
 

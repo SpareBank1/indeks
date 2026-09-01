@@ -31,7 +31,7 @@ For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` lig
 - Globale systembeskjeder — bruk SystemMessage
 - Lange eller komplekse forklaringer som krever egen side
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -315,7 +315,7 @@ Ikonet støtter forståelsen av budskapet, men skal aldri være eneste informasj
 | `announceText` | `string` | | Overstyr teksten som leses opp. Standard er den synlige teksten (tittel + brødtekst). Bruk for å lese opp noe kortere ved rikt innhold |
 | `className` | `string` | | Ekstra CSS-klasser på rot-elementet |
 
-## MessageRegion
+### MessageRegion
 
 `MessageRegion` er en obligatorisk wrapper rundt React-meldinger. Den rendrer ingenting synlig selv — den legger én stabil, skjult ARIA-live-region (`polite`) i DOM som meldingene annonseres gjennom. Uten en omsluttende `MessageRegion` rendres `<Message>` visuelt, men annonseres ikke for skjermlesere (og logger en advarsel i utviklingsmodus).
 
@@ -335,7 +335,7 @@ Du kan ha én felles `MessageRegion` rundt et helt skjema eller en hel side, ell
 </MessageRegion>
 ```
 
-### Annonsering ved sidelast
+#### Annonsering ved sidelast
 
 Meldinger som settes inn **dynamisk** (etter at siden er ferdig lastet — f.eks. som svar på en handling) annonseres automatisk. Meldinger som allerede er til stede **ved første sidelast** er stille som standard, slik at en side full av meldinger ikke leser seg selv opp ved innlasting.
 
@@ -349,7 +349,7 @@ Når en melding er server-rendret eller til stede ved sidelast og *likevel* skal
 </MessageRegion>
 ```
 
-### MessageRegion Props / API
+#### MessageRegion Props / API
 
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|

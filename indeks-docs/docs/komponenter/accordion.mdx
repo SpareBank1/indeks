@@ -25,29 +25,9 @@ Accordion viser og skjuler innhold i seksjoner. Den er nyttig når mye innhold s
 - Navigasjon mellom sider — bruk lenker eller meny
 - Når alt innholdet uansett må leses i rekkefølge
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Accordion>
-  <Accordion.Item defaultOpen>
-    <Accordion.Header>Hvordan logger jeg inn?</Accordion.Header>
-    <Accordion.Content>
-      <p>Du logger inn med BankID eller BankID på mobil øverst til høyre.</p>
-    </Accordion.Content>
-  </Accordion.Item>
-  <Accordion.Item>
-    <Accordion.Header>Hvordan endrer jeg passord?</Accordion.Header>
-    <Accordion.Content>
-      <p>Gå til Innstillinger → Sikkerhet og velg «Endre passord».</p>
-    </Accordion.Content>
-  </Accordion.Item>
-</Accordion>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -65,6 +45,26 @@ Accordion viser og skjuler innhold i seksjoner. Den er nyttig når mye innhold s
     </div>
   </details>
 </div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Accordion>
+  <Accordion.Item defaultOpen>
+    <Accordion.Header>Hvordan logger jeg inn?</Accordion.Header>
+    <Accordion.Content>
+      <p>Du logger inn med BankID eller BankID på mobil øverst til høyre.</p>
+    </Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item>
+    <Accordion.Header>Hvordan endrer jeg passord?</Accordion.Header>
+    <Accordion.Content>
+      <p>Gå til Innstillinger → Sikkerhet og velg «Endre passord».</p>
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion>
 ```
 
 </TabItem>

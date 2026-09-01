@@ -21,26 +21,9 @@ Select lar brukeren velge ett alternativ fra en nedtrekksliste. Komponenten skju
 - Når alternativene er komplekse eller krever forklaring
 - Situasjoner der brukeren bør se alle valg samtidig
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Select
-  label="Land"
-  placeholder="Velg land..."
-  options={[
-    { value: 'no', label: 'Norge' },
-    { value: 'se', label: 'Sverige' },
-    { value: 'dk', label: 'Danmark' },
-  ]}
-/>
-```
-
-Prøv å legge til flere alternativer i `options`-arrayen.
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -59,6 +42,23 @@ Prøv å legge til flere alternativer i `options`-arrayen.
 `<ix-field>` setter opp ARIA-koblinger automatisk. Error-elementet skal alltid ligge i DOM.
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Land"
+  placeholder="Velg land..."
+  options={[
+    { value: 'no', label: 'Norge' },
+    { value: 'se', label: 'Sverige' },
+    { value: 'dk', label: 'Danmark' },
+  ]}
+/>
+```
+
+Prøv å legge til flere alternativer i `options`-arrayen.
+
+</TabItem>
 </Tabs>
 
 ## Eksempler
@@ -66,22 +66,6 @@ Prøv å legge til flere alternativer i `options`-arrayen.
 ### Med hjelpetekst
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Select
-  label="Foretrukket kontaktmetode"
-  description="Vi bruker dette for å sende deg viktig informasjon"
-  placeholder="Velg..."
-  options={[
-    { value: 'email', label: 'E-post' },
-    { value: 'sms', label: 'SMS' },
-    { value: 'phone', label: 'Telefon' },
-  ]}
-/>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -99,6 +83,22 @@ Prøv å legge til flere alternativer i `options`-arrayen.
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Foretrukket kontaktmetode"
+  description="Vi bruker dette for å sende deg viktig informasjon"
+  placeholder="Velg..."
+  options={[
+    { value: 'email', label: 'E-post' },
+    { value: 'sms', label: 'SMS' },
+    { value: 'phone', label: 'Telefon' },
+  ]}
+/>
+```
+
+</TabItem>
 </Tabs>
 
 ### Med grupperte alternativer
@@ -106,6 +106,29 @@ Prøv å legge til flere alternativer i `options`-arrayen.
 Bruk `optgroup` for å gruppere relaterte alternativer. Dette gjør lange lister lettere å navigere.
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <label>Velg land</label>
+  <select class="ix-select" name="land">
+    <option value="" disabled selected>Velg...</option>
+    <optgroup label="Norden">
+      <option value="no">Norge</option>
+      <option value="se">Sverige</option>
+      <option value="dk">Danmark</option>
+    </optgroup>
+    <optgroup label="Europa">
+      <option value="de">Tyskland</option>
+      <option value="fr">Frankrike</option>
+      <option value="es">Spania</option>
+    </optgroup>
+  </select>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
@@ -134,52 +157,11 @@ Bruk `optgroup` for å gruppere relaterte alternativer. Dette gjør lange lister
 ```
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<ix-field>
-  <label>Velg land</label>
-  <select class="ix-select" name="land">
-    <option value="" disabled selected>Velg...</option>
-    <optgroup label="Norden">
-      <option value="no">Norge</option>
-      <option value="se">Sverige</option>
-      <option value="dk">Danmark</option>
-    </optgroup>
-    <optgroup label="Europa">
-      <option value="de">Tyskland</option>
-      <option value="fr">Frankrike</option>
-      <option value="es">Spania</option>
-    </optgroup>
-  </select>
-  <span data-field="error"></span>
-</ix-field>
-```
-
-</TabItem>
 </Tabs>
 
 ### Med feilmelding
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Select
-  label="Land"
-  placeholder="Velg land..."
-  errorMessage="Du må velge et land for å fortsette"
-  options={[
-    { value: 'no', label: 'Norge' },
-    { value: 'se', label: 'Sverige' },
-    { value: 'dk', label: 'Danmark' },
-  ]}
-/>
-```
-
-Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -198,11 +180,45 @@ Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
 `<ix-field>` setter `aria-invalid="true"` automatisk når error-elementet har innhold.
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Land"
+  placeholder="Velg land..."
+  errorMessage="Du må velge et land for å fortsette"
+  options={[
+    { value: 'no', label: 'Norge' },
+    { value: 'se', label: 'Sverige' },
+    { value: 'dk', label: 'Danmark' },
+  ]}
+/>
+```
+
+Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
+
+</TabItem>
 </Tabs>
 
 ### Med tooltip
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field tooltip="Vi trenger denne informasjonen for å beregne skatt" tooltip-label="Mer informasjon om Bostedsland">
+  <label>Bostedsland</label>
+  <select class="ix-select" name="land">
+    <option value="" disabled selected>Velg...</option>
+    <option value="no">Norge</option>
+    <option value="se">Sverige</option>
+    <option value="dk">Danmark</option>
+  </select>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
@@ -220,27 +236,25 @@ Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
 ```
 
 </TabItem>
+</Tabs>
+
+### Deaktivert
+
+<Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-field tooltip="Vi trenger denne informasjonen for å beregne skatt" tooltip-label="Mer informasjon om Bostedsland">
-  <label>Bostedsland</label>
-  <select class="ix-select" name="land">
-    <option value="" disabled selected>Velg...</option>
-    <option value="no">Norge</option>
+<ix-field>
+  <label>Land</label>
+  <select class="ix-select" name="land" disabled>
+    <option value="no" selected>Norge</option>
     <option value="se">Sverige</option>
-    <option value="dk">Danmark</option>
   </select>
   <span data-field="error"></span>
 </ix-field>
 ```
 
 </TabItem>
-</Tabs>
-
-### Deaktivert
-
-<Tabs groupId="variant">
 <TabItem value="react" label="React">
 
 ```tsx live
@@ -256,40 +270,11 @@ Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
 ```
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<ix-field>
-  <label>Land</label>
-  <select class="ix-select" name="land" disabled>
-    <option value="no" selected>Norge</option>
-    <option value="se">Sverige</option>
-  </select>
-  <span data-field="error"></span>
-</ix-field>
-```
-
-</TabItem>
 </Tabs>
 
 ### Med deaktivert alternativ
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Select
-  label="Leveringsmetode"
-  placeholder="Velg..."
-  options={[
-    { value: 'standard', label: 'Standard levering (3–5 dager)' },
-    { value: 'express', label: 'Ekspress (ikke tilgjengelig)', disabled: true },
-    { value: 'pickup', label: 'Hent i butikk' },
-  ]}
-/>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -303,6 +288,21 @@ Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
   </select>
   <span data-field="error"></span>
 </ix-field>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Select
+  label="Leveringsmetode"
+  placeholder="Velg..."
+  options={[
+    { value: 'standard', label: 'Standard levering (3–5 dager)' },
+    { value: 'express', label: 'Ekspress (ikke tilgjengelig)', disabled: true },
+    { value: 'pickup', label: 'Hent i butikk' },
+  ]}
+/>
 ```
 
 </TabItem>
@@ -352,7 +352,7 @@ Når brukeren åpner listen og velger et alternativ, skal listen lukkes og verdi
 
 Brukeren skal kunne navigere med tastatur og enkelt endre valget uten unødvendige steg.
 
-## Tilgjengelighet / universell utforming
+## Universell utforming
 
 ### Semantisk struktur og korrekt rolle
 
@@ -391,6 +391,38 @@ Vurder om feltet heller bør skjules, vises som ren tekst, eller settes til read
 ## Props / API
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### `<ix-field>` med `<select>`
+
+`<ix-field>` har ingen egne attributter. Alt settes på native HTML-elementer inni:
+
+```html
+<ix-field>
+  <label>Land</label>
+  <span data-field="description">Velg landet du bor i</span>
+  <select class="ix-select" name="land">
+    <option value="" disabled>Velg...</option>
+    <optgroup label="Norden">
+      <option value="no">Norge</option>
+      <option value="se">Sverige</option>
+    </optgroup>
+  </select>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `<ix-field>` | Ja | Wrapper. Kobler ARIA mellom label, select, description og error |
+| `<label>` | Ja | Labeltekst. Kobles til select via `for`/`id` |
+| `<span data-field="description">` | Nei | Hjelpetekst. Kobles til select via `aria-describedby` |
+| `<select class="ix-select">` | Ja | Selve nedtrekkslisten |
+| `<option>` | Ja | Alternativene i listen |
+| `<optgroup>` | Nei | Gruppering av alternativer |
+| `<span data-field="error">` | Ja | Feilmelding. Alltid i DOM. Tomt = ingen feil |
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ### SelectProps
@@ -422,38 +454,6 @@ I tillegg støttes alle standard HTML select-attributter (`value`, `defaultValue
 |------|------|---------|-------------|
 | `label` | `string` | Ja | Overskriften for gruppen |
 | `options` | `SelectOption[]` | Ja | Alternativene i gruppen |
-
-</TabItem>
-<TabItem value="html" label="HTML">
-
-### `<ix-field>` med `<select>`
-
-`<ix-field>` har ingen egne attributter. Alt settes på native HTML-elementer inni:
-
-```html
-<ix-field>
-  <label>Land</label>
-  <span data-field="description">Velg landet du bor i</span>
-  <select class="ix-select" name="land">
-    <option value="" disabled>Velg...</option>
-    <optgroup label="Norden">
-      <option value="no">Norge</option>
-      <option value="se">Sverige</option>
-    </optgroup>
-  </select>
-  <span data-field="error"></span>
-</ix-field>
-```
-
-| Del | Påkrevd | Beskrivelse |
-|-----|---------|-------------|
-| `<ix-field>` | Ja | Wrapper. Kobler ARIA mellom label, select, description og error |
-| `<label>` | Ja | Labeltekst. Kobles til select via `for`/`id` |
-| `<span data-field="description">` | Nei | Hjelpetekst. Kobles til select via `aria-describedby` |
-| `<select class="ix-select">` | Ja | Selve nedtrekkslisten |
-| `<option>` | Ja | Alternativene i listen |
-| `<optgroup>` | Nei | Gruppering av alternativer |
-| `<span data-field="error">` | Ja | Feilmelding. Alltid i DOM. Tomt = ingen feil |
 
 </TabItem>
 </Tabs>

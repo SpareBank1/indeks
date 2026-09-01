@@ -22,36 +22,9 @@ en handling).
 - Når innholdet ikke hører naturlig sammen — da skaper kortet falsk gruppering
 - Kun en flate å gruppere eller skille ut flere elementer på, uten avgrensning eller klikk — bruk [Surface](./surface)
 
-## Statisk vs. klikkbart — og hvorfor det er synlig på mobil
-
-Et klikkbart kort må se annerledes ut enn et statisk kort **uten** at man trenger å peke på det.
-På desktop kan klikkbarhet antydes med hover, men hover finnes ikke på touch. Derfor bærer det
-klikkbare kortet sin affordanse i hviletilstand:
-
-- **Chevron (›)** — et eksplisitt «dette gjør noe»-signal, synlig hele tiden. Dette er
-  hovedsignalet: en form, ikke bare en farge, så det holder også kontrastkravet.
-- **Hover** — på desktop får kortet en bakgrunns-tint når du peker på det.
-- **Pressed-state** — ved trykk får kortet en tint, som bekrefter klikket på touch.
-- **Fokusring** — synlig for tastaturbrukere via `:focus-visible`.
-
-Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `onClick` (handling →
-`<button>`). Chevronen legges på automatisk.
-
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<VStack align="start">
-  <Card padding="md">
-    <Heading as="h3" size="sm">Statisk kort</Heading>
-    <Text>Et kort uten href eller onClick er bare en beholder.</Text>
-  </Card>
-</VStack>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -61,6 +34,18 @@ Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `on
     <p>Et kort uten interaktivitet er bare en beholder.</p>
   </div>
 </ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack align="start">
+  <Card padding="md">
+    <Heading as="h3" size="sm">Statisk kort</Heading>
+    <Text>Et kort uten href eller onClick er bare en beholder.</Text>
+  </Card>
+</VStack>
 ```
 
 </TabItem>
@@ -74,22 +59,6 @@ Legg merke til at det klikkbare kortet har en chevron allerede i hviletilstand �
 trenger ikke peke på det for å forstå at det kan trykkes.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<HStack gap="md" align="start">
-  <Card padding="md">
-    <Heading as="h3" size="sm">Statisk</Heading>
-    <Text>Flat, ingen chevron.</Text>
-  </Card>
-  <Card padding="md" href="https://www.sparebank1.no">
-    <Heading as="h3" size="sm">Klikkbart</Heading>
-    <Text>Chevron i hviletilstand, helt uten hover.</Text>
-  </Card>
-</HStack>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -107,6 +76,22 @@ trenger ikke peke på det for å forstå at det kan trykkes.
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="md" align="start">
+  <Card padding="md">
+    <Heading as="h3" size="sm">Statisk</Heading>
+    <Text>Flat, ingen chevron.</Text>
+  </Card>
+  <Card padding="md" href="https://www.sparebank1.no">
+    <Heading as="h3" size="sm">Klikkbart</Heading>
+    <Text>Chevron i hviletilstand, helt uten hover.</Text>
+  </Card>
+</HStack>
+```
+
+</TabItem>
 </Tabs>
 
 ### Som lenke (navigasjon)
@@ -114,18 +99,6 @@ trenger ikke peke på det for å forstå at det kan trykkes.
 Sett `href` når kortet navigerer til en URL. Det rendres som `<a>` og får riktig lenke-semantikk.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<VStack align="start">
-  <Card padding="md" href="https://www.sparebank1.no">
-    <Heading as="h3" size="sm">Sparekonto</Heading>
-    <Text>Se saldo og renter</Text>
-  </Card>
-</VStack>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -139,6 +112,18 @@ Sett `href` når kortet navigerer til en URL. Det rendres som `<a>` og får rikt
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack align="start">
+  <Card padding="md" href="https://www.sparebank1.no">
+    <Heading as="h3" size="sm">Sparekonto</Heading>
+    <Text>Se saldo og renter</Text>
+  </Card>
+</VStack>
+```
+
+</TabItem>
 </Tabs>
 
 ### Som knapp (handling)
@@ -146,18 +131,6 @@ Sett `href` når kortet navigerer til en URL. Det rendres som `<a>` og får rikt
 Bruk et `<button>` når kortet utfører en handling. I React rendres `<button>` når du gir `onClick`.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<VStack align="start">
-  <Card padding="md" onClick={() => alert('Kort klikket')}>
-    <Heading as="h3" size="sm">Vis detaljer</Heading>
-    <Text>Åpner et panel</Text>
-  </Card>
-</VStack>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -171,6 +144,18 @@ Bruk et `<button>` når kortet utfører en handling. I React rendres `<button>` 
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack align="start">
+  <Card padding="md" onClick={() => alert('Kort klikket')}>
+    <Heading as="h3" size="sm">Vis detaljer</Heading>
+    <Text>Åpner et panel</Text>
+  </Card>
+</VStack>
+```
+
+</TabItem>
 </Tabs>
 
 ### Eget chevron-ikon
@@ -181,18 +166,6 @@ chevronen til `open_in_new` som visuelt signal. I ren HTML setter du `target`/`r
 chevron-ikonet selv.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<VStack align="start">
-  <Card padding="md" href="https://www.sparebank1.no" openInNewTab chevronIcon="open_in_new">
-    <Heading as="h3" size="sm">Åpner i ny fane</Heading>
-    <Text>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</Text>
-  </Card>
-</VStack>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -203,6 +176,18 @@ chevron-ikonet selv.
     <ix-icon class="ix-card__chevron" name="open_in_new" data-size="lg" aria-hidden="true"></ix-icon>
   </a>
 </ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack align="start">
+  <Card padding="md" href="https://www.sparebank1.no" openInNewTab chevronIcon="open_in_new">
+    <Heading as="h3" size="sm">Åpner i ny fane</Heading>
+    <Text>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</Text>
+  </Card>
+</VStack>
 ```
 
 </TabItem>
@@ -233,6 +218,21 @@ knapper i stedet — ikke gjør hele flaten klikkbar.
 
 Hele kortet er trykkbart. Gi kortet tilstrekkelig `padding` slik at klikkflaten blir komfortabel
 på touch (sikt mot minst 44×44 px).
+
+### Statisk vs. klikkbart — og hvorfor det er synlig på mobil
+
+Et klikkbart kort må se annerledes ut enn et statisk kort **uten** at man trenger å peke på det.
+På desktop kan klikkbarhet antydes med hover, men hover finnes ikke på touch. Derfor bærer det
+klikkbare kortet sin affordanse i hviletilstand:
+
+- **Chevron (›)** — et eksplisitt «dette gjør noe»-signal, synlig hele tiden. Dette er
+  hovedsignalet: en form, ikke bare en farge, så det holder også kontrastkravet.
+- **Hover** — på desktop får kortet en bakgrunns-tint når du peker på det.
+- **Pressed-state** — ved trykk får kortet en tint, som bekrefter klikket på touch.
+- **Fokusring** — synlig for tastaturbrukere via `:focus-visible`.
+
+Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `onClick` (handling →
+`<button>`). Chevronen legges på automatisk.
 
 ## Universell utforming
 

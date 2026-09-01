@@ -24,7 +24,7 @@ Combobox er en sammensatt komponent med en del markup. [Combobox i ren HTML](./c
 - Når brukeren skal skrive inn en fri verdi som ikke finnes i lista
 - Når alle alternativer alltid bør være synlige samtidig
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -455,7 +455,7 @@ Komponenten lar brukeren velge blant eksisterende alternativer — ikke skrive i
 
 Alternativene bør sorteres alfabetisk, eller med de mest relevante øverst i lange lister, slik at brukeren raskt finner frem.
 
-## Tilgjengelighet / universell utforming
+## Universell utforming
 
 ### Semantisk struktur og korrekt rolle
 
@@ -488,6 +488,37 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 ## Props / API
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### `<ix-combobox>`
+
+| Attributt | Påkrevd | Beskrivelse |
+|-----------|---------|-------------|
+| `multiple` | Nei | Flervalg med chips |
+| `disabled` | Nei | Deaktiverer feltet |
+| `readonly` | Nei | Skrivebeskyttet felt |
+| `name` | Nei | Navn på skjult `<select>` for form-innsending |
+| `data-no-hits-text` | Nei | Tekst ved 0 treff |
+| `data-remove-chip-label` | Nei | Suffiks på chip aria-label (multi) |
+| `data-chips-label` | Nei | aria-label på chip-gruppen `role="group"` (multi) |
+| `data-arrow-hint-text` | Nei | Skjult hint (aria-describedby) for chip-navigasjon (multi) |
+| `data-results-text` | Nei | Mal for annonsering av antall treff, `{n}` = antall |
+
+### Delelementer (light DOM)
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `.ix-text-field > input` | Ja | Inputfeltet. Får combobox-ARIA |
+| `.ix-combobox__toggle` | Nei | Chevron-knapp for å åpne/lukke lista |
+| `.ix-combobox__listbox` | Ja | Panelet med alternativer |
+| `.ix-combobox__option[data-value]` | Ja | Ett alternativ. Label i `.ix-combobox__option-label`. Sett `aria-selected="true"` for forhåndsvalg, `aria-disabled="true"` for å deaktivere |
+| `.ix-combobox__option-check` | Nei | Checkmark, vises når valgt |
+| `.ix-combobox__option-description` | Nei | Valgfri andrelinje |
+| `.ix-combobox__no-hits` | Nei | Melding ved 0 treff (`role="status"`) |
+| `[data-field="chips"]` | Kun multi | Tom wrapper du skriver selv. Komponenten fyller den med chips — ikke skriv `<data class="ix-chip">` for hånd |
+| `select[data-field="native"]` | Nei | Skjult select for form-synk. Opprettes automatisk om den mangler |
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ### ComboboxProps
@@ -525,37 +556,6 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 | `label` | `string` | Ja | Teksten som vises for alternativet |
 | `description` | `string` | Nei | Valgfri andrelinje under label |
 | `disabled` | `boolean` | Nei | Gjør alternativet utilgjengelig for valg |
-
-</TabItem>
-<TabItem value="html" label="HTML">
-
-### `<ix-combobox>`
-
-| Attributt | Påkrevd | Beskrivelse |
-|-----------|---------|-------------|
-| `multiple` | Nei | Flervalg med chips |
-| `disabled` | Nei | Deaktiverer feltet |
-| `readonly` | Nei | Skrivebeskyttet felt |
-| `name` | Nei | Navn på skjult `<select>` for form-innsending |
-| `data-no-hits-text` | Nei | Tekst ved 0 treff |
-| `data-remove-chip-label` | Nei | Suffiks på chip aria-label (multi) |
-| `data-chips-label` | Nei | aria-label på chip-gruppen `role="group"` (multi) |
-| `data-arrow-hint-text` | Nei | Skjult hint (aria-describedby) for chip-navigasjon (multi) |
-| `data-results-text` | Nei | Mal for annonsering av antall treff, `{n}` = antall |
-
-### Delelementer (light DOM)
-
-| Del | Påkrevd | Beskrivelse |
-|-----|---------|-------------|
-| `.ix-text-field > input` | Ja | Inputfeltet. Får combobox-ARIA |
-| `.ix-combobox__toggle` | Nei | Chevron-knapp for å åpne/lukke lista |
-| `.ix-combobox__listbox` | Ja | Panelet med alternativer |
-| `.ix-combobox__option[data-value]` | Ja | Ett alternativ. Label i `.ix-combobox__option-label`. Sett `aria-selected="true"` for forhåndsvalg, `aria-disabled="true"` for å deaktivere |
-| `.ix-combobox__option-check` | Nei | Checkmark, vises når valgt |
-| `.ix-combobox__option-description` | Nei | Valgfri andrelinje |
-| `.ix-combobox__no-hits` | Nei | Melding ved 0 treff (`role="status"`) |
-| `[data-field="chips"]` | Kun multi | Tom wrapper du skriver selv. Komponenten fyller den med chips — ikke skriv `<data class="ix-chip">` for hånd |
-| `select[data-field="native"]` | Nei | Skjult select for form-synk. Opprettes automatisk om den mangler |
 
 </TabItem>
 </Tabs>
