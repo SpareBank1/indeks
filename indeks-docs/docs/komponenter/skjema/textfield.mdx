@@ -18,21 +18,9 @@ TextField er et inputfelt for kortere tekst eller tall, som kontonummer, e-posta
 - Komplekse eller sammensatte input (f.eks. dato med flere felt)
 - Valg fra forhåndsdefinerte alternativer. Bruk [Select](./select), [RadioGroup](./radio-group) eller [Checkbox](./checkbox).
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<TextField
-  label="Kontonummer"
-  description="11 siffer uten mellomrom"
-/>
-```
-
-Prøv å endre label eller description direkte i editoren. Komponenten kobler `for`/`id` og `aria-describedby` automatisk.
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -49,6 +37,18 @@ Prøv å endre label eller description direkte i editoren. Komponenten kobler `f
 `<ix-field>` setter opp alle ARIA-koblinger automatisk. Error-elementet skal alltid ligge i DOM. Tomt betyr ingen feil.
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField
+  label="Kontonummer"
+  description="11 siffer uten mellomrom"
+/>
+```
+
+Prøv å endre label eller description direkte i editoren. Komponenten kobler `for`/`id` og `aria-describedby` automatisk.
+
+</TabItem>
 </Tabs>
 
 :::warning Unngå `type="number"`
@@ -62,17 +62,6 @@ Prøv å endre label eller description direkte i editoren. Komponenten kobler `f
 Bruk `tooltip` for å gi ekstra kontekst som ikke er kritisk for å fullføre oppgaven. Sett alltid `tooltipLabel` på riktig språk — det er det tilgjengelige navnet på info-knappen.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<TextField
-  label="Navn"
-  tooltip="Fullt juridisk navn som det står i passet"
-  tooltipLabel="Mer informasjon om Navn"
-/>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -86,6 +75,17 @@ Bruk `tooltip` for å gi ekstra kontekst som ikke er kritisk for å fullføre op
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField
+  label="Navn"
+  tooltip="Fullt juridisk navn som det står i passet"
+  tooltipLabel="Mer informasjon om Navn"
+/>
+```
+
+</TabItem>
 </Tabs>
 
 ### Med feilmelding
@@ -93,20 +93,6 @@ Bruk `tooltip` for å gi ekstra kontekst som ikke er kritisk for å fullføre op
 Når valideringen feiler, vis en feilmelding som sier hva som er galt og hva brukeren skal gjøre:
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<TextField
-  label="Kontonummer"
-  description="11 siffer uten mellomrom"
-  errorMessage="Kontonummer må ha 11 siffer"
-  inputMode="numeric"
-/>
-```
-
-Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -132,6 +118,20 @@ errorEl.textContent = '';
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField
+  label="Kontonummer"
+  description="11 siffer uten mellomrom"
+  errorMessage="Kontonummer må ha 11 siffer"
+  inputMode="numeric"
+/>
+```
+
+Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
+
+</TabItem>
 </Tabs>
 
 ### Med prefix og suffix
@@ -139,30 +139,6 @@ errorEl.textContent = '';
 Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må ligge før `<input>`, `suffix` må ligge etter — feil rekkefølge gir feil visuell plassering.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<>
-  <TextField
-    label="Beløp i kroner"
-    suffix="kr"
-    inputMode="numeric"
-  />
-  <TextField
-    label="Rente"
-    suffix="%"
-    inputMode="decimal"
-  />
-  <TextField
-    label="Beløp i euro"
-    prefix="€"
-    suffix=",00"
-    inputMode="numeric"
-  />
-</>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -196,6 +172,30 @@ Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må li
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextField
+    label="Beløp i kroner"
+    suffix="kr"
+    inputMode="numeric"
+  />
+  <TextField
+    label="Rente"
+    suffix="%"
+    inputMode="decimal"
+  />
+  <TextField
+    label="Beløp i euro"
+    prefix="€"
+    suffix=",00"
+    inputMode="numeric"
+  />
+</>
+```
+
+</TabItem>
 </Tabs>
 
 Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for NOK, ikke `prefix`. `prefix` brukes for valutasymboler som plasseres foran beløpet (f.eks. `€`, `$`).
@@ -207,29 +207,6 @@ TextField kan formatere innholdet automatisk. Sett `format` til en innebygd vari
 Formatering er visuell — den erstatter ikke behovet for å fortelle brukeren hva som forventes. Oppgi derfor forventet format som tekst i `description` (f.eks. `"11 siffer, f.eks. 1234 56 78903"`), slik eksemplene under gjør.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<>
-  <TextField
-    label="Beløp i kroner"
-    description="Beløp med tusenskille, f.eks. 1 234 567"
-    format="amount"
-    suffix="kr"
-    inputMode="decimal"
-    defaultValue="1234567"
-  />
-  <TextField
-    label="Kontonummer"
-    description="11 siffer, f.eks. 1234 56 78903"
-    format="account"
-    inputMode="numeric"
-    defaultValue="12345678903"
-  />
-</>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -255,6 +232,29 @@ Formatering er visuell — den erstatter ikke behovet for å fortelle brukeren h
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextField
+    label="Beløp i kroner"
+    description="Beløp med tusenskille, f.eks. 1 234 567"
+    format="amount"
+    suffix="kr"
+    inputMode="decimal"
+    defaultValue="1234567"
+  />
+  <TextField
+    label="Kontonummer"
+    description="11 siffer, f.eks. 1234 56 78903"
+    format="account"
+    inputMode="numeric"
+    defaultValue="12345678903"
+  />
+</>
+```
+
+</TabItem>
 </Tabs>
 
 Skriv i feltene og se separatorene bygge seg opp mens du skriver — `format="amount"` gir tusenskille (`1 234 567`), og `format="account"` grupperer kontonummeret (`1234 56 78903`). Begge er live-varianter.
@@ -264,24 +264,6 @@ Verdien du leser av `onChange` er alltid den rå verdien uten separatorer (den l
 ### Deaktivert og skrivebeskyttet
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<>
-  <TextField
-    label="Kontonummer"
-    disabled
-    defaultValue="1234 56 78903"
-  />
-  <TextField
-    label="Kontonummer"
-    readOnly
-    defaultValue="1234 56 78903"
-  />
-</>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -304,6 +286,24 @@ Verdien du leser av `onChange` er alltid den rå verdien uten separatorer (den l
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextField
+    label="Kontonummer"
+    disabled
+    defaultValue="1234 56 78903"
+  />
+  <TextField
+    label="Kontonummer"
+    readOnly
+    defaultValue="1234 56 78903"
+  />
+</>
+```
+
+</TabItem>
 </Tabs>
 
 `disabled` og `readOnly` settes direkte på input. `ix-field` tar seg av den visuelle tilstanden automatisk. `disabled` gjør feltet helt inaktivt — ingen fokus eller interaksjon. `readOnly` lar brukeren fokusere og kopiere, men ikke endre.
@@ -313,25 +313,6 @@ Verdien du leser av `onChange` er alltid den rå verdien uten separatorer (den l
 I banksammenheng er nesten alle felter påkrevd. Merk unntaket — ikke regelen. Legg til `(valgfritt)` på slutten av labelteksten når et felt ikke er obligatorisk: `label="Mobilnummer (valgfritt)"`. Ikke merk obligatoriske felt — det er standarden.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<>
-  <TextField
-    label="E-postadresse"
-    required
-    type="email"
-    autoComplete="email"
-  />
-  <TextField
-    label="Mobilnummer (valgfritt)"
-    type="tel"
-    autoComplete="tel"
-  />
-</>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -354,6 +335,25 @@ I banksammenheng er nesten alle felter påkrevd. Merk unntaket — ikke regelen.
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextField
+    label="E-postadresse"
+    required
+    type="email"
+    autoComplete="email"
+  />
+  <TextField
+    label="Mobilnummer (valgfritt)"
+    type="tel"
+    autoComplete="tel"
+  />
+</>
+```
+
+</TabItem>
 </Tabs>
 
 ### Tegnteller
@@ -361,22 +361,6 @@ I banksammenheng er nesten alle felter påkrevd. Merk unntaket — ikke regelen.
 Sett `maxlength` eller `minlength` på input — `ix-field` oppretter og oppdaterer en tegnteller automatisk. Med `maxlength` vises `0/50`, med `minlength` vises `0 tegn (minimum 10)`.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<>
-  <TextField
-    label="Kort beskrivelse"
-    maxLength={50}
-  />
-  <TextField
-    label="Begrunnelse"
-    minLength={10}
-  />
-</>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -395,6 +379,22 @@ Sett `maxlength` eller `minlength` på input — `ix-field` oppretter og oppdate
     </div>
     <span data-field="error"></span>
   </ix-field>
+</>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <TextField
+    label="Kort beskrivelse"
+    maxLength={50}
+  />
+  <TextField
+    label="Begrunnelse"
+    minLength={10}
+  />
 </>
 ```
 
@@ -482,13 +482,6 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 Synlig label er alltid anbefalt. I tilfeller der konteksten er helt åpenbar fra omgivelsene (f.eks. et søkefelt i en søkebar), kan `ariaLabel` brukes i stedet. Bruk det kun når synlig label er umulig av layoutmessige grunner — skjult label gjør det vanskeligere for alle brukere å orientere seg i skjemaet.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<TextField ariaLabel="Søk" placeholder="Søk..." />
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -501,6 +494,13 @@ Synlig label er alltid anbefalt. I tilfeller der konteksten er helt åpenbar fra
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<TextField ariaLabel="Søk" placeholder="Søk..." />
+```
+
+</TabItem>
 </Tabs>
 
 ### WCAG-kriterier
@@ -510,24 +510,6 @@ Synlig label er alltid anbefalt. I tilfeller der konteksten er helt åpenbar fra
 ## Props / API
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-### TextFieldProps
-
-| Prop | Type | Påkrevd | Standard | Beskrivelse |
-|------|------|---------|----------|-------------|
-| `label` | `string` | Nei* | | Synlig labeltekst for feltet. Anbefalt fremfor `ariaLabel` |
-| `ariaLabel` | `string` | Nei* | | Skjult label for skjermlesere. Brukes kun når synlig label ikke er mulig. *Enten `label` eller `ariaLabel` må settes |
-| `description` | `string` | Nei | | Hjelpetekst som vises under label. Kobles til input via `aria-describedby` |
-| `errorMessage` | `string` | Nei | | Feilmelding som vises under input. Trigger `aria-invalid` når den har innhold |
-| `prefix` | `ReactNode \| string` | Nei | | Vises foran inputfeltet. Skjult fra skjermlesere med aria-hidden. Husk å speile innholdet i `label` når konteksten ikke er åpenbar |
-| `suffix` | `ReactNode \| string` | Nei | | Vises etter inputfeltet. Skjult fra skjermlesere med aria-hidden. Husk å speile innholdet i `label` når konteksten ikke er åpenbar |
-| `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
-| `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet. Nyttig for fokusstyring og validering |
-
-I tillegg støttes alle standard HTML input-attributter (`value`, `defaultValue`, `onChange`, `onBlur`, `type`, `placeholder`, `disabled`, `readOnly`, `required`, `id`, `name`, `autoComplete`, `inputMode`, `pattern`, `maxLength`, `minLength` osv.) som settes direkte på komponenten — de sendes videre til `<input>`. `maxLength`/`minLength` aktiverer tegnteller automatisk.
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ### `<ix-field>` web component
@@ -586,6 +568,24 @@ Disabled og read-only styres kun via native attributter på input. `ix-field` h�
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+### TextFieldProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `label` | `string` | Nei* | | Synlig labeltekst for feltet. Anbefalt fremfor `ariaLabel` |
+| `ariaLabel` | `string` | Nei* | | Skjult label for skjermlesere. Brukes kun når synlig label ikke er mulig. *Enten `label` eller `ariaLabel` må settes |
+| `description` | `string` | Nei | | Hjelpetekst som vises under label. Kobles til input via `aria-describedby` |
+| `errorMessage` | `string` | Nei | | Feilmelding som vises under input. Trigger `aria-invalid` når den har innhold |
+| `prefix` | `ReactNode \| string` | Nei | | Vises foran inputfeltet. Skjult fra skjermlesere med aria-hidden. Husk å speile innholdet i `label` når konteksten ikke er åpenbar |
+| `suffix` | `ReactNode \| string` | Nei | | Vises etter inputfeltet. Skjult fra skjermlesere med aria-hidden. Husk å speile innholdet i `label` når konteksten ikke er åpenbar |
+| `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
+| `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet. Nyttig for fokusstyring og validering |
+
+I tillegg støttes alle standard HTML input-attributter (`value`, `defaultValue`, `onChange`, `onBlur`, `type`, `placeholder`, `disabled`, `readOnly`, `required`, `id`, `name`, `autoComplete`, `inputMode`, `pattern`, `maxLength`, `minLength` osv.) som settes direkte på komponenten — de sendes videre til `<input>`. `maxLength`/`minLength` aktiverer tegnteller automatisk.
+
+</TabItem>
 </Tabs>
 
 ## Tilpasning med CSS
@@ -622,7 +622,7 @@ HTML-struktur.
 </ix-field>
 ```
 
-## Hva ix-field gjør med DOM-en
+### Hva ix-field gjør med DOM-en
 
 `<ix-field>` er en web component som setter opp ARIA-koblinger automatisk når den kobles til DOM. Her er hva som skjer — fra HTML du skriver til HTML etter at `ix-field` har kjørt.
 

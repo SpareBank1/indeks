@@ -29,7 +29,7 @@ API-et er forberedt for å utvides med en `variant`/status senere uten brytende 
 - Generelle informasjonsmeldinger som ikke er feil
 - Suksess- eller advarselsmeldinger (success-tilstand er under vurdering — se notatet øverst)
 
-## Kom i gang
+## Bruk
 
 ValidationMessage rendrer et `<span data-field="error">` med et dekorativt feilikon (en badge — hvit glyf på rød sirkel) foran teksten. Elementet styles av Indeks-CSS. Når det ligger inne i en `<ix-field>` eller `<ix-radio-group>`, kobles det automatisk til input via `aria-describedby` og setter `aria-invalid="true"` på inputen når meldingen har innhold.
 
@@ -59,7 +59,7 @@ Ikonet er dekorativt (`aria-hidden`) — feilen formidles av teksten. Slå det a
 <ValidationMessage showIcon={false}>Du må velge et alternativ</ValidationMessage>
 ```
 
-## Bruk inne i ix-field
+### Bruk inne i ix-field
 
 `<ix-field>` finner automatisk elementer med `data-field="error"` og kobler dem til inputen via `aria-describedby`. Hold elementet i DOM hele tiden (også når det er tomt) — `<ix-field>` setter `aria-live="polite"` slik at skjermlesere fanger opp endringer.
 

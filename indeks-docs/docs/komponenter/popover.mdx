@@ -11,7 +11,29 @@ import a11yData from './accessibility/popover.json';
 
 En Popover brukes til å vise kontekstuell informasjon eller handlinger knyttet til et spesifikt element på siden. Popoveren vises når brukeren aktiverer et tilknyttet element, og plasseres i nærheten av dette elementet slik at sammenhengen er tydelig.
 
-## Eksempel
+## Egnet til
+
+Bruk Popover når du trenger å:
+
+- Gi brukeren mer informasjon om et element uten å navigere bort fra siden
+- Presentere små mengder innhold som er relevant i øyeblikket
+- Tilby enkle handlinger som er direkte knyttet til et spesifikt element
+- Forklare valg eller konsekvenser før brukeren utfører en handling
+- Vise ekstra detaljer som ikke trenger å være synlige hele tiden
+
+## Uegnet til
+
+Ikke bruk Popover når:
+
+- Innholdet er kritisk for å forstå eller fullføre en oppgave
+- Informasjonen må være permanent synlig
+- Innholdsmengden er stor eller omfattende
+- Brukeren må gjennomføre en lengre prosess eller flere steg
+- Innholdet krever fullt fokus fra brukeren
+
+Vurder heller [Tooltip](./skjema/tooltip) for korte forklaringer uten handlinger, [Modal](./modal) for komplekse oppgaver, eller [Message](./message) for informasjon som bør være synlig på siden.
+
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -52,29 +74,7 @@ En Popover brukes til å vise kontekstuell informasjon eller handlinger knyttet 
 </TabItem>
 </Tabs>
 
-## Egnet til
-
-Bruk Popover når du trenger å:
-
-- Gi brukeren mer informasjon om et element uten å navigere bort fra siden
-- Presentere små mengder innhold som er relevant i øyeblikket
-- Tilby enkle handlinger som er direkte knyttet til et spesifikt element
-- Forklare valg eller konsekvenser før brukeren utfører en handling
-- Vise ekstra detaljer som ikke trenger å være synlige hele tiden
-
-## Uegnet til
-
-Ikke bruk Popover når:
-
-- Innholdet er kritisk for å forstå eller fullføre en oppgave
-- Informasjonen må være permanent synlig
-- Innholdsmengden er stor eller omfattende
-- Brukeren må gjennomføre en lengre prosess eller flere steg
-- Innholdet krever fullt fokus fra brukeren
-
-Vurder heller [Tooltip](./skjema/tooltip) for korte forklaringer uten handlinger, [Modal](./modal) for komplekse oppgaver, eller [Message](./message) for informasjon som bør være synlig på siden.
-
-## Varianter
+## Eksempler
 
 ### Bare tekst
 
@@ -148,7 +148,7 @@ Pilen kan skjules når den visuelle koblingen til trigger-elementet er tydelig n
 </TabItem>
 </Tabs>
 
-## Plassering
+### Fire plasseringsretninger
 
 Popover støtter fire plasseringsretninger: `top`, `bottom`, `left` og `right`. Komponenten flipper automatisk til motsatt side hvis det ikke er nok plass.
 
@@ -256,6 +256,31 @@ Popover støtter fire plasseringsretninger: `top`, `bottom`, `left` og `right`. 
 - Bare én popover bør være åpen om gangen
 - Fokus flyttes inn i popoveren når den åpnes dersom den inneholder interaktive elementer
 
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- Trigger-elementet må være en interaktiv kontroll (`<button>` eller `<a>`)
+- Trigger-elementet må ha et tilgjengelig navn (synlig tekst eller `aria-label`)
+- Innholdet i popoveren skal være relevant og konsist
+- Handlingsknapper må ha beskrivende tekst
+
+### Hva komponenten gjør automatisk
+
+- Setter `role="dialog"` på innholdet
+- Kobler trigger til popover via `aria-controls`
+- Oppdaterer `aria-expanded` og `aria-haspopup` på trigger
+- Håndterer tastaturnavigasjon (Enter/Space for å åpne, Escape for å lukke)
+- Flytter fokus til første focusable element ved åpning
+- Returnerer fokus til trigger ved lukking med Escape
+- Posisjonerer popover automatisk med viewport-clamp
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
 ## Tilpasning med CSS
 
 Trenger du `ix-popover`-stylingen på HTML du setter sammen selv — uten React-komponenten eller web componenten — kan du bruke klassene direkte på elementene dine.
@@ -284,28 +309,3 @@ Trenger du `ix-popover`-stylingen på HTML du setter sammen selv — uten React-
   </div>
 </ix-popover>
 ```
-
-## Universell utforming
-
-### Hva du selv må sørge for
-
-- Trigger-elementet må være en interaktiv kontroll (`<button>` eller `<a>`)
-- Trigger-elementet må ha et tilgjengelig navn (synlig tekst eller `aria-label`)
-- Innholdet i popoveren skal være relevant og konsist
-- Handlingsknapper må ha beskrivende tekst
-
-### Hva komponenten gjør automatisk
-
-- Setter `role="dialog"` på innholdet
-- Kobler trigger til popover via `aria-controls`
-- Oppdaterer `aria-expanded` og `aria-haspopup` på trigger
-- Håndterer tastaturnavigasjon (Enter/Space for å åpne, Escape for å lukke)
-- Flytter fokus til første focusable element ved åpning
-- Returnerer fokus til trigger ved lukking med Escape
-- Posisjonerer popover automatisk med viewport-clamp
-
-<KeyboardAndScreenReader data={a11yData} />
-
-### WCAG-kriterier
-
-<AccessibilityTable data={a11yData} />

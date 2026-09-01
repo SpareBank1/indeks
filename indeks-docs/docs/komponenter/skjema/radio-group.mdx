@@ -21,7 +21,7 @@ RadioGroup lar brukeren velge ett alternativ fra en liste av gjensidig utelukken
 - Når det ikke er nødvendig å vise alle alternativer samtidig
 - Situasjoner der det er naturlig å kunne angre eller fjerne valg uten å velge et nytt
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -415,6 +415,12 @@ Et forhåndsvalgt alternativ kan gjøre det raskere å fylle ut skjemaet, men ka
 
 Både radioknappen og labelen er klikkbar. Det gir en stor trefflate (44 × 44 px minimum) og fungerer godt på mobil.
 
+### Designvalg
+
+Bak komponenten ligger en rekke tekniske valg — om hvorfor vi bruker `role="radiogroup"` istedenfor `<fieldset>`, hvordan ARIA og `disabled`-tilstand synkroniseres, hvorfor `RadioButton` ikke har sin egen web component, og mer.
+
+Se [Designvalg for RadioGroup](./radio-group-designvalg) hvis du er nysgjerrig på avveiningene.
+
 ## Universell utforming
 
 ### Hva du selv må sørge for
@@ -585,12 +591,6 @@ Bygger du radio-styling utenfor `<ix-radio-group>`, bruk BEM-klassene direkte:
   <label class="ix-radio-button__label" for="r-1">Alternativ 1</label>
 </div>
 ```
-
-## Designvalg
-
-Bak komponenten ligger en rekke tekniske valg — om hvorfor vi bruker `role="radiogroup"` istedenfor `<fieldset>`, hvordan ARIA og `disabled`-tilstand synkroniseres, hvorfor `RadioButton` ikke har sin egen web component, og mer.
-
-Se [Designvalg for RadioGroup](./radio-group-designvalg) hvis du er nysgjerrig på avveiningene.
 
 ## Relatert
 

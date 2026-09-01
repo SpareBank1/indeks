@@ -21,22 +21,22 @@ Button lar brukeren utføre en handling, som å sende inn et skjema, lagre endri
 - Visuell dekorasjon uten funksjon
 - For mange samtidige valg
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Button>Send inn</Button>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
 <button class="ix-button" data-variant="primary" type="button">
   Send inn
 </button>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Button>Send inn</Button>
 ```
 
 </TabItem>
@@ -49,17 +49,6 @@ Button lar brukeren utføre en handling, som å sende inn et skjema, lagre endri
 `primary` er standardvarianten og bør brukes for den viktigste handlingen på siden. Unngå to primary-knapper ved siden av hverandre.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<>
-  <Button variant="primary">Primary</Button>
-  <Button variant="secondary">Secondary</Button>
-  <Button variant="tertiary">Tertiary</Button>
-</>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -71,6 +60,17 @@ Button lar brukeren utføre en handling, som å sende inn et skjema, lagre endri
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="tertiary">Tertiary</Button>
+</>
+```
+
+</TabItem>
 </Tabs>
 
 ### Fare
@@ -78,16 +78,6 @@ Button lar brukeren utføre en handling, som å sende inn et skjema, lagre endri
 Bruk `danger` for destruktive handlinger som sletting eller avbryt-operasjoner der konsekvensen er vanskelig å reversere.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<>
-  <Button danger>Slett konto</Button>
-  <Button variant="secondary" danger>Avbryt overføring</Button>
-</>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -102,22 +92,21 @@ Bruk `danger` for destruktive handlinger som sletting eller avbryt-operasjoner d
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <Button danger>Slett konto</Button>
+  <Button variant="secondary" danger>Avbryt overføring</Button>
+</>
+```
+
+</TabItem>
 </Tabs>
 
 ### Størrelser
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<>
-  <Button size="sm">Liten</Button>
-  <Button>Medium (standard)</Button>
-  <Button size="lg">Stor</Button>
-</>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -129,24 +118,35 @@ Bruk `danger` for destruktive handlinger som sletting eller avbryt-operasjoner d
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <Button size="sm">Liten</Button>
+  <Button>Medium (standard)</Button>
+  <Button size="lg">Stor</Button>
+</>
+```
+
+</TabItem>
 </Tabs>
 
 ### Full bredde
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Button width="full">Fortsett</Button>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
 <button class="ix-button ix-w-full" data-variant="primary" type="button">
   Fortsett
 </button>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Button width="full">Fortsett</Button>
 ```
 
 </TabItem>
@@ -157,16 +157,6 @@ Bruk `danger` for destruktive handlinger som sletting eller avbryt-operasjoner d
 Ikon-knapper med tekst trenger ingen ekstra ARIA — teksten er den tilgjengelige labelen. Plasser ikonet foran teksten.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Button>
-  <Icon name="savings" />
-  Pålogget
-</Button>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -177,6 +167,16 @@ Ikon-knapper med tekst trenger ingen ekstra ARIA — teksten er den tilgjengelig
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Button>
+  <Icon name="savings" />
+  Pålogget
+</Button>
+```
+
+</TabItem>
 </Tabs>
 
 ### Ikonknapp (uten tekst)
@@ -184,21 +184,21 @@ Ikon-knapper med tekst trenger ingen ekstra ARIA — teksten er den tilgjengelig
 Knapper med bare ikon **må** ha `aria-label` som beskriver handlingen. Bruk `iconOnly` for å gjøre knappen rund.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Button iconOnly aria-label="Gå til sparing">
-  <Icon name="savings" />
-</Button>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
 <button class="ix-button" data-variant="primary" data-icon-only type="button" aria-label="Gå til sparing">
   <span class="ix-icon" style={{maskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)", WebkitMaskImage: "url(https://cdn.sparebank1.no/icons/savings.svg)"}} />
 </button>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Button iconOnly aria-label="Gå til sparing">
+  <Icon name="savings" />
+</Button>
 ```
 
 </TabItem>
@@ -217,6 +217,17 @@ I React erstattes children (inkludert ikon) automatisk med spinner og `loadingLa
 Spinneren arver knappens tekstfarge, så den får riktig kontrast i alle varianter — også på fylt primary-bakgrunn.
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<button class="ix-button" data-variant="primary" data-loading="true" type="button"
+        disabled aria-label="Sender inn…">
+  <span class="ix-spinner" aria-hidden="true" />
+  Sender inn…
+</button>
+```
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
@@ -229,36 +240,25 @@ Spinneren arver knappens tekstfarge, så den får riktig kontrast i alle variant
 ```
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<button class="ix-button" data-variant="primary" data-loading="true" type="button"
-        disabled aria-label="Sender inn…">
-  <span class="ix-spinner" aria-hidden="true" />
-  Sender inn…
-</button>
-```
-
-</TabItem>
 </Tabs>
 
 
 ### Deaktivert
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Button disabled>Deaktivert</Button>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
 <button class="ix-button" data-variant="primary" type="button" disabled>
   Deaktivert
 </button>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Button disabled>Deaktivert</Button>
 ```
 
 </TabItem>
@@ -271,21 +271,21 @@ Vurder om brukeren i stedet bør se en forklaring på hvorfor handlingen ikke er
 Bruk `as="a"` når knappen navigerer til en URL. Den beholder button-styling, men rendres som `<a>`.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Button as="a" href="https://www.sparebank1.no">
-  Gå til sparebank1.no
-</Button>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
 <a class="ix-button" data-variant="primary" href="https://www.sparebank1.no">
   Gå til sparebank1.no
 </a>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Button as="a" href="https://www.sparebank1.no">
+  Gå til sparebank1.no
+</Button>
 ```
 
 </TabItem>

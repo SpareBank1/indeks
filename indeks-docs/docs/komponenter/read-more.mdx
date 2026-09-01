@@ -25,7 +25,7 @@ ReadMore viser og skjuler én frittstående tekstblokk bak en klikkbar label. De
 - Navigasjon mellom sider — bruk lenker eller meny
 - Lange, strukturerte tekstmengder som bør ha egne overskrifter
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -133,32 +133,6 @@ Innholdet kan bestå av tekst, lister, lenker og andre komponenter.
 
 Bruk ReadMore for **én** enkeltstående forklaring i tekstflaten. Har du **flere** seksjoner som hører sammen og bør stå i et samlet kort, bruk [Accordion](./accordion) i stedet.
 
-## Tilpasning med CSS
-
-Trenger du `ix-read-more`-stylingen på HTML du setter sammen selv, kan du bruke klassene direkte. Native `<details>`/`<summary>` gir semantikk og tastatur — ingen JavaScript er nødvendig.
-
-### Tilgjengelige klasser
-
-| Element/tilstand | Selektor / attributt |
-|------------------|----------------------|
-| Rot | `.ix-read-more` på et `<details>`-element |
-| Åpen | `[open]` på `<details>` (native) |
-| Label | `<summary>` (første barn — styles via `.ix-read-more > summary`) |
-| Innhold | `.ix-read-more__content` på `<div>` (etter label) |
-
-### Eksempel: ren HTML
-
-```html
-<details class="ix-read-more">
-  <summary>Hva regnes som helsemessige begrensninger?</summary>
-  <div class="ix-read-more__content">
-    <p>Med helsemessige begrensninger mener vi funksjonshemming, sykdom eller skade som påvirker hverdagen din over tid.</p>
-  </div>
-</details>
-```
-
-Den myke åpne/lukke-animasjonen er en progressiv CSS-enhancement; nettlesere uten støtte hopper bare åpent/lukket.
-
 ## Universell utforming
 
 ### Hva du selv må sørge for
@@ -194,3 +168,29 @@ En button-basert løsning (`<button aria-expanded aria-controls>` + panel med ma
 | `children` | `ReactNode` | | Innholdet som avsløres — tekst, lister eller andre komponenter |
 | `defaultOpen` | `boolean` | `false` | Start seksjonen åpen. Speiler native `<details open>` |
 | `className` | `string` | | Ekstra CSS-klasser på rot-`<details>` |
+
+## Tilpasning med CSS
+
+Trenger du `ix-read-more`-stylingen på HTML du setter sammen selv, kan du bruke klassene direkte. Native `<details>`/`<summary>` gir semantikk og tastatur — ingen JavaScript er nødvendig.
+
+### Tilgjengelige klasser
+
+| Element/tilstand | Selektor / attributt |
+|------------------|----------------------|
+| Rot | `.ix-read-more` på et `<details>`-element |
+| Åpen | `[open]` på `<details>` (native) |
+| Label | `<summary>` (første barn — styles via `.ix-read-more > summary`) |
+| Innhold | `.ix-read-more__content` på `<div>` (etter label) |
+
+### Eksempel: ren HTML
+
+```html
+<details class="ix-read-more">
+  <summary>Hva regnes som helsemessige begrensninger?</summary>
+  <div class="ix-read-more__content">
+    <p>Med helsemessige begrensninger mener vi funksjonshemming, sykdom eller skade som påvirker hverdagen din over tid.</p>
+  </div>
+</details>
+```
+
+Den myke åpne/lukke-animasjonen er en progressiv CSS-enhancement; nettlesere uten støtte hopper bare åpent/lukket.

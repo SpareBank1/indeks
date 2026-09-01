@@ -31,9 +31,16 @@ De tre største størrelsene (`2xl`–`lg`) bruker SpareBank 1 Title, de tre min
 | `sm`               | `h5`                | SpareBank 1       | <span className="ix-heading" data-size="sm">Overskrift</span> |
 | `xs`               | `h6`                | SpareBank 1       | <span className="ix-heading" data-size="xs">Overskrift</span> |
 
-### Kom i gang
+### Bruk
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<h1 class="ix-heading" data-size="2xl">Renter og betingelser</h1>
+```
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ```tsx
@@ -45,18 +52,21 @@ import { Heading } from '@sb1/indeks-react';
 ```
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<h1 class="ix-heading" data-size="2xl">Renter og betingelser</h1>
-```
-
-</TabItem>
 </Tabs>
 
 Heading-nivå kan overstyres med `size` hvis det visuelle hierarkiet ikke samsvarer med det semantiske:
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+    <h1 class="ix-heading" data-size="lg">Renter og betingelser</h1>
+    <h2 class="ix-heading" data-size="md">Effektiv rente</h2>
+</>
+```
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
@@ -71,16 +81,6 @@ Heading-nivå kan overstyres med `size` hvis det visuelle hierarkiet ikke samsva
 ```
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<>
-    <h1 class="ix-heading" data-size="lg">Renter og betingelser</h1>
-    <h2 class="ix-heading" data-size="md">Effektiv rente</h2>
-</>
-```
-
-</TabItem>
 </Tabs>
 
 ### Spacing i overskrifter
@@ -88,18 +88,6 @@ Heading-nivå kan overstyres med `size` hvis det visuelle hierarkiet ikke samsva
 Alle overskrifter kommer uten spacing som standard. Du kan legge til anbefalt spacing basert på størrelsen, eller bruke [spacing-utility-klasser](../utility-klasser/oversikt#spacing) til å sette margin selv.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-Bruk `addRecommendedSpacing`-propen for å legge til anbefalt `margin-bottom` basert på størrelse:
-
-```tsx live
-<>
-    <Heading as="h1" addRecommendedSpacing>Renter og betingelser</Heading>
-    <Heading as="h2" addRecommendedSpacing>Effektiv rente</Heading>
-</>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 Legg til spacing-klassen som tilsvarer størrelsen:
@@ -119,21 +107,23 @@ Legg til spacing-klassen som tilsvarer størrelsen:
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+Bruk `addRecommendedSpacing`-propen for å legge til anbefalt `margin-bottom` basert på størrelse:
+
+```tsx live
+<>
+    <Heading as="h1" addRecommendedSpacing>Renter og betingelser</Heading>
+    <Heading as="h2" addRecommendedSpacing>Effektiv rente</Heading>
+</>
+```
+
+</TabItem>
 </Tabs>
 
 ### Props — Heading
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-| Prop                    | Type                                          | Standard         | Beskrivelse                                     |
-| ----------------------- | --------------------------------------------- | ---------------- | ----------------------------------------------- |
-| `as`                    | `h1`, `h2`, `h3`, `h4`, `h5`, `h6`  | — (påkrevd)      | Semantisk HTML-element. Bestemmer heading-nivå. |
-| `size`                  | `2xl`, `xl`, `lg`, `md`, `sm`, `xs` | Utledet fra `as` | Visuell størrelse. Overstyrer standard mapping. |
-| `addRecommendedSpacing` | `boolean`                                     | `false`          | Legger til `margin-bottom` basert på størrelse. |
-| `className`             | `string`                                      | —                | Ekstra CSS-klasser.                             |
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 | Attributt / klasse      | Beskrivelse                                      |
@@ -147,6 +137,16 @@ Legg til spacing-klassen som tilsvarer størrelsen:
 | `data-size="xs"`        | Størrelse xs — tilsvarer h6.                     |
 
 </TabItem>
+<TabItem value="react" label="React">
+
+| Prop                    | Type                                          | Standard         | Beskrivelse                                     |
+| ----------------------- | --------------------------------------------- | ---------------- | ----------------------------------------------- |
+| `as`                    | `h1`, `h2`, `h3`, `h4`, `h5`, `h6`  | — (påkrevd)      | Semantisk HTML-element. Bestemmer heading-nivå. |
+| `size`                  | `2xl`, `xl`, `lg`, `md`, `sm`, `xs` | Utledet fra `as` | Visuell størrelse. Overstyrer standard mapping. |
+| `addRecommendedSpacing` | `boolean`                                     | `false`          | Legger til `margin-bottom` basert på størrelse. |
+| `className`             | `string`                                      | —                | Ekstra CSS-klasser.                             |
+
+</TabItem>
 </Tabs>
 
 ---
@@ -157,9 +157,16 @@ Legg til spacing-klassen som tilsvarer størrelsen:
 
 Størrelsene (`xs`–`2xl`) følger [samme skala som spacing](../grunnleggende/tokens/spacing#spacing-skala), noe som gjør det lett å kombinere tekststørrelse og luft uten å blande ulike skalaer.
 
-### Kom i gang
+### Bruk
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<p class="ix-text" data-size="md">Kontoen din har en saldo på 12 345,00 kr.</p>
+```
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ```tsx
@@ -171,13 +178,6 @@ import { Text } from '@sb1/indeks-react';
 ```
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<p class="ix-text" data-size="md">Kontoen din har en saldo på 12 345,00 kr.</p>
-```
-
-</TabItem>
 </Tabs>
 
 ### Eget element
@@ -185,6 +185,16 @@ import { Text } from '@sb1/indeks-react';
 `ix-text`-klassen kan settes på alle block- og inline-elementer.
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ul>
+    <li class="ix-text" data-size="md">Brukskonto</li>
+    <li class="ix-text" data-size="md">Sparekonto</li>
+</ul>
+```
+
+</TabItem>
 <TabItem value="react" label="React">
 
 Tekst rendres som standard i en `<p>`. Bruk `as` når elementet ikke er en paragraf — for eksempel i lister eller tabellceller:
@@ -197,16 +207,6 @@ Tekst rendres som standard i en `<p>`. Bruk `as` når elementet ikke er en parag
 ```
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<ul>
-    <li class="ix-text" data-size="md">Brukskonto</li>
-    <li class="ix-text" data-size="md">Sparekonto</li>
-</ul>
-```
-
-</TabItem>
 </Tabs>
 
 ### Linjehøyde
@@ -214,16 +214,6 @@ Tekst rendres som standard i en `<p>`. Bruk `as` når elementet ikke er en parag
 Standard linjehøyde er 1.2. Brødtekst over flere linjer trenger større linjehøyde for bedre lesbarhet — sett den til 1.4 med modifikatoren under:
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Text long>
-    Renten på boliglånet ditt er basert på Nibor pluss et påslag. Den effektive renten inkluderer alle gebyrer og
-    kostnader knyttet til lånet, og gir deg et mer realistisk bilde av hva lånet faktisk koster deg per år.
-</Text>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 Legg til `ix-text--long` for økt linjehøyde:
@@ -236,6 +226,16 @@ Legg til `ix-text--long` for økt linjehøyde:
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Text long>
+    Renten på boliglånet ditt er basert på Nibor pluss et påslag. Den effektive renten inkluderer alle gebyrer og
+    kostnader knyttet til lånet, og gir deg et mer realistisk bilde av hva lånet faktisk koster deg per år.
+</Text>
+```
+
+</TabItem>
 </Tabs>
 
 ### Bold og emphasized tekst
@@ -243,6 +243,20 @@ Legg til `ix-text--long` for økt linjehøyde:
 Bruk `<strong>` og `<em>` for å utheve tekst med henholdsvis fet og kursiv stil. Begge har semantisk betydning. Bruk `<b>` og `<i>` kun når du vil ha visuell effekt uten semantisk mening.
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+    <p class="ix-text" data-size="md">
+        Saldo: <strong>12 345,00 kr</strong>
+    </p>
+    <p class="ix-text" data-size="md">
+        Renten er <em>variabel</em> og kan endres.
+    </p>
+</>
+```
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
@@ -263,36 +277,11 @@ Vil du utheve en hel paragraf uten `<p>`-elementet, bruk `as`:
 ```
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<>
-    <p class="ix-text" data-size="md">
-        Saldo: <strong>12 345,00 kr</strong>
-    </p>
-    <p class="ix-text" data-size="md">
-        Renten er <em>variabel</em> og kan endres.
-    </p>
-</>
-```
-
-</TabItem>
 </Tabs>
 
 ### Props — Text
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-| Prop                    | Type                                          | Standard | Beskrivelse                                                     |
-| ----------------------- | --------------------------------------------- | -------- | --------------------------------------------------------------- |
-| `as`                    | `ElementType`                                 | `p`      | HTML-element som rendres. Kan være `span`, `strong`, `em`, etc. |
-| `size`                  | `2xl`, `xl`, `lg`, `md`, `sm`, `xs` | `md`     | Skriftstørrelse.                                                |
-| `long`                  | `boolean`                                     | `false`  | Øker linjehøyden til 1.4. Bruk for tekst over flere linjer.     |
-| `addRecommendedSpacing` | `boolean`                                     | `false`  | Legger til anbefalt `margin-bottom` under teksten.              |
-| `className`             | `string`                                      | —        | Ekstra CSS-klasser.                                             |
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 | Attributt / klasse      | Beskrivelse                                      |
@@ -307,6 +296,17 @@ Vil du utheve en hel paragraf uten `<p>`-elementet, bruk `as`:
 | `ix-text--long`         | Øker linjehøyde til 1.4 for lengre tekstblokker. |
 
 </TabItem>
+<TabItem value="react" label="React">
+
+| Prop                    | Type                                          | Standard | Beskrivelse                                                     |
+| ----------------------- | --------------------------------------------- | -------- | --------------------------------------------------------------- |
+| `as`                    | `ElementType`                                 | `p`      | HTML-element som rendres. Kan være `span`, `strong`, `em`, etc. |
+| `size`                  | `2xl`, `xl`, `lg`, `md`, `sm`, `xs` | `md`     | Skriftstørrelse.                                                |
+| `long`                  | `boolean`                                     | `false`  | Øker linjehøyden til 1.4. Bruk for tekst over flere linjer.     |
+| `addRecommendedSpacing` | `boolean`                                     | `false`  | Legger til anbefalt `margin-bottom` under teksten.              |
+| `className`             | `string`                                      | —        | Ekstra CSS-klasser.                                             |
+
+</TabItem>
 </Tabs>
 
 ---
@@ -315,9 +315,18 @@ Vil du utheve en hel paragraf uten `<p>`-elementet, bruk `as`:
 
 `LinkText` er lenker som sitter i løpende tekst — ikke frittstående knapper eller navigasjonslenker. Komponenten setter riktig lenkefarge, understrek og aktiv-tilstand, og fungerer med `<a>` eller en hvilken som helst router-komponent.
 
-### Kom i gang
+### Bruk
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<a class="ix-link-text" href="/konto">
+    Se kontooversikt
+</a>
+```
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ```tsx
@@ -329,20 +338,20 @@ import { LinkText } from '@sb1/indeks-react';
 ```
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<a class="ix-link-text" href="/konto">
-    Se kontooversikt
-</a>
-```
-
-</TabItem>
 </Tabs>
 
 ### Props — LinkText
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+| Klasse                       | Beskrivelse                                                                                                             |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `ix-link-text`               | Påkrevd basisklasse. Setter lenkefarge og understrek.                                                                   |
+| `ix-link-text--no-underline` | Fjerner understrek. Bruk kun i spesielle kontekster.                                                                    |
+| `ix-link-text--active`       | Aktiv-tilstand. Endrer lenkefargen til aktiv-varianten. Brukes typisk for å markere gjeldende side i navigasjonsmenyer. |
+
+</TabItem>
 <TabItem value="react" label="React">
 
 | Prop        | Type                   | Standard | Beskrivelse                                                    |
@@ -352,15 +361,6 @@ import { LinkText } from '@sb1/indeks-react';
 | `underline` | `boolean`              | `true`   | Viser understrek. Deaktiver kun i spesielle kontekster.        |
 | `isActive`  | `boolean`              | `false`  | Markerer lenken som aktiv — brukes i navigasjonsmenyer o.l.    |
 | `className` | `string`               | —        | Ekstra CSS-klasser.                                            |
-
-</TabItem>
-<TabItem value="html" label="HTML">
-
-| Klasse                       | Beskrivelse                                                                                                             |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `ix-link-text`               | Påkrevd basisklasse. Setter lenkefarge og understrek.                                                                   |
-| `ix-link-text--no-underline` | Fjerner understrek. Bruk kun i spesielle kontekster.                                                                    |
-| `ix-link-text--active`       | Aktiv-tilstand. Endrer lenkefargen til aktiv-varianten. Brukes typisk for å markere gjeldende side i navigasjonsmenyer. |
 
 </TabItem>
 </Tabs>

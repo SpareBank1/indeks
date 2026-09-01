@@ -29,7 +29,7 @@ Tooltip-panelet viser kun ren tekst. Bruk [Popover](#) for innhold som krever fo
 - Innhold som må være tilgjengelig på mobil uten hover
 - Som erstatning for tydelige etiketter
 
-## Bruk på skjemafelt
+## Bruk
 
 Tooltip integreres i skjemafelt via `tooltip`-prop (React) eller `tooltip`-attributt (HTML) på feltkomponentene. `<ix-field>` injiserer automatisk en info-ikon-knapp i label-raden.
 
@@ -192,7 +192,32 @@ Pilen peker alltid mot senteret av trigger-elementet, også etter at panelet er 
 - Trenger ikke aktiv lukking — forsvinner automatisk
 - Kun én tooltip er synlig om gangen
 
-## API
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- **Send alltid inn `tooltipLabel`** — info-knappen har ingen hardkodet `aria-label`. Uten `tooltipLabel` (React) / `tooltip-label` (HTML) vil knappen stå uten tilgjengelig navn. En konsolladvarsel vises under utvikling. Eksempler: `"Mer informasjon"` (bokmål), `"Meir informasjon"` (nynorsk), `"More information"` (engelsk).
+- **Tooltip er ikke eneste kilde til kritisk informasjon** — informasjon brukeren *må* ha for å fullføre en oppgave skal ligge i label eller description.
+- **Kun tekst i tooltip** — ikke legg inn HTML, lenker eller formatering i tooltip-verdien.
+
+### Hva komponenten gjør automatisk
+
+- **`role="tooltip"`** settes på panelet — skjermlesere behandler det korrekt som supplerende beskrivelse
+- **`aria-describedby`** kobles dynamisk fra info-knappen til tooltip-panelet når tooltip åpnes, og fjernes ved lukking
+- **`aria-label`** settes på info-knappen med verdien fra `tooltipLabel` / `tooltip-label`
+- **Escape** lukker tooltip uten å flytte fokus (WCAG 2.1.2)
+- **Focus** aktiverer tooltip — tastaturbrukere har full tilgang
+- **44×44 px touch-mål** via `::before` på info-knappen (WCAG 2.5.8)
+- **Focus-visible-ring** på info-knappen (WCAG 2.4.7)
+- **Inverted farger** med tilstrekkelig kontrast mellom tekst og bakgrunn (WCAG 1.4.3)
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -220,31 +245,6 @@ Pilen peker alltid mot senteret av trigger-elementet, også etter at panelet er 
 
 </TabItem>
 </Tabs>
-
-## Universell utforming
-
-### Hva du selv må sørge for
-
-- **Send alltid inn `tooltipLabel`** — info-knappen har ingen hardkodet `aria-label`. Uten `tooltipLabel` (React) / `tooltip-label` (HTML) vil knappen stå uten tilgjengelig navn. En konsolladvarsel vises under utvikling. Eksempler: `"Mer informasjon"` (bokmål), `"Meir informasjon"` (nynorsk), `"More information"` (engelsk).
-- **Tooltip er ikke eneste kilde til kritisk informasjon** — informasjon brukeren *må* ha for å fullføre en oppgave skal ligge i label eller description.
-- **Kun tekst i tooltip** — ikke legg inn HTML, lenker eller formatering i tooltip-verdien.
-
-### Hva komponenten gjør automatisk
-
-- **`role="tooltip"`** settes på panelet — skjermlesere behandler det korrekt som supplerende beskrivelse
-- **`aria-describedby`** kobles dynamisk fra info-knappen til tooltip-panelet når tooltip åpnes, og fjernes ved lukking
-- **`aria-label`** settes på info-knappen med verdien fra `tooltipLabel` / `tooltip-label`
-- **Escape** lukker tooltip uten å flytte fokus (WCAG 2.1.2)
-- **Focus** aktiverer tooltip — tastaturbrukere har full tilgang
-- **44×44 px touch-mål** via `::before` på info-knappen (WCAG 2.5.8)
-- **Focus-visible-ring** på info-knappen (WCAG 2.4.7)
-- **Inverted farger** med tilstrekkelig kontrast mellom tekst og bakgrunn (WCAG 1.4.3)
-
-<KeyboardAndScreenReader data={a11yData} />
-
-### WCAG-kriterier
-
-<AccessibilityTable data={a11yData} />
 
 ## Tilpasning med CSS
 

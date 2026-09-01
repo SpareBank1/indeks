@@ -21,16 +21,9 @@ Checkbox lar brukeren velge én eller flere alternativer fra en liste. Hvert val
 - Situasjoner der valg påvirker hverandre eller er gjensidig utelukkende
 - Når det er behov for sterk veiledning eller forklaring per valg
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Checkbox label="Jeg godtar vilkårene" name="terms" />
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -46,6 +39,13 @@ labelen — du trenger ingen ekstra markup for indikatoren. Koble label til inpu
 `for`/`id` så hele raden blir klikkbar.
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Checkbox label="Jeg godtar vilkårene" name="terms" />
+```
+
+</TabItem>
 </Tabs>
 
 ## Eksempler
@@ -53,17 +53,6 @@ labelen — du trenger ingen ekstra markup for indikatoren. Koble label til inpu
 ### Med hjelpetekst
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Checkbox
-  label="Send meg nyhetsbrev"
-  description="Du kan når som helst melde deg av"
-  name="newsletter"
-/>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -78,22 +67,22 @@ labelen — du trenger ingen ekstra markup for indikatoren. Koble label til inpu
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Checkbox
+  label="Send meg nyhetsbrev"
+  description="Du kan når som helst melde deg av"
+  name="newsletter"
+/>
+```
+
+</TabItem>
 </Tabs>
 
 ### Med feilmelding
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Checkbox
-  label="Jeg godtar vilkårene"
-  errorMessage="Du må godta vilkårene for å fortsette"
-  name="terms"
-/>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -107,6 +96,17 @@ labelen — du trenger ingen ekstra markup for indikatoren. Koble label til inpu
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Checkbox
+  label="Jeg godtar vilkårene"
+  errorMessage="Du må godta vilkårene for å fortsette"
+  name="terms"
+/>
+```
+
+</TabItem>
 </Tabs>
 
 ### Indeterminate (delvis valgt)
@@ -114,13 +114,6 @@ labelen — du trenger ingen ekstra markup for indikatoren. Koble label til inpu
 Indeterminate-tilstanden brukes for "velg alle"-checkboxer når noen, men ikke alle, underliggende valg er krysset av.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Checkbox label="Velg alle" indeterminate name="select-all" />
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -141,21 +134,18 @@ function IndeterminateCheckbox() {
 I HTML må `indeterminate` settes via JavaScript: `checkbox.indeterminate = true`
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Checkbox label="Velg alle" indeterminate name="select-all" />
+```
+
+</TabItem>
 </Tabs>
 
 ### Deaktivert
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<>
-  <Checkbox label="Ikke tilgjengelig" disabled />
-  <Checkbox label="Allerede godtatt" disabled defaultChecked />
-</>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -172,6 +162,16 @@ I HTML må `indeterminate` settes via JavaScript: `checkbox.indeterminate = true
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<>
+  <Checkbox label="Ikke tilgjengelig" disabled />
+  <Checkbox label="Allerede godtatt" disabled defaultChecked />
+</>
+```
+
+</TabItem>
 </Tabs>
 
 ### Gruppe med flere checkboxer
@@ -182,21 +182,6 @@ layout-bugger i Safari) og kobler legend, hjelpetekst og feilmelding til gruppen
 `value` er et array — flere kan være valgt samtidig.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<CheckboxGroup
-  legend="Hvordan vil du bli kontaktet?"
-  name="contact"
-  defaultValue={['email']}
->
-  <CheckboxButton value="email" label="E-post" />
-  <CheckboxButton value="sms" label="SMS" />
-  <CheckboxButton value="phone" label="Telefon" />
-</CheckboxGroup>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -218,6 +203,21 @@ layout-bugger i Safari) og kobler legend, hjelpetekst og feilmelding til gruppen
   </div>
   <span data-field="error" aria-live="polite"></span>
 </ix-checkbox-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<CheckboxGroup
+  legend="Hvordan vil du bli kontaktet?"
+  name="contact"
+  defaultValue={['email']}
+>
+  <CheckboxButton value="email" label="E-post" />
+  <CheckboxButton value="sms" label="SMS" />
+  <CheckboxButton value="phone" label="Telefon" />
+</CheckboxGroup>
 ```
 
 </TabItem>
@@ -277,7 +277,7 @@ Store lister med mange checkboxer kan bli krevende å navigere i. Når antall va
 
 Dersom listen blir lang, bør man vurdere å dele opp innholdet, bruke filtrering eller andre mekanismer for å gjøre det enklere å orientere seg.
 
-## Tilgjengelighet / universell utforming
+## Universell utforming
 
 ### Semantisk struktur og kobling mellom label og felt
 
