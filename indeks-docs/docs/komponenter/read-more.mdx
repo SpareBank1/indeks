@@ -133,24 +133,26 @@ Innholdet kan bestå av tekst, lister, lenker og andre komponenter.
 
 Bruk ReadMore for **én** enkeltstående forklaring i tekstflaten. Har du **flere** seksjoner som hører sammen og bør stå i et samlet kort, bruk [Accordion](./accordion) i stedet.
 
+### Designvalg
+
+ReadMore bygger på native `<details>`/`<summary>` i stedet for en button-basert disclosure med
+`aria-expanded`/`aria-controls`. Begrunnelsen er den samme som for
+[Accordion](./accordion#designvalg).
+
 ## Universell utforming
 
 ### Hva du selv må sørge for
 
-- **Skriv kort og beskrivende label-tekst** — labelen er klikkflaten og må gi mening alene.
-- **Ikke gjem nødvendig innhold** — ReadMore er for utdypende, sekundær informasjon. Innhold brukeren må se for å komme videre skal vises åpent.
-- **Bruk overskriftsnivå ved behov** — inngår labelen i en dokumentstruktur, kan du legge en `<Heading>`/`<h3>` inni labelen for korrekt overskriftshierarki.
+- Skriv kort og beskrivende label-tekst. Labelen er klikkflaten og må gi mening alene.
+- Ikke gjem nødvendig innhold. ReadMore er for utdypende, sekundær informasjon. Innhold brukeren må se for å komme videre skal vises åpent.
+- Bruk overskriftsnivå ved behov. Inngår labelen i en dokumentstruktur, kan du legge en `<Heading>`/`<h3>` inni labelen for korrekt overskriftshierarki.
 
 ### Hva komponenten gjør automatisk
 
-- **Disclosure-semantikk** — labelen er en native `<summary>`: fokuserbar med Tab, åpnes/lukkes med Enter og Space, og åpen/lukket-tilstand annonseres av skjermlesere. Ingen ekstra ARIA er nødvendig.
-- **Programmessig kobling** — innholdet ligger inne i samme `<details>` som labelen, så de er knyttet sammen uten `aria-controls`/`id`.
-- **Tilstandsindikator** — en chevron roterer for å vise åpen/lukket. Animasjonen er kort og respekterer `prefers-reduced-motion`.
-- **Fokusindikator** — tydelig fokusring på labelen (`:focus-visible`).
-
-:::note Avvik fra akseptansekriteriene: `<summary>` framfor `<button>`
-En button-basert løsning (`<button aria-expanded aria-controls>` + panel med matchende `id`) er et vanlig mønster for disclosure. Vi bygger i stedet på native `<details>`/`<summary>`, som oppfyller samme intensjon — fokuserbar disclosure-knapp, Enter/Space og åpen/lukket-tilstand annonsert av skjermlesere — uten eksplisitt `aria-expanded`/`aria-controls`. Innholdet er programmessig knyttet til labelen ved å ligge inne i samme `<details>`, så aria-koblingen er overflødig. Dette er enklere, har bred innebygd støtte og følger samme native-tilnærming som Accordion.
-:::
+- **Disclosure-semantikk:** labelen er en native `<summary>`: fokuserbar med Tab, åpnes/lukkes med Enter og Space, og åpen/lukket-tilstand annonseres av skjermlesere. Ingen ekstra ARIA er nødvendig.
+- **Programmessig kobling:** innholdet ligger inne i samme `<details>` som labelen, så de er knyttet sammen uten `aria-controls`/`id`.
+- **Tilstandsindikator:** en chevron roterer for å vise åpen/lukket. Animasjonen er kort og respekterer `prefers-reduced-motion`.
+- **Fokusindikator:** tydelig fokusring på labelen (`:focus-visible`).
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -173,7 +175,7 @@ En button-basert løsning (`<button aria-expanded aria-controls>` + panel med ma
 
 Trenger du `ix-read-more`-stylingen på HTML du setter sammen selv, kan du bruke klassene direkte. Native `<details>`/`<summary>` gir semantikk og tastatur — ingen JavaScript er nødvendig.
 
-### Tilgjengelige klasser
+### Tilgjengelige klasser og selektorer
 
 | Element/tilstand | Selektor / attributt |
 |------------------|----------------------|

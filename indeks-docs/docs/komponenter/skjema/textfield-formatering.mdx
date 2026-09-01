@@ -11,7 +11,7 @@ TextField kan formatere innholdet automatisk mens brukeren fyller ut — beløp 
 
 ## Vi formaterer, vi masker ikke
 
-Uansett modus vises **alt** brukeren skriver. Formateringen avviser aldri et tastetrykk og skjuler aldri et tegn. Skriver brukeren flere tegn enn formatet har plass til — eller noe som ikke hører hjemme (en bokstav i et sifferfelt) — vises den ledende delen som passer formatert, og resten legges uformatert på til slutt, i samme rekkefølge. Et telefonfelt (`000 00 000`) viser `1234567890` som `123 45 67890`, og `1234567a` som `123 45 67a`.
+Uansett modus vises **alt** brukeren skriver. Formateringen avviser aldri et tastetrykk og skjuler aldri et tegn. Skriver brukeren flere tegn enn formatet har plass til, eller noe som ikke hører hjemme (en bokstav i et sifferfelt), vises den ledende delen som passer formatert. Resten legges uformatert på til slutt, i samme rekkefølge. Et telefonfelt (`000 00 000`) viser `1234567890` som `123 45 67890`, og `1234567a` som `123 45 67a`.
 
 Feil fanges derfor av **validering**, ikke ved å droppe tegn. Den rå verdien bevarer alt brukeren skrev (minus separatorene formatteren setter inn), så en feilaktig bokstav overlever helt fram til valideringen din og kan gi en tydelig feilmelding.
 
@@ -19,9 +19,9 @@ Feil fanges derfor av **validering**, ikke ved å droppe tegn. Den rå verdien b
 Formateringen er kun presentasjon. `onChange`, `ix-field.rawValue` og form-innsending gir deg verdien uten separatorer (`"12345678"`, ikke `"123 45 678"`). Du lagrer og validerer den rå verdien.
 :::
 
-:::note Bruk med React Hook Form
-Et formatert felt kobles med `{...register('felt')}` akkurat som et uformatert (Mønster A) — se [Form-validering](/docs/monstre-og-maler/form-validering#textfield-med-formatering). I formatter-modus videresender `TextField` et lite **proxy-objekt** til `ref` i stedet for den native `<input>` (siden `ix-field` eier den synlige DOM-verdien): proxyens `value` er alltid rå, og `focus()` delegerer til den synlige inputen. Det er en intern detalj — trenger du verdien selv, les den via `onChange` (`event.target.value`) eller `ix-field.rawValue`, ikke via `ref.value` direkte.
-:::
+### Bruk med React Hook Form
+
+Et formatert felt kobles med `{...register('felt')}` akkurat som et uformatert (Mønster A) — se [Form-validering](/docs/monstre-og-maler/form-validering#textfield-med-formatering). I formatter-modus videresender `TextField` et lite **proxy-objekt** til `ref` i stedet for den native `<input>` (siden `ix-field` eier den synlige DOM-verdien): proxyens `value` er alltid rå, og `focus()` delegerer til den synlige inputen. Det er en intern detalj. Trenger du verdien selv, les den via `onChange` (`event.target.value`) eller `ix-field.rawValue`, ikke via `ref.value` direkte.
 
 ## To moduser: blur (standard) og live (opt-in)
 
@@ -129,7 +129,7 @@ For enkle mønstre uten kode. Hvert tegn i pattern-strengen er enten en plass br
 </TabItem>
 </Tabs>
 
-:::note `formatPattern` er ikke det native `pattern`-attributtet
+:::warning `formatPattern` er ikke det native `pattern`-attributtet
 `formatPattern` styrer *visning*. Det native `pattern`-attributtet (en valideringsregex) sendes fortsatt uendret videre til `<input>`. De to er uavhengige.
 :::
 
@@ -181,7 +181,7 @@ Et `{ format, parse }`-objekt kan ikke uttrykkes som et attributt, så i ren HTM
 
 ## Egne, delbare varianter
 
-Trenger teamet ditt en variant flere felter skal dele — som ikke er blant de innebygde — kan du registrere den **én gang** og bruke den overalt via `format="<navn>"`. Da slipper du å sende inn funksjonen på hvert felt, og du er ikke avhengig av at designsystemet legger den til.
+Trenger teamet ditt en variant flere felter skal dele, og den ikke er blant de innebygde, kan du registrere den **én gang** og bruke den overalt via `format="<navn>"`. Da slipper du å sende inn funksjonen på hvert felt, og du er ikke avhengig av at designsystemet legger den til.
 
 Registrering skjer på web component-laget (`IxField`), som React-komponenten bygger på:
 
@@ -243,7 +243,7 @@ data.get('tlf'); // "12345678" (ikke "123 45 678")
 data.get('tlf_formatted'); // "123 45 678"
 ```
 
-:::note `input.value` er ikke lenger garantert rå
+:::warning `input.value` er ikke lenger garantert rå
 Den synlige inputen viser formatert tekst (og rå ved fokus i blur-modus), så les rå verdi via `field.rawValue` eller den skjulte mirror-inputen — ikke `synligInput.value`.
 :::
 
@@ -267,8 +267,8 @@ Bruker appen din `cleave.js` (utdatert) eller `react-number-format` for felt-for
 
 Indeks eksponerer alltid den rå verdien (i `onChange`, `rawValue` og form-innsending) — så nedstrøms kode som allerede lagrer råverdien (`rawValue`/`floatValue`) fungerer likt. De innebygde variantene formaterer live, slik at overgangen fra et Cleave-felt med tusenskille kjennes likt for brukeren.
 
-:::caution Ugyldige tegn avvises ikke lenger stille
-Cleave/imask nekter typisk «ugyldige» tegn mens man skriver. Indeks gjør det motsatte: vi formaterer men masker ikke, så alt brukeren skriver vises, og feil fanges av validering. Sørg for at feltet har validering + `errorMessage` for verdier som må avvises.
+:::warning Ugyldige tegn avvises ikke lenger stille
+Cleave/imask nekter typisk «ugyldige» tegn mens brukeren skriver. Indeks gjør det motsatte: vi formaterer men masker ikke, så alt brukeren skriver vises, og feil fanges av validering. Sørg for at feltet har validering + `errorMessage` for verdier som må avvises.
 :::
 
 ## Relatert

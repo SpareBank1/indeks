@@ -178,18 +178,18 @@ I `error` er prosessen avbrutt. Et feilikon vises, og støtteteksten skal forkla
 
 ### Hva du selv må sørge for
 
-- **Gi alltid et tilgjengelig navn** — beskriv hva fremdriften gjelder («Laster opp dokumenter»), ikke bare at noe pågår («Prosessering»). Bruk `label` for et synlig navn, eller `aria-label` når baren skal stå uten synlig tekst. Uten navn er `active`-baren et WCAG 4.1.2-brudd (web componenten advarer i dev).
-- **La `supportText` følge overgangen til `success`/`error`** — uten støttetekst blir overgangen stille for skjermlesere (kun visuell). Teksten leses opp via en live-region når den settes. I `error` skal den forklare hva som gikk galt og hva brukeren kan gjøre videre — farge og ikon alene forteller ikke hvorfor.
-- **Bruk kun én ProgressBar per prosess** — ikke del opp én prosess i flere barer. Skal du vise plassering i et flerstegsforløp, bruk Stepper.
-- **Sett kun reell fremdrift** — er varigheten ukjent, bruk [Spinner](./spinner) i stedet for en kunstig beregnet verdi.
+- Gi alltid et tilgjengelig navn. Beskriv hva fremdriften gjelder («Laster opp dokumenter»), ikke bare at noe pågår («Prosessering»). Bruk `label` for et synlig navn, eller `aria-label` når baren skal stå uten synlig tekst. Uten navn er `active`-baren et WCAG 4.1.2-brudd (web componenten advarer i dev).
+- La `supportText` følge overgangen til `success`/`error`. Uten støttetekst blir overgangen stille for skjermlesere (kun visuell). Teksten leses opp via en live-region når den settes. I `error` skal den forklare hva som gikk galt og hva brukeren kan gjøre videre — farge og ikon alene forteller ikke hvorfor.
+- Bruk kun én ProgressBar per prosess. Ikke del opp én prosess i flere barer. Skal du vise plassering i et flerstegsforløp, bruk Stepper.
+- Sett kun reell fremdrift. Er varigheten ukjent, bruk [Spinner](./spinner) i stedet for en kunstig beregnet verdi.
 
 ### Hva komponenten gjør automatisk
 
 - **`role="progressbar"`** settes i `active` med `aria-valuenow` (avrundet), `aria-valuemin="0"` og `aria-valuemax="100"`. Sett `valueText` for en lokalisert `aria-valuetext`.
-- **iOS-tilpasning** — på iOS bytter `active` til `role="img"` og baker verdien inn i `aria-label` (`«label, verdi»`), fordi VoiceOver ikke leser løpende `aria-valuenow`-endringer på en `progressbar`. `valueText` foretrekkes i denne teksten når den er satt. Desktop og Android beholder ekte progressbar-semantikk.
+- **iOS-tilpasning:** på iOS bytter `active` til `role="img"` og baker verdien inn i `aria-label` (`«label, verdi»`), fordi VoiceOver ikke leser løpende `aria-valuenow`-endringer på en `progressbar`. `valueText` foretrekkes i denne teksten når den er satt. Desktop og Android beholder ekte progressbar-semantikk.
 - **`aria-labelledby` / `aria-describedby`** kobler label og støttetekst programmatisk til baren.
-- **Rollen fjernes i `success`/`error`** — komponenten er ikke lenger en progressbar. Status formidles med `data-status` (kobler statusfarger), et dekorativt statusikon og tekst — aldri farge alene.
-- **Overgang annonseres** — støtteteksten er en stabil live-region (`role="status"`), så endringen til `success`/`error` leses høflig uten å flytte fokus.
+- Rollen fjernes i `success`/`error`. Komponenten er ikke lenger en progressbar. Status formidles med `data-status` (kobler statusfarger), et dekorativt statusikon og tekst — aldri farge alene.
+- **Overgang annonseres:** støtteteksten er en stabil live-region (`role="status"`), så endringen til `success`/`error` leses høflig uten å flytte fokus.
 - **`prefers-reduced-motion`** fjerner overgangsanimasjonen for brukere som har slått av bevegelse.
 
 <KeyboardAndScreenReader data={a11yData} />
@@ -227,7 +227,7 @@ I tillegg støttes standard HTML-attributter (`id`, `style`, `aria-*` osv.).
 
 ## Tilpasning med CSS
 
-Trenger du `ix-progress-bar`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke web component-taggen `<ix-progress-bar>` direkte. Den genererer selv all indre struktur; du skriver kun host-elementet med attributter.
+Trenger du `ix-progress-bar`-stylingen på HTML du setter sammen selv, uten React-komponenten, kan du bruke web component-taggen `<ix-progress-bar>` direkte. Den genererer selv all indre struktur; du skriver kun host-elementet med attributter.
 
 ### Tilgjengelige klasser og selektorer
 

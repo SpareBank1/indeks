@@ -163,16 +163,16 @@ Du kan fjerne blinket helt ved å sette `--ii-icon-url` inline selv. Da tegnes i
 ></ix-icon>
 ```
 
-:::note Hacky, men trygt som fallback
-`--ii-icon-url` er en intern variabel (`--ii-`-prefiks). Den er ikke et offisielt API og kan i teorien endres. Bruk dette kun som en bevisst optimalisering for ikke-React-sider der blinket er et problem. `name` er Material Design-filnavnet direkte, så URL-en er `.../{name}.svg` (f.eks. `home` → `home.svg`).
+:::warning `--ii-icon-url` er en intern variabel
+Prefikset `--ii-` betyr internt. Variabelen er ikke et offisielt API og kan endres uten varsel, så bruk dette bare som en bevisst optimalisering for ikke-React-sider der blinket er et problem. `name` er Material Design-filnavnet direkte, så URL-en er `.../{name}.svg` (f.eks. `home` → `home.svg`).
 :::
 
 ## Universell utforming
 
 ### Hva du selv må sørge for
 
-- **Semantiske ikoner trenger aria-label** — sett `ariaLabel` når ikonet formidler informasjon uten tilstøtende synlig tekst
-- **Ikoner i knapper** — knapper med kun ikon trenger `aria-label` på knappen, ikke på ikonet
+- Semantiske ikoner trenger aria-label. Sett `ariaLabel` når ikonet formidler informasjon uten tilstøtende synlig tekst
+- **Ikoner i knapper:** knapper med kun ikon trenger `aria-label` på knappen, ikke på ikonet
 
 ### Hva komponenten gjør automatisk
 

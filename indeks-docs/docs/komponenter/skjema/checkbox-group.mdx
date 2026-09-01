@@ -90,7 +90,7 @@ const kontakt = useCheckboxGroup(['epost']);
 
 Trenger du bare selve array-oppdateringen i din egen state, bruk den rene funksjonen `toggleValue(prev, event)` — det er den samme oppskriften hooken bygger på.
 
-Trenger du mer — deaktiverte alternativer, custom `id`-er eller ref — bruk `CheckboxButton`-barn i stedet:
+Trenger du deaktiverte alternativer, egne `id`-er eller en ref, bruker du `CheckboxButton`-barn i stedet:
 
 ```tsx live
 <CheckboxGroup legend="Hvordan vil du bli kontaktet?" name="kontakt-children" defaultValue={['epost']}>
@@ -354,11 +354,11 @@ Se [Designvalg for CheckboxGroup](./checkbox-group-designvalg) hvis du er nysgje
 
 ### Hva du selv må sørge for
 
-- **Beskrivende legend** — komponenten kobler legend til gruppen, men du må skrive god tekst
-- **Beskrivende labels** — hver CheckboxButton må ha en label som forklarer hva alternativet er
-- **Konkret feilmelding** — `errorMessage` viser feilen, men teksten er ditt ansvar
-- **Vurder `disabled` med omtanke** — et deaktivert alternativ er ofte vanskelig å forstå
-- **Bruk checkbox kun for uavhengige valg** — er valgene gjensidig utelukkende, bruk `RadioGroup`
+- **Beskrivende legend:** komponenten kobler legend til gruppen, men du må skrive god tekst
+- **Beskrivende labels:** hver CheckboxButton må ha en label som forklarer hva alternativet er
+- **Konkret feilmelding:** `errorMessage` viser feilen, men teksten er ditt ansvar
+- Vurder `disabled` med omtanke. Et deaktivert alternativ er ofte vanskelig å forstå
+- Bruk checkbox kun for uavhengige valg. Er valgene gjensidig utelukkende, bruk `RadioGroup`
 
 ### Hva komponenten gjør automatisk
 
@@ -468,9 +468,7 @@ Når du bruker `<ix-checkbox-group>` eller React-komponenten, settes dette opp f
 
 I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocus`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten — de sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
 
-:::note
-`CheckboxButton` er designet for bruk inni `CheckboxGroup`. `onChange` er ikke tilgjengelig som prop fordi endringshåndteringen skjer via gruppen. For en enkeltstående checkbox, bruk `Checkbox`.
-:::
+`CheckboxButton` er laget for bruk inne i `CheckboxGroup`. Den har ingen `onChange`-prop, fordi gruppen håndterer endringene. Trenger du én enkeltstående checkbox, bruk `Checkbox`.
 
 </TabItem>
 </Tabs>

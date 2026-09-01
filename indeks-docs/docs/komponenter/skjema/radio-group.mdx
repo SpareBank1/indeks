@@ -85,7 +85,7 @@ const [kundetype, setKundetype] = useState<string>('privat');
 />
 ```
 
-Trenger du mer — deaktiverte alternativer, custom `id`-er eller ref — bruk `RadioButton`-barn i stedet:
+Trenger du deaktiverte alternativer, egne `id`-er eller en ref, bruker du `RadioButton`-barn i stedet:
 
 ```tsx live
 <RadioGroup legend="Velg kundetype" name="kundetype-children" defaultValue="privat">
@@ -425,10 +425,10 @@ Se [Designvalg for RadioGroup](./radio-group-designvalg) hvis du er nysgjerrig p
 
 ### Hva du selv må sørge for
 
-- **Beskrivende legend** — komponenten kobler legend til gruppen, men du må skrive god tekst
-- **Beskrivende labels** — hver RadioButton må ha en label som forklarer hva alternativet er
-- **Konkret feilmelding** — `errorMessage` viser feilen, men teksten er ditt ansvar
-- **Vurder `disabled` med omtanke** — et deaktivert alternativ er ofte vanskelig å forstå
+- **Beskrivende legend:** komponenten kobler legend til gruppen, men du må skrive god tekst
+- **Beskrivende labels:** hver RadioButton må ha en label som forklarer hva alternativet er
+- **Konkret feilmelding:** `errorMessage` viser feilen, men teksten er ditt ansvar
+- Vurder `disabled` med omtanke. Et deaktivert alternativ er ofte vanskelig å forstå
 - **Sett `required`** når gruppen er påkrevd, så native validering virker
 
 ### Hva komponenten gjør automatisk
@@ -541,9 +541,7 @@ Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for 
 
 I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocus`, `required`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten — de sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
 
-:::note
-`RadioButton` er designet for bruk inni `RadioGroup`. `onChange` er ikke tilgjengelig som prop fordi endringshåndteringen skjer via gruppen. For standalone radio input, bruk native `<input type="radio">` direkte.
-:::
+`RadioButton` er laget for bruk inne i `RadioGroup`. Den har ingen `onChange`-prop, fordi gruppen håndterer endringene. Trenger du én enkeltstående radioknapp, bruk native `<input type="radio">` direkte.
 
 </TabItem>
 </Tabs>

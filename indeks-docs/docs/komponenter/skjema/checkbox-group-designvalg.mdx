@@ -10,7 +10,7 @@ CheckboxGroup speiler [RadioGroup](./radio-group-designvalg) der det gir mening 
 
 ## WC eier ARIA og DOM-synk; React-laget er bevisst tynt
 
-Hele ARIA-koblingsapparatet — id-generering, `htmlFor`, `name`-propagering, `aria-labelledby`/`describedby`/`invalid`, disabled-propagering og readonly-tastaturblokk — ligger i `<ix-checkbox-group>`. React-wrapperen eksponerer kun props-API, kontrollert state og presentasjons-attributter (`data-state`, `className`).
+Hele ARIA-koblingsapparatet ligger i `<ix-checkbox-group>`: id-generering, `htmlFor`, `name`-propagering, `aria-labelledby`/`describedby`/`invalid`, disabled-propagering og readonly-tastaturblokk. React-wrapperen eksponerer kun props-API, kontrollert state og presentasjons-attributter (`data-state`, `className`).
 
 *Hvorfor:* HTML- og React-bruk får identisk a11y-oppførsel uten duplisering. Samme begrunnelse som for RadioGroup.
 

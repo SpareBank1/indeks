@@ -225,11 +225,11 @@ Et klikkbart kort må se annerledes ut enn et statisk kort **uten** at man treng
 På desktop kan klikkbarhet antydes med hover, men hover finnes ikke på touch. Derfor bærer det
 klikkbare kortet sin affordanse i hviletilstand:
 
-- **Chevron (›)** — et eksplisitt «dette gjør noe»-signal, synlig hele tiden. Dette er
+- **Chevron (›):** et eksplisitt «dette gjør noe»-signal, synlig hele tiden. Dette er
   hovedsignalet: en form, ikke bare en farge, så det holder også kontrastkravet.
-- **Hover** — på desktop får kortet en bakgrunns-tint når du peker på det.
-- **Pressed-state** — ved trykk får kortet en tint, som bekrefter klikket på touch.
-- **Fokusring** — synlig for tastaturbrukere via `:focus-visible`.
+- **Hover:** på desktop får kortet en bakgrunns-tint når du peker på det.
+- **Pressed-state:** ved trykk får kortet en tint, som bekrefter klikket på touch.
+- **Fokusring:** synlig for tastaturbrukere via `:focus-visible`.
 
 Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `onClick` (handling →
 `<button>`). Chevronen legges på automatisk.
@@ -238,21 +238,21 @@ Du aktiverer klikkbart kort ved å sette `href` (navigasjon → `<a>`) eller `on
 
 ### Hva du selv må sørge for
 
-- **Velg `href` eller `onClick` bevisst** — navigasjon skal være `<a>`, handling skal være
+- Velg `href` eller `onClick` bevisst. Navigasjon skal være `<a>`, handling skal være
   `<button>`. Komponenten velger element basert på hvilken du gir.
-- **Gi kortet et meningsfylt navn** — innholdet blir det tilgjengelige navnet. Rent visuelle kort
+- Gi kortet et meningsfylt navn. Innholdet blir det tilgjengelige navnet. Rent visuelle kort
   trenger `aria-label`.
 - **Ikke nøst interaktive elementer** inni et klikkbart kort.
-- **Ikke skill klikkbart fra statisk kun med farge** — chevronen gjør jobben, og må ikke
+- Ikke skill klikkbart fra statisk kun med farge. Chevronen gjør jobben, og må ikke
   fjernes.
 
 ### Hva komponenten gjør automatisk
 
-- **Semantisk element** — `<a>` ved `href`, `<button>` ved `onClick`, ellers `<div>`.
-- **Tastaturstøtte** — native element gir Enter/Space-aktivering og tab-rekkefølge gratis.
+- **Semantisk element:** `<a>` ved `href`, `<button>` ved `onClick`, ellers `<div>`.
+- **Tastaturstøtte:** native element gir Enter/Space-aktivering og tab-rekkefølge gratis.
 - **Fokusindikator** via `:focus-visible` — synlig for tastatur, ikke for mus.
-- **Touch-synlig affordanse** — chevron i hviletilstand, pressed-state ved `:active`.
-- **Redusert bevegelse** — transition og skalering deaktiveres ved `prefers-reduced-motion`.
+- **Touch-synlig affordanse:** chevron i hviletilstand, pressed-state ved `:active`.
+- **Redusert bevegelse:** transition og skalering deaktiveres ved `prefers-reduced-motion`.
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -276,10 +276,10 @@ I tillegg støttes standard HTML-attributter, som settes direkte på det rendred
 
 ## Tilpasning med CSS
 
-Trenger du `ix-card`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du
+Trenger du `ix-card`-stylingen på HTML du setter sammen selv, uten React-komponenten, kan du
 bruke klassene direkte. Husk at klikkbart kort skal være et `<a>` eller `<button>`.
 
-### Tilgjengelige klasser
+### Tilgjengelige klasser og selektorer
 
 | Element/tilstand | Selektor |
 |-----------------|----------|

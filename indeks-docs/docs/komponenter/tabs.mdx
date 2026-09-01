@@ -243,19 +243,19 @@ function Konto() {
 
 ### Hva du selv må sørge for
 
-- **Gi kun-ikon-faner et `ariaLabel`** — en fane uten synlig tekst trenger et tilgjengelig navn på brukerens språk. Komponenten har ingen hardkodet fallback.
+- Gi kun-ikon-faner et `ariaLabel`. En fane uten synlig tekst trenger et tilgjengelig navn på brukerens språk. Komponenten har ingen hardkodet fallback.
 - **Merk fane-settet med `ariaLabel`** på `Tabs.List` når flere uavhengige fane-sett finnes på samme side, så skjermleserbrukere kan skille dem.
 - **Skriv korte, beskrivende etiketter** som beskriver innholdet i tilhørende panel og gir mening lest alene.
-- **Bruk faner til likeverdig innhold** — ikke til sekvensielle steg (bruk stegindikator) eller navigasjon mellom sider (bruk lenker).
+- Bruk faner til likeverdig innhold. Ikke til sekvensielle steg (bruk stegindikator) eller navigasjon mellom sider (bruk lenker).
 
 ### Hva komponenten gjør automatisk
 
-- **Roller og relasjoner** — web componenten setter `role="tablist"/"tab"/"tabpanel"`, `aria-selected`, `aria-controls` (fane → panel) og `aria-labelledby` (panel → fane) ved mount. Ingen ekstra ARIA er nødvendig.
-- **Tastaturnavigasjon (manuell aktivering)** — roving `tabindex` gir én tab-stopp; pil venstre/høyre flytter fokus, Home/End går til første/siste, og Enter/Mellomrom aktiverer.
-- **Tilstand annonseres** — aktiv fane formidles av `aria-selected`, ikke av farge alene.
-- **Fokusindikator** — tydelig fokusring rundt hele fanen (`:focus-visible`); tablisten reserverer vertikal plass så ringen ikke klippes av scroll-containeren.
-- **Reflow og touch-mål** — fane-lista scroller horisontalt ved plassmangel (siden får ingen horisontal scroll ned til 320 px), og hver fane har min. 44×44 px touch-mål.
-- **Redusert bevegelse** — indikator-overgangen respekterer `prefers-reduced-motion: reduce`.
+- **Roller og relasjoner:** web componenten setter `role="tablist"/"tab"/"tabpanel"`, `aria-selected`, `aria-controls` (fane → panel) og `aria-labelledby` (panel → fane) ved mount. Ingen ekstra ARIA er nødvendig.
+- **Tastaturnavigasjon (manuell aktivering):** roving `tabindex` gir én tab-stopp; pil venstre/høyre flytter fokus, Home/End går til første/siste, og Enter/Mellomrom aktiverer.
+- **Tilstand annonseres:** aktiv fane formidles av `aria-selected`, ikke av farge alene.
+- **Fokusindikator:** tydelig fokusring rundt hele fanen (`:focus-visible`); tablisten reserverer vertikal plass så ringen ikke klippes av scroll-containeren.
+- **Reflow og touch-mål:** fane-lista scroller horisontalt ved plassmangel (siden får ingen horisontal scroll ned til 320 px), og hver fane har min. 44×44 px touch-mål.
+- **Redusert bevegelse:** indikator-overgangen respekterer `prefers-reduced-motion: reduce`.
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -269,7 +269,7 @@ Props-tabellen genereres automatisk fra Storybook (`tags: ['autodocs']`).
 
 ## Tilpasning med CSS
 
-Trenger du `ix-tabs`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte. Web componenten `<ix-tabs>` kobler roller, `aria-controls`, roving `tabindex`, tastatur og panel-visning ved mount; du skriver semantisk markup, gir hver fane og sitt panel et delt `data-value`, og markerer start-fanen med `aria-selected="true"` og de skjulte panelene med `hidden`.
+Trenger du `ix-tabs`-stylingen på HTML du setter sammen selv, uten React-komponenten, kan du bruke klassene direkte. Web componenten `<ix-tabs>` kobler roller, `aria-controls`, roving `tabindex`, tastatur og panel-visning ved mount; du skriver semantisk markup, gir hver fane og sitt panel et delt `data-value`, og markerer start-fanen med `aria-selected="true"` og de skjulte panelene med `hidden`.
 
 ### Tilgjengelige klasser og selektorer
 

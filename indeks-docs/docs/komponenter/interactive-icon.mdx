@@ -165,15 +165,15 @@ En knapp med bare ikon og ingen `aria-label` er usynlig for skjermlesere. Bruker
 
 ### Hva du selv må sørge for
 
-- **`aria-label` er påkrevd** — beskriv handlingen, ikke ikonet: `aria-label="Slett melding"`, ikke `aria-label="Søppelkasse-ikon"`. Det finnes ingen hardkodet fallback; send inn riktig tekst for brukerens språk.
-- **Ikke stol på farge alene** — `status`-fargen vises bare ved pekehvil/trykk og eksponeres ikke for skjermlesere. Har status betydning, må det fremgå av `aria-label` eller konteksten rundt.
-- **Bekreft destruktive handlinger** — når `status="danger"` brukes for sletting eller andre irreversible handlinger, bør handlingen kreve en ekstra bekreftelse.
+- **`aria-label` er påkrevd:** beskriv handlingen, ikke ikonet: `aria-label="Slett melding"`, ikke `aria-label="Søppelkasse-ikon"`. Det finnes ingen hardkodet fallback; send inn riktig tekst for brukerens språk.
+- Ikke stol på farge alene. `status`-fargen vises bare ved pekehvil/trykk og eksponeres ikke for skjermlesere. Har status betydning, må det fremgå av `aria-label` eller konteksten rundt.
+- Bekreft destruktive handlinger. Når `status="danger"` brukes for sletting eller andre irreversible handlinger, bør handlingen kreve en ekstra bekreftelse.
 
 ### Hva komponenten gjør automatisk
 
-- **Native `<button>`** — gir tastaturstøtte (Enter/Space), fokuserbarhet og rolle uten ekstra ARIA.
+- **Native `<button>`:** gir tastaturstøtte (Enter/Space), fokuserbarhet og rolle uten ekstra ARIA.
 - **`type="button"`** settes som standard så knappen ikke sender inn skjema utilsiktet.
-- **Ikonet er `aria-hidden`** — knappens navn kommer utelukkende fra `aria-label`, så skjermlesere annonserer ikke ikonet to ganger.
+- **Ikonet er `aria-hidden`:** knappens navn kommer utelukkende fra `aria-label`, så skjermlesere annonserer ikke ikonet to ganger.
 - **Klikkflate ≥ 44×44 px** via `min-width`/`min-height` — godt over WCAG-minstekravet på 24×24 px.
 - **Fokusindikator** via `:focus-visible` — synlig for tastaturbrukere, ikke for mus. Samme fokusstil uavhengig av status.
 
@@ -196,9 +196,9 @@ I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `
 
 ## Tilpasning med CSS
 
-Trenger du `ix-interactive-icon`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassen direkte på et `<button>`-element som wrapper et `<ix-icon>`.
+Trenger du `ix-interactive-icon`-stylingen på HTML du setter sammen selv, uten React-komponenten, kan du bruke klassen direkte på et `<button>`-element som wrapper et `<ix-icon>`.
 
-### Tilgjengelige klasser og attributter
+### Tilgjengelige klasser og selektorer
 
 | Element/tilstand | Selektor / attributt |
 |------------------|----------------------|
