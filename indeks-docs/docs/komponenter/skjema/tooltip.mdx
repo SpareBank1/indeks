@@ -187,7 +187,13 @@ Pilen peker alltid mot senteret av trigger-elementet, også etter at panelet er 
 
 ### Regn med at tooltipen lukker seg selv
 
-Panelet åpner på hover etter 300 ms, og med en gang på fokus og tapp. Det lukker når pekeren forlater triggeren, når fokus flyttes videre, og på `Escape`. Ikke bygg en egen lukkeknapp, og ikke legg noe brukeren skal rekke bort til inni panelet. Bare én tooltip er synlig om gangen, så to hjelpetekster som hører sammen må skrives som én.
+- Åpner på hover etter 300 ms, og med en gang på fokus og tapp
+- Lukker når pekeren forlater triggeren, når fokus flyttes videre, og på `Escape`
+- Forsvinner av seg selv, så den trenger ingen lukkeknapp
+- Bare én tooltip er synlig om gangen
+
+Ikke legg noe brukeren skal rekke bort til inni panelet. Det lukker i det pekeren forlater
+triggeren, så en lenke eller knapp der er ikke til å treffe.
 
 ## Universell utforming
 
