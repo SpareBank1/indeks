@@ -65,9 +65,9 @@ RadioGroup lar brukeren velge ett alternativ fra en liste av gjensidig utelukken
 />
 ```
 
-For enkle lister er `options`-propen den raskeste veien — på samme måte som `Select`. Hver option har `value` og `label`.
+For enkle lister er `options`-propen den raskeste veien, på samme måte som `Select`. Hver option har `value` og `label`.
 
-I praksis vil du som regel holde valgt verdi i state og koble den via `value`/`onChange`. `onChange` er event-basert (verdien ligger i `event.target.value`), slik at et `{...register('felt')}` fra React Hook Form kan spres rett på komponenten — se [Form-validering](../../monstre-og-maler/form-validering):
+I praksis vil du som regel holde valgt verdi i state og koble den via `value`/`onChange`. `onChange` er event-basert (verdien ligger i `event.target.value`), slik at et `{...register('felt')}` fra React Hook Form kan spres rett på komponenten, se [Form-validering](../../monstre-og-maler/form-validering):
 
 ```tsx
 const [kundetype, setKundetype] = useState<string>('privat');
@@ -108,7 +108,7 @@ Bruk `description` for å gi ekstra kontekst til hele gruppen.
 
 <Diskuter title="Verifiser forced-colors (Windows høykontrast) selv">
 
-Radio-indikatoren har en `@media (forced-colors: active)`-fallback i `indeks-css/css/components/form/radio-group.css`, men forced-colors kan ikke triggers fra siden — du må slå den på i nettleseren for å se den faktiske visningen.
+Radio-indikatoren har en `@media (forced-colors: active)`-fallback i `indeks-css/css/components/form/radio-group.css`, men forced-colors kan ikke utløses fra siden. Du må slå den på i nettleseren for å se den faktiske visningen.
 
 **Chromium (Chrome, Edge, Brave):**
 1. Åpne DevTools (F12 eller `Ctrl+Shift+I`).
@@ -170,7 +170,7 @@ Sjekk at: ringen er synlig (`CanvasText`), valgt prikk har brukerens accent-farg
 
 ### Horisontal orientering
 
-For svært korte lister kan alternativene vises ved siden av hverandre. Bruk det med omtanke — vertikal er enklere å skanne, og horisontal bryter til vertikal automatisk på smale skjermer.
+For svært korte lister kan alternativene vises ved siden av hverandre. Bruk det med omtanke. Vertikal er enklere å skanne, og horisontal bryter til vertikal automatisk på smale skjermer.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -264,7 +264,7 @@ Når validering feiler, vis en feilmelding som forklarer hva som er galt og hva 
 
 ### Skjult legend
 
-I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan legend skjules visuelt. Den skal fortsatt være meningsfull — skjermlesere leser den.
+I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan legend skjules visuelt. Den skal fortsatt være meningsfull. Skjermlesere leser den.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -308,7 +308,7 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
 
 ### Skrivebeskyttet og deaktivert
 
-`readOnly` viser valget men hindrer endring. `disabled` gjør hele gruppen inaktiv. Vurder om disabled er riktig — alternativet kan ofte heller skjules eller forklares.
+`readOnly` viser valget men hindrer endring. `disabled` gjør hele gruppen inaktiv. Vurder om disabled er riktig. Alternativet kan ofte heller skjules eller forklares.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -431,12 +431,12 @@ web component: gruppen setter opp ARIA og `disabled` for alle inputs under seg.
 Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for deg:
 
 - **`role="radiogroup"`** på containeren slik at skjermlesere annonserer gruppen riktig
-- **`aria-labelledby`** til legend-elementet — gruppens tilgjengelige navn
-- **`aria-describedby`** til description og error — leses etter legend
+- **`aria-labelledby`** til legend-elementet: gruppens tilgjengelige navn
+- **`aria-describedby`** til description og error: leses etter legend
 - **`aria-live="polite"`** på error-elementet slik at endringer kunngjøres uten å avbryte
 - **`aria-invalid`** på containeren og alle inputs synkroniseres med error-innholdet via MutationObserver
-- **Felles `name`** på alle inputs — sikrer mutual exclusivity (kun ett valg av gangen) og ArrowKey-navigasjon
-- **`htmlFor`/`id`** mellom hver label og input — klikk på label velger alternativet
+- **Felles `name`** på alle inputs: sikrer mutual exclusivity (kun ett valg av gangen) og ArrowKey-navigasjon
+- **`htmlFor`/`id`** mellom hver label og input: klikk på label velger alternativet
 - **`disabled`/`readonly`** propagerer fra container til alle inputs
 
 <KeyboardAndScreenReader data={a11yData} />
@@ -534,7 +534,7 @@ Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for 
 | `className` | `string` | Nei | | CSS-klasse på wrapper-div |
 | `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet |
 
-I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocus`, `required`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten — de sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
+I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocus`, `required`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten og sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
 
 `RadioButton` er laget for bruk inne i `RadioGroup`. Den har ingen `onChange`-prop, fordi gruppen håndterer endringene. Trenger du én enkeltstående radioknapp, bruk native `<input type="radio">` direkte.
 
@@ -543,7 +543,7 @@ I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocu
 
 ## Tilpasning med CSS
 
-Inni `<ix-radio-group>` styles naken `<input type="radio">` og `<label>` automatisk — du trenger ikke skrive klasser. BEM-klassene finnes som hooks for konsumenter som vil bruke radio-styling utenfor `<ix-radio-group>`.
+Inni `<ix-radio-group>` styles naken `<input type="radio">` og `<label>` automatisk. Du trenger ikke skrive klasser. BEM-klassene finnes som hooks for konsumenter som vil bruke radio-styling utenfor `<ix-radio-group>`.
 
 ### Tilgjengelige klasser og selektorer
 
@@ -561,7 +561,7 @@ Inni `<ix-radio-group>` styles naken `<input type="radio">` og `<label>` automat
 
 ### Eksempel: bruk i egen HTML-struktur
 
-Inni `<ix-radio-group>` trengs ingen klasser, og heller ikke `id` eller `for` — komponenten kobler input og label automatisk:
+Inni `<ix-radio-group>` kobler komponenten input og label automatisk, så du trenger verken klasser, `id` eller `for`:
 
 ```html
 <ix-radio-group name="kundetype">
