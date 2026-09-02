@@ -1,13 +1,11 @@
 # Native
 
-Indeks brukes i hybridapper der webinnhold vises i native-appens WebView. For brukeren skal web-innholdet oppleves som en naturlig del av den native appen.
-
-Denne siden samler hensyn og verktøy som er relevante når Indeks-komponenter brukes i en native kontekst.
+I hybridapper vises Indeks-komponenter i WebView-en til en native app. Brukeren skiller ikke mellom de to, og forventer derfor at web-delen oppfører seg som resten av appen.
 
 ## WebView-oppførsel
 
-Uten tilpasning vil WebView-innhold oppføre seg som en vanlig nettside: tekst kan markeres ved langt trykk, elementer kan dras, og trykk har en merkbar forsinkelse. Dette bryter med forventningene til en native app.
+Uten tilpasning oppfører innholdet seg som en vanlig nettside. Tekst kan markeres ved langt trykk, elementer kan dras, og det ligger en merkbar forsinkelse på trykk. Ingen av de tre skjer i en native app.
 
-Indeks tilbyr utility-klasser som gjør at webinnholdet oppfører seg som native UI — med mulighet for å slippe gjennom tekstmarkering der det trengs.
+Indeks har utility-klasser som slår av denne oppførselen, og som lar deg slippe tekstmarkering gjennom igjen der brukeren faktisk trenger å kopiere noe.
 
 Se [Native (utility-klasser)](/docs/utility-klasser/native) for fullstendig oversikt over klassene `.ix-native`, `.ix-selectable` og `.ix-selectable-all`.
