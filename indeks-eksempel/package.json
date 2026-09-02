@@ -17,7 +17,7 @@
         "test:e2e:docker": "pnpm run build && pnpm run docker:run-e2e"
     },
     "dependencies": {
-        "@hookform/resolvers": "5.9.0",
+        "@hookform/resolvers": "5.9.1",
         "@sb1/indeks-css": "workspace:*",
         "@sb1/indeks-react": "workspace:*",
         "@sb1/indeks-tokens": "workspace:*",
@@ -25,7 +25,7 @@
         "@sb1/indeks-web": "workspace:*",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",
-        "react-hook-form": "7.85.0",
+        "react-hook-form": "7.86.0",
         "react-router-dom": "^7.18.2",
         "valibot": "1.4.2"
     },
@@ -38,6 +38,6 @@
         "debug": "^4.4.3",
         "eslint-plugin-react-refresh": "^0.5.4",
         "typescript": "~6.0.3",
-        "vite": "^8.2.1"
+        "vite": "^8.2.2"
     }
 }
