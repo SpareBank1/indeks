@@ -55,7 +55,7 @@ Importér begge de genererte filene. **Rekkefølgen dem imellom spiller ingen ro
 @import './css/colors.css';
 ```
 
-Bruker du både `@sb1/indeks-css` (for komponent-CSS) og ditt eget theme, er det derimot rekkefølgen mot indeks-css som avgjør. Den ferdige CSS-en inlirer de samme tokenene under nøyaktig samme selektorer og spesifisitet, og det finnes ingen `@layer` som skiller dem — så det er «sist vinner» som gjelder:
+Bruker du både `@sb1/indeks-css` (for komponent-CSS) og ditt eget theme, er det derimot rekkefølgen mot indeks-css som avgjør. Den ferdige CSS-en inlinjerer de samme tokenene under nøyaktig samme selektorer og spesifisitet, og det finnes ingen `@layer` som skiller dem — så det er «sist vinner» som gjelder:
 
 ```css
 @import url('https://cdn.sparebank1.no/indeks/css/<versjon>/index.css');
