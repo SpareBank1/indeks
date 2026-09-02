@@ -47,7 +47,7 @@ CheckboxGroup samler flere relaterte checkboxer i én gruppe der brukeren kan ve
 </ix-checkbox-group>
 ```
 
-`<ix-checkbox-group>` genererer `id` på hver input og kobler `for`/`id` mellom label og input automatisk, setter opp `role="group"`, `aria-labelledby` til legend og `aria-describedby` til description og error. Hver checkbox wrappes i `<div class="ix-checkbox">` med input og label som søsken — indikatoren tegnes som CSS-pseudo-element. Error-elementet skal alltid ligge i DOM. Tomt betyr ingen feil.
+`<ix-checkbox-group>` genererer `id` på hver input og kobler `for`/`id` mellom label og input automatisk, setter opp `role="group"`, `aria-labelledby` til legend og `aria-describedby` til description og error. Hver checkbox wrappes i `<div class="ix-checkbox">` med input og label som søsken. Indikatoren tegnes som CSS-pseudo-element. Error-elementet skal alltid ligge i DOM. Tomt betyr ingen feil.
 
 </TabItem>
 <TabItem value="react" label="React">
@@ -65,9 +65,9 @@ CheckboxGroup samler flere relaterte checkboxer i én gruppe der brukeren kan ve
 />
 ```
 
-For enkle lister er `options`-propen den raskeste veien — på samme måte som `Select`. Hver option har `value` og `label`.
+For enkle lister er `options`-propen den raskeste veien, på samme måte som `Select`. Hver option har `value` og `label`.
 
-I praksis vil du som regel holde valgte verdier i state og koble dem via `value`/`onChange`. Merk at `value` er et **array** — flere kan være valgt samtidig. `onChange` er event-basert (verdien ligger i `event.target.value`, av/på i `event.target.checked`), slik at et `{...register('felt')}` fra React Hook Form kan spres rett på komponenten — se [Form-validering](../../monstre-og-maler/form-validering).
+I praksis vil du som regel holde valgte verdier i state og koble dem via `value`/`onChange`. Merk at `value` er et **array**: flere kan være valgt samtidig. `onChange` er event-basert (verdien ligger i `event.target.value`, av/på i `event.target.checked`), slik at et `{...register('felt')}` fra React Hook Form kan spres rett på komponenten. Se [Form-validering](../../monstre-og-maler/form-validering).
 
 Bruker du **ikke** React Hook Form, gir `useCheckboxGroup`-hooken deg kontrollert array-state uten at du selv må bygge neste array. Den returnerer `{ value, onChange }` klar til å spres på komponenten, og `value` er `string[]` du kan bruke til å vise/skjule avhengige seksjoner:
 
@@ -88,7 +88,7 @@ const kontakt = useCheckboxGroup(['epost']);
 />
 ```
 
-Trenger du bare selve array-oppdateringen i din egen state, bruk den rene funksjonen `toggleValue(prev, event)` — det er den samme oppskriften hooken bygger på.
+Trenger du bare selve array-oppdateringen i din egen state, bruk den rene funksjonen `toggleValue(prev, event)`. Det er den samme oppskriften hooken bygger på.
 
 Trenger du deaktiverte alternativer, egne `id`-er eller en ref, bruker du `CheckboxButton`-barn i stedet:
 
@@ -198,7 +198,7 @@ Når validering feiler, vis en feilmelding som forklarer hva som er galt og hva 
 
 ### Skjult legend
 
-I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan legend skjules visuelt. Den skal fortsatt være meningsfull — skjermlesere leser den.
+I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan legend skjules visuelt. Den skal fortsatt være meningsfull. Skjermlesere leser den.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -241,7 +241,7 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
 
 ### Skrivebeskyttet og deaktivert
 
-`readOnly` viser valgene men hindrer endring. `disabled` gjør hele gruppen inaktiv. Vurder om disabled er riktig — alternativet kan ofte heller skjules eller forklares.
+`readOnly` viser valgene men hindrer endring. `disabled` gjør hele gruppen inaktiv. Vurder om disabled er riktig. Alternativet kan ofte heller skjules eller forklares.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -361,12 +361,12 @@ hva som skiller CheckboxGroup fra RadioGroup.
 Når du bruker `<ix-checkbox-group>` eller React-komponenten, settes dette opp for deg:
 
 - **`role="group"`** på containeren slik at skjermlesere annonserer gruppen riktig (det finnes ingen egen «checkboxgroup»-rolle)
-- **`aria-labelledby`** til legend-elementet — gruppens tilgjengelige navn
-- **`aria-describedby`** til description og error — leses etter legend
+- **`aria-labelledby`** til legend-elementet: gruppens tilgjengelige navn
+- **`aria-describedby`** til description og error: leses etter legend
 - **`aria-live="polite"`** på error-elementet slik at endringer kunngjøres uten å avbryte
 - **`aria-invalid`** på containeren synkroniseres med error-innholdet via MutationObserver
-- **`htmlFor`/`id`** mellom hver label og input — klikk på label toggler alternativet
-- **Felles `name`** propageres til alle inputs når du setter `name` på gruppen — slik at alle valgene sendes med i skjemaet
+- **`htmlFor`/`id`** mellom hver label og input: klikk på label toggler alternativet
+- **Felles `name`** propageres til alle inputs når du setter `name` på gruppen, slik at alle valgene sendes med i skjemaet
 - **`disabled`/`readonly`** propagerer fra container til alle inputs (readonly blokkerer Space via tastatur, siden `readOnly` er en no-op på checkbox)
 
 <KeyboardAndScreenReader data={a11yData} />
@@ -462,7 +462,7 @@ Når du bruker `<ix-checkbox-group>` eller React-komponenten, settes dette opp f
 | `className` | `string` | Nei | | CSS-klasse på wrapper-div |
 | `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet |
 
-I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocus`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten — de sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
+I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocus`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten og sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
 
 `CheckboxButton` er laget for bruk inne i `CheckboxGroup`. Den har ingen `onChange`-prop, fordi gruppen håndterer endringene. Trenger du én enkeltstående checkbox, bruk `Checkbox`.
 
@@ -471,7 +471,7 @@ I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocu
 
 ## Tilpasning med CSS
 
-Inni `<ix-checkbox-group>` styles `<input type="checkbox">` og `<label>` (inni `.ix-checkbox`) automatisk — indikatoren tegnes som pseudo-element på labelen, så du trenger ingen ekstra markup.
+Inni `<ix-checkbox-group>` styles `<input type="checkbox">` og `<label>` (inni `.ix-checkbox`) automatisk. Indikatoren tegnes som pseudo-element på labelen, så du trenger ingen ekstra markup.
 
 ### Tilgjengelige klasser og selektorer
 
@@ -489,7 +489,7 @@ Inni `<ix-checkbox-group>` styles `<input type="checkbox">` og `<label>` (inni `
 
 ### Eksempel: bruk i egen HTML-struktur
 
-Inni `<ix-checkbox-group>` trengs ingen `id` eller `for` — komponenten kobler input og label automatisk:
+Inni `<ix-checkbox-group>` kobler komponenten input og label automatisk, så du trenger ingen `id` eller `for`:
 
 ```html
 <ix-checkbox-group name="interesser">
