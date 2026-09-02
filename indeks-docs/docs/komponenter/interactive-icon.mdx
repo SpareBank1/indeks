@@ -204,10 +204,8 @@ Trenger du `ix-interactive-icon`-stylingen på HTML du setter sammen selv, uten 
 |------------------|----------------------|
 | Knapp | `.ix-interactive-icon` |
 | Status | `data-status="info"` / `"success"` / `"warning"` / `"danger"` (arves fra nærmeste `data-status`-forelder når det ikke settes på knappen) |
-| Pekehvil-farge | intern variabel `--ii-interactive-icon-fill-hover` |
-| Trykk-farge | intern variabel `--ii-interactive-icon-fill-active` |
 
-Variablene med `--ii-`-prefiks er interne implementasjonsdetaljer og er ikke en del av det offentlige API-et.
+Pekehvil- og trykkfargene følger statusen, så du styrer dem med `data-status` og ikke med CSS.
 
 ### Eksempel: ren HTML
 

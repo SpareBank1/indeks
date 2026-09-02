@@ -156,18 +156,10 @@ I React merker du ingenting: web componenten er lastet før komponentene rendres
 ikonet blinke inn et øyeblikk etterpå, særlig på sider som vises før `indeks-web`-scriptet er
 ferdig lastet fra CDN.
 
-Du kan fjerne blinket helt ved å sette `--ii-icon-url` inline selv. Da tegnes ikonet umiddelbart, og web componenten overtar variabelen (og legger til aria) når den laster:
-
-```html live
-<ix-icon
-  name="home"
-  style="--ii-icon-url: url('https://cdn.sparebank1.no/icons/home.svg')"
-></ix-icon>
-```
-
-:::warning `--ii-icon-url` er en intern variabel
-Prefikset `--ii-` betyr internt. Variabelen er ikke et offisielt API og kan endres uten varsel, så bruk dette bare som en bevisst optimalisering for ikke-React-sider der blinket er et problem. `name` er Material Design-filnavnet direkte, så URL-en er `.../{name}.svg` (f.eks. `home` → `home.svg`).
-:::
+Blinket er ikke noe du kan style deg ut av. Scriptet lastes som `type="module"`, og et modulescript
+kjører etter at HTML-en er ferdig parset. Det du kan gjøre, er å korte ned vinduet ved å legge
+`<script>`-tagen tidlig i `<head>` i stedet for nederst i `<body>`. Da lastes filen ned parallelt
+med at siden parses, og web componenten er klar med en gang parsingen er over.
 
 ## Universell utforming
 

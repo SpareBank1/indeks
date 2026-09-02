@@ -10,7 +10,8 @@ beholder sin visuelle størrelse og layout-påvirkning. Inspirert av [bazza.dev/
 ## Klasser
 
 `.ix-hitbox` er basisklassen og må alltid brukes. Legg til én eller flere størrelsesklasser for å
-kontrollere utvidelsen i de retningene du trenger.
+kontrollere utvidelsen i de retningene du trenger. Utvidelsene følger spacing-skalaen. Trenger du
+en verdi som ikke finnes der, velg den nærmeste.
 
 ### Basisklasse
 
@@ -86,26 +87,6 @@ kontrollere utvidelsen i de retningene du trenger.
 | `.ix-hitbox-l-lg`   | Venstre: `var(--ix-spacing-lg)`  |
 | `.ix-hitbox-l-xl`   | Venstre: `var(--ix-spacing-xl)`  |
 | `.ix-hitbox-l-2xl`  | Venstre: `var(--ix-spacing-2xl)` |
-
-## CSS-egenskaper
-
-Størrelsesklassene setter interne CSS-variabler som basisklassen bruker. Du kan overstyre disse
-direkte hvis du trenger en egendefinert størrelse:
-
-| CSS-variabel    | Kontrollerer  | Standard |
-| --------------- | ------------- | -------- |
-| `--ii-hit-t`    | Topp-utvidelse | `0px`   |
-| `--ii-hit-r`    | Høyre-utvidelse | `0px`  |
-| `--ii-hit-b`    | Bunn-utvidelse | `0px`   |
-| `--ii-hit-l`    | Venstre-utvidelse | `0px` |
-
-```css
-/* Egendefinert hitbox-størrelse */
-.min-knapp {
-    --ii-hit-t: 12px;
-    --ii-hit-b: 12px;
-}
-```
 
 ## Eksempler
 
