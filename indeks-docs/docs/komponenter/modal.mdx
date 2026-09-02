@@ -303,9 +303,8 @@ lukking, bruk en bekreftelses-dialog framfor å blokkere tasten.
 - **Oversett all tekst:** tittel, `label` på lukk-knappen og knappetekster kommer fra deg og må være på brukerens språk (bokmål, nynorsk, engelsk). Komponenten har ingen hardkodet tekst.
 - Merk triggerknappen. Sett `aria-haspopup="dialog"` på knappen som åpner dialogen (og gjerne `aria-controls` som peker til dialogens `id` i ren HTML), så skjermlesere annonserer at den åpner en dialog.
 - Ikke stol på farge alene. Viktig informasjon og handlinger i modalen må ikke kommuniseres med farge alene. Det må være tydelig gjennom tekst og struktur.
-- Sørg for kontrast og lesbarhet. Tekst og bakgrunn du legger inn må ha tilstrekkelig kontrast, og innholdet må være lett å lese og bruke på alle skjermstørrelser. På mindre skjermer kan modalen fylle hele flaten (`size="full"`) for å sikre god brukervennlighet.
 - Vær varsom med bakgrunnslukking. Bakgrunnslukking er på som standard; slå den av med `closeOnBackdropClick={false}` / `data-no-close-on-backdrop` for skjemaer eller destruktive handlinger der et uhell gir datatap.
-- Hold det viktigste synlig. Ved fullskjerm eller mye innhold, sørg for at den sentrale informasjonen og handlingene er synlige før brukeren må scrolle.
+- Hold det viktigste synlig. Ved mye innhold må den sentrale informasjonen og handlingene være synlige før brukeren må scrolle. På små skjermer kan `size="full"` gi innholdet hele flaten i stedet for å klemme det inn i en boks.
 
 ### Hva komponenten gjør automatisk
 
