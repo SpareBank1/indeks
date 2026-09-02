@@ -12,9 +12,9 @@ Utility-klasser for å kontrollere tekstmarkering, berøring og dra-og-slipp-opp
 
 ## CSS-egenskaper
 
-### `.ix-native`
+Alle tre klassene virker på elementet de står på og alle barn under det.
 
-Påvirker elementet selv og alle barn:
+### `.ix-native`
 
 | Egenskap                | Verdi          | Effekt                                         |
 | ----------------------- | -------------- | ---------------------------------------------- |
@@ -29,16 +29,12 @@ Input-felt, textarea og contenteditable-elementer får alltid `user-select: text
 
 ### `.ix-selectable`
 
-Påvirker elementet selv og alle barn:
-
 | Egenskap                | Verdi     | Effekt                                |
 | ----------------------- | --------- | ------------------------------------- |
 | `user-select`           | `text`    | Tillater vanlig tekstmarkering        |
 | `-webkit-touch-callout` | `default` | Gjenoppretter long-press kontekstmeny |
 
 ### `.ix-selectable-all`
-
-Påvirker elementet selv og alle barn:
 
 | Egenskap                | Verdi                    | Effekt                                |
 | ----------------------- | ------------------------ | ------------------------------------- |
@@ -94,18 +90,18 @@ Prøv å markere teksten i eksempelet under. Tekst innenfor `.ix-native` kan ikk
 
 ### Skjemafelt fungerer alltid
 
-Input-felt, textarea og contenteditable-elementer unntas automatisk fra `.ix-native`, slik at brukere alltid kan redigere tekst.
+Feltet under ligger inne i `.ix-native`, men oppfører seg som ellers.
 
 ```jsx live
 <div class="ix-native ix-flex ix-flex-col ix-gap-sm ix-p-md">
     <p>Tekst som ikke kan markeres.</p>
-    <TextField label="Navn" placeholder="Skriv her — fungerer normalt" />
+    <TextField label="Navn" />
 </div>
 ```
 
-## Tilgjengelighet
+## Universell utforming
 
-Vær oppmerksom på at `user-select: none` kan påvirke brukere som er avhengige av å markere tekst for å kopiere det. Bruk `.ix-selectable` på innhold brukeren kan ha behov for å kopiere, for eksempel:
+`user-select: none` tar fra brukeren muligheten til å kopiere. Noen er avhengige av det, for eksempel for å lime inn et kontonummer i en annen app eller sende en feilmelding videre. Sett `.ix-selectable` på innhold som skal kunne kopieres:
 
 - Avtaletekst og vilkår
 - Kontaktinformasjon (telefonnummer, e-post, adresse)
