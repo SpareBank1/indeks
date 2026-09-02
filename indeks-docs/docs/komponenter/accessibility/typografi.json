@@ -1,0 +1,159 @@
+{
+  "component": "Typografi (Heading, Text, LinkText)",
+  "lastReviewed": "2026-09-02",
+  "consumerResponsibilities": [
+    {
+      "summary": "Velg heading-nivå etter dokumentstruktur, ikke etter størrelse",
+      "details": "as bestemmer det semantiske nivået (h1–h6) og er det skjermlesere annonserer og navigerer etter. size bestemmer bare utseendet. Trenger du en mindre h2, sett size=\"md\" i stedet for å bytte til h4 — da beholder du hierarkiet. Ikke hopp over nivåer, og bruk én h1 per side.\n\nEksempel: `<Heading as=\"h2\" size=\"md\">Effektiv rente</Heading>`",
+      "wcag": ["1.3.1", "2.4.6"]
+    },
+    {
+      "summary": "Ikke lag falske overskrifter med Text",
+      "details": "En `.ix-text` med stor data-size ser ut som en overskrift, men er ingen. Den havner ikke i skjermleserens overskriftsliste, og brukere som navigerer med overskrifter hopper rett over seksjonen. Skal teksten fungere som overskrift, bruk Heading.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Skriv overskrifter og lenketekst som beskriver innholdet",
+      "details": "Skjermleserbrukere hopper mellom overskrifter og lenker og hører dem løsrevet fra teksten rundt. Overskriften skal si hva seksjonen handler om, og lenketeksten skal si hvor lenken går: «Se kontooversikt», ikke «Les mer» eller «Klikk her».",
+      "wcag": ["2.4.4", "2.4.6"]
+    },
+    {
+      "summary": "Behold understreken på lenker i løpende tekst",
+      "details": "underline={false} i React og ix-link-text--no-underline i HTML fjerner det eneste signalet som ikke er farge. Da må lenken skilles fra brødteksten på farge alene, og det er ikke nok for brukere som ikke oppfatter fargeforskjellen. Fjern understreken bare der lenken er tydelig noe annet enn tekst, for eksempel i en navigasjonsmeny.",
+      "wcag": ["1.4.1"]
+    },
+    {
+      "summary": "Marker gjeldende side med mer enn farge",
+      "details": "isActive og ix-link-text--active endrer bare lenkefargen. Brukes den til å vise hvilken side man står på, må tilstanden også finnes for hjelpemidler: sett aria-current=\"page\" på lenken.",
+      "wcag": ["1.4.1", "4.1.2"]
+    },
+    {
+      "summary": "LinkText må rendres som en lenke med href",
+      "details": "as kan peke på en router-komponent (for eksempel Link fra React Router), men elementet som havner i DOM må være en `<a>` med href. En `<a>` uten href har verken lenkerolle eller tastaturfokus, og en `<span>` med lenkefarge er ikke en lenke. Skal handlingen ikke navigere noe sted, er det en knapp.",
+      "wcag": ["4.1.2", "2.1.1"]
+    },
+    {
+      "summary": "Merk tekst som er på et annet språk",
+      "details": "Komponentene setter ikke lang. Står et ord eller et avsnitt på et annet språk enn resten av siden, sett lang på elementet, slik at skjermleseren bytter uttale.\n\nEksempel: `<Text as=\"span\" lang=\"en\">cash flow</Text>`",
+      "wcag": ["3.1.2"]
+    },
+    {
+      "summary": "Sjekk kontrasten når teksten står på en farget flate",
+      "details": "Fargen kommer fra foreground-tokens som er laget for hovedbakgrunnene. Legger du teksten på en status-flate, et bilde eller en egen bakgrunnsfarge, må du måle kontrasten selv: 4.5:1 for brødtekst, 3:1 for tekst fra 24px (eller 19px bold) og oppover.",
+      "wcag": ["1.4.3"]
+    },
+    {
+      "summary": "Bruk long for tekst over flere linjer",
+      "details": "Standard linjehøyde er 1.2, som er tett for løpende tekst. long i React og ix-text--long i HTML setter den til 1.4. Bruk den på alt som går over mer enn én linje — lange linjer med tett linjeavstand er tunge å følge, særlig ved forstørret tekst.",
+      "wcag": ["1.4.12"]
+    },
+    {
+      "summary": "Bruk strong og em når uthevingen betyr noe",
+      "details": ".ix-text-bold og .ix-text-italic gir bare visuell effekt og formidler ingenting til skjermlesere. Bærer uthevingen mening, bruk `<strong>` eller `<em>` — også som as=\"strong\" på Text. Utility-klassene er for tilfellene der du ikke kan endre semantikken.",
+      "wcag": ["1.3.1", "1.4.1"]
+    },
+    {
+      "summary": "Frittstående lenker trenger stort nok trykkmål",
+      "details": "Lenker i løpende tekst er unntatt kravet til målstørrelse fordi de sitter inne i en setning. Bruker du ix-link-text som en frittstående lenke, for eksempel i en meny eller en liste, gjelder kravet: målet må være minst 24 × 24 px, eller ha nok avstand til nabomålene.",
+      "wcag": ["2.5.8"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    {
+      "id": "1.3.1",
+      "notes": "Heading rendrer et ekte h1–h6, Text rendrer `<p>` som standard, og LinkText rendrer `<a>`. Størrelsen settes med data-size og endrer ikke semantikken, så visuelt hierarki og dokumentstruktur kan avvike uten at strukturen går tapt."
+    },
+    {
+      "id": "1.3.2",
+      "notes": "Ingen visuell omstokking av innholdet. Rekkefølgen i DOM er leserekkefølgen."
+    },
+    {
+      "id": "1.4.1",
+      "notes": "Lenker har text-decoration: underline som standard, så de skilles fra brødteksten uten at farge er eneste signal."
+    },
+    {
+      "id": "1.4.3",
+      "notes": "Farge settes med foreground-tokens: main-emphasis for overskrift, main-default for brødtekst og link-default for lenker. Tokenene er valgt for hovedbakgrunnene i lys og mørk modus."
+    },
+    {
+      "id": "1.4.4",
+      "notes": "Alle størrelser er rem-baserte. Skalaen bygges fra --ii-font-base-size (1rem) med faktor 1.125, og typografi-CSS-en inneholder ingen px-verdier. Teksten følger derfor brukerens skriftstørrelse i nettleseren og skalerer ved 200 % zoom."
+    },
+    {
+      "id": "1.4.10",
+      "notes": "Ingen faste bredder og ingen white-space: nowrap. Teksten flyter og brekker ved 320 px viewport uten horisontal scroll."
+    },
+    {
+      "id": "1.4.12",
+      "notes": "Linjehøyde og farge settes i :where(), som har spesifisitet 0. En brukerstil eller et leservisnings-tillegg som øker linjehøyde, ord- eller bokstavavstand vinner derfor uten !important."
+    },
+    {
+      "id": "2.1.1",
+      "notes": "LinkText rendrer `<a>` og er tastaturfokuserbar når den har href. Heading og Text er ikke interaktive og skal ikke være fokuserbare."
+    },
+    {
+      "id": "2.4.7",
+      "notes": "ix-link-text fjerner ikke nettleserens fokusmarkering. Lenken beholder standard fokusring, og reset-laget setter outline: auto for :-moz-focusring."
+    },
+    {
+      "id": "4.1.2",
+      "notes": "Rolle, nivå og navn kommer fra det native elementet: h1–h6 gir overskriftsrolle med nivå, og `<a href>` gir lenkerolle med lenketeksten som navn. Komponentene legger ikke på ARIA."
+    }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Komponentene rendrer tekst, ikke ikke-tekstlig innhold." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Ingen sensoriske egenskaper brukes til å formidle informasjon." },
+    { "id": "1.3.4", "reason": "Ingen orientasjonslåsing." },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt." },
+    { "id": "1.4.2", "reason": "Ingen lyd." },
+    { "id": "1.4.5", "reason": "Tekst rendres som tekst, aldri som bilde." },
+    { "id": "1.4.11", "reason": "Ingen ikke-tekstlige UI-komponenter eller grafikk. Understreken på lenker er tekstdekorasjon og faller under tekstkontrast." },
+    { "id": "1.4.13", "reason": "Ingen innhold vises ved hover eller fokus; hover endrer bare lenkefargen." },
+    { "id": "2.1.2", "reason": "Lenker er vanlige `<a>`-elementer uten fokushåndtering." },
+    { "id": "2.1.4", "reason": "Ingen hurtigtaster." },
+    { "id": "2.2.1", "reason": "Ingen tidsfrister." },
+    { "id": "2.2.2", "reason": "Ingen bevegelse eller autooppdatering." },
+    { "id": "2.3.1", "reason": "Ingen blinking eller flimring." },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.3", "reason": "Endrer ikke fokusrekkefølge; lenker følger DOM-rekkefølgen." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11", "reason": "Ingen overlay eller fastlåst element som kan dekke en fokusert lenke." },
+    { "id": "2.5.1", "reason": "Ingen pekerbevegelser." },
+    { "id": "2.5.2", "reason": "Aktivering skjer med nettleserens egen lenkehåndtering." },
+    { "id": "2.5.3", "reason": "Lenketeksten er både synlig label og tilgjengelig navn." },
+    { "id": "2.5.4", "reason": "Ingen bevegelsesaktivering." },
+    { "id": "2.5.6", "reason": "Ingen begrensning på inndatametode." },
+    { "id": "2.5.7", "reason": "Ingen dra-funksjonalitet." },
+    { "id": "3.1.1", "reason": "Språk for siden settes på `<html>`, ikke av komponentene." },
+    { "id": "3.2.1", "reason": "Fokus på en lenke utløser ingen endring." },
+    { "id": "3.2.2", "reason": "Ingen inndata." },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1", "reason": "Ingen validering." },
+    { "id": "3.3.2", "reason": "Ingen skjemafelt." },
+    { "id": "3.3.3", "reason": "Ingen feilforslag." },
+    { "id": "3.3.4", "reason": "Ingen juridisk forpliktende handlinger." },
+    { "id": "3.3.7", "reason": "Ingen inndata som kan gjentas." },
+    { "id": "3.3.8", "reason": "Ingen autentisering." },
+    { "id": "4.1.3", "reason": "Komponentene genererer ingen statusmeldinger." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til neste lenke. Overskrifter og brødtekst er ikke fokuserbare" },
+    { "key": "Shift + Tab", "action": "Flytter fokus til forrige lenke" },
+    { "key": "Enter", "action": "Følger lenken som har fokus" }
+  ],
+  "screenReader": [
+    "Heading: «[tekst], overskrift nivå N» — nivået kommer fra elementet i as, ikke fra size",
+    "Text: leses som vanlig innhold, uten egen rolle",
+    "LinkText: «[tekst], lenke». Med aria-current=\"page\" annonseres den også som gjeldende side",
+    "Overskriftsnavigasjon: skjermlesere lister opp h1–h6 og hopper mellom dem. Hopper du et nivå, blir listen misvisende"
+  ]
+}
