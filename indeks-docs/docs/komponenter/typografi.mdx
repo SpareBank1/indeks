@@ -5,6 +5,8 @@ description: >
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/typografi.json';
 
 # Typografi
 
@@ -395,6 +397,42 @@ For tilfeller der du ikke bruker `Text`-komponenten, finnes det utility-klasser 
 | `.ix-text-italic` | Setter `font-style: italic`. Tilsvarer effekten av `<em>` og `<i>`.      |
 
 `strong` og `b` arver bold-stilen fra `.ix-body` automatisk, og `em` og `i` arver kursiv. Utility-klassene er der for tilfellene der du ikke kan endre HTML-semantikken.
+
+---
+
+## Universell utforming
+
+Typografi er der dokumentstrukturen faktisk lages. Overskriftsnivåene er det skjermlesere
+navigerer etter, og lenketeksten er det de leser løsrevet fra avsnittet rundt.
+
+### Hva du selv må sørge for
+
+- **Nivå etter struktur, ikke størrelse:** `as` bestemmer hva som er `h1`–`h6`, `size` bestemmer bare utseendet. Trenger du en mindre `h2`, sett `size="md"` framfor å bytte til `h4`
+- **Ikke lag falske overskrifter:** en `ix-text` med stor `data-size` ser ut som en overskrift, men havner ikke i skjermleserens overskriftsliste. Brukere som navigerer med overskrifter hopper over seksjonen
+- **Beskrivende overskrifter og lenketekst:** begge leses uten teksten rundt. «Se kontooversikt», ikke «Les mer»
+- **Behold understreken på lenker i løpende tekst:** `underline={false}` og `ix-link-text--no-underline` fjerner det eneste signalet som ikke er farge
+- **Merk aktiv lenke for hjelpemidler:** `isActive` og `ix-link-text--active` endrer bare fargen. Viser den hvilken side brukeren står på, sett også `aria-current="page"`
+- **Lenken må ende i en `<a>` med `href`:** `as` kan peke på en router-komponent, men elementet i DOM må ha lenkesemantikk. Navigerer handlingen ingen steder, er det en knapp
+- **`lang` på tekst i et annet språk:** komponentene setter det ikke, og skjermleseren bytter ikke uttale uten
+- **`long` på tekst over flere linjer:** standard linjehøyde er 1.2, som er tett for løpende tekst
+- **`<strong>` og `<em>` når uthevingen betyr noe:** `.ix-text-bold` og `.ix-text-italic` er rent visuelle og formidler ingenting til skjermlesere
+- **Kontrast på farget flate:** fargetokenene er valgt for hovedbakgrunnene. Legger du teksten på en status-flate eller et bilde, må du måle kontrasten selv
+
+### Hva komponenten gjør automatisk
+
+- **Semantikken kommer fra elementet:** `h1`–`h6` gir overskriftsrolle med nivå, `<a href>` gir lenkerolle med lenketeksten som navn. Ingen ARIA legges på
+- **Størrelse er løsrevet fra semantikk:** `data-size` endrer bare utseendet, så det visuelle hierarkiet kan avvike fra dokumentstrukturen uten at strukturen går tapt
+- **Understrek på lenker** som standard, så de skilles fra brødteksten uten at farge er eneste signal
+- **rem-basert skala:** alle størrelser bygges fra `--ii-font-base-size` (`1rem`) med faktor 1.125, og typografi-CSS-en har ingen px-verdier. Teksten følger skriftstørrelsen brukeren har valgt i nettleseren, og skalerer ved 200 % zoom
+- **Ingen faste bredder:** teksten flyter og brekker ved 320 px viewport uten horisontal scroll
+- **Overstyrbar linjeavstand:** linjehøyde og farge settes i `:where()`, som har spesifisitet 0. En brukerstil som øker linjehøyde eller bokstavavstand vinner uten `!important`
+- **Fokusmarkeringen beholdes:** `ix-link-text` fjerner ikke nettleserens fokusring
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
 
 ---
 
