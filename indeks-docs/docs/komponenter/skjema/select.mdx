@@ -341,33 +341,29 @@ bruk [Combobox](./combobox), der hvert alternativ kan ha en beskrivelse under na
 
 ## Universell utforming
 
-### Semantisk struktur og korrekt rolle
+### Hva du selv må sørge for
 
-Select skal implementeres med korrekt HTML (`<select>`) eller med riktig ARIA-roller dersom det er en custom komponent. Dette sikrer at hjelpemidler forstår hvordan komponenten fungerer.
+- **Beskrivende labeltekst:** komponenten kobler label til feltet, men du skriver teksten. «Land» eller «Foretrukket kontaktmetode», ikke «Velg et alternativ»
+- **Option-tekster som gir mening:** skjermleseren leser teksten, ikke `value`. «Norge», ikke «NO»
+- **`optgroup` når listen er lang:** grupper relaterte alternativer. Skjermleseren annonserer «[gruppenavn], gruppe» før alternativene i gruppen
+- **Gode feilmeldinger:** komponenten viser og annonserer dem, men du skriver innholdet. «Du må velge et land», ikke «Ugyldig valg»
+- **Unngå `disabled`:** et deaktivert felt sier ikke hvorfor det er deaktivert. Se [Deaktiverte tilstander](../../monstre-og-maler/deaktiverte-tilstander) for alternativene
 
-Alle select-felter må ha en programmessig koblet label.
+### Hva komponenten gjør automatisk
 
-### Label må være tilgjengelig
+Select er et native `<select>`, så nettleseren eier nedtrekkslisten — på mobil åpnes plattformens egen velger. Tastaturoppførselen er derfor ikke noe vi har implementert, den er den brukeren kjenner fra alle andre select-felt. Den står i tabellen under.
 
-Select skal alltid ha en tydelig label som beskriver hva brukeren skal velge. Skjermlesere bruker denne for å gi kontekst til feltet.
+Resten settes opp av `<ix-field>`:
 
-Uten en god label blir det vanskelig å forstå hva valget gjelder.
+- **`for`/`id`**: label kobles til feltet, med generert ID hvis du ikke oppgir en
+- **`aria-describedby`**: feltet peker til description og feilmelding, i den rekkefølgen
+- **`aria-invalid`**: settes når feilmeldingen har innhold, og fjernes når den tømmes
+- **`aria-live="polite"`** på feilmeldingen, slik at en ny melding annonseres uten å avbryte brukeren
+- **`placeholder`** rendres som et `disabled` førstevalg med tom `value`, ikke som grå tekst i feltet. Brukeren kan derfor ikke velge det tilbake etter å ha valgt noe
+- **44 px høyde** via `min-height` på `.ix-select` (WCAG 2.5.8)
+- **Fokusring** på `:focus-visible` (WCAG 2.4.7)
 
-### Tydelig fokus og tastaturnavigasjon
-
-Select må være fullt opererbar med tastatur. Brukeren skal kunne navigere til feltet med Tab, åpne listen med Enter eller Space, og navigere mellom alternativer med piltaster.
-
-Fokusindikatoren må være tydelig og ha god kontrast.
-
-### Tilstrekkelig størrelse og klikkeflate
-
-Select-feltet må ha tilstrekkelig størrelse (minimum 44px høyde) for å være enkelt å bruke, spesielt på touch-enheter.
-
-### Vær bevisst på bruk av disabled
-
-Bruk av disabled state frarådes. Et deaktivert felt kan være vanskelig å forstå uten forklaring.
-
-Vurder om feltet heller bør skjules, vises som ren tekst, eller settes til readOnly.
+Skjermleseren annonserer feltet som «kombinasjonsboks». Det er den implisitte rollen native `<select>` har, ikke noe vi setter.
 
 <KeyboardAndScreenReader data={a11yData} />
 
