@@ -43,7 +43,7 @@ css/
 - **`colors.css`** — de semantiske fargene (`--ix-color-*`), som peker inn i primitivene. Denne inneholder både light mode (`:root`, `.ix-light-mode`), dark mode (`.ix-dark-mode`) og `prefers-color-scheme`-håndtering.
 
 :::info `--ii-` vs `--ix-`
-`--ii-primitive-*` er interne primitiver. Ikke bruk dem direkte i applikasjonskoden din. `--ix-color-*` er det offentlige API-et du styler mot.
+`--ii-` står for «indeks internt», altså Indeks' eget maskineri. Du leser dem ikke i applikasjonskoden din, og du endrer dem normalt ikke. Theming er det ene tilfellet der de endres, og da skriver generatoren verdiene for deg. `--ix-color-*` er det offentlige API-et du styler mot.
 :::
 
 ### Rekkefølge og overstyring
@@ -94,10 +94,10 @@ basisfargen(e) du vil endre og sette `--ii-primitive-<navn>-<steg>` på et scope
 semantiske tokenene re-resolver seg selv via `var()`-kaskaden. Du skal **aldri** regenerere det
 semantiske laget selv.
 
-:::info Eneste tillatte bruk av `--ii-`
-`--ii-primitive-*` er ellers interne (se over). Runtime-generering er det ene stedet der du
-bevisst setter dem. API-et eier navnekonvensjonen og `gray-0 = #FFFFFF`-unntaket for deg, så du
-slipper å hardkode dem.
+:::info Theming er ikke et unntak fra `--ii-`-regelen
+At primitivene er interne (se over) betyr at du ikke leser dem og ikke skriver dem for hånd.
+Runtime-theming bryter ikke med det: du hardkoder ingen primitiver, du setter det generatoren
+returnerer. API-et eier navnekonvensjonen og `gray-0 = #FFFFFF`-unntaket, så de er ikke ditt ansvar.
 :::
 
 ### API
