@@ -4,7 +4,7 @@ pageType: supplementary
 
 # Designvalg for RadioGroup
 
-Denne siden forklarer *hvorfor* RadioGroup er bygget som den er. Den er ment for de som er nysgjerrige på avveiningene bak komponenten — du trenger den ikke for å bruke den. For bruk og API, se [RadioGroup](./radio-group).
+Denne siden forklarer *hvorfor* RadioGroup er bygget som den er. Den er ment for de som er nysgjerrige på avveiningene bak komponenten. Du trenger den ikke for å bruke den. For bruk og API, se [RadioGroup](./radio-group).
 
 ## WC eier ARIA og DOM-synk; React-laget er bevisst tynt
 
@@ -28,7 +28,7 @@ API-et i React er `<RadioGroup>` med `<RadioButton>`-barn, ikke en prop-array (`
 
 `RadioGroupContext` propagerer det React må rute ned på hver native `<input>`: gruppens `name`, valgt verdi (kontrollert modus), den event-baserte `onChange`, `onBlur`, og i register-modus også RHF sin `ref` (samme objekt på alle inputs, som RHF akkumulerer) pluss et `uncontrolled`-flagg. `disabled`, `readOnly` og `required` ligger *ikke* i Context. De settes som HTML-attributter på `<ix-radio-group>`, og web component-en propagerer dem ned til hver `<input>`.
 
-*Hvorfor:* radioene er ekte native input-elementer, så `register()` kobles slik det er bygget for radios — `ref`/`onChange`/`onBlur` rutes rett ned på inputene, og RHF eier `checked` via de native refene. Context er kanalen for den rutingen. `disabled` m.fl. holdes utenfor for å unngå dobbelt sannhet: WC må uansett vite om disabled for per-knapp bevaring (se under), så å duplisere det i Context ville bare gitt to kilder å holde i synk.
+*Hvorfor:* radioene er ekte native input-elementer, så `register()` kobles slik det er bygget for radios: `ref`/`onChange`/`onBlur` rutes rett ned på inputene, og RHF eier `checked` via de native refene. Context er kanalen for den rutingen. `disabled` m.fl. holdes utenfor for å unngå dobbelt sannhet: WC må uansett vite om disabled for per-knapp bevaring (se under), så å duplisere det i Context ville bare gitt to kilder å holde i synk.
 
 ## Ingen egen web component for `RadioButton`
 
@@ -46,23 +46,23 @@ En MutationObserver lytter etter at nye `<input type="radio">` legges til etter 
 
 Gruppen får sitt tilgjengelige navn fra legend-elementet via `aria-labelledby`. Hjelpetekst og evt. feilmelding kobles via `aria-describedby` (description først, error etter).
 
-*Hvorfor:* gir skjermlesere konsistent rekkefølge — gruppe-navn → hjelpetekst → feilmelding.
+*Hvorfor:* gir skjermlesere konsistent rekkefølge: gruppe-navn → hjelpetekst → feilmelding.
 
 ## `aria-invalid` settes kun på host, ikke på hver input
 
 Error-elementet ligger alltid i DOM. En MutationObserver setter `aria-invalid="true"` på `<ix-radio-group>` så snart error-noden får innhold, og fjerner attributten igjen når den tømmes.
 
-*Hvorfor:* gruppens validitet er det som teller for skjermlesere — å duplisere `aria-invalid` på hver input gir ingen merverdi. *Vurdert:* per-input `aria-invalid` — bare støy, samme informasjon én gang.
+*Hvorfor:* gruppens validitet er det som teller for skjermlesere. Å duplisere `aria-invalid` på hver input gir ingen merverdi. *Vurdert:* per-input `aria-invalid` — bare støy, samme informasjon én gang.
 
 ## `aria-live="polite"` på error, ikke `role="alert"`
 
-Error-elementet får `aria-live="polite"`. Komponenten setter dette selv — forfatteren skal ikke skrive det.
+Error-elementet får `aria-live="polite"`. Komponenten setter dette selv. Forfatteren skal ikke skrive det.
 
 *Hvorfor:* `polite` venter til skjermleseren er ferdig med pågående annonsering, mens `role="alert"` (implisitt `assertive`) avbryter. Feilmeldinger i skjema skal ikke avbryte brukeren midt i en setning.
 
 ## Native tastaturoppførsel beholdes
 
-Tab inn/ut av gruppen, piltaster (alle fire retninger) for å bytte valg, Space for å velge. Vi har ingen egne tastatur-handlere — native `<input type="radio">` med felles `name` gir alt gratis.
+Tab inn/ut av gruppen, piltaster (alle fire retninger) for å bytte valg, Space for å velge. Vi har ingen egne tastatur-handlere: native `<input type="radio">` med felles `name` gir alt gratis.
 
 *Eneste unntak:* `readonly` blokkeres i en `keydown`-listener fordi `readOnly` er en no-op på radio-input per HTML-spec. `pointer-events: none` i CSS dekker mus og touch.
 
