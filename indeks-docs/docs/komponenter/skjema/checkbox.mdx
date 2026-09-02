@@ -287,3 +287,130 @@ Tilstanden er alltid den native inputens. Boks og hake er `::before` og `::after
 ### WCAG-kriterier
 
 <AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### Struktur
+
+En enkeltstående checkbox trenger ingen web component. Strukturen er en naken input med en label som søsken inni `.ix-checkbox`:
+
+```html
+<div class="ix-checkbox">
+  <input type="checkbox" id="terms" name="terms" />
+  <label for="terms">Jeg godtar vilkårene</label>
+</div>
+```
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `<div class="ix-checkbox">` | Ja | Wrapper. Holder input og label som direkte søsken, som er det indikator-stylingen bygger på |
+| `<input type="checkbox">` | Ja | Selve checkboxen. Visuelt skjult, men i DOM for tastatur og skjermleser |
+| `<label>` | Ja | Labeltekst og klikkflate. Kobles til input med `for`/`id` |
+
+Trenger checkboxen hjelpetekst, feilmelding eller tooltip, legger du den inni `<ix-field>`:
+
+```html
+<ix-field>
+  <div class="ix-checkbox">
+    <input type="checkbox" id="newsletter" name="newsletter" />
+    <label for="newsletter">Send meg nyhetsbrev</label>
+  </div>
+  <span data-field="description">Du kan når som helst melde deg av</span>
+  <span data-field="error"></span>
+</ix-field>
+```
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `<ix-field>` | Nei | Kobler `aria-describedby` fra input til hjelpetekst og feilmelding. Trengs bare når du har en av dem |
+| `<span data-field="description">` | Nei | Hjelpetekst |
+| `<span data-field="error">` | Ja i `<ix-field>` | Feilmelding. Alltid i DOM. Tomt betyr ingen feil |
+
+### Tilstand via native attributter
+
+| Attributt | Plassering | Effekt |
+|-----------|------------|--------|
+| `checked` | `<input>` | Avkrysset |
+| `disabled` | `<input>` | Deaktivert. Legg også `ix-checkbox--disabled` på wrapperen for riktig markør og pointer-events |
+| `aria-invalid="true"` | `<input>` | Feiltilstand. Settes automatisk av `<ix-field>` når feilmeldingen har innhold |
+| `tooltip` / `tooltip-label` / `tooltip-placement` | `<ix-field>` | Info-knapp i label-raden. `tooltip-label` er knappens tilgjengelige navn og må oppgis |
+
+`indeterminate` finnes ikke som HTML-attributt. Sett det som DOM-property: `checkbox.indeterminate = true`.
+
+</TabItem>
+<TabItem value="react" label="React">
+
+### CheckboxProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `label` | `ReactNode` | Ja | | Synlig labeltekst. Kobles til input via `for`/`id` med generert ID |
+| `ariaLabel` | `string` | Nei | | Skjult navn på input. Brukes kun når en synlig label ikke er mulig |
+| `description` | `string` | Nei | | Hjelpetekst. Kobles via `aria-describedby` |
+| `errorMessage` | `string` | Nei | | Feilmelding. Setter `aria-invalid="true"` på input når den har innhold |
+| `indeterminate` | `boolean` | Nei | `false` | Delvis valgt. Settes som DOM-property på input |
+| `tooltip` | `string` | Nei | | Tooltip-innhold. Gir en info-knapp i label-raden |
+| `tooltipLabel` | `string` | Nei | | Tilgjengelig navn på info-knappen. Må settes når `tooltip` er satt, og skal oversettes |
+| `tooltipPlacement` | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'right'` | Nei | `'top'` | Plassering av tooltipen |
+| `className` | `string` | Nei | | CSS-klasse på `<ix-field>`. Har ingen effekt uten field-wrapper, se under |
+| `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet |
+
+I tillegg støttes alle standard HTML input-attributter (`name`, `value`, `checked`, `defaultChecked`, `disabled`, `required`, `onChange`, `onBlur`, `id`, `aria-*`, osv.) som settes direkte på komponenten og sendes videre til `<input>`. `type` håndteres av komponenten.
+
+`description`, `errorMessage` og `tooltip` er det som avgjør om komponenten wrappes i `<ix-field>`. Er ingen av dem satt, rendres bare `.ix-checkbox`-blokken, og `className` har ingenting å sitte på. Trenger du en klasse på selve wrapperen uten hjelpetekst, sett den i HTML i stedet.
+
+Skal flere checkboxer høre sammen under en felles legend, bruk [CheckboxGroup](./checkbox-group) framfor flere `Checkbox`.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+`.ix-checkbox` styler naken markup: `input[type="checkbox"]` og `<label>` som direkte søsken. Boksen og glyfen tegnes som `label::before` og `label::after`, togglet av nabo-kombinatoren `input:checked + label` og `input:indeterminate + label`. Du trenger ingen ekstra markup for indikatoren.
+
+BEM-klassene `.ix-checkbox__input` og `.ix-checkbox__label` er valgfrie hooks for forfattere som vil ha eksplisitte selektorer. Stilene treffer begge former.
+
+### Tilgjengelige klasser og selektorer
+
+| Element / tilstand | Selektor |
+|--------------------|----------|
+| Wrapper | `.ix-checkbox` |
+| Deaktivert wrapper | `.ix-checkbox--disabled` |
+| Input, visuelt skjult (valgfri hook) | `.ix-checkbox__input` |
+| Label med indikator (valgfri hook) | `.ix-checkbox__label` |
+| Boksen | `label::before` |
+| Hake eller strek | `label::after` |
+| Avkrysset | `input:checked + label` |
+| Delvis valgt | `input:indeterminate + label` |
+| Feil | `input[aria-invalid="true"] + label` |
+| Deaktivert | `input:disabled + label` |
+| Fokusring | `input:focus-visible + label::before` |
+
+### Lokale CSS-variabler
+
+Disse er interne (`--ii-`) og settes på labelen. De kan endres uten varsel, men er tilgjengelige hvis du må justere en flate.
+
+| Variabel | Standard | Beskrivelse |
+|----------|----------|-------------|
+| `--ii-checkbox-size` | `24px` | Bredde og høyde på boksen, og minimumshøyde på klikkflaten |
+| `--ii-checkbox-box-bg` | `--ix-color-fill-interactive-default` | Bakgrunn i boksen. Byttes av hover, checked, indeterminate og feil |
+| `--ii-checkbox-box-border` | `--ix-color-border-main-default` | Kantfarge på boksen. Settes til `transparent` når boksen er fylt |
+
+### Eksempel: ren HTML
+
+```html
+<div class="ix-checkbox">
+  <input type="checkbox" id="samtykke" name="samtykke" />
+  <label for="samtykke">Jeg godtar vilkårene</label>
+</div>
+```
+
+## Relatert
+
+- [CheckboxGroup](./checkbox-group) — når flere checkboxer hører sammen under en legend
+- [Label](./label) — reglene for labeltekst
+- [RadioGroup](./radio-group) — når kun ett alternativ kan velges
+- [ValidationMessage](./validation-message) — feilmeldingsteksten
