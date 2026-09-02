@@ -148,9 +148,9 @@ innhold. `lg` og `xl` til frittstående ikoner, navigasjon og illustrasjon.
 
 ### Unngå blink før web componenten laster
 
-Ikonet tegnes av CSS via `mask-image: var(--ii-icon-url)`, og det er web componenten som setter
-`--ii-icon-url` i sin `connectedCallback`. Frem til den kjører er variabelen usatt, og CSS faller
-tilbake til en gjennomsiktig maske. Ikonet er altså usynlig, ikke en farget boks.
+Ikonet tegnes av CSS som en maske, og masken peker på en URL web componenten setter i sin
+`connectedCallback`. Frem til den kjører finnes ikke URL-en, og CSS faller tilbake til en
+gjennomsiktig maske. Ikonet er altså usynlig, ikke en farget boks.
 
 I React merker du ingenting: web componenten er lastet før komponentene rendres. I ren HTML kan
 ikonet blinke inn et øyeblikk etterpå, særlig på sider som vises før `indeks-web`-scriptet er
@@ -172,7 +172,6 @@ med at siden parses, og web componenten er klar med en gang parsingen er over.
 
 - `aria-hidden="true"` settes automatisk på dekorative ikoner
 - `role="img"` settes automatisk når `aria-label` er til stede
-- `--ii-icon-url` settes på elementet slik at `mask-image` i CSS kan bruke den
 
 <KeyboardAndScreenReader data={a11yData} />
 
