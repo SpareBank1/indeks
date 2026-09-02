@@ -52,14 +52,14 @@ Prøv å endre label eller description direkte i editoren. Komponenten kobler `f
 </Tabs>
 
 :::warning Unngå `type="number"`
-`type="number"` gir uforutsigbar oppførsel: stepper-knapper, scrollhjul endrer verdi, og nettlesere kan fjerne ledende nuller (kontonummer!). Bruk `inputMode="numeric"` i stedet — det gir talltastatur på mobil uten quirksene.
+`type="number"` gir uforutsigbar oppførsel: stepper-knapper, scrollhjul endrer verdi, og nettlesere kan fjerne ledende nuller (kontonummer!). Bruk `inputMode="numeric"` i stedet. Det gir talltastatur på mobil uten quirksene.
 :::
 
 ## Eksempler
 
 ### Med tooltip
 
-Bruk `tooltip` for å gi ekstra kontekst som ikke er kritisk for å fullføre oppgaven. Sett alltid `tooltipLabel` på riktig språk — det er det tilgjengelige navnet på info-knappen.
+Bruk `tooltip` for å gi ekstra kontekst som ikke er kritisk for å fullføre oppgaven. Sett alltid `tooltipLabel` på riktig språk. Det er det tilgjengelige navnet på info-knappen.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -136,7 +136,7 @@ Prøv å tømme `errorMessage`. `aria-invalid` fjernes automatisk.
 
 ### Med prefix og suffix
 
-Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må ligge før `<input>`, `suffix` må ligge etter — feil rekkefølge gir feil visuell plassering.
+Prefix og suffix gir ekstra kontekst om hva som skal fylles inn. `prefix` må ligge før `<input>`, `suffix` må ligge etter. Feil rekkefølge gir feil visuell plassering.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -202,9 +202,9 @@ Norsk standard er beløp først, enhet etter: `1 500 kr`. Bruk `suffix="kr"` for
 
 ### Formatering av verdien
 
-TextField kan formatere innholdet automatisk. Sett `format` til en innebygd variant (`"phone"`, `"amount"`, `"account"`, `"orgnr"`, `"ssn"`, `"date"`), eller bruk `formatPattern` for enkle mønstre. De innebygde variantene formaterer **live** — separatorene dukker opp mens brukeren skriver. Egne pattern-strenger og `{format,parse}`-objekter formateres på blur (viser rå verdi ved fokus) med mindre de setter `live: true`. Uansett vises alt brukeren skriver — feil fanges av validering, ikke ved å droppe tegn.
+TextField kan formatere innholdet automatisk. Sett `format` til en innebygd variant (`"phone"`, `"amount"`, `"account"`, `"orgnr"`, `"ssn"`, `"date"`), eller bruk `formatPattern` for enkle mønstre. De innebygde variantene formaterer **live**: separatorene dukker opp mens brukeren skriver. Egne pattern-strenger og `{format,parse}`-objekter formateres på blur (viser rå verdi ved fokus) med mindre de setter `live: true`. Uansett vises alt brukeren skriver. Feil fanges av validering, ikke ved å droppe tegn.
 
-Formatering er visuell — den erstatter ikke behovet for å fortelle brukeren hva som forventes. Oppgi derfor forventet format som tekst i `description` (f.eks. `"11 siffer, f.eks. 1234 56 78903"`), slik eksemplene under gjør.
+Formatering er visuell. Den erstatter ikke behovet for å fortelle brukeren hva som forventes. Oppgi derfor forventet format som tekst i `description` (f.eks. `"11 siffer, f.eks. 1234 56 78903"`), slik eksemplene under gjør.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -257,7 +257,7 @@ Formatering er visuell — den erstatter ikke behovet for å fortelle brukeren h
 </TabItem>
 </Tabs>
 
-Skriv i feltene og se separatorene bygge seg opp mens du skriver — `format="amount"` gir tusenskille (`1 234 567`), og `format="account"` grupperer kontonummeret (`1234 56 78903`). Begge er live-varianter.
+Skriv i feltene og se separatorene bygge seg opp mens du skriver. `format="amount"` gir tusenskille (`1 234 567`), og `format="account"` grupperer kontonummeret (`1234 56 78903`). Begge er live-varianter.
 
 Verdien du leser av `onChange` er alltid den rå verdien uten separatorer (den ligger i en skjult mirror-input som også brukes ved form-innsending). Se [Formatering](./textfield-formatering) for de to modusene, de tre måtene å definere en formatter på, egne varianter, og tilgjengelighetshensyn.
 
@@ -306,11 +306,11 @@ Verdien du leser av `onChange` er alltid den rå verdien uten separatorer (den l
 </TabItem>
 </Tabs>
 
-`disabled` og `readOnly` settes direkte på input. `ix-field` tar seg av den visuelle tilstanden automatisk. `disabled` gjør feltet helt inaktivt — ingen fokus eller interaksjon. `readOnly` lar brukeren fokusere og kopiere, men ikke endre.
+`disabled` og `readOnly` settes direkte på input. `ix-field` tar seg av den visuelle tilstanden automatisk. `disabled` gjør feltet helt inaktivt: ingen fokus eller interaksjon. `readOnly` lar brukeren fokusere og kopiere, men ikke endre.
 
 ### Valgfrie felt
 
-I banksammenheng er nesten alle felter påkrevd. Merk unntaket — ikke regelen. Legg til `(valgfritt)` på slutten av labelteksten når et felt ikke er obligatorisk: `label="Mobilnummer (valgfritt)"`. Ikke merk obligatoriske felt — det er standarden.
+I banksammenheng er nesten alle felter påkrevd. Merk unntaket, ikke regelen. Legg til `(valgfritt)` på slutten av labelteksten når et felt ikke er obligatorisk: `label="Mobilnummer (valgfritt)"`. Ikke merk obligatoriske felt. Det er standarden.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -358,7 +358,7 @@ I banksammenheng er nesten alle felter påkrevd. Merk unntaket — ikke regelen.
 
 ### Tegnteller
 
-Sett `maxlength` eller `minlength` på input — `ix-field` oppretter og oppdaterer en tegnteller automatisk. Med `maxlength` vises `0/50`, med `minlength` vises `0 tegn (minimum 10)`.
+Sett `maxlength` eller `minlength` på input. `ix-field` oppretter og oppdaterer en tegnteller automatisk. Med `maxlength` vises `0/50`, med `minlength` vises `0 tegn (minimum 10)`.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -477,7 +477,7 @@ Når du bruker `<ix-field>` eller React-komponenten, settes dette opp for deg:
 - **`aria-describedby`**: Input peker til description og error-elementet. Rekkefølgen er meningsfull. Hjelpetekst leses før feilmelding.
 - **`aria-live="polite"`**: Settes på error-elementet slik at skjermlesere annonserer nye feilmeldinger uten å avbryte brukeren.
 - **`aria-invalid`**: Synkroniseres automatisk med innholdet i error-elementet via MutationObserver.
-- **`required`**: Settes på input for nativ nettleservalidering. Ingen visuell indikator — merk valgfrie felt med `(valgfritt)` i labelteksten.
+- **`required`**: Settes på input for nativ nettleservalidering. Ingen visuell indikator. Merk valgfrie felt med `(valgfritt)` i labelteksten.
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -552,7 +552,7 @@ Eksempelet under bruker `placeholder` som visuelt hint. Det er unntaket fra råd
 
 ### Tilstand via native attributter
 
-Disabled og read-only styres kun via native attributter på input. `ix-field` håndterer visuell tilstand automatisk — ingen ekstra klasser trengs:
+Disabled og read-only styres kun via native attributter på input. `ix-field` håndterer visuell tilstand automatisk, så ingen ekstra klasser trengs:
 
 ```jsx live
 <>
@@ -589,15 +589,15 @@ Disabled og read-only styres kun via native attributter på input. `ix-field` h�
 | `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
 | `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet. Nyttig for fokusstyring og validering |
 
-I tillegg støttes alle standard HTML input-attributter (`value`, `defaultValue`, `onChange`, `onBlur`, `type`, `placeholder`, `disabled`, `readOnly`, `required`, `id`, `name`, `autoComplete`, `inputMode`, `pattern`, `maxLength`, `minLength` osv.) som settes direkte på komponenten — de sendes videre til `<input>`. `maxLength`/`minLength` aktiverer tegnteller automatisk.
+I tillegg støttes alle standard HTML input-attributter (`value`, `defaultValue`, `onChange`, `onBlur`, `type`, `placeholder`, `disabled`, `readOnly`, `required`, `id`, `name`, `autoComplete`, `inputMode`, `pattern`, `maxLength`, `minLength` osv.) som settes direkte på komponenten og sendes videre til `<input>`. `maxLength`/`minLength` aktiverer tegnteller automatisk.
 
 </TabItem>
 </Tabs>
 
 ## Tilpasning med CSS
 
-Trenger du `ix-text-field`-stylingen på HTML du setter sammen selv — uten
-React-komponenten eller `<ix-field>` — kan du bruke klassene direkte på elementene dine.
+Trenger du `ix-text-field`-stylingen på HTML du setter sammen selv, uten
+React-komponenten eller `<ix-field>`, kan du bruke klassene direkte på elementene dine.
 
 ### Tilgjengelige klasser og selektorer
 
@@ -630,7 +630,7 @@ HTML-struktur.
 
 ### Hva ix-field gjør med DOM-en
 
-`<ix-field>` er en web component som setter opp ARIA-koblinger automatisk når den kobles til DOM. Her er hva som skjer — fra HTML du skriver til HTML etter at `ix-field` har kjørt.
+`<ix-field>` er en web component som setter opp ARIA-koblinger automatisk når den kobles til DOM. Her er hva som skjer, fra HTML du skriver til HTML etter at `ix-field` har kjørt.
 
 **Før** (det du skriver):
 
