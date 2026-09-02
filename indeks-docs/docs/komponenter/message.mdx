@@ -26,9 +26,9 @@ For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` lig
 ## Uegnet til
 
 - Kritiske feil som stopper videre fremdrift
-- Midlertidige bekreftelser — bruk toast
-- Situasjoner som krever aktiv bekreftelse — bruk [Modal](./modal)
-- Globale systembeskjeder — bruk SystemMessage
+- Midlertidige bekreftelser (bruk toast)
+- Situasjoner som krever aktiv bekreftelse (bruk [Modal](./modal))
+- Globale systembeskjeder (bruk SystemMessage)
 - Lange eller komplekse forklaringer som krever egen side
 
 ## Bruk
@@ -61,7 +61,7 @@ For at meldinger skal annonseres pålitelig for skjermlesere må `<Message>` lig
 
 ### Varianter
 
-Velg status ut fra budskapet: `info` for nøytral informasjon, `success` for bekreftelse, `warning` for noe brukeren bør være oppmerksom på, og `danger` for noe som har gått galt og bør følges opp. Hver status har et fast statusikon som rendres automatisk. Fargene kobles via `data-status`, som setter `--ix-color-status-*`-variablene — meldingsflaten bruker `surface`-fargen for sin status.
+Velg status ut fra budskapet: `info` for nøytral informasjon, `success` for bekreftelse, `warning` for noe brukeren bør være oppmerksom på, og `danger` for noe som har gått galt og bør følges opp. Hver status har et fast statusikon som rendres automatisk. Fargene kobles via `data-status`, som setter `--ix-color-status-*`-variablene. Meldingsflaten bruker `surface`-fargen for sin status.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -106,7 +106,7 @@ Velg status ut fra budskapet: `info` for nøytral informasjon, `success` for bek
 
 ### Med tittel
 
-Budskapet (children) er alltid med og bærer innholdet. Trenger meldingen en overskrift, kan du legge til en valgfri `title` over budskapet — den løfter fram hovedpoenget når meldingen er lengre. En kort melding klarer seg ofte uten tittel.
+Budskapet (children) er alltid med og bærer innholdet. Trenger meldingen en overskrift, kan du legge til en valgfri `title` over budskapet. Den løfter fram hovedpoenget når meldingen er lengre. En kort melding klarer seg ofte uten tittel.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -137,7 +137,7 @@ Budskapet (children) er alltid med og bærer innholdet. Trenger meldingen en ove
 
 ### Med lenke
 
-En lenke kan peke videre til mer informasjon. Lenken er ikke en egen prop — den skrives som en del av innholdet med den vanlige Indeks-lenken `LinkText` (React) / `.ix-link-text` (HTML). Det er ingenting message-spesifikt ved lenken. Lenketeksten skal beskrive målet og være meningsfull lest alene.
+En lenke kan peke videre til mer informasjon. Lenken er ikke en egen prop. Den skrives som en del av innholdet med den vanlige Indeks-lenken `LinkText` (React) / `.ix-link-text` (HTML). Det er ingenting message-spesifikt ved lenken. Lenketeksten skal beskrive målet og være meningsfull lest alene.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -303,9 +303,9 @@ og ikon, **ikke** annonseringsprioritet: også en `danger`-melding leses høflig
 
 ### Hva komponenten gjør automatisk
 
-- **Annonsering via `<MessageRegion>`:** det synlige Message-elementet har bevisst *ingen* `role`/`aria-live`. I stedet legger komponenten meldingsteksten til som en egen node i en stabil, skjult `polite` live-region i `<MessageRegion>`. Stabile regioner er det som gjør annonsering pålitelig — en region som settes inn samtidig med innholdet annonseres ofte ikke. Hver melding blir en egen node (`aria-atomic="false"`), slik at flere meldinger som dukker opp tett etter hverandre alle leses opp fortløpende i tur, uten å avbryte hverandre.
+- **Annonsering via `<MessageRegion>`:** det synlige Message-elementet har bevisst *ingen* `role`/`aria-live`. I stedet legger komponenten meldingsteksten til som en egen node i en stabil, skjult `polite` live-region i `<MessageRegion>`. Stabile regioner er det som gjør annonsering pålitelig: en region som settes inn samtidig med innholdet annonseres ofte ikke. Hver melding blir en egen node (`aria-atomic="false"`), slik at flere meldinger som dukker opp tett etter hverandre alle leses opp fortløpende i tur, uten å avbryte hverandre.
 - **Stille ved sidelast:** meldinger som finnes ved første sidelast leses ikke opp automatisk (så en side full av meldinger ikke leser seg selv opp). Bruk `announceOnPageLoad` for å overstyre. Meldinger som settes inn senere annonseres automatisk.
-- **Statusikon** rendres som en dekorativ `<ix-icon data-badge name="…" aria-hidden="true">` — en sirkel i status-`fill` (følger `data-status`) med en lys glyf oppå (`info_i`, `check` eller `priority_high` per status). `aria-hidden="true"` holder den ute av tilgjengelighetstreet; varianten formidles av teksten.
+- **Statusikon** rendres som en dekorativ `<ix-icon data-badge name="…" aria-hidden="true">`: en sirkel i status-`fill` (følger `data-status`) med en lys glyf oppå (`info_i`, `check` eller `priority_high` per status). `aria-hidden="true"` holder den ute av tilgjengelighetstreet; varianten formidles av teksten.
 - **Fokusindikator:** meldingen får ingen ring rundt seg selv; kun lukkeknappen har sin egen `:focus-visible`-ring. Lenker bruker `:focus-visible`.
 
 
@@ -331,11 +331,11 @@ og ikon, **ikke** annonseringsprioritet: også en `danger`-melding leses høflig
 
 ### MessageRegion
 
-`MessageRegion` er en obligatorisk wrapper rundt React-meldinger. Den rendrer ingenting synlig selv — den legger én stabil, skjult ARIA-live-region (`polite`) i DOM som meldingene annonseres gjennom. Uten en omsluttende `MessageRegion` rendres `<Message>` visuelt, men annonseres ikke for skjermlesere (og logger en advarsel i utviklingsmodus).
+`MessageRegion` er en obligatorisk wrapper rundt React-meldinger. Den rendrer ingenting synlig selv. Den legger én stabil, skjult ARIA-live-region (`polite`) i DOM som meldingene annonseres gjennom. Uten en omsluttende `MessageRegion` rendres `<Message>` visuelt, men annonseres ikke for skjermlesere (og logger en advarsel i utviklingsmodus).
 
 Stabile, alltid-tilstedeværende regioner er det som gjør annonseringen pålitelig: en live-region som settes inn i DOM samtidig med innholdet rekker ofte ikke å bli registrert før teksten er der, og annonseres da ikke. `MessageRegion` har derfor regionen klar fra start og legger kun teksten til ved behov. Hver melding legges til som en egen node, slik at flere meldinger leses opp fortløpende i tur i stedet for at den siste overskriver de andre.
 
-Du kan ha én felles `MessageRegion` rundt et helt skjema eller en hel side, eller én rundt hver melding — begge fungerer. Det enkleste er å plassere én region høyt i treet og la alle meldinger ligge inni den.
+Du kan ha én felles `MessageRegion` rundt et helt skjema eller en hel side, eller én rundt hver melding. Begge fungerer. Det enkleste er å plassere én region høyt i treet og la alle meldinger ligge inni den.
 
 ```tsx live
 <MessageRegion>
@@ -347,7 +347,7 @@ Du kan ha én felles `MessageRegion` rundt et helt skjema eller en hel side, ell
 
 #### Annonsering ved sidelast
 
-Meldinger som settes inn **dynamisk** (etter at siden er ferdig lastet — f.eks. som svar på en handling) annonseres automatisk. Meldinger som allerede er til stede **ved første sidelast** er stille som standard, slik at en side full av meldinger ikke leser seg selv opp ved innlasting.
+Meldinger som settes inn **dynamisk** (etter at siden er ferdig lastet, f.eks. som svar på en handling) annonseres automatisk. Meldinger som allerede er til stede **ved første sidelast** er stille som standard, slik at en side full av meldinger ikke leser seg selv opp ved innlasting.
 
 Noen meldinger er server-rendret eller til stede ved sidelast og skal *likevel* leses opp. Det typiske tilfellet er en success- eller feilmelding etter en redirect tilbake fra en tredjepart. Da setter du `announceOnPageLoad` på selve `<Message>`:
 
@@ -386,7 +386,7 @@ Statusikonet skrives som `<ix-icon data-badge name="…" aria-hidden="true">` so
 
 ### Annonsering for skjermlesere uten React
 
-React-komponenten annonserer via en `<MessageRegion>` (en stabil, skjult live-region). I ren HTML finnes ikke denne automatikken — du må sette opp regionen selv. Den pålitelige oppskriften:
+React-komponenten annonserer via en `<MessageRegion>` (en stabil, skjult live-region). I ren HTML finnes ikke denne automatikken. Du må sette opp regionen selv. Den pålitelige oppskriften:
 
 1. Legg en **stabil, tom** live-region i DOM ved sidelast (den må eksistere *før* du skriver tekst inn i den):
 
