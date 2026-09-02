@@ -9,7 +9,7 @@ import a11yData from './accessibility/phone-number-field.json';
 
 # PhoneNumberField
 
-PhoneNumberField lar brukeren oppgi et telefonnummer med landkode. Komponenten setter sammen en søkbar **landvelger** (der brukeren velger _land_, ikke skriver tallkode) og et **nummerfelt** som formateres mens brukeren skriver — under én felles label. De to er uavhengige felt: hver kan ha sin egen feilmelding, og i React bindes de som to separate React Hook Form-felt.
+PhoneNumberField lar brukeren oppgi et telefonnummer med landkode. Komponenten setter sammen en søkbar **landvelger** (der brukeren velger _land_, ikke skriver tallkode) og et **nummerfelt** som formateres mens brukeren skriver, under én felles label. De to er uavhengige felt: hver kan ha sin egen feilmelding, og i React bindes de som to separate React Hook Form-felt.
 
 :::info Sammensatt komponent
 PhoneNumberField reimplementerer ingenting selv: den grupperer en [Combobox](./combobox) (landkode) og et [TextField](./textfield) med [formatering](./textfield-formatering) (nummer). All filtrering, virtual focus, formatering og form-synk kommer uendret fra de to.
@@ -62,7 +62,7 @@ Du skriver minimal markup: en **tom** `<ix-combobox>` (bare input + chevron + to
 - **Stamper nummer-feltet** med `type="tel"`, `inputmode="numeric"`, `autocomplete="tel-national"` og `data-format="phone"` når de mangler.
 - **Setter gruppe-ARIA:** `role="group"`, kobler `data-field="legend"` via `aria-labelledby`, `data-field="error"` via `aria-describedby` + `aria-live="polite"`, og propagerer `disabled`/`readonly`/`required` til begge kontrollene.
 
-Den rører aldri combobox-ens eller nummerfeltets egen indre ARIA, og fyller kun en `.ix-combobox__listbox` som er tom — skriver du options selv, beholdes de.
+Den rører aldri combobox-ens eller nummerfeltets egen indre ARIA, og fyller kun en `.ix-combobox__listbox` som er tom. Skriver du options selv, beholdes de.
 
 </TabItem>
 <TabItem value="react" label="React">
@@ -79,7 +79,7 @@ Den rører aldri combobox-ens eller nummerfeltets egen indre ARIA, og fyller kun
 />
 ```
 
-Landvelgeren bruker den innebygde landlista (Norge øverst, så Norden, så alfabetisk). Skriv i nummerfeltet — det formateres til `123 45 678` mens du skriver, men `onChange` og form-innsending gir alltid den **rå** verdien uten mellomrom.
+Landvelgeren bruker den innebygde landlista (Norge øverst, så Norden, så alfabetisk). Skriv i nummerfeltet: det formateres til `123 45 678` mens du skriver, men `onChange` og form-innsending gir alltid den **rå** verdien uten mellomrom.
 
 </TabItem>
 </Tabs>
@@ -166,11 +166,11 @@ function Skjema() {
 }
 ```
 
-Å bytte land reformaterer ikke nummeret — formatet er uavhengig av valgt land. For kontrollert bruk uten RHF: bind hvert delfelt manuelt via `numberField`/`countryField` (`{ name, onChange, onBlur, ref }`), eller bruk `<Controller>`.
+Å bytte land reformaterer ikke nummeret. Formatet er uavhengig av valgt land. For kontrollert bruk uten RHF: bind hvert delfelt manuelt via `numberField`/`countryField` (`{ name, onChange, onBlur, ref }`), eller bruk `<Controller>`.
 
 ### Egen landliste
 
-Utelates `countries` fyller web-komponenten inn den innebygde standardlista i språket fra `locale` (`nb` | `nn` | `en`). Send inn din egen `countries` for å begrense eller utvide — samme form som `Combobox`-options (`value` = landkode, `label` = kallekode `+kode` (vises som valgt verdi), `description` = landnavn). I ren HTML tilsvarer dette `data-countries` med en JSON-array av samme form.
+Utelates `countries` fyller web-komponenten inn den innebygde standardlista i språket fra `locale` (`nb` | `nn` | `en`). Send inn din egen `countries` for å begrense eller utvide: samme form som `Combobox`-options (`value` = landkode, `label` = kallekode `+kode` (vises som valgt verdi), `description` = landnavn). I ren HTML tilsvarer dette `data-countries` med en JSON-array av samme form.
 
 ```tsx live
 <PhoneNumberField
@@ -287,7 +287,7 @@ Feilene er uavhengige: `errorMessage` vises under nummeret, `countryErrorMessage
 </ix-phone-number-field>
 ```
 
-`disabled` på `<ix-phone-number-field>` propageres til både landvelgeren og nummerfeltet — du trenger ikke sette det på hvert felt selv.
+`disabled` på `<ix-phone-number-field>` propageres til både landvelgeren og nummerfeltet. Du trenger ikke sette det på hvert felt selv.
 
 </TabItem>
 <TabItem value="react" label="React">
@@ -340,7 +340,7 @@ bare visuell: verdien som sendes, er alltid rå og uten mellomrom.
 
 ### Gruppe med felles navn
 
-`<ix-phone-number-field>` setter `role="group"` og kobler den felles labelen (`data-field="legend"`) via `aria-labelledby`. Skjermlesere annonserer de to feltene som én gruppe med et felles navn. De to kontrollene beholder sin egen rolle, navn og verdi — combobox følger [ARIA APG combobox-mønsteret](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/), nummerfeltet er en native `input`.
+`<ix-phone-number-field>` setter `role="group"` og kobler den felles labelen (`data-field="legend"`) via `aria-labelledby`. Skjermlesere annonserer de to feltene som én gruppe med et felles navn. De to kontrollene beholder sin egen rolle, navn og verdi. Combobox følger [ARIA APG combobox-mønsteret](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/), nummerfeltet er en native `input`.
 
 ### Feltets formål eksponeres (1.3.5)
 
@@ -348,15 +348,15 @@ Web-komponenten stamper nummerfeltet med `type="tel"`, `inputmode="numeric"` og 
 
 ### Feilmelding per felt annonseres
 
-Hvert felt eier sin egen feilmelding. I React setter `errorMessage` feil på nummerfeltet og `countryErrorMessage` på landvelgeren — hvert indre `ix-field`/`ix-combobox` kobler meldingen via `aria-describedby`, setter `aria-invalid="true"` på sin egen input, og annonserer `polite` via `aria-live` (avbryter ikke brukeren). I ren HTML kan du fortsatt legge en felles gruppe-feil i `[data-field="error"]` direkte på host.
+Hvert felt eier sin egen feilmelding. I React setter `errorMessage` feil på nummerfeltet og `countryErrorMessage` på landvelgeren. Hvert indre `ix-field`/`ix-combobox` kobler meldingen via `aria-describedby`, setter `aria-invalid="true"` på sin egen input, og annonserer `polite` via `aria-live` (avbryter ikke brukeren). I ren HTML kan du fortsatt legge en felles gruppe-feil i `[data-field="error"]` direkte på host.
 
 ### Fokusrekkefølge og tastatur
 
 Tab flytter fokus fra landvelger til nummerfelt (samme som leserekkefølgen). Landvelgeren er fullt tastaturopererbar (piltast/Enter/Escape), nummerfeltet er et vanlig tekstfelt.
 
-### i18n — send inn oversatt tekst
+### Send inn oversatt tekst (i18n)
 
-`label`, `countryLabel`, `numberLabel`, `noHitsText` (påkrevd), `toggleLabel` og `resultsText` må sendes inn på riktig språk (bokmål, nynorsk, engelsk) — det finnes ingen fallback. Den innebygde landlista lokaliseres med `locale` (`data-locale` i ren HTML), men er også fullt overstyrbar via `countries` (`data-countries`).
+`label`, `countryLabel`, `numberLabel`, `noHitsText` (påkrevd), `toggleLabel` og `resultsText` må sendes inn på riktig språk (bokmål, nynorsk, engelsk). Det finnes ingen fallback. Den innebygde landlista lokaliseres med `locale` (`data-locale` i ren HTML), men er også fullt overstyrbar via `countries` (`data-countries`).
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -427,7 +427,7 @@ Tab flytter fokus fra landvelger til nummerfelt (samme som leserekkefølgen). La
 
 ### FieldRegistration
 
-Struktur-typen `countryField`/`numberField` tar. Matcher det React Hook Form `register()` returnerer, men er en ren struktur-type — pakka har ingen RHF-avhengighet, så egne handlers eller en `<Controller>`-kobling fungerer også.
+Struktur-typen `countryField`/`numberField` tar. Matcher det React Hook Form `register()` returnerer, men er en ren struktur-type. Pakka har ingen RHF-avhengighet, så egne handlers eller en `<Controller>`-kobling fungerer også.
 
 | Felt | Type | Beskrivelse |
 |------|------|-------------|
