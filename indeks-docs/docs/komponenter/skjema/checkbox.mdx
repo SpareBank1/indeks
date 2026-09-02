@@ -260,37 +260,27 @@ brukeren har satt, men den er beregnet fra barna.
 
 ## Universell utforming
 
-### Semantisk struktur og kobling mellom label og felt
+### Hva du selv må sørge for
 
-Checkbox skal implementeres med korrekt HTML (`<input type="checkbox">`) og ha en programmessig koblet label. Dette gjør at skjermlesere kan formidle hva valget gjelder og hvilken tilstand det har.
+- **Labeltekst som sier hva som velges:** «Jeg godtar vilkårene», ikke «Kryss av her». Skjermleseren leser labelen sammen med tilstanden, så teksten må gi mening alene
+- **Legend på grupper:** hører flere checkboxer sammen, bruk `CheckboxGroup` og gi den en legend. Uten den leses valgene uten kontekst
+- **Skjult label er fortsatt label:** skjuler du teksten visuelt, leses den likevel. Den skal beskrive valget like presist som en synlig label ville
+- **`indeterminate` må matche virkeligheten:** komponenten viser tilstanden, men du styrer når den gjelder. En «velg alle»-checkbox skal være indeterminate når noen — men ikke alle — underliggende valg er på
+- **Unngå `disabled`:** et deaktivert valg sier ikke hvorfor det ikke kan velges. Se [Deaktiverte tilstander](../../monstre-og-maler/deaktiverte-tilstander) for alternativene
 
-Når flere checkboxer hører sammen, skal de grupperes med `CheckboxGroup` (rendres som `<ix-checkbox-group>` med `role="group"` og en legend koblet via `aria-labelledby`). Dette gir nødvendig kontekst og gjør det tydelig hva valgene gjelder. Vi bruker `role="group"` framfor `<fieldset>` fordi `<fieldset>` har kjente layout-bugger i Safari kombinert med flex/grid.
+### Hva komponenten gjør automatisk
 
-### Label og legend må være tilgjengelige
+- **`for`/`id`**: label kobles til `<input type="checkbox">`, med generert ID hvis du ikke oppgir en
+- **Labelen er klikkflaten**: hele label-raden toggler checkboxen, ikke bare boksen
+- **`role="group"` med legend** i `CheckboxGroup`, koblet via `aria-labelledby`. Vi bruker `role="group"` framfor `<fieldset>` fordi `<fieldset>` har kjente layout-bugger i Safari sammen med flex og grid
+- **`indeterminate`** settes som DOM-property, siden det ikke finnes noe HTML-attributt for det. Skjermleseren annonserer den som «delvis avkrysset»
+- **`aria-invalid`**: settes når feilmeldingen har innhold
+- **Windows høykontrast**: i `forced-colors` byttes boks og hake til systemfargene `CanvasText`, `Highlight` og `HighlightText`, fordi bakgrunnsfarger faller bort der
+- **`prefers-reduced-motion`**: overgangene skrus av
 
-Alle checkboxer må ha en tydelig label, og grupper må ha en beskrivende legend. Skjermlesere leser disse sammen med tilstanden (valgt/ikke valgt), og uten denne informasjonen mister brukeren viktig kontekst.
+Tilstanden er alltid den native inputens. Boks og hake er `::before` og `::after` på labelen, slått av og på med `:checked` og `:indeterminate` — ingen JavaScript holder det synkronisert, så det kan ikke komme ut av sync.
 
-Teksten skal være konkret og beskrive hva som velges, slik at brukeren forstår konsekvensen av valget.
-
-### Skjule label eller legend visuelt
-
-Hver checkbox må ha en tydelig label, og grupper av relaterte checkboxer må ha en beskrivende legend. Dersom teksten skjules visuelt, må den fortsatt være tilgjengelig for hjelpemidler.
-
-Selv om teksten ikke er synlig, må den fortsatt være meningsfull og beskrivende. Skjermlesere leser fortsatt denne informasjonen, og den er avgjørende for at brukeren skal forstå hva valget gjelder.
-
-### Tydelig fokus og tastaturnavigasjon
-
-Checkboxer skal være fullt opererbare med tastatur. Brukeren skal kunne navigere med Tab og endre tilstand med Space.
-
-Fokusindikatoren må være tydelig og ha god kontrast, slik at det er enkelt å se hvilken checkbox som er aktiv.
-
-### Indeterminate må formidles korrekt
-
-Dersom indeterminate-tilstand brukes, må denne formidles korrekt til hjelpemidler. Dette sikrer at også ikke-visuelle brukere forstår tilstanden.
-
-### Vær bevisst på bruk av disabled
-
-Bruk av disabled state frarådes. Et deaktivert valg kan være vanskelig å oppfatte og forstå, spesielt dersom brukeren ikke får noen forklaring på hvorfor det ikke kan velges.
+`aria-describedby` kobles bare når du sender inn `description`, `errorMessage` eller `tooltip`. Først da wrappes checkboxen i `<ix-field>`. En checkbox med bare label rendres uten field-wrapper.
 
 <KeyboardAndScreenReader data={a11yData} />
 
