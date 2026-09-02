@@ -7,7 +7,7 @@ import a11yData from './accessibility/surface.json';
 
 Surface er flaten flere ting ligger på: en region som samler flere beslektede elementer og
 skiller dem visuelt fra resten av siden med en egen surface-farge (nøytral eller status), gjerne
-med border eller avrundede hjørner. Den er bevisst enkel — en ren flate for layout og visuell
+med border eller avrundede hjørner. Den er bevisst enkel: en ren flate for layout og visuell
 gruppering, uten klikk-affordanse eller annen interaktivitet.
 
 Surface bygger i sin helhet på [utility-klasser](../utility-klasser/oversikt), men gir et React-API
@@ -17,25 +17,25 @@ slik at du slipper å forholde deg til klassenavnene direkte.
 
 - Visuell gruppering av flere beslektede elementer i én flate med farge eller border
 - Seksjoner og paneler i et oppsett (sett `as="section"` for riktig semantikk)
-- Bakgrunnsflate for en gruppe elementer — også for flere [Card](./card) som ligger oppå
+- Bakgrunnsflate for en gruppe elementer, også for flere [Card](./card) som ligger oppå
 - Rask layout med `gap`, `justifyContent` og `alignItems` uten egen CSS
 
 ## Uegnet til
 
-- Klikkbare flater eller navigasjon — bruk [Card](./card) med `href`/`onClick`
-- Innhold som skal fremstå som en avgrenset, klikkbar enhet — bruk [Card](./card)
-- Komplekse layouter med retning og innrykk — vurder [Stack](./primitives/stack)
+- Klikkbare flater eller navigasjon (bruk [Card](./card) med `href`/`onClick`)
+- Innhold som skal fremstå som en avgrenset, klikkbar enhet (bruk [Card](./card))
+- Komplekse layouter med retning og innrykk (vurder [Stack](./primitives/stack))
 
 ### Surface vs. Card
 
 Surface og [Card](./card) virker på ulike nivåer:
 
-- **Surface** er *flaten flere ting ligger på*. Den signaliserer ingen interaktivitet — den samler
+- **Surface** er *flaten flere ting ligger på*. Den signaliserer ingen interaktivitet. Den samler
   en gruppe elementer og skiller dem visuelt fra resten av siden. Tenk bakgrunn, seksjon eller panel.
 - **Card** er *én ting*: en avgrenset, selvstendig innholdsenhet. Det kan være klikkbart og bærer
   chevron når det er det.
 
-Et Card kan ligge oppå en Surface — de konkurrerer ikke, de virker på ulike nivåer. Trenger du at
+Et Card kan ligge oppå en Surface: de konkurrerer ikke, de virker på ulike nivåer. Trenger du at
 selve flaten kan trykkes, velg Card. Skal flaten bare gruppere og skille ut innhold, velg Surface.
 
 ## Bruk
@@ -84,10 +84,10 @@ selve flaten kan trykkes, velg Card. Skal flaten bare gruppere og skille ut innh
 ### Statusfarger
 
 `neutral` er den nøytrale standardflaten, og settes eksplisitt med `data-status="neutral"`
-i HTML og `status="neutral"` i React — det er standardverdien. `.ix-surface` uten `data-status` gir
+i HTML og `status="neutral"` i React. Det er standardverdien. `.ix-surface` uten `data-status` gir
 også den nøytrale flaten (fallback fra `:root`), men merk at flaten da arver en eventuell `data-status`
 fra en forelder; sett `data-status="neutral"` for å bryte den arven. De andre statusene (`info`,
-`success`, `warning`, `danger`) settes på samme måte — samme status-system som [Card](./card) og
+`success`, `warning`, `danger`) settes på samme måte. Det er samme status-system som [Card](./card) og
 [Message](./message).
 
 <Tabs groupId="variant">
@@ -216,11 +216,11 @@ Surface er en ikke-interaktiv container og tilfører ingen rolle eller fokus-hå
 
 ### Hva du selv må sørge for
 
-- **Velg semantisk element** med `as` der det er relevant — f.eks. `as="section"` for en seksjon.
+- **Velg semantisk element** med `as` der det er relevant, f.eks. `as="section"` for en seksjon.
   Standard `<div>` er korrekt når flaten kun er visuell gruppering.
 - Ikke kommuniser mening med farge alene. Statusfargen er dekorativ. Innhold som bærer
   betydning må også ha tekst eller annet ikke-visuelt signal.
-- **Trenger flaten å være klikkbar**, er Surface feil verktøy — bruk [Card](./card), som gir
+- **Trenger flaten å være klikkbar**, er Surface feil verktøy. Bruk [Card](./card), som gir
   riktig semantikk (`<a>`/`<button>`), tastaturstøtte og fokusring.
 
 ### WCAG-kriterier

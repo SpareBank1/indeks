@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 # Formatering
 
-TextField kan formatere innholdet automatisk mens brukeren fyller ut — beløp med tusenskille, telefonnummer i grupper, kontonummer, fødselsnummer. Denne siden forklarer hvordan formatering virker, de to modusene, de tre måtene å definere en formatter på, og tilgjengelighetshensynene bak. For vanlig bruk og API, se [TextField](./textfield).
+TextField kan formatere innholdet automatisk mens brukeren fyller ut: beløp med tusenskille, telefonnummer i grupper, kontonummer, fødselsnummer. Denne siden forklarer hvordan formatering virker, de to modusene, de tre måtene å definere en formatter på, og tilgjengelighetshensynene bak. For vanlig bruk og API, se [TextField](./textfield).
 
 ## Vi formaterer, vi masker ikke
 
@@ -21,14 +21,14 @@ Formateringen er kun presentasjon. `onChange`, `ix-field.rawValue` og form-innse
 
 ### Bruk med React Hook Form
 
-Et formatert felt kobles med `{...register('felt')}` akkurat som et uformatert (Mønster A) — se [Form-validering](/docs/monstre-og-maler/form-validering#textfield-med-formatering). I formatter-modus videresender `TextField` et lite **proxy-objekt** til `ref` i stedet for den native `<input>` (siden `ix-field` eier den synlige DOM-verdien): proxyens `value` er alltid rå, og `focus()` delegerer til den synlige inputen. Det er en intern detalj. Trenger du verdien selv, les den via `onChange` (`event.target.value`) eller `ix-field.rawValue`, ikke via `ref.value` direkte.
+Et formatert felt kobles med `{...register('felt')}` akkurat som et uformatert (Mønster A). Se [Form-validering](/docs/monstre-og-maler/form-validering#textfield-med-formatering). I formatter-modus videresender `TextField` et lite **proxy-objekt** til `ref` i stedet for den native `<input>` (siden `ix-field` eier den synlige DOM-verdien): proxyens `value` er alltid rå, og `focus()` delegerer til den synlige inputen. Det er en intern detalj. Trenger du verdien selv, les den via `onChange` (`event.target.value`) eller `ix-field.rawValue`, ikke via `ref.value` direkte.
 
 ## To moduser: blur (standard) og live (opt-in)
 
 - **Blur (standard):** feltet viser formatert verdi **når det ikke har fokus**, og den rå (uformaterte) verdien når det får fokus, slik at brukeren kan redigere fritt uten at markøren hopper. Egne pattern-strenger og `{format,parse}`-objekter er blur med mindre de opter inn på live.
-- **Live (opt-in):** separatorene bygger seg opp **mens brukeren skriver**, og markøren styres så den holder plassen. Fem av de innebygde variantene (`phone`, `amount`, `account`, `orgnr`, `ssn`) formaterer live. `date` er unntaket — den er skilletegn-bevisst og formaterer på blur (se tabellen under).
+- **Live (opt-in):** separatorene bygger seg opp **mens brukeren skriver**, og markøren styres så den holder plassen. Fem av de innebygde variantene (`phone`, `amount`, `account`, `orgnr`, `ssn`) formaterer live. `date` er unntaket: den er skilletegn-bevisst og formaterer på blur (se tabellen under).
 
-Modus bæres av et `live`-flagg på selve formatteren — det er ingen egen prop eller attributt på feltet.
+Modus bæres av et `live`-flagg på selve formatteren. Det er ingen egen prop eller attributt på feltet.
 
 **Hvorfor er blur standard?** Live reformatering for hvert tegn (klassisk «input-masking», slik Cleave.js og imask gjør) har kjente tilgjengelighetsulemper som blur unngår:
 
@@ -36,11 +36,11 @@ Modus bæres av et `live`-flagg på selve formatteren — det er ingen egen prop
 - **Skjermlesere kan lese hele feltet på nytt** hver gang en separator settes inn under skriving (WCAG 4.1.3 / 3.3.2).
 - **Transkribering blir vanskeligere.** Skriver du av et nummer fra et kort eller dokument, kan løpende reformatering forstyrre sammenligningen med kilden (jf. [GOV.UK sin frarådning](https://design-system.service.gov.uk/patterns/telephone-numbers/) mot å reformatere telefonnummer mens brukeren skriver).
 
-Mange designsystemer (Aksel, Digdir, Adobe Spectrum, GOV.UK m.fl.) shipper derfor ingen live maske som standard. Indeks tilbyr live som et bevisst opt-in for de formatene der effekten er ønsket (særlig beløp), men beholder blur som trygg standard. Merk at Indeks sin live-modus **formaterer** — den masker ikke: den avviser aldri tastetrykk, i motsetning til klassisk maskering (som kan bryte WCAG 3.3.1 ved stille å nekte «ugyldige» tegn).
+Mange designsystemer (Aksel, Digdir, Adobe Spectrum, GOV.UK m.fl.) shipper derfor ingen live maske som standard. Indeks tilbyr live som et bevisst opt-in for de formatene der effekten er ønsket (særlig beløp), men beholder blur som trygg standard. Merk at Indeks sin live-modus **formaterer**, den masker ikke: den avviser aldri tastetrykk, i motsetning til klassisk maskering (som kan bryte WCAG 3.3.1 ved stille å nekte «ugyldige» tegn).
 
 ### Overstyr modus per felt
 
-Formatterens `live`-flagg bestemmer standardmodus, men du kan overstyre den på det enkelte feltet med `formatLive` (React) / `data-format-live` (HTML) — nyttig for å slå live *av* på en innebygd variant, eller *på* for en egen pattern uten å skrive en formatter.
+Formatterens `live`-flagg bestemmer standardmodus, men du kan overstyre den på det enkelte feltet med `formatLive` (React) / `data-format-live` (HTML). Det er nyttig for å slå live *av* på en innebygd variant, eller *på* for en egen pattern uten å skrive en formatter.
 
 ```tsx live
 <>
@@ -53,7 +53,7 @@ Uten `formatLive` gjelder formatterens egen default (innebygde varianter er live
 
 ## Tre måter å definere en formatter
 
-En formatter er et par rene funksjoner: `format(raw)` lager visningsstrengen, `parse(display)` gjør den om til rå verdi igjen. `parse` er **tapsfri** — den fjerner kun separatorene `format` setter inn og beholder alt annet, så `parse(format(raw))` gir tilbake `raw` for enhver verdi (også en med et feilaktig tegn). Et valgfritt `live`-flagg (`{ format, parse, live: true }`) slår på live-modus for formatteren.
+En formatter er et par rene funksjoner: `format(raw)` lager visningsstrengen, `parse(display)` gjør den om til rå verdi igjen. `parse` er **tapsfri**: den fjerner kun separatorene `format` setter inn og beholder alt annet, så `parse(format(raw))` gir tilbake `raw` for enhver verdi (også en med et feilaktig tegn). Et valgfritt `live`-flagg (`{ format, parse, live: true }`) slår på live-modus for formatteren.
 
 Du kan angi formatteren på tre måter, i økende grad av fleksibilitet.
 
@@ -135,7 +135,7 @@ For enkle mønstre uten kode. Hvert tegn i pattern-strengen er enten en plass br
 
 ### 3. Egen funksjon (`format={{ format, parse }}`)
 
-For logikk som ikke passer et pattern — locale-avhengige beløp, egne grupperinger, versaler:
+For logikk som ikke passer et pattern (locale-avhengige beløp, egne grupperinger, versaler):
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -244,15 +244,15 @@ data.get('tlf_formatted'); // "123 45 678"
 ```
 
 :::warning `input.value` er ikke lenger garantert rå
-Den synlige inputen viser formatert tekst (og rå ved fokus i blur-modus), så les rå verdi via `field.rawValue` eller den skjulte mirror-inputen — ikke `synligInput.value`.
+Den synlige inputen viser formatert tekst (og rå ved fokus i blur-modus), så les rå verdi via `field.rawValue` eller den skjulte mirror-inputen, ikke `synligInput.value`.
 :::
 
 ## Universell utforming
 
 - **Bruk aldri `type="number"`** med formatering. Med separatorer i verdien returnerer nettleseren tom `.value`. Bruk `type="text"` eller `type="tel"` med `inputMode="numeric"`/`"decimal"`.
-- **Kommuniser forventet format som tekst**, i `description` eller label — ikke som placeholder-«understreker». `description="11 siffer"` er både synlig og lest opp av skjermleser.
+- **Kommuniser forventet format som tekst**, i `description` eller label, ikke som placeholder-«understreker». `description="11 siffer"` er både synlig og lest opp av skjermleser.
 - **Formatering er ikke validering.** Feltet avviser aldri tastetrykk stille. Valider på blur eller innsending, og gi en tydelig feilmelding via `errorMessage`.
-- **Sett riktig `autocomplete`** (WCAG 1.3.5) — f.eks. `autocomplete="tel-national"` for telefonnummer.
+- **Sett riktig `autocomplete`** (WCAG 1.3.5), f.eks. `autocomplete="tel-national"` for telefonnummer.
 
 ## Migrering fra Cleave.js og react-number-format
 
@@ -265,7 +265,7 @@ Bruker appen din `cleave.js` (utdatert) eller `react-number-format` for felt-for
 | `react-number-format` `NumericFormat` (tusenskille/desimaler) | `format="amount"` |
 | Egen `format`-funksjon | `format={{ format, parse }}` |
 
-Indeks eksponerer alltid den rå verdien (i `onChange`, `rawValue` og form-innsending) — så nedstrøms kode som allerede lagrer råverdien (`rawValue`/`floatValue`) fungerer likt. De innebygde variantene formaterer live, slik at overgangen fra et Cleave-felt med tusenskille kjennes likt for brukeren.
+Indeks eksponerer alltid den rå verdien (i `onChange`, `rawValue` og form-innsending), så nedstrøms kode som allerede lagrer råverdien (`rawValue`/`floatValue`) fungerer likt. De innebygde variantene formaterer live, slik at overgangen fra et Cleave-felt med tusenskille kjennes likt for brukeren.
 
 :::warning Ugyldige tegn avvises ikke lenger stille
 Cleave/imask nekter typisk «ugyldige» tegn mens brukeren skriver. Indeks gjør det motsatte: vi formaterer men masker ikke, så alt brukeren skriver vises, og feil fanges av validering. Sørg for at feltet har validering + `errorMessage` for verdier som må avvises.
