@@ -1,48 +1,45 @@
 # Migrering fra FFE til Indeks
 
-Indeks er et helt nytt designsystem, bygget opp fra grunnen med en annen arkitektur og struktur enn FFE. For deg som skal migrere fra FFE betyr dette at enkelte ting må gjøres litt annerledes enn før. 
+Indeks er ikke FFE med ny styling. Det er bygget opp på nytt, med en annen arkitektur, og på fem punkter må du derfor jobbe annerledes enn du er vant til. Denne siden går gjennom dem.
 
-## Atomic design
+## Vi leverer byggeklosser, ikke ferdige skjermer
 
-Atomic design er en metodikk for å bygge brukergrensesnitt ved å dele dem opp i små, gjenbrukbare deler. Metoden ble introdusert av Brad Frost og tar inspirasjon fra hvordan ting bygges opp i naturen. I atomic design organiseres komponenter i ulike nivåer:
+Indeks tilbyr grunnleggende basekomponenter. Trenger du noe større, setter du det sammen selv av dem. Designsystemteamet eier og vedlikeholder basekomponentene; teamet ditt eier det du bygger oppå.
 
-* **Atoms** er de minste byggesteinene i et grensesnitt, som for eksempel knapper, input-felt, labels eller ikoner.
-* **Molecules** er kombinasjoner av flere atoms, for eksempel et søkefelt som består av et input-felt og en knapp.
-* **Organisms** er større og mer sammensatte komponenter, som for eksempel et navigasjonsfelt eller et kort med flere elementer.
+Det er en bevisst arbeidsdeling. Skulle vi også vedlikeholdt alle de sammensatte komponentene teamene trenger, ville vi blitt flaskehalsen som alle måtte stå i kø bak. I stedet får du bestemme selv hvordan delene settes sammen.
 
-Tanken er at små, enkle deler kan kombineres til mer komplekse komponenter og til slutt komplette brukergrensesnitt.
+Strukturen følger atomic design, metodikken Brad Frost beskrev:
 
-I Indeks bygger vi komponenter etter prinsippene i atomic design. Atomic design er en metode for å strukturere komponenter der små, enkle byggeklosser settes sammen til større og mer komplekse løsninger
+* **Atoms** er de minste delene: en knapp, et input-felt, en label, et ikon.
+* **Molecules** er flere atoms satt sammen, for eksempel et søkefelt av et input-felt og en knapp.
+* **Organisms** er større sammensetninger, som en navigasjonsrad eller et kort med flere elementer.
 
-I praksis betyr dette at Indeks primært tilbyr grunnleggende basekomponenter. Disse kan settes sammen til mer avanserte komponenter etter behov. Designsystemet tar ansvar for å utvikle og vedlikeholde disse basekomponentene, mens produktteamene selv har ansvar for å bygge og forvalte større og mer komplekse komponenter.
-
-En viktig grunn til denne tilnærmingen er å gi teamene større fleksibilitet og kreativ frihet. Samtidig bidrar det til å hindre at designsystemet blir en flaskehals i produktutviklingen. Dersom designsystemteamet også skulle vedlikeholde alle komplekse komponenter som ulike team trenger, ville det raskt kunne skape avhengigheter og redusere tempoet i utviklingen for produktteamene.
-
-Ved å holde designsystemet fokusert på stabile og gjenbrukbare byggeklosser, kan produktteamene jobbe mer selvstendig og utvikle løsninger raskere.
+Indeks leverer atoms og enkelte molecules. Organisms bygger du.
 
 ## Webstandarder fremfor rammeverk
 
-Indeks er bygget på webstandarder i stedet for å baseres på et spesifikt rammeverk som React eller Vue. Dette betyr at du kan bruke Indeks-komponenter i hvilken som helst frontend-teknologi du foretrekker, uten å måtte bekymre deg for kompatibilitet eller avhengigheter.
+FFE var React. Indeks er HTML og CSS, utvidet med web components der oppførsel krever JavaScript. Det betyr at komponentene virker i Vue, Svelte, server-rendret HTML eller ren statisk side, ikke bare i React.
 
-Komponentene er i utgangspunktet skrevet som ren HTML og CSS, og utvidet i form av web components der det er nødvendig. Likevel tilbyr Indeks også React-komponenter for de som ønsker å bruke det, men det er ikke et krav for å kunne bruke designsystemet. React-komponentene er i praksis tynne wrapper-komponenter som gjør det enklere å bruke Indeks i React-prosjekter.
+React-komponentene finnes fortsatt, i `@sb1/indeks-react`. De er tynne lag rundt web-komponentene og CSS-en, så du får det samme resultatet enten du bruker dem eller skriver HTML-en selv. Velger du React, må du også laste `@sb1/indeks-web`.
 
 ## Utility-klasser
 
-Indeks tilbyr et omfattende sett med utility-klasser i Tailwind-stil for å hjelpe deg med å bygge og tilpasse komponenter raskt og effektivt. Disse klassene dekker alt fra layout og spacing til farger og typografi, og kan brukes direkte i HTML for å justere utseendet og oppførselen til elementene dine uten behov for egendefinert CSS. For en fullstendig oversikt over tilgjengelige utility-klasser, se [Utility-dokumentasjonen](../utility-klasser/oversikt).
+Indeks har utility-klasser i Tailwind-stil for layout, spacing, farger og typografi. Du kan justere avstander og plassering direkte i markupen i stedet for å skrive egen CSS til hvert tilfelle. De ligger i CSS-en du allerede laster, så du trenger ikke installere noe ekstra. Se [Utility-dokumentasjonen](../utility-klasser/oversikt) for hele settet.
 
-## CDN og NPM-pakker
+## Færre pakker enn i FFE
 
-Indeks tilbyr både CDN og NPM-pakker for å gjøre det enkelt å integrere designsystemet i dine prosjekter. CDN-alternativet lar deg raskt inkludere styling, fonter og ikoner i prosjektet ditt med en enkel `<link>`-tag, mens NPM-pakkene gir deg mer kontroll og fleksibilitet ved å la deg installere og administrere Indeks som en avhengighet i prosjektet ditt på samme måte som i FFE.
+I FFE lå hver komponent i sin egen npm-pakke. I Indeks er det tre du forholder deg til:
 
-Styling, utilities, komponenter og tokens er samlet i hver sin NPM-pakke, i motsetning til i FFE der alle komponenter ble distribuert i egne pakker. I Indeks trenger du for eksempel kun å installere én pakke for å bruke alle React-komponentene. Dette forenkler installasjon og bruk av designsystemet, og gjør det mindre sårbart for endringer som påvirker avhengigheter frem og tilbake mellom pakkene og eksternt.
+| Pakke | Inneholder | Hvordan du laster den |
+|---|---|---|
+| [`@sb1/indeks-css`](https://www.npmjs.com/package/@sb1/indeks-css) | All styling: komponent-CSS, utility-klasser og tokens i én fil | CDN (anbefalt), eller npm |
+| [`@sb1/indeks-web`](https://www.npmjs.com/package/@sb1/indeks-web) | Web-komponentene, altså oppførselen | CDN (anbefalt), eller npm |
+| [`@sb1/indeks-react`](https://www.npmjs.com/package/@sb1/indeks-react) | React-komponentene | npm |
 
-Disse pakkene er tilgjengelige i Indeks:
+`@sb1/indeks-tokens` og `@sb1/indeks-utils` finnes på npm, men du skal normalt ikke installere dem: innholdet er inlinet i `@sb1/indeks-css`. Trenger du tokens i et native-prosjekt eller i et eget byggesteg, er det unntaket.
 
-* [Indeks-CSS](https://www.npmjs.com/package/@sb1/indeks-css)
-* [Indeks-Utils](https://www.npmjs.com/package/@sb1/indeks-utils)
-* [Indeks-React](https://www.npmjs.com/package/@sb1/indeks-react)
-* [Indeks-Tokens](https://www.npmjs.com/package/@sb1/indeks-tokens)
+Vi anbefaler CDN for CSS og web-komponentene, ikke npm. Alle SB1-applikasjoner deler samme URL, så nettleseren gjenbruker cachen når brukeren går mellom tjenestene våre. [Utvikler](./utvikler) viser oppsettet, inkludert hvordan du holder CDN-versjonen i takt med `@sb1/indeks-react`.
 
-## Farger
+## Færre farger
 
-Indeks har en mer begrenset og konsistent fargepalett enn FFE. Dette er gjort for å sikre en mer helhetlig og gjenkjennelig visuell identitet på tvers av alle produkter som bruker Indeks. Ved å bruke et standardisert sett med farger, kan vi skape en sterkere merkevare og forbedre brukeropplevelsen ved å gi en mer sammenhengende og profesjonell visuell stil. For mer informasjon om tilgjengelige farger i Indeks, se [Farge-dokumentasjonen](../retningslinjer/farger).
+Fargepaletten i Indeks er mindre enn i FFE, og det er med vilje. Du velger farge etter hva den betyr og ikke etter hvilken kulør du vil ha: navnene er `fill-success`, `surface-main`, `border-danger`. Da havner to team som løser samme oppgave på samme farge, og et bytte av kulør senere treffer alle stedene på én gang. Se [Farge-dokumentasjonen](../retningslinjer/farger) for hele paletten.
