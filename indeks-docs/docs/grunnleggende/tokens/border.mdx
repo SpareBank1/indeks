@@ -15,13 +15,12 @@ Vi har 2 forskjellige border-tykkelser. For fokus på skjemaelementer skal du br
 <CssPropertyTable tokens={borderTokens['border']['width']} prefix="border-width" />
 
 ## Border radius
-Vi har border radius i størrelsene xs, sm, md, lg og xl. Det er egne border radius for pilleformede elementer hvis man trenger det, 
-samt checkbox, input og knapp. Bruk `ix-border-radius-circle` for helt runde elementer.
+Vi har border radius i størrelsene xs, sm, md, lg og xl. I tillegg finnes egne verdier for pilleformede elementer, checkbox, input og knapp. Bruk `ix-border-radius-circle` for helt runde elementer.
 
 <CssPropertyTable tokens={borderTokens['border']['radius']} prefix="border-radius" />
 
 ## Outline
-Outline brukes ved fokus på skjemaelementer. Outline burde være satt til transparent når elementet ikke er i fokus for å unngå hopping i layouten.  
+Outline brukes ved fokus på skjemaelementer. Outline burde være satt til transparent når elementet ikke er i fokus for å unngå hopping i layouten.
 Bruk `--ix-outline-default` for standard outline-stil, og legg til outline-offset med `--ix-outline-offset-default`.
 
 <CssPropertyTable tokens={outlineTokens.outline.width} prefix="outline-width" />

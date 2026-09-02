@@ -11,15 +11,13 @@ import { SurfaceBlock } from './surface/SurfaceBlock';
 
 # Farger
 
-I Indeks bruker vi semantiske farger. Det betyr at farger defineres og navngis ut fra hvordan de brukes, ikke hvordan de ser ut. For eksempel navngir vi en farge "Background" i stedet for å bruke det visuelle navnet (f.eks fjell) eller en hex-verdi.
+I Indeks bruker vi semantiske farger. En farge navngis etter hva den brukes til, ikke etter hvordan den ser ut: `surface-main` og `fill-success`, ikke «fjell» eller `#E4002B`.
 
-Ved å bruke semantiske farger standardiserer vi fargebruk på tvers av våre digitale flater. Fordi fargene har en fast betydning knyttet til bruksområde uavhengig av selve fargetonen, bruker vi navn som "surface-main" og "fill-success". Dette sikrer konsistent og forutsigbar bruk gjennom hele systemet.
-
-Dark mode kommer automatisk med når man bruker semantiske fargevariabelnavn.
+Navnet er dermed en instruks. Trenger du bakgrunn på et kort, leter du etter `surface`, og du slipper å vurdere hvilken grå som er den riktige. Dark mode følger med av seg selv, siden hvert semantiske navn har én verdi for light og én for dark.
 
 ## Background
 
-Vi har 2 bakgrunnsfarger, `default` og `tinted`. De skal kun brukes som bakgrunnsfarge på en side.
+Vi har to bakgrunnsfarger, `default` og `tinted`. De skal kun brukes som bakgrunnsfarge på en side.
 
 <table>
     <tbody>
@@ -44,7 +42,7 @@ Til større overflater som ligger oppå bakgrunnen brukes `surface`-fargene. For
 
 ## Fill
 
-Brukes til mindre elemeneter som f.eks. Tag, Checkbox og Badge.
+Brukes til mindre elementer, for eksempel Tag, Checkbox og Badge.
 
 ### Default
 
@@ -83,7 +81,7 @@ Brukes til mindre elemeneter som f.eks. Tag, Checkbox og Badge.
 
 ## Foreground
 
-Foreground farger brukes til tekst og ikoner.
+Foreground-fargene brukes til tekst og ikoner.
 
 ### Main
 
@@ -120,13 +118,13 @@ Inverse brukes der det er kontrastbakgrunn, for eksempel i en Tag eller liknende
 
 ### Link
 
-Link foreground-farger brukes på interaktiv tekst, for eksempel lenker. Bruk `active` når musepekeren trykker ned på teksten eller når det er fokus på teksten via tastaturnavigasjon.
+Link-fargene brukes på interaktiv tekst, for eksempel lenker. Bruk `active` mens musepekeren holdes nede på teksten, og når teksten har fokus fra tastaturnavigasjon.
 
 <ForegroundLinkBlock />
 
 ### Status
 
-Status-foreground fargene brukes på tekst eller ikon og skal brukes som en indikasjon på status, ikke til dekorasjon. Hvis fargen brukes til tekst skal den brukes sammen med et ikon og andre indikatorer enn bare farge.
+Status-foreground-fargene brukes på tekst eller ikon og skal brukes som en indikasjon på status, ikke til dekorasjon. Hvis fargen brukes til tekst skal den brukes sammen med et ikon og andre indikatorer enn bare farge.
 
 <table>
     <tbody>
@@ -151,7 +149,7 @@ Farger som brukes til border, for eksempel rundt bokser, input-felt og meldinger
 
 ### Focus
 
-Focus border brukes for å indikere hvilket element som har fokus, for eksempel når man navigerer med tastatur. Kan brukes rundt input-felt og andre interaktive elementer.
+Focus border viser hvilket element som har fokus, for eksempel når brukeren navigerer med tastatur. Bruk den rundt input-felt og andre interaktive elementer.
 
 <table>
     <tbody>
