@@ -1,5 +1,11 @@
 # @sb1/indeks-react
 
+## 0.22.0
+
+### Minor Changes
+
+- 7d253af: Legg til flere størrelser for InteractiveIcon: xs (24px), sm (26px), md (36px), lg (48px)
+
 ## 0.21.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # @sb1/indeks-css
 
+## 0.22.0
+
+### Minor Changes
+
+- be6e6bb: Oppdater ikonstørrelser i Icon: sm (18px), md (20px), lg (24px), xl (32px)
+- 7d253af: Legg til flere størrelser for InteractiveIcon: xs (24px), sm (26px), md (36px), lg (48px)
+
+### Patch Changes
+
+- feffcf3: Reduser ikonstørrelse i Message fra 32px til 20px
+
 ## 0.21.0
 
 ### Minor Changes
