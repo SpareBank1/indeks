@@ -7,7 +7,7 @@ import a11yData from './accessibility/combobox.json';
 
 Combobox lar brukeren søke etter og velge ett eller flere alternativer fra en liste. Brukeren skriver for å filtrere, og valgte alternativer vises enten som verdi i feltet (single) eller som chips over feltet (flervalg).
 
-:::tip Skriver du ren HTML eller Astro?
+:::info Skriver du ren HTML eller Astro?
 Combobox er en sammensatt komponent med en del markup. [Combobox i ren HTML](./combobox-html) gir en full gjennomgang av anatomien, hvordan et valg fungerer, forhåndsvalg og form-innsending.
 :::
 
@@ -24,7 +24,7 @@ Combobox er en sammensatt komponent med en del markup. [Combobox i ren HTML](./c
 - Når brukeren skal skrive inn en fri verdi som ikke finnes i lista
 - Når alle alternativer alltid bør være synlige samtidig
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -34,7 +34,7 @@ Combobox er en sammensatt komponent med en del markup. [Combobox i ren HTML](./c
   <label for="land-html">Land</label>
   <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
     <div class="ix-text-field">
-      <input id="land-html" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <input id="land-html" class="ix-text-field__input" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -69,7 +69,6 @@ Combobox er en sammensatt komponent med en del markup. [Combobox i ren HTML](./c
 ```tsx live
 <Combobox
   label="Land"
-  placeholder="Søk etter land …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   options={[
@@ -99,7 +98,7 @@ I React setter du startverdi med `defaultValue` (ukontrollert) eller `value` (ko
   <label for="land-preselect">Land</label>
   <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
     <div class="ix-text-field">
-      <input id="land-preselect" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <input id="land-preselect" class="ix-text-field__input" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -134,7 +133,6 @@ Norge vises i feltet fra start fordi optionen har `aria-selected="true"`. Verken
 ```tsx live
 <Combobox
   label="Land"
-  placeholder="Søk etter land …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   defaultValue="47"
@@ -183,7 +181,7 @@ function KontrollertLand() {
 }
 ```
 
-:::note Filtrering er ikke konfigurerbar
+:::info Filtrering er ikke konfigurerbar
 Søk/filtrering skjer inne i web-komponenten (locale-bevisst, treffer label, verdi og beskrivelse) og kan ikke overstyres med en prop fra React. Ved 0 treff vises `noHitsText` i en `role="status"`-region.
 :::
 
@@ -207,7 +205,7 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
   >
     <div class="ix-combobox__chips" data-field="chips"></div>
     <div class="ix-text-field">
-      <input id="land-multi" class="ix-text-field__input" placeholder="Søk etter land …" />
+      <input id="land-multi" class="ix-text-field__input" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -241,7 +239,6 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 <Combobox
   label="Land"
   multiple
-  placeholder="Søk etter land …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   removeChipLabel="fjern"
@@ -269,7 +266,7 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
   <span data-field="description">Søk og velg landet du bor i</span>
   <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
     <div class="ix-text-field">
-      <input id="land-desc" class="ix-text-field__input" placeholder="Søk …" />
+      <input id="land-desc" class="ix-text-field__input" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -303,7 +300,6 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 <Combobox
   label="Land"
   description="Søk og velg landet du bor i"
-  placeholder="Søk …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   options={[
@@ -327,7 +323,7 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
   <label for="land-error">Land</label>
   <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
     <div class="ix-text-field">
-      <input id="land-error" class="ix-text-field__input" placeholder="Søk …" aria-invalid="true" />
+      <input id="land-error" class="ix-text-field__input" aria-invalid="true" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -361,7 +357,6 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 <Combobox
   label="Land"
   errorMessage="Du må velge et land for å fortsette"
-  placeholder="Søk …"
   noHitsText="Ingen treff"
   toggleLabel="Vis alternativer"
   options={[
@@ -435,27 +430,29 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
 
 ## Retningslinjer
 
-### Tydelige labels gir forutsigbarhet
+### Bruk combobox når det er raskere å skrive enn å lete
 
-Alle combobox-felter skal ha en synlig og beskrivende label. Labelen skal beskrive hvilken informasjon feltet gjelder, ikke handlingen. Skriv "Land" i stedet for "Søk og velg land".
+Combobox lønner seg når listen er så lang at brukeren vet svaret før hen finner det: land,
+kommuner, kontoer, verdipapirer. Er det få nok alternativer å lese gjennom, gir
+[Select](./select) eller [RadioGroup](./radio-group) mindre å forholde seg til.
 
-### Bruk combobox når søk er raskere enn å skanne
+### La brukeren se hva som er valgt
 
-Combobox egner seg når listen er lang eller vanskelig å skanne. For korte lister gir radio-knapper eller Select bedre oversikt.
+I enkeltvalg står valgt verdi i feltet. I flervalg ligger valgene som chips over feltet, og
+i lista får de en hake. Haken er en form, ikke bare en farge, slik at valget også er synlig
+for den som ikke skiller fargene.
 
-### Valgt verdi må alltid være tydelig
+### Fri tekst hører ikke her
 
-I single vises valgt verdi i feltet. I flervalg vises hvert valg som en chip over feltet. I begge moduser får valgte alternativer en checkmark i lista (struktur, ikke farge alene). Brukeren skal aldri være i tvil om hva som er valgt.
-
-### "Kun velg fra liste"
-
-Komponenten lar brukeren velge blant eksisterende alternativer — ikke skrive inn frie verdier. Trenger du fri tekst, bruk et vanlig tekstfelt.
+Brukeren kan bare velge blant alternativene i lista. Skal verdien kunne være noe annet enn
+det du har definert, bruk et vanlig [tekstfelt](./textfield).
 
 ### Sorter alternativene forutsigbart
 
-Alternativene bør sorteres alfabetisk, eller med de mest relevante øverst i lange lister, slik at brukeren raskt finner frem.
+Alfabetisk er utgangspunktet. I lange lister kan de mest brukte alternativene ligge øverst,
+så treffer brukeren dem uten å skrive noe.
 
-## Tilgjengelighet / universell utforming
+## Universell utforming
 
 ### Semantisk struktur og korrekt rolle
 
@@ -488,45 +485,6 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 ## Props / API
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-### ComboboxProps
-
-| Prop | Type | Påkrevd | Standard | Beskrivelse |
-|------|------|---------|----------|-------------|
-| `label` | `string` | Nei* | | Synlig labeltekst. Anbefalt fremfor `ariaLabel` |
-| `ariaLabel` | `string` | Nei* | | Skjult label for skjermlesere. *Enten `label` eller `ariaLabel` må settes |
-| `options` | `ComboboxOption[]` | Ja | | Alternativene i lista |
-| `noHitsText` | `string` | Ja | | Tekst i lista når filteret gir 0 treff (i18n) |
-| `multiple` | `boolean` | Nei | `false` | Flervalg med chips |
-| `value` | `string \| string[]` | Nei | | Kontrollert verdi. `string` i single, `string[]` i multi |
-| `defaultValue` | `string \| string[]` | Nei | | Ukontrollert startverdi. Virker kun ved mount |
-| `onChange` | `(value: string \| string[]) => void` | Nei | | Kalles ved valg/avmarkering/fjerning. Får `string` i single (`''` når tomt), `string[]` i multi |
-| `placeholder` | `string` | Nei | | Placeholder i inputfeltet |
-| `description` | `string` | Nei | | Hjelpetekst under label |
-| `errorMessage` | `string` | Nei | | Feilmelding. Trigger `aria-invalid` når den har innhold |
-| `disabled` | `boolean` | Nei | | Deaktiverer feltet |
-| `readOnly` | `boolean` | Nei | | Skrivebeskyttet felt |
-| `required` | `boolean` | Nei | | Markerer feltet som påkrevd |
-| `toggleLabel` | `string` | Nei | | aria-label på chevron-knappen (i18n) |
-| `removeChipLabel` | `string` | Nei | | Suffiks på chip-ens aria-label, f.eks. "fjern" (i18n, multi) |
-| `chipsLabel` | `string` | Nei | | aria-label på chip-gruppen (`role="group"`), f.eks. "Valgte alternativer" (i18n, multi) |
-| `arrowHintText` | `string` | Nei | | Skjult hint (aria-describedby) som forklarer chip-navigasjon (i18n, multi) |
-| `resultsText` | `string` | Nei | | Mal for skjermleser-annonsering av antall treff. `{n}` byttes med antallet, f.eks. `"{n} alternativer"` (i18n) |
-| `name` | `string` | Nei | | Navn på skjult `<select>` for form-innsending |
-| `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
-| `ref` | `Ref<IxCombobox>` | Nei | | Ref videresendes til `<ix-combobox>`-elementet |
-
-### ComboboxOption
-
-| Prop | Type | Påkrevd | Beskrivelse |
-|------|------|---------|-------------|
-| `value` | `string` | Ja | Verdien som sendes ved valg |
-| `label` | `string` | Ja | Teksten som vises for alternativet |
-| `description` | `string` | Nei | Valgfri andrelinje under label |
-| `disabled` | `boolean` | Nei | Gjør alternativet utilgjengelig for valg |
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ### `<ix-combobox>`
@@ -558,6 +516,45 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 | `select[data-field="native"]` | Nei | Skjult select for form-synk. Opprettes automatisk om den mangler |
 
 </TabItem>
+<TabItem value="react" label="React">
+
+### ComboboxProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `label` | `string` | Nei* | | Synlig labeltekst. Anbefalt fremfor `ariaLabel` |
+| `ariaLabel` | `string` | Nei* | | Skjult label for skjermlesere. *Enten `label` eller `ariaLabel` må settes |
+| `options` | `ComboboxOption[]` | Ja | | Alternativene i lista |
+| `noHitsText` | `string` | Ja | | Tekst i lista når filteret gir 0 treff (i18n) |
+| `multiple` | `boolean` | Nei | `false` | Flervalg med chips |
+| `value` | `string \| string[]` | Nei | | Kontrollert verdi. `string` i single, `string[]` i multi |
+| `defaultValue` | `string \| string[]` | Nei | | Ukontrollert startverdi. Virker kun ved mount |
+| `onChange` | `(value: string \| string[]) => void` | Nei | | Kalles ved valg/avmarkering/fjerning. Får `string` i single (`''` når tomt), `string[]` i multi |
+| `placeholder` | `string` | Nei | | Frarådes: placeholder forsvinner når brukeren skriver. Bruk `description` til hint |
+| `description` | `string` | Nei | | Hjelpetekst under label |
+| `errorMessage` | `string` | Nei | | Feilmelding. Trigger `aria-invalid` når den har innhold |
+| `disabled` | `boolean` | Nei | | Deaktiverer feltet |
+| `readOnly` | `boolean` | Nei | | Skrivebeskyttet felt |
+| `required` | `boolean` | Nei | | Markerer feltet som påkrevd |
+| `toggleLabel` | `string` | Nei | | aria-label på chevron-knappen (i18n) |
+| `removeChipLabel` | `string` | Nei | | Suffiks på chip-ens aria-label, f.eks. "fjern" (i18n, multi) |
+| `chipsLabel` | `string` | Nei | | aria-label på chip-gruppen (`role="group"`), f.eks. "Valgte alternativer" (i18n, multi) |
+| `arrowHintText` | `string` | Nei | | Skjult hint (aria-describedby) som forklarer chip-navigasjon (i18n, multi) |
+| `resultsText` | `string` | Nei | | Mal for skjermleser-annonsering av antall treff. `{n}` byttes med antallet, f.eks. `"{n} alternativer"` (i18n) |
+| `name` | `string` | Nei | | Navn på skjult `<select>` for form-innsending |
+| `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
+| `ref` | `Ref<IxCombobox>` | Nei | | Ref videresendes til `<ix-combobox>`-elementet |
+
+### ComboboxOption
+
+| Prop | Type | Påkrevd | Beskrivelse |
+|------|------|---------|-------------|
+| `value` | `string` | Ja | Verdien som sendes ved valg |
+| `label` | `string` | Ja | Teksten som vises for alternativet |
+| `description` | `string` | Nei | Valgfri andrelinje under label |
+| `disabled` | `boolean` | Nei | Gjør alternativet utilgjengelig for valg |
+
+</TabItem>
 </Tabs>
 
 ## Tilpasning med CSS
@@ -578,4 +575,5 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 
 - [Combobox i ren HTML](./combobox-html) — full gjennomgang av HTML-markup, forhåndsvalg og form-innsending
 - [Select](./select) — for enkelt valg fra kort/mellomlang liste uten søk
+- [Label](./label) — labeltekst for feltet
 - [Chip](../chip) — chip-stilen som gjenbrukes for valgte alternativer i flervalg

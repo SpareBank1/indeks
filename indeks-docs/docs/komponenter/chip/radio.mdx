@@ -15,7 +15,7 @@ Hver chip har en indikator til venstre for teksten: en tom sirkel når den ikke 
 
 Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`, og pil-tastene flytter valget mellom alternativene. Gi alltid gruppen en beskrivende `legend`.
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -138,15 +138,15 @@ Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn
 
 ### Hva du selv må sørge for
 
-- **Gi radio chip-gruppen en beskrivende `legend`** — det er gruppens tilgjengelige navn. Bruk riktig språk; ingen hardkodet fallback.
-- **Bruk radio chip kun når brukeren skal velge nøyaktig ett alternativ** — skal flere kunne velges samtidig, er det feil semantikk. Bruk checkbox-chip i stedet.
-- **Gi hvert valg en kort og tydelig label** — label-teksten er det tilgjengelige navnet for valget.
-- **Ikke stol på farge alene** — ikke overstyr stylingen slik at kun fargen skiller valgt fra ikke-valgt.
+- Gi radio chip-gruppen en beskrivende `legend`. Det er gruppens tilgjengelige navn. Bruk riktig språk; ingen hardkodet fallback.
+- Bruk radio chip kun når brukeren skal velge nøyaktig ett alternativ. Skal flere kunne velges samtidig, er det feil semantikk. Bruk checkbox-chip i stedet.
+- Gi hvert valg en kort og tydelig label. Label-teksten er det tilgjengelige navnet for valget.
+- Ikke stol på farge alene. Overstyr ikke stylingen slik at bare fargen skiller valgt fra ikke-valgt.
 
 ### Hva komponenten gjør automatisk
 
-- **Radiogruppe-semantikk** — radio chip bygger på `<ix-radio-group>`, som setter `role="radiogroup"`, kobler `legend` som tilgjengelig navn, synkroniserer `name` på alle valg og lar piltastene flytte valget. Gruppen er ett tab-stopp.
-- **Valgt tilstand** kommuniseres med fylt sirkel-indikator, aksent-kant og fyll — ikke farge alene — og eksponeres programmatisk via native `aria-checked`.
+- **Radiogruppe-semantikk:** radio chip bygger på `<ix-radio-group>`, som setter `role="radiogroup"`, kobler `legend` som tilgjengelig navn, synkroniserer `name` på alle valg og lar piltastene flytte valget. Gruppen er ett tab-stopp.
+- **Valgt tilstand** vises med fylt sirkel-indikator, aksent-kant og fyll, ikke med farge alene. Tilstanden eksponeres programmatisk via native `aria-checked`.
 - **Fokusindikator** via `:focus-visible` som følger pill-formen.
 
 <KeyboardAndScreenReader data={a11yData} />
@@ -187,7 +187,7 @@ Radio chip er `RadioGroup` med `variant="chip"`. Se [RadioGroup](../skjema/radio
 
 Radio chip gjenbruker `ix-radio-group`-web componenten med chip-styling aktivert via `data-variant="chip"` på host-elementet. Trenger du stylingen på HTML du setter sammen selv, kan du bruke markupen under.
 
-### Tilgjengelige klasser og attributter
+### Tilgjengelige klasser og selektorer
 
 | Element/tilstand | Selektor / attributt |
 |-----------------|----------------------|

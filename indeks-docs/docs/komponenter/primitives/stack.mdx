@@ -18,30 +18,11 @@ Stack er en layout-primitiv for å stable innhold i én dimensjon — vertikalt 
 - Todimensjonal layout — bruk CSS Grid og [grid-utilities](../../utility-klasser/oversikt#grid)
 - Komplekst innholdsoppsett som artikler og dashboard-views
 
-## Kom i gang
+## Bruk
 
 `ix-stack` har `md` gap som standard. Bruk `gap`-attributtet (eller prop) for å overstyre.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<VStack>
-  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 1</div>
-  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 2</div>
-  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 3</div>
-</VStack>
-```
-
-```tsx live
-<HStack>
-  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 1</div>
-  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 2</div>
-  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 3</div>
-</HStack>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 Stack finnes i to bruksformer i HTML:
@@ -72,6 +53,25 @@ Stack finnes i to bruksformer i HTML:
 På vanlige elementer bruker du CSS-klasser — se [CSS-klasser](#css-klasser) i API-seksjonen.
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 1</div>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 2</div>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 3</div>
+</VStack>
+```
+
+```tsx live
+<HStack>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 1</div>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 2</div>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Element 3</div>
+</HStack>
+```
+
+</TabItem>
 </Tabs>
 
 ## Eksempler
@@ -79,32 +79,6 @@ På vanlige elementer bruker du CSS-klasser — se [CSS-klasser](#css-klasser) i
 ### Vertikal — align
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<HStack gap="lg">
-  <VStack gap="sm" align="start">
-    <strong>start (standard)</strong>
-    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
-    <div className="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
-    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
-  </VStack>
-  <VStack gap="sm" align="center">
-    <strong>center</strong>
-    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
-    <div className="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
-    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
-  </VStack>
-  <VStack gap="sm" align="end">
-    <strong>end</strong>
-    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
-    <div className="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
-    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
-  </VStack>
-</HStack>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -132,11 +106,64 @@ På vanlige elementer bruker du CSS-klasser — se [CSS-klasser](#css-klasser) i
 ```
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="lg">
+  <VStack gap="sm" align="start">
+    <strong>start (standard)</strong>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+    <div className="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+  </VStack>
+  <VStack gap="sm" align="center">
+    <strong>center</strong>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+    <div className="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+  </VStack>
+  <VStack gap="sm" align="end">
+    <strong>end</strong>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+    <div className="ix-color-surface-info-default ix-px-xl ix-py-2xs">Bred</div>
+    <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Smal</div>
+  </VStack>
+</HStack>
+```
+
+</TabItem>
 </Tabs>
 
 ### Horisontal — align
 
 <Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack horizontal gap="sm">
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+</ix-stack>
+```
+
+```jsx live
+<ix-stack horizontal="start" gap="sm">
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+</ix-stack>
+```
+
+```jsx live
+<ix-stack horizontal="end" gap="sm">
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
+  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
+</ix-stack>
+```
+
+</TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
@@ -169,33 +196,6 @@ På vanlige elementer bruker du CSS-klasser — se [CSS-klasser](#css-klasser) i
 ```
 
 </TabItem>
-<TabItem value="html" label="HTML">
-
-```jsx live
-<ix-stack horizontal gap="sm">
-  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
-  <div class="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
-  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
-</ix-stack>
-```
-
-```jsx live
-<ix-stack horizontal="start" gap="sm">
-  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
-  <div class="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
-  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
-</ix-stack>
-```
-
-```jsx live
-<ix-stack horizontal="end" gap="sm">
-  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
-  <div class="ix-color-surface-info-default ix-px-sm ix-py-lg">Høy</div>
-  <div class="ix-color-surface-info-default ix-px-sm ix-py-2xs">Lav</div>
-</ix-stack>
-```
-
-</TabItem>
 </Tabs>
 
 ### Gap
@@ -203,34 +203,6 @@ På vanlige elementer bruker du CSS-klasser — se [CSS-klasser](#css-klasser) i
 Standard gap er `md`. Bruk `gap`-prop/-attributt for å overstyre.
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<VStack gap="lg">
-  <HStack gap="xs">
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
-  </HStack>
-  <HStack>
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
-  </HStack>
-  <HStack gap="xl">
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
-  </HStack>
-  <HStack gap="none">
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
-    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
-  </HStack>
-</VStack>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -260,13 +232,41 @@ Standard gap er `md`. Bruk `gap`-prop/-attributt for å overstyre.
 Tilgjengelige størrelser for `gap`-attributt: `none`, `2xs`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`, `4xl`
 
 </TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="lg">
+  <HStack gap="xs">
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+  </HStack>
+  <HStack>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+  </HStack>
+  <HStack gap="xl">
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+  </HStack>
+  <HStack gap="none">
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">A</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">B</div>
+    <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">C</div>
+  </HStack>
+</VStack>
+```
+
+</TabItem>
 </Tabs>
 
 ## Universell utforming
 
 ### Hva du selv må sørge for
 
-- **Bruk semantiske elementer når konteksten krever det** — `ix-stack` er et ukjent HTML-element uten semantisk rolle. Nettleseren behandler det som generisk blokkinnhold, på samme måte som `<div>`. Bruk `as`-prop i React (f.eks. `<HStack as="nav">`) eller CSS-klasser direkte på et native element når innholdet krever semantikk.
+- Bruk semantiske elementer når konteksten krever det. `ix-stack` er et ukjent HTML-element uten semantisk rolle. Nettleseren behandler det som generisk blokkinnhold, på samme måte som `<div>`. Bruk `as`-prop i React (f.eks. `<HStack as="nav">`) eller CSS-klasser direkte på et native element når innholdet krever semantikk.
 
 På native elementer (ikke `<ix-stack>`) virker **ikke** attributter — bruk modifier-klasser:
 
@@ -288,33 +288,6 @@ På native elementer (ikke `<ix-stack>`) virker **ikke** attributter — bruk mo
 ## Props / API
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-### HStack
-
-| Prop | Type | Standard | Beskrivelse |
-|------|------|----------|-------------|
-| `as` | `ElementType` | | Rendrer et native element med CSS-klasser i stedet for `<ix-stack>` med attributter. Bruk for semantikk — f.eks. `as="nav"`. |
-| `align` | `'start' \| 'center' \| 'end'` | `'center'` | Kryssaksejustering av barn |
-| `gap` | `GapSize` | `'md'` | Avstand mellom barn |
-| `className` | `string` | | Ekstra CSS-klasser |
-| `ref` | `Ref<HTMLElement>` | | Ref til rotelementet |
-
-Støtter alle standard HTML-attributter for det rendrede elementet (`id`, `style`, `data-*` osv.).
-
-### VStack
-
-| Prop | Type | Standard | Beskrivelse |
-|------|------|----------|-------------|
-| `as` | `ElementType` | | Rendrer et native element med CSS-klasser i stedet for `<ix-stack>` med attributter. Bruk for semantikk — f.eks. `as="ul"`. |
-| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Kryssaksejustering av barn |
-| `gap` | `GapSize` | `'md'` | Avstand mellom barn |
-| `className` | `string` | | Ekstra CSS-klasser |
-| `ref` | `Ref<HTMLElement>` | | Ref til rotelementet |
-
-Støtter alle standard HTML-attributter for det rendrede elementet (`id`, `style`, `data-*` osv.).
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ### `<ix-stack>` — attributter
@@ -351,6 +324,33 @@ Klasser fungerer på både `<ix-stack>` og vanlige elementer som `<div>`.
 | `ix-stack-nowrap` | Hindrer linjebryting |
 
 Standard gap er `md`. Bruk `gap`-attributtet på `<ix-stack>` eller `ix-gap-*` utility-klasser på andre elementer for å overstyre.
+
+</TabItem>
+<TabItem value="react" label="React">
+
+### HStack
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `as` | `ElementType` | | Rendrer et native element med CSS-klasser i stedet for `<ix-stack>` med attributter. Bruk for semantikk — f.eks. `as="nav"`. |
+| `align` | `'start' \| 'center' \| 'end'` | `'center'` | Kryssaksejustering av barn |
+| `gap` | `GapSize` | `'md'` | Avstand mellom barn |
+| `className` | `string` | | Ekstra CSS-klasser |
+| `ref` | `Ref<HTMLElement>` | | Ref til rotelementet |
+
+Støtter alle standard HTML-attributter for det rendrede elementet (`id`, `style`, `data-*` osv.).
+
+### VStack
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `as` | `ElementType` | | Rendrer et native element med CSS-klasser i stedet for `<ix-stack>` med attributter. Bruk for semantikk — f.eks. `as="ul"`. |
+| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Kryssaksejustering av barn |
+| `gap` | `GapSize` | `'md'` | Avstand mellom barn |
+| `className` | `string` | | Ekstra CSS-klasser |
+| `ref` | `Ref<HTMLElement>` | | Ref til rotelementet |
+
+Støtter alle standard HTML-attributter for det rendrede elementet (`id`, `style`, `data-*` osv.).
 
 </TabItem>
 </Tabs>

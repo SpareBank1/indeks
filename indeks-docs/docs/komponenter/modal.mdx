@@ -25,7 +25,7 @@ Modal brukes til å vise innhold oppå eksisterende side og krever at brukeren f
 - Innhold som brukeren trenger å referere til samtidig som resten av siden
 - Gjentatt bruk i samme flyt (kan skape frustrasjon)
 
-## Kom i gang
+## Bruk
 
 En modal kan brukes kontrollert (du styrer `open`) eller ukontrollert (dialogen eier tilstanden selv) — se [Kontrollert og ukontrollert bruk](#kontrollert-og-ukontrollert-bruk). Uansett lukker den seg på Escape, lukk-knapp eller klikk på bakgrunnen. Klikk på bakgrunnen lukker som standard — slå det av for skjemaer og destruktive handlinger. Gi den alltid en tittel som navngir dialogen.
 
@@ -161,11 +161,7 @@ function Ukontrollert() {
 }
 ```
 
-Skal en trigger-knapp åpne dialogen uten at du holder state, er ren HTML riktig verktøy: det native `<dialog>` åpnes med `showModal()` via `data-modal-open` og eier sin egen tilstand — nettleseren lukker på Escape og bakgrunnsklikk. Se HTML-fanen i «Kom i gang».
-
-:::note Til diskusjon i teamet: bør Escape-lukking kunne slås av?
-Escape lukker alltid dialogen i dag, og det er bevisst: fokus er fanget inne i en modal, og Escape er den forventede rømningsveien (WCAG 2.1.2 — ingen tastaturfelle). Enkelte skjema-flyter ønsker likevel å hindre utilsiktet Escape-lukking (som med bakgrunnsklikk). Det innføres ikke nå, fordi å fjerne Escape uten en annen tydelig rømningsvei svekker tilgjengeligheten. Om behovet melder seg bør teamet avgjøre hvordan det kan gjøres forsvarlig (f.eks. bekreftelses-dialog i stedet for å blokkere tasten).
-:::
+Skal en trigger-knapp åpne dialogen uten at du holder state, er ren HTML riktig verktøy: det native `<dialog>` åpnes med `showModal()` via `data-modal-open` og eier sin egen tilstand — nettleseren lukker på Escape og bakgrunnsklikk. Se HTML-fanen under «Bruk».
 
 ### Slå av bakgrunnslukking
 
@@ -255,41 +251,78 @@ Et utilsiktet klikk utenfor dialogen lukker den umiddelbart. For skjemaer med ul
 
 ## Retningslinjer
 
-### Bruk modal med omtanke
+### Åpne modal bare når brukeren må svare først
 
-Modal avbryter brukerens flyt og bør derfor kun brukes når det er nødvendig. Den egner seg best når brukeren må ta stilling til noe før de kan fortsette, eller når det er viktig å redusere distraksjoner.
+En modal stopper alt annet: bakgrunnen er utilgjengelig, og fokus er låst inne. Det er riktig
+når svaret må gis før flyten kan gå videre, og feil når innholdet like godt kunne stått på
+siden. Trenger du bare å vise litt mer, bruk [Popover](./popover) eller
+[ReadMore](./read-more).
 
-### Modalen får mening gjennom innholdet
+### Åpne med en tittel som sier hvorfor
 
-Modal-komponenten er i seg selv kun en container. Det er innholdet som avgjør hvordan den oppleves og brukes. Det er derfor viktig å strukturere innholdet tydelig med tittel, beskrivelse og eventuelle handlinger.
+`Modal.Title` er det første en skjermleser leser opp, og det første øyet finner. Skriv den som
+et svar på «hvorfor kom dette opp?». Trenger svaret en setning mer, legg den i
+`Modal.Description` — da kobles den automatisk som beskrivelse av dialogen.
 
-### Gi tydelig kontekst med en gang
+### Hold innholdet fokusert
 
-Brukeren skal raskt forstå hvorfor modalen vises. En tydelig tittel og eventuell beskrivelse gjør det enklere å ta stilling til innholdet og hva som forventes.
+Én oppgave per modal. Blir innholdet så mye at du strekker deg mot `size="large"` eller
+`"full"`, er det et tegn på at dette hører på en egen side. Velg `size` etter hvor mye
+innholdet faktisk trenger, ikke etter hvor viktig saken er.
 
-### Unngå overfylte modaler
+### Gi én primær handling og én vei tilbake
 
-Modaler bør være fokuserte og inneholde kun det som er nødvendig. For mye innhold kan gjøre det vanskelig å orientere seg og øker kognitiv belastning.
+Én knapp fører oppgaven i mål, og én lar brukeren komme seg ut. Flere likestilte knapper gjør
+at brukeren må lese alle før hen tør trykke. Lukkeknappen (`Modal.CloseButton` med `label`)
+skal alltid være der, i tillegg til Escape.
 
-### Handlinger skal være tydelige og få
+### Send brukeren tilbake dit hen kom fra
 
-Modaler inneholder ofte handlinger, og disse bør være enkle å forstå og tydelig prioritert. Som hovedregel bør det være én primær handling, og eventuelt en sekundær handling for å avbryte.
+Når modalen lukkes, skal brukeren stå på samme sted i flyten som da den åpnet, med samme
+rulleposisjon og samme skjemadata. Komponenten flytter fokus tilbake til trigger-knappen, men
+tilstanden i siden er ditt ansvar.
 
-### Gjør det enkelt å lukke modalen
+### Ikke åpne modal over modal
 
-Brukeren skal alltid ha en tydelig måte å lukke modalen på. Dette inkluderer en synlig lukkeknapp, og ofte også støtte for Esc og klikk utenfor.
+To lag med fanget fokus gir brukeren ingen holdepunkt for hvor hen er eller hva Escape lukker.
+Trenger du et steg videre, bytt innholdet i den samme modalen.
 
-### Bevar brukerens kontekst
+### Designvalg
 
-Når modalen lukkes, skal brukeren returnere til samme sted i flyten som de kom fra. Dette gir en forutsigbar opplevelse og gjør det enklere å fortsette.
+Escape lukker alltid dialogen, og det er bevisst: fokus er fanget inne i en modal, og Escape er den
+forventede rømningsveien (WCAG 2.1.2, ingen tastaturfelle). Noen skjema-flyter vil hindre utilsiktet
+Escape-lukking, på samme måte som med bakgrunnsklikk. Vi innfører det ikke, fordi å fjerne Escape
+uten en annen tydelig rømningsvei svekker tilgjengeligheten. Trenger du å bremse en utilsiktet
+lukking, bruk en bekreftelses-dialog framfor å blokkere tasten.
 
-### Unngå flere modaler samtidig
+## Universell utforming
 
-Flere åpne modaler skaper forvirring og gjør det vanskelig å navigere. Det skal som hovedregel kun være én modal åpen om gangen.
+### Hva du selv må sørge for
 
-### Tilpass størrelse til innhold
+- Gi tydelig tittel og struktur. Bruk `Modal.Title` (eller `aria-label` på `<dialog>` i ren HTML) og gjerne `Modal.Description`. Tittelen navngir dialogen for skjermlesere, og en tydelig struktur med tittel, beskrivelse og handlinger gjør at hjelpemidler forstår at brukeren har gått inn i en ny kontekst. Uten tittel er dialogen unavngitt. Komponenten gir role `dialog` fra det native `<dialog>`-elementet.
+- **Oversett all tekst:** tittel, `label` på lukk-knappen og knappetekster kommer fra deg og må være på brukerens språk (bokmål, nynorsk, engelsk). Komponenten har ingen hardkodet tekst.
+- Merk triggerknappen. Sett `aria-haspopup="dialog"` på knappen som åpner dialogen (og gjerne `aria-controls` som peker til dialogens `id` i ren HTML), så skjermlesere annonserer at den åpner en dialog.
+- Ikke stol på farge alene. Viktig informasjon og handlinger i modalen må ikke kommuniseres med farge alene. Det må være tydelig gjennom tekst og struktur.
+- Vær varsom med bakgrunnslukking. Bakgrunnslukking er på som standard; slå den av med `closeOnBackdropClick={false}` / `data-no-close-on-backdrop` for skjemaer eller destruktive handlinger der et uhell gir datatap.
+- Hold det viktigste synlig. Ved mye innhold må den sentrale informasjonen og handlingene være synlige før brukeren må scrolle. På små skjermer kan `size="full"` gi innholdet hele flaten i stedet for å klemme det inn i en boks.
 
-Modalens størrelse bør tilpasses innholdet. For små modaler kan føles trange, mens for store modaler kan oppleves som unødvendig dominerende.
+### Hva komponenten gjør automatisk
+
+- **Fokus-trap:** mens dialogen er åpen holdes fokus inne i den (native `<dialog>` åpnet med `showModal()`). Tab og Shift+Tab sykler kun mellom elementene i dialogen.
+- **Åpningsfokus på dialogen:** ved åpning settes fokus på selve dialogen, ikke på lukk-knappen. Skjermlesere annonserer da «\<tittel\>, dialog», og Tab flytter videre til første interaktive element. Vil du heller fokusere et bestemt element (f.eks. første felt i et skjema), sett `autofocus` på det elementet inni modalen.
+- **Escape lukker:** Escape ber om lukking (via `onOpenChange` / `data-modal-close`-atferd), som forventet av en modal dialog.
+- **Fokus-retur:** når dialogen lukkes, føres fokus tilbake til elementet som åpnet den.
+- **Inert bakgrunn:** innholdet bak dialogen gjøres utilgjengelig for både mus og skjermleser (`aria-modal`-atferd fra det native elementet).
+- **Top-layer:** dialogen tegnes over alt annet innhold uten at du trenger å styre `z-index`.
+- **Fokusindikator:** tydelig fokusring (`:focus-visible`) på lukk-knappen og andre interaktive elementer.
+- **Touch-mål:** lukk-knappen er minst 44 × 44 px.
+- **Dempet bevegelse:** inn-animasjonen er kort og slås av ved `prefers-reduced-motion`.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
 
 ## Props / API
 
@@ -337,7 +370,7 @@ Valgfri. Kobles automatisk til dialogen via `aria-describedby`, slik at skjermle
 
 ## Tilpasning med CSS
 
-Trenger du `ix-modal`-stylingen på HTML du setter sammen selv — uten React-komponenten — kan du bruke klassene direkte på et native `<dialog class="ix-modal">`. Åpne det med `dialog.showModal()` for å få fokus-trap, Escape-lukking, dempet bakgrunn (`::backdrop`) og fokus-retur gratis.
+Trenger du `ix-modal`-stylingen på HTML du setter sammen selv, uten React-komponenten, kan du bruke klassene direkte på et native `<dialog class="ix-modal">`. Åpne det med `dialog.showModal()` for å få fokus-trap, Escape-lukking, dempet bakgrunn (`::backdrop`) og fokus-retur gratis.
 
 Vil du i tillegg ha deklarativ åpning/lukking og scroll-lås uten egen JavaScript, laster du `@sb1/indeks-web` og bruker data-attributtene under.
 
@@ -395,33 +428,3 @@ Vil du i tillegg ha deklarativ åpning/lukking og scroll-lås uten egen JavaScri
   </div>
 </dialog>
 ```
-
-## Universell utforming
-
-### Hva du selv må sørge for
-
-- **Gi tydelig tittel og struktur** — bruk `Modal.Title` (eller `aria-label` på `<dialog>` i ren HTML) og gjerne `Modal.Description`. Tittelen navngir dialogen for skjermlesere, og en tydelig struktur med tittel, beskrivelse og handlinger gjør at hjelpemidler forstår at brukeren har gått inn i en ny kontekst. Uten tittel er dialogen unavngitt. Komponenten gir role `dialog` fra det native `<dialog>`-elementet.
-- **Oversett all tekst** — tittel, `label` på lukk-knappen og knappetekster kommer fra deg og må være på brukerens språk (bokmål, nynorsk, engelsk). Komponenten har ingen hardkodet tekst.
-- **Merk triggerknappen** — sett `aria-haspopup="dialog"` på knappen som åpner dialogen (og gjerne `aria-controls` som peker til dialogens `id` i ren HTML), så skjermlesere annonserer at den åpner en dialog.
-- **Ikke stol på farge alene** — viktig informasjon og handlinger i modalen må ikke kommuniseres med farge alene. Det må være tydelig gjennom tekst og struktur.
-- **Sørg for kontrast og lesbarhet** — tekst og bakgrunn du legger inn må ha tilstrekkelig kontrast, og innholdet må være lett å lese og bruke på alle skjermstørrelser. På mindre skjermer kan modalen fylle hele flaten (`size="full"`) for å sikre god brukervennlighet.
-- **Vær varsom med bakgrunnslukking** — bakgrunnslukking er på som standard; slå den av med `closeOnBackdropClick={false}` / `data-no-close-on-backdrop` for skjemaer eller destruktive handlinger der et uhell gir datatap.
-- **Hold det viktigste synlig** — ved fullskjerm eller mye innhold, sørg for at den sentrale informasjonen og handlingene er synlige før brukeren må scrolle.
-
-### Hva komponenten gjør automatisk
-
-- **Fokus-trap** — mens dialogen er åpen holdes fokus inne i den (native `<dialog>` åpnet med `showModal()`). Tab og Shift+Tab sykler kun mellom elementene i dialogen.
-- **Åpningsfokus på dialogen** — ved åpning settes fokus på selve dialogen, ikke på lukk-knappen. Skjermlesere annonserer da «\<tittel\>, dialog», og Tab flytter videre til første interaktive element. Vil du heller fokusere et bestemt element (f.eks. første felt i et skjema), sett `autofocus` på det elementet inni modalen.
-- **Escape lukker** — Escape ber om lukking (via `onOpenChange` / `data-modal-close`-atferd), som forventet av en modal dialog.
-- **Fokus-retur** — når dialogen lukkes, føres fokus tilbake til elementet som åpnet den.
-- **Inert bakgrunn** — innholdet bak dialogen gjøres utilgjengelig for både mus og skjermleser (`aria-modal`-atferd fra det native elementet).
-- **Top-layer** — dialogen tegnes over alt annet innhold uten at du trenger å styre `z-index`.
-- **Fokusindikator** — tydelig fokusring (`:focus-visible`) på lukk-knappen og andre interaktive elementer.
-- **Touch-mål** — lukk-knappen er minst 44 × 44 px.
-- **Dempet bevegelse** — inn-animasjonen er kort og slås av ved `prefers-reduced-motion`.
-
-<KeyboardAndScreenReader data={a11yData} />
-
-### WCAG-kriterier
-
-<AccessibilityTable data={a11yData} />

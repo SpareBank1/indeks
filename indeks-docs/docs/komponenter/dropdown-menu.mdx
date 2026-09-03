@@ -20,12 +20,12 @@ DropdownMenu er en nedtrekksmeny for handlinger eller navigasjon. Menyen vises n
 
 ## Uegnet til
 
-- Primærhandlinger som bør være umiddelbart synlige (bruk Button)
-- Valg i skjemaer (bruk Select eller RadioGroup)
-- Navigasjon mellom seksjoner (bruk Tabs eller vanlige lenker)
-- Svært lange lister (vurder Combobox med søk)
+- Primærhandlinger som bør være umiddelbart synlige (bruk [Button](./button))
+- Valg i skjemaer (bruk [Select](./skjema/select) eller [RadioGroup](./skjema/radio-group))
+- Navigasjon mellom seksjoner (bruk [Tabs](./tabs) eller vanlige lenker)
+- Svært lange lister (vurder [Combobox](./skjema/combobox) med søk)
 
-## Kom i gang
+## Bruk
 
 En DropdownMenu bygges opp av en trigger-knapp og et menypanel med elementer. Klikk eller tastaturnavigasjon (Enter/Space/piler) åpner menyen og aktiverer valg. Menyen lukkes ved valg, klikk utenfor eller Escape.
 
@@ -297,21 +297,52 @@ Bruk `disabled` for elementer som ikke kan velges i nåværende tilstand. Deakti
 
 ## Retningslinjer
 
-### Bruk korte og tydelige etiketter
+### Start hvert punkt med et verb
 
-Meny-etiketter bør være korte verb eller handlingsbeskrivelser: «Rediger», «Slett», «Eksporter som PDF». Unngå vage etiketter som «Mer» eller «Handlinger» inne i selve menyen.
+«Rediger», «Slett», «Eksporter som PDF». Punktet skal si hva som skjer når brukeren velger
+det. «Mer» og «Handlinger» hører på knappen som åpner menyen, ikke inni den.
 
 ### Grupper relaterte handlinger
 
-Bruk dividers for å skille grupper av handlinger som hører sammen. Det gjør menyen lettere å skanne. Plasser destruktive handlinger (slett, fjern) nederst og skill dem fra andre handlinger med en divider.
+Skill grupper som hører sammen med en divider, så kan menyen skannes i bolker istedenfor
+linje for linje. Destruktive handlinger som slett og fjern hører nederst, bak sin egen
+divider, der de ikke treffes ved et uhell.
 
 ### Begrens antall valg
 
-En meny med for mange valg er vanskelig å navigere. Vurder å gruppere, bruke submenyer eller redesigne flyten dersom menyen overstiger 7-10 elementer.
+Over 7–10 punkter blir menyen en liste å lete i. Da er det bedre å gruppere, flytte noe til
+en submeny, eller ta et steg tilbake og se på flyten.
 
 ### Unngå dyp nøsting
 
-Submenyer kan brukes for hierarkisk organisering, men begrens til ett nivå. Dypere nøsting gjør navigasjon vanskelig, spesielt med tastatur.
+Ett nivå submeny er nok. Dypere må brukeren huske hvor hen er samtidig som hen navigerer, og
+med tastatur er det tungt: hvert nivå må åpnes og lukkes med piltaster.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- Bruk en tydelig trigger-knapp. Teksten eller `aria-label` skal fortelle hva menyen inneholder. Komponenten setter `aria-haspopup` og `aria-expanded` automatisk.
+- Skriv korte og beskrivende meny-etiketter. Hvert element bør ha presis tekst som beskriver handlingen. Unngå vage etiketter.
+- **Oversett all tekst:** trigger-tekst og meny-etiketter kommer fra deg og må være på brukerens språk.
+- Begrens nesting. Dyp nøsting gjør navigasjon vanskelig. Hold deg til maksimalt ett nivå med submenyer.
+- Unngå for mange valg. En lang meny er vanskelig å navigere. Grupper med dividers eller redesign flyten.
+
+### Hva komponenten gjør automatisk
+
+- **ARIA-attributter:** `aria-haspopup="menu"` og `aria-expanded` settes på trigger. `role="menu"` på menyen, `role="menuitem"` på elementer, `role="separator"` på dividers.
+- **Tastaturnavigasjon:** Enter/Space åpner, piltaster navigerer, Escape lukker. Home/End hopper til første/siste. ArrowRight åpner submeny, ArrowLeft lukker den.
+- **Fokushåndtering:** fokus flyttes til første element ved åpning og tilbake til trigger ved lukking. Roving tabindex gjør at kun ett element har tabindex="0".
+- **Typeahead:** skriv bokstaver for å hoppe til matchende element.
+- **Posisjonering:** menyen plasseres med viewport-clamp og flipper ved plassmangel.
+- **Touch-mål:** alle elementer har minimum 32px høyde.
+- **Fokusindikator:** tydelig `:focus-visible` på alle interaktive elementer.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
 
 ## Props / API
 
@@ -374,29 +405,3 @@ Trenger du `ix-dropdown`-stylingen på HTML du setter sammen selv kan du bruke k
   </div>
 </ix-dropdown>
 ```
-
-## Universell utforming
-
-### Hva du selv må sørge for
-
-- **Bruk en tydelig trigger-knapp** — teksten eller `aria-label` skal fortelle hva menyen inneholder. Komponenten setter `aria-haspopup` og `aria-expanded` automatisk.
-- **Skriv korte og beskrivende meny-etiketter** — hvert element bør ha presis tekst som beskriver handlingen. Unngå vage etiketter.
-- **Oversett all tekst** — trigger-tekst og meny-etiketter kommer fra deg og må være på brukerens språk.
-- **Begrens nesting** — dyp nøsting gjør navigasjon vanskelig. Hold deg til maksimalt ett nivå med submenyer.
-- **Unngå for mange valg** — en lang meny er vanskelig å navigere. Grupper med dividers eller redesign flyten.
-
-### Hva komponenten gjør automatisk
-
-- **ARIA-attributter** — `aria-haspopup="menu"` og `aria-expanded` settes på trigger. `role="menu"` på menyen, `role="menuitem"` på elementer, `role="separator"` på dividers.
-- **Tastaturnavigasjon** — Enter/Space åpner, piltaster navigerer, Escape lukker. Home/End hopper til første/siste. ArrowRight åpner submeny, ArrowLeft lukker den.
-- **Fokushåndtering** — fokus flyttes til første element ved åpning og tilbake til trigger ved lukking. Roving tabindex gjør at kun ett element har tabindex="0".
-- **Typeahead** — skriv bokstaver for å hoppe til matchende element.
-- **Posisjonering** — menyen plasseres med viewport-clamp og flipper ved plassmangel.
-- **Touch-mål** — alle elementer har minimum 32px høyde.
-- **Fokusindikator** — tydelig `:focus-visible` på alle interaktive elementer.
-
-<KeyboardAndScreenReader data={a11yData} />
-
-### WCAG-kriterier
-
-<AccessibilityTable data={a11yData} />

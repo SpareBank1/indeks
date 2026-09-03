@@ -9,7 +9,7 @@
     },
     {
       "summary": "Oppgi forventet format som synlig tekst",
-      "details": "Feltet normaliserer det brukeren taster til dd.mm.åååå når feltet mister fokus, men formatet må også stå som synlig hjelpetekst i description (f.eks. \"dd.mm.åååå\"). Normaliseringen alene er ikke nok — den skjer først på blur, og teksten står urørt mens man skriver. Ikke bruk placeholder til dette; den forsvinner idet brukeren skriver og har svak kontrast.",
+      "details": "Feltet normaliserer det brukeren taster til dd.mm.åååå når feltet mister fokus, men formatet må også stå som synlig hjelpetekst i description (f.eks. \"dd.mm.åååå\"). Normaliseringen alene er ikke nok — den skjer først på blur, og teksten står urørt underveis. Ikke bruk placeholder til dette; den forsvinner idet brukeren skriver og har svak kontrast.",
       "wcag": ["3.3.1", "3.3.2"]
     },
     {
@@ -39,13 +39,13 @@
     { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport uten horisontal scroll." },
     { "id": "1.4.11", "notes": "Ramme, fokusindikator og kalenderikon oppfyller 3:1 kontrastkrav." },
     { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },
-    { "id": "2.1.1", "notes": "Å velge dato er fullt opererbart med tastatur på to måter: (1) tast datoen i den synlige inputen — feltet er skilletegn-bevisst (godtar 1.1.2026), avviser aldri tastetrykk, lar teksten stå urørt mens man skriver og normaliserer til dd.mm.åååå på blur; (2) tab til kalenderknappen og trykk Enter/Mellomrom for å åpne OS-kalenderen (showPicker() utløses av tastaturaktiveringen). På desktop er knappen i tab-rekkefølgen. På touch er knappen tabindex=-1 og aria-hidden — der er tasting i feltet primærveien og et tapp åpner den native velgeren. Den overlagte native date-inputen er alltid tabindex=-1, så den lager aldri et ekstra tab-stopp." },
+    { "id": "2.1.1", "notes": "Å velge dato er fullt opererbart med tastatur på to måter: (1) tast datoen i den synlige inputen — feltet er skilletegn-bevisst (godtar 1.1.2026), avviser aldri tastetrykk, lar teksten stå urørt mens brukeren skriver og normaliserer til dd.mm.åååå på blur; (2) tab til kalenderknappen og trykk Enter/Mellomrom for å åpne OS-kalenderen (showPicker() utløses av tastaturaktiveringen). På desktop er knappen i tab-rekkefølgen. På touch er knappen tabindex=-1 og aria-hidden — der er tasting i feltet primærveien og et tapp åpner den native velgeren. Den overlagte native date-inputen er alltid tabindex=-1, så den lager aldri et ekstra tab-stopp." },
     { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab. Kalenderknappen (desktop) og inputen er vanlige fokuserbare kontroller uten fokusfeller; den overlagte native inputen er tabindex=-1 og fanger aldri fokus." },
     { "id": "2.4.3", "notes": "På desktop to tab-stopp i naturlig DOM-rekkefølge: den synlige inputen, deretter kalenderknappen. På touch ett tab-stopp (knappen er tabindex=-1). Den overlagte native inputen er alltid tabindex=-1." },
     { "id": "2.4.7", "notes": "Tydelig fokusindikator på inputfeltet (arves fra text-field) og på kalenderknappen (focus-visible med --ix-outline-default), så tastaturbrukere ser hvor fokus står når de tabber til knappen på desktop." },
     { "id": "2.5.8", "notes": "Kalenderknappen oppfyller minimum 44x44px klikkflate; den overlagte native inputen dekker samme flate." },
     { "id": "3.2.1", "notes": "Fokus alene trigger ingen kontekstendring — kalenderen åpnes først ved klikk/tap på kalenderknappen (eller den overlagte native inputen)." },
-    { "id": "3.2.2", "notes": "Feltet endrer aldri teksten mens man skriver; det normaliserer til dd.mm.åååå først når feltet mister fokus, og bytter aldri fokus eller side. Kalendervalg fyller feltet uten uventet kontekstendring." },
+    { "id": "3.2.2", "notes": "Feltet endrer aldri teksten mens brukeren skriver; det normaliserer til dd.mm.åååå først når feltet mister fokus, og bytter aldri fokus eller side. Kalendervalg fyller feltet uten uventet kontekstendring." },
     { "id": "4.1.2", "notes": "Native tekst-input og native date-input med implisitte roller. Kalenderknappen er en native button med tilgjengelig navn fra openLabel/data-open-label. Tilstander (disabled, readonly, invalid) eksponeres korrekt." }
   ],
   "notRelevant": [

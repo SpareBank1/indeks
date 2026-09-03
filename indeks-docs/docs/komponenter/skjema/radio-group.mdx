@@ -21,7 +21,7 @@ RadioGroup lar brukeren velge ett alternativ fra en liste av gjensidig utelukken
 - Når det ikke er nødvendig å vise alle alternativer samtidig
 - Situasjoner der det er naturlig å kunne angre eller fjerne valg uten å velge et nytt
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -65,9 +65,9 @@ RadioGroup lar brukeren velge ett alternativ fra en liste av gjensidig utelukken
 />
 ```
 
-For enkle lister er `options`-propen den raskeste veien — på samme måte som `Select`. Hver option har `value` og `label`.
+For enkle lister er `options`-propen den raskeste veien, på samme måte som `Select`. Hver option har `value` og `label`.
 
-I praksis vil du som regel holde valgt verdi i state og koble den via `value`/`onChange`. `onChange` er event-basert (verdien ligger i `event.target.value`), slik at et `{...register('felt')}` fra React Hook Form kan spres rett på komponenten — se [Form-validering](../../monstre-og-maler/form-validering):
+I praksis vil du som regel holde valgt verdi i state og koble den via `value`/`onChange`. `onChange` er event-basert (verdien ligger i `event.target.value`), slik at et `{...register('felt')}` fra React Hook Form kan spres rett på komponenten, se [Form-validering](../../monstre-og-maler/form-validering):
 
 ```tsx
 const [kundetype, setKundetype] = useState<string>('privat');
@@ -85,7 +85,7 @@ const [kundetype, setKundetype] = useState<string>('privat');
 />
 ```
 
-Trenger du mer — deaktiverte alternativer, custom `id`-er eller ref — bruk `RadioButton`-barn i stedet:
+Trenger du deaktiverte alternativer, egne `id`-er eller en ref, bruker du `RadioButton`-barn i stedet:
 
 ```tsx live
 <RadioGroup legend="Velg kundetype" name="kundetype-children" defaultValue="privat">
@@ -108,7 +108,7 @@ Bruk `description` for å gi ekstra kontekst til hele gruppen.
 
 <Diskuter title="Verifiser forced-colors (Windows høykontrast) selv">
 
-Radio-indikatoren har en `@media (forced-colors: active)`-fallback i `indeks-css/css/components/form/radio-group.css`, men forced-colors kan ikke triggers fra siden — du må slå den på i nettleseren for å se den faktiske visningen.
+Radio-indikatoren har en `@media (forced-colors: active)`-fallback i `indeks-css/css/components/form/radio-group.css`, men forced-colors kan ikke utløses fra siden. Du må slå den på i nettleseren for å se den faktiske visningen.
 
 **Chromium (Chrome, Edge, Brave):**
 1. Åpne DevTools (F12 eller `Ctrl+Shift+I`).
@@ -170,7 +170,7 @@ Sjekk at: ringen er synlig (`CanvasText`), valgt prikk har brukerens accent-farg
 
 ### Horisontal orientering
 
-For svært korte lister kan alternativene vises ved siden av hverandre. Bruk det med omtanke — vertikal er enklere å skanne, og horisontal bryter til vertikal automatisk på smale skjermer.
+For svært korte lister kan alternativene vises ved siden av hverandre. Bruk det med omtanke. Vertikal er enklere å skanne, og horisontal bryter til vertikal automatisk på smale skjermer.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -264,7 +264,7 @@ Når validering feiler, vis en feilmelding som forklarer hva som er galt og hva 
 
 ### Skjult legend
 
-I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan legend skjules visuelt. Den skal fortsatt være meningsfull — skjermlesere leser den.
+I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan legend skjules visuelt. Den skal fortsatt være meningsfull. Skjermlesere leser den.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -308,7 +308,7 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
 
 ### Skrivebeskyttet og deaktivert
 
-`readOnly` viser valget men hindrer endring. `disabled` gjør hele gruppen inaktiv. Vurder om disabled er riktig — alternativet kan ofte heller skjules eller forklares.
+`readOnly` viser valget men hindrer endring. `disabled` gjør hele gruppen inaktiv. Vurder om disabled er riktig. Alternativet kan ofte heller skjules eller forklares.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -382,47 +382,48 @@ I tabeller eller andre kontekster der gruppe-konteksten allerede er gitt, kan le
 
 ## Retningslinjer
 
-### Tydelige labels gir forutsigbarhet
+### Bruk radioknapper bare i gruppe
 
-Hver RadioButton skal ha en synlig og beskrivende label. Labelen skal beskrive hva alternativet er, ikke hva brukeren skal gjøre.
+En radioknapp alene har ingen mening: poenget er at valget utelukker de andre. Gruppen
+trenger en legend som sier hva som velges, for eksempel "Kundetype".
 
-| Gjør dette | Ikke dette |
-|------------|------------|
-| Privat | Velg privat |
-| Bedrift | Trykk her for bedrift |
+### Vis alle alternativene samtidig
 
-### RadioGroup skal alltid brukes i gruppe
+Radioknapper er til for å sammenlignes. Brukeren skal se alle valgene før hen bestemmer
+seg, uten å åpne noe. Er listen for lang til det, bruk [Select](./select) eller
+[Combobox](./combobox) i stedet.
 
-Radioknapper gir mening kun som del av en gruppe — de representerer gjensidig utelukkende valg. Gruppen må ha en legend som forklarer hva valget gjelder, f.eks. "Velg kundetype".
+### Bruk vertikal orientering
 
-### Alle alternativer skal være synlige
+Én kolonne er enklest å skanne, tåler zoom og brekker ikke på smal skjerm. Horisontal
+rekke fungerer bare for to eller tre korte alternativer, som "Ja" og "Nei".
 
-Radioknapper egner seg når alle alternativene vises samtidig. Brukeren får oversikt og kan sammenligne valgene før de bestemmer seg. Hvis listen blir lang, vurder `Select`.
+### Sorter uten å styre valget
 
-### Vertikalt er hovedregelen
+Logisk eller alfabetisk rekkefølge er utgangspunktet. Skal det anbefalte valget ligge
+først, gjør det med åpne øyne: alternativet øverst blir valgt oftere enn de andre.
 
-Vertikal orientering er enklere å skanne og fungerer bedre ved zoom og smale skjermer. Bruk horisontal kun for svært korte og få alternativer.
+### Bruk forhåndsvalg med omtanke
 
-### Rekkefølgen påvirker valget
+Et forhåndsvalgt alternativ sparer tid i skjemaer der svaret er opplagt for de fleste. Det
+koster også noe: brukeren kan sende inn et forhåndsvalg uten å ha tenkt over det. Sett det bare
+når standardvalget er trygt å bli sittende med.
 
-Sorter alternativene logisk eller alfabetisk. I noen tilfeller kan det være riktig å plassere det mest sannsynlige eller anbefalte valget først — vær bevisst på at det påvirker brukerens beslutning.
+### Designvalg
 
-### Standardvalg bør brukes med omtanke
+RadioGroup bruker `role="radiogroup"` framfor `<fieldset>`, og `RadioButton` har ingen egen
+web component: gruppen setter opp ARIA og `disabled` for alle inputs under seg.
 
-Et forhåndsvalgt alternativ kan gjøre det raskere å fylle ut skjemaet, men kan også føre til at brukeren ikke tar et aktivt valg. Bruk det kun når det finnes et tydelig og trygt default-valg.
-
-### Hele raden er klikkbar
-
-Både radioknappen og labelen er klikkbar. Det gir en stor trefflate (44 × 44 px minimum) og fungerer godt på mobil.
+[Designvalg for RadioGroup](./radio-group-designvalg) forklarer hvorfor.
 
 ## Universell utforming
 
 ### Hva du selv må sørge for
 
-- **Beskrivende legend** — komponenten kobler legend til gruppen, men du må skrive god tekst
-- **Beskrivende labels** — hver RadioButton må ha en label som forklarer hva alternativet er
-- **Konkret feilmelding** — `errorMessage` viser feilen, men teksten er ditt ansvar
-- **Vurder `disabled` med omtanke** — et deaktivert alternativ er ofte vanskelig å forstå
+- **Beskrivende legend:** komponenten kobler legend til gruppen, men du må skrive god tekst
+- **Beskrivende labels:** hver RadioButton må ha en label som forklarer hva alternativet er
+- **Konkret feilmelding:** `errorMessage` viser feilen, men teksten er ditt ansvar
+- Vurder `disabled` med omtanke. Et deaktivert alternativ er ofte vanskelig å forstå
 - **Sett `required`** når gruppen er påkrevd, så native validering virker
 
 ### Hva komponenten gjør automatisk
@@ -430,12 +431,12 @@ Både radioknappen og labelen er klikkbar. Det gir en stor trefflate (44 × 44 p
 Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for deg:
 
 - **`role="radiogroup"`** på containeren slik at skjermlesere annonserer gruppen riktig
-- **`aria-labelledby`** til legend-elementet — gruppens tilgjengelige navn
-- **`aria-describedby`** til description og error — leses etter legend
+- **`aria-labelledby`** til legend-elementet: gruppens tilgjengelige navn
+- **`aria-describedby`** til description og error: leses etter legend
 - **`aria-live="polite"`** på error-elementet slik at endringer kunngjøres uten å avbryte
 - **`aria-invalid`** på containeren og alle inputs synkroniseres med error-innholdet via MutationObserver
-- **Felles `name`** på alle inputs — sikrer mutual exclusivity (kun ett valg av gangen) og ArrowKey-navigasjon
-- **`htmlFor`/`id`** mellom hver label og input — klikk på label velger alternativet
+- **Felles `name`** på alle inputs: sikrer mutual exclusivity (kun ett valg av gangen) og ArrowKey-navigasjon
+- **`htmlFor`/`id`** mellom hver label og input: klikk på label velger alternativet
 - **`disabled`/`readonly`** propagerer fra container til alle inputs
 
 <KeyboardAndScreenReader data={a11yData} />
@@ -533,18 +534,16 @@ Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for 
 | `className` | `string` | Nei | | CSS-klasse på wrapper-div |
 | `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet |
 
-I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocus`, `required`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten — de sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
+I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocus`, `required`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten og sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
 
-:::note
-`RadioButton` er designet for bruk inni `RadioGroup`. `onChange` er ikke tilgjengelig som prop fordi endringshåndteringen skjer via gruppen. For standalone radio input, bruk native `<input type="radio">` direkte.
-:::
+`RadioButton` er laget for bruk inne i `RadioGroup`. Den har ingen `onChange`-prop, fordi gruppen håndterer endringene. Trenger du én enkeltstående radioknapp, bruk native `<input type="radio">` direkte.
 
 </TabItem>
 </Tabs>
 
 ## Tilpasning med CSS
 
-Inni `<ix-radio-group>` styles naken `<input type="radio">` og `<label>` automatisk — du trenger ikke skrive klasser. BEM-klassene finnes som hooks for konsumenter som vil bruke radio-styling utenfor `<ix-radio-group>`.
+Inni `<ix-radio-group>` styles naken `<input type="radio">` og `<label>` automatisk. Du trenger ikke skrive klasser. BEM-klassene finnes som hooks for konsumenter som vil bruke radio-styling utenfor `<ix-radio-group>`.
 
 ### Tilgjengelige klasser og selektorer
 
@@ -562,7 +561,7 @@ Inni `<ix-radio-group>` styles naken `<input type="radio">` og `<label>` automat
 
 ### Eksempel: bruk i egen HTML-struktur
 
-Inni `<ix-radio-group>` trengs ingen klasser, og heller ikke `id` eller `for` — komponenten kobler input og label automatisk:
+Inni `<ix-radio-group>` kobler komponenten input og label automatisk, så du trenger verken klasser, `id` eller `for`:
 
 ```html
 <ix-radio-group name="kundetype">
@@ -585,12 +584,6 @@ Bygger du radio-styling utenfor `<ix-radio-group>`, bruk BEM-klassene direkte:
   <label class="ix-radio-button__label" for="r-1">Alternativ 1</label>
 </div>
 ```
-
-## Designvalg
-
-Bak komponenten ligger en rekke tekniske valg — om hvorfor vi bruker `role="radiogroup"` istedenfor `<fieldset>`, hvordan ARIA og `disabled`-tilstand synkroniseres, hvorfor `RadioButton` ikke har sin egen web component, og mer.
-
-Se [Designvalg for RadioGroup](./radio-group-designvalg) hvis du er nysgjerrig på avveiningene.
 
 ## Relatert
 

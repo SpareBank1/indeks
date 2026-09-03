@@ -5,17 +5,17 @@ import UtilsTable from '../../src/components/utilsTable';
 
 # Utility-klasser
 
-Utility-klasser er hjelpeklasser i CSS, designet for å enkelt kunne legge vanlige styling-properties til elementer ved behov. Hver klasse har sitt eget separate formål og består av én enkelt CSS-property, eller et mindre sett med properties for å oppnå en spesifikk effekt. Flere klasser kan brukes samtidig for å bygge opp komplette elementer. Komponentene i Indeks er i stor grad bygget med utility-klasser.
+En utility-klasse setter én CSS-property, eller et lite sett som hører sammen. Du kombinerer dem i markupen i stedet for å skrive egen CSS for hvert tilfelle, og komponentene i Indeks er i stor grad bygget på dem.
 
-Mange av klassene refererer til design tokens som er synket mellom Figma og koden i GitHub. I CSS er disse verdiene tilgjengelige i form av CSS-variabler, som i sin tur brukes av utility-klassene.
+Verdiene bak klassene er de samme design tokenene som ligger i Figma, eksponert som CSS-variabler. Endrer et token seg, endrer klassen seg med.
 
-På denne siden finner du en utfyllende liste over tilgjengelige utility-klasser i Indeks.
+Under står hele settet.
 
-### Eksempel
+## Eksempel
 
-Eksempler på egenskaper som kan legges til med utility-klasser er spacing (margin, padding, gap), flex-verdier og bakgrunnsfarger. I eksempelet nedenfor lager vi en flex-container med standard (main) bakgrunn, medium padding og ekstra stor margin-top.
+Klassene dekker spacing (margin, padding, gap), flex- og grid-verdier, farger, typografi og border. Her er en flex-container med `main`-flate, medium padding og ekstra stor margin i topp:
 
-```
+```html
 <div class="ix-flex ix-color-surface-main-default ix-p-md ix-mt-xl">
     ...
 </div>
@@ -608,7 +608,7 @@ Utility-klassene for størrelser har også responsive varianter for `sm`, `md`, 
 | `.ix-list-inside`  | `list-style-position: inside;` |
 
 :::info CSS Reset
-Indeks bruker en avart av reset.css for å sikre et konsistent utgangspunkt for styling på tvers av nettlesere, i motsetning til FFE, som bruker normalize.css. Det betyr at det kan være noen forskjeller i grunnleggende styling mellom FFE og Indeks, blant annet har ikke listeelementer bullet points som standard.
+Indeks bygger på en variant av reset.css, mens FFE bruker normalize.css. Kommer du fra FFE, vil grunnstylingen derfor være litt annerledes. Det mest merkbare er at listeelementer ikke har bullet points som standard.
 :::
 
 ## Border
@@ -637,18 +637,23 @@ Indeks bruker en avart av reset.css for å sikre et konsistent utgangspunkt for 
 
 ## Bakgrunnsfarger
 
-| CSS-klasse                       | Beskrivelse             |
-| -------------------------------- | ----------------------- |
-| `.ix-color-surface-main-default` | Primær bakgrunnsfarge   |
-| `.ix-surface-secondary`          | Sekundær bakgrunnsfarge |
-| `.ix-surface-tertiary`           | Tertiær bakgrunnsfarge  |
-| `.ix-surface-neutral`            | Nøytral bakgrunnsfarge  |
-| `.ix-color-background-default`   | Standard bakgrunnsfarge |
-| `.ix-color-background-tinted`    | Tonet bakgrunnsfarge    |
+Bakgrunn på en side settes med `background`, flater som ligger oppå den med `surface`, og mindre elementer med `fill`. Se [Farger](../retningslinjer/farger) for når du bruker hvilken.
+
+| CSS-klasse | Beskrivelse |
+| --- | --- |
+| `.ix-color-background-default` | Sidebakgrunn |
+| `.ix-color-background-tinted` | Tonet sidebakgrunn |
+| `.ix-color-surface-main-default` | Flate oppå bakgrunnen, for eksempel et kort |
+| `.ix-color-surface-main-active` | Samme flate mens den trykkes |
+| `.ix-color-surface-{status}-default` | Statusflate. `{status}` er `info`, `success`, `warning` eller `danger` |
+| `.ix-color-surface-{status}-active` | Statusflate mens den trykkes |
+| `.ix-color-fill-{variant}-default` | Fyll på mindre elementer. `{variant}` er `main`, `neutral`, `info`, `success`, `warning` eller `danger`. Legg til `-active` for trykket tilstand |
+| `.ix-color-fill-{variant}-subtle` | Svakere fyll av samme variant. Også med `-active` |
+| `.ix-color-fill-interactive-default` | Fyll på skjemaelementer: input, checkbox, radio. Finnes også som `-active`, `-disabled` og `-read-only` |
 
 ## Transition
 
-Transitions i Indeks bruker standardverdier for varighet og timing-funksjon, som er definert i CSS-variabler. Disse variablene kan brukes i egne stiler for å sikre konsistente overganger.
+Varighet og timing-funksjon for overganger ligger i CSS-variabler. Bruk dem i egne stiler, så beveger det du lager seg i samme tempo som resten av grensesnittet.
 
 | CSS-variabel                      | Verdi                           | Beskrivelse                             |
 | --------------------------------- | ------------------------------- | --------------------------------------- |
@@ -671,7 +676,7 @@ Tekststørrelser i Indeks er basert på en skala med verdier regnet ut fra en ba
 | -------------------- | ------------------------------------------------- |
 | `--ix-font-size-xs`  | Ekstra liten skriftstørrelse (0.8 x baseverdi)    |
 | `--ix-font-size-sm`  | Liten skriftstørrelse (0.9 x baseverdi)           |
-| `--ix-font-size-md`  | Medium skriftstørrelse (1rem - baseverdi)         |
+| `--ix-font-size-md`  | Medium skriftstørrelse (1rem, baseverdien)         |
 | `--ix-font-size-lg`  | Stor skriftstørrelse (1.125 x baseverdi)          |
 | `--ix-font-size-xl`  | Ekstra stor skriftstørrelse (1.27 x baseverdi)    |
 | `--ix-font-size-2xl` | 2x ekstra stor skriftstørrelse (1.42 x baseverdi) |
@@ -680,7 +685,7 @@ Tekststørrelser i Indeks er basert på en skala med verdier regnet ut fra en ba
 | `--ix-font-size-5xl` | 5x ekstra stor skriftstørrelse (2.57 x baseverdi) |
 | `--ix-font-size-6xl` | 6x ekstra stor skriftstørrelse (3.25 x baseverdi) |
 
-## Tilgjengelighet
+## Universell utforming
 
 | CSS-klasse    | Beskrivelse                               |
 | ------------- | ----------------------------------------- |

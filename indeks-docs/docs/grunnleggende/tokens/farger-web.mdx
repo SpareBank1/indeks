@@ -1,6 +1,6 @@
 # Farger for Web
 
-Pakken `@sb1/indeks-tokens` inneholder fargetokens som brukes i hele designsystemet. På web trenger de aller fleste ikke å generere farger selv — den ferdig bygde CSS-en inneholder alt du trenger. Men du kan generere din egen web-CSS med et eget theme ved hjelp av den samme `build-colors`-kommandoen som brukes for [native (iOS/Android)](./farger-native).
+Pakken `@sb1/indeks-tokens` inneholder fargetokens som brukes i hele designsystemet. På web trenger de aller fleste ikke å generere farger selv, for den ferdig bygde CSS-en inneholder alt du trenger. Har du et eget theme, kan du likevel generere din egen web-CSS med den samme `build-colors`-kommandoen som brukes for [native (iOS/Android)](./farger-native).
 
 ## Standard bruk: importer ferdig CSS
 
@@ -39,23 +39,23 @@ css/
     └── <theme-navn>.css
 ```
 
-- **`themes/<theme-navn>.css`** — primitivene (`--ii-primitive-*`), altså de fullstendige [fargeskalaene](./fargeskalaer) generert fra basisfargene i themet ditt. Merk at basisfargen kun styrer fargetone og metning — lysheten settes per trinn, så å gjøre en basisfarge lysere eller mørkere endrer ikke skalaen.
+- **`themes/<theme-navn>.css`** — primitivene (`--ii-primitive-*`), altså de fullstendige [fargeskalaene](./fargeskalaer) generert fra basisfargene i themet ditt. Basisfargen styrer bare fargetone og metning. Lysheten settes per trinn, så å gjøre en basisfarge lysere eller mørkere endrer ikke skalaen.
 - **`colors.css`** — de semantiske fargene (`--ix-color-*`), som peker inn i primitivene. Denne inneholder både light mode (`:root`, `.ix-light-mode`), dark mode (`.ix-dark-mode`) og `prefers-color-scheme`-håndtering.
 
 :::info `--ii-` vs `--ix-`
-`--ii-primitive-*` er interne primitiver (implementasjonsdetalj) — ikke bruk dem direkte i applikasjonskoden din. `--ix-color-*` er det offentlige API-et du styler mot.
+`--ii-primitive-*` er interne primitiver. Ikke bruk dem direkte i applikasjonskoden din. `--ix-color-*` er det offentlige API-et du styler mot.
 :::
 
 ### Rekkefølge og overstyring
 
-Importér begge de genererte filene. **Rekkefølgen dem imellom spiller ingen rolle** — `--ix-color-*` refererer til `--ii-primitive-*` via `var()`, og CSS custom properties slås opp når de brukes, uavhengig av import-/deklarasjonsrekkefølge:
+Importér begge de genererte filene. **Rekkefølgen dem imellom spiller ingen rolle:** `--ix-color-*` refererer til `--ii-primitive-*` via `var()`, og CSS custom properties slås opp når de brukes, uavhengig av import- og deklarasjonsrekkefølge.
 
 ```css
 @import './css/themes/my-theme.css';
 @import './css/colors.css';
 ```
 
-Bruker du både `@sb1/indeks-css` (for komponent-CSS) og ditt eget theme, er det derimot rekkefølgen mot indeks-css som avgjør. Den ferdige CSS-en inlirer de samme tokenene under nøyaktig samme selektorer og spesifisitet, og det finnes ingen `@layer` som skiller dem — så det er «sist vinner» som gjelder:
+Bruker du både `@sb1/indeks-css` (for komponent-CSS) og ditt eget theme, er det derimot rekkefølgen mot indeks-css som avgjør. Den ferdige CSS-en har de samme tokenene under nøyaktig samme selektorer og spesifisitet, og ingen `@layer` skiller dem. Da er det «sist vinner» som gjelder:
 
 ```css
 @import url('https://cdn.sparebank1.no/indeks/css/<versjon>/index.css');
@@ -63,15 +63,15 @@ Bruker du både `@sb1/indeks-css` (for komponent-CSS) og ditt eget theme, er det
 @import './css/colors.css';
 ```
 
-:::caution Eget theme må lastes sist
-Ditt eget theme overstyrer bare indeks-css hvis det importeres **etter** indeks-css. Lastes det før — eller uten kontroll på rekkefølgen i bundleren — vinner indeks-css, og temaet får stille ingen effekt.
+:::warning Eget theme må lastes sist
+Ditt eget theme overstyrer bare indeks-css hvis det importeres **etter** indeks-css. Lastes det før, vinner indeks-css og temaet får stille ingen effekt. Det samme skjer hvis du ikke har kontroll på rekkefølgen bundleren din legger opp til.
 :::
 
 ## Generere farger i runtime
 
-Trenger du å endre farger **on-the-fly** — typisk å bytte `brand`-fargen basert på brukervalg
-eller merkevare — kan du generere fargeskalaer i runtime, både i nettleseren og i en Node-backend.
-Da bruker du subpath-eksporten `@sb1/indeks-tokens/generate`.
+Skal farger endres mens appen kjører, typisk ved å bytte `brand`-fargen etter brukervalg eller
+merkevare, kan du generere fargeskalaer i runtime. Det virker både i nettleseren og i en
+Node-backend, og du bruker subpath-eksporten `@sb1/indeks-tokens/generate`.
 
 :::info Da blir `@sb1/indeks-tokens` en ekte avhengighet
 Ved standard bruk (ferdig CSS) trenger du bare `@sb1/indeks-css`. Men bruker du runtime-API-et,
@@ -122,7 +122,7 @@ applyColorScaleVariables(document.documentElement, vars);
 // Alle --ix-color-* som bygger på brand oppdateres nå automatisk.
 ```
 
-Vil du se det i praksis — skriv inn en basisfarge og se hele appen rethem-e seg live:
+Vil du se det i praksis, kan du skrive inn en basisfarge og se hele appen bytte tema live:
 
 **[Prøv fargegenerering i eksempelappen →](https://design.sparebank1.no/eksempel/#/internTesting/generer-farger)**
 
@@ -141,8 +141,8 @@ const css = colorScaleVariablesToCss(vars);
 const scoped = colorScaleVariablesToCss(vars, { selector: '.min-merkevare' });
 ```
 
-Se [Fargeskalaer](./fargeskalaer) for hva basisfargen faktisk styrer (fargetone og metning —
-ikke lyshet).
+Se [Fargeskalaer](./fargeskalaer) for hva basisfargen faktisk styrer: fargetone og metning, ikke
+lyshet.
 
 ## Eksempel på egen theme-fil
 
@@ -170,12 +170,14 @@ Theme-fila er en JSON-fil med de sju basisfargene. `identityColor` og `themeable
 }
 ```
 
-Filnavnet på theme-CSS-en følger `name`-feltet i JSON-fila — themet over gir `css/themes/my-custom-theme.css`.
+Filnavnet på theme-CSS-en følger `name`-feltet i JSON-fila. Themet over gir `css/themes/my-custom-theme.css`.
 
 ## Parametere
 
-- `platform=web` — spesifiserer at du vil bygge web-CSS
-- `path=<sti>` — hvor filene skal lagres (f.eks. `./css`)
-- `theme=<sti>` — (valgfri) sti til egen JSON-theme-fil (default: `sb1`)
+| Parameter | Påkrevd | Betydning |
+|---|---|---|
+| `platform=web` | Ja | Bygger web-CSS |
+| `path=<sti>` | Ja | Hvor filene skal lagres, for eksempel `./css` |
+| `theme=<sti>` | Nei | Sti til egen JSON-theme-fil. Standard er `sb1` |
 
-Den samme kommandoen bygger også farger for iOS og Android — se [Farger for Native](./farger-native).
+Den samme kommandoen bygger også farger for iOS og Android. Se [Farger for Native](./farger-native).
