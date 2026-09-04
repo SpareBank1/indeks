@@ -60,21 +60,21 @@
 }
 
 /* Removable chip — kun Selected. Hele chipen er fjern-knappen; krysset (::after)
-   er dekorativt. Fylt aksentfarge med lys tekst, jf. designets Selected Passive. */
+   er dekorativt. Samme Selected-palett som radio- og checkbox-chip: lyst aksent-fyll
+   med aksent-kant og vanlig tekstfarge. */
 :where(.ix-chip[data-removable]) {
-    background-color: var(--ix-color-fill-main-default);
-    color: var(--ix-color-foreground-inverse-default);
-    border-color: transparent;
+    background-color: var(--ix-color-fill-main-subtle);
+    border-color: var(--ix-color-component-button-secondary-border-default);
 }
 
 :where(.ix-chip[data-removable]:hover) {
-    background-color: var(--ix-color-fill-main-default-hover);
-    border-color: transparent;
+    background-color: var(--ix-color-fill-main-subtle-hover);
+    border-color: var(--ix-color-component-button-secondary-border-default-hover);
 }
 
 :where(.ix-chip[data-removable]:active) {
-    background-color: var(--ix-color-fill-main-default-active);
-    border-color: transparent;
+    background-color: var(--ix-color-fill-main-subtle-active);
+    border-color: var(--ix-color-component-button-secondary-border-default-active);
 }
 
 /* Dekorativt kryss — CSS-maske, ingen markup. currentColor følger den lyse teksten. */
