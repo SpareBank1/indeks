@@ -198,12 +198,14 @@
 }
 
 /* Flytt sirkelen (ytre ring + indre prikk) inn fra pill-kanten. Ett uttrykk
- * dekker begge størrelser — --ii-chip-padding-inline bytter selv fra md til sm. */
+ * dekker begge størrelser — --ii-chip-indicator-inset bytter selv fra md til sm.
+ * Ikke bytt til --ii-chip-padding-inline: den er tallet for den nakne siden av
+ * pillen og er likt i begge størrelser. */
 :where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::after {
-    left: var(--ii-chip-padding-inline);
+    left: var(--ii-chip-indicator-inset);
 }
 :where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::before {
-    left: calc(var(--ii-chip-padding-inline) + var(--ii-radio-size) / 2);
+    left: calc(var(--ii-chip-indicator-inset) + var(--ii-radio-size) / 2);
 }
 
 /* ── Error ───────────────────────────────────────────────────────────────── */
@@ -248,13 +250,30 @@
     --ii-radio-bg: transparent;
 }
 
+/* Chip-variant, read-only + passiv: ingen hvit flate inne i ringen. Ringen står
+ * alene mot den grå pillen, med 1px border-main-default fra read-only-regelen
+ * under. Uvalgt-vakten må stå — en valgt read-only radio beholder flaten, så den
+ * grå prikken ikke smelter sammen med pillen. (0,2,0) slår den generelle
+ * read-only-regelen på (0,0,1); read-only-valgt er (0,2,2) og vinner uansett. */
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='readonly']
+    :where(input[type='radio']:not(:checked) + label) {
+    --ii-radio-bg: transparent;
+}
+
 /* ── ReadOnly ────────────────────────────────────────────────────────────── */
 
 :where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) label,
 :where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) :where(.ix-radio-button__label) {
     cursor: default;
     color: var(--ix-color-foreground-main-read-only);
-    --ii-radio-outer-color: var(--ix-color-border-main-subtle);
+
+    /* --ix-color-border-main-subtle finnes ikke i token-settet. Referansen sto her
+     * fra før, og gjorde border-color ugyldig ved beregning, slik at ringen falt
+     * tilbake til currentColor — altså read-only-forgrunnen satt på linjen over.
+     * Design ber om border-main-default, som er det ringen har i alle andre
+     * tilstander. Merk at det senker kontrasten mot den grå flaten fra ca. 4,5:1
+     * til ca. 2,0:1; det er ført opp i a11y-dataene. */
+    --ii-radio-outer-color: var(--ix-color-border-main-default);
 }
 
 :where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) input[type='radio']:checked + label,

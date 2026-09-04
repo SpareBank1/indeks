@@ -23,6 +23,7 @@ Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`,
 ```jsx live
 <ix-radio-group data-variant="chip" name="periode-html">
   <span data-field="legend">Velg periode</span>
+  <p data-field="description">Vi viser tall for perioden du velger</p>
   <div data-field="items">
     <div class="ix-radio-button">
       <input type="radio" id="periode-1m" value="1m" />
@@ -45,7 +46,13 @@ Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`,
 <TabItem value="react" label="React">
 
 ```tsx live
-<RadioGroup variant="chip" legend="Velg periode" name="periode" defaultValue="3m">
+<RadioGroup
+  variant="chip"
+  legend="Velg periode"
+  description="Vi viser tall for perioden du velger"
+  name="periode"
+  defaultValue="3m"
+>
   <RadioButton value="1m" label="1 måned" />
   <RadioButton value="3m" label="3 måneder" />
   <RadioButton value="12m" label="12 måneder" />
@@ -136,9 +143,9 @@ Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn
 
 ### Feilmelding og skrivebeskyttet
 
-`errorMessage` gir de uvalgte chipene rød kant, og en valgt chip mørkerødt fyll med lys tekst og indikator. Selve feilmeldingen vises under alternativene. Kanten alene forteller ikke brukeren hva som er galt, så teksten er den som bærer informasjonen.
+`errorMessage` gir de uvalgte chipene rød kant på gjennomsiktig flate, og en valgt chip mørkerødt fyll med lys tekst og indikator. Selve feilmeldingen vises under alternativene. Kanten alene forteller ikke brukeren hva som er galt, så teksten er den som bærer informasjonen.
 
-`readOnly` gir alle chipene samme nedtonede grå flate, valgt eller ikke. Valget kan ikke endres, men det valgte alternativet er fortsatt eksponert programmatisk, så en skjermleser leser opp hva som er valgt.
+`readOnly` gir alle chipene samme nedtonede grå flate, valgt eller ikke. Ringen på de uvalgte står uten fyll, så den grå flaten går helt inn til kanten av sirkelen. Valget kan ikke endres, men det valgte alternativet er fortsatt eksponert programmatisk, så en skjermleser leser opp hva som er valgt.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">

@@ -117,7 +117,7 @@ Vurder om brukeren i stedet bør se en forklaring på hvorfor valget ikke er til
 
 ### Feilmelding og skrivebeskyttet
 
-`error` gir chipen rød kant. `readOnly` gir en nedtonet grå flate uten klikkrespons. Chipen beholder tab-fokus, så innholdet kan fortsatt leses opp. Er begge satt, vinner `error`.
+`error` gir chipen rød kant og fjerner fyllet, så flaten blir gjennomsiktig og tar fargen fra det chipen ligger på. `readOnly` gir en nedtonet grå flate uten klikkrespons. Chipen beholder tab-fokus, så innholdet kan fortsatt leses opp. Er begge satt, vinner `error`.
 
 En rød kant alene forteller ikke brukeren hva som er galt. Vis alltid en feilmelding i tekst ved siden av chipene.
 
@@ -201,7 +201,7 @@ Bruk `as="a"` når chipen navigerer til en URL. Den beholder chip-styling, men r
 | `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
 | `as` | `ElementType` | `'button'` | Render som annet element, f.eks. `'a'` for lenke-chips |
 | `disabled` | `boolean` | | Deaktiverer chipen (nativ HTML-attributt) |
-| `error` | `boolean` | | Viser chipen i feiltilstand med rød kant. Slår `readOnly` |
+| `error` | `boolean` | | Viser chipen i feiltilstand med rød kant og gjennomsiktig flate. Slår `readOnly` |
 | `readOnly` | `boolean` | | Nedtonet grå flate, ingen klikkrespons. Setter `aria-disabled` |
 
 I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `type`, `name`, `value`, `tabIndex` osv.) og settes direkte på elementet.

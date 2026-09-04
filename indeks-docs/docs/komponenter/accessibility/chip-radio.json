@@ -31,7 +31,12 @@
   "issues": [
     {
       "summary": "Kanten på en uvalgt chip i feiltilstand har for lav kontrast",
-      "details": "Feilkanten bruker --ix-color-border-danger-default (#f9807d), som gir ca. 2,5:1 mot hvit bakgrunn — under kravet på 3:1 for ikke-tekstlige indikatorer. Tokenet er hus-standard for feilkant i TextField, TextArea, Select og Checkbox, så avviket er felles for alle fem komponentene og gjennomgås separat. Det som oppfyller 3:1, er fokusindikatoren, indikator-kanten og fyllet på en valgt chip i feiltilstand. Feilen formidles heller aldri av kanten alene: en valgt chip får mørkerødt fyll med invertert forgrunn, og feilmeldingen vises som tekst med ikon.",
+      "details": "Feilkanten bruker --ix-color-border-danger-default (#f9807d), som gir ca. 2,5:1 mot en lys bakgrunn — under kravet på 3:1 for ikke-tekstlige indikatorer. En uvalgt chip i feiltilstand har ikke eget fyll, så kanten måles mot flaten chipen ligger på. Tokenet er hus-standard for feilkant i TextField, TextArea, Select og Checkbox, så avviket er felles for alle fem komponentene og gjennomgås separat. Det som oppfyller 3:1, er fokusindikatoren, indikator-kanten og fyllet på en valgt chip i feiltilstand. Feilen formidles heller aldri av kanten alene: en valgt chip får mørkerødt fyll med invertert forgrunn, og feilmeldingen vises som tekst med ikon.",
+      "wcag": ["1.4.11"]
+    },
+    {
+      "summary": "Ringen på en skrivebeskyttet chip har for lav kontrast",
+      "details": "Etter design-spec står ringen på en uvalgt skrivebeskyttet chip med --ix-color-border-main-default (#a0abbb) og uten fyll. Mot den grå read-only-flaten (#edeff2) gir det ca. 2,0:1, under kravet på 3:1. Verdien er den samme ringen har i alle andre tilstander, så alternativet ville vært en egen read-only-kant bare for chip. SC 1.4.11 gjør unntak for inaktive komponenter, og en skrivebeskyttet gruppe har pointer-events: none og kan ikke endres, men unntaket er skjønn og føres derfor opp her. Det valgte alternativet er uansett ikke avhengig av ringen: prikken bruker read-only-forgrunnen, som ligger på ca. 4,5:1, og valget er eksponert programmatisk.",
       "wcag": ["1.4.11"]
     }
   ],

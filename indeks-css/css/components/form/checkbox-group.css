@@ -59,14 +59,16 @@
 
 /* Flytt firkant-indikatoren (boks + glyf) inn fra pill-kanten. Glyfen krympes til
    12px så den står i proporsjon til den mindre chip-boksen. Ett uttrykk dekker
-   begge størrelser — --ii-chip-padding-inline bytter selv fra md til sm. */
+   begge størrelser — --ii-chip-indicator-inset bytter selv fra md til sm. Ikke
+   bytt til --ii-chip-padding-inline: den er tallet for den nakne siden av pillen
+   og er likt i begge størrelser. */
 :where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label::before {
-    left: var(--ii-chip-padding-inline);
+    left: var(--ii-chip-indicator-inset);
 }
 :where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label::after {
     width: 12px;
     height: 12px;
-    left: calc(var(--ii-chip-padding-inline) + (var(--ii-checkbox-size) - 12px) / 2);
+    left: calc(var(--ii-chip-indicator-inset) + (var(--ii-checkbox-size) - 12px) / 2);
 }
 
 /* ── Chip-indikator ved error og read-only ───────────────────────────────────
@@ -117,6 +119,16 @@
 :where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='readonly'] .ix-checkbox input[type='checkbox']:indeterminate + label {
     --ii-checkbox-box-bg: var(--ix-color-foreground-main-read-only);
     --ii-checkbox-box-border: var(--ix-color-foreground-main-read-only);
+}
+
+/* Read-only, passiv — ingen hvit flate inne i boksen. Bare fyllet fjernes: kanten
+   er alt 1px border-main-default fra checkbox.css, og ingen read-only-regel rører
+   den, så å skrive den om igjen ville duplisert en verdi som alt stemmer.
+   Uvalgt-vakten holder regelen unna den valgte boksen over, som skal være grå. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='readonly']
+    .ix-checkbox
+    :where(input[type='checkbox']:not(:checked):not(:indeterminate) + label) {
+    --ii-checkbox-box-bg: transparent;
 }
 
 /* ── ReadOnly ────────────────────────────────────────────────────────────── */
