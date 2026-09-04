@@ -28,11 +28,11 @@
 :where(.ix-read-more > summary) {
     display: inline-flex;
     align-items: center;
-    gap: var(--ix-spacing-sm);
+    gap: var(--ix-spacing-2xs);
     /* Litt mer luft til høyre enn til venstre: chevronen tåler å ligge tett i
      * kanten, mens teksten trenger avstand til hover-flatens høyre kant. */
     padding: var(--ix-spacing-xs) var(--ix-spacing-sm) var(--ix-spacing-xs) var(--ix-spacing-xs);
-    border-radius: var(--ix-border-radius-md);
+    border-radius: var(--ix-border-radius-sm);
     font-size: var(--ix-font-size-md);
     font-weight: var(--ix-font-weight-medium);
     /* Samme farge som en tertiary-knapp — labelen *er* en knapp visuelt. */
@@ -94,7 +94,8 @@
  * treffer chevronens senter, mens teksten flukter med label-teksten. Begge
  * regnes ut fra summary-ens venstre padding, ikonbredden og gapet. */
 :where(.ix-read-more__content) {
-    padding-block: var(--ix-spacing-sm);
+    padding-block-start: var(--ix-spacing-xs);
+    padding-block-end: var(--ix-spacing-sm);
     /* Fram til chevronens senter. Halve kantbredden trekkes fra slik at det er
      * streken selv, ikke kanten av den, som sentreres på ikonet. */
     margin-inline-start: calc(
@@ -102,7 +103,7 @@
     );
     /* Resten av veien fram til label-teksten: andre halvdel av ikonet + gapet. */
     padding-inline-start: calc(
-        var(--ix-font-size-xl) / 2 + var(--ix-spacing-sm) - var(--ix-border-width-default) / 2
+        var(--ix-font-size-xl) / 2 + var(--ix-spacing-2xs) - var(--ix-border-width-default) / 2
     );
     padding-inline-end: var(--ix-spacing-md);
 }
