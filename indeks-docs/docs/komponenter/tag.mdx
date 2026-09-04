@@ -9,24 +9,6 @@ import a11yData from './accessibility/tag.json';
 
 # Tag
 
-:::info TODO — diskusjon: farget subtle-tekst per status
-
-Etter Figma-designet skal subtle-varianten ha _farget_ tekst per status (blå på
-lyseblå, grønn på lysegrønn osv.). Implementasjonen bruker i stedet mørk tekst i
-alle subtle-statuser: de mettede fyll-fargene (`-550`) gir kun 3.3–3.9:1 mot
-pastell-flatene og bryter WCAG 1.4.3 (4.5:1), og systemet mangler
-foreground-tokens for `info`, `warning` og `neutral` (kun `success`/`danger`
-finnes). En mørkere per-status foreground (~`-700`, 7–11:1) ville latt oss matche
-Figma WCAG-trygt. Avventer beslutning om å legge til de manglende tokenene — se
-[Status-foreground i fargedokumentasjonen](/docs/retningslinjer/farger/#status).
-
-Et designsystem som gjør nettopp dette:
-[Digdir Designsystemet — Tag](https://storybook.designsystemet.no/?path=/docs/komponenter-tag--docs)
-bruker `data-color` med tonet flate og mørkere tekst i samme fargetone per status
-(og en `outline`-variant for enda roligere uttrykk).
-
-:::
-
 Tag er en liten, ikke-interaktiv etikett som merker eller kategoriserer innhold — for eksempel en status, en egenskap eller et nøkkelord. Taggen bærer betydningen i teksten sin, og fargen støtter opp om hvilken type informasjon det er.
 
 ## Egnet til

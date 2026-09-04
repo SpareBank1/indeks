@@ -9,7 +9,10 @@
           "com.figma": {
             "hiddenFromPublishing": false,
             "scopes": [
-              "ALL_SCOPES"
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE_COLOR",
+              "EFFECT_COLOR"
             ],
             "codeSyntax": {}
           }
@@ -23,7 +26,10 @@
           "com.figma": {
             "hiddenFromPublishing": false,
             "scopes": [
-              "ALL_SCOPES"
+              "FRAME_FILL",
+              "SHAPE_FILL",
+              "STROKE_COLOR",
+              "EFFECT_COLOR"
             ],
             "codeSyntax": {
               "WEB": "--ffe-color-background-subtle"
@@ -42,7 +48,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -56,7 +65,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -70,7 +82,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -86,7 +101,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -100,7 +118,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -114,7 +135,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -130,7 +154,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -144,7 +171,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -158,7 +188,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -174,7 +207,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -188,7 +224,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -202,7 +241,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -218,7 +260,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -232,7 +277,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -246,7 +294,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -264,7 +315,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -278,7 +332,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -292,7 +349,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -306,7 +366,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -320,7 +383,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -334,7 +400,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -350,7 +419,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -364,7 +436,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -378,7 +453,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -392,7 +470,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -406,7 +487,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -420,7 +504,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -436,7 +523,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -450,7 +540,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -464,7 +557,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -478,7 +574,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -492,7 +591,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -508,7 +610,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -522,7 +627,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -536,7 +644,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -550,7 +661,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -564,7 +678,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -578,7 +695,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -594,7 +714,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -608,7 +731,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -622,7 +748,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -636,7 +765,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -650,7 +782,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -664,7 +799,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -680,7 +818,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -694,7 +835,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -708,7 +852,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -722,7 +869,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -736,7 +886,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -750,7 +903,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -766,7 +922,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -780,7 +939,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -794,7 +956,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -808,7 +973,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -822,7 +990,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -836,7 +1007,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1022,129 +1196,11 @@
             }
           }
         }
-      }
-    },
-    "border": {
-      "main": {
-        "default": {
-          "$type": "color",
-          "$value": "{color.gray.400}",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        },
-        "hover": {
-          "$type": "color",
-          "$value": "{color.gray.450}",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        },
-        "active": {
-          "$type": "color",
-          "$value": "{color.gray.500}",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        }
       },
       "info": {
         "default": {
           "$type": "color",
-          "$value": "{color.info.400}",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        },
-        "hover": {
-          "$type": "color",
-          "$value": "{color.info.500}",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        },
-        "active": {
-          "$type": "color",
-          "$value": "{color.info.550}",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        }
-      },
-      "success": {
-        "default": {
-          "$type": "color",
-          "$value": "{color.success.400}",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        },
-        "hover": {
-          "$type": "color",
-          "$value": "{color.success.500}",
-          "$description": "",
-          "$extensions": {
-            "com.figma": {
-              "hiddenFromPublishing": false,
-              "scopes": [
-                "ALL_SCOPES"
-              ],
-              "codeSyntax": {}
-            }
-          }
-        },
-        "active": {
-          "$type": "color",
-          "$value": "{color.success.550}",
+          "$value": "{color.info.600}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1160,13 +1216,193 @@
       "warning": {
         "default": {
           "$type": "color",
-          "$value": "{color.warning.400}",
+          "$value": "{color.warning.600}",
           "$description": "",
           "$extensions": {
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
                 "ALL_SCOPES"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      }
+    },
+    "border": {
+      "main": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.gray.400}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "hover": {
+          "$type": "color",
+          "$value": "{color.gray.450}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "active": {
+          "$type": "color",
+          "$value": "{color.gray.500}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "info": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.info.400}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "hover": {
+          "$type": "color",
+          "$value": "{color.info.500}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "active": {
+          "$type": "color",
+          "$value": "{color.info.550}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "success": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.success.400}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "hover": {
+          "$type": "color",
+          "$value": "{color.success.500}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "active": {
+          "$type": "color",
+          "$value": "{color.success.550}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        }
+      },
+      "warning": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.warning.400}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1180,7 +1416,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1194,7 +1433,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1210,7 +1452,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1224,7 +1469,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1238,7 +1486,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1254,7 +1505,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1272,7 +1526,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1286,7 +1543,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1300,7 +1560,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1314,7 +1577,10 @@
             "com.figma": {
               "hiddenFromPublishing": false,
               "scopes": [
-                "ALL_SCOPES"
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
               ],
               "codeSyntax": {}
             }
@@ -1332,7 +1598,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1346,7 +1615,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1360,7 +1632,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1374,7 +1649,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1388,7 +1666,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1402,7 +1683,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1418,7 +1702,11 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "TEXT_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1432,7 +1720,11 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "TEXT_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1448,7 +1740,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1462,7 +1757,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1476,7 +1774,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1490,7 +1791,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1504,7 +1808,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1518,7 +1825,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1536,7 +1846,11 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "TEXT_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1550,7 +1864,11 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "TEXT_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1566,7 +1884,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1580,7 +1901,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1594,7 +1918,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1608,7 +1935,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1622,7 +1952,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1636,7 +1969,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1652,7 +1988,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1666,7 +2005,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1680,7 +2022,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1694,7 +2039,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1708,7 +2056,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1726,7 +2077,11 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "TEXT_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1740,7 +2095,11 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "TEXT_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1756,7 +2115,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1770,7 +2132,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1784,7 +2149,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1798,7 +2166,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1812,7 +2183,10 @@
                 "com.figma": {
                   "hiddenFromPublishing": false,
                   "scopes": [
-                    "ALL_SCOPES"
+                    "FRAME_FILL",
+                    "SHAPE_FILL",
+                    "STROKE_COLOR",
+                    "EFFECT_COLOR"
                   ],
                   "codeSyntax": {}
                 }
@@ -1826,7 +2200,7 @@
   "opacity": {
     "disabled": {
       "$type": "number",
-      "$value": 40,
+      "$value": "{number.basics.40}",
       "$description": "",
       "$extensions": {
         "com.figma": {
