@@ -43,88 +43,30 @@
 
 /* ── Chip-variant ─────────────────────────────────────────────────────────────
  * Checkbox chip: samme gruppe-semantikk (role="group") og firkant-indikator, men
- * hver <label> styles som en pill (jf. .ix-chip). Alt gated på [data-variant='chip']
- * slik at vanlig checkbox er urørt. Indikatoren beholdes (tom firkant → fylt med
- * hake på valgt), men krympes via den lokale --ii-checkbox-size og flyttes inn fra
- * pill-kanten. Speiler radio-group.css' chip-seksjon. */
+ * <label> styles som en pill.
+ *
+ * Selve pillen — form, størrelse, padding, fyll, kant, hover/selected/focus —
+ * eies i sin helhet av components/chip.css. Her ligger BARE indikator-
+ * geometrien, som er checkbox-spesifikk. Ikke legg pill-styling tilbake her:
+ * chip.css cascader først, så en duplisert property her vinner og skjuler den.
+ * Speiler radio-group.css' chip-seksjon. */
 
-/* Chips skal alltid ligge på rad og wrappe. */
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) [data-field='items'] {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: var(--ix-spacing-sm);
-}
-
-/* Label som pill — chip-grunnmurens tokens, plass til indikator til venstre. */
+/* Checkboxens egen størrelsesvariabel mappes på chip-kontrakten, så chip.css
+ * aldri trenger å nevne --ii-checkbox-*. */
 :where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label {
-    --ii-checkbox-size: 18px;
-    padding-block: var(--ix-spacing-xs);
-    padding-right: var(--ix-spacing-md);
-    padding-left: calc(var(--ix-spacing-md) + var(--ii-checkbox-size) + var(--ix-spacing-xs));
-    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
-    border-radius: var(--ix-border-radius-pill);
-    background-color: var(--ix-color-fill-interactive-default);
-    font-weight: var(--ix-font-weight-button);
+    --ii-checkbox-size: var(--ii-chip-indicator-size);
 }
 
 /* Flytt firkant-indikatoren (boks + glyf) inn fra pill-kanten. Glyfen krympes til
-   12px så den står i proporsjon til den mindre chip-boksen. */
+   12px så den står i proporsjon til den mindre chip-boksen. Ett uttrykk dekker
+   begge størrelser — --ii-chip-padding-inline bytter selv fra md til sm. */
 :where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label::before {
-    left: var(--ix-spacing-md);
+    left: var(--ii-chip-padding-inline);
 }
 :where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label::after {
     width: 12px;
     height: 12px;
-    left: calc(var(--ix-spacing-md) + (var(--ii-checkbox-size) - 12px) / 2);
-}
-
-/* Hover — pill-fyll som .ix-chip:hover (kun ikke-disabled). */
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:not(:disabled) + label:hover {
-    background-color: var(--ix-color-fill-interactive-hover);
-    border-color: var(--ix-color-border-main-hover);
-}
-
-/* Selected — pill får aksent (lys fyll + aksent-kant). Boks + hake fylles allerede
-   av den generelle :checked-regelen i checkbox.css → tre samtidige signaler. */
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:checked + label,
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:indeterminate + label {
-    background-color: var(--ix-color-fill-main-subtle);
-    border-color: var(--ix-color-component-button-secondary-border-default);
-}
-
-/* Selected hover/active — aksenten beholdes, bare et hakk mørkere. Må ha
-   :checked/:indeterminate i selektoren fordi hover-regelen over ellers vinner på
-   spesifisitet og gir en valgt chip nøytralt fyll. */
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:checked:not(:disabled) + label:hover,
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:indeterminate:not(:disabled) + label:hover {
-    background-color: var(--ix-color-fill-main-subtle-hover);
-    border-color: var(--ix-color-component-button-secondary-border-default-hover);
-}
-
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:checked:not(:disabled) + label:active,
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:indeterminate:not(:disabled) + label:active {
-    background-color: var(--ix-color-fill-main-subtle-active);
-    border-color: var(--ix-color-component-button-secondary-border-default-active);
-}
-
-/* Focus — den generelle focus-regelen ligger på ::before; pillen beholder formen. */
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:focus-visible + label {
-    border-radius: var(--ix-border-radius-pill);
-}
-
-/* Liten størrelse */
-:where(ix-checkbox-group[data-variant='chip'][data-size='sm'], .ix-checkbox-group[data-variant='chip'][data-size='sm']) .ix-checkbox label {
-    --ii-checkbox-size: 16px;
-    font-size: var(--ix-font-size-sm);
-    padding-block: var(--ix-spacing-2xs);
-    padding-right: var(--ix-spacing-sm);
-    padding-left: calc(var(--ix-spacing-sm) + var(--ii-checkbox-size) + var(--ix-spacing-2xs));
-}
-:where(ix-checkbox-group[data-variant='chip'][data-size='sm'], .ix-checkbox-group[data-variant='chip'][data-size='sm']) .ix-checkbox label::before {
-    left: var(--ix-spacing-sm);
-}
-:where(ix-checkbox-group[data-variant='chip'][data-size='sm'], .ix-checkbox-group[data-variant='chip'][data-size='sm']) .ix-checkbox label::after {
-    left: calc(var(--ix-spacing-sm) + (var(--ii-checkbox-size) - 12px) / 2);
+    left: calc(var(--ii-chip-padding-inline) + (var(--ii-checkbox-size) - 12px) / 2);
 }
 
 /* ── ReadOnly ────────────────────────────────────────────────────────────── */
