@@ -69,6 +69,56 @@
     left: calc(var(--ii-chip-padding-inline) + (var(--ii-checkbox-size) - 12px) / 2);
 }
 
+/* ── Chip-indikator ved error og read-only ───────────────────────────────────
+ * Pillen styles av chip.css; her følger bare firkant-indikatoren etter.
+ *
+ * Merk: den generelle checkbox-gruppen har fortsatt ingen error-styling — i
+ * checkbox.css drives error per input via aria-invalid, og CheckboxGroup setter
+ * det ikke. Det hullet er en egen oppgave; reglene under er scopet til
+ * chip-varianten. */
+
+/* Error, uvalgt — samme røde boks som checkbox.css gir ved aria-invalid. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox label,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox label {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);
+    --ii-checkbox-box-border: var(--ix-color-border-danger-default);
+}
+
+/* Hover ved error: behold den røde boksen. Uten dette vinner hover-regelen i
+ * checkbox.css (0,3,2) over regelen over (0,3,1). Speiler radio-group.css. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox input[type='checkbox']:not(:disabled) + label:hover,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox input[type='checkbox']:not(:disabled) + label:hover {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);
+    --ii-checkbox-box-border: var(--ix-color-border-danger-default);
+}
+
+/* Error, valgt — pillen er mørkerød, så boksen flippes til hvit. Må ligge etter
+ * hover-regelen over (samme spesifisitet) for å holde stand under pekeren. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox input[type='checkbox']:checked + label,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox input[type='checkbox']:indeterminate + label,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox input[type='checkbox']:checked + label,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox input[type='checkbox']:indeterminate + label {
+    --ii-checkbox-box-bg: var(--ix-color-foreground-inverse-default);
+    --ii-checkbox-box-border: var(--ix-color-foreground-inverse-default);
+}
+
+/* … og glyfen males mørkerød, ellers blir hvit hake på hvit boks usynlig.
+ * Glyf-fargen er hardkodet i checkbox.css (ingen variabel), derav egen regel. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox input[type='checkbox']:checked + label::after,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox input[type='checkbox']:indeterminate + label::after,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox input[type='checkbox']:checked + label::after,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox input[type='checkbox']:indeterminate + label::after {
+    background-color: var(--ix-color-fill-danger-default);
+}
+
+/* Read-only, valgt — checkbox.css fyller boksen med aksent på :checked. Demp den
+ * til read-only-forgrunn så hele chipen leser som inaktiv. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='readonly'] .ix-checkbox input[type='checkbox']:checked + label,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='readonly'] .ix-checkbox input[type='checkbox']:indeterminate + label {
+    --ii-checkbox-box-bg: var(--ix-color-foreground-main-read-only);
+    --ii-checkbox-box-border: var(--ix-color-foreground-main-read-only);
+}
+
 /* ── ReadOnly ────────────────────────────────────────────────────────────── */
 
 :where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox label,

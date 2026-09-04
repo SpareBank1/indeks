@@ -115,6 +115,35 @@ Chip finnes i to størrelser: `md` (standard) og `sm`.
 
 Vurder om brukeren i stedet bør se en forklaring på hvorfor valget ikke er tilgjengelig.
 
+### Feilmelding og skrivebeskyttet
+
+`error` gir chipen rød kant. `readOnly` gir en nedtonet grå flate uten klikkrespons — chipen beholder tab-fokus, så innholdet kan fortsatt leses opp. Er begge satt, vinner `error`.
+
+En rød kant alene forteller ikke brukeren hva som er galt. Vis alltid en feilmelding i tekst ved siden av chipene.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack horizontal gap="sm">
+  <button class="ix-chip" type="button" data-state="error">Feil</button>
+  <button class="ix-chip" type="button" data-state="readonly" aria-disabled="true">Skrivebeskyttet</button>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="sm">
+  <Chip error>Feil</Chip>
+  <Chip readOnly>Skrivebeskyttet</Chip>
+</HStack>
+```
+
+</TabItem>
+</Tabs>
+
 ### Som lenke
 
 Bruk `as="a"` når chipen navigerer til en URL. Den beholder chip-styling, men rendres som `<a>`.
@@ -172,6 +201,8 @@ Bruk `as="a"` når chipen navigerer til en URL. Den beholder chip-styling, men r
 | `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
 | `as` | `ElementType` | `'button'` | Render som annet element, f.eks. `'a'` for lenke-chips |
 | `disabled` | `boolean` | | Deaktiverer chipen (nativ HTML-attributt) |
+| `error` | `boolean` | | Viser chipen i feiltilstand med rød kant. Slår `readOnly` |
+| `readOnly` | `boolean` | | Nedtonet grå flate, ingen klikkrespons. Setter `aria-disabled` |
 
 I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `type`, `name`, `value`, `tabIndex` osv.) og settes direkte på elementet.
 
@@ -188,6 +219,8 @@ Trenger du button chip-stylingen på HTML du setter sammen selv, kan du bruke `.
 | Hover / active | `:hover` / `:active` (automatisk) |
 | Fokus | `:focus-visible` (automatisk) |
 | Deaktivert | `disabled` eller `aria-disabled="true"` |
+| Feilmelding | `data-state="error"` eller `aria-invalid="true"` |
+| Skrivebeskyttet | `data-state="readonly"` |
 
 ### Eksempel: ren HTML
 
