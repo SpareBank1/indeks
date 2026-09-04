@@ -25,6 +25,7 @@ Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"
 ```jsx live
 <ix-checkbox-group data-variant="chip" name="interesser">
   <span data-field="legend">Velg interesser</span>
+  <p data-field="description">Velg så mange du vil</p>
   <div data-field="items">
     <div class="ix-checkbox">
       <input type="checkbox" id="int-sport" value="sport" checked />
@@ -47,7 +48,13 @@ Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"
 <TabItem value="react" label="React">
 
 ```tsx live
-<CheckboxGroup variant="chip" legend="Velg interesser" name="interesser" defaultValue={['sport']}>
+<CheckboxGroup
+  variant="chip"
+  legend="Velg interesser"
+  description="Velg så mange du vil"
+  name="interesser"
+  defaultValue={['sport']}
+>
   <CheckboxButton value="sport" label="Sport" />
   <CheckboxButton value="musikk" label="Musikk" />
   <CheckboxButton value="reise" label="Reise" />
@@ -101,9 +108,9 @@ Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"
 
 ### Feilmelding og skrivebeskyttet
 
-`errorMessage` gir de uvalgte chipene rød kant, og en valgt chip mørkerødt fyll med lys tekst og hvit hake-boks. Selve feilmeldingen vises under alternativene. Kanten alene forteller ikke brukeren hva som er galt, så teksten er den som bærer informasjonen.
+`errorMessage` gir de uvalgte chipene rød kant på gjennomsiktig flate, og en valgt chip mørkerødt fyll med lys tekst og hvit hake-boks. Selve feilmeldingen vises under alternativene. Kanten alene forteller ikke brukeren hva som er galt, så teksten er den som bærer informasjonen.
 
-`readOnly` gir alle chipene samme nedtonede grå flate, valgt eller ikke. Valgene kan ikke endres, men de valgte alternativene er fortsatt eksponert programmatisk, så en skjermleser leser opp hva som er valgt.
+`readOnly` gir alle chipene samme nedtonede grå flate, valgt eller ikke. Boksen på de uvalgte står uten fyll, så den grå flaten går helt inn til kanten av boksen. Valgene kan ikke endres, men de valgte alternativene er fortsatt eksponert programmatisk, så en skjermleser leser opp hva som er valgt.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">

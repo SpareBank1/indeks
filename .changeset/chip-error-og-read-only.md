@@ -7,9 +7,9 @@ Chip: feiltilstand og skrivebeskyttet for alle fire chip-varianter
 
 Etter design-spec. Skrevet én gang i `chip.css` og gjelder derfor button chip, removable chip, radio chip og checkbox chip likt.
 
-- **Feil, uvalgt**: rød kant (`border-danger-default`). Den visuelle 2px-kanten lages med 1px `border-color` + `inset box-shadow`, samme oppskrift som TextField, TextArea, Select og Checkbox, slik at kanten ikke reflower chip-raden når validering slår inn.
+- **Feil, uvalgt**: rød kant (`border-danger-default`) på gjennomsiktig flate, så chipen har ikke eget fyll i feiltilstand. Den visuelle 2px-kanten lages med 1px `border-color` + `inset box-shadow`, samme oppskrift som TextField, TextArea, Select og Checkbox, slik at kanten ikke reflower chip-raden når validering slår inn. Hover og active svarer fortsatt med `fill-interactive-hover`/`-active`. Removable chip er unntaket: den er alltid i valgt tilstand og beholder det mørkerøde fyllet.
 - **Feil, valgt**: `fill-danger-default` med `foreground-inverse-default` på tekst og indikator. Kanten kollapses til fyllfargen. Hover og active bruker `-hover`/`-active`-variantene.
-- **Skrivebeskyttet**: `fill-interactive-read-only`, `border-main-default` og `foreground-main-read-only` — samme grå flate for valgt og uvalgt. Nedtonet fyll, ikke `opacity`.
+- **Skrivebeskyttet**: `fill-interactive-read-only`, `border-main-default` og `foreground-main-read-only` — samme grå flate for valgt og uvalgt. Nedtonet fyll, ikke `opacity`. På en uvalgt chip står radioringen og checkbox-boksen uten eget fyll, så den grå flaten går helt inn til kanten av indikatoren. Ringen får da lavere kontrast enn før mot flaten den ligger på; det er ført opp som issue i tilgjengelighetstabellen, med henvisning til unntaket for inaktive komponenter i SC 1.4.11.
 
 Tilstanden kan komme fra chipen selv, fra gruppen (`ix-radio-group`/`ix-checkbox-group` med `data-variant="chip"`) eller fra en multiselect-combobox i feil/skrivebeskyttet tilstand — chipene arver feltets `data-state` uten at du setter noe på dem.
 

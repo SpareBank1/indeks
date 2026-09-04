@@ -31,7 +31,7 @@
   "issues": [
     {
       "summary": "Kanten på en uvalgt chip i feiltilstand har for lav kontrast",
-      "details": "Feilkanten bruker --ix-color-border-danger-default (#f9807d), som gir ca. 2,5:1 mot hvit bakgrunn — under kravet på 3:1 for ikke-tekstlige indikatorer. Tokenet er hus-standard for feilkant i TextField, TextArea, Select og Checkbox, så avviket er felles for alle fem komponentene og gjennomgås separat. Det som oppfyller 3:1, er fokusindikatoren, indikator-kanten og fyllet på en valgt chip i feiltilstand. Feilen formidles heller aldri av kanten alene: en valgt chip får mørkerødt fyll med invertert forgrunn, og feilmeldingen vises som tekst med ikon.",
+      "details": "Feilkanten bruker --ix-color-border-danger-default (#f9807d), som gir ca. 2,5:1 mot en lys bakgrunn — under kravet på 3:1 for ikke-tekstlige indikatorer. En uvalgt chip i feiltilstand har ikke eget fyll, så kanten måles mot flaten chipen ligger på. Tokenet er hus-standard for feilkant i TextField, TextArea, Select og Checkbox, så avviket er felles for alle fem komponentene og gjennomgås separat. Det som oppfyller 3:1, er fokusindikatoren, indikator-kanten og fyllet på en valgt chip i feiltilstand. Feilen formidles heller aldri av kanten alene: en valgt chip får mørkerødt fyll med invertert forgrunn, og feilmeldingen vises som tekst med ikon.",
       "wcag": ["1.4.11"]
     }
   ],
