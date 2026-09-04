@@ -136,7 +136,7 @@ Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn
 
 ### Feilmelding og skrivebeskyttet
 
-`errorMessage` gir de uvalgte chipene rød kant, og en valgt chip mørkerødt fyll med lys tekst og indikator. Selve feilmeldingen vises under alternativene — kanten alene forteller ikke brukeren hva som er galt, så teksten er den som bærer informasjonen.
+`errorMessage` gir de uvalgte chipene rød kant, og en valgt chip mørkerødt fyll med lys tekst og indikator. Selve feilmeldingen vises under alternativene. Kanten alene forteller ikke brukeren hva som er galt, så teksten er den som bærer informasjonen.
 
 `readOnly` gir alle chipene samme nedtonede grå flate, valgt eller ikke. Valget kan ikke endres, men det valgte alternativet er fortsatt eksponert programmatisk, så en skjermleser leser opp hva som er valgt.
 
@@ -157,7 +157,7 @@ Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn
     </div>
   </div>
   <span data-field="error">
-    <ix-icon name="dangerous"></ix-icon>
+    <ix-icon data-badge data-status="danger" name="close" aria-hidden="true"></ix-icon>
     Perioden er ikke gyldig
   </span>
 </ix-radio-group>
@@ -230,7 +230,7 @@ Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn
 ### Hva komponenten gjør automatisk
 
 - **Radiogruppe-semantikk** — radio chip bygger på `<ix-radio-group>`, som setter `role="radiogroup"`, kobler `legend` som tilgjengelig navn, synkroniserer `name` på alle valg og lar piltastene flytte valget. Gruppen er ett tab-stopp.
-- **Valgt tilstand** kommuniseres med fylt sirkel-indikator, aksent-kant og fyll — ikke farge alene — og eksponeres programmatisk via native `aria-checked`.
+- **Valgt tilstand** kommuniseres med fylt sirkel-indikator, aksent-kant og fyll, ikke farge alene. Tilstanden eksponeres programmatisk via native `aria-checked`.
 - **Fokusindikator** via `:focus-visible` som følger pill-formen.
 
 <KeyboardAndScreenReader data={a11yData} />
