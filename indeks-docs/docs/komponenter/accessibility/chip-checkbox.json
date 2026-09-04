@@ -19,7 +19,7 @@
     },
     {
       "summary": "Ikke stol på farge alene for valgt tilstand",
-      "details": "Valgt tilstand kommuniseres med tre samtidige signaler (fylt firkant-indikator med hake, aksent-kant og lys fyll på pillen) — ikke kun farge. Ikke overstyr dette slik at kun fargen skiller valgt fra ikke-valgt.",
+      "details": "Valgt tilstand kommuniseres med tre samtidige signaler (fylt firkant-indikator med hake, aksent-kant og lys fyll på chipen) — ikke kun farge. Ikke overstyr dette slik at kun fargen skiller valgt fra ikke-valgt.",
       "wcag": ["1.4.1"]
     },
     {
@@ -44,12 +44,12 @@
     { "id": "2.1.1", "notes": "Native <input type=checkbox> er fullt opererbart med tastatur: Tab flytter fokus til hver chip, Space toggler valgt tilstand." },
     { "id": "2.1.2", "notes": "Fokus kan navigeres ut av gruppen med Tab og Shift+Tab. Ingen tastaturfelle." },
     { "id": "2.4.3", "notes": "Hver chip er et eget tab-stopp i naturlig DOM-rekkefølge (ingen piltast-mutex — i motsetning til radio chip)." },
-    { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible som følger pill-formen." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible som følger chipens avrundede form." },
     { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
     { "id": "3.2.2", "notes": "Å toggle en chip endrer kun gruppens verdi, ikke kontekst — ingen uventet navigasjon eller innsending." },
     { "id": "1.4.3", "notes": "Tekstfarge mot fill-tokens i alle tilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG. I feiltilstand står invertert forgrunn mot fill-danger-default (ca. 5,5:1), og skrivebeskyttet foreground-main-read-only mot fill-interactive-read-only (ca. 4,6:1) — begge over 4,5:1, men read-only har liten margin." },
     { "id": "3.3.2", "notes": "Gruppens legend fungerer som instruksjon/etikett for valgene." },
-    { "id": "2.5.8", "notes": "Hele pillen er klikkflate for valget. md-størrelsen gir mål godt over 24×24px. sm-størrelsen (padding-block spacing-2xs + font-size-sm) er nær minimumet; chips wrapper i en gruppe med gap mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." },
+    { "id": "2.5.8", "notes": "Hele chipen er klikkflate for valget. md-størrelsen gir mål godt over 24×24px. sm-størrelsen (padding-block spacing-2xs + font-size-sm) er nær minimumet; chips wrapper i en gruppe med gap mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." },
     { "id": "4.1.2", "notes": "<ix-checkbox-group> setter role=group på gruppen (navn fra legend via aria-labelledby), og native <input type=checkbox> gir rolle og valgt/ikke-valgt-tilstand (aria-checked). Native disabled-attributt eksponeres til hjelpemidler." },
     { "id": "3.3.1", "notes": "Gruppen setter aria-invalid=\"true\" på seg selv og på alle inputs når errorMessage er satt, og feilmeldingen rendres i [data-field=\"error\"] med ikon og aria-live=\"polite\", koblet til gruppen via aria-describedby. Chipene får rød kant, og en valgt chip mørkerødt fyll med hvit hake-boks. Selve feilteksten er konsumentens ansvar." }
   ],

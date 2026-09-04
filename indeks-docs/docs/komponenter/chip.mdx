@@ -6,7 +6,7 @@ title: Chip
 
 Chip er små, interaktive komponenter som lar brukeren gjøre raske valg, filtrere innhold eller trigge handlinger. Chips brukes ofte i grupper og gir en kompakt og oversiktlig måte å presentere valg på.
 
-Alle chips deler samme visuelle grunnmur: pill-form, to størrelser (`md`/`sm`), fokusindikator og tilstandsfarger. Semantikk og oppførsel velger du ved å velge type.
+Alle chips deler samme visuelle grunnmur: to størrelser (`md`/`sm`), fokusindikator og tilstandsfarger. Semantikk, oppførsel og form velger du ved å velge type. Button chip, removable chip og radio chip er pilleformet, mens checkbox chip er avrundet.
 
 ## Egnet til
 
@@ -66,7 +66,9 @@ bare ikon sier ingenting til den som ikke kjenner symbolet.
 
 ## Tilpasning med CSS
 
-Alle chip-typer bygger på den delte `.ix-chip`-klassen. Den gir pill-form, størrelser, tilstandsfarger og fokusindikator. Trenger du stylingen på HTML du setter sammen selv, uten React-komponenten, kan du bruke klassen direkte på elementene dine.
+Button chip og removable chip bygger på `.ix-chip`-klassen. Den gir pill-form, størrelser, tilstandsfarger og fokusindikator. Trenger du stylingen på HTML du setter sammen selv, uten React-komponenten, kan du bruke klassen direkte på elementene dine.
+
+Radio chip og checkbox chip får samme styling fra `data-variant="chip"` på gruppe-elementet, ikke fra klassen. Se [Radio chip](./chip/radio) og [Checkbox chip](./chip/checkbox) for markup.
 
 ### Felles klasser og attributter
 
