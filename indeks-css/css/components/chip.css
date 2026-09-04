@@ -41,6 +41,8 @@
     --ii-chip-fill: var(--ix-color-fill-interactive-default);
     --ii-chip-border-color: var(--ix-color-border-main-default);
     --ii-chip-foreground: var(--ix-color-foreground-main-default);
+    --ii-chip-radius: var(--ix-border-radius-pill);
+    --ii-chip-line-height: 1.125;
     --ii-chip-shadow: none;
     --ii-chip-opacity: 1;
     --ii-chip-padding-block: var(--ix-spacing-xs);
@@ -50,11 +52,27 @@
 
     font-size: var(--ix-font-size-md);
     font-weight: var(--ix-font-weight-button);
+
+    /* Chipens høyde er padding + kant + linjeboks, og linjeboksen er
+       font-size × line-height. 1,125 er samme forholdstall som font-skalaen
+       trapper med, og gir 36px på md og 26px på sm — tallene design-spec ber om.
+       Den må stå her og ikke arves: uten den henter en chip line-height fra
+       konsumentens side, og checkbox-labelen arver 1,5 fra checkbox.css, som ga
+       checkbox chip 42px mens de tre andre variantene lå på 37. */
+    line-height: var(--ii-chip-line-height);
     color: var(--ii-chip-foreground);
     background-color: var(--ii-chip-fill);
     border: var(--ix-border-width-default) solid var(--ii-chip-border-color);
-    border-radius: var(--ix-border-radius-pill);
+    border-radius: var(--ii-chip-radius);
     box-shadow: var(--ii-chip-shadow);
+}
+
+/* Checkbox chip er den ene varianten som ikke er en pille. Etter design-spec:
+   firkantet indikator hører sammen med en avrundet, ikke helt rund, pille.
+   Radien går via variabelen fordi focus-regelen nederst setter border-radius om
+   igjen for gruppe-armene, og de to må ikke kunne komme i utakt. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'] :where(.ix-checkbox label) {
+    --ii-chip-radius: var(--ix-border-radius-sm);
 }
 
 /* Kun arm A: .ix-chip er selve boksen og må lage layouten selv. Gruppe-labelene
@@ -211,11 +229,12 @@
 
 /* Gruppe-armene får selve outlinen fra focus-regelen i sin egen fil, men den
    setter border-radius-xs på labelen. Uten dette blir en fokusert radio-chip
-   firkantet. (0,1,0) slår radio-group.css' (0,0,2). */
+   firkantet. (0,1,0) slår radio-group.css' (0,0,2). Variabelen holder radien lik
+   den passive: pill for radio chip, sm for checkbox chip. */
 :where(ix-radio-group, .ix-radio-group)[data-variant='chip'] :where(input[type='radio']:focus-visible + label),
 :where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip']
     :where(.ix-checkbox input[type='checkbox']:focus-visible + label) {
-    border-radius: var(--ix-border-radius-pill);
+    border-radius: var(--ii-chip-radius);
 }
 
 /* ── Disabled ────────────────────────────────────────────────────────────────
