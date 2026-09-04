@@ -52,7 +52,7 @@
     { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med outline-token." },
     { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
     { "id": "1.4.3", "notes": "Tekstfarge bruker --ix-color-foreground-main-default mot fill-main-tokens i alle interaksjonstilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG. I feiltilstand står invertert forgrunn mot fill-danger-default (ca. 5,5:1), og skrivebeskyttet foreground-main-read-only mot fill-interactive-read-only (ca. 4,6:1) — begge over 4,5:1, men read-only har liten margin." },
-    { "id": "2.5.8", "notes": "md-størrelsen (padding-block spacing-xs + font-size-md) gir klikkflate godt over 24×24px. sm-størrelsen (padding-block spacing-2xs + font-size-sm) er nær minimumet; chips presenteres i grupper med gap (spacing) mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." },
+    { "id": "2.5.8", "notes": "Med standard tetthet er md-størrelsen 36px høy, godt over 24×24px, og sm 26px. Med kompakt tetthet faller sm til 22px, altså under minimumet; chips presenteres i grupper med gap (spacing) mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." },
     { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button og navn fra tekst-innhold. Native disabled-attributt eksponeres til hjelpemidler." }
   ],
   "notRelevant": [

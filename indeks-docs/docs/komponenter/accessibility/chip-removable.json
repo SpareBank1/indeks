@@ -49,7 +49,7 @@
     { "id": "1.4.3", "notes": "Tekstfarge mot fill-main-subtle-tokens i alle interaksjonstilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG. I feiltilstand står invertert forgrunn mot fill-danger-default (ca. 5,5:1), og skrivebeskyttet foreground-main-read-only mot fill-interactive-read-only (ca. 4,6:1) — begge over 4,5:1, men read-only har liten margin." },
     { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button og navn fra aria-label «[label] [removeLabel]». Native disabled-attributt eksponeres til hjelpemidler." },
     { "id": "2.5.3", "notes": "Den synlige label-teksten inngår i det tilgjengelige navnet («[label] [removeLabel]»)." },
-    { "id": "2.5.8", "notes": "Hele chipen er fjern-knappen. md-størrelsen gir klikkflate godt over 24×24px. sm-størrelsen (padding-block spacing-2xs + font-size-sm) er nær minimumet; chips presenteres i grupper med gap mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." }
+    { "id": "2.5.8", "notes": "Hele chipen er fjern-knappen. Med standard tetthet er md-størrelsen 36px høy, godt over 24×24px, og sm 26px. Med kompakt tetthet faller sm til 22px, altså under minimumet; chips presenteres i grupper med gap mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." }
   ],
   "notRelevant": [
     { "id": "1.1.1", "reason": "Krysset er et dekorativt CSS-ikon (::after) uten egen markup og ligger ikke i tilgjengelighetstreet." },
