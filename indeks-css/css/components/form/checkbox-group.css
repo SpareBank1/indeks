@@ -89,7 +89,22 @@
 :where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:checked + label,
 :where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:indeterminate + label {
     background-color: var(--ix-color-fill-main-subtle);
-    border-color: var(--ix-color-fill-main-default);
+    border-color: var(--ix-color-component-button-secondary-border-default);
+}
+
+/* Selected hover/active — aksenten beholdes, bare et hakk mørkere. Må ha
+   :checked/:indeterminate i selektoren fordi hover-regelen over ellers vinner på
+   spesifisitet og gir en valgt chip nøytralt fyll. */
+:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:checked:not(:disabled) + label:hover,
+:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:indeterminate:not(:disabled) + label:hover {
+    background-color: var(--ix-color-fill-main-subtle-hover);
+    border-color: var(--ix-color-component-button-secondary-border-default-hover);
+}
+
+:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:checked:not(:disabled) + label:active,
+:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:indeterminate:not(:disabled) + label:active {
+    background-color: var(--ix-color-fill-main-subtle-active);
+    border-color: var(--ix-color-component-button-secondary-border-default-active);
 }
 
 /* Focus — den generelle focus-regelen ligger på ::before; pillen beholder formen. */

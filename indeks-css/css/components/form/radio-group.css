@@ -225,7 +225,24 @@
    allerede av den generelle :checked-regelen over → tre samtidige signaler. */
 :where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) input[type='radio']:checked + label {
     background-color: var(--ix-color-fill-main-subtle);
-    border-color: var(--ix-color-fill-main-default);
+    border-color: var(--ix-color-component-button-secondary-border-default);
+}
+
+/* Selected hover/active — aksenten beholdes, bare et hakk mørkere. Må ha :checked
+   i selektoren fordi hover/active-reglene over ellers vinner på spesifisitet og gir
+   en valgt chip nøytralt fyll. */
+:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip'])
+    input[type='radio']:checked:not(:disabled):not([aria-disabled='true'])
+    + label:hover {
+    background-color: var(--ix-color-fill-main-subtle-hover);
+    border-color: var(--ix-color-component-button-secondary-border-default-hover);
+}
+
+:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip'])
+    input[type='radio']:checked:not(:disabled):not([aria-disabled='true'])
+    + label:active {
+    background-color: var(--ix-color-fill-main-subtle-active);
+    border-color: var(--ix-color-component-button-secondary-border-default-active);
 }
 
 /* Focus — den generelle focus-regelen setter border-radius-xs; behold pill-form. */
