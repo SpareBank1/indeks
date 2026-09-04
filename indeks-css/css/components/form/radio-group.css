@@ -182,87 +182,28 @@
 }
 
 /* ── Chip-variant ─────────────────────────────────────────────────────────────
- * Radio chip: samme radiogruppe-semantikk og sirkel-indikator, men hver <label>
- * styles som en pill (jf. .ix-chip). Alt gated på [data-variant='chip'] slik at
- * vanlig radio er urørt. Indikatoren beholdes (tom sirkel → fylt prikk på valgt),
- * men krympes via den lokale --ii-radio-size og flyttes inn fra pill-kanten.
+ * Radio chip: samme radiogruppe-semantikk og sirkel-indikator, men <label>
+ * styles som en pill.
+ *
+ * Selve pillen — form, størrelse, padding, fyll, kant, hover/selected/focus —
+ * eies i sin helhet av components/chip.css. Her ligger BARE indikator-
+ * geometrien, som er radio-spesifikk. Ikke legg pill-styling tilbake her:
+ * chip.css cascader først, så en duplisert property her vinner og skjuler den.
  */
 
-/* Chips skal alltid ligge på rad og wrappe — uavhengig av orientation. */
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) [data-field='items'] {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: var(--ix-spacing-sm);
-}
-
-/* Label som pill — chip-grunnmurens tokens, plass til indikator til venstre. */
+/* Radioens egen størrelsesvariabel mappes på chip-kontrakten. Avhengigheten går
+ * denne veien slik at chip.css aldri trenger å nevne --ii-radio-*. */
 :where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label {
-    --ii-radio-size: 18px;
-    padding-block: var(--ix-spacing-xs);
-    padding-right: var(--ix-spacing-md);
-    padding-left: calc(var(--ix-spacing-md) + var(--ii-radio-size) + var(--ix-spacing-xs));
-    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
-    border-radius: var(--ix-border-radius-pill);
-    background-color: var(--ix-color-fill-interactive-default);
-    font-weight: var(--ix-font-weight-button);
+    --ii-radio-size: var(--ii-chip-indicator-size);
 }
 
-/* Flytt sirkelen (ytre ring + indre prikk) inn fra pill-kanten. */
+/* Flytt sirkelen (ytre ring + indre prikk) inn fra pill-kanten. Ett uttrykk
+ * dekker begge størrelser — --ii-chip-padding-inline bytter selv fra md til sm. */
 :where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::after {
-    left: var(--ix-spacing-md);
+    left: var(--ii-chip-padding-inline);
 }
 :where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::before {
-    left: calc(var(--ix-spacing-md) + var(--ii-radio-size) / 2);
-}
-
-/* Hover — pill-fyll som .ix-chip:hover (kun ikke-disabled). */
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) input[type='radio']:not(:disabled):not([aria-disabled='true']) + label:hover {
-    background-color: var(--ix-color-fill-interactive-hover);
-    border-color: var(--ix-color-border-main-hover);
-}
-
-/* Selected — pill får aksent (lys-blå fyll + aksent-kant). Ring+prikk fylles
-   allerede av den generelle :checked-regelen over → tre samtidige signaler. */
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) input[type='radio']:checked + label {
-    background-color: var(--ix-color-fill-main-subtle);
-    border-color: var(--ix-color-component-button-secondary-border-default);
-}
-
-/* Selected hover/active — aksenten beholdes, bare et hakk mørkere. Må ha :checked
-   i selektoren fordi hover/active-reglene over ellers vinner på spesifisitet og gir
-   en valgt chip nøytralt fyll. */
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip'])
-    input[type='radio']:checked:not(:disabled):not([aria-disabled='true'])
-    + label:hover {
-    background-color: var(--ix-color-fill-main-subtle-hover);
-    border-color: var(--ix-color-component-button-secondary-border-default-hover);
-}
-
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip'])
-    input[type='radio']:checked:not(:disabled):not([aria-disabled='true'])
-    + label:active {
-    background-color: var(--ix-color-fill-main-subtle-active);
-    border-color: var(--ix-color-component-button-secondary-border-default-active);
-}
-
-/* Focus — den generelle focus-regelen setter border-radius-xs; behold pill-form. */
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) input[type='radio']:focus-visible + label {
-    border-radius: var(--ix-border-radius-pill);
-}
-
-/* Liten størrelse */
-:where(ix-radio-group[data-variant='chip'][data-size='sm'], .ix-radio-group[data-variant='chip'][data-size='sm']) label {
-    --ii-radio-size: 16px;
-    font-size: var(--ix-font-size-sm);
-    padding-block: var(--ix-spacing-2xs);
-    padding-right: var(--ix-spacing-sm);
-    padding-left: calc(var(--ix-spacing-sm) + var(--ii-radio-size) + var(--ix-spacing-2xs));
-}
-:where(ix-radio-group[data-variant='chip'][data-size='sm'], .ix-radio-group[data-variant='chip'][data-size='sm']) label::after {
-    left: var(--ix-spacing-sm);
-}
-:where(ix-radio-group[data-variant='chip'][data-size='sm'], .ix-radio-group[data-variant='chip'][data-size='sm']) label::before {
-    left: calc(var(--ix-spacing-sm) + var(--ii-radio-size) / 2);
+    left: calc(var(--ii-chip-padding-inline) + var(--ii-radio-size) / 2);
 }
 
 /* ── Error ───────────────────────────────────────────────────────────────── */
