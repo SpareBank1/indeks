@@ -9,7 +9,7 @@ import a11yData from '../accessibility/chip-removable.json';
 
 # Removable chip
 
-En removable chip representerer et aktivt valg eller en verdi som brukeren kan fjerne — for eksempel et valgt filter. Den finnes kun i valgt tilstand (den eksisterer ikke før den er valgt) og vises med fylt aksentfarge og et kryss til høyre.
+En removable chip representerer et aktivt valg eller en verdi som brukeren kan fjerne — for eksempel et valgt filter. Den finnes kun i valgt tilstand (den eksisterer ikke før den er valgt) og vises med lyst aksent-fyll, aksent-kant og et kryss til høyre — samme valgt-uttrykk som radio chip og checkbox chip.
 
 **Hele chipen er fjern-knappen.** Et klikk hvor som helst på chipen — eller Enter/Mellomrom når den har fokus — fjerner den. Krysset er et dekorativt CSS-ikon uten eget fokus, så det blir kun ett tab-stopp per chip. Dette følger mønsteret i Aksel og Designsystemet.
 
@@ -90,6 +90,37 @@ Det tilgjengelige navnet settes sammen av label og et fjern-suffiks, f.eks. «Sp
 </TabItem>
 </Tabs>
 
+### Feilmelding og skrivebeskyttet
+
+Removable chip finnes bare i valgt tilstand, så `error` gir den mørkerødt fyll med lys tekst, ikke bare rød kant. Krysset følger tekstfargen automatisk.
+
+`readOnly` gir en nedtonet grå flate, og `onRemove` kalles ikke, heller ikke med Enter eller Mellomrom. Chipen beholder tab-fokus, så innholdet kan fortsatt leses opp. Er begge satt, vinner `error`.
+
+Vis alltid en feilmelding i tekst ved siden av chipene. Fargen på chipen forteller ikke hva som er galt.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack horizontal gap="sm">
+  <button class="ix-chip" data-removable data-state="error" aria-label="Sparing fjern">Sparing</button>
+  <button class="ix-chip" data-removable data-state="readonly" aria-disabled="true" aria-label="Lån fjern">Lån</button>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<HStack gap="sm">
+  <RemovableChip error removeLabel="fjern" onRemove={() => {}}>Sparing</RemovableChip>
+  <RemovableChip readOnly removeLabel="fjern" onRemove={() => {}}>Lån</RemovableChip>
+</HStack>
+```
+
+</TabItem>
+</Tabs>
+
 ## Universell utforming
 
 ### Hva du selv må sørge for
@@ -123,6 +154,8 @@ Det tilgjengelige navnet settes sammen av label og et fjern-suffiks, f.eks. «Sp
 | `onRemove` | `() => void` | | Kalles når chipen fjernes (klikk / Enter / Mellomrom) |
 | `size` | `'sm' \| 'md'` | `'md'` | Størrelse |
 | `disabled` | `boolean` | | Deaktiverer chipen (nativ HTML-attributt) |
+| `error` | `boolean` | | Viser chipen i feiltilstand med mørkerødt fyll. Slår `readOnly` |
+| `readOnly` | `boolean` | | Nedtonet grå flate, `onRemove` kalles ikke. Setter `aria-disabled` |
 
 I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `type`, `name`, `value`, `tabIndex` osv.) og settes direkte på elementet.
 
@@ -141,6 +174,8 @@ Trenger du removable chip-stylingen på HTML du setter sammen selv, kan du bruke
 | Hover / active | `:hover` / `:active` (automatisk) |
 | Fokus | `:focus-visible` (automatisk) |
 | Deaktivert | `disabled` eller `aria-disabled="true"` |
+| Feilmelding | `data-state="error"` eller `aria-invalid="true"` |
+| Skrivebeskyttet | `data-state="readonly"` |
 
 ### Eksempel: ren HTML
 

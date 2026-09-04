@@ -11,7 +11,9 @@ import a11yData from '../accessibility/chip-checkbox.json';
 
 En checkbox chip er en gruppe chips der brukeren kan velge **ett eller flere** alternativer samtidig — som kompakte filter- eller preferansevalg. Hvert valg er uavhengig av de andre.
 
-Hver chip har en indikator til venstre for teksten: en tom firkant når den ikke er valgt, og en fylt firkant med hake når den er valgt. I tillegg fylles den valgte pillen med en lys aksentfarge og får aksent-kant, slik at valgt tilstand kommuniseres med mer enn farge.
+Hver chip har en indikator til venstre for teksten: en tom firkant når den ikke er valgt, og en fylt firkant med hake når den er valgt. I tillegg fylles den valgte chipen med en lys aksentfarge og får aksent-kant, slik at valgt tilstand kommuniseres med mer enn farge.
+
+Checkbox chip er avrundet, ikke pilleformet. Den firkantede indikatoren hører sammen med en avrundet chip, og formen skiller den fra radio chip på et blikk.
 
 Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"`, og hver chip er et eget tab-stopp som toggles med Space. Gi alltid gruppen en beskrivende `legend`.
 
@@ -23,6 +25,7 @@ Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"
 ```jsx live
 <ix-checkbox-group data-variant="chip" name="interesser">
   <span data-field="legend">Velg interesser</span>
+  <p data-field="description">Velg så mange du vil</p>
   <div data-field="items">
     <div class="ix-checkbox">
       <input type="checkbox" id="int-sport" value="sport" checked />
@@ -45,7 +48,13 @@ Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"
 <TabItem value="react" label="React">
 
 ```tsx live
-<CheckboxGroup variant="chip" legend="Velg interesser" name="interesser" defaultValue={['sport']}>
+<CheckboxGroup
+  variant="chip"
+  legend="Velg interesser"
+  description="Velg så mange du vil"
+  name="interesser"
+  defaultValue={['sport']}
+>
   <CheckboxButton value="sport" label="Sport" />
   <CheckboxButton value="musikk" label="Musikk" />
   <CheckboxButton value="reise" label="Reise" />
@@ -97,6 +106,96 @@ Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"
 </TabItem>
 </Tabs>
 
+### Feilmelding og skrivebeskyttet
+
+`errorMessage` gir de uvalgte chipene rød kant på gjennomsiktig flate, og en valgt chip mørkerødt fyll med lys tekst og hvit hake-boks. Selve feilmeldingen vises under alternativene. Kanten alene forteller ikke brukeren hva som er galt, så teksten er den som bærer informasjonen.
+
+`readOnly` gir alle chipene samme nedtonede grå flate, valgt eller ikke. Boksen på de uvalgte står uten fyll, så den grå flaten går helt inn til kanten av boksen. Valgene kan ikke endres, men de valgte alternativene er fortsatt eksponert programmatisk, så en skjermleser leser opp hva som er valgt.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-checkbox-group data-variant="chip" name="interesser-feil" data-state="error">
+  <span data-field="legend">Velg interesser</span>
+  <div data-field="items">
+    <div class="ix-checkbox">
+      <input type="checkbox" id="feil-sport" value="sport" checked />
+      <label for="feil-sport">Sport</label>
+    </div>
+    <div class="ix-checkbox">
+      <input type="checkbox" id="feil-musikk" value="musikk" />
+      <label for="feil-musikk">Musikk</label>
+    </div>
+  </div>
+  <span data-field="error">
+    <ix-icon data-badge data-status="danger" name="close" aria-hidden="true"></ix-icon>
+    Du må velge minst to interesser
+  </span>
+</ix-checkbox-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<CheckboxGroup
+  variant="chip"
+  legend="Velg interesser"
+  name="interesser-feil"
+  defaultValue={['sport']}
+  errorMessage="Du må velge minst to interesser"
+>
+  <CheckboxButton value="sport" label="Sport" />
+  <CheckboxButton value="musikk" label="Musikk" />
+</CheckboxGroup>
+```
+
+</TabItem>
+</Tabs>
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-checkbox-group data-variant="chip" name="interesser-lesing" readonly data-state="readonly">
+  <span data-field="legend">
+    <ix-icon name="lock"></ix-icon>
+    Valgte interesser
+  </span>
+  <div data-field="items">
+    <div class="ix-checkbox">
+      <input type="checkbox" id="lesing-sport" value="sport" checked />
+      <label for="lesing-sport">Sport</label>
+    </div>
+    <div class="ix-checkbox">
+      <input type="checkbox" id="lesing-musikk" value="musikk" />
+      <label for="lesing-musikk">Musikk</label>
+    </div>
+  </div>
+  <span data-field="error"></span>
+</ix-checkbox-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<CheckboxGroup
+  variant="chip"
+  legend="Valgte interesser"
+  name="interesser-lesing"
+  defaultValue={['sport']}
+  readOnly
+>
+  <CheckboxButton value="sport" label="Sport" />
+  <CheckboxButton value="musikk" label="Musikk" />
+</CheckboxGroup>
+```
+
+</TabItem>
+</Tabs>
+
 ## Universell utforming
 
 ### Hva du selv må sørge for
@@ -109,8 +208,8 @@ Checkbox chip gjenbruker checkbox-gruppe-semantikken: gruppen får `role="group"
 ### Hva komponenten gjør automatisk
 
 - **Gruppe-semantikk** — checkbox chip bygger på `<ix-checkbox-group>`, som setter `role="group"`, kobler `legend` som tilgjengelig navn, propagerer `name` til alle valg og kobler hver label til sin input. Hver chip er et eget tab-stopp.
-- **Valgt tilstand** kommuniseres med fylt firkant-indikator (hake), aksent-kant og fyll — ikke farge alene — og eksponeres programmatisk via native `aria-checked`.
-- **Fokusindikator** via `:focus-visible` som følger pill-formen.
+- **Valgt tilstand** kommuniseres med fylt firkant-indikator (hake), aksent-kant og fyll, ikke farge alene. Tilstanden eksponeres programmatisk via native `aria-checked`.
+- **Fokusindikator** via `:focus-visible` som følger chipens avrundede form.
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -136,6 +235,7 @@ Checkbox chip er `CheckboxGroup` med `variant="chip"`. Se [CheckboxGroup](../skj
 | `description` | `string` | | Hjelpetekst over alternativene |
 | `errorMessage` | `string` | | Feilmelding — setter `aria-invalid` på gruppen |
 | `disabled` | `boolean` | | Deaktiverer hele gruppen |
+| `readOnly` | `boolean` | | Skrivebeskyttet: grå chips, valgene kan ikke endres. Låsikon i legend |
 | `hideLegend` | `boolean` | | Skjuler legend visuelt, men beholder den for skjermlesere |
 
 ### `CheckboxButton`
@@ -154,7 +254,7 @@ Checkbox chip gjenbruker `ix-checkbox-group`-web componenten med chip-styling ak
 
 | Element/tilstand | Selektor / attributt |
 |-----------------|----------------------|
-| Checkbox chip (gruppe) | `ix-checkbox-group[data-variant="chip"]` — styler hver `<label>` som pill |
+| Checkbox chip (gruppe) | `ix-checkbox-group[data-variant="chip"]` — styler hver `<label>` som chip |
 | Liten størrelse | `ix-checkbox-group[data-variant="chip"][data-size="sm"]` |
 | Legend | `[data-field="legend"]` |
 | Alternativer | `[data-field="items"]` |
@@ -162,6 +262,8 @@ Checkbox chip gjenbruker `ix-checkbox-group`-web componenten med chip-styling ak
 | Valgt tilstand | `input:checked + label` (automatisk) |
 | Fokus | `input:focus-visible + label` (automatisk) |
 | Feilmelding | `[data-field="error"]` |
+| Feiltilstand | `data-state="error"` eller `aria-invalid="true"` på gruppen |
+| Skrivebeskyttet | `data-state="readonly"` på gruppen |
 
 ### Eksempel: ren HTML
 

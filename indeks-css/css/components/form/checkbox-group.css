@@ -43,73 +43,92 @@
 
 /* ── Chip-variant ─────────────────────────────────────────────────────────────
  * Checkbox chip: samme gruppe-semantikk (role="group") og firkant-indikator, men
- * hver <label> styles som en pill (jf. .ix-chip). Alt gated på [data-variant='chip']
- * slik at vanlig checkbox er urørt. Indikatoren beholdes (tom firkant → fylt med
- * hake på valgt), men krympes via den lokale --ii-checkbox-size og flyttes inn fra
- * pill-kanten. Speiler radio-group.css' chip-seksjon. */
+ * <label> styles som en pill.
+ *
+ * Selve pillen — form, størrelse, padding, fyll, kant, hover/selected/focus —
+ * eies i sin helhet av components/chip.css. Her ligger BARE indikator-
+ * geometrien, som er checkbox-spesifikk. Ikke legg pill-styling tilbake her:
+ * chip.css cascader først, så en duplisert property her vinner og skjuler den.
+ * Speiler radio-group.css' chip-seksjon. */
 
-/* Chips skal alltid ligge på rad og wrappe. */
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) [data-field='items'] {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: var(--ix-spacing-sm);
-}
-
-/* Label som pill — chip-grunnmurens tokens, plass til indikator til venstre. */
+/* Checkboxens egen størrelsesvariabel mappes på chip-kontrakten, så chip.css
+ * aldri trenger å nevne --ii-checkbox-*. */
 :where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label {
-    --ii-checkbox-size: 18px;
-    padding-block: var(--ix-spacing-xs);
-    padding-right: var(--ix-spacing-md);
-    padding-left: calc(var(--ix-spacing-md) + var(--ii-checkbox-size) + var(--ix-spacing-xs));
-    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
-    border-radius: var(--ix-border-radius-pill);
-    background-color: var(--ix-color-fill-interactive-default);
-    font-weight: var(--ix-font-weight-button);
+    --ii-checkbox-size: var(--ii-chip-indicator-size);
 }
 
 /* Flytt firkant-indikatoren (boks + glyf) inn fra pill-kanten. Glyfen krympes til
-   12px så den står i proporsjon til den mindre chip-boksen. */
+   12px så den står i proporsjon til den mindre chip-boksen. Ett uttrykk dekker
+   begge størrelser — --ii-chip-indicator-inset bytter selv fra md til sm. Ikke
+   bytt til --ii-chip-padding-inline: den er tallet for den nakne siden av pillen
+   og er likt i begge størrelser. */
 :where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label::before {
-    left: var(--ix-spacing-md);
+    left: var(--ii-chip-indicator-inset);
 }
 :where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label::after {
     width: 12px;
     height: 12px;
-    left: calc(var(--ix-spacing-md) + (var(--ii-checkbox-size) - 12px) / 2);
+    left: calc(var(--ii-chip-indicator-inset) + (var(--ii-checkbox-size) - 12px) / 2);
 }
 
-/* Hover — pill-fyll som .ix-chip:hover (kun ikke-disabled). */
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:not(:disabled) + label:hover {
-    background-color: var(--ix-color-fill-interactive-hover);
-    border-color: var(--ix-color-border-main-hover);
+/* ── Chip-indikator ved error og read-only ───────────────────────────────────
+ * Pillen styles av chip.css; her følger bare firkant-indikatoren etter.
+ *
+ * Merk: den generelle checkbox-gruppen har fortsatt ingen error-styling — i
+ * checkbox.css drives error per input via aria-invalid, og CheckboxGroup setter
+ * det ikke. Det hullet er en egen oppgave; reglene under er scopet til
+ * chip-varianten. */
+
+/* Error, uvalgt — samme røde boks som checkbox.css gir ved aria-invalid. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox label,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox label {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);
+    --ii-checkbox-box-border: var(--ix-color-border-danger-default);
 }
 
-/* Selected — pill får aksent (lys fyll + aksent-kant). Boks + hake fylles allerede
-   av den generelle :checked-regelen i checkbox.css → tre samtidige signaler. */
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:checked + label,
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:indeterminate + label {
-    background-color: var(--ix-color-fill-main-subtle);
-    border-color: var(--ix-color-fill-main-default);
+/* Hover ved error: behold den røde boksen. Uten dette vinner hover-regelen i
+ * checkbox.css (0,3,2) over regelen over (0,3,1). Speiler radio-group.css. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox input[type='checkbox']:not(:disabled) + label:hover,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox input[type='checkbox']:not(:disabled) + label:hover {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);
+    --ii-checkbox-box-border: var(--ix-color-border-danger-default);
 }
 
-/* Focus — den generelle focus-regelen ligger på ::before; pillen beholder formen. */
-:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:focus-visible + label {
-    border-radius: var(--ix-border-radius-pill);
+/* Error, valgt — pillen er mørkerød, så boksen flippes til hvit. Må ligge etter
+ * hover-regelen over (samme spesifisitet) for å holde stand under pekeren. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox input[type='checkbox']:checked + label,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox input[type='checkbox']:indeterminate + label,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox input[type='checkbox']:checked + label,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox input[type='checkbox']:indeterminate + label {
+    --ii-checkbox-box-bg: var(--ix-color-foreground-inverse-default);
+    --ii-checkbox-box-border: var(--ix-color-foreground-inverse-default);
 }
 
-/* Liten størrelse */
-:where(ix-checkbox-group[data-variant='chip'][data-size='sm'], .ix-checkbox-group[data-variant='chip'][data-size='sm']) .ix-checkbox label {
-    --ii-checkbox-size: 16px;
-    font-size: var(--ix-font-size-sm);
-    padding-block: var(--ix-spacing-2xs);
-    padding-right: var(--ix-spacing-sm);
-    padding-left: calc(var(--ix-spacing-sm) + var(--ii-checkbox-size) + var(--ix-spacing-2xs));
+/* … og glyfen males mørkerød, ellers blir hvit hake på hvit boks usynlig.
+ * Glyf-fargen er hardkodet i checkbox.css (ingen variabel), derav egen regel. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox input[type='checkbox']:checked + label::after,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox input[type='checkbox']:indeterminate + label::after,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox input[type='checkbox']:checked + label::after,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] .ix-checkbox input[type='checkbox']:indeterminate + label::after {
+    background-color: var(--ix-color-fill-danger-default);
 }
-:where(ix-checkbox-group[data-variant='chip'][data-size='sm'], .ix-checkbox-group[data-variant='chip'][data-size='sm']) .ix-checkbox label::before {
-    left: var(--ix-spacing-sm);
+
+/* Read-only, valgt — checkbox.css fyller boksen med aksent på :checked. Demp den
+ * til read-only-forgrunn så hele chipen leser som inaktiv. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='readonly'] .ix-checkbox input[type='checkbox']:checked + label,
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='readonly'] .ix-checkbox input[type='checkbox']:indeterminate + label {
+    --ii-checkbox-box-bg: var(--ix-color-foreground-main-read-only);
+    --ii-checkbox-box-border: var(--ix-color-foreground-main-read-only);
 }
-:where(ix-checkbox-group[data-variant='chip'][data-size='sm'], .ix-checkbox-group[data-variant='chip'][data-size='sm']) .ix-checkbox label::after {
-    left: calc(var(--ix-spacing-sm) + (var(--ii-checkbox-size) - 12px) / 2);
+
+/* Read-only, passiv — ingen hvit flate inne i boksen. Bare fyllet fjernes: kanten
+   er alt 1px border-main-default fra checkbox.css, og ingen read-only-regel rører
+   den, så å skrive den om igjen ville duplisert en verdi som alt stemmer.
+   Uvalgt-vakten holder regelen unna den valgte boksen over, som skal være grå. */
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='readonly']
+    .ix-checkbox
+    :where(input[type='checkbox']:not(:checked):not(:indeterminate) + label) {
+    --ii-checkbox-box-bg: transparent;
 }
 
 /* ── ReadOnly ────────────────────────────────────────────────────────────── */

@@ -23,6 +23,7 @@ Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`,
 ```jsx live
 <ix-radio-group data-variant="chip" name="periode-html">
   <span data-field="legend">Velg periode</span>
+  <p data-field="description">Vi viser tall for perioden du velger</p>
   <div data-field="items">
     <div class="ix-radio-button">
       <input type="radio" id="periode-1m" value="1m" />
@@ -45,7 +46,13 @@ Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`,
 <TabItem value="react" label="React">
 
 ```tsx live
-<RadioGroup variant="chip" legend="Velg periode" name="periode" defaultValue="3m">
+<RadioGroup
+  variant="chip"
+  legend="Velg periode"
+  description="Vi viser tall for perioden du velger"
+  name="periode"
+  defaultValue="3m"
+>
   <RadioButton value="1m" label="1 måned" />
   <RadioButton value="3m" label="3 måneder" />
   <RadioButton value="12m" label="12 måneder" />
@@ -97,7 +104,7 @@ Radio chip gjenbruker radiogruppe-semantikken: gruppen får `role="radiogroup"`,
 </TabItem>
 </Tabs>
 
-### Ja/nei – alternativ til checkbox
+### Ja/nei: alternativ til checkbox
 
 Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn én checkbox. En checkbox har en implisitt standardtilstand (av), mens to radio chips tvinger brukeren til å ta et eksplisitt valg — ingen av dem er forhåndsvalgt. Bruk dette når du vil unngå at «ingen handling» tolkes som et svar, for eksempel ved samtykke.
 
@@ -134,6 +141,90 @@ Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn
 </TabItem>
 </Tabs>
 
+### Feilmelding og skrivebeskyttet
+
+`errorMessage` gir de uvalgte chipene rød kant på gjennomsiktig flate, og en valgt chip mørkerødt fyll med lys tekst og indikator. Selve feilmeldingen vises under alternativene. Kanten alene forteller ikke brukeren hva som er galt, så teksten er den som bærer informasjonen.
+
+`readOnly` gir alle chipene samme nedtonede grå flate, valgt eller ikke. Ringen på de uvalgte står uten fyll, så den grå flaten går helt inn til kanten av sirkelen. Valget kan ikke endres, men det valgte alternativet er fortsatt eksponert programmatisk, så en skjermleser leser opp hva som er valgt.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-radio-group data-variant="chip" data-state="error" name="periode-feil-html">
+  <span data-field="legend">Velg periode</span>
+  <div data-field="items">
+    <div class="ix-radio-button">
+      <input type="radio" id="feil-1m" value="1m" />
+      <label for="feil-1m">1 måned</label>
+    </div>
+    <div class="ix-radio-button">
+      <input type="radio" id="feil-3m" value="3m" checked />
+      <label for="feil-3m">3 måneder</label>
+    </div>
+  </div>
+  <span data-field="error">
+    <ix-icon data-badge data-status="danger" name="close" aria-hidden="true"></ix-icon>
+    Perioden er ikke gyldig
+  </span>
+</ix-radio-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<RadioGroup
+  variant="chip"
+  legend="Velg periode"
+  name="periode-feil"
+  defaultValue="3m"
+  errorMessage="Perioden er ikke gyldig"
+>
+  <RadioButton value="1m" label="1 måned" />
+  <RadioButton value="3m" label="3 måneder" />
+</RadioGroup>
+```
+
+</TabItem>
+</Tabs>
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-radio-group data-variant="chip" name="periode-lesing-html" readonly data-state="readonly">
+  <span data-field="legend">
+    <ix-icon name="lock"></ix-icon>
+    Valgt periode
+  </span>
+  <div data-field="items">
+    <div class="ix-radio-button">
+      <input type="radio" id="lesing-1m" value="1m" />
+      <label for="lesing-1m">1 måned</label>
+    </div>
+    <div class="ix-radio-button">
+      <input type="radio" id="lesing-3m" value="3m" checked />
+      <label for="lesing-3m">3 måneder</label>
+    </div>
+  </div>
+  <span data-field="error"></span>
+</ix-radio-group>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<RadioGroup variant="chip" legend="Valgt periode" name="periode-lesing" defaultValue="3m" readOnly>
+  <RadioButton value="1m" label="1 måned" />
+  <RadioButton value="3m" label="3 måneder" />
+</RadioGroup>
+```
+
+</TabItem>
+</Tabs>
+
 ## Universell utforming
 
 ### Hva du selv må sørge for
@@ -146,7 +237,7 @@ Når et valg er et bevisst ja/nei-spørsmål, kan to radio chips være bedre enn
 ### Hva komponenten gjør automatisk
 
 - **Radiogruppe-semantikk** — radio chip bygger på `<ix-radio-group>`, som setter `role="radiogroup"`, kobler `legend` som tilgjengelig navn, synkroniserer `name` på alle valg og lar piltastene flytte valget. Gruppen er ett tab-stopp.
-- **Valgt tilstand** kommuniseres med fylt sirkel-indikator, aksent-kant og fyll — ikke farge alene — og eksponeres programmatisk via native `aria-checked`.
+- **Valgt tilstand** kommuniseres med fylt sirkel-indikator, aksent-kant og fyll, ikke farge alene. Tilstanden eksponeres programmatisk via native `aria-checked`.
 - **Fokusindikator** via `:focus-visible` som følger pill-formen.
 
 <KeyboardAndScreenReader data={a11yData} />
@@ -173,6 +264,7 @@ Radio chip er `RadioGroup` med `variant="chip"`. Se [RadioGroup](../skjema/radio
 | `description` | `string` | | Hjelpetekst over alternativene |
 | `errorMessage` | `string` | | Feilmelding — setter `aria-invalid` på gruppen |
 | `disabled` | `boolean` | | Deaktiverer hele gruppen |
+| `readOnly` | `boolean` | | Skrivebeskyttet: grå chips, valget kan ikke endres. Låsikon i legend |
 | `hideLegend` | `boolean` | | Skjuler legend visuelt, men beholder den for skjermlesere |
 
 ### `RadioButton`
@@ -199,6 +291,8 @@ Radio chip gjenbruker `ix-radio-group`-web componenten med chip-styling aktivert
 | Valgt tilstand | `input:checked + label` (automatisk) |
 | Fokus | `input:focus-visible + label` (automatisk) |
 | Feilmelding | `[data-field="error"]` |
+| Feiltilstand | `data-state="error"` eller `aria-invalid="true"` på gruppen |
+| Skrivebeskyttet | `data-state="readonly"` på gruppen |
 
 ### Eksempel: ren HTML
 
