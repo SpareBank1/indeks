@@ -28,14 +28,15 @@
 :where(.ix-read-more > summary) {
     display: inline-flex;
     align-items: center;
-    gap: var(--ix-spacing-sm);
-    padding: var(--ix-spacing-sm) var(--ix-spacing-md);
-    border-radius: var(--ix-border-radius-md);
-    /* Touch-mål min. 44 px (WCAG 2.5.8) — sikres av padding + innhold. */
-    min-height: 44px;
+    gap: var(--ix-spacing-2xs);
+    /* Litt mer luft til høyre enn til venstre: chevronen tåler å ligge tett i
+     * kanten, mens teksten trenger avstand til hover-flatens høyre kant. */
+    padding: var(--ix-spacing-xs) var(--ix-spacing-sm) var(--ix-spacing-xs) var(--ix-spacing-xs);
+    border-radius: var(--ix-border-radius-sm);
     font-size: var(--ix-font-size-md);
     font-weight: var(--ix-font-weight-medium);
-    color: var(--ix-color-foreground-accent-default);
+    /* Samme farge som en tertiary-knapp — labelen *er* en knapp visuelt. */
+    color: var(--ix-color-component-button-tertiary-foreground-default);
     cursor: pointer;
     /* Myk hover-overgang på klikkflaten (samme token som chevron-en under). */
     transition: var(--ix-transition-all);
@@ -47,14 +48,14 @@
     display: none;
 }
 
-/* Hover — subtil flate rundt labelen. */
+/* Hover — subtil flate rundt labelen, samme token som tertiary-knappen. */
 :where(.ix-read-more > summary:hover) {
-    background-color: var(--ix-color-surface-main-hover);
+    background-color: var(--ix-color-component-button-tertiary-fill-default-hover);
 }
 
 /* Active — noe tydeligere flate ved trykk. */
 :where(.ix-read-more > summary:active) {
-    background-color: var(--ix-color-surface-main-active);
+    background-color: var(--ix-color-component-button-tertiary-fill-default-active);
 }
 
 /* Focus — synlig, konsistent ring (samme som resten av systemet). */
@@ -88,16 +89,29 @@
     transform: rotate(180deg);
 }
 
-/* Innholdsområde. Luft over (mellom label og innhold) og på sidene — justert
- * inn under teksten (etter chevron-bredden) for pen venstrekant. */
+/* Innholdsområde. Luft over (mellom label og innhold), og et venstre-innrykk som
+ * knytter innholdet til labelen: venstrekanten — og dermed streken under —
+ * treffer chevronens senter, mens teksten flukter med label-teksten. Begge
+ * regnes ut fra summary-ens venstre padding, ikonbredden og gapet. */
 :where(.ix-read-more__content) {
-    padding-block: var(--ix-spacing-sm);
-    padding-inline: var(--ix-spacing-md);
+    padding-block-start: var(--ix-spacing-xs);
+    padding-block-end: var(--ix-spacing-sm);
+    /* Fram til chevronens senter. Halve kantbredden trekkes fra slik at det er
+     * streken selv, ikke kanten av den, som sentreres på ikonet. */
+    margin-inline-start: calc(
+        var(--ix-spacing-xs) + var(--ix-font-size-xl) / 2 - var(--ix-border-width-default) / 2
+    );
+    /* Resten av veien fram til label-teksten: andre halvdel av ikonet + gapet. */
+    padding-inline-start: calc(
+        var(--ix-font-size-xl) / 2 + var(--ix-spacing-2xs) - var(--ix-border-width-default) / 2
+    );
+    padding-inline-end: var(--ix-spacing-md);
 }
 
-/* Vertikal skillelinje langs venstre kant av innholdet når seksjonen er åpen.
- * Skiller det avdekkede innholdet visuelt fra labelen. Scopet til [open] slik at
- * streken ikke vises under lukke-animasjonen. Samme border-token som Divider. */
+/* Vertikal skillelinje langs venstre kant av innholdet når seksjonen er åpen —
+ * sentrert rett under chevronen (se innrykket over), slik at den leses som en
+ * fortsettelse av labelen. Scopet til [open] slik at streken ikke vises under
+ * lukke-animasjonen. Samme border-token som Divider. */
 :where(.ix-read-more[open] > .ix-read-more__content) {
     border-inline-start: var(--ix-border-default);
 }
