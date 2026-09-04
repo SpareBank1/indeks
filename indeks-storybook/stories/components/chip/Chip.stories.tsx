@@ -38,6 +38,14 @@ export const Disabled: Story = {
     args: { disabled: true },
 };
 
+export const Feilmelding: Story = {
+    args: { error: true },
+};
+
+export const Skrivebeskyttet: Story = {
+    args: { readOnly: true },
+};
+
 export const Group: Story = {
     name: 'Gruppe',
     render: () => (
@@ -97,6 +105,24 @@ export const RemovableDeaktivert: Story = {
     name: 'Removable chip – deaktivert',
     render: () => (
         <RemovableChip disabled removeLabel="fjern" onRemove={() => {}}>
+            Sparing
+        </RemovableChip>
+    ),
+};
+
+export const RemovableFeilmelding: Story = {
+    name: 'Removable chip – feilmelding',
+    render: () => (
+        <RemovableChip error removeLabel="fjern" onRemove={() => {}}>
+            Sparing
+        </RemovableChip>
+    ),
+};
+
+export const RemovableSkrivebeskyttet: Story = {
+    name: 'Removable chip – skrivebeskyttet',
+    render: () => (
+        <RemovableChip readOnly removeLabel="fjern" onRemove={() => {}}>
             Sparing
         </RemovableChip>
     ),
@@ -171,6 +197,23 @@ export const RadioChipKunLesing: Story = {
     ),
 };
 
+export const RadioChipFeilmeldingValgt: Story = {
+    name: 'Radio chip – feilmelding og valgt',
+    render: () => (
+        <RadioGroup
+            variant="chip"
+            legend="Velg periode"
+            name="periode-error-valgt"
+            defaultValue="3m"
+            errorMessage="Perioden er ikke gyldig"
+        >
+            <RadioButton value="1m" label="1 måned" />
+            <RadioButton value="3m" label="3 måneder" />
+            <RadioButton value="12m" label="12 måneder" />
+        </RadioGroup>
+    ),
+};
+
 export const RadioChipJaNei: Story = {
     name: 'Radio chip – ja/nei',
     render: () => (
@@ -220,6 +263,57 @@ export const CheckboxChipLiten: Story = {
     name: 'Checkbox chip – liten',
     render: () => (
         <CheckboxGroup variant="chip" legend="Velg interesser" name="interesser-sm" size="sm" defaultValue={['sport']}>
+            <CheckboxButton value="sport" label="Sport" />
+            <CheckboxButton value="musikk" label="Musikk" />
+            <CheckboxButton value="reise" label="Reise" />
+        </CheckboxGroup>
+    ),
+};
+
+export const CheckboxChipDeaktivert: Story = {
+    name: 'Checkbox chip – deaktivert',
+    render: () => (
+        <CheckboxGroup
+            variant="chip"
+            legend="Velg interesser"
+            name="interesser-disabled"
+            defaultValue={['sport']}
+            disabled
+        >
+            <CheckboxButton value="sport" label="Sport" />
+            <CheckboxButton value="musikk" label="Musikk" />
+            <CheckboxButton value="reise" label="Reise" />
+        </CheckboxGroup>
+    ),
+};
+
+export const CheckboxChipFeilmelding: Story = {
+    name: 'Checkbox chip – feilmelding',
+    render: () => (
+        <CheckboxGroup
+            variant="chip"
+            legend="Velg interesser"
+            name="interesser-error"
+            defaultValue={['sport']}
+            errorMessage="Du må velge minst to interesser"
+        >
+            <CheckboxButton value="sport" label="Sport" />
+            <CheckboxButton value="musikk" label="Musikk" />
+            <CheckboxButton value="reise" label="Reise" />
+        </CheckboxGroup>
+    ),
+};
+
+export const CheckboxChipSkrivebeskyttet: Story = {
+    name: 'Checkbox chip – skrivebeskyttet',
+    render: () => (
+        <CheckboxGroup
+            variant="chip"
+            legend="Velg interesser"
+            name="interesser-readonly"
+            defaultValue={['sport']}
+            readOnly
+        >
             <CheckboxButton value="sport" label="Sport" />
             <CheckboxButton value="musikk" label="Musikk" />
             <CheckboxButton value="reise" label="Reise" />

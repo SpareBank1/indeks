@@ -236,6 +236,18 @@
     --ii-radio-bg: var(--ix-color-fill-danger-subtle);
 }
 
+/* Chip-variant, error + valgt: chip.css fyller pillen mørkerødt, så ringen og
+ * prikken må flippe til inverse for å være synlige. Ligger etter hover-ved-error-
+ * regelen over på samme spesifisitet (0,4,2), slik at en hovret valgt error-chip
+ * beholder den hvite ringen. Uvalgt error trenger ingenting — reglene over gir
+ * allerede rød ring på nøytralt pill-fyll. */
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='error'] input[type='radio']:checked + label,
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][aria-invalid='true'] input[type='radio']:checked + label {
+    --ii-radio-outer-color: var(--ix-color-foreground-inverse-default);
+    --ii-radio-inner-color: var(--ix-color-foreground-inverse-default);
+    --ii-radio-bg: transparent;
+}
+
 /* ── ReadOnly ────────────────────────────────────────────────────────────── */
 
 :where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) label,

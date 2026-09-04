@@ -40,6 +40,9 @@
        --ii-radio-* eller --ii-checkbox-*. */
     --ii-chip-fill: var(--ix-color-fill-interactive-default);
     --ii-chip-border-color: var(--ix-color-border-main-default);
+    --ii-chip-foreground: var(--ix-color-foreground-main-default);
+    --ii-chip-shadow: none;
+    --ii-chip-opacity: 1;
     --ii-chip-padding-block: var(--ix-spacing-xs);
     --ii-chip-padding-inline: var(--ix-spacing-md);
     --ii-chip-indicator-size: 18px;
@@ -47,9 +50,11 @@
 
     font-size: var(--ix-font-size-md);
     font-weight: var(--ix-font-weight-button);
+    color: var(--ii-chip-foreground);
     background-color: var(--ii-chip-fill);
     border: var(--ix-border-width-default) solid var(--ii-chip-border-color);
     border-radius: var(--ix-border-radius-pill);
+    box-shadow: var(--ii-chip-shadow);
 }
 
 /* Kun arm A: .ix-chip er selve boksen og må lage layouten selv. Gruppe-labelene
@@ -64,9 +69,9 @@
     width: auto;
     height: fit-content;
     padding: var(--ii-chip-padding-block) var(--ii-chip-padding-inline);
-    color: var(--ix-color-foreground-main-default);
     white-space: nowrap;
     cursor: pointer;
+    opacity: var(--ii-chip-opacity);
 }
 
 /* Uten :where() slik at transition vinner over en global bar a{transition:color}
@@ -218,8 +223,120 @@
    på labelen ved input:disabled) i sine filer. */
 
 :where(.ix-chip[aria-disabled='true'], .ix-chip:disabled) {
+    /* opacity går via variabelen så read-only-regelen under kan skru den av
+       igjen: read-only setter aria-disabled='true' (en <button> har ingen native
+       read-only), og ville ellers blitt dimmet på toppen av det grå fyllet. */
+    --ii-chip-opacity: 0.4;
+
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
     pointer-events: none;
-    opacity: 0.4;
+}
+
+/* ── Error og read-only ──────────────────────────────────────────────────────
+   Tilstanden kan komme fra tre steder, og hver regel under gjentar alle tre:
+
+     1. chipen selv          .ix-chip[data-state='error']
+     2. et omsluttende felt  <ix-combobox data-state='error'>  → multiselect-chips
+     3. gruppen              <ix-radio-group data-variant='chip' data-state='error'>
+
+   Gruppene eksponerer også [aria-invalid='true'] (settes av web componenten når
+   error-elementet får innhold), så error-armene godtar begge.
+
+   Reglene ligger ETTER disabled med vilje. Alle tilstandsarmene er (0,2,0), så
+   kilderekkefølgen koder presedensen error > read-only > disabled — samme
+   rangering som RadioGroup.tsx utleder data-state med. Selected-armene ligger ett
+   attributt høyere, som er riktig retning: valgt skal slå uvalgt. */
+
+/* Read-only — én regel for valgt og uvalgt. Design viser begge med samme grå
+   flate, så read-only overstyrer selected-aksenten helt. Hus-oppskriften er
+   nedtonet fyll + read-only-forgrunn, aldri opacity (jf. text-field.css). */
+.ix-chip[data-state='readonly'],
+:where(ix-combobox, .ix-combobox)[data-state='readonly'] .ix-chip,
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='readonly'] :where(label),
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='readonly'] :where(.ix-checkbox label) {
+    --ii-chip-fill: var(--ix-color-fill-interactive-read-only);
+    --ii-chip-border-color: var(--ix-color-border-main-default);
+    --ii-chip-foreground: var(--ix-color-foreground-main-read-only);
+    --ii-chip-shadow: none;
+}
+
+/* Kun arm A: gruppene setter cursor og pointer-events selv i sine filer, og på
+   (0,2,0) her ville cursor tapt mot radio-group.css' base-label uansett. */
+.ix-chip[data-state='readonly'],
+:where(ix-combobox, .ix-combobox)[data-state='readonly'] .ix-chip {
+    --ii-chip-opacity: 1;
+
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Error, uvalgt — spec-en ber om 2px kant. Vi beholder 1px border og legger en
+   inset-skygge på samme token oppå: å endre border-width ville lagt en piksel på
+   hver side av hver chip og reflowet hele flex-wrap-raden i det validering slår
+   inn. Inset-skyggen males innenfor border-boksen, så geometrien er identisk.
+   Samme oppskrift som text-field.css:73, text-area.css:67, select.css:45 og
+   checkbox.css:147. Fyllet står — hover-regelen over er mindre spesifikk og
+   endrer bare --ii-chip-fill, så kanten blir liggende rød under pekeren. */
+.ix-chip[data-state='error'],
+.ix-chip[aria-invalid='true'],
+:where(ix-combobox, .ix-combobox)[data-state='error'] .ix-chip,
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='error'] :where(label),
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][aria-invalid='true'] :where(label),
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] :where(.ix-checkbox label),
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] :where(.ix-checkbox label) {
+    --ii-chip-border-color: var(--ix-color-border-danger-default);
+    --ii-chip-shadow: inset 0 0 0 var(--ix-border-width-default) var(--ix-color-border-danger-default);
+}
+
+/* Error, valgt — fyll og kant på samme token. Kanten kollapses til fyllfargen
+   fordi den lyse border-danger rundt det mørkerøde fyllet leser som en glorie;
+   samme grep som checkbox.css:150-159. Forgrunnen flippes til inverse, og
+   krysset på removable chip følger gratis etter — det males med currentColor.
+   Ikke gi krysset en egen farge-regel. */
+.ix-chip[data-state='error'][data-removable],
+.ix-chip[aria-invalid='true'][data-removable],
+:where(ix-combobox, .ix-combobox)[data-state='error'] .ix-chip[data-removable],
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='error'] :where(input[type='radio']:checked + label),
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][aria-invalid='true'] :where(input[type='radio']:checked + label),
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error']
+    :where(.ix-checkbox :is(input[type='checkbox']:checked, input[type='checkbox']:indeterminate) + label),
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true']
+    :where(.ix-checkbox :is(input[type='checkbox']:checked, input[type='checkbox']:indeterminate) + label) {
+    --ii-chip-fill: var(--ix-color-fill-danger-default);
+    --ii-chip-border-color: var(--ix-color-fill-danger-default);
+    --ii-chip-foreground: var(--ix-color-foreground-inverse-default);
+    --ii-chip-shadow: none;
+}
+
+/* Error, valgt, hover/active — uten disse ville en valgt error-chip vært helt
+   død under pekeren, siden selected-hover-regelen lenger opp er mindre spesifikk. */
+.ix-chip[data-state='error'][data-removable]:where(:hover),
+.ix-chip[aria-invalid='true'][data-removable]:where(:hover),
+:where(ix-combobox, .ix-combobox)[data-state='error'] .ix-chip[data-removable]:where(:hover),
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='error']
+    :where(input[type='radio']:checked:not(:disabled) + label:hover),
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][aria-invalid='true']
+    :where(input[type='radio']:checked:not(:disabled) + label:hover),
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error']
+    :where(.ix-checkbox :is(input[type='checkbox']:checked, input[type='checkbox']:indeterminate):not(:disabled) + label:hover),
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true']
+    :where(.ix-checkbox :is(input[type='checkbox']:checked, input[type='checkbox']:indeterminate):not(:disabled) + label:hover) {
+    --ii-chip-fill: var(--ix-color-fill-danger-default-hover);
+    --ii-chip-border-color: var(--ix-color-fill-danger-default-hover);
+}
+
+.ix-chip[data-state='error'][data-removable]:where(:active),
+.ix-chip[aria-invalid='true'][data-removable]:where(:active),
+:where(ix-combobox, .ix-combobox)[data-state='error'] .ix-chip[data-removable]:where(:active),
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='error']
+    :where(input[type='radio']:checked:not(:disabled) + label:active),
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][aria-invalid='true']
+    :where(input[type='radio']:checked:not(:disabled) + label:active),
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error']
+    :where(.ix-checkbox :is(input[type='checkbox']:checked, input[type='checkbox']:indeterminate):not(:disabled) + label:active),
+:where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true']
+    :where(.ix-checkbox :is(input[type='checkbox']:checked, input[type='checkbox']:indeterminate):not(:disabled) + label:active) {
+    --ii-chip-fill: var(--ix-color-fill-danger-default-active);
+    --ii-chip-border-color: var(--ix-color-fill-danger-default-active);
 }

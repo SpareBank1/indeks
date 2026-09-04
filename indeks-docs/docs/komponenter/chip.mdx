@@ -70,8 +70,12 @@ Alle chip-typer bygger på den delte `.ix-chip`-klassen. Den gir pill-form, stø
 | Hover / active | `:hover` / `:active` (automatisk) |
 | Fokus | `:focus-visible` (automatisk) |
 | Deaktivert | `disabled` eller `aria-disabled="true"` |
+| Feilmelding | `data-state="error"` eller `aria-invalid="true"` |
+| Skrivebeskyttet | `data-state="readonly"` |
 
 Type-spesifikke kroker (f.eks. `data-removable` for removable chip og `ix-radio-group[data-variant="chip"]` for radio chip) er dokumentert på hver undertype-side.
+
+En chip som ligger inne i et felt arver feltets tilstand: står `data-state="error"` eller `data-state="readonly"` på gruppen (`ix-radio-group`, `ix-checkbox-group`) eller på en multiselect-combobox, følger chipene etter uten at du setter noe på dem selv.
 
 ### Eksempel: ren HTML
 
