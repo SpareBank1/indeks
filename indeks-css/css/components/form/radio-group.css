@@ -79,7 +79,17 @@
 :where(ix-radio-group, .ix-radio-group) label,
 :where(.ix-radio-button__label) {
     --ii-radio-size: 24px;
-    --ii-radio-dot-size: calc(var(--ii-radio-size) * 0.5);
+
+    /* Prikken avledes av et heltalls innrykk, ikke av et forholdstall. Ringen og
+       prikken er to selvstendige bokser, og avstanden mellom dem er
+       (ring − prikk) / 2. Er den en halv piksel, snapper Firefox de to boksene i
+       hver sin retning og prikken står synlig skjevt; Chromium kantutjevner i
+       stedet, så der blir den bare uskarp. Med innrykket som utgangspunkt er
+       avstanden et heltall ved konstruksjon, i alle størrelser og tettheter.
+       Faste piksler med vilje: --ii-radio-size er også faste piksler, så et
+       spacing-token ville krympet innrykket i compact og latt prikken vokse. */
+    --ii-radio-dot-inset: 6px;
+    --ii-radio-dot-size: calc(var(--ii-radio-size) - 2 * var(--ii-radio-dot-inset));
     --ii-radio-outer-color: var(--ix-color-border-main-default);
     --ii-radio-inner-color: transparent;
     --ii-radio-bg: var(--ix-color-surface-main-default);
@@ -91,6 +101,14 @@
     padding-left: calc(var(--ii-radio-size) + var(--ix-spacing-xs));
     cursor: pointer;
     font-size: var(--ix-font-size-md);
+
+    /* Linjeboksen settes lik ringen, som en lengde. Ringen står på top: 50% av
+       linjeboksen, så en linjeboks på 19,2px (arvet 1,2 fra .ix-body) ga ringen
+       y = −2,4 og en 1px-kant som straddler en enhetspiksel i begge ender. Nå blir
+       50 % nøyaktig 12px og ringen starter på 0. Et forholdstall ville ikke holdt:
+       font-skalaen er flytende, og 1,5 × 15,6px er 23,4. Chip-varianten setter sin
+       egen line-height i chip.css og er upåvirket. */
+    line-height: var(--ii-radio-size);
     color: var(--ix-color-foreground-main-default);
     user-select: none;
     transition: var(--ix-transition-all);
@@ -128,9 +146,10 @@
     height: var(--ii-radio-dot-size);
     top: 50%;
     /* Ankre prikken på ringens senter (radio-size/2 fra ringens venstrekant) og
-       selv-sentrer med translate(-50%). Deler nøyaktig samme sub-pixel-anker som
-       ringen → holder seg konsentrisk uansett device-pixel-avrunding. Unngår
-       (ring − dot)/2-offset som gir halve piksler (f.eks. 4.5px ved 18px chip). */
+       selv-sentrer med translate(-50%). Det felles ankeret er nødvendig, men det
+       er ikke nok: translate(-50%) av en odde prikk er selv en halv piksel, så
+       den kom tilbake den veien så lenge prikken var 9px i en 18px ring. Derfor
+       er prikken nå avledet av et heltalls innrykk — se --ii-radio-dot-inset. */
     left: calc(var(--ii-radio-size) / 2);
     z-index: 1;
     background-color: var(--ii-radio-inner-color);
@@ -195,6 +214,11 @@
  * denne veien slik at chip.css aldri trenger å nevne --ii-radio-*. */
 :where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label {
     --ii-radio-size: var(--ii-chip-indicator-size);
+
+    /* 4px dekker begge chip-størrelsene og holder prikken jevn: 18 − 8 = 10px på md,
+       16 − 8 = 8px på sm. Base-verdien 6px ville gitt 18 − 12 = 6px, altså en prikk
+       som krymper når ringen krymper. */
+    --ii-radio-dot-inset: 4px;
 }
 
 /* Flytt sirkelen (ytre ring + indre prikk) inn fra pill-kanten. Ett uttrykk
