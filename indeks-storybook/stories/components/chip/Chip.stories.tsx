@@ -230,17 +230,21 @@ export const RadioChipHTML: Story = {
         <ix-radio-group data-variant="chip" name="periode-html">
             <span data-field="legend">Velg periode</span>
             <div data-field="items">
+                {/* Ingen faste id-er: ix-radio-group genererer unike id-er og setter
+                    label[for]. Faste id-er ville blitt duplisert når lys/mørk-decoratoren
+                    rendrer storyen to ganger i samme dokument, og da peker begge labels
+                    på den første inputen. */}
                 <div className="ix-radio-button">
-                    <input type="radio" id="periode-1m" value="1m" />
-                    <label htmlFor="periode-1m">1 måned</label>
+                    <input type="radio" value="1m" />
+                    <label>1 måned</label>
                 </div>
                 <div className="ix-radio-button">
-                    <input type="radio" id="periode-3m" value="3m" defaultChecked />
-                    <label htmlFor="periode-3m">3 måneder</label>
+                    <input type="radio" value="3m" defaultChecked />
+                    <label>3 måneder</label>
                 </div>
                 <div className="ix-radio-button">
-                    <input type="radio" id="periode-12m" value="12m" />
-                    <label htmlFor="periode-12m">12 måneder</label>
+                    <input type="radio" value="12m" />
+                    <label>12 måneder</label>
                 </div>
             </div>
             <span data-field="error" aria-live="polite"></span>
@@ -327,17 +331,19 @@ export const CheckboxChipHTML: Story = {
         <ix-checkbox-group data-variant="chip" name="interesser-html">
             <span data-field="legend">Velg interesser</span>
             <div data-field="items">
+                {/* Ingen faste id-er — ix-checkbox-group genererer unike id-er og setter
+                    label[for]. Se kommentaren i «Radio chip – HTML». */}
                 <div className="ix-checkbox">
-                    <input type="checkbox" id="int-sport" value="sport" defaultChecked />
-                    <label htmlFor="int-sport">Sport</label>
+                    <input type="checkbox" value="sport" defaultChecked />
+                    <label>Sport</label>
                 </div>
                 <div className="ix-checkbox">
-                    <input type="checkbox" id="int-musikk" value="musikk" />
-                    <label htmlFor="int-musikk">Musikk</label>
+                    <input type="checkbox" value="musikk" />
+                    <label>Musikk</label>
                 </div>
                 <div className="ix-checkbox">
-                    <input type="checkbox" id="int-reise" value="reise" />
-                    <label htmlFor="int-reise">Reise</label>
+                    <input type="checkbox" value="reise" />
+                    <label>Reise</label>
                 </div>
             </div>
             <span data-field="error" aria-live="polite"></span>
