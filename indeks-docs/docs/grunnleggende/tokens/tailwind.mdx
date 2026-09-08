@@ -18,6 +18,10 @@ Legg importen etter `tailwindcss` i CSS-en din:
 @import '@sb1/indeks-css/tailwind.css';
 ```
 
+Temaet krever Tailwind 4.1 eller nyere. Direktivene vi bruker finnes fra 4.0, men 4.0 er
+designet for Safari 16.4 og nyere, mens Indeks støtter Safari 15.4. I 4.1 kom fallbacks som
+gjør at Tailwinds egen CSS også virker der.
+
 Temafilen setter bare opp navnene. Selve verdiene kommer fra Indeks-CSS-en, så den må
 lastes som normalt:
 
@@ -44,9 +48,14 @@ Bruker du bare én av delpakkene, finnes temaet der også:
 Brødfonten ligger på `font-sans`, ikke `font-normal`. Tailwind har allerede
 `font-normal` som fontvekt 400, og to klasser med samme navn ville kollidert.
 
-Komponent-variablene (`--ix-color-component-button-*`) er holdt utenfor. De finnes for at
-våre egne komponenter skal kunne temes, og vi vil ikke at koden din skal binde seg til
-dem. Trenger du én likevel, se `var()`-formen under.
+Fargenavnene er token-navnene uendret, de samme du finner i Figma. Derfor blir det
+`bg-fill-main-default` og `border-border-main-default`. Den doble `border` ser rar ut, men
+gjør at du kan lese navnet rett av skissen.
+
+Komponent-fargene er også med, som `bg-component-button-primary-fill-default`. De finnes
+for at komponentene våre skal kunne temes, så de kan endre seg uten at vi regner det som et
+brudd. Bruk de semantiske fargene der du kan, og disse når du bygger noe som skal matche en
+Indeks-komponent tett.
 
 ## Bruk `var()` for det som mangler navnerom
 

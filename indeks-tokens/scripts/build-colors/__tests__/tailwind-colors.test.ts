@@ -32,8 +32,10 @@ describe('buildTailwindColorsCss', () => {
         );
     });
 
-    it('utelater komponent-tokens, som ikke er konsument-API', () => {
-        expect(buildTailwindColorsCss(semanticColors)).not.toContain('component');
+    it('tar med komponent-tokens, som er like synlige i Figma som de semantiske', () => {
+        expect(buildTailwindColorsCss(semanticColors)).toContain(
+            '--color-component-button-primary-fill: var(--ix-color-component-button-primary-fill);'
+        );
     });
 
     it('inneholder ingen fargeverdier — bare var()-aliaser', () => {

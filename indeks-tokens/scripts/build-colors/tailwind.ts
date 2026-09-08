@@ -14,18 +14,6 @@ import { flattenObject } from '../utils';
  */
 
 /**
- * Komponent-tokens (`--ix-color-component-button-...`) finnes for at våre egne
- * komponenter skal kunne temes, og er ikke ment som konsument-API. Samme filter som
- * fargeutility-generatoren i indeks-utils bruker. Trenger noen én likevel, virker
- * `bg-[var(--ix-color-component-...)]` fortsatt.
- */
-const EXCLUDED_PREFIXES = ['component.'];
-
-function isExcluded(name: string): boolean {
-    return EXCLUDED_PREFIXES.some((prefix) => name.startsWith(prefix));
-}
-
-/**
  * Vi itererer bare det lyse settet, siden lys og mørk skal ha identiske nøkler.
  * FFE antar dette stille; vi feiler bygget i stedet, så et Figma-sync-avvik ikke
  * blir en farge som mangler i mørk modus.
@@ -52,8 +40,11 @@ export function buildTailwindColorsCss(semanticColors: any): string {
 
     assertMatchingKeys(light, dark);
 
+    // Komponent-tokens (component.button.…) er med. De finnes for at komponentene våre skal
+    // kunne temes, men de er like synlige i Figma som de semantiske, og et team som bygger
+    // noe knappeaktig selv har bruk for dem. Merk at fargeutility-generatoren i indeks-utils
+    // filtrerer dem bort, så `ix-color-component-*`-klasser finnes ikke.
     const lines = light
-        .filter((name) => !isExcluded(name))
         .map((name) => name.replace(/\./g, '-'))
         .sort((a, b) => a.localeCompare(b))
         .map((name) => `    --color-${name}: var(--ix-color-${name});`)
