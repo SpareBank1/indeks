@@ -143,7 +143,6 @@ declare global {
             'ix-popover': {
                 open?: boolean | '';
                 placement?: 'top' | 'bottom' | 'left' | 'right';
-                'data-arrow'?: 'true' | 'false';
                 'data-controlled'?: boolean | '';
                 class?: string;
                 children?: unknown;
