@@ -89,13 +89,13 @@
     transform: rotate(180deg);
 }
 
-/* Innholdsområde. Luft over (mellom label og innhold), og et venstre-innrykk som
- * knytter innholdet til labelen: venstrekanten — og dermed streken under —
- * treffer chevronens senter, mens teksten flukter med label-teksten. Begge
- * regnes ut fra summary-ens venstre padding, ikonbredden og gapet. */
+/* Innholdsområde. Like mye luft over og under innholdet, slik at streken slutter
+ * tett på siste tekstlinje, og et venstre-innrykk som knytter innholdet til
+ * labelen: venstrekanten — og dermed streken under — treffer chevronens senter,
+ * mens teksten flukter med label-teksten. Innrykket regnes ut fra summary-ens
+ * venstre padding, ikonbredden og gapet. */
 :where(.ix-read-more__content) {
-    padding-block-start: var(--ix-spacing-xs);
-    padding-block-end: var(--ix-spacing-sm);
+    padding-block: var(--ix-spacing-2xs);
     /* Fram til chevronens senter. Halve kantbredden trekkes fra slik at det er
      * streken selv, ikke kanten av den, som sentreres på ikonet. */
     margin-inline-start: calc(
