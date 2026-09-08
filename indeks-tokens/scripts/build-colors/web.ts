@@ -2,6 +2,7 @@ import { writeFileSyncEnsureDir } from '../../../shared/tokens/utils.ts';
 import { themeableDefaults } from '../../themes/themeables';
 import { BuiltTheme, ThemeableProperties } from '../../themes/types';
 import { flattenObject } from '../utils';
+import { buildTailwindColorsCss } from './tailwind';
 
 export function buildWebColors(themes: BuiltTheme[], semanticColors: any, outPath: string) {
     // Build color variables for all themes
@@ -18,6 +19,10 @@ export function buildWebColors(themes: BuiltTheme[], semanticColors: any, outPat
     const semanticOutPath = `${outPath}/colors.css`;
     console.log(`Eksporterer semantiske farger til ${semanticOutPath}`);
     writeFileSyncEnsureDir(semanticOutPath, buildSemanticColorsCss(semanticColors));
+
+    const tailwindOutPath = `${outPath}/tailwind-colors.css`;
+    console.log(`Eksporterer Tailwind-farger til ${tailwindOutPath}`);
+    writeFileSyncEnsureDir(tailwindOutPath, buildTailwindColorsCss(semanticColors));
 }
 
 function buildThemeColorsDict(themes: BuiltTheme[]): Record<string, string> {

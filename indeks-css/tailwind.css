@@ -1,0 +1,10 @@
+/*
+ * Tailwind v4-tema for hele det offentlige tokensettet — farger, radius, breakpoints,
+ * font og transition fra indeks-tokens, spacing og fontstørrelser fra indeks-utils.
+ *
+ * Merk at det er dist-banene som brukes her, ikke exports-subpathene
+ * ('@sb1/indeks-tokens/tailwind.css'): postcss-import bruker klassisk node-resolution og
+ * leser ikke "exports". Subpathene finnes for konsumentene, som ikke går via postcss.
+ */
+@import '@sb1/indeks-tokens/dist/tailwind.css';
+@import '@sb1/indeks-utils/dist/tailwind.css';

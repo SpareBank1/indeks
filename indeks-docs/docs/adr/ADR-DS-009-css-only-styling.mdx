@@ -90,6 +90,11 @@ populært og brukes av mange designsystemer.
 - Tailwinds klassemodell og vårt token-system er grunnleggende ulike paradigmer som
   er vanskelig å kombinere uten å tape fordelene med begge
 
+Beslutningen gjelder hvordan Indeks selv er stylet, ikke hva konsumenter kan bruke. Team som
+allerede har Tailwind får en generert temafil som kobler Tailwinds navnerom til
+`--ix-`-variablene, slik at de kan bruke tokenene våre uten å skrive `var()` overalt. Den
+er valgfri og påvirker ikke CSS-en vi leverer. Se [Tailwind](../grunnleggende/tokens/tailwind).
+
 ### CSS-in-JS (styled-components, Emotion, vanilla-extract)
 
 Styling defineres i JavaScript/TypeScript, nær komponentkoden.

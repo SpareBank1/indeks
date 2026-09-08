@@ -23,6 +23,7 @@
     "main": "dist/index.css",
     "exports": {
         ".": "./dist/index.css",
+        "./tailwind.css": "./dist/tailwind.css",
         "./generate": {
             "types": "./dist/scripts/build-colors/generate.d.ts",
             "import": "./dist/generate.js"
@@ -44,12 +45,12 @@
     },
     "scripts": {
         "dev": "echo not implemented",
-        "build": "rm -rf ./dist ./.build && pnpm run build:tokens:css && pnpm run build:colors:web && pnpm run build:colors:figma && pnpm run build:bundle && pnpm run build:cli && pnpm run build:generate && pnpm run build:types",
+        "build": "rm -rf ./dist ./.build && pnpm run build:tokens:css && pnpm run build:colors:web && pnpm run build:colors:figma && pnpm run build:bundle && pnpm run build:tailwind && pnpm run build:cli && pnpm run build:generate && pnpm run build:types",
         "build:cli": "pnpm exec esbuild scripts/build-colors/cli.ts --bundle --platform=node --format=esm --outfile=dist/cli.js --banner:js='#!/usr/bin/env node' --define:__PKG_VERSION__=\"\\\"$npm_package_version\\\"\"",
         "build:generate": "pnpm exec esbuild scripts/build-colors/generate.ts --bundle --platform=neutral --format=esm --outfile=dist/generate.js",
         "build:types": "pnpm exec tsc -p tsconfig.generate.json",
         "build:spacing": "node ./scripts/build-spacing-tokens.cjs",
-        "test": "vitest run buildThemeColors.test.ts cli.integration.test.ts generate.test.ts",
+        "test": "vitest run buildThemeColors.test.ts cli.integration.test.ts generate.test.ts tailwind-tokens.test.ts tailwind-colors.test.ts",
         "build:colors:web": "tsx ./scripts/build-colors/index platform=web path=./.build/css",
         "build:colors:figma": "tsx ./scripts/build-colors/index platform=figma path=./tokens/colors/from-code",
         "build:colors:ios": "tsx ./scripts/build-colors/index platform=ios path=./dist/ios",
@@ -57,7 +58,8 @@
         "sync": "sh scripts/figma-api/sync.sh",
         "update-packages": "ncu -i --format group",
         "build:tokens:css": "tsx scripts/build-tokens/index.ts platform=css path=./.build/css",
-        "build:bundle": "postcss ./.build/css/index.css -o ./dist/index.css"
+        "build:bundle": "postcss ./.build/css/index.css -o ./dist/index.css",
+        "build:tailwind": "postcss ./.build/css/tailwind.css -o ./dist/tailwind.css"
     },
     "author": "",
     "license": "MIT",
