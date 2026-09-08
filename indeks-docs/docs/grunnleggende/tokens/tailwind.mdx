@@ -1,13 +1,13 @@
 # Tailwind
 
-Vi anbefaler ikke Tailwind i nye prosjekter. Indeks har egne utility-klasser med
-`ix-`-prefiks som dekker det samme, og de krever ingen byggesteg hos deg. Men vi vet at
-flere team allerede har Tailwind, og da skal du ikke måtte skrive
-`bg-[var(--ix-color-fill-main-default)]` for å bruke designsystemet.
+Indeks kommer med [egne utility-klasser](/docs/utility-klasser/oversikt) med `ix-`-prefiks
+som dekker mye av det Tailwind gir deg, uten noe byggesteg hos deg. Trenger du bare farger,
+spacing og typografi fra designsystemet, holder de.
 
-Derfor genererer vi en Tailwind 4-temafil sammen med resten av pakkene. Den kobler
-Tailwinds navnerom til Indeks-variablene, slik at `bg-fill-main-default` og `p-md` gir
-riktige verdier.
+Bruker du Tailwind allerede, skal du ikke måtte skrive
+`bg-[var(--ix-color-fill-main-default)]` for å nå tokenene våre. Derfor genererer vi en
+Tailwind 4-temafil sammen med resten av pakkene. Den kobler Tailwinds navnerom til
+Indeks-variablene, slik at `bg-fill-main-default` og `p-md` gir riktige verdier.
 
 ## Kom i gang
 
