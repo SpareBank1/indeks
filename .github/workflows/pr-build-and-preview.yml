@@ -55,6 +55,11 @@ jobs:
             - name: Sikkerhetssjekk (audit)
               if: always()
               run: |
+                  # Uten pipefail er exit-koden under tee sin, ikke pnpm audit sin, og
+                  # tee lykkes alltid. Da kjører then-grenen uansett og sammendraget
+                  # sier «ingen kjente sårbarheter» også når audit fant noe eller
+                  # krasjet. GitHub kjører run-blokker som `bash -e`, uten pipefail.
+                  set -o pipefail
                   echo "## Sikkerhetssjekk av avhengigheter" >> $GITHUB_STEP_SUMMARY
                   echo "" >> $GITHUB_STEP_SUMMARY
                   if pnpm audit --prod 2>&1 | tee /tmp/audit.txt; then
