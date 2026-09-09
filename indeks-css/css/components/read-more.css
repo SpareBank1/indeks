@@ -89,12 +89,15 @@
     transform: rotate(180deg);
 }
 
-/* Innholdsområde. Like mye luft over og under innholdet, slik at streken slutter
- * tett på siste tekstlinje, og et venstre-innrykk som knytter innholdet til
+/* Innholdsområde. Luft både over streken (gap mellom knappen og innholdet) og
+ * inne i innholdet, slik at streken starter litt under knappen og slutter tett
+ * på siste tekstlinje. I tillegg et venstre-innrykk som knytter innholdet til
  * labelen: venstrekanten — og dermed streken under — treffer chevronens senter,
  * mens teksten flukter med label-teksten. Innrykket regnes ut fra summary-ens
  * venstre padding, ikonbredden og gapet. */
 :where(.ix-read-more__content) {
+    /* Gapet mot knappen ligger utenfor streken, så det blir faktisk tomt. */
+    margin-block-start: var(--ix-spacing-2xs);
     padding-block: var(--ix-spacing-2xs);
     /* Fram til chevronens senter. Halve kantbredden trekkes fra slik at det er
      * streken selv, ikke kanten av den, som sentreres på ikonet. */
