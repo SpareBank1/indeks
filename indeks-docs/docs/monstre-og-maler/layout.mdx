@@ -1,14 +1,14 @@
 # Layout
 
-Indeks tilbyr et sett med layout-utilities for å hjelpe med oppsett av elementer på siden ved bruk av Flex og CSS Grid. Disse klassene kan brukes direkte i HTML for raskt å justere layout uten behov for egendefinert CSS.
+Indeks har utility-klasser for Flex og CSS Grid. Du skriver dem rett i markupen, så du slipper en egen CSS-fil for hver plassering.
 
 ## Flex eller Grid?
 
-Som tommelfingeregel anbefales det å bruke Flex for enklere layoutbehov som justering og fordeling av elementer i én dimensjon (rad eller kolonne), mens Grid er bedre egnet for mer komplekse, todimensjonale layouter.
+Spør hvor mange dimensjoner du styrer. Én rad eller én kolonne: Flex. Rader og kolonner samtidig: Grid. Er du i tvil, er det nesten alltid Flex.
 
 ## Grid
 
-Utility-klassene for Grid i Indeks gjør det enkelt å definere rader, kolonner og gap mellom elementer. For en fullstendig oversikt over tilgjengelige Grid-klasser, se [Grid-dokumentasjonen](../utility-klasser/oversikt#grid).
+Grid-klassene setter rader, kolonner og avstand mellom cellene. Se [Grid-dokumentasjonen](../utility-klasser/oversikt#grid) for hele settet.
 
 ### Bruk Grid når:
 
@@ -29,11 +29,11 @@ Utility-klassene for Grid i Indeks gjør det enkelt å definere rader, kolonner 
 
 ## Flex
 
-Utility-klassene for Flex i Indeks gir mulighet for fleksibel justering og fordeling av elementer i en rad eller kolonne. For en fullstendig oversikt over tilgjengelige Flex-klasser, se [Flex-dokumentasjonen](../utility-klasser/oversikt#flex).
+Flex-klassene justerer og fordeler elementer langs én akse. Se [Flex-dokumentasjonen](../utility-klasser/oversikt#flex) for hele settet.
 
 ### Bruk Flex når:
 
-* Layouten har én dimensjon - enten rad eller kolonne
+* Layouten har én dimensjon: enten rad eller kolonne
 * Innholdet selv bestemmer størrelsen på elementene
 * Du trenger fleksibel wrapping av elementer
 
@@ -49,11 +49,9 @@ Utility-klassene for Flex i Indeks gir mulighet for fleksibel justering og forde
 
 ## VStack og HStack
 
-`VStack` og `HStack` er enkle layout-komponenter som hjelper deg å stable innhold og elementer i én dimensjon, henholdsvis vertikalt og horisontalt.
+`VStack` og `HStack` er React-komponenter som stabler innhold vertikalt og horisontalt. De er Flex under panseret, så du kan kombinere dem med Flex-utilities. Skriver du HTML uten React, bruker du [`<ix-stack>`](../komponenter/primitives/stack) i stedet.
 
-Komponentene bruker Flex under panseret og wrapper `display: flex` og `flex-direction: <row/column>`. `VStack` etablerer en vertikal layout, mens `HStack` etablerer en horisontal layout. Begge komponentene kan kombineres med Flex-utilities for ytterligere tilpasning.
-
-```html
+```tsx
 <!-- Vertikal stack med standard gap (md) -->
 <VStack>
     <div>Element 1</div>
@@ -70,7 +68,7 @@ Komponentene bruker Flex under panseret og wrapper `display: flex` og `flex-dire
 
 ## Density
 
-Spacing-systemet i Indeks er basert på en density-modus som settes som et data-attributt på container-elementer. Dette attributtet påvirker alle spacing-verdier og bestemmer tettheten i layouten. Standard density er `data-density="default"`. For å endre tetthet, kan du bruke en av verdiene nedenfor:
+Alle spacing-verdier skalerer med `data-density` på et container-element. Standard er `data-density="default"`. De to andre:
 
 - `data-density="comfortable"`: Gir en mer romslig layout med større avstander mellom og inni elementer
 - `data-density="compact"`: Gir en tettere layout med mindre avstander mellom og inni elementer
@@ -79,7 +77,7 @@ Spacing-systemet i Indeks er basert på en density-modus som settes som et data-
 
 ## Mobile first
 
-Alle responsive utility-klasser i Indeks er bygget etter "mobile first"-prinsippet. Dette betyr at standard-klassene gjelder for alle skjermstørrelser, men kan overstyres av responsive varianter som gjelder fra en gitt skjermstørrelse (breakpoint) og oppover. For eksempel vil klassen `ix-md-flex` gjøre et element til en flex-container på medium skjermstørrelse (`md`) og større, mens det på mindre skjermer vil følge standard oppførsel.
+De responsive klassene er mobile first: en klasse uten prefiks gjelder alle skjermstørrelser, og en med prefiks gjelder fra det breakpointet og oppover. `ix-md-flex` gjør elementet til flex-container fra `md` og opp, og lar mindre skjermer stå som de er.
 
 ```html
 <div class="ix-md-flex ix-lg-grid">

@@ -125,7 +125,7 @@ Legg merke til at den visuelle størrelsen er uendret — bare det klikkbare are
 
 ### X-akse
 
-Nyttig for lenker og knapper i navigasjon der du vil utvide klikkbart areal horisontalt uten å påvirke linjehøyden.
+Passer til lenker og knapper i navigasjon: treffarealet vokser sidelengs uten at linjehøyden endrer seg.
 
 ```jsx live
 <div class="hb-demo">
@@ -137,7 +137,7 @@ Nyttig for lenker og knapper i navigasjon der du vil utvide klikkbart areal hori
 
 ### Y-akse
 
-Nyttig for ikoner og kompakte verktøylinjeknapper der du vil utvide treffarealet opp og ned.
+Til ikoner og kompakte verktøylinjeknapper, der det er plass over og under, men ikke ved siden av.
 
 ```jsx live
 <div class="hb-demo">
@@ -149,7 +149,7 @@ Nyttig for ikoner og kompakte verktøylinjeknapper der du vil utvide treffareale
 
 ### Individuelle sider
 
-Nyttig for elementer som sitter langs en kant og bare trenger utvidelse innover — for eksempel en lukk-knapp i et hjørne.
+Til elementer som sitter langs en kant og bare kan vokse innover, for eksempel en lukk-knapp i et hjørne.
 
 ```jsx live
 <div class="hb-demo">
@@ -195,12 +195,11 @@ Fargesignalene er de samme som i originalen fra bazza.dev: blå = «her er hitbo
 </div>
 ```
 
-## Tilgjengelighet
+## Universell utforming
 
-Hitbox bruker `::before`-pseudo-elementet til å utvide det klikkbare arealet. Pseudo-elementet
-legges over nærliggende innhold hvis elementet ikke er plassert i en beholder med `overflow: hidden`
-eller `clip-path`. Sørg for at hitbox-arealet ikke overlapper andre klikkbare elementer ved å gi
-tilstrekkelig mellomrom mellom dem.
+Pseudo-elementet legger seg over det som ligger inntil, med mindre elementet står i en beholder med
+`overflow: hidden` eller `clip-path`. To hitboxer som overlapper gir et areal der brukeren treffer
+noe annet enn det hen sikter på, så hold nok avstand mellom klikkbare elementer.
 
 Klassen setter automatisk `position: relative` på elementet via `.ix-hitbox`. Ikke fjern dette —
 uten `position: relative` vil `::before` posisjonere seg mot nærmeste posisjonerte forfar.

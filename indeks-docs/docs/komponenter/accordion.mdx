@@ -25,29 +25,9 @@ Accordion viser og skjuler innhold i seksjoner. Den er nyttig når mye innhold s
 - Navigasjon mellom sider — bruk lenker eller meny
 - Når alt innholdet uansett må leses i rekkefølge
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
-<TabItem value="react" label="React">
-
-```tsx live
-<Accordion>
-  <Accordion.Item defaultOpen>
-    <Accordion.Header>Hvordan logger jeg inn?</Accordion.Header>
-    <Accordion.Content>
-      <p>Du logger inn med BankID eller BankID på mobil øverst til høyre.</p>
-    </Accordion.Content>
-  </Accordion.Item>
-  <Accordion.Item>
-    <Accordion.Header>Hvordan endrer jeg passord?</Accordion.Header>
-    <Accordion.Content>
-      <p>Gå til Innstillinger → Sikkerhet og velg «Endre passord».</p>
-    </Accordion.Content>
-  </Accordion.Item>
-</Accordion>
-```
-
-</TabItem>
 <TabItem value="html" label="HTML">
 
 ```jsx live
@@ -65,6 +45,26 @@ Accordion viser og skjuler innhold i seksjoner. Den er nyttig når mye innhold s
     </div>
   </details>
 </div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Accordion>
+  <Accordion.Item defaultOpen>
+    <Accordion.Header>Hvordan logger jeg inn?</Accordion.Header>
+    <Accordion.Content>
+      <p>Du logger inn med BankID eller BankID på mobil øverst til høyre.</p>
+    </Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item>
+    <Accordion.Header>Hvordan endrer jeg passord?</Accordion.Header>
+    <Accordion.Content>
+      <p>Gå til Innstillinger → Sikkerhet og velg «Endre passord».</p>
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion>
 ```
 
 </TabItem>
@@ -149,38 +149,46 @@ Innholdet kan bestå av tekst, lister, lenker og andre komponenter.
 
 ## Retningslinjer
 
-### Innhold og formulering
+### Skriv headere som kan leses alene
 
-- Skriv korte, beskrivende headere som gir mening lest alene.
-- Start med det viktigste ordet i headeren — den skal være lett å skanne.
-- Unngå at brukeren må åpne seksjoner for å forstå hva de inneholder.
+Headeren er det eneste brukeren har å gå etter før hen åpner seksjonen. Sett det viktigste
+ordet først, og hold den kort nok til å skannes nedover lista. Må seksjonen åpnes for at
+headeren skal gi mening, er headeren for vag.
 
-### Unngå overdreven nøsting
+### Ikke legg accordion i accordion
 
-Accordion i accordion blir fort uoversiktlig. Vurder å dele opp innholdet på en annen måte hvis du trenger flere nivåer.
+To nivåer med åpne og lukkede seksjoner er vanskelig å holde oversikt over. Trenger du
+flere nivåer, del innholdet på egne sider eller i [faner](./tabs) i stedet.
 
-### Default-åpne seksjoner
+### Start med det viktigste åpent
 
-Marker den eller de viktigste seksjonene med `defaultOpen` slik at brukeren ser noe innhold med en gang. Seksjonene er uavhengige, så du kan starte flere åpne samtidig.
+Sett `defaultOpen` på den seksjonen folk oftest er ute etter, så møter de innhold og ikke
+bare en liste med lukkede rader. Seksjonene er uavhengige, så flere kan stå åpne fra start.
+
+### Designvalg
+
+Akseptansekriteriene beskriver en button-basert accordion (`<button aria-expanded aria-controls>`
+med et panel som har matchende `id`). Vi bygger i stedet på native `<details>`/`<summary>`. Den
+oppfyller samme intensjon uten eksplisitt `aria-expanded`/`aria-controls`: disclosure-knappen er
+fokuserbar, Enter og Space åpner og lukker, og skjermlesere annonserer tilstanden. Innholdet er
+programmessig knyttet til headeren ved å ligge inne i samme `<details>`, så aria-koblingen er
+overflødig. Løsningen er enklere, har bred innebygd støtte, og følger samme native-tilnærming som
+Digdir og Designsystemet.
 
 ## Universell utforming
 
 ### Hva du selv må sørge for
 
-- **Skriv kort og beskrivende header-tekst** — headeren er klikkflaten og må gi mening alene. Et valgfritt prefiks-ikon støtter, men teksten er alltid hovedbæreren.
+- Skriv kort og beskrivende header-tekst. Headeren er klikkflaten og må gi mening alene. Et valgfritt prefiks-ikon støtter, men teksten er alltid hovedbæreren.
 - **Plasser `Accordion.Header` først** i hver `Accordion.Item` — native `<details>` krever at `<summary>` er første barn.
-- **Bruk overskriftsnivå ved behov** — inngår headerne i en dokumentstruktur, kan du legge en `<Heading>`/`<h3>` inni `Accordion.Header` for korrekt overskriftshierarki.
+- Bruk overskriftsnivå ved behov. Inngår headerne i en dokumentstruktur, kan du legge en `<Heading>`/`<h3>` inni `Accordion.Header` for korrekt overskriftshierarki.
 
 ### Hva komponenten gjør automatisk
 
-- **Disclosure-semantikk** — header er en native `<summary>`: fokuserbar med Tab, åpnes/lukkes med Enter og Space, og åpen/lukket-tilstand annonseres av skjermlesere. Ingen ekstra ARIA er nødvendig.
-- **Programmessig kobling** — innholdet ligger inne i samme `<details>` som headeren, så de er knyttet sammen uten `aria-controls`/`id`.
-- **Tilstandsindikator** — en chevron roterer for å vise åpen/lukket. Animasjonen er kort og respekterer `prefers-reduced-motion`.
-- **Fokusindikator** — tydelig fokusring på header (`:focus-visible`).
-
-:::note Avvik fra akseptansekriteriene: `<summary>` framfor `<button>`
-Kriteriene beskriver en button-basert accordion (`<button aria-expanded aria-controls>` + panel med matchende `id`). Vi bygger i stedet på native `<details>`/`<summary>`, som oppfyller samme intensjon — fokuserbar disclosure-knapp, Enter/Space og åpen/lukket-tilstand annonsert av skjermlesere — uten eksplisitt `aria-expanded`/`aria-controls`. Innholdet er programmessig knyttet til headeren ved å ligge inne i samme `<details>`, så aria-koblingen er overflødig. Dette er enklere, har bred innebygd støtte og følger samme native-tilnærming som Digdir/Designsystemet.
-:::
+- **Disclosure-semantikk:** header er en native `<summary>`: fokuserbar med Tab, åpnes/lukkes med Enter og Space, og åpen/lukket-tilstand annonseres av skjermlesere. Ingen ekstra ARIA er nødvendig.
+- **Programmessig kobling:** innholdet ligger inne i samme `<details>` som headeren, så de er knyttet sammen uten `aria-controls`/`id`.
+- **Tilstandsindikator:** en chevron roterer for å vise åpen/lukket. Animasjonen er kort og respekterer `prefers-reduced-motion`.
+- **Fokusindikator:** tydelig fokusring på header (`:focus-visible`).
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -223,7 +231,7 @@ Kriteriene beskriver en button-basert accordion (`<button aria-expanded aria-con
 
 Trenger du `ix-accordion`-stylingen på HTML du setter sammen selv, kan du bruke klassene direkte. Native `<details>`/`<summary>` gir semantikk og tastatur — ingen JavaScript er nødvendig.
 
-### Tilgjengelige klasser
+### Tilgjengelige klasser og selektorer
 
 | Element/tilstand | Selektor / attributt |
 |------------------|----------------------|

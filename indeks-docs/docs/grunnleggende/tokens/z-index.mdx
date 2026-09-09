@@ -3,10 +3,8 @@ import CssPropertyTable from '../../../src/components/cssPropertyTable';
 
 # Z Index
 
-Z-index er en CSS-egenskap som styrer stablingsrekkefølgen til elementer på en nettside. Med z-index kan du bestemme hvilke elementer som skal ligge over eller under andre, spesielt når de overlapper hverandre. For å sikre konsistens og forutsigbarhet i designet, har vi definert en rekke z-index tokens som dekker vanlige brukstilfeller i SpareBank 1 sitt designsystem.
+`z-index` bestemmer hvilket element som ligger øverst når to elementer overlapper. Problemet oppstår når hvert team velger tall selv: en modal med `z-index: 100` havner under en header med `999`, og så begynner budkrigen.
 
-Hver token representerer en CSS custom property, som gjør det enkelt å bruke og vedlikeholde z-index-verdier på tvers av prosjekter. Tokenene er navngitt etter formålet de skal dekke, og verdiene er nøye valgt for å unngå konflikter mellom ulike komponenter og overlays.
-
-Ved å bruke disse tokenene sikrer du at grensesnittet oppfører seg konsistent, og at viktige elementer alltid vises i riktig rekkefølge.
+Derfor har vi tokens for de tilfellene som faktisk trenger stabling. Tokenet er navngitt etter formålet, og verdiene er satt slik at komponenter og overlays ikke kolliderer. Velg tokenet som beskriver det du lager, og la tallet være.
 
 <CssPropertyTable tokens={zIndexTokens['z-index']} prefix="z" />

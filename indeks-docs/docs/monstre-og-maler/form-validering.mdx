@@ -2,9 +2,9 @@ import EksempelLink from '@site/src/components/EksempelLink';
 
 # Form-validering
 
-Indeks sine form-komponenter er **bring-your-own-validation**: hver komponent tar en ferdig `errorMessage`-streng og viser den (og setter `aria-invalid` selv). Selve valideringen — reglene og feilmeldingene — overlater vi til et form-rammeverk og et skjema. Denne siden viser det anbefalte oppsettet med [React Hook Form](https://react-hook-form.com/) (RHF) og [Valibot](https://valibot.dev/).
+Indeks sine form-komponenter er **bring-your-own-validation**: hver komponent tar en ferdig `errorMessage`-streng og viser den (og setter `aria-invalid` selv). Reglene og feilmeldingene overlater vi til et form-rammeverk og et skjema. Denne siden viser det anbefalte oppsettet med [React Hook Form](https://react-hook-form.com/) (RHF) og [Valibot](https://valibot.dev/).
 
-:::tip Se det i praksis
+:::info Se det i praksis
 Et fullstendig, kjørbart eksempel med alle felttyper ligger i eksempelappen: <EksempelLink to="internTesting/form-validering">åpne Form-validering</EksempelLink>. Kildekoden: [`indeks-eksempel/src/pages/openPages/FormValidering.tsx`](https://github.com/SpareBank1/indeks/blob/main/indeks-eksempel/src/pages/openPages/FormValidering.tsx). Eksemplet dekkes også av en funksjonell Playwright-e2e-test ([`indeks-eksempel/tests/form-validering.spec.ts`](https://github.com/SpareBank1/indeks/blob/main/indeks-eksempel/tests/form-validering.spec.ts)).
 :::
 
@@ -121,7 +121,7 @@ const { register, handleSubmit, formState: { errors } } = useForm({
 
 ## Felt som trenger to-veis binding: `<Controller>`
 
-`register()` binder én vei (UI → skjema). Trenger du at skjemaet også skal styre UI-et — for eksempel at `reset()`/`setValue()` skal oppdatere det synlige valget, eller at du vil kontrollere verdien fullt ut i React — bruk RHF sin `<Controller>` og bind `value` + `field.onChange`.
+`register()` binder én vei (UI → skjema). Skal skjemaet også styre UI-et, slik at `reset()` og `setValue()` oppdaterer det synlige valget, bruker du RHF sin `<Controller>` og binder `value` + `field.onChange`.
 
 Dette er særlig relevant for `Combobox`. Med `register()` peker `ref` på web-komponenten (som eier fokus ved valideringsfeil), og verdien flyter inn via et syntetisk change-event — men RHF har ingen native input å *skrive tilbake* gjennom, så `reset()`/`setValue()` oppdaterer ikke det synlige valget. `<Controller>` løser det:
 
@@ -148,8 +148,8 @@ import { Combobox } from '@sb1/indeks-react';
 
 `Combobox` sitt `onChange` sender et event der verdien ligger i `event.target.value` (`string` i single, `string[]` i multi) — samme form som `register()` leser, så mappingen til `field.onChange` er triviell. `RadioGroup` og `CheckboxGroup` støtter også `<Controller>` på samme vis, men der holder `register()` nesten alltid.
 
-:::note `Combobox` med `register()` — initialverdi
-Bruker du `register()` (ikke `<Controller>`) og vil vise et forhåndsvalgt alternativ: sett `defaultValue` på `Combobox` i tillegg til `defaultValues` i `useForm`, og hold dem i synk. `defaultValues` alene pushes ikke inn i web-komponenten.
+:::warning Combobox med register() trenger både defaultValue og defaultValues
+Bruker du `register()` og ikke `<Controller>`, må et forhåndsvalgt alternativ settes to steder: `defaultValue` på `Combobox` *og* `defaultValues` i `useForm`. Hold dem i synk. `defaultValues` alene pushes ikke inn i web-komponenten.
 :::
 
 ## `TextField` med formatering
@@ -185,7 +185,7 @@ Send skjemaet via `handleSubmit`, som kjører valideringen før din `onValid`-ca
 </Form>
 ```
 
-## Se også
+## Relatert
 
 - [ValidationMessage](/docs/komponenter/skjema/validation-message) — komponenten som viser feilmeldingen
 - [TextField](/docs/komponenter/skjema/textfield) og [formatering av TextField](/docs/komponenter/skjema/textfield-formatering)

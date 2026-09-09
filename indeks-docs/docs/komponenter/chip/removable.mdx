@@ -11,11 +11,11 @@ import a11yData from '../accessibility/chip-removable.json';
 
 En removable chip representerer et aktivt valg eller en verdi som brukeren kan fjerne — for eksempel et valgt filter. Den finnes kun i valgt tilstand (den eksisterer ikke før den er valgt) og vises med fylt aksentfarge og et kryss til høyre.
 
-**Hele chipen er fjern-knappen.** Et klikk hvor som helst på chipen — eller Enter/Mellomrom når den har fokus — fjerner den. Krysset er et dekorativt CSS-ikon uten eget fokus, så det blir kun ett tab-stopp per chip. Dette følger mønsteret i Aksel og Designsystemet.
+**Hele chipen er fjern-knappen.** Et klikk hvor som helst på chipen fjerner den, og Enter eller Mellomrom gjør det samme når den har fokus. Krysset er et dekorativt CSS-ikon uten eget fokus, så det blir kun ett tab-stopp per chip. Dette følger mønsteret i Aksel og Designsystemet.
 
 Det tilgjengelige navnet settes sammen av label og et fjern-suffiks, f.eks. «Sparing fjern». I React sender du suffikset via `removeLabel`; i ren HTML setter du hele `aria-label` selv. Suffikset må være på brukerens språk — komponenten har ingen hardkodet fallback.
 
-## Kom i gang
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -94,15 +94,15 @@ Det tilgjengelige navnet settes sammen av label og et fjern-suffiks, f.eks. «Sp
 
 ### Hva du selv må sørge for
 
-- **Gi removable chip et tilgjengelig fjern-navn** — send `removeLabel` (React) eller sett hele `aria-label` (HTML), f.eks. «Sparing fjern». Uten det hører skjermleserbrukeren bare «Sparing, knapp» og vet ikke at klikk fjerner den. Bruk riktig språk (bokmål «fjern», nynorsk «fjern», engelsk «remove») — ingen hardkodet fallback.
-- **Gi chipen en kort og tydelig label** — teksten beskriver verdien som kan fjernes og inngår i det tilgjengelige navnet.
-- **Bruk chips i grupper** — removable chips viser aktive valg og gir mest mening presentert sammen.
-- **Ikke stol på farge alene** — teksten må alltid være den primære informasjonsbæreren.
+- Gi removable chip et tilgjengelig fjern-navn. Send `removeLabel` (React) eller sett hele `aria-label` (HTML), f.eks. «Sparing fjern». Uten det hører skjermleserbrukeren bare «Sparing, knapp» og vet ikke at klikk fjerner den. Bruk riktig språk (bokmål «fjern», nynorsk «fjern», engelsk «remove») — ingen hardkodet fallback.
+- Gi chipen en kort og tydelig label. Teksten beskriver verdien som kan fjernes og inngår i det tilgjengelige navnet.
+- Bruk chips i grupper. Removable chips viser aktive valg og gir mest mening presentert sammen.
+- Ikke stol på farge alene. Teksten må alltid være den primære informasjonsbæreren.
 
 ### Hva komponenten gjør automatisk
 
 - **Tilgjengelig navn** settes til «[label] [removeLabel]».
-- **Fjern-krysset er dekorativt** — det rendres med CSS (`::after`) og ligger ikke i tilgjengelighetstreet. Hele chipen er fjern-knappen, så det blir kun ett tab-stopp.
+- **Fjern-krysset er dekorativt:** det rendres med CSS (`::after`) og ligger ikke i tilgjengelighetstreet. Hele chipen er fjern-knappen, så det blir kun ett tab-stopp.
 - **`type="button"`** settes som standard så chipen ikke sender inn skjema utilsiktet.
 - **Fokusindikator** via `:focus-visible` — synlig for tastaturbrukere, ikke for mus.
 
@@ -130,7 +130,7 @@ I tillegg støttes alle standard HTML-knapp-attributter (`onClick`, `onFocus`, `
 
 Trenger du removable chip-stylingen på HTML du setter sammen selv, kan du bruke `.ix-chip`-klassen med `data-removable` direkte.
 
-### Tilgjengelige klasser og attributter
+### Tilgjengelige klasser og selektorer
 
 | Element/tilstand | Selektor / attributt |
 |-----------------|----------------------|

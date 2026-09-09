@@ -1,6 +1,6 @@
 # Spacing
 
-Spacing-systemet i Indeks sikrer konsistente avstander mellom elementer på tvers av flater. Systemet bruker faste px-verdier som justeres på tre breakpoints, og kan tilpasses behov for mer eller mindre kompakt visning.
+Avstandene i Indeks er faste px-verdier med navn, ikke tall du velger selv. De justerer seg på tre breakpoints, og hele skalaen kan skrus tettere eller romsligere med en density-modus.
 
 ## Breakpoints
 
@@ -16,13 +16,13 @@ Fontstørrelser er faste og skalerer **ikke** med skjermbredden — grunnstørre
 
 ## Density-moduser
 
-Spacing-systemet i Indeks kan justeres basert på hvor kompakt eller romslig (desinsity) en flate skal være. Dette gjør det mulig å vise mer eller mindre innhold på samme flate, uten å gå på bekostning av lesbarhet. Indeks støtter tre ulike moduser som påvirker alle spacing-verdier.
+Density-modusen skalerer alle spacing-verdier samtidig, så du kan endre hvor tett en flate er uten å røre en enkelt avstand. Modusen settes med attributtet `data-density` på et element, og gjelder alt under det.
 
-- **Default**: Standard visning med balanserte spacing-verdier som gir god lesbarhet og tydelig struktur. Dette er anbefalt valg for de fleste flater og brukstilfeller.
-
-- **Compact**: Kompakt visning med reduserte spacing-verdier. Er godt egnet for flater med behov for høy informasjonstetthet, som for eksempel rådgiverflater og andre interne systemer. Et kompakt område kan settes ved bruk av attributtet `data-density="compact"`.
-
-- **Comfortable**: Komfortabel visning med økte spacing-verdier som gir et mer romslig uttrykk. Egner seg godt for åpne nettsider, salgskanaler og kampanjer, der innholdet skal få mer luft og oppmerksomhet. Et komfortabelt område kan settes ved bruk av attributtet `data-density="comfortable"`.
+| Modus | Passer til |
+|---|---|
+| `default` | De fleste flater. Bruk denne med mindre du har en grunn til noe annet |
+| `compact` | Flater som skal vise mye på én skjerm: rådgiverflater og interne systemer |
+| `comfortable` | Åpne nettsider, salgskanaler og kampanjer, der innholdet skal få plass |
 
 ```html
 <!-- Standard -->
@@ -84,15 +84,16 @@ Full oversikt over utility-klassene finner du [i oversikten over utility-klasser
 
 ### CSS Custom Properties
 
-Spacing finnes også i variabler: `--ix-spacing-{size}`. Variablene skiller ikke mellom padding, margin eller gap. 
+Spacing finnes også i variabler: `--ix-spacing-{size}`. Variablene skiller ikke mellom padding, margin eller gap.
 
 ```css
 .min-komponent {
     padding: var(--ix-spacing-md);
     margin-bottom: var(--ix-spacing-lg);
-    gap: (var--ix-spacing-md);
+    gap: var(--ix-spacing-md);
 }
 ```
+
 ## Migreringsguider
 
 ### Migrere fra FFE
@@ -113,7 +114,7 @@ Indeks sine verdier på spacing-variabler justerer seg etter skjermstørrelse og
 | `ffe-spacing-4xl` | `ix-spacing-4xl` | 80px      | 64px               | 96px                 |
 | `ffe-spacing-5xl` | `ix-spacing-5xl` | 160px     | 80px               | 128px                |
 
-Det er mulig å migrere til disse spacing-variablene ved bruk av search-replace-all, men det er viktig å dobbeltsjekke endringen (også på flere skjermstørrelser), da oversettelsen ikke er direkte for alle variablene.
+Du kan migrere med search-replace-all, men gå gjennom resultatet etterpå, også på flere skjermstørrelser. Oversettelsen er ikke én til én for alle variablene.
 
 ### Migrere fra tailwind
 

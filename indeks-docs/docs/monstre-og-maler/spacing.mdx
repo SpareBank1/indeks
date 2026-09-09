@@ -1,11 +1,11 @@
 # Spacing
 
-For å sikre konsistente og forutsigbare layouter i applikasjoner bygget med Indeks følger vi et sett med retningslinjer for distribusjon av spacing. Klare mønstre for avstand mellom elementer hjelper oss med å skape en harmonisk og brukervennlig visuell struktur på tvers av applikasjoner. Oppsummert dreier det seg om disse prinsippene:
+Luft mellom elementer er noe containeren bestemmer, ikke elementet selv. Det er hele ideen bak spacing i Indeks, og den koker ned til fire regler:
 
 1. [Komponenter har ingen ytre margin](#ingen-ytre-margin-på-komponenter)
-2. [Seksjoner med flere elementer defineres som egne containere med `gap` for spacing mellom elementer](#gap-inni-seksjoner)
+2. [Bruk `gap` inni en seksjon](#gap-inni-seksjoner)
 3. [Bruk margin mellom seksjoner](#margin-mellom-seksjoner)
-4. [Margin i én retning](#margin-i-én-retning)
+4. [Sett margin i én retning](#margin-i-én-retning)
 
 En sidelayout kan for eksempel fordeles på denne måten:
 
@@ -13,22 +13,22 @@ En sidelayout kan for eksempel fordeles på denne måten:
 
 ## Ingen ytre margin på komponenter
 
-Alle komponenter fra designsystemet kommer **uten ytre margin**. Dette gir deg full kontroll over spacing i din layout, enten du bruker Grid, Flex eller block-layout.
+Ingen komponent fra Indeks har ytre margin. Da kan du plassere den hvor som helst uten å nullstille noe først, og avstanden settes der den hører hjemme: i containeren.
 
-```html
-<!-- Komponentene har ingen margin -->
+```tsx
+{/* Knappen har ingen margin */}
 <Button>Klikk her</Button>
 
-<!-- Du styrer spacing i containeren -->
-<div class="ix-flex ix-gap-md">
-    <Button>Avbryt</Button>
+{/* Containeren styrer avstanden */}
+<div className="ix-flex ix-gap-md">
+    <Button variant="secondary">Avbryt</Button>
     <Button>Lagre</Button>
 </div>
 ```
 
 ## Gap inni seksjoner
 
-Når du har flere elementer innenfor samme seksjon, bruk Grid eller Flex med `gap` for å skille elementene. Gap fordeler luft *mellom* elementer, men påvirker ikke ytre margin.
+Har seksjonen flere elementer, bruk Grid eller Flex med `gap`. `gap` legger luft *mellom* elementene og lager ingen kant utenfor det første og siste, så seksjonen kan fortsatt plasseres fritt.
 
 ```css
 .card-content {
@@ -40,7 +40,7 @@ Når du har flere elementer innenfor samme seksjon, bruk Grid eller Flex med `ga
 
 ## Margin mellom seksjoner
 
-Når du skal skille mellom ulike seksjoner, bruk block-layout med margin:
+Mellom seksjoner bruker du block-layout med margin:
 
 ```css
 .section {
@@ -50,7 +50,7 @@ Når du skal skille mellom ulike seksjoner, bruk block-layout med margin:
 
 ## Margin i én retning
 
-For å skape konsistente mellomrom, bruker vi primært **margin-bottom** mellom block-elementer/seksjoner. Dette gjør det enklere å forutsi hvordan layouter vil oppføre seg og hvordan seksjoner plasserer seg i forhold til hverandre.
+Bruk `margin-bottom`, ikke `margin-top`. Velger du én retning og holder deg til den, slipper du å regne på hva som skjer der to elementer møtes:
 
 ```css
 .block-element {
@@ -64,47 +64,42 @@ For å skape konsistente mellomrom, bruker vi primært **margin-bottom** mellom 
 
 ### Hvorfor akkurat margin-bottom?
 
-* Enklere å forutsi hvordan elementer stables vertikalt
-* Margin-collapse oppfører seg mer forutsigbart
-* Lettere å gjøre overstyringer når det trengs
-* Det siste elementet i en container trenger ikke spesiell håndtering
+* Elementer stables nedover, så avstanden hører til elementet over
+* Margin-collapse blir lettere å forutsi
+* Overstyringer treffer bare ett sted
+* Det siste elementet i containeren trenger ingen egen håndtering
 
+## Skjema med spacing
 
-## Praktisk eksempel - Skjema med spacing
+`VStack` gir `gap: md` som standard, så seksjonene under trenger bare margin i bunn:
 
-```html
+```tsx
 <form>
-    <!-- Seksjon 1: Personlig info -->
-    <section class="form-section ix-mb-md">
+    {/* Seksjon 1: personlig info */}
+    <section className="ix-mb-md">
         <h2>Personlig informasjon</h2>
-        <div class="ix-v-stack">
-            <Input label="Fornavn"></Input>
-            <Input label="Etternavn"></Input>
-            <Input label="E-post"></Input>
-        </div>
+        <VStack>
+            <TextField label="Fornavn" />
+            <TextField label="Etternavn" />
+            <TextField label="E-postadresse" />
+        </VStack>
     </section>
 
-    <!-- Seksjon 2: Adresse -->
-    <section class="form-section ix-mb-md">
+    {/* Seksjon 2: adresse */}
+    <section className="ix-mb-md">
         <h2>Adresse</h2>
-        <div class="ix-v-stack">
-            <Input label="Gateadresse"></Input>
-            <Input label="Postnummer"></Input>
-        </div>
+        <VStack>
+            <TextField label="Gateadresse" />
+            <TextField label="Postnummer" />
+        </VStack>
     </section>
 
-    <!-- Knapper -->
-    <div class="ix-h-stack ix-mb-md">
+    {/* Knapper */}
+    <HStack>
         <Button variant="secondary">Avbryt</Button>
         <Button>Lagre</Button>
-    </div>
+    </HStack>
 </form>
 ```
 
-## Oppsummering
-
-* **Internt i seksjoner**: Bruk Grid/Flex med `gap`
-* **Mellom seksjoner**: Bruk block med `margin-bottom`
-* **Stack-komponenter** (`ix-v-stack` / `ix-h-stack`): Har gap md som standard
-* **Komponenter**: Kommer uten ytre margin
-* **Konsistens**: Bruk spacing-tokens/utility-klasser fra designsystemet
+Skriver du HTML uten React, er `<ix-stack>` og `<ix-stack horizontal>` de samme to. Se [Stack](../komponenter/primitives/stack) for begge variantene, og [Spacing-tokens](../grunnleggende/tokens/spacing) for verdiene bak `--ix-spacing-*`.

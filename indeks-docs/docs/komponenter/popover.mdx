@@ -11,7 +11,29 @@ import a11yData from './accessibility/popover.json';
 
 En Popover brukes til å vise kontekstuell informasjon eller handlinger knyttet til et spesifikt element på siden. Popoveren vises når brukeren aktiverer et tilknyttet element, og plasseres i nærheten av dette elementet slik at sammenhengen er tydelig.
 
-## Eksempel
+## Egnet til
+
+Bruk Popover når du trenger å:
+
+- Gi brukeren mer informasjon om et element uten å navigere bort fra siden
+- Presentere små mengder innhold som er relevant i øyeblikket
+- Tilby enkle handlinger som er direkte knyttet til et spesifikt element
+- Forklare valg eller konsekvenser før brukeren utfører en handling
+- Vise ekstra detaljer som ikke trenger å være synlige hele tiden
+
+## Uegnet til
+
+Ikke bruk Popover når:
+
+- Innholdet er kritisk for å forstå eller fullføre en oppgave
+- Informasjonen må være permanent synlig
+- Innholdsmengden er stor eller omfattende
+- Brukeren må gjennomføre en lengre prosess eller flere steg
+- Innholdet krever fullt fokus fra brukeren
+
+Vurder heller [Tooltip](./skjema/tooltip) for korte forklaringer uten handlinger, [Modal](./modal) for komplekse oppgaver, eller [Message](./message) for informasjon som bør være synlig på siden.
+
+## Bruk
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -52,29 +74,7 @@ En Popover brukes til å vise kontekstuell informasjon eller handlinger knyttet 
 </TabItem>
 </Tabs>
 
-## Egnet til
-
-Bruk Popover når du trenger å:
-
-- Gi brukeren mer informasjon om et element uten å navigere bort fra siden
-- Presentere små mengder innhold som er relevant i øyeblikket
-- Tilby enkle handlinger som er direkte knyttet til et spesifikt element
-- Forklare valg eller konsekvenser før brukeren utfører en handling
-- Vise ekstra detaljer som ikke trenger å være synlige hele tiden
-
-## Uegnet til
-
-Ikke bruk Popover når:
-
-- Innholdet er kritisk for å forstå eller fullføre en oppgave
-- Informasjonen må være permanent synlig
-- Innholdsmengden er stor eller omfattende
-- Brukeren må gjennomføre en lengre prosess eller flere steg
-- Innholdet krever fullt fokus fra brukeren
-
-Vurder heller [Tooltip](./skjema/tooltip) for korte forklaringer uten handlinger, [Modal](./modal) for komplekse oppgaver, eller [Message](./message) for informasjon som bør være synlig på siden.
-
-## Varianter
+## Eksempler
 
 ### Bare tekst
 
@@ -148,7 +148,7 @@ Pilen kan skjules når den visuelle koblingen til trigger-elementet er tydelig n
 </TabItem>
 </Tabs>
 
-## Plassering
+### Fire plasseringsretninger
 
 Popover støtter fire plasseringsretninger: `top`, `bottom`, `left` og `right`. Komponenten flipper automatisk til motsatt side hvis det ikke er nok plass.
 
@@ -229,61 +229,30 @@ Popover støtter fire plasseringsretninger: `top`, `bottom`, `left` og `right`. 
 
 ## Retningslinjer
 
-### Innhold
+### Svar på det brukeren nettopp trykket på
 
-- Innholdet skal være kortfattet og relevant for elementet som utløser popoveren
-- Bruk overskrift når det gir brukeren bedre forståelse av innholdet
-- Teksten skal være enkel og tydelig
-- Unngå lange tekstblokker
-- Handlingsknapper skal beskrive hva som skjer når brukeren velger dem
+Innholdet skal handle om trigger-elementet og ingenting annet. En overskrift hjelper når
+panelet inneholder mer enn et par setninger, men lange tekstblokker hører på siden: en popover
+legger seg over innholdet og skal kunne leses ferdig raskt.
 
-### Handlinger
+### Hold handlingene til de viktigste
 
-- Handlinger er valgfrie — en popover kan vises uten handlinger dersom den kun skal presentere informasjon
-- Når handlinger brukes, bør antallet begrenses til de viktigste valgene
-- Primærhandling skal tydelig fremheves
+En popover klarer seg fint uten knapper hvis den bare forklarer noe. Har den knapper, skal
+teksten på dem si hva som skjer («Bytt konto», ikke «OK»), og én av dem skal være tydelig
+primær. Blir det mange valg, hører de i en [DropdownMenu](./dropdown-menu) eller en
+[Modal](./modal).
 
-### Plassering
+### La pekeren peke på riktig element
 
-- Popover skal være visuelt koblet til elementet som åpner den
-- Komponentens peker viser hvilken kontekst informasjonen tilhører
-- Velg plassering basert på tilgjengelig plass i grensesnittet
+Pekeren er koblingen mellom panelet og det brukeren trykket på. Velg plassering etter hvor det
+er plass på skjermen, og sjekk at pekeren fortsatt treffer trigger-elementet når panelet
+clampes mot kanten av viewporten.
 
-### Oppførsel
+### Hold én popover åpen om gangen
 
-- Popover åpnes når brukeren aktiverer tilknyttet trigger-element
-- Popover lukkes ved Escape-tasten eller klikk utenfor komponenten
-- Bare én popover bør være åpen om gangen
-- Fokus flyttes inn i popoveren når den åpnes dersom den inneholder interaktive elementer
-
-## Tilpasning med CSS
-
-Trenger du `ix-popover`-stylingen på HTML du setter sammen selv — uten React-komponenten eller web componenten — kan du bruke klassene direkte på elementene dine.
-
-### Tilgjengelige klasser og selektorer
-
-| Element | Selektor |
-|---------|----------|
-| Popover-wrapper | `ix-popover` eller `.ix-popover` |
-| Innholdspanel | `.ix-popover__content` |
-| Overskrift | `.ix-popover__heading` |
-| Brødtekst | `.ix-popover__body` |
-| Handlingsrad | `.ix-popover__actions` |
-
-### Eksempel: bruk i egen HTML-struktur
-
-```html
-<ix-popover placement="top">
-  <button class="ix-button">Åpne popover</button>
-  <div class="ix-popover__content">
-    <div class="ix-popover__heading">Overskrift</div>
-    <div class="ix-popover__body">Forklarende tekst.</div>
-    <div class="ix-popover__actions">
-      <button class="ix-button" data-size="sm">Bekreft</button>
-    </div>
-  </div>
-</ix-popover>
-```
+Panelet åpnes fra trigger-elementet og lukkes med Escape eller klikk utenfor. Åpner du en ny
+mens en annen står åpen, konkurrerer to paneler om samme oppmerksomhet, og brukeren mister
+sporet av hva Escape lukker.
 
 ## Universell utforming
 
@@ -309,3 +278,106 @@ Trenger du `ix-popover`-stylingen på HTML du setter sammen selv — uten React-
 ### WCAG-kriterier
 
 <AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### `<ix-popover>`
+
+Web componenten tar trigger og innhold som barn. Første element er triggeren, `.ix-popover__content` er panelet.
+
+| Attributt | Verdier | Standard | Beskrivelse |
+|-----------|---------|----------|-------------|
+| `placement` | `top` \| `bottom` \| `left` \| `right` | `top` | Ønsket plassering. Komponenten flipper til motsatt side hvis det ikke er plass |
+| `open` | flagg | | Åpner panelet. Settes og fjernes av komponenten selv, med mindre `data-controlled` er satt |
+| `data-arrow` | `false` | | Skjuler pilmarkøren. Utelat attributtet for å vise den |
+| `data-controlled` | flagg | | Kontrollert modus. Komponenten endrer ikke `open` selv, men sender `open-request` og `close-request` slik at du kan styre den |
+
+### Struktur
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| Trigger | Ja | Første barn. Må være en interaktiv kontroll (`<button>` eller `<a>`) med tilgjengelig navn |
+| `.ix-popover__content` | Ja | Panelet. Må være direkte barn av `<ix-popover>`. Får `role="dialog"` og `data-placement` av komponenten |
+| `.ix-popover__heading` | Nei | Overskrift i panelet |
+| `.ix-popover__body` | Nei | Brødtekst i panelet |
+| `.ix-popover__actions` | Nei | Handlingsrad nederst i panelet |
+
+### Hendelser
+
+Alle bobler.
+
+| Hendelse | Når | Modus |
+|----------|-----|-------|
+| `open` | Panelet er åpnet | Ukontrollert |
+| `close` | Panelet er lukket | Ukontrollert |
+| `open-request` | Brukeren ber om å åpne | Kontrollert (`data-controlled`) |
+| `close-request` | Brukeren ber om å lukke | Kontrollert (`data-controlled`) |
+
+</TabItem>
+<TabItem value="react" label="React">
+
+### PopoverProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | Nei | `'top'` | Ønsket plassering. Flipper automatisk hvis det ikke er plass |
+| `arrow` | `boolean` | Nei | `true` | Vis pilmarkøren |
+| `open` | `boolean` | Nei | | Kontrollert åpen-tilstand. Angi den for kontrollert bruk, utelat for ukontrollert |
+| `defaultOpen` | `boolean` | Nei | `false` | Startverdi i ukontrollert modus. Ignoreres når `open` er satt |
+| `onOpenChange` | `(open: boolean) => void` | Nei | | Kalles når panelet åpnes eller lukkes. I kontrollert modus setter du `open` som respons; i ukontrollert modus er den en observatør |
+| `children` | `ReactNode` | Nei | | `Popover.Trigger` og `Popover.Content` |
+| `className` | `string` | Nei | | Ekstra CSS-klasser på `<ix-popover>` |
+| `ref` | `Ref<HTMLElement>` | Nei | | Peker på `<ix-popover>`-elementet |
+
+### `Popover.Trigger`
+
+| Prop | Type | Påkrevd | Beskrivelse |
+|------|------|---------|-------------|
+| `children` | `ReactElement` | Ja | Trigger-elementet, typisk en `Button`. Rendres som seg selv uten wrapper. Andre verdier enn et React-element gir en feil |
+
+### `Popover.Content`, `Popover.Heading`, `Popover.Body`, `Popover.Actions`
+
+| Prop | Type | Påkrevd | Beskrivelse |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | Nei | Innhold |
+| `className` | `string` | Nei | Ekstra CSS-klasser på `<div>`-elementet |
+| ...`div`-attributter | | | Alle vanlige `<div>`-props |
+
+Underkomponentene rendrer hver sin `<div>` med den tilsvarende BEM-klassen. `Popover.Content` er den web componenten finner og gir `role="dialog"`, så den må være med.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Trenger du `ix-popover`-stylingen på HTML du setter sammen selv, uten React-komponenten eller web componenten, kan du bruke klassene direkte på elementene dine.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Popover-wrapper | `ix-popover` eller `.ix-popover` |
+| Innholdspanel | `.ix-popover__content` |
+| Overskrift | `.ix-popover__heading` |
+| Brødtekst | `.ix-popover__body` |
+| Handlingsrad | `.ix-popover__actions` |
+| Faktisk plassering (styrer pilen) | `.ix-popover__content[data-placement="top\|bottom\|left\|right"]` |
+| Skjult pil | `[data-arrow="false"]` på `ix-popover` |
+
+### Eksempel: bruk i egen HTML-struktur
+
+```html
+<ix-popover placement="top">
+  <button class="ix-button">Åpne popover</button>
+  <div class="ix-popover__content">
+    <div class="ix-popover__heading">Overskrift</div>
+    <div class="ix-popover__body">Forklarende tekst.</div>
+    <div class="ix-popover__actions">
+      <button class="ix-button" data-size="sm">Bekreft</button>
+    </div>
+  </div>
+</ix-popover>
+```

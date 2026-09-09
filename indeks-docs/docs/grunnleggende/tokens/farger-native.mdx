@@ -1,17 +1,13 @@
 # Farger for Native
 
-Pakken `@sb1/indeks-tokens` inneholder fargetokens som kan bygges til forskjellige plattformer, inkludert native (iOS og Android).
-
-For å bruke fargene i native-apper er det enkleste å bygge dem til den relevante plattformen ved hjelp av `build-colors`-kommandoen som følger med pakken.
+Fargene i Indeks kan bygges ut til native-kode. Pakken `@sb1/indeks-tokens` har en `build-colors`-kommando som genererer Kotlin-farger til Android og Color Assets til iOS, fra de samme tokenene som ligger bak [web](./farger-web).
 
 ## Hvordan bygge fargene
 
-Pakken `@sb1/indeks-tokens` eksponerer en `build-colors`-kommando som genererer fargetokens for den plattformen du velger.
+Du kan kjøre kommandoen med `npx` uten å installere pakken. Signaturen er den samme uansett plattform, og du styrer resultatet med `platform=`, `path=` og valgfritt `theme=`.
 
-Du kan kjøre den med `npx` uten å installere pakken. Kommandoen har samme signatur uansett plattform — du styrer resultatet med `platform=`, `path=` og valgfritt `theme=`. Den samme generatoren brukes også for [web](./farger-web).
-
-:::tip Versjonering
-Vi anbefaler at dere commiter scriptet dere bruker for å bygge fargene, slik at dere har kontroll på når fargene endrer seg. Ved å ha dette committet blir det enklere å spore når fargene endrer seg og å vite hvilken versjon en er på.
+:::info Commit build-scriptet
+Legg scriptet dere bygger fargene med i versjonskontroll. Da kan dere se hvilken tokens-versjon appen står på, og når fargene sist ble endret.
 :::
 
 ## Android
@@ -42,12 +38,6 @@ object Colors {
 }
 ```
 
-### Parametere
-
-- `platform=android` - Spesifiserer at du vil bygge for Android
-- `path=<sti>` - Hvor filene skal lagres (f.eks. `./android/colors`)
-- `theme=<sti>` - (Valgfri) Sti til egen theme-fil (default: `sb1`)
-
 ## iOS
 
 For å bygge farger til iOS (Xcode Color Assets):
@@ -73,11 +63,13 @@ SemanticColors.xcassets/
     └── ... flere farger
 ```
 
-### Parametere
+## Parametere
 
-- `platform=ios` - Spesifiserer at du vil bygge for iOS
-- `path=<sti>` - Hvor filene skal lagres (f.eks. `./ios/colors`)
-- `theme=<sti>` - (Valgfri) Sti til egen theme-fil (default: `sb1`)
+| Parameter | Påkrevd | Betydning |
+|---|---|---|
+| `platform=android` eller `platform=ios` | Ja | Hvilken plattform du bygger for |
+| `path=<sti>` | Ja | Hvor filene skal lagres, for eksempel `./android/colors` |
+| `theme=<sti>` | Nei | Sti til egen JSON-theme-fil. Standard er `sb1` |
 
 ## Egne themes
 
@@ -137,19 +129,21 @@ npx @sb1/indeks-tokens build-colors platform=ios path=./ios/colors theme=./my-th
 
 ## Fargeskalaer
 
-Alle farger bygges fra fargeskalaer med 20 steg (0-950) for hver basisfarge:
+Alle farger bygges fra fargeskalaer med 20 steg (0–950) for hver basisfarge:
 
-- **brand** - Merkevarefarge
-- **success** - Suksess/positiv
-- **info** - Informasjon
-- **warning** - Advarsel
-- **danger** - Feil/negativ
-- **gray** - Nøytral grå
-- **neutral** - Nøytral brun/beige
+| Basisfarge | Brukes til |
+|---|---|
+| `brand` | Merkevarefargen |
+| `success` | Bekreftelse og positive tilstander |
+| `info` | Nøytral informasjon |
+| `warning` | Advarsel |
+| `danger` | Feil og destruktive handlinger |
+| `gray` | Nøytral grå |
+| `neutral` | Nøytral brun og beige |
 
-De semantiske fargene (f.eks. `background.default`, `foreground.main`) er mappet til disse fargeskalaene og justeres automatisk for light og dark mode.
+De semantiske fargene (for eksempel `background.default` og `foreground.main`) peker inn i disse skalaene og bytter trinn automatisk mellom light og dark mode.
 
-Se [Fargeskalaer](./fargeskalaer) for hvordan skalaene genereres — og hvorfor det å justere mørkhetsgraden på en basisfarge ikke påvirker resultatet.
+Se [Fargeskalaer](./fargeskalaer) for hvordan skalaene genereres, og hvorfor det ikke påvirker resultatet å justere mørkhetsgraden på en basisfarge.
 
 ## Oppdatere farger
 
@@ -157,7 +151,6 @@ For å oppdatere fargene i native-appen din:
 
 1. Oppdater versjonen av `@sb1/indeks-tokens` i kommandoen
 2. Kjør build-scriptet på nytt
-3. Commit de nye filene til versjonskontroll
-4. De nye fargene vil være tilgjengelige i appen
+3. Commit de genererte filene
 
-Dette sikrer at fargeendringer er sporbare og at teamet har kontroll over når oppdateringer skjer.
+Fargene følger appen fra og med den commiten, så det er dere som bestemmer når endringen slår inn.

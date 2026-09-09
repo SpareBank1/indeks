@@ -12,7 +12,7 @@ import a11yData from './accessibility/date-field.json';
 DateField lar brukeren taste en dato i norsk format (`dd.mm.åååå`) eller åpne enhetens innebygde kalender via en knapp i feltet. Verdien som sendes videre er alltid ISO (`åååå-mm-dd`), uavhengig av hva som vises i feltet.
 
 :::info Norsk format, ISO-verdi
-Brukeren ser og taster `dd.mm.åååå`. Selve verdien — det som sendes ved innsending og som ligger i `event.target.value` i `onChange` — er ISO (`åååå-mm-dd`). Det unngår den amerikanske `mm/dd/åååå`-tvetydigheten samtidig som datoen er maskinlesbar.
+Brukeren ser og taster `dd.mm.åååå`. Selve verdien er ISO (`åååå-mm-dd`). Det er den som sendes ved innsending, og den som ligger i `event.target.value` i `onChange`. Det unngår den amerikanske `mm/dd/åååå`-tvetydigheten samtidig som datoen er maskinlesbar.
 :::
 
 ## Egnet til
@@ -27,9 +27,9 @@ Brukeren ser og taster `dd.mm.åååå`. Selve verdien — det som sendes ved in
 - Valg av måned eller år alene uten dag
 - Sperring av enkeltdager eller helger — støttes ikke i denne fasen
 
-## Kom i gang
+## Bruk
 
-I feltet taster brukeren datoen. Feltet er skilletegn-bevisst og fleksibelt: du kan taste `1.1.2026` like gjerne som `01.01.2026` (eller `01012026` uten skilletegn). Teksten står urørt mens du skriver, og feltet normaliserer til `dd.mm.åååå` — nullutfyller enkeltsifret dag/måned — når det mister fokus (`1.1.2026` → `01.01.2026`). Året kan tastes med fire sifre (`2026`) eller to sifre som utvides til `20xx` — `1.1.26` blir `01.01.2026`. Kalenderknappen til høyre åpner enhetens innebygde datovelger. På desktop kaller knappen `showPicker()`; på touch fanges tappet av en gjennomsiktig native date-input som ligger oppå knappen, så kalenderen åpnes robust.
+I feltet taster brukeren datoen. Feltet er skilletegn-bevisst og fleksibelt: du kan taste `1.1.2026` like gjerne som `01.01.2026` (eller `01012026` uten skilletegn). Teksten står urørt mens du skriver. Når feltet mister fokus, normaliserer det til `dd.mm.åååå` og nullutfyller enkeltsifret dag og måned (`1.1.2026` → `01.01.2026`). Året kan tastes med fire sifre (`2026`) eller to sifre som utvides til `20xx`, så `1.1.26` blir `01.01.2026`. Kalenderknappen til høyre åpner enhetens innebygde datovelger. På desktop kaller knappen `showPicker()`; på touch fanges tappet av en gjennomsiktig native date-input som ligger oppå knappen, så kalenderen åpnes også der `showPicker()` ikke er støttet.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -275,7 +275,7 @@ Som standard fokuserer et tapp i feltet for manuell tasting, og kalenderen åpne
 </TabItem>
 </Tabs>
 
-## Native skjema-innsending
+### Native skjema-innsending
 
 DateField sperrer ikke for vanlige HTML-skjemaer. `name` når den genererte native date-inputen, som bærer ISO-verdien — så et server-side skjema med `method="post"` mottar `åååå-mm-dd`:
 
@@ -294,7 +294,7 @@ DateField sperrer ikke for vanlige HTML-skjemaer. `name` når den genererte nati
 </form>
 ```
 
-### React Hook Form
+#### React Hook Form
 
 `onChange` er event-basert (ISO i `event.target.value`) og `ref` er en register-kompatibel proxy, så feltet bindes som et hvilket som helst annet — spre `{...register('felt')}` rett på. RHF leser/skriver ISO via proxy-en (`reset`/`setValue`/`defaultValues` fungerer), og `onBlur` gir touched-state.
 
@@ -315,13 +315,13 @@ Skriv `dd.mm.åååå` i `description`. Formateringen vises først når brukeren
 
 ### Bruk min og maks fremfor etterkontroll der det går
 
-Når gyldige datoer har en naturlig grense (f.eks. ikke frem i tid), sett `min`/`max` slik at OS-kalenderen sperrer dem. Regler som ikke kan uttrykkes med et intervall — enkeltdager, helger — valideres på blur/innsending med en `errorMessage`.
+Når gyldige datoer har en naturlig grense (f.eks. ikke frem i tid), sett `min`/`max` slik at OS-kalenderen sperrer dem. Regler som ikke kan uttrykkes som et intervall, som enkeltdager eller helger, valideres på blur eller innsending med en `errorMessage`.
 
 ### Én dato per felt
 
 Trenger du et intervall, bruk to separate datofelter med hver sin label («Fra» og «Til»).
 
-## Kjent begrensning (fase 1)
+### Kjent begrensning (fase 1)
 
 Denne versjonen støtter `min`/`max`, men ikke sperring av enkeltdager eller helger, og bruker enhetens innebygde kalender. En egen kalendervelger for desktop med fler-års-navigasjon er planlagt i en senere fase. På desktop åpner kalenderknappen velgeren via `showPicker()`; på de eldste nettleserne i baselinen vår (Safari 15.4, Firefox 100) uten `showPicker()` kan desktop-brukeren i stedet navigere med tastatur og taste datoen direkte.
 
@@ -347,23 +347,6 @@ Denne versjonen støtter `min`/`max`, men ikke sperring av enkeltdager eller hel
 ### WCAG-kriterier
 
 <AccessibilityTable data={a11yData} />
-
-## Tilpasning med CSS
-
-Trenger du `ix-date-field`-stylingen på HTML du setter sammen selv — uten React-komponenten — bruker du klassene direkte. Den synlige inputen gjenbruker `.ix-text-field`; kalenderknappen og den native inputen genereres av web-komponenten og trenger ikke skrives for hånd.
-
-### Tilgjengelige klasser og selektorer
-
-| Element | Selektor |
-|---------|----------|
-| Rot | `.ix-date-field` |
-| Tekstfelt-wrapper | `.ix-text-field` |
-| Synlig input | `.ix-date-field .ix-text-field > input` |
-| Kalenderknapp (generert) | `.ix-date-field__toggle` |
-| Native date-input (generert) | `.ix-date-field__native` |
-| Label | `.ix-label` |
-| Hjelpetekst | `[data-field="description"]` |
-| Feilmelding | `[data-field="error"]` |
 
 ## Props / API
 
@@ -424,6 +407,23 @@ Trenger du `ix-date-field`-stylingen på HTML du setter sammen selv — uten Rea
 
 </TabItem>
 </Tabs>
+
+## Tilpasning med CSS
+
+Trenger du `ix-date-field`-stylingen på HTML du setter sammen selv, uten React-komponenten, bruker du klassene direkte. Den synlige inputen gjenbruker `.ix-text-field`; kalenderknappen og den native inputen genereres av web-komponenten og trenger ikke skrives for hånd.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Rot | `.ix-date-field` |
+| Tekstfelt-wrapper | `.ix-text-field` |
+| Synlig input | `.ix-date-field .ix-text-field > input` |
+| Kalenderknapp (generert) | `.ix-date-field__toggle` |
+| Native date-input (generert) | `.ix-date-field__native` |
+| Label | `.ix-label` |
+| Hjelpetekst | `[data-field="description"]` |
+| Feilmelding | `[data-field="error"]` |
 
 ## Relatert
 

@@ -7,16 +7,10 @@ import a11yData from './accessibility/validation-message.json';
 
 ValidationMessage viser en feilmelding knyttet til et skjemafelt eller en feltgruppe.
 
-:::note Success-tilstand er under vurdering
-
-Komponenten støtter i dag kun **error**-tilstand. Figma viser også en **success**-variant (grønt ikon + grønn tekst), men vi har ikke tatt den i bruk ennå. Før vi implementerer success må vi avklare:
-
-- **Når gir bekreftelse faktisk verdi?** Success-meldinger på hvert felt kan skape støy og over-annonsering for skjermlesere.
-- **Hvordan annonseres den?** `ix-field` setter i dag `aria-live="polite"` for feil. Success bør ikke avbryte, men vi må sikre at den ikke dobbelt-annonseres sammen med feil.
-- **Skal `aria-invalid` fjernes?** Success og error deler i dag samme `[data-field="error"]`-slot og `aria-invalid`-logikk i `ix-field`.
-
-API-et er forberedt for å utvides med en `variant`/status senere uten brytende endringer. Ta kontakt med designsystem-teamet før du bygger på success.
-
+:::info Bare error-tilstand i dag
+Komponenten støtter bare **error**. Figma viser også en **success**-variant, men den er ikke tatt
+i bruk. API-et kan utvides med en status senere uten brytende endringer, så ta kontakt med
+designsystem-teamet før du bygger på success.
 :::
 
 ## Egnet til
@@ -27,9 +21,9 @@ API-et er forberedt for å utvides med en `variant`/status senere uten brytende 
 ## Uegnet til
 
 - Generelle informasjonsmeldinger som ikke er feil
-- Suksess- eller advarselsmeldinger (success-tilstand er under vurdering — se notatet øverst)
+- Suksess- eller advarselsmeldinger (komponenten støtter bare feil)
 
-## Kom i gang
+## Bruk
 
 ValidationMessage rendrer et `<span data-field="error">` med et dekorativt feilikon (en badge — hvit glyf på rød sirkel) foran teksten. Elementet styles av Indeks-CSS. Når det ligger inne i en `<ix-field>` eller `<ix-radio-group>`, kobles det automatisk til input via `aria-describedby` og setter `aria-invalid="true"` på inputen når meldingen har innhold.
 
@@ -59,7 +53,7 @@ Ikonet er dekorativt (`aria-hidden`) — feilen formidles av teksten. Slå det a
 <ValidationMessage showIcon={false}>Du må velge et alternativ</ValidationMessage>
 ```
 
-## Bruk inne i ix-field
+### Bruk inne i ix-field
 
 `<ix-field>` finner automatisk elementer med `data-field="error"` og kobler dem til inputen via `aria-describedby`. Hold elementet i DOM hele tiden (også når det er tomt) — `<ix-field>` setter `aria-live="polite"` slik at skjermlesere fanger opp endringer.
 
@@ -106,19 +100,23 @@ Beskriv hva brukeren må gjøre, ikke hva som er feil i abstrakte termer.
 
 ### Hold meldingen kort
 
-Én setning er nok. Detaljerte krav hører hjemme i `description`, ikke i feilmeldingen.
+Én setning er nok. Skal brukeren vite formatkravet på forhånd, hører det i `description` over
+feltet, ikke i feilmeldingen etterpå.
 
-### Hold elementet i DOM
+### Behold elementet i DOM
 
-Når du veksler mellom feil og ingen feil, behold `<span data-field="error">` i DOM og endre kun innholdet. Hvis elementet legges til/fjernes dynamisk, kan skjermleseren miste oppdateringen — `aria-live`-regioner må være i DOM før innholdet endres.
+Veksler du mellom feil og ingen feil, la `<span data-field="error">` stå og endre bare
+innholdet. En `aria-live`-region må ligge i DOM før teksten endres. Settes elementet inn
+samtidig med meldingen, rekker ikke skjermleseren å registrere endringen, og brukeren hører
+ingenting.
 
 ## Universell utforming
 
 ### Hva du selv må sørge for
 
-- **Skriv konkret feilmeldingstekst** — beskriv hva brukeren må gjøre, ikke bare at noe er feil
-- **Hold elementet i DOM** — ikke fjern det når feilmeldingen er borte. Sett innholdet til en tom streng i stedet, slik at `aria-live` kan kunngjøre framtidige endringer
-- **Plasser den nær feltet** — feilmeldingen skal stå i nærheten av input-elementet i DOM-rekkefølgen, så koblingen blir tydelig både visuelt og for skjermlesere
+- Skriv konkret feilmeldingstekst. Beskriv hva brukeren må gjøre, ikke bare at noe er feil
+- Hold elementet i DOM. Ikke fjern det når feilmeldingen er borte. Sett innholdet til en tom streng i stedet, slik at `aria-live` kan kunngjøre framtidige endringer
+- Plasser den nær feltet. Feilmeldingen skal stå i nærheten av input-elementet i DOM-rekkefølgen, så koblingen blir tydelig både visuelt og for skjermlesere
 
 <KeyboardAndScreenReader data={a11yData} />
 
