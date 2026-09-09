@@ -19,7 +19,7 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
      *  status-farge-kaskaden. @default "neutral" */
     variant?: TagVariant;
     /** Visuell profil. `emphasis` = mettet flate + hvit tekst, `subtle` =
-     *  pastell-flate + farget tekst. @default "emphasis" */
+     *  pastell-flate + mørk tekst + farget border. @default "emphasis" */
     type?: 'emphasis' | 'subtle';
     /** @default "md" */
     size?: 'sm' | 'md' | 'lg';

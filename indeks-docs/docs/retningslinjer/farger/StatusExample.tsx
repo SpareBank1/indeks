@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import './status-example.css';
 
 const StatusExample: React.FC = () => {
-    const [selectedStatus, setSelectedStatus] = useState('default');
+    const [selectedStatus, setSelectedStatus] = useState('neutral');
 
     const statusOptions = [
-        'default',
+        'neutral',
         'info',
         'success',
         'warning',

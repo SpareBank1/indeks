@@ -1,6 +1,6 @@
 {
   "component": "Tag",
-  "lastReviewed": "2026-07-28",
+  "lastReviewed": "2026-08-28",
   "consumerResponsibilities": [
     {
       "summary": "Ikke stol på farge alene for å formidle status",
@@ -27,7 +27,7 @@
     { "id": "1.3.1", "notes": "Tekstinnholdet følger naturlig leserekkefølge i DOM. Ingen skjult struktur som må formidles." },
     { "id": "1.3.2", "notes": "Innhold (ikon + tekst) følger naturlig og meningsfull sekvens i DOM." },
     { "id": "1.4.1", "notes": "Status kommuniseres av tekstinnhold i tillegg til farge — komponenten legger ikke opp til farge alene, men teksten er konsumentens ansvar." },
-    { "id": "1.4.3", "notes": "Emphasis bruker invers (lys) tekst mot mettet flate (4.8–5.5:1). Subtle bruker mørk main-tekst mot pastell-flate i alle statuser (10.8–13.2:1); fargen bæres av flate og border. Farget tekst per status ble vurdert, men token-systemet har ingen per-status foreground mørk nok til å nå 4.5:1 på de lyse subtle-flatene (info ville falt til 1.48:1), så mørk tekst er brukt." },
+    { "id": "1.4.3", "notes": "Emphasis bruker invers (lys) tekst mot mettet flate (4.8–5.5:1). Subtle bruker mørk main-tekst mot pastell-flate i alle statuser (10.8–13.2:1); fargen bæres av flate og border. Nøytral status er grå (fill hentes fra neutral-tieren, ikke brand-blå main-tier) og ligger innenfor de samme spennene: 5.05:1 emphasis, 13.18:1 subtle. Farget tekst per status ble vurdert, men token-systemet har ingen per-status foreground mørk nok til å nå 4.5:1 på de lyse subtle-flatene (info ville falt til 1.48:1), så mørk tekst er brukt." },
     { "id": "1.4.4", "notes": "Størrelser bruker relative font-size-tokens og skalerer korrekt ved 200 % zoom." },
     { "id": "1.4.10", "notes": "Taggen er width: fit-content uten fast bredde og reflower korrekt ned til 320 px viewport." },
     { "id": "1.4.11", "notes": "Emphasis-flaten oppfyller 3:1 komponentavgrensning mot lys sidebakgrunn (5.0–5.8:1 mot hvit). Subtle-varianten er bevisst rolig: pastell-flate (1.4–1.7:1) og border (2.2–2.5:1) når ikke 3:1 mot en lys side, men taggen er ikke-interaktiv og all betydning bæres av teksten (1.4.1) med 10.8–13.1:1 — avgrensningen er dekorativ, så 1.4.11 stiller ikke krav til den." },

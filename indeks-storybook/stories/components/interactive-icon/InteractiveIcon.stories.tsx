@@ -24,7 +24,7 @@ export const Standard: Story = {};
 export const Statuser: Story = {
     render: (args) => (
         <div style={{ display: 'flex', gap: '8px' }}>
-            <InteractiveIcon {...args} status="default" aria-label="Standard" />
+            <InteractiveIcon {...args} status="neutral" aria-label="Nøytral" />
             <InteractiveIcon {...args} status="info" aria-label="Info" />
             <InteractiveIcon {...args} status="success" aria-label="Suksess" />
             <InteractiveIcon {...args} status="warning" aria-label="Advarsel" />
@@ -48,7 +48,7 @@ export const Størrelser: Story = {
 // storybook-addon-pseudo-states tvinger hover/active/focus-visible på de
 // spesifikke knappene via id-selektorene i `parameters.pseudo` under.
 const STATUSER: { status: InteractiveIconStatus; label: string }[] = [
-    { status: 'default', label: 'Standard' },
+    { status: 'neutral', label: 'Nøytral' },
     { status: 'info', label: 'Info' },
     { status: 'success', label: 'Suksess' },
     { status: 'warning', label: 'Advarsel' },
@@ -119,20 +119,24 @@ export const Tilstander: Story = {
  * Arv fra konteksten. Et ikon uten egen `status` plukker opp status fra nærmeste
  * forelder med `data-status` (f.eks. en Message eller et status-kort), slik at
  * hover/trykk følger omgivelsene. Uten status-kontekst er ikonet nøytralt, og en
- * eksplisitt `status` på ikonet overstyrer arven.
+ * eksplisitt `status` på ikonet overstyrer arven — også `status="neutral"`, som
+ * er måten å holde ikonet nøytralt inne i en farget kontekst (siste ikon under).
  */
 export const ArvFraKontekst: Story = {
     name: 'Arv fra kontekst',
     render: (args) => (
         <div style={{ display: 'flex', gap: '16px' }}>
             <div data-status="info" style={{ padding: '8px' }}>
-                <InteractiveIcon {...args} status="default" aria-label="Info-kontekst" />
+                <InteractiveIcon {...args} aria-label="Info-kontekst" />
             </div>
             <div data-status="warning" style={{ padding: '8px' }}>
-                <InteractiveIcon {...args} status="default" aria-label="Advarsel-kontekst" />
+                <InteractiveIcon {...args} aria-label="Advarsel-kontekst" />
             </div>
             <div data-status="danger" style={{ padding: '8px' }}>
-                <InteractiveIcon {...args} status="default" aria-label="Fare-kontekst" />
+                <InteractiveIcon {...args} aria-label="Fare-kontekst" />
+            </div>
+            <div data-status="danger" style={{ padding: '8px' }}>
+                <InteractiveIcon {...args} status="neutral" aria-label="Fare-kontekst, nøytralt ikon" />
             </div>
         </div>
     ),

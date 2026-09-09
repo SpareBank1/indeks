@@ -1,6 +1,21 @@
+/* Nøytral-gruppen, som også er fallback for elementer uten data-status.
+ *
+ * Blandingen av tiere er tilsiktet: surface, border og foreground hentes fra
+ * main-tieren, som allerede er nøytral i verdi (surface-main-default er hvit,
+ * border-main-default er grå, foreground-main-default er nesten svart), og det
+ * finnes ingen surface-/border-/foreground-neutral-* å bytte til. Fill hentes
+ * derimot fra neutral-tieren, fordi fill-main-default er brand-blå — en nøytral
+ * flate skal være grå, ikke blå. Se komponenter som Tag, der nøytral er
+ * standardverdien.
+ *
+ * --ix-color-status-foreground er tekst-/ikonfargen for statusen. Den er
+ * kalibrert for status-surface (5.4–6.5:1) og for vanlig bakgrunn (6.7–7.6:1
+ * mot hvit), IKKE for fill-subtle-pastellen — der gir info 4.49:1 og success
+ * 4.36:1, som bryter WCAG 1.4.3. Bruk foreground-main-default på subtle fyll.
+ * Vær også varsom med å kombinere den med status-surface-active, som er nede
+ * på 4.36–4.87:1. */
 :root,
 :host,
-[data-status="default"],
 [data-status="neutral"],
 .ix-dark-mode,
 .ix-light-mode,
@@ -9,10 +24,11 @@
     --ix-color-status-surface-hover: var(--ix-color-surface-main-hover);
     --ix-color-status-surface-active: var(--ix-color-surface-main-active);
     --ix-color-status-border: var(--ix-color-border-main-default);
-    --ix-color-status-fill: var(--ix-color-fill-main-default);
-    --ix-color-status-fill-subtle: var(--ix-color-fill-main-subtle);
-    --ix-color-status-fill-subtle-hover: var(--ix-color-fill-main-subtle-hover);
-    --ix-color-status-fill-subtle-active: var(--ix-color-fill-main-subtle-active);
+    --ix-color-status-foreground: var(--ix-color-foreground-main-default);
+    --ix-color-status-fill: var(--ix-color-fill-neutral-default);
+    --ix-color-status-fill-subtle: var(--ix-color-fill-neutral-subtle);
+    --ix-color-status-fill-subtle-hover: var(--ix-color-fill-neutral-subtle-hover);
+    --ix-color-status-fill-subtle-active: var(--ix-color-fill-neutral-subtle-active);
 }
 
 .ix-color-status-surface {
@@ -31,6 +47,10 @@
     border-color: var(--ix-color-status-border);
 }
 
+.ix-color-status-foreground {
+    color: var(--ix-color-status-foreground);
+}
+
 .ix-color-status-fill {
     background-color: var(--ix-color-status-fill);
 }
@@ -44,6 +64,7 @@
     --ix-color-status-surface-hover: var(--ix-color-surface-info-hover);
     --ix-color-status-surface-active: var(--ix-color-surface-info-active);
     --ix-color-status-border: var(--ix-color-border-info-default);
+    --ix-color-status-foreground: var(--ix-color-foreground-info-default);
     --ix-color-status-fill: var(--ix-color-fill-info-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-info-subtle);
     --ix-color-status-fill-subtle-hover: var(--ix-color-fill-info-subtle-hover);
@@ -55,6 +76,7 @@
     --ix-color-status-surface-hover: var(--ix-color-surface-success-hover);
     --ix-color-status-surface-active: var(--ix-color-surface-success-active);
     --ix-color-status-border: var(--ix-color-border-success-default);
+    --ix-color-status-foreground: var(--ix-color-foreground-success-default);
     --ix-color-status-fill: var(--ix-color-fill-success-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-success-subtle);
     --ix-color-status-fill-subtle-hover: var(--ix-color-fill-success-subtle-hover);
@@ -66,6 +88,7 @@
     --ix-color-status-surface-hover: var(--ix-color-surface-warning-hover);
     --ix-color-status-surface-active: var(--ix-color-surface-warning-active);
     --ix-color-status-border: var(--ix-color-border-warning-default);
+    --ix-color-status-foreground: var(--ix-color-foreground-warning-default);
     --ix-color-status-fill: var(--ix-color-fill-warning-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-warning-subtle);
     --ix-color-status-fill-subtle-hover: var(--ix-color-fill-warning-subtle-hover);
@@ -77,6 +100,7 @@
     --ix-color-status-surface-hover: var(--ix-color-surface-danger-hover);
     --ix-color-status-surface-active: var(--ix-color-surface-danger-active);
     --ix-color-status-border: var(--ix-color-border-danger-default);
+    --ix-color-status-foreground: var(--ix-color-foreground-danger-default);
     --ix-color-status-fill: var(--ix-color-fill-danger-default);
     --ix-color-status-fill-subtle: var(--ix-color-fill-danger-subtle);
     --ix-color-status-fill-subtle-hover: var(--ix-color-fill-danger-subtle-hover);
