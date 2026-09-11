@@ -208,9 +208,14 @@
             display var(--ix-transition-duration) allow-discrete;
     }
 
+    /* `transform: none`, ikke `scale(1)`: en transform som ikke er `none` gjør
+     * dialogen til containing block for `position: fixed`-etterkommere, og da
+     * havner flytende paneler (combobox-liste, dropdown-meny, tooltip, popover)
+     * forskjøvet fordi de regner i viewport-koordinater. `none` interpolerer mot
+     * identitetsmatrisen, så både inn- og ut-animasjonen er uendret. */
     :where(.ix-modal[open]) {
         opacity: 1;
-        transform: scale(1);
+        transform: none;
     }
 
     @starting-style {
