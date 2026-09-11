@@ -1,0 +1,107 @@
+/* Felles stiler for de to skjema-strukturvariantene.
+   Eksempelappen er en KONSUMENT av Indeks, så custom properties her har ingen
+   `--ix-`/`--ii-`-prefiks — de er lokale for denne siden. Verdiene hentes fra
+   Indeks-tokens; ingen rå farger eller avstander. */
+
+/* Felt som ikke trenger full skjemabredde: en dato, et telefonnummer og et
+   organisasjonsnummer har kjent, kort lengde. Feltbredden er et hint om hvor
+   mye som forventes — et 8-sifret nummer i et 40rem bredt felt ser feil ut. */
+.skjema__smalt {
+    max-width: 20rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Feiloppsummering
+   ------------------------------------------------------------------------- */
+
+.skjema__feilliste {
+    margin: var(--ix-spacing-2xs) 0 0;
+    padding-inline-start: var(--ix-spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ix-spacing-2xs);
+}
+
+/* ---------------------------------------------------------------------------
+   Steg-indikator (lokal — Indeks har ingen slik komponent, se StegIndikator.tsx)
+   ------------------------------------------------------------------------- */
+
+.skjema__stegtekst {
+    margin: 0 0 var(--ix-spacing-xs);
+    font-size: var(--ix-font-size-sm);
+    color: var(--ix-color-foreground-main-subtle);
+}
+
+.skjema__stegliste {
+    --skjema-prikk: 1rem;
+
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.skjema__stegpunkt {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--ix-spacing-2xs);
+    text-align: center;
+    font-size: var(--ix-font-size-xs);
+    color: var(--ix-color-foreground-main-subtle);
+}
+
+/* Forbindelseslinjen tegnes bakover fra hvert punkt: fra forrige punkts senter
+   (left: -50%) til dette punktets senter (right: 50%). Siden alle punktene har
+   like bredde (flex: 1 1 0) treffer -50% nøyaktig naboens midtpunkt. */
+.skjema__stegpunkt:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    inset-inline: -50% 50%;
+    top: calc(var(--skjema-prikk) / 2 - var(--ix-border-width-bold) / 2);
+    height: var(--ix-border-width-bold);
+    background-color: var(--ix-color-border-main-default);
+}
+
+.skjema__stegprikk {
+    box-sizing: border-box;
+    width: var(--skjema-prikk);
+    height: var(--skjema-prikk);
+    border: var(--ix-border-width-bold) solid var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-circle);
+    background-color: var(--ix-color-background-default);
+    /* Over forbindelseslinjen, ellers krysser linja prikken. */
+    position: relative;
+    z-index: 1;
+}
+
+/* Både fullførte og gjeldende steg har en tilbakelagt vei bak seg, så linja inn
+   til dem er utfylt. */
+.skjema__stegpunkt[data-tilstand='ferdig']::before,
+.skjema__stegpunkt[data-tilstand='aktiv']::before {
+    background-color: var(--ix-color-fill-interactive-default);
+}
+
+.skjema__stegpunkt[data-tilstand='ferdig'] .skjema__stegprikk,
+.skjema__stegpunkt[data-tilstand='aktiv'] .skjema__stegprikk {
+    border-color: var(--ix-color-fill-interactive-default);
+    background-color: var(--ix-color-fill-interactive-default);
+}
+
+/* Gjeldende steg får en ring i tillegg, slik at det skiller seg fra de
+   fullførte uten å være avhengig av farge alene. */
+.skjema__stegpunkt[data-tilstand='aktiv'] .skjema__stegprikk {
+    box-shadow: 0 0 0 var(--ix-spacing-2xs) var(--ix-color-fill-main-subtle);
+}
+
+.skjema__stegpunkt[data-tilstand='aktiv'] .skjema__stegnavn {
+    color: var(--ix-color-foreground-main-default);
+    font-weight: var(--ix-font-weight-medium);
+}
+
+.skjema__stegnavn {
+    overflow-wrap: break-word;
+}
