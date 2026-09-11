@@ -31,8 +31,16 @@ export type FeiloppsummeringProps = {
  * blikket er, og hver linje er en snarvei til feltet.
  *
  * Fokus flyttes hit, og annonseringen skjer PÅ GRUNN AV fokusflyttingen. Derfor
- * er `announceText=""` satt: den slår av `Message` sin egen live-region-
+ * er `announce={false}` satt: den slår av `Message` sin egen live-region-
  * annonsering, som ellers ville lest oppsummeringen opp en gang til.
+ *
+ * Lenkene flytter fokus med RHF sin `setFocus(navn)` i stedet for å være ekte
+ * `href="#id"`-ankere. Begge er gyldige varianter av mønsteret, men `setFocus`
+ * virker likt for ALLE felttypene: den finner feltet via navnet skjemaet
+ * allerede kjenner, i stedet for at hvert felt må ha en `id` som
+ * oppsummeringen kjenner på forhånd. Ankervarianten krever at du selv gir og
+ * holder styr på id-ene — også på gruppene, som da trenger `tabIndex={-1}` for
+ * å kunne motta fokus.
  */
 export function Feiloppsummering({
     errors,
@@ -64,23 +72,35 @@ export function Feiloppsummering({
     const tittel = tittelMal.replace('{n}', String(feil.length));
 
     return (
-        // role="group" + aria-label: en naken <div tabindex="-1"> har ingen rolle,
-        // og da ignorerer skjermlesere aria-label. Med rollen på plass leses
-        // tittelen når fokus lander her.
-        <div ref={ref} tabIndex={-1} role="group" aria-label={tittel} className="skjema__feiloppsummering">
-            <Message status="danger" title={tittel} fullWidth announceText="">
-                <ul className="skjema__feilliste">
-                    {feil.map(({ navn, melding }) => (
-                        <li key={navn}>
-                            {/* type="button" er påkrevd: knappen ligger inne i
-                                <form>, og en knapp uten type submitter skjemaet. */}
-                            <LinkText as="button" type="button" onClick={() => onVelgFelt(navn)}>
-                                {melding}
-                            </LinkText>
-                        </li>
-                    ))}
-                </ul>
-            </Message>
-        </div>
+        /*
+         * Fokusmålet er <Message> selv — ingen wrapper-div. Det er mulig fordi
+         * Message sender øvrige attributter videre til rot-elementet.
+         *
+         * role="group" er med fordi et element med `tabindex="-1"` og ingen rolle
+         * ikke får lest opp sin aria-label; da lander fokus stille, og brukeren
+         * hører ikke hvorfor. Med rollen på plass leses tittelen når fokus lander.
+         */
+        <Message
+            ref={ref}
+            status="danger"
+            title={tittel}
+            fullWidth
+            tabIndex={-1}
+            role="group"
+            aria-label={tittel}
+            announce={false}
+        >
+            <ul className="skjema__feilliste">
+                {feil.map(({ navn, melding }) => (
+                    <li key={navn}>
+                        {/* type="button" er påkrevd: knappen ligger inne i
+                            <form>, og en knapp uten type submitter skjemaet. */}
+                        <LinkText as="button" type="button" onClick={() => onVelgFelt(navn)}>
+                            {melding}
+                        </LinkText>
+                    </li>
+                ))}
+            </ul>
+        </Message>
     );
 }
