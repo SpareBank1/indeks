@@ -1,11 +1,11 @@
 name: Release - Publiser til npm
 
 on:
-    # Skrus på når npm Trusted Publishing er flyttet til denne fila og en
-    # workflow_dispatch er verifisert. Se docs-planer/8-samkjor-release.md.
-    # schedule:
-    #     # Hver time 07–14 UTC på hverdager = 08–15 Oslo (vinter) / 09–16 (sommer)
-    #     - cron: '5 7-14 * * 1-5'
+    schedule:
+        # Hver time 07–14 UTC på hverdager = 08–15 Oslo (vinter) / 09–16 (sommer).
+        # Kjøringen er en no-op når alt i versjons-commiten allerede er publisert,
+        # så en forsinket eller droppet kjøring er ufarlig — den prøver igjen neste time.
+        - cron: '5 7-14 * * 1-5'
     workflow_dispatch:
         inputs:
             dry_run:
