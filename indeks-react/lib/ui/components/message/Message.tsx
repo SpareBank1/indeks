@@ -1,17 +1,27 @@
 import { cn } from '../../../cn';
 import { forwardRef, useEffect, useRef, useState } from 'react';
-import type { JSX, ReactNode } from 'react';
+import type { HTMLAttributes, JSX, ReactNode } from 'react';
 import { useMessageRegion } from '../message-region/MessageRegionContext';
 import { InteractiveIcon } from '../interactive-icon/InteractiveIcon';
 import type { IconName } from '../../icons/icon-types';
 
 export type MessageStatus = 'info' | 'success' | 'warning' | 'danger';
 
-export type MessageProps = {
+// Flat interface som extender HTMLAttributes — ikke type-alias med `&`, som
+// bryter react-docgen-typescript (tom Storybook Controls). Arven gir `id`,
+// `tabIndex`, `data-*`, `aria-*` og resten av div-attributtene: uten dem kunne
+// meldingen ikke gjøres til et fokus- eller ankermål, og mønstre som en
+// feiloppsummering måtte pakke <Message> i en ekstra <div role="group">.
+export interface MessageProps extends HTMLAttributes<HTMLDivElement> {
     /** Status; styrer farge og ikon. Settes som `data-status` slik at
      *  fargevariablene (`--ix-color-status-*`) kobles automatisk. */
     status: MessageStatus;
-    /** Valgfri overskrift over budskapet. */
+    /**
+     * Valgfri overskrift over budskapet.
+     *
+     * Merk at denne OVERSTYRER HTML-attributtet `title` (nettleserens tooltip):
+     * teksten rendres som en synlig overskrift og settes ikke på `<div>`-en.
+     */
     title?: string;
     /** Budskapet — alltid påkrevd. Lenker skrives som children med Indeks-lenken
      *  `LinkText`. */
@@ -40,8 +50,15 @@ export type MessageProps = {
      * det som vises, f.eks. når innholdet er rikt (liste, lenker).
      */
     announceText?: string;
-    className?: string;
-};
+    /**
+     * Sett `false` for å ikke annonsere meldingen i det hele tatt. Bruk det når
+     * noe ANNET allerede gjør at meldingen leses opp — typisk at du flytter
+     * fokus til den eller til en forelder. Uten dette blir meldingen lest to
+     * ganger: én gang av fokusflyttingen og én gang av live-regionen.
+     * @default true
+     */
+    announce?: boolean;
+}
 
 /** Semantisk ikonnavn per status (sendes til badge-ikonet). */
 const STATUS_ICON: Record<MessageStatus, IconName> = {
@@ -61,7 +78,9 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(function Message
         fullWidth = false,
         announceOnPageLoad = false,
         announceText,
+        announce = true,
         className,
+        ...rest
     },
     ref,
 ): JSX.Element | null {
@@ -73,7 +92,7 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(function Message
     // elementet har bevisst ingen role/aria-live — en region som settes inn samtidig
     // med innholdet annonseres upålitelig (se MessageRegion).
     useEffect(() => {
-        if (closed) {
+        if (closed || !announce) {
             return;
         }
         if (!region) {
@@ -86,7 +105,7 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(function Message
         }
         const text = announceText ?? bodyRef.current?.textContent ?? '';
         region.announce(text, announceOnPageLoad);
-    }, [region, status, announceOnPageLoad, announceText, title, children, closed]);
+    }, [region, status, announce, announceOnPageLoad, announceText, title, children, closed]);
 
     if (closed) {
         return null;
@@ -98,8 +117,13 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(function Message
     }
 
     return (
+        // `rest` spres FØRST: attributtene komponenten eier selv (data-status,
+        // data-full-width) skal ikke kunne overskrives utenfra — de er utledet av
+        // props, og en `data-status` som ikke matcher `status` gir farge og ikon
+        // som spriker.
         <div
             ref={ref}
+            {...rest}
             className={cn('ix-message', className)}
             data-status={status}
             data-full-width={fullWidth ? '' : undefined}
