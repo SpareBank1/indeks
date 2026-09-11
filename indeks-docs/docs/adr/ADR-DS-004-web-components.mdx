@@ -13,6 +13,7 @@ import Term from '@site/src/components/Term';
     historikk={[
         { status: 'Besluttet', dato: '2026-07-24' },
         { status: 'Besluttet', dato: '2026-07-29' },
+        { status: 'Besluttet', dato: '2026-09-11' },
     ]}
 />
 
@@ -33,6 +34,28 @@ Hvordan `indeks-react` bygges og distribueres er beskrevet i [ADR-DS-005](./ADR-
 **UI og UX skal være identisk uansett konsument.** En bruker skal ikke kunne se eller kjenne — verken visuelt eller via tastatur og skjermleser — om et felt er bygget med ren HTML eller React. HTML-versjonen av hver komponent er fullverdig i seg selv; React-wrapperen legger ikke til noe ekstra, den kabler bare det som allerede finnes lenger ned i stacken. Det som *skal* skille seg, er API-flaten: React får idiomatiske props, typer og JSX, mens HTML får attributter og web component. Ulikt grensesnitt, lik komponent.
 
 Tilpasninger er tillatt så lenge to ting holder: (1) Web Component-en forblir kilden til sannhet — logikken legges i WC-en når den også gagner ikke-React-konsumenter (f.eks. native `change`-events og fokushåndtering på riktig element), og React-laget begrenser seg til tynn kabling; og (2) HTML-pariteten bevares — en ren-HTML- eller Vue/Angular-konsument får samme fullverdige komponent, ikke en redusert variant. En React-only-egenskap som ikke lar seg uttrykke i WC-en, skal være liten, veldokumentert og ikke bryte de andre konsumentene.
+
+### Atferds-moduler
+
+Ikke all atferd trenger et element. `indeks-web` har derfor to mønstre, og valget mellom dem avgjøres av ett spørsmål: **kan handlingen utledes fra DOM-en i det den skjer, eller må noe huskes mellom handlingene?**
+
+Kan den utledes, skriver vi en **atferds-modul**: en fil som lytter delegert på `document`, finner det den trenger med `closest()`, og endrer attributter. Den har ingen egen tag, ingen livssyklus og ingen instanser. `indeks-web/lib/modal/modal.ts` og `indeks-web/lib/tooltip/tooltip.ts` er de to som fantes før regelen ble skrevet ned, og tabellsortering er den tredje: sorteringstilstanden *er* `aria-sort` på `<th>`, så et klikk finner alt det trenger i DOM-en rundt seg.
+
+Må noe huskes, trenger vi et sted å huske det, og da er svaret en web component. En combobox må holde den filtrerte trefflisten og hvilket alternativ som er aktivt, og ingen av de to står i markupen. Det samme gjelder komponenter som må reagere når et attributt endres (`attributeChangedCallback`), eller som skal tilby et element-API til konsumenten.
+
+|                                            | Atferds-modul                      | Web component                          |
+| ------------------------------------------ | ---------------------------------- | -------------------------------------- |
+| Bor i                                      | `lib/<navn>/<navn>.ts`             | `lib/components/<navn>/Ix<Navn>.ts`    |
+| Registreres med                            | side-effect-import i `index.ts`    | `customElements.define`                |
+| Krever i markupen                          | ingenting                          | en `<ix-navn>`-tag                     |
+| Instans-tilstand                           | nei                                | ja                                     |
+| Virker på elementer som legges til senere   | ja, uten videre                    | ja, når de opprettes                   |
+
+Et tredje hensyn kan avgjøre saken alene: noen elementer tar ikke imot en wrapper. `<table>` har en streng innholdsmodell, og et ukjent element som står inne i tabellen men utenfor en celle blir flyttet ut av tabellen av HTML-parseren (*foster parenting*). En web component kan derfor bare ligge utenpå `<table>`, og har da ingen fordel over delegering.
+
+**Atferds-moduler endrer attributter. De flytter ikke noder et rammeverk eier.** `modal.ts` rører bare attributter. `tooltip.ts` legger panelet sitt på `document.body`, altså utenfor treet React kontrollerer. Sortering er unntaket som *må* flytte rader, og gjør det derfor bare når tabellen ber om det med `data-ix-sort-client`. React setter ikke attributtet, og sorterer sine egne data på `ix-sort`-hendelsen i stedet.
+
+Atferds-modulen tjener de samme driverne som resten av denne ADR-en med et annet virkemiddel: en HTML-konsument får full funksjonalitet uten å skrive annet enn semantisk markup, og logikken finnes fortsatt på ett sted. Dette er en presisering av beslutningen, ikke et unntak fra den.
 
 ### Drivere for beslutningen
 
