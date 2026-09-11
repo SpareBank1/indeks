@@ -42,7 +42,6 @@
     background-color: var(--ix-popover-background);
     border: var(--ix-border-width-default) solid var(--ix-popover-border-color);
     border-radius: var(--ix-border-radius-sm);
-    box-shadow: var(--ix-shadow-md);
 
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-default);

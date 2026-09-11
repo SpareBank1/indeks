@@ -284,7 +284,7 @@
 :where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) :where(.ix-radio-button__label) {
     cursor: default;
     color: var(--ix-color-foreground-main-read-only);
-    --ii-radio-outer-color: var(--ix-color-border-main-subtle);
+    --ii-radio-outer-color: var(--ix-color-foreground-main-read-only);
 }
 
 :where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) input[type='radio']:checked + label,

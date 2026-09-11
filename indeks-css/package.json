@@ -37,7 +37,7 @@
         "build": "rm -rf ./dist && pnpm run build:npm",
         "build:npm": "rm -rf ./dist/npm && postcss ./index.css -o ./dist/npm/index.css",
         "build:cdn": "rm -rf ./dist/cdn && postcss ./index.css -o ./dist/cdn/index.css --env cdn",
-        "lint": "stylelint \"css/**/*.css\"",
+        "lint": "stylelint \"css/**/*.css\" && node ../scripts/check-css-variables.js css",
         "update-packages": "echo not implemented",
         "test": "echo \"Ingen tester\""
     },
