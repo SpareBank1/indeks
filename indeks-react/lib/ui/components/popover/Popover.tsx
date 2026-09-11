@@ -22,8 +22,6 @@ export type PopoverProps = {
     onOpenChange?: (open: boolean) => void;
     /** Posisjon relativt til trigger. @default 'top' */
     placement?: 'top' | 'bottom' | 'left' | 'right';
-    /** Vis/skjul pilmarkør. @default true */
-    arrow?: boolean;
     children?: ReactNode;
     className?: string;
 };
@@ -34,7 +32,6 @@ export const Popover = forwardRef<HTMLElement, PopoverProps>(function Popover(
         defaultOpen,
         onOpenChange,
         placement = 'top',
-        arrow = true,
         children,
         className,
     },
@@ -98,7 +95,6 @@ export const Popover = forwardRef<HTMLElement, PopoverProps>(function Popover(
             }}
             class={cn('ix-popover', className)}
             placement={placement}
-            data-arrow={arrow ? undefined : 'false'}
             data-controlled={isControlled ? '' : undefined}
         >
             {children}

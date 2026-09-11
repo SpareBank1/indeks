@@ -8,7 +8,6 @@ const meta = {
     tags: ['autodocs'],
     args: {
         placement: 'top',
-        arrow: true,
     },
     decorators: [
         (Story) => (
@@ -70,24 +69,6 @@ export const UtenHandlinger: Story = {
                 <Popover.Body>
                     Denne popoveren inneholder bare informasjon og har ingen handlingsknapper.
                 </Popover.Body>
-            </Popover.Content>
-        </Popover>
-    ),
-};
-
-export const UtenPil: Story = {
-    name: 'Uten pil',
-    args: {
-        arrow: false,
-    },
-    render: (args) => (
-        <Popover {...args} >
-            <Popover.Trigger>
-                <Button>Åpne</Button>
-            </Popover.Trigger>
-            <Popover.Content>
-                <Popover.Heading>Ingen pil</Popover.Heading>
-                <Popover.Body>Denne popoveren vises uten pilmarkør.</Popover.Body>
             </Popover.Content>
         </Popover>
     ),
