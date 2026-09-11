@@ -176,8 +176,8 @@
 
 :where(.ix-checkbox) input[type='checkbox']:disabled:indeterminate + label,
 :where(.ix-checkbox__input:disabled:indeterminate) + :where(.ix-checkbox__label) {
-    --ii-checkbox-box-bg: var(--ix-color-fill-main-disabled);
-    --ii-checkbox-box-border: var(--ix-color-fill-main-disabled);
+    --ii-checkbox-box-bg: var(--ix-color-fill-interactive-disabled);
+    --ii-checkbox-box-border: var(--ix-color-fill-interactive-disabled);
 }
 
 /* ── prefers-reduced-motion ──────────────────────────────────────────────── */
