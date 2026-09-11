@@ -1,5 +1,13 @@
 # @sb1/indeks-web
 
+## 0.22.0
+
+### Minor Changes
+
+- 785c7b9: Fjern «uten pil»-varianten av Popover — pilmarkøren vises nå alltid
+  
+  **Breaking:** `arrow`-propen er fjernet fra `Popover` i `@sb1/indeks-react`, og attributtet `data-arrow="false"` på `<ix-popover>` har ingen effekt lenger. Fjern `arrow={false}` / `data-arrow="false"` fra kallene dine — popoveren får pil. Pilen er selve koblingen til trigger-elementet, og vi holder oss til én variant for konsistens.
+
 ## 0.21.0
 
 ## 0.20.0

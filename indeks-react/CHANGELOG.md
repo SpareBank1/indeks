@@ -1,5 +1,38 @@
 # @sb1/indeks-react
 
+## 0.22.0
+
+### Minor Changes
+
+- 36b63ea: Chip: feiltilstand og skrivebeskyttet for alle fire chip-varianter
+  
+  Etter design-spec. Skrevet én gang i `chip.css` og gjelder derfor button chip, removable chip, radio chip og checkbox chip likt.
+  
+  - **Feil, uvalgt**: rød kant (`border-danger-default`) på gjennomsiktig flate, så chipen har ikke eget fyll i feiltilstand. Den visuelle 2px-kanten lages med 1px `border-color` + `inset box-shadow`, samme oppskrift som TextField, TextArea, Select og Checkbox, slik at kanten ikke reflower chip-raden når validering slår inn. Hover og active svarer fortsatt med `fill-interactive-hover`/`-active`. Removable chip er unntaket: den er alltid i valgt tilstand og beholder det mørkerøde fyllet.
+  - **Feil, valgt**: `fill-danger-default` med `foreground-inverse-default` på tekst og indikator. Kanten kollapses til fyllfargen. Hover og active bruker `-hover`/`-active`-variantene.
+  - **Skrivebeskyttet**: `fill-interactive-read-only`, `border-main-default` og `foreground-main-read-only` — samme grå flate for valgt og uvalgt. Nedtonet fyll, ikke `opacity`. På en uvalgt chip står radioringen og checkbox-boksen uten eget fyll, så den grå flaten går helt inn til kanten av indikatoren. Ringen får da lavere kontrast enn før mot flaten den ligger på; det er ført opp som issue i tilgjengelighetstabellen, med henvisning til unntaket for inaktive komponenter i SC 1.4.11.
+  
+  Tilstanden kan komme fra chipen selv, fra gruppen (`ix-radio-group`/`ix-checkbox-group` med `data-variant="chip"`) eller fra en multiselect-combobox i feil/skrivebeskyttet tilstand — chipene arver feltets `data-state` uten at du setter noe på dem.
+  
+  `Chip` og `RemovableChip` får to nye props: `error` og `readOnly`. `readOnly` setter `aria-disabled` og kortslutter `onClick`/`onRemove`, siden en `<button>` ikke har native read-only.
+  
+  Kjent avvik dokumentert som issue i tilgjengelighetstabellen: `--ix-color-border-danger-default` gir ca. 2,5:1 mot hvitt, under 3:1 i SC 1.4.11. Tokenet er hus-standard for feilkant i fem komponenter og gjennomgås samlet.
+- 785c7b9: Fjern «uten pil»-varianten av Popover — pilmarkøren vises nå alltid
+  
+  **Breaking:** `arrow`-propen er fjernet fra `Popover` i `@sb1/indeks-react`, og attributtet `data-arrow="false"` på `<ix-popover>` har ingen effekt lenger. Fjern `arrow={false}` / `data-arrow="false"` fra kallene dine — popoveren får pil. Pilen er selve koblingen til trigger-elementet, og vi holder oss til én variant for konsistens.
+- 7d253af: Legg til flere størrelser for InteractiveIcon: xs (24px), sm (26px), md (36px), lg (48px)
+- f9f462c: Nøytral status-fyll går fra brand-blå til grå, og `default` er fjernet som statusverdi.
+  
+  **Nøytralt fyll er nå grått.** `--ix-color-status-fill*` i nøytral-gruppen hentes fra `neutral`-tieren i stedet for `main`-tieren, som er brand-blå. Det gjør en nøytral flate faktisk nøytral — mest synlig i Tag, der `neutral` er standardverdien. `--ix-color-status-surface*` og `--ix-color-status-border` er uendret; de peker fortsatt på `main`-tieren, som allerede er nøytral i verdi (hvit flate, grå kantlinje), og det finnes ingen `surface-neutral-*`/`border-neutral-*` å bytte til.
+  
+  Endringen er WCAG-nøytral: nøytral Tag går fra 5.09:1 til 5.05:1 for emphasis-tekst og fra 13.14:1 til 13.18:1 for subtle-tekst, godt innenfor 1.4.3 (4.5:1). Emphasis-flaten holder 5.32:1 mot hvit side (1.4.11, 3:1).
+  
+  **Breaking: `default` er borte som statusverdi.** `neutral` er nå det eneste navnet på nøytral status.
+  
+  - `[data-status="default"]` gir ikke lenger noen `--ix-color-status-*`-verdier. Bytt til `data-status="neutral"`, eller fjern attributtet helt — elementer uten `data-status` faller fortsatt tilbake på de nøytrale verdiene via `:root`.
+  - `InteractiveIconStatus` er nå `'neutral' | 'info' | 'success' | 'warning' | 'danger'`. `status="default"` blir en typefeil; bruk `status="neutral"`.
+  - `InteractiveIcon` har ingen standardverdi for `status` lenger. Utelater du propen, arver ikonet status fra nærmeste `data-status`-forelder og er nøytralt uten en slik forelder — akkurat som før, siden `status="default"` også utelot attributtet. Ny mulighet: `status="neutral"` setter `data-status="neutral"` eksplisitt og bryter arven, slik at ikonet kan holdes nøytralt inne i en farget kontekst.
+
 ## 0.21.0
 
 ### Minor Changes

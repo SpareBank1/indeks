@@ -1,5 +1,105 @@
 # @sb1/indeks-css
 
+## 0.22.0
+
+### Minor Changes
+
+- 785c7b9: Fjern «uten pil»-varianten av Popover — pilmarkøren vises nå alltid
+  
+  **Breaking:** `arrow`-propen er fjernet fra `Popover` i `@sb1/indeks-react`, og attributtet `data-arrow="false"` på `<ix-popover>` har ingen effekt lenger. Fjern `arrow={false}` / `data-arrow="false"` fra kallene dine — popoveren får pil. Pilen er selve koblingen til trigger-elementet, og vi holder oss til én variant for konsistens.
+- be6e6bb: Oppdater ikonstørrelser i Icon: sm (18px), md (20px), lg (24px), xl (32px)
+- 7d253af: Legg til flere størrelser for InteractiveIcon: xs (24px), sm (26px), md (36px), lg (48px)
+- f9f462c: Nøytral status-fyll går fra brand-blå til grå, og `default` er fjernet som statusverdi.
+  
+  **Nøytralt fyll er nå grått.** `--ix-color-status-fill*` i nøytral-gruppen hentes fra `neutral`-tieren i stedet for `main`-tieren, som er brand-blå. Det gjør en nøytral flate faktisk nøytral — mest synlig i Tag, der `neutral` er standardverdien. `--ix-color-status-surface*` og `--ix-color-status-border` er uendret; de peker fortsatt på `main`-tieren, som allerede er nøytral i verdi (hvit flate, grå kantlinje), og det finnes ingen `surface-neutral-*`/`border-neutral-*` å bytte til.
+  
+  Endringen er WCAG-nøytral: nøytral Tag går fra 5.09:1 til 5.05:1 for emphasis-tekst og fra 13.14:1 til 13.18:1 for subtle-tekst, godt innenfor 1.4.3 (4.5:1). Emphasis-flaten holder 5.32:1 mot hvit side (1.4.11, 3:1).
+  
+  **Breaking: `default` er borte som statusverdi.** `neutral` er nå det eneste navnet på nøytral status.
+  
+  - `[data-status="default"]` gir ikke lenger noen `--ix-color-status-*`-verdier. Bytt til `data-status="neutral"`, eller fjern attributtet helt — elementer uten `data-status` faller fortsatt tilbake på de nøytrale verdiene via `:root`.
+  - `InteractiveIconStatus` er nå `'neutral' | 'info' | 'success' | 'warning' | 'danger'`. `status="default"` blir en typefeil; bruk `status="neutral"`.
+  - `InteractiveIcon` har ingen standardverdi for `status` lenger. Utelater du propen, arver ikonet status fra nærmeste `data-status`-forelder og er nøytralt uten en slik forelder — akkurat som før, siden `status="default"` også utelot attributtet. Ny mulighet: `status="neutral"` setter `data-status="neutral"` eksplisitt og bryter arven, slik at ikonet kan holdes nøytralt inne i en farget kontekst.
+- 11e39df: Juster ReadMore etter Figma: labelen bruker tertiary-knappens tekst- og hover/active-farger, paddingen er redusert til 8px (12px til høyre), avstanden mellom chevron og tekst er 4px, border-radiusen er strammet inn til `sm` (8px), det er 4px luft mellom labelen og innholdet i tillegg til 4px over og under selve innholdet, og streken langs åpent innhold er sentrert rett under chevronen med innholdsteksten i flukt med label-teksten
+- 85dc7e7: Generer Tailwind 4-tema fra tokens. Ny fil `tailwind.css` i hver pakke kobler Tailwinds navnerom til `--ix-`-variablene, slik at `bg-fill-main-default`, `p-md`, `rounded-md` og `text-lg` gir Indeks-verdier. Importer `@sb1/indeks-css/tailwind.css` for hele settet. Temaet legger seg oppå Tailwinds egne skalaer, men overstyrer breakpointene: `sm:` blir 768px, ikke 640px.
+
+### Patch Changes
+
+- 36b63ea: Button: høyden er nå 36 / 26 og lik chip
+  
+  Knappen satte ingen `line-height` og arvet 1,2 fra `.ix-body`. Høyden var derfor ikke bare feil, den var ustabil: 39,19px inne i `.ix-body`, 44px utenfor, 58,39px i en container som setter 2,4. Design-spec sier 36 / 26.
+  
+  To endringer:
+  
+  - `line-height: 1.125` i base-regelen, samme forholdstall som chip
+  - Kanten flyttes fra layout til maling. `border-width` går fra `bold` (2px) til `default` (1px), og de manglende pikslene males som `inset box-shadow` i samme farge. Kanten ser fortsatt 2px tykk ut, men tar bare 1px i høyden. Samme oppskrift som chip, TextField og Select
+  
+  Kantfargen leses nå av begge halvdelene fra `--ii-button-border-color`, satt i base og overstyrt per variant og tilstand, slik at border og skygge ikke kan komme i utakt. Tertiær reserverer plassen fra base i stedet for å sette en gjennomsiktig kant selv, så alle variantene har samme kantbredde og dermed samme høyde.
+  
+  Målt: 36 / 25,98 ved standard tetthet, 28 / 21,98 i compact, 44 / 33,98 i comfortable — likt chip på pikselen i alle tre. Ikon-knapper er fortsatt 38 / 28, fordi `ix-icon` er 20/18px og gulver linjeboksen. Det er et eget designvalg.
+- 36b63ea: Checkbox chip er ikke lenger pilleformet. Etter design-spec bytter den til `--ix-border-radius-sm` (8px), mens radio chip beholder `--ix-border-radius-pill`. De tre andre chip-variantene er urørt.
+  
+  Radien går nå via en intern variabel, `--ii-chip-radius`, som leses både av den passive regelen og av focus-regelen for gruppe-armene. Uten den kunne en fokusert checkbox chip fått pille-radius tilbake.
+- 36b63ea: Chip: feiltilstand og skrivebeskyttet for alle fire chip-varianter
+  
+  Etter design-spec. Skrevet én gang i `chip.css` og gjelder derfor button chip, removable chip, radio chip og checkbox chip likt.
+  
+  - **Feil, uvalgt**: rød kant (`border-danger-default`) på gjennomsiktig flate, så chipen har ikke eget fyll i feiltilstand. Den visuelle 2px-kanten lages med 1px `border-color` + `inset box-shadow`, samme oppskrift som TextField, TextArea, Select og Checkbox, slik at kanten ikke reflower chip-raden når validering slår inn. Hover og active svarer fortsatt med `fill-interactive-hover`/`-active`. Removable chip er unntaket: den er alltid i valgt tilstand og beholder det mørkerøde fyllet.
+  - **Feil, valgt**: `fill-danger-default` med `foreground-inverse-default` på tekst og indikator. Kanten kollapses til fyllfargen. Hover og active bruker `-hover`/`-active`-variantene.
+  - **Skrivebeskyttet**: `fill-interactive-read-only`, `border-main-default` og `foreground-main-read-only` — samme grå flate for valgt og uvalgt. Nedtonet fyll, ikke `opacity`. På en uvalgt chip står radioringen og checkbox-boksen uten eget fyll, så den grå flaten går helt inn til kanten av indikatoren. Ringen får da lavere kontrast enn før mot flaten den ligger på; det er ført opp som issue i tilgjengelighetstabellen, med henvisning til unntaket for inaktive komponenter i SC 1.4.11.
+  
+  Tilstanden kan komme fra chipen selv, fra gruppen (`ix-radio-group`/`ix-checkbox-group` med `data-variant="chip"`) eller fra en multiselect-combobox i feil/skrivebeskyttet tilstand — chipene arver feltets `data-state` uten at du setter noe på dem.
+  
+  `Chip` og `RemovableChip` får to nye props: `error` og `readOnly`. `readOnly` setter `aria-disabled` og kortslutter `onClick`/`onRemove`, siden en `<button>` ikke har native read-only.
+  
+  Kjent avvik dokumentert som issue i tilgjengelighetstabellen: `--ix-color-border-danger-default` gir ca. 2,5:1 mot hvitt, under 3:1 i SC 1.4.11. Tokenet er hus-standard for feilkant i fem komponenter og gjennomgås samlet.
+- 36b63ea: Chip har fått eksplisitt `line-height`, slik at alle fire variantene er like høye. Med standard tetthet er en chip nå 36px på `md` og 26px på `sm` — tallene fra design-spec.
+  
+  Verdien er `1.125`, samme forholdstall som font-skalaen trapper med, og ligger i den interne variabelen `--ii-chip-line-height`. To ting var galt før:
+  
+  - `.ix-chip` satte ingen `line-height` i det hele tatt, så høyden på en chip avhang av hva konsumentens side arvet ned.
+  - Checkbox chip arvet `line-height: 1.5` fra `checkbox.css` og ble 42px, mens de tre andre variantene lå på 37px.
+  
+  Chips i en multiselect-combobox er `.ix-chip[data-removable]` og blir 1px lavere de også.
+  
+  Merk at Button ikke er 36px i kode, men 39px, fordi Button bruker `--ix-border-width-bold` (2px) mot chipens 1px. Spec-en ber om at chip skal matche Button, men de to tallene kan ikke begge stemme. Chip følger her spec-tallet 36/26.
+- 36b63ea: Samle chip-pillen i `components/chip.css`. Ingen visuell endring er tilsiktet — pillens form, størrelser, fyll, kant og tilstander er identiske før og etter.
+  
+  Tidligere bygget `radio-group.css` og `checkbox-group.css` hver sin kopi av pillen, uten å bruke `.ix-chip`. Nå eier `chip.css` pillen for alle fire chip-typene, og gruppefilene beholder bare indikator-geometrien som faktisk er ulik (radio: ring + prikk, checkbox: boks + glyf).
+  
+  For konsumenter som overstyrer chip-styling med egen CSS: selektorene for radio- og checkbox-chip har fått ett klassenivå mer spesifisitet (`[data-variant='chip']` ligger utenfor `:where()`), så en overstyring kan trenge én klasse mer for å vinne.
+- 36b63ea: Chip: horisontal padding ned fra 16px til 12px
+  
+  Etter design-spec, og likt for alle fire variantene. Siden med ikon er strammere enn den nakne siden, så paddingen er nå to variabler i stedet for én:
+  
+  | Variabel | md | sm | Brukes av |
+  |---|---|---|---|
+  | `--ii-chip-padding-inline` | 12px | 12px | Nakne siden: begge sider på button chip, venstre på removable, høyre på gruppe-armene |
+  | `--ii-chip-indicator-inset` | 12px | 8px | Ikon-siden: høyre på removable, innrykket til radioringen og checkbox-boksen |
+  
+  Målt ved standard tetthet: button chip 12/12, removable 12/12 på `md` og 12/8 på `sm`, radio og checkbox 38/12 på `md` og 28/12 på `sm` med indikatoren 12px respektive 8px inn. Høyden er uendret (36 / 25,98), og alt skalerer videre med tetthetstokenene.
+  
+  Chipene blir 8px smalere på `md`. Korteste realistiske label gir fortsatt rundt 44px bredde, godt over de 24px SC 2.5.8 krever.
+- 36b63ea: Juster farger på valgt tilstand for alle chip-varianter etter design:
+  
+  - Kant på valgt chip bruker nå `--ix-color-component-button-secondary-border-*` i stedet for `--ix-color-fill-main-default`.
+  - Valgt chip beholder aksentfargen i hover og active (`--ix-color-fill-main-subtle-hover` / `-active`) — tidligere falt en valgt radio- eller checkbox-chip tilbake til nøytralt fyll ved hover.
+  - Removable chip går fra fylt aksentfarge med lys tekst til samme lyse aksent-fyll som radio- og checkbox-chip. Dette gjelder også chips i multiselect-combobox, som gjenbruker `.ix-chip[data-removable]`.
+- feffcf3: Reduser ikonstørrelse i Message fra 32px til 20px
+- 36b63ea: Radio: prikken står nå midt i ringen i alle motorer
+  
+  Prikken var `50 %` av ringen. På radio chip `md` ga det 9px i en 18px ring, og et odde tall kan ikke sentreres i et jevnt uten en halv piksel: ringen landet på hele piksler, prikken på halve, i begge akser. Firefox snapper bakgrunner til enhetspiksler og flyttet prikken en halv til én piksel; Chromium kantutjevnet i stedet, så der ble den bare litt uskarp. Samme CSS-feil, to malestrategier.
+  
+  Prikken avledes nå av et heltalls innrykk i stedet: `--ii-radio-dot-size: calc(var(--ii-radio-size) - 2 * var(--ii-radio-dot-inset))`. Da er avstanden mellom de to boksene et heltall ved konstruksjon, i alle størrelser og alle tettheter.
+  
+  - Vanlig radio: uendret, 12px prikk i 24px ring
+  - Radio chip `md`: prikken går fra 9px til **10px**
+  - Radio chip `sm`: uendret, 8px prikk i 16px ring
+  
+  Labelen på vanlig radio setter i tillegg `line-height: var(--ii-radio-size)`. Den arvet 1,2 fra `.ix-body`, som ga en linjeboks på 19,2px og en ring på y = −2,4 med kanten på tvers av en enhetspiksel. Linjeboksen er en lengde og ikke et forholdstall, fordi font-skalaen er flytende: `1.5 × 15,6px` er 23,4, og da er brøkdelene tilbake i en annen tetthet. Radiogrupper blir med dette 24px høye per rad der de før var 19,2px. Chip-varianten setter sin egen linjeboks og er upåvirket.
+- f9f462c: Tag får smalere sidepadding: `--ix-spacing-xs` i stedet for `--ix-spacing-sm`. Koden lå ett steg over designet i Figma; nå er de like.
+- d0eead5: Gi tooltip-info-ikonet i skjemafelt sterkere farge (`--ix-color-foreground-main-default`) og fjern hovereffekten
+
 ## 0.21.0
 
 ### Minor Changes
