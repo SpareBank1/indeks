@@ -28,6 +28,7 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Components/ReadMore',
   'Components/ProgressBar',
   'Components/Spinner',
+  'Components/Table',
   'Components/Tabs',
   'Components/Tag',
   'Layout/Grid',

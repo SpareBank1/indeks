@@ -110,6 +110,7 @@ const sidebars: SidebarsConfig = {
                     items: [
                         'komponenter/card',
                         'komponenter/tag',
+                        'komponenter/table',
                         'komponenter/accordion',
                         'komponenter/read-more',
                     ],
