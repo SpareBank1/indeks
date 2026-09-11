@@ -20,21 +20,37 @@ All CI/CD kjøres med **GitHub Actions**, organisert i spesialiserte workflows g
 Kjøres på pull requests mot main.
 
 - **`pr-build-and-preview.yml`** — Bygger alle pakker, kjører lint og tester, bygger <Term>Storybook</Term>, og deployer forhåndsvisning til Azure Static Web Apps. Inkluderer lisenssjekk og sikkerhetsaudit.
-- **`pr-playwright.yml`** — Kjører <Term>Playwright</Term>-tester i <Term>Docker</Term> mot Storybook. Trigges bare ved endringer i komponent- og stilpakker.
+- **`pr-playwright.yml`** — Kjører <Term>Playwright</Term>-tester i <Term>Docker</Term> mot Storybook: screenshot-sammenligning og tilgjengelighetstesting.
+- **`pr-eksempel-e2e.yml`** — Kjører funksjonell e2e mot eksempelappen i Docker. Trigges bare ved endringer i eksempelappen eller pakkene den bruker.
 - **`pr-cleanup.yml`** — Sletter Azure-forhåndsvisningen når en PR lukkes.
 
-### Release-workflow
+### Release-workflows
 
-- **`release-tag-and-publish.yml`** — Trigger: push til main. Bruker `dotansimha/changesets-action` med to utfall: hvis det finnes uforbrukte changesets opprettes en versjonerings-PR; hvis en versjonerings-PR nettopp er merget publiseres pakkene til npm. Pakkene publiseres med <Term>npm provenance</Term> — en kryptografisk kobling mellom npm-pakken og GitHub Actions-kjøringen som produserte den, slik at konsumenter kan verifisere at pakken faktisk ble bygget fra kildekoden i repoet.
+Versjonering og publisering er to workflows, ikke én. `changesets/action` velger alltid versjonering når det finnes uforbrukte changesets, så den kan ikke også brukes til å publisere på et senere tidspunkt.
+
+- **`release-versjons-pr.yml`** — Trigger: push til main. Kjører `changeset version` via `changesets/action` og oppretter eller oppdaterer PR-en «chore: version packages». Publiserer ingenting.
+- **`release-publiser.yml`** — Trigger: schedule, hver time i kjernetid på hverdager. Publiserer alt i den nyeste versjons-commiten som ikke allerede ligger på npm, pusher git-tags og oppretter en GitHub-release per pakke. Er alt publisert, gjør kjøringen ingenting. Pakkene publiseres med <Term>npm provenance</Term> — en kryptografisk kobling mellom npm-pakken og GitHub Actions-kjøringen som produserte den, slik at konsumenter kan verifisere at pakken faktisk ble bygget fra kildekoden i repoet. Autentiseringen mot npm skjer med Trusted Publishing (OIDC), uten tilgangstoken.
+
+Publiseringen skjer fra versjons-commiten, ikke fra det main peker på når cron-jobben kjører. Ellers ville feature-PR-er som har landet i mellomtiden bli publisert under et versjonsnummer changeloggen deres ikke står i.
 
 ### Deploy-workflow
 
-- **`deploy-docs.yml`** — Trigger: push til main (ved endringer i docs, storybook, komponenter). Bygger docs, Storybook og eksempel-app, og deployer til Azure Static Web Apps (design.sparebank1.no). Kan kjøres manuelt med valgfri commit-SHA.
+- **`deploy-docs.yml`** — Trigger: schedule, hver time i kjernetid på hverdager. Bygger docs, Storybook og eksempel-app fra den nyeste release-taggen og deployer til Azure Static Web Apps. En egen, billig sjekk-jobb avgjør først om det er noe å deploye: den krever at CDN-en faktisk svarer på URL-ene for de nyeste versjonene, og at den versjonen ikke alt er deployet. Kan kjøres manuelt med valgfri commit når en tekstfiks må ut før neste release.
+
+Docs bygges fra release-taggen fordi `package.json` i det treet *er* den publiserte sannheten. Bygde vi fra main, ville installasjonseksemplene på nettstedet vist versjonsnumre som ennå ikke finnes på npm eller CDN.
+
+### Publisering til CDN
+
+CDN-artefaktene bygges av et eget, internt repo (`sparebank1utvikling/sb1-indeks`) som poller Releases-API-et her, kloner de nye release-taggene, kjører CDN-bygget og laster opp til S3. Det skjer også på schedule, mellom npm-publiseringen og docs-deployen.
+
+Kjeden er polling-basert og ikke event-basert fordi de to repoene ligger i ulike GitHub-organisasjoner — en webhook ville krevd at en credential med skrivetilgang til det interne repoet lå lagret i dette, som er offentlig.
+
+Fordi hvert steg selv sjekker om det forrige er ute, er en forsinket eller droppet cron-kjøring ufarlig: steget gjør ingenting og prøver igjen neste time.
 
 ### Security-workflows
 
-- **`security-codeql.yml`** — CodeQL-skanning av JavaScript på PR, push til main og ukentlig schedule.
-- **`security-zizmor.yml`** — Skanner workflow-filer med [Zizmor](https://github.com/zizmorcore/zizmor), et statisk analyseverktøy som finner sikkerhetsproblemer i GitHub Actions-konfigurasjoner (f.eks. script injection, overprivilegerte tokens). Kjøres ved endringer i `.github/workflows/`. Funn blokkerer merge via branch protection rules.
+- **`security-codeql.yml`** — CodeQL-skanning av JavaScript på PR, push til main og ukentlig schedule. Funn av alvorlighet `error` eller `high` blokkerer merge via rulesettet for main.
+- **`security-zizmor.yml`** — Skanner workflow-filer med [Zizmor](https://github.com/zizmorcore/zizmor), et statisk analyseverktøy som finner sikkerhetsproblemer i GitHub Actions-konfigurasjoner (f.eks. script injection, overprivilegerte tokens). Kjøres ved endringer i `.github/workflows/`. Kjøringen feiler ved funn, men er ikke en påkrevd statussjekk — den ville blokkert alle PR-er som ikke rører workflow-filer.
 - **`security-npm-deprecate.yml`** — Manuell workflow for å deprecate eller unpublish npm-pakker ved sikkerhetshendelser.
 
 ### Drivere for beslutningen

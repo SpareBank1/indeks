@@ -1,25 +1,26 @@
-name: Release - Opprett versjons-PR eller publiser
+name: Release - Opprett versjons-PR
 
 on:
     push:
         branches:
             - main
 
+permissions: {}
+
 concurrency:
     group: release
     cancel-in-progress: false
 
 jobs:
-    release:
+    versjons-pr:
         runs-on: ubuntu-latest
         timeout-minutes: 30
         permissions:
             contents: write
             pull-requests: write
-            id-token: write
         steps:
             - name: Checkout code
-              # zizmor: ignore[artipacked] - persist-credentials trengs for git push av tags og branch
+              # zizmor: ignore[artipacked] - persist-credentials trengs for git push av versjons-branchen
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                   fetch-depth: 0
@@ -32,22 +33,18 @@ jobs:
               with:
                   node-version: '24'
                   cache: 'pnpm'
-                  registry-url: 'https://registry.npmjs.org'
 
             - name: Install dependencies
               run: pnpm install --frozen-lockfile --ignore-scripts
 
-            - name: Opprett versjons-PR eller publiser
+            # Bare versjonering. Publiseringen skjer i release-publiser.yml, fordi
+            # changesets/action alltid velger versjonering når det finnes changesets —
+            # den kan derfor ikke gjenbrukes til en schedulert publisering.
+            - name: Opprett eller oppdater versjons-PR
               uses: changesets/action@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
               with:
                   version-script: pnpm ci:version
-                  publish-script: pnpm ci:publish
                   commit-message: 'chore: version packages'
                   pr-title: 'chore: version packages'
                   # v2 leser ikke lenger GITHUB_TOKEN fra env
                   github-token: ${{ secrets.GITHUB_TOKEN }}
-              env:
-                  # npm-auth via Trusted Publishing (id-token + setup-node registry-url);
-                  # v2 skriver ikke lenger .npmrc basert på NPM_TOKEN
-                  NPM_CONFIG_PROVENANCE: 'true'
-

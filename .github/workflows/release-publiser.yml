@@ -1,0 +1,114 @@
+name: Release - Publiser til npm
+
+on:
+    schedule:
+        # Hver time 07–14 UTC på hverdager = 08–15 Oslo (vinter) / 09–16 (sommer).
+        # Kjøringen er en no-op når alt i versjons-commiten allerede er publisert,
+        # så en forsinket eller droppet kjøring er ufarlig — den prøver igjen neste time.
+        - cron: '5 7-14 * * 1-5'
+    workflow_dispatch:
+        inputs:
+            dry_run:
+                description: 'Vis publiseringsplan uten å publisere'
+                required: false
+                default: false
+                type: boolean
+            ref:
+                description: 'Commit/tag å publisere fra (tom = nyeste versjons-commit på main)'
+                required: false
+                type: string
+
+permissions: {}
+
+concurrency:
+    group: release
+    cancel-in-progress: false
+
+jobs:
+    publiser:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        permissions:
+            contents: write # git push --tags + gh release create
+            id-token: write # npm Trusted Publishing (OIDC)
+        steps:
+            - name: Checkout code
+              # zizmor: ignore[artipacked] - persist-credentials trengs for git push av tags
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  fetch-depth: 0
+
+            # Publiser fra versjons-commiten, ikke main HEAD: da er @sb1/indeks-css@X på npm
+            # nøyaktig koden i den commiten. Publiserte vi fra HEAD noen timer senere, ville
+            # feature-PR-er som har landet siden bli merket som X uten å stå i changeloggen.
+            - name: Finn versjons-commit
+              id: finn
+              env:
+                  INPUT_REF: ${{ inputs.ref }}
+              run: |
+                  if [ -n "$INPUT_REF" ]; then
+                      SHA="$INPUT_REF"
+                  else
+                      SHA=$(git rev-list -1 --grep='^chore: version packages' origin/main)
+                  fi
+                  [ -n "$SHA" ] || { echo "::error::Fant ingen versjons-commit"; exit 1; }
+                  echo "Publiserer fra $SHA"
+                  echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
+            - name: Sjekk ut versjons-commit
+              env:
+                  SHA: ${{ steps.finn.outputs.sha }}
+              run: git checkout --detach "$SHA"
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
+            - name: Set up Node.js
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
+              with:
+                  node-version: '24'
+                  cache: 'pnpm'
+                  registry-url: 'https://registry.npmjs.org'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile --ignore-scripts
+
+            # Er alt i denne commiten allerede publisert, blir resten av jobben en no-op.
+            - name: Vis publiseringsplan
+              run: pnpm changeset publish-plan
+
+            - name: Publiser til npm
+              if: ${{ !inputs.dry_run }}
+              run: pnpm ci:publish
+              env:
+                  # npm-auth via Trusted Publishing (id-token + setup-node registry-url)
+                  NPM_CONFIG_PROVENANCE: 'true'
+
+            # changeset publish tagger bare lokalt — det var changesets/action som pushet før.
+            # changeset git-tag er registry-uavhengig og idempotent, så en tag som feilet å
+            # pushe kan reparteres senere. Uten taggen kan CDN-kjeden ikke klone versjonen.
+            - name: Sørg for git-tags
+              if: ${{ !inputs.dry_run }}
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  pnpm changeset git-tag
+                  git push origin --tags
+
+            # sb1-indeks finner nye versjoner via Releases-API-et, ikke via tags. Publiserer vi
+            # uten release, oppdateres CDN-en aldri — og synken exit'er 0, så ingen merker det.
+            - name: Opprett GitHub-releaser
+              if: ${{ !inputs.dry_run }}
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  for pkg in indeks-tokens indeks-utils indeks-css indeks-react indeks-web; do
+                      V=$(node -p "require('./$pkg/package.json').version")
+                      TAG="@sb1/$pkg@$V"
+                      if gh release view "$TAG" >/dev/null 2>&1; then
+                          echo "⏭️  $TAG finnes allerede"
+                          continue
+                      fi
+                      NOTES=$(awk -v h="## $V" 'index($0,h)==1{f=1;next} f&&/^## /{exit} f' "$pkg/CHANGELOG.md")
+                      gh release create "$TAG" --verify-tag --title "$TAG" --notes "${NOTES:-Se $pkg/CHANGELOG.md}"
+                  done
