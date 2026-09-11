@@ -1,43 +1,114 @@
 name: Deploy - Dokumentasjon
 
+# Docs bygges fra release-taggen, ikke fra main. I det treet *er* package.json den
+# publiserte sannheten, så versjonsnumrene på nettstedet kan ikke løpe foran npm og CDN.
+# Prisen er at rene tekstfikser venter på neste release — bruk workflow_dispatch med
+# `commit` når det haster.
 on:
-    push:
-        branches:
-            - main
-        paths:
-            - 'indeks-docs/**'
-            - 'indeks-storybook/**'
-            - 'indeks-react/**'
-            - 'indeks-web/**'
-            - 'indeks-css/**'
-            - 'indeks-tokens/**'
-            - 'indeks-eksempel/**'
-            - 'shared/**'
-            - '.github/workflows/deploy-docs.yml'
+    schedule:
+        # Hver time 07–14 UTC på hverdager, etter npm (:05) og CDN-synken (:20).
+        # Avstandene er ikke bærende: gaten under sjekker faktisk tilstand, så en
+        # forsinket eller droppet kjøring er ufarlig og prøver igjen neste time.
+        - cron: '40 7-14 * * 1-5'
     workflow_dispatch:
         inputs:
             commit:
-                description: 'Commit SHA or branch/tag to deploy (leave empty for latest)'
+                description: 'Commit/branch/tag å deploye (tom = nyeste release-tag)'
                 required: false
                 type: string
+            dry_run:
+                description: 'Kjør bare sjekken, ikke deploy'
+                required: false
+                default: false
+                type: boolean
+
+permissions: {}
 
 concurrency:
     group: deploy-docs
-    cancel-in-progress: true
+    # Med cron er det farlig å avbryte en pågående deploy — se KONVENSJONER.md.
+    cancel-in-progress: false
 
 jobs:
-    build-and-deploy:
+    sjekk:
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 10
         permissions:
             contents: read
-
+        outputs:
+            deploy: ${{ steps.gate.outputs.deploy }}
+            css_tag: ${{ steps.gate.outputs.css_tag }}
+            css: ${{ steps.gate.outputs.css }}
+            web: ${{ steps.gate.outputs.web }}
+            tokens: ${{ steps.gate.outputs.tokens }}
+            utils: ${{ steps.gate.outputs.utils }}
+            react: ${{ steps.gate.outputs.react }}
         steps:
             - name: Checkout code
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
-                  ref: ${{ github.event.inputs.commit || github.sha }}
+                  fetch-depth: 0
                   persist-credentials: false
+
+            - name: Er det noe å deploye?
+              id: gate
+              run: |
+                  nyeste() { git tag --list "@sb1/$1@*" | sed "s|^@sb1/$1@||" | sort -V | tail -1; }
+                  ikke_deploy() { echo "$1"; echo "deploy=false" >> "$GITHUB_OUTPUT"; exit 0; }
+
+                  css=$(nyeste indeks-css)
+                  web=$(nyeste indeks-web)
+                  tokens=$(nyeste indeks-tokens)
+                  utils=$(nyeste indeks-utils)
+                  react=$(nyeste indeks-react)
+                  [ -n "$css" ] || { echo "::error::Fant ingen @sb1/indeks-css-tag"; exit 1; }
+
+                  {
+                      echo "css=$css"; echo "web=$web"; echo "tokens=$tokens"
+                      echo "utils=$utils"; echo "react=$react"
+                      echo "css_tag=@sb1/indeks-css@$css"
+                  } >> "$GITHUB_OUTPUT"
+
+                  # Manglende S3-objekt gir 403, ikke 404 — bruk curl sin exit-status,
+                  # ikke strengmatch på statuskoden.
+                  for u in "css/$css/index.css" "web/$web/index.js" \
+                           "tokens/$tokens/index.css" "utils/$utils/index.css"; do
+                      curl -fsI "https://cdn.sparebank1.no/indeks/$u" >/dev/null \
+                          || ikke_deploy "⏭️  CDN mangler $u — venter"
+                  done
+
+                  # if/fi, ikke `git rev-parse ... && ikke_deploy ...`: GitHub kjører run med
+                  # bash -e, så en frittstående AND-liste med feilende venstreside avbryter
+                  # jobben — altså nøyaktig i normaltilfellet der taggen ikke finnes ennå.
+                  if git rev-parse -q --verify "refs/tags/docs/$css" >/dev/null; then
+                      ikke_deploy "⏭️  docs/$css er allerede deployet"
+                  fi
+
+                  echo "✅ Deployer docs for css@$css"
+                  echo "deploy=true" >> "$GITHUB_OUTPUT"
+
+    bygg-og-deploy:
+        needs: sjekk
+        if: ${{ needs.sjekk.outputs.deploy == 'true' && inputs.dry_run != true }}
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        permissions:
+            contents: write # git push av docs/<versjon>-taggen
+        env:
+            # Versjonsnumrene på nettstedet kommer fra det gaten har verifisert er ute,
+            # ikke fra treet vi bygger. Se readVersion i indeks-docs/docusaurus.config.ts.
+            INDEKS_CSS_VERSJON: ${{ needs.sjekk.outputs.css }}
+            INDEKS_WEB_VERSJON: ${{ needs.sjekk.outputs.web }}
+            INDEKS_TOKENS_VERSJON: ${{ needs.sjekk.outputs.tokens }}
+            INDEKS_UTILS_VERSJON: ${{ needs.sjekk.outputs.utils }}
+            INDEKS_REACT_VERSJON: ${{ needs.sjekk.outputs.react }}
+
+        steps:
+            - name: Checkout code
+              # zizmor: ignore[artipacked] - persist-credentials trengs for git push av docs-taggen
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  ref: ${{ inputs.commit || needs.sjekk.outputs.css_tag }}
 
             - name: Install pnpm
               uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
@@ -77,3 +148,16 @@ jobs:
                   output_location: ''
                   skip_app_build: true
                   production_branch: 'main'
+
+            # Tag, ikke en fil på nettstedet: den faktiske Azure-URL-en er ikke kjent her,
+            # og en tag virker uansett hosting og gir revisjonsspor. Hoppes over ved
+            # dispatch med `commit`, siden det som ligger ute da ikke er release-taggen.
+            - name: Merk versjonen som deployet
+              if: ${{ !inputs.commit }}
+              env:
+                  CSS: ${{ needs.sjekk.outputs.css }}
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git tag "docs/$CSS"
+                  git push origin "docs/$CSS"
