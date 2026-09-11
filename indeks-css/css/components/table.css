@@ -172,6 +172,8 @@
     padding: var(--ii-table-cell-padding-block) var(--ii-table-cell-padding-inline);
     cursor: pointer;
     text-align: start;
+    /* --ix-transition-all blir automatisk `none` ved prefers-reduced-motion, så
+       komponenten trenger ingen egen @media-regel for dette. */
     transition: var(--ix-transition-all);
 }
 
