@@ -445,6 +445,20 @@ Når du bruker `<ix-checkbox-group>` eller React-komponenten, settes dette opp f
 
 *Enten `options` eller `children` må være satt. Hvis begge er satt, vinner `options`.
 
+I tillegg sendes øvrige HTML-attributter (`id`, `tabIndex`, `role`, `aria-*`, `data-*`, osv.) videre til `<ix-checkbox-group>`-rotelementet. Det er `id` + `tabIndex={-1}` som gjør at en feiloppsummering kan lenke til gruppen: rotelementet har `role="group"`, så skjermleseren leser legend og feilmelding når fokus lander der.
+
+```tsx
+<CheckboxGroup legend="Hvilke tjenester vil du ha?" id="tjenester" tabIndex={-1} … />
+
+// og i feiloppsummeringen:
+<a href="#tjenester">Velg minst én tjeneste</a>
+```
+
+To unntak:
+
+- `aria-describedby` kommer ikke gjennom. `<ix-checkbox-group>` eier den (den peker på `description` og feilmeldingen) og overskriver verdien du sender inn. Trenger du ekstra hjelpetekst, bruk `description`.
+- `data-state`, `data-variant`, `data-size`, `disabled` og `readonly` kan ikke overstyres — de utledes av propene med samme navn.
+
 ### CheckboxOption
 
 | Felt | Type | Påkrevd | Beskrivelse |
