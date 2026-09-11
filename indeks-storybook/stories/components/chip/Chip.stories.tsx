@@ -38,6 +38,14 @@ export const Disabled: Story = {
     args: { disabled: true },
 };
 
+export const Feilmelding: Story = {
+    args: { error: true },
+};
+
+export const Skrivebeskyttet: Story = {
+    args: { readOnly: true },
+};
+
 export const Group: Story = {
     name: 'Gruppe',
     render: () => (
@@ -97,6 +105,24 @@ export const RemovableDeaktivert: Story = {
     name: 'Removable chip – deaktivert',
     render: () => (
         <RemovableChip disabled removeLabel="fjern" onRemove={() => {}}>
+            Sparing
+        </RemovableChip>
+    ),
+};
+
+export const RemovableFeilmelding: Story = {
+    name: 'Removable chip – feilmelding',
+    render: () => (
+        <RemovableChip error removeLabel="fjern" onRemove={() => {}}>
+            Sparing
+        </RemovableChip>
+    ),
+};
+
+export const RemovableSkrivebeskyttet: Story = {
+    name: 'Removable chip – skrivebeskyttet',
+    render: () => (
+        <RemovableChip readOnly removeLabel="fjern" onRemove={() => {}}>
             Sparing
         </RemovableChip>
     ),
@@ -171,6 +197,23 @@ export const RadioChipKunLesing: Story = {
     ),
 };
 
+export const RadioChipFeilmeldingValgt: Story = {
+    name: 'Radio chip – feilmelding og valgt',
+    render: () => (
+        <RadioGroup
+            variant="chip"
+            legend="Velg periode"
+            name="periode-error-valgt"
+            defaultValue="3m"
+            errorMessage="Perioden er ikke gyldig"
+        >
+            <RadioButton value="1m" label="1 måned" />
+            <RadioButton value="3m" label="3 måneder" />
+            <RadioButton value="12m" label="12 måneder" />
+        </RadioGroup>
+    ),
+};
+
 export const RadioChipJaNei: Story = {
     name: 'Radio chip – ja/nei',
     render: () => (
@@ -187,17 +230,21 @@ export const RadioChipHTML: Story = {
         <ix-radio-group data-variant="chip" name="periode-html">
             <span data-field="legend">Velg periode</span>
             <div data-field="items">
+                {/* Ingen faste id-er: ix-radio-group genererer unike id-er og setter
+                    label[for]. Faste id-er ville blitt duplisert når lys/mørk-decoratoren
+                    rendrer storyen to ganger i samme dokument, og da peker begge labels
+                    på den første inputen. */}
                 <div className="ix-radio-button">
-                    <input type="radio" id="periode-1m" value="1m" />
-                    <label htmlFor="periode-1m">1 måned</label>
+                    <input type="radio" value="1m" />
+                    <label>1 måned</label>
                 </div>
                 <div className="ix-radio-button">
-                    <input type="radio" id="periode-3m" value="3m" defaultChecked />
-                    <label htmlFor="periode-3m">3 måneder</label>
+                    <input type="radio" value="3m" defaultChecked />
+                    <label>3 måneder</label>
                 </div>
                 <div className="ix-radio-button">
-                    <input type="radio" id="periode-12m" value="12m" />
-                    <label htmlFor="periode-12m">12 måneder</label>
+                    <input type="radio" value="12m" />
+                    <label>12 måneder</label>
                 </div>
             </div>
             <span data-field="error" aria-live="polite"></span>
@@ -227,23 +274,76 @@ export const CheckboxChipLiten: Story = {
     ),
 };
 
+export const CheckboxChipDeaktivert: Story = {
+    name: 'Checkbox chip – deaktivert',
+    render: () => (
+        <CheckboxGroup
+            variant="chip"
+            legend="Velg interesser"
+            name="interesser-disabled"
+            defaultValue={['sport']}
+            disabled
+        >
+            <CheckboxButton value="sport" label="Sport" />
+            <CheckboxButton value="musikk" label="Musikk" />
+            <CheckboxButton value="reise" label="Reise" />
+        </CheckboxGroup>
+    ),
+};
+
+export const CheckboxChipFeilmelding: Story = {
+    name: 'Checkbox chip – feilmelding',
+    render: () => (
+        <CheckboxGroup
+            variant="chip"
+            legend="Velg interesser"
+            name="interesser-error"
+            defaultValue={['sport']}
+            errorMessage="Du må velge minst to interesser"
+        >
+            <CheckboxButton value="sport" label="Sport" />
+            <CheckboxButton value="musikk" label="Musikk" />
+            <CheckboxButton value="reise" label="Reise" />
+        </CheckboxGroup>
+    ),
+};
+
+export const CheckboxChipSkrivebeskyttet: Story = {
+    name: 'Checkbox chip – skrivebeskyttet',
+    render: () => (
+        <CheckboxGroup
+            variant="chip"
+            legend="Velg interesser"
+            name="interesser-readonly"
+            defaultValue={['sport']}
+            readOnly
+        >
+            <CheckboxButton value="sport" label="Sport" />
+            <CheckboxButton value="musikk" label="Musikk" />
+            <CheckboxButton value="reise" label="Reise" />
+        </CheckboxGroup>
+    ),
+};
+
 export const CheckboxChipHTML: Story = {
     name: 'Checkbox chip – HTML',
     render: () => (
         <ix-checkbox-group data-variant="chip" name="interesser-html">
             <span data-field="legend">Velg interesser</span>
             <div data-field="items">
+                {/* Ingen faste id-er — ix-checkbox-group genererer unike id-er og setter
+                    label[for]. Se kommentaren i «Radio chip – HTML». */}
                 <div className="ix-checkbox">
-                    <input type="checkbox" id="int-sport" value="sport" defaultChecked />
-                    <label htmlFor="int-sport">Sport</label>
+                    <input type="checkbox" value="sport" defaultChecked />
+                    <label>Sport</label>
                 </div>
                 <div className="ix-checkbox">
-                    <input type="checkbox" id="int-musikk" value="musikk" />
-                    <label htmlFor="int-musikk">Musikk</label>
+                    <input type="checkbox" value="musikk" />
+                    <label>Musikk</label>
                 </div>
                 <div className="ix-checkbox">
-                    <input type="checkbox" id="int-reise" value="reise" />
-                    <label htmlFor="int-reise">Reise</label>
+                    <input type="checkbox" value="reise" />
+                    <label>Reise</label>
                 </div>
             </div>
             <span data-field="error" aria-live="polite"></span>

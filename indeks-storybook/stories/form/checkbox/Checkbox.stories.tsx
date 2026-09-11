@@ -90,9 +90,12 @@ export const FlereCheckboxer: Story = {
 export const HTML: Story = {
     render: () => (
         <ix-field>
+            {/* Ingen fast id: ix-field genererer en unik id og setter label[for]. En fast
+                id ble duplisert når lys/mørk-decoratoren rendrer storyen to ganger i samme
+                dokument, og da pekte labelen i mørk modus på inputen i lys modus. */}
             <div className="ix-checkbox">
-                <input type="checkbox" id="terms-html" name="terms" />
-                <label htmlFor="terms-html">Jeg godtar vilkårene</label>
+                <input type="checkbox" name="terms" />
+                <label>Jeg godtar vilkårene</label>
             </div>
             <span data-field="description">Les vilkårene før du godtar</span>
             <span data-field="error" aria-live="polite"></span>

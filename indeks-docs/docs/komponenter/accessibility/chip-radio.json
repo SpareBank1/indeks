@@ -21,26 +21,42 @@
       "summary": "Ikke stol på farge alene for valgt tilstand",
       "details": "Valgt tilstand kommuniseres med tre samtidige signaler (fylt sirkel-indikator med prikk, aksent-kant og lys fyll på pillen) — ikke kun farge. Ikke overstyr dette slik at kun fargen skiller valgt fra ikke-valgt.",
       "wcag": ["1.4.1"]
+    },
+    {
+      "summary": "Skriv en feilmelding som forklarer hva som må rettes",
+      "details": "Chipene i feiltilstand får rød kant, og en valgt chip mørkerødt fyll — men fargen sier ikke hva som er galt. Send errorMessage (React) eller fyll [data-field=\"error\"] (HTML) med tekst som beskriver feilen og hva brukeren skal gjøre — f.eks. «Du må velge minst to interesser», ikke «Ugyldig valg». Teksten må være på brukerens språk; komponenten har ingen hardkodet fallback.",
+      "wcag": ["3.3.3"]
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "summary": "Kanten på en uvalgt chip i feiltilstand har for lav kontrast",
+      "details": "Feilkanten bruker --ix-color-border-danger-default (#f9807d), som gir ca. 2,5:1 mot en lys bakgrunn — under kravet på 3:1 for ikke-tekstlige indikatorer. En uvalgt chip i feiltilstand har ikke eget fyll, så kanten måles mot flaten chipen ligger på. Tokenet er hus-standard for feilkant i TextField, TextArea, Select og Checkbox, så avviket er felles for alle fem komponentene og gjennomgås separat. Det som oppfyller 3:1, er fokusindikatoren, indikator-kanten og fyllet på en valgt chip i feiltilstand. Feilen formidles heller aldri av kanten alene: en valgt chip får mørkerødt fyll med invertert forgrunn, og feilmeldingen vises som tekst med ikon.",
+      "wcag": ["1.4.11"]
+    },
+    {
+      "summary": "Ringen på en skrivebeskyttet chip har for lav kontrast",
+      "details": "Etter design-spec står ringen på en uvalgt skrivebeskyttet chip med --ix-color-border-main-default (#a0abbb) og uten fyll. Mot den grå read-only-flaten (#edeff2) gir det ca. 2,0:1, under kravet på 3:1. Verdien er den samme ringen har i alle andre tilstander, så alternativet ville vært en egen read-only-kant bare for chip. SC 1.4.11 gjør unntak for inaktive komponenter, og en skrivebeskyttet gruppe har pointer-events: none og kan ikke endres, men unntaket er skjønn og føres derfor opp her. Det valgte alternativet er uansett ikke avhengig av ringen: prikken bruker read-only-forgrunnen, som ligger på ca. 4,5:1, og valget er eksponert programmatisk.",
+      "wcag": ["1.4.11"]
+    }
+  ],
   "handled": [
     { "id": "1.3.1", "notes": "Gruppen får role=radiogroup og navn fra legend via aria-labelledby. Hvert valg er native <input type=radio> med label koblet via for/id." },
     { "id": "1.3.2", "notes": "Innholdet følger naturlig lesrekkefølge i DOM." },
-    { "id": "1.4.1", "notes": "Valgt tilstand kommuniseres med fylt sirkel-indikator, aksent-kant og fyll — ikke farge alene." },
+    { "id": "1.4.1", "notes": "Valgt tilstand kommuniseres med fylt sirkel-indikator, aksent-kant og fyll — ikke farge alene. Feiltilstand bæres av kant på uvalgte chips, mørkerødt fyll med invertert forgrunn og indikator på en valgt chip, rødt ikon i feilmeldingen og selve feilteksten — aldri av fargen alene. Skrivebeskyttet bæres av nedtonet fyll, nedtonet forgrunn og låsikon i legend." },
     { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
     { "id": "1.4.10", "notes": "Chips wrapper og reflower korrekt ned til 320px viewport." },
-    { "id": "1.4.11", "notes": "Fokusindikator og indikator-kant oppfyller 3:1 kontrastkrav." },
     { "id": "2.1.1", "notes": "Native <input type=radio> navigeres med piltaster og velges med pil/Space. Fullt opererbart med tastatur." },
     { "id": "2.1.2", "notes": "Fokus kan navigeres ut av gruppen med Tab og Shift+Tab." },
     { "id": "2.4.3", "notes": "<ix-radio-group> wirer alle inputs til samme name, slik at piltaster flytter valget i naturlig rekkefølge og gruppen utgjør ett tab-stopp." },
     { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible som følger pill-formen." },
     { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
     { "id": "3.2.2", "notes": "Å velge en chip endrer kun gruppens verdi, ikke kontekst — ingen uventet navigasjon eller innsending." },
-    { "id": "1.4.3", "notes": "Tekstfarge mot fill-tokens i alle tilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG." },
+    { "id": "1.4.3", "notes": "Tekstfarge mot fill-tokens i alle tilstander. Disabled-tilstand (opacity: 0.4) er unntatt fra kravet per WCAG. I feiltilstand står invertert forgrunn mot fill-danger-default (ca. 5,5:1), og skrivebeskyttet foreground-main-read-only mot fill-interactive-read-only (ca. 4,6:1) — begge over 4,5:1, men read-only har liten margin." },
     { "id": "3.3.2", "notes": "Gruppens legend fungerer som instruksjon/etikett for valget." },
-    { "id": "2.5.8", "notes": "Hele pillen er klikkflate for valget. md-størrelsen gir mål godt over 24×24px. sm-størrelsen (padding-block spacing-2xs + font-size-sm) er nær minimumet; chips wrapper i en gruppe med gap mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." },
-    { "id": "4.1.2", "notes": "<ix-radio-group> setter role=radiogroup på gruppen (navn fra legend via aria-labelledby), og native <input type=radio> gir rolle og valgt/ikke-valgt-tilstand (aria-checked). Native disabled-attributt eksponeres til hjelpemidler." }
+    { "id": "2.5.8", "notes": "Hele pillen er klikkflate for valget. Med standard tetthet er md-størrelsen 36px høy, godt over 24×24px, og sm 26px. Med kompakt tetthet faller sm til 22px, altså under minimumet; chips wrapper i en gruppe med gap mellom seg, slik at avstands-unntaket i SC 2.5.8 gjelder. Konsumenten må unngå å pakke sm-chips så tett at både mål og avstand kommer under 24px." },
+    { "id": "4.1.2", "notes": "<ix-radio-group> setter role=radiogroup på gruppen (navn fra legend via aria-labelledby), og native <input type=radio> gir rolle og valgt/ikke-valgt-tilstand (aria-checked). Native disabled-attributt eksponeres til hjelpemidler." },
+    { "id": "3.3.1", "notes": "Gruppen setter aria-invalid=\"true\" på seg selv og på alle inputs når errorMessage er satt, og feilmeldingen rendres i [data-field=\"error\"] med ikon og aria-live=\"polite\", koblet til gruppen via aria-describedby. Chipene får rød kant, og en valgt chip mørkerødt fyll med invertert forgrunn og indikator. Selve feilteksten er konsumentens ansvar." }
   ],
   "notRelevant": [
     { "id": "1.1.1", "reason": "Sirkel-indikatoren er rent dekorativ CSS uten egen markup; tilstanden formidles av native radio-input." },
@@ -76,8 +92,6 @@
     { "id": "3.2.3" },
     { "id": "3.2.4" },
     { "id": "3.2.6" },
-    { "id": "3.3.1" },
-    { "id": "3.3.3" },
     { "id": "3.3.4" },
     { "id": "3.3.7" },
     { "id": "3.3.8" },
