@@ -170,6 +170,63 @@ describe('Message', () => {
             // Ingen region → ingen kast, bare console.warn (dempet i beforeEach).
             expect(() => render(<Message status="info">Tekst</Message>)).not.toThrow();
         });
+
+        it('announce={false} slår av annonseringen helt', () => {
+            // Brukstilfellet: noe annet flytter fokus til meldingen, og da leses
+            // den opp av fokusflyttingen. Uten dette blir den lest to ganger.
+            const { container } = render(
+                <MessageRegion>
+                    <Message status="danger" announceOnPageLoad announce={false}>
+                        Betalingen feilet
+                    </Message>
+                </MessageRegion>,
+            );
+            expect(getRegion(container)?.textContent).toBe('');
+        });
+
+        it('announce={false} advarer ikke om manglende MessageRegion', () => {
+            // Har du valgt bort annonsering, er en advarsel om at annonseringen
+            // ikke virker bare støy.
+            render(<Message status="info" announce={false}>Tekst</Message>);
+            expect(warnSpy).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('videresending av øvrige attributter', () => {
+        it('sender id og tabIndex videre til rot-elementet', () => {
+            // Uten dette kan ikke en feiloppsummering peke på eller flytte fokus
+            // til meldingen, og måtte pakket den i en ekstra <div role="group">.
+            const { container } = render(
+                <Message status="danger" id="feiloppsummering" tabIndex={-1} role="group" aria-label="3 feil">
+                    Tekst
+                </Message>,
+            );
+            const root = container.firstElementChild as HTMLElement;
+            expect(root.id).toBe('feiloppsummering');
+            expect(root.tabIndex).toBe(-1);
+            expect(root.getAttribute('role')).toBe('group');
+            expect(root.getAttribute('aria-label')).toBe('3 feil');
+        });
+
+        it('lar seg ikke overstyre på data-status — den følger status-propen', () => {
+            const { container } = render(
+                <Message status="danger" data-status="success">
+                    Tekst
+                </Message>,
+            );
+            expect(container.firstElementChild?.getAttribute('data-status')).toBe('danger');
+        });
+
+        it('title er den synlige overskriften, ikke nettleserens tooltip', () => {
+            const { container } = render(
+                <Message status="info" title="Overskrift">
+                    Tekst
+                </Message>,
+            );
+            const root = container.firstElementChild as HTMLElement;
+            expect(screen.getByText('Overskrift').classList.contains('ix-message__title')).toBe(true);
+            expect(root.hasAttribute('title')).toBe(false);
+        });
     });
 
     describe('full bredde', () => {

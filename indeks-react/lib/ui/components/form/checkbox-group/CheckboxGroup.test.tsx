@@ -252,4 +252,48 @@ describe('CheckboxGroup', () => {
             expect(firstEvent(onChange).target.value).toBe('a');
         });
     });
+
+    describe('videresending av øvrige attributter', () => {
+        it('sender id og tabIndex videre til host-elementet', () => {
+            // Brukstilfellet: en feiloppsummering lenker til `#kontaktmate` og
+            // flytter fokus dit — se den samme testen i RadioGroup.test.tsx.
+            const { container } = renderGroup({ id: 'kontaktmate', tabIndex: -1 });
+            const host = container.querySelector('ix-checkbox-group') as HTMLElement;
+            expect(host.id).toBe('kontaktmate');
+            expect(host.getAttribute('tabindex')).toBe('-1');
+        });
+
+        it('sender data-attributter videre', () => {
+            const { container } = render(
+                <CheckboxGroup legend="Velg" data-testid="gruppe" aria-keyshortcuts="Alt+K">
+                    <CheckboxButton value="a" label="A" />
+                </CheckboxGroup>
+            );
+            const host = container.querySelector('ix-checkbox-group') as HTMLElement;
+            expect(host.getAttribute('data-testid')).toBe('gruppe');
+            expect(host.getAttribute('aria-keyshortcuts')).toBe('Alt+K');
+        });
+
+        it('lar seg ikke overstyre på data-state — den følger errorMessage', () => {
+            const { container } = render(
+                <CheckboxGroup legend="Velg" errorMessage="Velg minst én" data-state="readonly">
+                    <CheckboxButton value="a" label="A" />
+                </CheckboxGroup>
+            );
+            const host = container.querySelector('ix-checkbox-group') as HTMLElement;
+            expect(host.getAttribute('data-state')).toBe('error');
+        });
+
+        it('får IKKE gjennom aria-describedby — den eies av web-komponenten', () => {
+            // Samme unntak som i RadioGroup.test.tsx: ix-checkbox-group setter
+            // aria-describedby til sin egen beskrivelse/feilmelding.
+            const { container } = render(
+                <CheckboxGroup legend="Velg" aria-describedby="min-hjelpetekst">
+                    <CheckboxButton value="a" label="A" />
+                </CheckboxGroup>
+            );
+            const host = container.querySelector('ix-checkbox-group') as HTMLElement;
+            expect(host.getAttribute('aria-describedby')).not.toBe('min-hjelpetekst');
+        });
+    });
 });

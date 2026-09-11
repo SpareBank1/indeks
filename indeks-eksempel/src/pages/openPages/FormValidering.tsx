@@ -8,10 +8,12 @@ import {
     DateField,
     Form,
     Heading,
+    LinkText,
     PhoneNumberField,
     RadioGroup,
     Select,
     TextArea,
+    Text,
     TextField,
 } from '@sb1/indeks-react';
 import { useState } from 'react';
@@ -150,6 +152,18 @@ export default function FormValidering() {
                 <Heading as="h1" addRecommendedSpacing>
                     Form-validering
                 </Heading>
+
+                {/*
+                 * Denne siden viser KOBLINGEN mellom komponent og RHF, ett felt av
+                 * hver type. Hvordan et skjema STRUKTURERES er et eget spørsmål, og
+                 * har egne sider — eksempelappen har ingen meny, så uten disse
+                 * lenkene er de bare å finne ved å skrive URL-en selv.
+                 */}
+                <Text long addRecommendedSpacing>
+                    Strukturmønstre for skjema:{' '}
+                    <LinkText href="#/internTesting/skjema-en-side">alt på én side, delt i seksjoner</LinkText>{' '}
+                    · <LinkText href="#/internTesting/skjema-steg">steg for steg</LinkText>
+                </Text>
 
                 <Form onSubmit={handleSubmit(onValid)} noValidate>
                     <TextField

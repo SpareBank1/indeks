@@ -16,6 +16,8 @@ import GenererFarger from './pages/openPages/GenererFarger';
 import OpenPagesOverview from './pages/openPages/Oversikt';
 import ResponsivLayout from './pages/openPages/ResponsivLayout';
 import ResponsivSpacing from './pages/openPages/ResponsivSpacing';
+import SkjemaEnSide from './pages/openPages/skjema/SkjemaEnSide';
+import SkjemaSteg from './pages/openPages/skjema/SkjemaSteg';
 import SpacingEksempler from './pages/openPages/SpacingEksempler';
 import TypografiEksempler from './pages/openPages/TypografiEksempler';
 import PMBetaling from './pages/pm/betaling/Betaling';
@@ -87,6 +89,14 @@ const router = createHashRouter([
                     {
                         path: 'form-validering',
                         element: <FormValidering />,
+                    },
+                    {
+                        path: 'skjema-en-side',
+                        element: <SkjemaEnSide />,
+                    },
+                    {
+                        path: 'skjema-steg',
+                        element: <SkjemaSteg />,
                     },
                     {
                         path: 'generer-farger',

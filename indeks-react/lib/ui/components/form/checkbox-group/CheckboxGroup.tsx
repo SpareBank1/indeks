@@ -4,6 +4,7 @@ import {
     useState,
     type ChangeEventHandler,
     type FocusEventHandler,
+    type HTMLAttributes,
     type ReactNode,
 } from 'react';
 import { ValidationMessage } from '../validation-message/ValidationMessage';
@@ -16,7 +17,17 @@ export type CheckboxOption = {
     label: string;
 };
 
-export type CheckboxGroupProps = {
+/*
+ * Extender HTMLAttributes så host-elementet kan få `id`, `tabIndex`, `data-*`
+ * og `aria-*` som alle andre elementer — se den samme forklaringen i
+ * RadioGroup.tsx. `onChange`/`onBlur` er utelatt fra arven fordi de har
+ * snevrere signatur her (input-eventer, ikke generiske element-eventer), og
+ * `defaultValue` fordi den er et `string[]` (flere valg) og ikke DOM-ens streng.
+ *
+ * `aria-describedby` kommer ikke gjennom — web-komponenten eier den. Bruk
+ * `description`. Se RadioGroup.tsx.
+ */
+export interface CheckboxGroupProps extends Omit<HTMLAttributes<HTMLElement>, 'onChange' | 'onBlur' | 'defaultValue'> {
     legend: string;
     description?: string;
     errorMessage?: string;
@@ -36,14 +47,13 @@ export type CheckboxGroupProps = {
     disabled?: boolean;
     readOnly?: boolean;
     hideLegend?: boolean;
-    className?: string;
     options?: CheckboxOption[];
     children?: ReactNode;
     /** Visuell variant. `'chip'` styler hvert valg som en pill (chip). Standard er vanlig checkbox. */
     variant?: 'chip';
     /** Størrelse — kun relevant for `variant="chip"`. @default "md" */
     size?: 'sm' | 'md';
-};
+}
 
 // React-laget er tynt: ix-checkbox-group (WC) eier id, htmlFor, aria-*-koblinger,
 // aria-invalid og disabled-propagering til barn-inputs. React-laget eksponerer kun
@@ -85,6 +95,7 @@ export const CheckboxGroup = forwardRef<HTMLInputElement, CheckboxGroupProps>(fu
         children,
         variant,
         size = 'md',
+        ...rest
     },
     ref
 ) {
@@ -108,7 +119,9 @@ export const CheckboxGroup = forwardRef<HTMLInputElement, CheckboxGroupProps>(fu
         : children;
 
     return (
+        // `rest` spres FØRST — se forklaringen i RadioGroup.tsx.
         <ix-checkbox-group
+            {...rest}
             name={name}
             class={cn(className) || undefined}
             data-variant={variant}
