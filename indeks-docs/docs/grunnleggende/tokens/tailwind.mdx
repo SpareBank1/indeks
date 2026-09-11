@@ -1,0 +1,143 @@
+# Tailwind
+
+Indeks kommer med [egne utility-klasser](/docs/utility-klasser/oversikt) med `ix-`-prefiks
+som dekker mye av det Tailwind gir deg, uten noe byggesteg hos deg. Trenger du bare farger,
+spacing og typografi fra designsystemet, holder de.
+
+Bruker du Tailwind allerede, skal du ikke måtte skrive
+`bg-[var(--ix-color-fill-main-default)]` for å nå tokenene våre. Derfor genererer vi en
+Tailwind 4-temafil sammen med resten av pakkene. Den kobler Tailwinds navnerom til
+Indeks-variablene, slik at `bg-fill-main-default` og `p-md` gir riktige verdier.
+
+## Kom i gang
+
+Legg importen etter `tailwindcss` i CSS-en din:
+
+```css
+@import 'tailwindcss';
+@import '@sb1/indeks-css/tailwind.css';
+```
+
+Temaet krever Tailwind 4.1 eller nyere. Direktivene vi bruker finnes fra 4.0, men 4.0 er
+designet for Safari 16.4 og nyere, mens Indeks støtter Safari 15.4. I 4.1 kom fallbacks som
+gjør at Tailwinds egen CSS også virker der.
+
+Temafilen setter bare opp navnene. Selve verdiene kommer fra Indeks-CSS-en, så den må
+lastes som normalt:
+
+```css
+@import '@sb1/indeks-css';
+```
+
+Bruker du bare én av delpakkene, finnes temaet der også:
+`@sb1/indeks-tokens/tailwind.css` og `@sb1/indeks-utils/tailwind.css`.
+
+## Hva du får
+
+| Tailwind-navnerom | Kommer fra | Eksempel på klasse |
+| --- | --- | --- |
+| `--color-*` | `--ix-color-*` | `bg-fill-main-default`, `text-foreground-main-subtle` |
+| `--spacing-*` | `--ix-spacing-*` | `p-md`, `gap-lg`, `mt-2xl` |
+| `--text-*` | `--ix-font-size-*` | `text-lg`, `text-3xl` |
+| `--radius-*` | `--ix-border-radius-*` | `rounded-md`, `rounded-pill` |
+| `--font-sans`, `--font-heading` | `--ix-font-family-*` | `font-sans`, `font-heading` |
+| `--font-weight-*` | `--ix-font-weight-*` | `font-regular`, `font-medium`, `font-button` |
+| `--breakpoint-*` | `--ix-breakpoint-*` | `sm:`, `md:`, `lg:`, `xl:` |
+| `--ease-default` | `--ix-transition-animation` | `ease-default` |
+
+Brødfonten ligger på `font-sans`, ikke `font-normal`. Tailwind har allerede
+`font-normal` som fontvekt 400, og to klasser med samme navn ville kollidert.
+
+Fargenavnene er token-navnene uendret, de samme du finner i Figma. Derfor blir det
+`bg-fill-main-default` og `border-border-main-default`. Den doble `border` ser rar ut, men
+gjør at du kan lese navnet rett av skissen.
+
+Komponent-fargene er også med, som `bg-component-button-primary-fill-default`. De finnes
+for at komponentene våre skal kunne temes, så de kan endre seg uten at vi regner det som et
+brudd. Bruk de semantiske fargene der du kan, og disse når du bygger noe som skal matche en
+Indeks-komponent tett.
+
+## Bruk `var()` for det som mangler navnerom
+
+Noen tokens har ingen tilsvarende tema-nøkkel i Tailwind 4. Dem bruker du med
+Tailwinds klammeform:
+
+| Token | Slik bruker du den |
+| --- | --- |
+| `--ix-z-index-*` | `z-[var(--ix-z-index-dialog)]` |
+| `--ix-border-width-*` | `[border-width:var(--ix-border-width-bold)]` |
+| `--ix-outline-width-default` | `[outline-width:var(--ix-outline-width-default)]` |
+| `--ix-outline-offset-default` | `outline-offset-[var(--ix-outline-offset-default)]` |
+| `--ix-opacity-disabled` | `opacity-[var(--ix-opacity-disabled)]` |
+| `--ix-transition-duration` | `duration-[var(--ix-transition-duration)]` |
+
+Samme form virker for alle Indeks-variabler, også de vi ikke har tatt med i temaet.
+
+## Regn med at `sm:` betyr 768 piksler
+
+Breakpoint-navnene våre er de samme som Tailwinds, men verdiene er ikke. Tailwind bruker
+640 piksler for `sm`, Indeks bruker 768. Når du importerer temafilen, får du Indeks-verdien:
+
+| Variant | Tailwind uten Indeks | Med Indeks-temaet |
+| --- | --- | --- |
+| `sm:` | 640px | 768px |
+| `md:` | 768px | 1024px |
+| `lg:` | 1024px | 1280px |
+| `xl:` | 1280px | 1600px |
+
+Har du Tailwind-kode fra før, endrer den oppførsel. Gå gjennom `sm:`- og `md:`-klassene
+dine når du tar i bruk temaet.
+
+Breakpointene er de eneste verdiene vi skriver rett inn i temafilen. Tailwind bygger media
+queries på byggetid og kan ikke slå opp en CSS-variabel der.
+
+## Du trenger ikke `dark:` for Indeks-farger
+
+Fargeklassene peker på Indeks-variablene, og de bytter selv inne i `ix-dark-mode`. Dette
+blir mørkt uten at du gjør noe mer:
+
+```html
+<div class="ix-dark-mode">
+    <p class="bg-surface-main-default text-foreground-main-default">Mørk</p>
+</div>
+```
+
+Det samme gjelder density: `p-md` følger `data-density` og skjermbredden, fordi klassen
+peker på variabelen i stedet for en fast piksel-verdi.
+
+Temafilen setter i tillegg Tailwinds egen `dark:`-variant til å følge `ix-dark-mode` i
+stedet for `prefers-color-scheme`. Da havner ikke dine egne `dark:`-klasser i motsatt
+modus av designsystemet.
+
+## Lås deg til Indeks-tokens
+
+Temafilen legger seg oppå Tailwinds egne skalaer. Både `bg-red-500` og
+`bg-fill-main-default` virker, og `p-4` virker ved siden av `p-md`.
+
+Vil du at bare Indeks-verdiene skal være tilgjengelige, nullstill navnerommene før du
+importerer:
+
+```css
+@import 'tailwindcss';
+
+@theme {
+    --color-*: initial;
+    --spacing-*: initial;
+}
+
+@import '@sb1/indeks-css/tailwind.css';
+```
+
+Vær klar over hva `--spacing-*: initial` tar med seg: hele den numeriske skalaen
+forsvinner, altså `w-64` og `gap-2` like mye som `p-4`.
+
+## Relatert
+
+- [Utility-klasser i Indeks](/docs/utility-klasser/oversikt) er alternativet til Tailwind i
+  dette designsystemet
+- [Migrere spacing fra Tailwind](/docs/grunnleggende/tokens/spacing#migrere-fra-tailwind)
+  hvis du heller vil bytte ut Tailwind-klassene med `ix-`-klasser
+- [Fargemodus](/docs/retningslinjer/farger/fargemodus) forklarer `ix-dark-mode` og
+  `ix-light-mode`
+- [ADR-DS-009](/docs/adr/ADR-DS-009-css-only-styling) begrunner hvorfor Indeks selv ikke
+  bruker Tailwind

@@ -46,6 +46,7 @@ const sidebars: SidebarsConfig = {
                 'grunnleggende/tokens/spacing',
                 'grunnleggende/tokens/border',
                 'grunnleggende/tokens/z-index',
+                'grunnleggende/tokens/tailwind',
             ],
         },
         {

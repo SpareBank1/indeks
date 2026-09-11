@@ -1,6 +1,7 @@
 import path from 'path';
 import { writeFileSyncEnsureDir } from '../../../../shared/tokens/utils.ts';
 import { flattenTokens, type FlatToken as Token, buildCSSVarNameFromToken } from '../../../../shared/tokens/utils.ts';
+import { buildTailwindUtils } from './tailwind.ts';
 
 // Generate CSS header comment
 function generateCSSHeader(version: string): string {
@@ -47,4 +48,8 @@ export function buildCSS(outPath: string, version: string, tokens: Record<string
 
     // Write index.css that imports all generated files
     generateIndexFile(outPath, generatedFiles);
+
+    // Tailwind-temaet holdes utenfor generatedFiles med vilje, så @theme ikke havner i
+    // index.css-manifestet og derfra i dist/index.css som alle konsumenter laster.
+    writeFileSyncEnsureDir(path.join(outPath, 'tailwind-utils.css'), buildTailwindUtils(version));
 }
