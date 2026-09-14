@@ -1,5 +1,35 @@
 # @sb1/indeks-utils
 
+## 0.9.0
+
+### Minor Changes
+
+- f9f462c: Nøytral status-fyll går fra brand-blå til grå, og `default` er fjernet som statusverdi.
+  
+  **Nøytralt fyll er nå grått.** `--ix-color-status-fill*` i nøytral-gruppen hentes fra `neutral`-tieren i stedet for `main`-tieren, som er brand-blå. Det gjør en nøytral flate faktisk nøytral — mest synlig i Tag, der `neutral` er standardverdien. `--ix-color-status-surface*` og `--ix-color-status-border` er uendret; de peker fortsatt på `main`-tieren, som allerede er nøytral i verdi (hvit flate, grå kantlinje), og det finnes ingen `surface-neutral-*`/`border-neutral-*` å bytte til.
+  
+  Endringen er WCAG-nøytral: nøytral Tag går fra 5.09:1 til 5.05:1 for emphasis-tekst og fra 13.14:1 til 13.18:1 for subtle-tekst, godt innenfor 1.4.3 (4.5:1). Emphasis-flaten holder 5.32:1 mot hvit side (1.4.11, 3:1).
+  
+  **Breaking: `default` er borte som statusverdi.** `neutral` er nå det eneste navnet på nøytral status.
+  
+  - `[data-status="default"]` gir ikke lenger noen `--ix-color-status-*`-verdier. Bytt til `data-status="neutral"`, eller fjern attributtet helt — elementer uten `data-status` faller fortsatt tilbake på de nøytrale verdiene via `:root`.
+  - `InteractiveIconStatus` er nå `'neutral' | 'info' | 'success' | 'warning' | 'danger'`. `status="default"` blir en typefeil; bruk `status="neutral"`.
+  - `InteractiveIcon` har ingen standardverdi for `status` lenger. Utelater du propen, arver ikonet status fra nærmeste `data-status`-forelder og er nøytralt uten en slik forelder — akkurat som før, siden `status="default"` også utelot attributtet. Ny mulighet: `status="neutral"` setter `data-status="neutral"` eksplisitt og bryter arven, slik at ikonet kan holdes nøytralt inne i en farget kontekst.
+- f9f462c: Status-foreground-settet er fullført, og foreground er koblet inn i status-kaskaden.
+  
+  **Nye tokens fra Figma.** `--ix-color-foreground-info-default` og `--ix-color-foreground-warning-default` finnes nå, i tillegg til `success` og `danger`. Lysmodus bruker `-600`-nivået, mørkmodus `-400` — samme nivå som de eksisterende. Util-klassene `ix-color-foreground-info-default` og `ix-color-foreground-warning-default` genereres automatisk.
+  
+  **Ny variabel `--ix-color-status-foreground`.** Den settes av `[data-status]` sammen med resten av `--ix-color-status-*`, slik at en komponent kan hente tekst-/ikonfargen for sin status uten å velge token selv. Util-klassen `ix-color-status-foreground` leser den. `neutral` — og elementer uten `data-status` — får `foreground-main-default`, siden det ikke finnes en `foreground-neutral-*`.
+  
+  **Merk hvor fargene er trygge.** De er kalibrert for vanlig bakgrunn (6.7–7.6:1 mot hvit) og for `status-surface` (5.4–6.5:1), men ikke for pastell-fyllet `fill-*-subtle`: der gir `info` 4.49:1 og `success` 4.36:1, som bryter WCAG 1.4.3 (4.5:1). Bruk `foreground-main-default` på subtle fyll. Kombinasjonen med `surface-*-active` er også stram (4.36–4.87:1).
+- 85dc7e7: Generer Tailwind 4-tema fra tokens. Ny fil `tailwind.css` i hver pakke kobler Tailwinds navnerom til `--ix-`-variablene, slik at `bg-fill-main-default`, `p-md`, `rounded-md` og `text-lg` gir Indeks-verdier. Importer `@sb1/indeks-css/tailwind.css` for hele settet. Temaet legger seg oppå Tailwinds egne skalaer, men overstyrer breakpointene: `sm:` blir 768px, ikke 640px.
+
+### Patch Changes
+
+- Updated dependencies [f9f462c]
+- Updated dependencies [85dc7e7]
+  - @sb1/indeks-tokens@0.9.0
+
 ## 0.8.2
 
 ### Patch Changes
