@@ -1,3 +1,5 @@
+import { CssImportBlock } from '@site/docs/kom-i-gang/InstallSnippets';
+
 # Farger for Web
 
 Pakken `@sb1/indeks-tokens` inneholder fargetokens som brukes i hele designsystemet. På web trenger de aller fleste ikke å generere farger selv, for den ferdig bygde CSS-en inneholder alt du trenger. Har du et eget theme, kan du likevel generere din egen web-CSS med den samme `build-colors`-kommandoen som brukes for [native (iOS/Android)](./farger-native).
@@ -6,9 +8,7 @@ Pakken `@sb1/indeks-tokens` inneholder fargetokens som brukes i hele designsyste
 
 I de aller fleste tilfeller skal du **ikke** generere farger selv. Bruk den ferdig bygde CSS-en, som allerede inneholder alle fargetokens:
 
-```css
-@import url('https://cdn.sparebank1.no/indeks/css/<versjon>/index.css');
-```
+<CssImportBlock />
 
 Eller via npm med `@sb1/indeks-css` (som inkluderer tokens):
 

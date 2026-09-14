@@ -6,7 +6,11 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+// Versjonen CI har verifisert er ute går foran den i treet. Bygger vi fra release-taggen
+// er de like, men ved en hastefiks bygget fra main ville package.json vist en uutgitt
+// versjon — og snippetene her peker på CDN-URL-er som da ikke finnes ennå.
 const readVersion = (pkg: string): string =>
+    process.env[`INDEKS_${pkg.replace('indeks-', '').toUpperCase()}_VERSJON`] ??
     JSON.parse(readFileSync(path.resolve(__dirname, `../${pkg}/package.json`), 'utf-8')).version;
 
 const config: Config = {

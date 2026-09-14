@@ -17,7 +17,9 @@ import Term from '@site/src/components/Term';
 
 ### Versjonering
 
-`indeks-css`, `indeks-web` og `indeks-react` har alltid identisk versjonsnummer — en endring i én bumper alle tre. `indeks-tokens` og `indeks-utils` versjoneres uavhengig. Changesets er konfigurert slik at en endring i `indeks-tokens` eller `indeks-utils` automatisk utløser en patch-bump i `indeks-css`, som igjen bumper `indeks-web` og `indeks-react`.
+`indeks-css`, `indeks-web` og `indeks-react` har alltid identisk versjonsnummer — en endring i én bumper alle tre. `indeks-tokens` og `indeks-utils` versjoneres uavhengig.
+
+Bumping på tvers følger de faktiske avhengighetene. `indeks-utils` bruker `indeks-tokens` som en vanlig `dependency`, så en tokens-endring patch-bumper utils. Videre går det ikke: `indeks-css` har tokens og utils som `devDependencies` — PostCSS inliner dem ved build, så de er ikke avhengigheter for konsumenten — og changesets bumper ikke gjennom devDependencies. Skal en tokens- eller utils-endring ut til dem som konsumerer `indeks-css`, må changesetet nevne `indeks-css` eksplisitt.
 
 `indeks-web` er pakken med Web Components (rammeverk-uavhengig komponentlogikk) — se [ADR-DS-004](./ADR-DS-004-web-components) for mer om arkitekturen.
 
@@ -70,8 +72,9 @@ i stedet for Conventional Commits.
 
 ### Tiltak mot ulemper
 
-- CI blokkerer merge hvis det allerede finnes en åpen release-PR — sikrer at ikke to versjonsoppdateringer havner i køen samtidig
-- CDN-versjoner publiseres automatisk ved release
+- Det finnes til enhver tid bare én åpen versjons-PR. CI oppdaterer den samme PR-en når nye changesets kommer inn, så versjonsoppdateringer kan ikke havne i kø bak hverandre.
+- npm, CDN og dokumentasjonsnettstedet oppdateres automatisk, i den rekkefølgen, etter at versjons-PR-en er merget. Hvert steg sjekker at det forrige er ute før det gjør noe — dokumentasjonen deployes for eksempel ikke før CDN-en faktisk svarer på de nye URL-ene. Se [ADR-DS-003](./ADR-DS-003-ci-cd) for mekanikken.
+- Merge av versjons-PR-en er det eneste manuelle steget. Det er også den eneste gaten: alt annet ruller av seg selv.
 
 ## Forkastede alternativer
 
@@ -80,7 +83,7 @@ i stedet for Conventional Commits.
 Tokens, CSS og React bumpes alltid til samme versjon, som i SpareBank 1s eksisterende
 designsystem FFE.
 
-**Forkastet fordi:** `indeks-tokens` og `indeks-utils` endres sjelden, og skal beholde et stabilt versjonsnummer slik at deres egne CDN-artefakter kan caches lengst mulig. Cascade-bumpingen går bevisst kun én vei — en token- eller utils-endring patch-bumper `indeks-css` (og dermed `indeks-web` og `indeks-react`), men en css/web/react-endring bumper *aldri* tokens/utils tilbake. Å låse alle fire til samme versjon (FFE-stil) ville bumpet tokens/utils ved hver minste css- eller react-endring og ugyldiggjort cachen deres helt unødvendig.
+**Forkastet fordi:** `indeks-tokens` og `indeks-utils` endres sjelden, og skal beholde et stabilt versjonsnummer slik at deres egne CDN-artefakter kan caches lengst mulig. Å låse alle fire til samme versjon (FFE-stil) ville bumpet tokens/utils ved hver minste css- eller react-endring og ugyldiggjort cachen deres helt unødvendig.
 
 ### Helt uavhengige versjoner
 

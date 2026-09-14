@@ -8,9 +8,3 @@ export const usePackageVersion = (pkg: Pkg): string => {
 };
 
 export const PackageVersion = ({ pkg }: { pkg: Pkg }) => <>{usePackageVersion(pkg)}</>;
-
-export const CssVersion = () => <PackageVersion pkg="css" />;
-export const ReactVersion = () => <PackageVersion pkg="react" />;
-export const WebVersion = () => <PackageVersion pkg="web" />;
-export const TokensVersion = () => <PackageVersion pkg="tokens" />;
-export const UtilsVersion = () => <PackageVersion pkg="utils" />;

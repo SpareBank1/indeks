@@ -12,7 +12,7 @@ export const glossary = {
     },
     CDN: {
         short: 'Content Delivery Network — distribuerer filer geografisk nær brukeren for rask lasting.',
-        long: 'Content Delivery Network. Et nettverk av servere plassert geografisk nær brukeren som leverer statiske filer (CSS, JS, bilder) raskere enn en sentralisert server. Indeks publiserer CSS og Web Components til CDN med versjonerte URLer — f.eks. `cdn.sparebank1.no/indeks/css/1.2.3/index.css`. Versjonerte URLer kan caches "for alltid" i nettleseren.',
+        long: 'Content Delivery Network. Et nettverk av servere plassert geografisk nær brukeren som leverer statiske filer (CSS, JS, bilder) raskere enn en sentralisert server. Indeks publiserer CSS og Web Components til CDN med versjonerte URLer — f.eks. `cdn.sparebank1.no/indeks/css/<versjon>/index.css`. Versjonerte URLer kan caches "for alltid" i nettleseren.',
     },
     Changesets: {
         short: 'Verktøy for å dokumentere endringer i en monorepo og generere versjoner.',
