@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 // @ts-expect-error — Node-script uten type-erklæringer.
-import { analyzeFile, run } from './sync-cdn.js';
+import { analyzeFile, findSyncCommand, run } from './sync-cdn.js';
 
 // Hent egen versjon slik at testene alltid holder seg oppdatert mot
 // package.json-versjonen som faktisk publiseres.
@@ -513,5 +513,61 @@ describe('run — gammel URL-form på disk', () => {
 
         expect(exit).toBe(1);
         expect(readFileSync(file, 'utf8')).toBe(before);
+    });
+});
+
+describe('findSyncCommand', () => {
+    function skrivScripts(scripts: Record<string, string>) {
+        writeFileSync(join(tmp, 'package.json'), JSON.stringify({ name: 'demo', scripts }));
+    }
+
+    test('bruker navnet konsumenten har gitt scriptet', () => {
+        skrivScripts({ 'oppdater-indeks': 'indeks-react sync-cdn' });
+
+        expect(findSyncCommand(tmp)).toBe('npm run oppdater-indeks');
+    });
+
+    test('hopper over --check-varianten, som ikke retter noe', () => {
+        skrivScripts({ prebuild: 'indeks-react sync-cdn --check', 'sync-indeks': 'indeks-react sync-cdn' });
+
+        expect(findSyncCommand(tmp)).toBe('npm run sync-indeks');
+    });
+
+    test('faller tilbake på npx når package.json mangler', () => {
+        expect(findSyncCommand(tmp)).toBe('npx indeks-react sync-cdn');
+    });
+
+    test('faller tilbake på npx når ingen script kaller kommandoen', () => {
+        skrivScripts({ build: 'vite build' });
+
+        expect(findSyncCommand(tmp)).toBe('npx indeks-react sync-cdn');
+    });
+});
+
+describe('run — oppgraderingshint', () => {
+    test('viser installer-og-synk i riktig rekkefølge, med konsumentens eget scriptnavn', () => {
+        writeFileSync(join(tmp, 'index.html'), `<link href="https://cdn.sparebank1.no/indeks/css/0.1.0/index.css">`);
+        writeFileSync(
+            join(tmp, 'package.json'),
+            JSON.stringify({ name: 'demo', scripts: { 'oppdater-indeks': 'indeks-react sync-cdn' } })
+        );
+        const output = fangConsole();
+
+        run(['node', 'bin', 'sync-cdn', '--root', tmp, '--check'], { latest: '99.0.0' });
+
+        expect(output()).toContain('du er ikke på siste versjon');
+        expect(output()).toContain('npm install @sb1/indeks-react@99.0.0 && npm run oppdater-indeks');
+        // Meldingen om å synke skal peke på samme script, ikke gjette på «sync-indeks».
+        expect(output()).toContain('Kjør `npm run oppdater-indeks` for å oppdatere.');
+    });
+
+    test('nevner ikke oppgradering når du er på siste versjon', () => {
+        writeFileSync(join(tmp, 'index.html'), `<link href="https://cdn.sparebank1.no/indeks/css/0.1.0/index.css">`);
+        const output = fangConsole();
+
+        run(['node', 'bin', 'sync-cdn', '--root', tmp, '--check'], { latest: OWN_VERSION });
+
+        expect(output()).toContain('du er på siste versjon');
+        expect(output()).not.toContain('Oppgrader og synk');
     });
 });

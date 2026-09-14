@@ -309,6 +309,22 @@ function readNpmUsage(root, name) {
     return installed ? `npm ${installed}${declared ? ` (${declared})` : ''}` : `npm (${declared})`;
 }
 
+// Konsumenten navngir scriptet sitt selv («sync-indeks» er bare det vi anbefaler
+// i READMEen). Finn det faktiske navnet, så vi kan si «npm run <ditt navn>» i
+// stedet for å gjette. Vi hopper over varianten med --check: den retter ingenting.
+export function findSyncCommand(root) {
+    try {
+        const scripts = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).scripts ?? {};
+        const hit = Object.entries(scripts).find(
+            ([, cmd]) => typeof cmd === 'string' && cmd.includes('sync-cdn') && !cmd.includes('--check')
+        );
+        if (hit) return `npm run ${hit[0]}`;
+    } catch {
+        // Ingen lesbar package.json — fall tilbake på den direkte kommandoen.
+    }
+    return 'npx indeks-react sync-cdn';
+}
+
 function formatCdnUsage(type, hits, targetVersion) {
     if (hits.length === 0) return undefined;
     const versions = [...new Set(hits.map((hit) => hit.version))];
@@ -323,7 +339,7 @@ function formatCdnUsage(type, hits, targetVersion) {
     return `CDN ${versionText} (${fileText})`;
 }
 
-function printPackageStatus({ version, cdnHits, root, latest, cdnHas, offline }) {
+function printPackageStatus({ version, cdnHits, root, latest, cdnHas, offline, syncCommand }) {
     const rows = [[REACT_PACKAGE, `npm ${version} — installert, styrer versjonen under`]];
     for (const type of SYNCED_TYPES) {
         const name = PACKAGE_NAMES[type];
@@ -345,7 +361,10 @@ function printPackageStatus({ version, cdnHits, root, latest, cdnHas, offline })
         console.log(`    Nyeste på npm: ${latest} — du er på siste versjon.`);
     } else {
         console.log(`    Nyeste på npm: ${latest} — du er ikke på siste versjon.`);
-        console.log(`    Oppgrader med \`npm install ${REACT_PACKAGE}@${latest}\` og kjør denne på nytt.`);
+        // Rekkefølgen er poenget: installer først, synk etterpå. Motsatt vei
+        // skriver vi URL-ene til versjonen du er i ferd med å forlate.
+        console.log('    Oppgrader og synk i én operasjon:');
+        console.log(`        npm install ${REACT_PACKAGE}@${latest} && ${syncCommand}`);
     }
 
     const missing = SYNCED_TYPES.filter((type) => cdnHas[type] === false);
@@ -506,8 +525,10 @@ export function run(argv, { cwd = process.cwd(), write = true, latest, cdnHas = 
         }
     }
 
+    const syncCommand = findSyncCommand(root);
+
     if (filesChanged > 0) console.log('');
-    printPackageStatus({ version, cdnHits, root, latest, cdnHas, offline: args.offline });
+    printPackageStatus({ version, cdnHits, root, latest, cdnHas, offline: args.offline, syncCommand });
     console.log('');
 
     // Ingen filer i det hele tatt: nesten alltid feil --root/--include, ikke et
@@ -553,7 +574,7 @@ export function run(argv, { cwd = process.cwd(), write = true, latest, cdnHas = 
             console.log(`${formFixes} URL(er) bruker gammel form (…/css/<versjon>.css). Den finnes ikke på`);
             console.log('CDN-en og migreres til …/css/<versjon>/index.css.');
         }
-        console.log('Kjør `npm run sync-indeks` for å oppdatere.');
+        console.log(`Kjør \`${syncCommand}\` for å oppdatere.`);
         if (ignoredHits.length > 0) printIgnored(ignoredHits);
         return 1;
     }

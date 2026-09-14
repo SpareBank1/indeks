@@ -83,6 +83,14 @@ Kommandoen skiller mellom tre utfall, slik at du alltid kan se hva den faktisk f
 
 I tillegg skriver den en kort `Pakkestatus` for de tre versjonslåste pakkene: hvilken versjon som er i bruk, om den hentes fra CDN eller npm, om du er på siste versjon på npm, og om CDN-en har artefaktene for versjonen ennå.
 
+Ligger du bak siste versjon, får du kommandoen ferdig skrevet:
+
+```bash
+npm install @sb1/indeks-react@0.23.0 && npm run sync-indeks
+```
+
+Rekkefølgen er poenget: kommandoen skriver alltid URL-ene til den versjonen som ligger i `node_modules`, så avhengigheten må oppgraderes først. Scriptnavnet leses fra `package.json` din, så teksten viser navnet _du_ har valgt.
+
 ### Flagg
 
 | Flagg | Effekt |

@@ -185,6 +185,14 @@ Kommandoen skiller mellom tre utfall, så du alltid ser hva den faktisk fant:
 
 Til slutt kommer en kort `Pakkestatus` for de tre versjonslåste pakkene: hvilken versjon som er i bruk, om den hentes fra CDN eller npm, om du er på siste versjon på npm, og om CDN-en har artefaktene for versjonen ennå. Nettverksoppslagene er «best effort» — de påvirker aldri exit-koden, og `--offline` hopper over dem.
 
+Ligger du bak siste versjon på npm, skriver `Pakkestatus` ut kommandoen ferdig utfylt:
+
+```bash
+npm install @sb1/indeks-react@0.23.0 && npm run sync-indeks
+```
+
+Kommandoen oppgraderer aldri avhengigheten selv, og den skriver aldri en URL du ikke har installert — da ville nettleseren kjørt CSS og web components fra en annen versjon enn React-koden i bundlen. Derfor må `npm install` komme først. Scriptnavnet plukkes fra `package.json` din, så du får navnet du selv har valgt.
+
 #### Krev at CDN-URL-ene finnes
 
 Uten funn returnerer `--check` 0, fordi et npm-basert prosjekt legitimt har null CDN-URL-er. Vet prosjektet ditt at det bruker CDN, skru på `--require-urls` — da fanger du også at noen fjerner `<link>`-tagen:
