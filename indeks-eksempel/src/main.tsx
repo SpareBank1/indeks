@@ -11,6 +11,7 @@ import BodyWrapper from './components/BodyWrapper';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import OpenPagesWrapper from './components/OpenPagesWrapper';
 import FargeskalaerEksempler from './pages/openPages/FargeskalaerEksempler';
+import FlytendePanelerIModal from './pages/openPages/FlytendePanelerIModal';
 import FormValidering from './pages/openPages/FormValidering';
 import GenererFarger from './pages/openPages/GenererFarger';
 import OpenPagesOverview from './pages/openPages/Oversikt';
@@ -87,6 +88,10 @@ const router = createHashRouter([
                     {
                         path: 'form-validering',
                         element: <FormValidering />,
+                    },
+                    {
+                        path: 'flytende-paneler-i-modal',
+                        element: <FlytendePanelerIModal />,
                     },
                     {
                         path: 'generer-farger',
