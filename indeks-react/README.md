@@ -32,7 +32,7 @@ CDN er anbefalt fordi URL-en deles på tvers av SB1-applikasjoner. Nettleseren k
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/<versjon>.css" />
+        <link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/<versjon>/index.css" />
     </head>
     <body>
         <div id="root"></div>
@@ -55,7 +55,7 @@ import '@sb1/indeks-web'; // registrerer custom elements
 
 ## 🔄 Hold CDN-URL-er i takt
 
-`@sb1/indeks-css` og `@sb1/indeks-web` versjonslåses til samme versjon som denne pakken. Når `@sb1/indeks-react` bumpes, må CDN-URL-ene i prosjektet ditt oppdateres tilsvarende — ellers får du drift mellom React-komponentenes forventede DOM og det som faktisk er lastet i nettleseren.
+`@sb1/indeks-css` og `@sb1/indeks-web` versjonslåses til samme versjon som denne pakken. Når `@sb1/indeks-react` bumpes, må CDN-URL-ene i prosjektet ditt oppdateres tilsvarende — ellers kjører nettleseren en annen versjon av CSS og web components enn React-komponentene forventer.
 
 Pakken har et innebygd script for dette. Legg til i `package.json`:
 
@@ -72,6 +72,30 @@ Pakken har et innebygd script for dette. Legg til i `package.json`:
 - `sync-indeks` kjører du eksplisitt for å oppdatere URL-ene i `index.html`, CSS-filer osv.
 
 Scriptet bruker ikke `postinstall` fordi SB1 anbefaler `npm install --ignore-scripts` — da blir lifecycle-hooks hoppet over.
+
+### Hva utskriften betyr
+
+Kommandoen skiller mellom tre utfall, slik at du alltid kan se hva den faktisk fant:
+
+- **`Alle N CDN-URL-er i M fil(er) bruker samme versjon …`** — den fant URL-er og alle peker på installert versjon.
+- **`Fant ingen CDN-URL-er …`** — den fant ingenting å synce. Bruker du npm-import (Metode 2 over) er det som forventet, og du kan fjerne `prebuild`/`sync-indeks`. Ellers skriver den ut et ferdig CDN-oppsett med installert versjon.
+- **`Ulik versjon: N av M URL(er) … peker ikke på <versjon>.`** — URL-ene står på en annen versjon. Utskriften viser hvilken versjon hver URL gikk fra og til.
+
+I tillegg skriver den en kort `Pakkestatus` for de tre versjonslåste pakkene: hvilken versjon som er i bruk, om den hentes fra CDN eller npm, om du er på siste versjon på npm, og om CDN-en har artefaktene for versjonen ennå.
+
+### Flagg
+
+| Flagg | Effekt |
+| --- | --- |
+| `--check` | Exit 1 hvis en URL peker på en annen versjon; endrer ingen filer. For CI. |
+| `--dry-run` | Vis hva som ville blitt endret. |
+| `--require-urls` | Exit 1 hvis ingen CDN-URL-er ble funnet. Uten flagget er null funn OK, fordi et npm-basert prosjekt legitimt ikke har noen. Bruk `--check --require-urls` i prosjekter som _vet_ at de bruker CDN — da fanger du at noen fjerner `<link>`-tagen. |
+| `--offline` | Hopp over nettverksoppslagene (siste versjon på npm, og om CDN har artefaktene). De er «best effort» og påvirker aldri exit-koden. |
+| `--root`, `--include`, `--exclude` | Begrens hva som skannes. Se `indeks-react sync-cdn --help`. |
+
+URL-er på den gamle formen `…/indeks/css/<versjon>.css` blir migrert til `…/indeks/css/<versjon>/index.css` — den flate formen finnes ikke på CDN-en. Det betyr at `--check` kan feile i et prosjekt som tidligere passerte; URL-en lastet i så fall ikke.
+
+`@sb1/indeks-tokens` og `@sb1/indeks-utils` har egne versjoner og blir aldri skrevet om. De rapporteres til slutt, siden innholdet deres allerede ligger inne i `indeks-css`.
 
 ## ✨ Bruk
 

@@ -159,7 +159,7 @@ function App() {
 
 ### 5. Hold CDN-URL-er i takt
 
-`@sb1/indeks-css` og `@sb1/indeks-web` versjonslåses til samme versjon som `@sb1/indeks-react`. Når Dependabot bumper React-pakken i `package.json`, må CDN-URL-ene i `index.html` og CSS-filene dine oppdateres til samme versjon — ellers får du drift mellom det React-komponentene forventer og det som faktisk er lastet i nettleseren.
+`@sb1/indeks-css` og `@sb1/indeks-web` versjonslåses til samme versjon som `@sb1/indeks-react`. Når Dependabot bumper React-pakken i `package.json`, må CDN-URL-ene i `index.html` og CSS-filene dine oppdateres til samme versjon — ellers kjører nettleseren en annen versjon av CSS og web components enn React-komponentene forventer.
 
 Scriptet `indeks-react sync-cdn` oppdaterer URL-ene til å matche versjonen du har installert. Legg til to scripts i `package.json`:
 
@@ -172,14 +172,38 @@ Scriptet `indeks-react sync-cdn` oppdaterer URL-ene til å matche versjonen du h
 }
 ```
 
-- `prebuild` kjører før hver `npm run build` og **feiler** hvis URL-ene ikke matcher installert versjon. Dette er med vilje: hvis builden auto-fikser driften, vil det som deployes kunne bruke andre klasser enn det du har testet lokalt. La utvikleren se feilen og kjøre sync eksplisitt.
+- `prebuild` kjører før hver `npm run build` og **feiler** hvis URL-ene ikke matcher installert versjon. Dette er med vilje: hvis builden auto-fikser dette, vil det som deployes kunne bruke andre klasser enn det du har testet lokalt. La utvikleren se feilen og kjøre sync eksplisitt.
 - `sync-indeks` kjører du selv etter en dependency-bump — eller når `prebuild` feiler. Den oppdaterer filene, du commit-er endringene og kjører builden på nytt.
+
+#### Hva utskriften betyr
+
+Kommandoen skiller mellom tre utfall, så du alltid ser hva den faktisk fant:
+
+- `Alle N CDN-URL-er i M fil(er) bruker samme versjon …` — den fant URL-er, og alle peker på installert versjon.
+- `Fant ingen CDN-URL-er …` — den fant ingenting å synce. Importerer du fra npm i stedet er det som forventet, og da kan du fjerne `prebuild`/`sync-indeks`. Ellers skriver den ut et ferdig CDN-oppsett med installert versjon, klart til å lime inn.
+- `Ulik versjon: N av M URL(er) … peker ikke på <versjon>.` — URL-ene står på en annen versjon, og utskriften viser hvilken versjon hver URL gikk fra og til.
+
+Til slutt kommer en kort `Pakkestatus` for de tre versjonslåste pakkene: hvilken versjon som er i bruk, om den hentes fra CDN eller npm, om du er på siste versjon på npm, og om CDN-en har artefaktene for versjonen ennå. Nettverksoppslagene er «best effort» — de påvirker aldri exit-koden, og `--offline` hopper over dem.
+
+#### Krev at CDN-URL-ene finnes
+
+Uten funn returnerer `--check` 0, fordi et npm-basert prosjekt legitimt har null CDN-URL-er. Vet prosjektet ditt at det bruker CDN, skru på `--require-urls` — da fanger du også at noen fjerner `<link>`-tagen:
+
+```json
+{
+  "scripts": {
+    "prebuild": "indeks-react sync-cdn --check --require-urls"
+  }
+}
+```
+
+URL-er på den gamle formen `…/indeks/css/<versjon>.css` migreres til `…/indeks/css/<versjon>/index.css` — den flate formen finnes ikke på CDN-en. `@sb1/indeks-tokens` og `@sb1/indeks-utils` har egne versjoner og skrives aldri om; de rapporteres bare, siden innholdet deres allerede ligger inne i `indeks-css`.
 
 Typisk flyt etter en Dependabot-bump:
 
 ```bash
 npm install          # ny indeks-react-versjon låst i package-lock
-npm run build        # prebuild feiler: drift funnet
+npm run build        # prebuild feiler: ulik versjon
 npm run sync-indeks  # URL-ene oppdateres
 git add -A && git commit -m "sync CDN til <versjon>"
 npm run build        # passer nå
