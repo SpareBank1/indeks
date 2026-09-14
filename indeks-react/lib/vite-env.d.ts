@@ -85,7 +85,6 @@ declare module 'react' {
                 class?: string;
                 open?: '' | boolean;
                 placement?: 'top' | 'bottom' | 'left' | 'right';
-                'data-arrow'?: 'true' | 'false';
                 'data-controlled'?: '' | boolean;
             };
             'ix-phone-number-field': React.DetailedHTMLProps<React.HTMLAttributes<IxPhoneNumberField>, IxPhoneNumberField> & {

@@ -98,11 +98,6 @@
     border-bottom: var(--ix-border-width-default) solid var(--ix-popover-border-color);
 }
 
-/* Skjul pil når data-arrow="false" */
-:where(ix-popover[data-arrow='false'], .ix-popover[data-arrow='false']) .ix-popover__content::before {
-    display: none;
-}
-
 /* ── Heading ────────────────────────────────────────────────────────────────
    Valgfri overskrift øverst i popoveren. */
 :where(.ix-popover__heading) {

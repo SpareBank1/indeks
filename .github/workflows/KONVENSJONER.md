@@ -162,9 +162,9 @@ grep -rhoE 'uses: .+@[0-9a-f]{40} # .*' .github/workflows/*.yml | sort -u
 |-----------------------------------------|----------------------------------------------|---------|-----------------------------------|
 | `actions/checkout`                      | `3d3c42e5aac5ba805825da76410c181273ba90b1`   | v7.0.1  | Checkout av kode                  |
 | `actions/setup-node`                    | `820762786026740c76f36085b0efc47a31fe5020`   | v6      | Node.js-oppsett                   |
-| `pnpm/action-setup`                     | `0977fd99725f1db4007ccb2928dbb4e90d06cc86`   | v6.0.10 | pnpm-installasjon                 |
+| `pnpm/action-setup`                     | `ea17c68df8912ef543352723c149a84f56e3d413`   | v6.1.0  | pnpm-installasjon                 |
 | `actions/upload-artifact`               | `043fb46d1a93c77aae656e7c1c64a875d1fc6a0a`   | v7.0.1  | Last opp testartefakter           |
-| `changesets/action`                     | `8488615a623b1b9c987934bb89eae8af6a946ac1`   | v2.1.1  | Opprette/oppdatere versjons-PR-en |
+| `changesets/action`                     | `ae32849d5ba541f9ae29e40e22a623bc13562f51`   | v2.1.2  | Opprette/oppdatere versjons-PR-en |
 | `Azure/static-web-apps-deploy`          | `1a947af9992250f3bc2e68ad0754c0b0c11566c9`   | v1      | Deploy til Azure Static Web Apps  |
 | `github/codeql-action/init`             | `0c0c5dc2f136b98cb0537075ccfa21f94cd9a63e`   | codeql-bundle-v2.24.3 | Initialisere CodeQL   |
 | `github/codeql-action/analyze`          | `0c0c5dc2f136b98cb0537075ccfa21f94cd9a63e`   | codeql-bundle-v2.24.3 | Kjøre CodeQL-analyse  |
@@ -257,7 +257,7 @@ Standard trifecta som brukes i alle bygg-workflows:
 
 ```yaml
 - name: Install pnpm
-  uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+  uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 
 - name: Set up Node.js
   uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6

@@ -77,3 +77,54 @@ describe('RemovableChip disabled-tilstand', () => {
         expect(chip).toHaveProperty('disabled', true);
     });
 });
+
+describe('RemovableChip error- og read-only-tilstand', () => {
+    it('skal ikke sette data-state uten error eller readOnly', () => {
+        render(<RemovableChip removeLabel="fjern">Sparing</RemovableChip>);
+        const chip = screen.getByRole('button', { name: 'Sparing fjern' });
+        expect(chip.hasAttribute('data-state')).toBe(false);
+        expect(chip.hasAttribute('aria-disabled')).toBe(false);
+    });
+
+    it('skal sette data-state=error når error=true', () => {
+        render(
+            <RemovableChip error removeLabel="fjern">
+                Sparing
+            </RemovableChip>
+        );
+        const chip = screen.getByRole('button', { name: 'Sparing fjern' });
+        expect(chip.getAttribute('data-state')).toBe('error');
+    });
+
+    it('skal sette data-state=readonly og aria-disabled når readOnly=true', () => {
+        render(
+            <RemovableChip readOnly removeLabel="fjern">
+                Sparing
+            </RemovableChip>
+        );
+        const chip = screen.getByRole('button', { name: 'Sparing fjern' });
+        expect(chip.getAttribute('data-state')).toBe('readonly');
+        expect(chip.getAttribute('aria-disabled')).toBe('true');
+    });
+
+    it('skal la error slå readOnly når begge er satt', () => {
+        render(
+            <RemovableChip error readOnly removeLabel="fjern">
+                Sparing
+            </RemovableChip>
+        );
+        const chip = screen.getByRole('button', { name: 'Sparing fjern' });
+        expect(chip.getAttribute('data-state')).toBe('error');
+    });
+
+    it('skal ikke kalle onRemove når readOnly=true', () => {
+        const onRemove = vi.fn();
+        render(
+            <RemovableChip readOnly removeLabel="fjern" onRemove={onRemove}>
+                Sparing
+            </RemovableChip>
+        );
+        fireEvent.click(screen.getByRole('button', { name: 'Sparing fjern' }));
+        expect(onRemove).not.toHaveBeenCalled();
+    });
+});

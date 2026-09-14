@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { buildCSSVarNameFromToken, flattenTokens } from '../../../../shared/tokens/utils.ts';
+import { buildTailwindTokens } from './tailwind.ts';
 
 export function buildCSSTokens(outPath: string, version: string, tokens: Record<string, any>): void {
     // Ensure the output directory exists
@@ -32,4 +33,13 @@ export function buildCSSTokens(outPath: string, version: string, tokens: Record<
         `@import './colors.css';`,
     ];
     fs.writeFileSync(path.join(outPath, 'index.css'), importLines.join('\n'));
+
+    // Tailwind-temaet skrives bevisst utenfor generatedFiles-løkken over: da kan det
+    // ikke havne i index.css-manifestet, og @theme kan ikke lekke inn i dist/index.css
+    // som alle konsumenter laster. tailwind-colors.css skrives av build-colors/tailwind.ts.
+    fs.writeFileSync(path.join(outPath, 'tailwind-tokens.css'), buildTailwindTokens(version, tokens));
+    fs.writeFileSync(
+        path.join(outPath, 'tailwind.css'),
+        [`@import './tailwind-tokens.css';`, `@import './tailwind-colors.css';`].join('\n') + '\n'
+    );
 }

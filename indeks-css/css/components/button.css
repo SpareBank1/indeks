@@ -1,15 +1,39 @@
+/* Button — primær, sekundær og tertiær handling, i tre størrelser.
+
+   Kanten er 1px i layouten og 2px på skjermen. Variantene under setter bare
+   --ii-button-border-color; både border-en og inset-skyggen leser den, så de kan
+   ikke komme i utakt. Grunnen til delingen er høyden: en 2px border legger fire
+   piksler på hver knapp, og da blir md 38 og ikke 36 som design-spec ber om.
+   Inset-skyggen males innenfor border-boksen og tar ingen plass. Samme oppskrift
+   som chip.css:334, text-field.css:73 og select.css:45.
+
+   Sett aldri border-width eller box-shadow i en variantregel. Da er de to
+   halvdelene av kanten ute av takt, og høyden hopper igjen. */
+
 :where(.ix-button) {
+    --ii-button-border-color: transparent;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--ix-spacing-sm);
     padding: var(--ix-spacing-xs) var(--ix-spacing-md);
-    border: none;
+    border: var(--ix-border-width-default) solid var(--ii-button-border-color);
     border-radius: var(--ix-border-radius-button);
+    box-shadow: inset 0 0 0 var(--ix-border-width-default) var(--ii-button-border-color);
     height: fit-content;
     width: auto;
     cursor: pointer;
     font-weight: var(--ix-font-weight-button);
+
+    /* Høyden er padding + kant + linjeboks, og linjeboksen er font-size ×
+       line-height. Uten tallet her arver knappen 1,2 fra .ix-body, og da er
+       høyden ikke bare 39 i stedet for 36 — den er ustabil: 44px utenfor
+       .ix-body, 58px i en container som setter 2,4. 1,125 er samme forholdstall
+       som chip.css:70, og gir 36 på md og 26 på sm ved standard tetthet. Høyden
+       følger paddingen videre ned og opp — 28/22 i compact, 44/34 i comfortable —
+       og er da lik chip på pikselen i alle tre. */
+    line-height: 1.125;
     transition: var(--ix-transition-all);
 }
 
@@ -27,43 +51,42 @@
 
 /* Primary */
 :where(.ix-button[data-variant='primary']) {
+    --ii-button-border-color: var(--ix-color-component-button-primary-border-default);
     background-color: var(--ix-color-component-button-primary-fill-default);
     color: var(--ix-color-component-button-primary-foreground-default);
-    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-primary-border-default);
 }
 
 :where(.ix-button[data-variant='primary']:hover) {
+    --ii-button-border-color: var(--ix-color-component-button-primary-border-default-hover);
     background-color: var(--ix-color-component-button-primary-fill-default-hover);
-    border-color: var(--ix-color-component-button-primary-border-default-hover);
 }
 
 :where(.ix-button[data-variant='primary']:active) {
+    --ii-button-border-color: var(--ix-color-component-button-primary-border-default-active);
     background-color: var(--ix-color-component-button-primary-fill-default-active);
-    border-color: var(--ix-color-component-button-primary-border-default-active);
 }
 
 /* Secondary */
 :where(.ix-button[data-variant='secondary']) {
+    --ii-button-border-color: var(--ix-color-component-button-secondary-border-default);
     background-color: transparent;
     color: var(--ix-color-component-button-secondary-foreground-default);
-    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-secondary-border-default);
 }
 
 :where(.ix-button[data-variant='secondary']:hover) {
+    --ii-button-border-color: var(--ix-color-component-button-secondary-border-default-hover);
     background-color: var(--ix-color-component-button-secondary-fill-default-hover);
-    border-color: var(--ix-color-component-button-secondary-border-default-hover);
 }
 
 :where(.ix-button[data-variant='secondary']:active) {
+    --ii-button-border-color: var(--ix-color-component-button-secondary-border-default-active);
     background-color: var(--ix-color-component-button-secondary-fill-default-active);
-    border-color: var(--ix-color-component-button-secondary-border-default-active);
 }
 
 /* Tertiary */
 :where(.ix-button[data-variant='tertiary']) {
     background-color: transparent;
     color: var(--ix-color-component-button-tertiary-foreground-default);
-    border: var(--ix-border-width-bold) solid transparent;
 }
 
 :where(.ix-button[data-variant='tertiary']:hover) {
@@ -76,41 +99,40 @@
 
 /* Danger-varianter */
 :where(.ix-button[data-variant='primary'][data-danger='true']) {
+    --ii-button-border-color: var(--ix-color-component-button-primary-border-danger);
     background-color: var(--ix-color-component-button-primary-fill-danger);
     color: var(--ix-color-component-button-primary-foreground-danger);
-    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-primary-border-danger);
 }
 
 :where(.ix-button[data-variant='primary'][data-danger='true']:hover) {
+    --ii-button-border-color: var(--ix-color-component-button-primary-border-danger-hover);
     background-color: var(--ix-color-component-button-primary-fill-danger-hover);
-    border-color: var(--ix-color-component-button-primary-border-danger-hover);
 }
 
 :where(.ix-button[data-variant='primary'][data-danger='true']:active) {
+    --ii-button-border-color: var(--ix-color-component-button-primary-border-danger-active);
     background-color: var(--ix-color-component-button-primary-fill-danger-active);
-    border-color: var(--ix-color-component-button-primary-border-danger-active);
 }
 
 :where(.ix-button[data-variant='secondary'][data-danger='true']) {
+    --ii-button-border-color: var(--ix-color-component-button-secondary-border-danger);
     background-color: var(--ix-color-component-button-secondary-fill-danger);
     color: var(--ix-color-component-button-secondary-foreground-danger);
-    border: var(--ix-border-width-bold) solid var(--ix-color-component-button-secondary-border-danger);
 }
 
 :where(.ix-button[data-variant='secondary'][data-danger='true']:hover) {
+    --ii-button-border-color: var(--ix-color-component-button-secondary-border-danger-hover);
     background-color: var(--ix-color-component-button-secondary-fill-danger-hover);
-    border-color: var(--ix-color-component-button-secondary-border-danger-hover);
 }
 
 :where(.ix-button[data-variant='secondary'][data-danger='true']:active) {
+    --ii-button-border-color: var(--ix-color-component-button-secondary-border-danger-active);
     background-color: var(--ix-color-component-button-secondary-fill-danger-active);
-    border-color: var(--ix-color-component-button-secondary-border-danger-active);
 }
 
 :where(.ix-button[data-variant='tertiary'][data-danger='true']) {
     background-color: var(--ix-color-component-button-tertiary-fill-danger);
     color: var(--ix-color-component-button-tertiary-foreground-danger);
-    border: var(--ix-border-width-bold) solid transparent;
 }
 
 :where(.ix-button[data-variant='tertiary'][data-danger='true']:hover) {

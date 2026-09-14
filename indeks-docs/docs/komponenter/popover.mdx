@@ -113,41 +113,6 @@ Popover kan vises uten overskrift når innholdet er selvforklarende.
 </TabItem>
 </Tabs>
 
-### Uten pil
-
-Pilen kan skjules når den visuelle koblingen til trigger-elementet er tydelig nok.
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<ix-popover placement="bottom" data-arrow="false">
-  <button class="ix-button">Åpne</button>
-  <div class="ix-popover__content">
-    <div class="ix-popover__heading">Ingen pil</div>
-    <div class="ix-popover__body">Denne popoveren vises uten pilmarkør.</div>
-  </div>
-</ix-popover>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<Popover placement="bottom" arrow={false}>
-  <Popover.Trigger>
-    <Button>Åpne</Button>
-  </Popover.Trigger>
-  <Popover.Content>
-    <Popover.Heading>Ingen pil</Popover.Heading>
-    <Popover.Body>Denne popoveren vises uten pilmarkør.</Popover.Body>
-  </Popover.Content>
-</Popover>
-```
-
-</TabItem>
-</Tabs>
-
 ### Fire plasseringsretninger
 
 Popover støtter fire plasseringsretninger: `top`, `bottom`, `left` og `right`. Komponenten flipper automatisk til motsatt side hvis det ikke er nok plass.
@@ -244,9 +209,9 @@ primær. Blir det mange valg, hører de i en [DropdownMenu](./dropdown-menu) ell
 
 ### La pekeren peke på riktig element
 
-Pekeren er koblingen mellom panelet og det brukeren trykket på. Velg plassering etter hvor det
-er plass på skjermen, og sjekk at pekeren fortsatt treffer trigger-elementet når panelet
-clampes mot kanten av viewporten.
+Pekeren er koblingen mellom panelet og det brukeren trykket på, og den vises alltid — den kan
+ikke skjules. Velg plassering etter hvor det er plass på skjermen, og sjekk at pekeren fortsatt
+treffer trigger-elementet når panelet clampes mot kanten av viewporten.
 
 ### Hold én popover åpen om gangen
 
@@ -292,7 +257,6 @@ Web componenten tar trigger og innhold som barn. Første element er triggeren, `
 |-----------|---------|----------|-------------|
 | `placement` | `top` \| `bottom` \| `left` \| `right` | `top` | Ønsket plassering. Komponenten flipper til motsatt side hvis det ikke er plass |
 | `open` | flagg | | Åpner panelet. Settes og fjernes av komponenten selv, med mindre `data-controlled` er satt |
-| `data-arrow` | `false` | | Skjuler pilmarkøren. Utelat attributtet for å vise den |
 | `data-controlled` | flagg | | Kontrollert modus. Komponenten endrer ikke `open` selv, men sender `open-request` og `close-request` slik at du kan styre den |
 
 ### Struktur
@@ -324,7 +288,6 @@ Alle bobler.
 | Prop | Type | Påkrevd | Standard | Beskrivelse |
 |------|------|---------|----------|-------------|
 | `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | Nei | `'top'` | Ønsket plassering. Flipper automatisk hvis det ikke er plass |
-| `arrow` | `boolean` | Nei | `true` | Vis pilmarkøren |
 | `open` | `boolean` | Nei | | Kontrollert åpen-tilstand. Angi den for kontrollert bruk, utelat for ukontrollert |
 | `defaultOpen` | `boolean` | Nei | `false` | Startverdi i ukontrollert modus. Ignoreres når `open` er satt |
 | `onOpenChange` | `(open: boolean) => void` | Nei | | Kalles når panelet åpnes eller lukkes. I kontrollert modus setter du `open` som respons; i ukontrollert modus er den en observatør |
@@ -365,7 +328,6 @@ Trenger du `ix-popover`-stylingen på HTML du setter sammen selv, uten React-kom
 | Brødtekst | `.ix-popover__body` |
 | Handlingsrad | `.ix-popover__actions` |
 | Faktisk plassering (styrer pilen) | `.ix-popover__content[data-placement="top\|bottom\|left\|right"]` |
-| Skjult pil | `[data-arrow="false"]` på `ix-popover` |
 
 ### Eksempel: bruk i egen HTML-struktur
 

@@ -59,34 +59,6 @@ describe('Popover', () => {
         expect(host?.getAttribute('placement')).toBe('top');
     });
 
-    it('setter data-arrow="false" når arrow={false}', () => {
-        const { container } = render(
-            <Popover arrow={false}>
-                <Popover.Trigger>
-                    <button>Trigger</button>
-                </Popover.Trigger>
-                <Popover.Content>Innhold</Popover.Content>
-            </Popover>,
-        );
-
-        const host = container.querySelector('ix-popover');
-        expect(host?.getAttribute('data-arrow')).toBe('false');
-    });
-
-    it('utelater data-arrow når arrow={true} (default)', () => {
-        const { container } = render(
-            <Popover>
-                <Popover.Trigger>
-                    <button>Trigger</button>
-                </Popover.Trigger>
-                <Popover.Content>Innhold</Popover.Content>
-            </Popover>,
-        );
-
-        const host = container.querySelector('ix-popover');
-        expect(host?.hasAttribute('data-arrow')).toBe(false);
-    });
-
     it('setter data-controlled i kontrollert modus', () => {
         const { container } = render(
             <Popover open={false}>

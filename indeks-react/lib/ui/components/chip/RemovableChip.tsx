@@ -16,6 +16,14 @@ export interface RemovableChipProps
     removeLabel: string;
     /** Kalles når chipen fjernes (klikk / Enter / Mellomrom). */
     onRemove?: () => void;
+    /** Viser chipen i feiltilstand med mørkerødt fyll. Slår `readOnly` hvis begge er satt. */
+    error?: boolean;
+    /**
+     * Viser chipen som skrivebeskyttet: nedtonet grå flate, og `onRemove` kalles
+     * ikke. Setter `aria-disabled` — en `<button>` har ingen native read-only-
+     * tilstand, og en chip som ser inaktiv ut men likevel fjerner seg er en felle.
+     */
+    readOnly?: boolean;
 }
 
 /**
@@ -25,10 +33,28 @@ export interface RemovableChipProps
  */
 export const RemovableChip = forwardRef<HTMLButtonElement, RemovableChipProps>(
     function RemovableChip(
-        { children, size = 'md', removeLabel, onRemove, onClick, type, className, ...props },
+        {
+            children,
+            size = 'md',
+            removeLabel,
+            onRemove,
+            error,
+            readOnly,
+            onClick,
+            type,
+            className,
+            ...props
+        },
         ref
     ): JSX.Element {
+        // Samme rangering som RadioGroup og CheckboxGroup utleder data-state med.
+        const dataState = error ? 'error' : readOnly ? 'readonly' : undefined;
+
         function handleClick(event: MouseEvent<HTMLButtonElement>): void {
+            if (readOnly) {
+                event.preventDefault();
+                return;
+            }
             onClick?.(event);
             onRemove?.();
         }
@@ -40,6 +66,8 @@ export const RemovableChip = forwardRef<HTMLButtonElement, RemovableChipProps>(
                 className={cn('ix-chip', className)}
                 data-removable=""
                 data-size={size !== 'md' ? size : undefined}
+                data-state={dataState}
+                aria-disabled={readOnly ? 'true' : undefined}
                 aria-label={`${children} ${removeLabel}`}
                 onClick={handleClick}
                 {...props}
