@@ -10,6 +10,7 @@ describe('Button', () => {
         expect(button).toBeDefined();
         expect(button.tagName).toBe('BUTTON');
         expect(button.classList).toContain('ix-button');
+        expect(button.getAttribute('type')).toBe('button');
     });
 
     it('skal rendre som lenke når as="a"', () => {
@@ -22,6 +23,15 @@ describe('Button', () => {
         expect(link).toBeDefined();
         expect(link.tagName).toBe('A');
         expect(link.attributes.getNamedItem('href')?.value).toBe('https://example.com');
+        // type-attributtet skal ikke settes på lenker
+        expect(link.hasAttribute('type')).toBe(false);
+    });
+
+    it('skal videresende type når den er satt eksplisitt', () => {
+        render(<Button type="submit">Send inn</Button>);
+        expect(screen.getByRole('button', { name: 'Send inn' }).getAttribute('type')).toBe(
+            'submit'
+        );
     });
 
     it('skal videresende ekstra props til elementet', () => {

@@ -86,6 +86,19 @@ export const LoadingVariants: Story = {
 
 
 
+/**
+ * Med `as="a"` beholder knappen stylingen, men rendres som `<a>` og annonseres
+ * som lenke. `type` settes ikke — attributtet er ikke gyldig på et anker.
+ */
+export const AsLink: Story = {
+    name: 'Som lenke',
+    render: () => (
+        <Button as="a" href="https://www.sparebank1.no">
+            Gå til sparebank1.no
+        </Button>
+    ),
+};
+
 export const WithIcon: Story = {
     args: { size: 'md' },
     name: 'Med ikon',
