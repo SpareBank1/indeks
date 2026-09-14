@@ -263,7 +263,8 @@ function formatCheck(change) {
 
 export async function fetchLatestVersion(name, { timeoutMs = NETWORK_TIMEOUT_MS } = {}) {
     try {
-        const url = `https://registry.npmjs.org/${name.replace('/', '%2f')}/latest`;
+        // Scope-skilletegnet må kodes for registry-API-et: @sb1/x → @sb1%2fx.
+        const url = `https://registry.npmjs.org/${name.replaceAll('/', '%2f')}/latest`;
         const res = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });
         if (!res.ok) return undefined;
         const body = await res.json();

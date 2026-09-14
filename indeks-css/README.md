@@ -19,7 +19,7 @@ Du trenger ikke å installere tokens eller utils separat — alt ligger i `@sb1/
 <link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/<versjon>/index.css" />
 ```
 
-Erstatt `<versjon>` med ønsket versjon, f.eks. `0.22.0`. Versjonen må ligge i stien — `…/indeks/css/0.22.0.css` finnes ikke på CDN-en.
+Erstatt `<versjon>` med ønsket versjon, f.eks. `0.22.0`.
 
 ### Via npm
 
