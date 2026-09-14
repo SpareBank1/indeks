@@ -320,14 +320,35 @@ og ikon, **ikke** annonseringsprioritet: også en `danger`-melding leses høflig
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
 | `status` | `'info' \| 'success' \| 'warning' \| 'danger'` | | Status; styrer farge og ikon. Settes som `data-status` slik at fargevariablene kobles automatisk. Påkrevd |
-| `title` | `string` | | Valgfri overskrift over budskapet |
+| `title` | `string` | | Valgfri overskrift over budskapet. Overstyrer HTML-attributtet `title` (nettleserens tooltip): teksten rendres synlig og settes ikke på rot-elementet |
 | `children` | `ReactNode` | | Budskapet — påkrevd. Rendres rått — skriv selv `<p>` og evt. en lenke med `LinkText`. Påkrevd |
 | `closeLabel` | `string` | | `aria-label` på lukkeknappen. Lukkeknappen vises kun når denne er satt |
 | `onClose` | `() => void` | | Kalles etter at meldingen er skjult ved klikk på lukkeknappen. Komponenten skjuler seg selv; `onClose` er kun for ev. opprydding |
 | `fullWidth` | `boolean` | `false` | Strekk meldingen til full bredde av forelderen (i stedet for å krympe til innholdsbredden i en vertikal stack). Settes som `data-full-width` |
 | `announceOnPageLoad` | `boolean` | `false` | Annonser meldingen selv om den er til stede ved første sidelast. Krever en omsluttende `<MessageRegion>` |
 | `announceText` | `string` | | Overstyr teksten som leses opp. Standard er den synlige teksten (tittel + brødtekst). Bruk for å lese opp noe kortere ved rikt innhold |
+| `announce` | `boolean` | `true` | Sett `false` for å ikke annonsere meldingen i det hele tatt. Bruk det når noe annet allerede får meldingen lest opp — typisk at du flytter fokus til den |
 | `className` | `string` | | Ekstra CSS-klasser på rot-elementet |
+
+Øvrige `div`-attributter (`id`, `tabIndex`, `role`, `aria-*`, `data-*`, `onClick` …) sendes videre til rot-elementet. Det gjør at meldingen kan brukes som fokus- eller ankermål — for eksempel som feiloppsummering i et skjema:
+
+```tsx
+<Message
+    status="danger"
+    title="Skjemaet har 3 feil som må rettes"
+    role="group"
+    aria-label="Skjemaet har 3 feil som må rettes"
+    tabIndex={-1}
+    ref={oppsummeringRef}
+    announce={false}
+>
+    …
+</Message>
+```
+
+`role="group"` er med fordi en `<div tabindex="-1">` uten rolle ikke får lest opp sin `aria-label`. `announce={false}` fordi fokusflyttingen allerede leser opp meldingen; uten den leses den to ganger.
+
+Attributtene komponenten eier selv (`data-status`, `data-full-width`) kan ikke overstyres — de utledes av `status` og `fullWidth`.
 
 ### MessageRegion
 

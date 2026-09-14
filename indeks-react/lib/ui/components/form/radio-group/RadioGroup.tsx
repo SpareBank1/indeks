@@ -4,6 +4,7 @@ import {
     useState,
     type ChangeEventHandler,
     type FocusEventHandler,
+    type HTMLAttributes,
     type ReactNode,
 } from 'react';
 import { ValidationMessage } from '../validation-message/ValidationMessage';
@@ -15,7 +16,22 @@ export type RadioOption = {
     label: string;
 };
 
-export type RadioGroupProps = {
+/*
+ * Extender HTMLAttributes så host-elementet kan få `id`, `tabIndex`, `data-*`
+ * og `aria-*` som alle andre elementer. `id` + `tabIndex={-1}` er det en
+ * feiloppsummering trenger for å lenke til gruppen (`href="#min-gruppe"`) —
+ * host-elementet har `role="radiogroup"`, så en skjermleser leser legend og
+ * feilmelding når fokus lander der. Uten dette fantes det ingen måte å peke på
+ * en radiogruppe utenfra.
+ *
+ * `onChange`/`onBlur` er utelatt fra arven fordi de har snevrere signatur her
+ * (input-eventer, ikke generiske element-eventer) — se propene under.
+ *
+ * ÉN ATTRIBUTT KOMMER IKKE GJENNOM: `aria-describedby`. Web-komponenten eier
+ * den (den peker på `description` og feilmeldingen) og overskriver det du
+ * sender inn. Trenger du ekstra hjelpetekst, bruk `description`.
+ */
+export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLElement>, 'onChange' | 'onBlur'> {
     legend: string;
     description?: string;
     errorMessage?: string;
@@ -35,14 +51,13 @@ export type RadioGroupProps = {
     readOnly?: boolean;
     orientation?: 'vertical' | 'horizontal';
     hideLegend?: boolean;
-    className?: string;
     options?: RadioOption[];
     children?: ReactNode;
     /** Visuell variant. `'chip'` styler hvert valg som en pill (chip). Standard er vanlig radioknapp. */
     variant?: 'chip';
     /** Størrelse — kun relevant for `variant="chip"`. @default "md" */
     size?: 'sm' | 'md';
-};
+}
 
 // React-laget er tynt: ix-radio-group (WC) eier id, name, htmlFor, aria-*-koblinger,
 // aria-invalid, aria-required, og disabled-propagering til barn-inputs. React-laget
@@ -80,6 +95,7 @@ export const RadioGroup = forwardRef<HTMLInputElement, RadioGroupProps>(function
         children,
         variant,
         size = 'md',
+        ...rest
     },
     ref
 ) {
@@ -103,7 +119,11 @@ export const RadioGroup = forwardRef<HTMLInputElement, RadioGroupProps>(function
         : children;
 
     return (
+        // `rest` spres FØRST, slik at attributtene komponenten selv utleder
+        // (data-state, data-variant, disabled/readonly/required) ikke kan
+        // overskrives utenfra og komme i utakt med propene de kommer fra.
         <ix-radio-group
+            {...rest}
             name={name}
             class={cn(className) || undefined}
             data-variant={variant}

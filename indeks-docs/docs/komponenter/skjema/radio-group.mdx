@@ -517,6 +517,20 @@ Når du bruker `<ix-radio-group>` eller React-komponenten, settes dette opp for 
 
 *Enten `options` eller `children` må være satt. Hvis begge er satt, vinner `options`.
 
+I tillegg sendes øvrige HTML-attributter (`id`, `tabIndex`, `role`, `aria-*`, `data-*`, osv.) videre til `<ix-radio-group>`-rotelementet. Det er `id` + `tabIndex={-1}` som gjør at en feiloppsummering kan lenke til gruppen: rotelementet har `role="radiogroup"`, så skjermleseren leser legend og feilmelding når fokus lander der.
+
+```tsx
+<RadioGroup legend="Er du privat- eller bedriftskunde?" id="kundetype" tabIndex={-1} … />
+
+// og i feiloppsummeringen:
+<a href="#kundetype">Velg om du er privat- eller bedriftskunde</a>
+```
+
+To unntak:
+
+- `aria-describedby` kommer ikke gjennom. `<ix-radio-group>` eier den (den peker på `description` og feilmeldingen) og overskriver verdien du sender inn. Trenger du ekstra hjelpetekst, bruk `description`.
+- `data-state`, `data-variant`, `data-size`, `data-orientation`, `disabled`, `readonly` og `required` kan ikke overstyres — de utledes av propene med samme navn.
+
 ### RadioOption
 
 | Felt | Type | Påkrevd | Beskrivelse |

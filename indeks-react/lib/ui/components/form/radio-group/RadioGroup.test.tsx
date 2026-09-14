@@ -299,4 +299,51 @@ describe('RadioGroup', () => {
             expect(inputs[1].checked).toBe(false);
         });
     });
+
+    describe('videresending av øvrige attributter', () => {
+        it('sender id og tabIndex videre til host-elementet', () => {
+            // Brukstilfellet: en feiloppsummering lenker til `#kundetype` og
+            // flytter fokus dit. Host har role="radiogroup" (satt av WC-en), så
+            // skjermleseren leser legend og feilmelding når fokus lander.
+            const { container } = renderGroup({ id: 'kundetype', tabIndex: -1 });
+            const host = container.querySelector('ix-radio-group') as HTMLElement;
+            expect(host.id).toBe('kundetype');
+            expect(host.getAttribute('tabindex')).toBe('-1');
+        });
+
+        it('sender data-attributter videre', () => {
+            const { container } = render(
+                <RadioGroup legend="Velg" data-testid="gruppe" aria-keyshortcuts="Alt+K">
+                    <RadioButton value="a" label="A" />
+                </RadioGroup>
+            );
+            const host = container.querySelector('ix-radio-group') as HTMLElement;
+            expect(host.getAttribute('data-testid')).toBe('gruppe');
+            expect(host.getAttribute('aria-keyshortcuts')).toBe('Alt+K');
+        });
+
+        it('lar seg ikke overstyre på data-state — den følger errorMessage', () => {
+            const { container } = render(
+                <RadioGroup legend="Velg" errorMessage="Velg én" data-state="readonly">
+                    <RadioButton value="a" label="A" />
+                </RadioGroup>
+            );
+            const host = container.querySelector('ix-radio-group') as HTMLElement;
+            expect(host.getAttribute('data-state')).toBe('error');
+        });
+
+        it('får IKKE gjennom aria-describedby — den eies av web-komponenten', () => {
+            // Dokumenterer et unntak, ikke en ønsket egenskap: ix-radio-group
+            // setter aria-describedby til sin egen beskrivelse/feilmelding og
+            // overskriver det forfatteren sendte inn. Trenger du å peke på ekstra
+            // hjelpetekst, legg teksten i `description` i stedet.
+            const { container } = render(
+                <RadioGroup legend="Velg" aria-describedby="min-hjelpetekst">
+                    <RadioButton value="a" label="A" />
+                </RadioGroup>
+            );
+            const host = container.querySelector('ix-radio-group') as HTMLElement;
+            expect(host.getAttribute('aria-describedby')).not.toBe('min-hjelpetekst');
+        });
+    });
 });
