@@ -84,6 +84,8 @@
 
     /* --ix-transition-all blir automatisk `none` ved prefers-reduced-motion. */
     transition: var(--ix-transition-all);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
 }
 
 /* Hover — tydeligere tekst + tykkere, mørkere understrek. */
@@ -98,8 +100,7 @@
  * Tablisten reserverer vertikal luft (padding-block) så den ikke klippes av
  * overflow-x: auto. */
 :where(ix-tab:focus-visible, .ix-tabs__tab:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: var(--ix-outline-offset-default);
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 /* Aktiv/valgt — full tekstfarge + tykkere understrek i brand-farge (blå). */

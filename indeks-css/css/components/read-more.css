@@ -40,6 +40,8 @@
     cursor: pointer;
     /* Myk hover-overgang på klikkflaten (samme token som chevron-en under). */
     transition: var(--ix-transition-all);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: calc(var(--ix-outline-offset-default) * -1);
     /* Skjul native disclosure-marker (trekant) i alle nettlesere. */
     list-style: none;
 }
@@ -60,8 +62,7 @@
 
 /* Focus — synlig, konsistent ring (samme som resten av systemet). */
 :where(.ix-read-more > summary:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: calc(var(--ix-outline-offset-default) * -1);
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 /* Chevron *foran* labelen som indikerer åpen/lukket tilstand. */

@@ -107,6 +107,8 @@
    transition i sine filer. */
 .ix-chip {
     transition: var(--ix-transition-all);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
 }
 
 /* Størrelse: Small (Medium er default uten attributt) */
@@ -240,9 +242,8 @@
 
 /* ── Focus ───────────────────────────────────────────────────────────────── */
 
-:where(.ix-chip:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: var(--ix-outline-offset-default);
+.ix-chip:focus-visible {
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 /* Gruppe-armene får selve outlinen fra focus-regelen i sin egen fil, men den

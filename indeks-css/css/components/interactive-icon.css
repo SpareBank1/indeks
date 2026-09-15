@@ -14,6 +14,8 @@
     min-height: 26px;
     color: inherit;
     transition: var(--ix-transition-all);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
 }
 
 :where(.ix-interactive-icon[data-size='sm']) {
@@ -47,8 +49,7 @@
 }
 
 :where(.ix-interactive-icon:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: var(--ix-outline-offset-default);
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 /*

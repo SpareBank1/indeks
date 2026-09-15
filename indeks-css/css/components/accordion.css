@@ -46,6 +46,38 @@
     border-top: 0;
 }
 
+/* Border-radius på første og siste summary slik at innvendig fokus-outline
+ * følger containerens avrundede hjørner og ikke klippes av overflow: hidden. */
+:where(.ix-accordion) > details:first-child > summary,
+:where(.ix-accordion__item:first-child) .ix-accordion__header {
+    border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
+        calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) 0 0;
+}
+
+:where(.ix-accordion) > details:last-child > summary,
+:where(.ix-accordion__item:last-child) .ix-accordion__header {
+    border-radius: 0 0 calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
+        calc(var(--ix-border-radius-md) - var(--ix-border-width-default));
+}
+
+/* Når siste seksjon er åpen, fjernes bunnradius — innholdet fyller hjørnene. */
+:where(.ix-accordion) > details:last-child[open] > summary,
+:where(.ix-accordion__item:last-child[open]) .ix-accordion__header {
+    border-radius: 0;
+}
+
+/* Eneste element: alle fire hjørner når lukket, bare topp når åpen. */
+:where(.ix-accordion) > details:only-child > summary,
+:where(.ix-accordion__item:only-child) .ix-accordion__header {
+    border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default));
+}
+
+:where(.ix-accordion) > details:only-child[open] > summary,
+:where(.ix-accordion__item:only-child[open]) .ix-accordion__header {
+    border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
+        calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) 0 0;
+}
+
 /* Header = <summary>: hele klikkflaten. Tittel (+ ev. prefiks-ikon) til venstre,
  * chevron til høyre (margin-inline-start:auto). */
 :where(.ix-accordion) summary,
@@ -61,6 +93,8 @@
     cursor: pointer;
     /* Myk hover-overgang på klikkflaten (samme token som chevron-en under). */
     transition: var(--ix-transition-all);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: calc(var(--ix-outline-offset-default) * -1);
     /* Skjul native disclosure-marker (trekant) i alle nettlesere. */
     list-style: none;
 }
@@ -80,8 +114,7 @@
 /* Focus — synlig, konsistent ring (samme som resten av systemet). */
 :where(.ix-accordion) summary:focus-visible,
 :where(.ix-accordion__header:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: calc(var(--ix-outline-offset-default) * -1);
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 /* Chevron som indikerer åpen/lukket tilstand. Flex-barn skjøvet helt til høyre. */
