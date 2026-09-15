@@ -85,7 +85,6 @@ export const LoadingVariants: Story = {
 };
 
 
-
 export const WithIcon: Story = {
     args: { size: 'md' },
     name: 'Med ikon',

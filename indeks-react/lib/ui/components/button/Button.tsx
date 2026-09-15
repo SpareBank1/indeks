@@ -53,7 +53,7 @@ export const Button: OverridableComponent<ButtonProps, HTMLButtonElement> = forw
         size = 'md',
         width = 'auto',
         iconOnly = false,
-        type = 'button',
+        type,
         disabled,
         className,
         'aria-label': ariaLabel,
@@ -73,7 +73,7 @@ export const Button: OverridableComponent<ButtonProps, HTMLButtonElement> = forw
             data-icon-only={iconOnly ? '' : undefined}
             aria-label={loading ? loadingLabel : ariaLabel}
             disabled={loading ? true : disabled}
-            type={type}
+            type={Component === 'button' ? (type ?? 'button') : type}
             {...props}
         >
             {loading && <Spinner aria-hidden className="ix-button__spinner" />}

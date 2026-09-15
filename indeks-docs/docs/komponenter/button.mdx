@@ -291,6 +291,32 @@ Bruk `as="a"` når knappen navigerer til en URL. Den beholder button-styling, me
 </TabItem>
 </Tabs>
 
+Varianter, størrelser og ikoner virker likt på lenke-knapper. Merk at `type` ikke settes når
+komponenten rendrer et anker — attributtet er kun gyldig på `<button>`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<a class="ix-button" data-variant="secondary" href="/tilbake">
+  <span class="ix-icon" style={{maskImage: "url(https://cdn.sparebank1.no/icons/arrow_back.svg)", WebkitMaskImage: "url(https://cdn.sparebank1.no/icons/arrow_back.svg)"}} aria-hidden="true" />
+  Tilbake til oversikten
+</a>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Button as="a" variant="secondary" href="/tilbake">
+  <Icon name="arrow_back" />
+  Tilbake til oversikten
+</Button>
+```
+
+</TabItem>
+</Tabs>
+
 ## Retningslinjer
 
 ### Bruk knapp til handling, lenke til navigasjon
