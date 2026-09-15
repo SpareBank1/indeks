@@ -10,10 +10,18 @@ komponent er ofte spredt over flere pakker etter ansvar:
 ```
 indeks-css/css/components/<navn>/        # styling (.ix-<navn>)
 indeks-web/lib/components/<navn>/        # web component (hvis komponenten trenger logikk)
+indeks-web/lib/<navn>/<navn>.ts          # atferds-modul (logikk uten egen tag)
 indeks-react/lib/ui/                     # tynn React-wrapper (components/, layout/, typography/, icons/)
 indeks-storybook/stories/                # <Navn>.stories.tsx
 indeks-docs/docs/komponenter/<navn>.mdx  # dokumentasjon
 ```
+
+Logikk i `indeks-web` ligger enten som en web component under `lib/components/`, eller som en
+atferds-modul rett under `lib/` når atferden kan utledes fra DOM-en og derfor ikke trenger et
+element å bo i. `lib/modal/modal.ts`, `lib/tooltip/tooltip.ts` og `lib/table/table.ts` er
+atferds-moduler. Valget mellom de to er beskrevet i
+[ADR-DS-004](./ADR-DS-004-web-components#atferds-moduler). `lib/utils/` er noe tredje: rene
+hjelpere uten atferd.
 
 React-komponentene grupperes i `indeks-react/lib/ui/` etter kategori (`components/`,
 `layout/`, `typography/`, `icons/`). Delte React-hooks ligger i `indeks-react/lib/hooks/`

@@ -12,6 +12,7 @@ import { IxRadioGroup } from './lib/components/radio-group/IxRadioGroup.js';
 import { IxTabs, IxTabList, IxTab, IxTabPanel } from './lib/components/tabs/IxTabs.js';
 import { cn } from './lib/utils/cn.js';
 import './lib/modal/modal.js';
+import './lib/table/table.js';
 import './lib/tooltip/tooltip.js';
 
 customElements.define('ix-field', IxField);
@@ -47,6 +48,8 @@ export type { ProgressBarState } from './lib/components/progress-bar/IxProgressB
 export { IxTabs, IxTabList, IxTab, IxTabPanel };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
+
+export type { IxSortDetail, SortDirection } from './lib/table/table.js';
 
 export { createPatternFormatter, createAmountFormatter, amountFormatterForLocale, registerFormat, resolveFormat, BUILTIN_FORMAT_NAMES } from './lib/components/field/formats.js';
 export type { FieldFormatter, BuiltInFormatName } from './lib/components/field/formats.js';

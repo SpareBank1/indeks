@@ -1,0 +1,876 @@
+---
+title: Table
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/table.json';
+
+# Table
+
+Table viser data i rader og kolonner, der plasseringen i rutenettet er en del av
+betydningen: en celle sier noe fordi den står i denne raden og under denne overskriften.
+Tabellen kan sorteres på kolonne, og den scroller i sin egen ramme på smal skjerm i
+stedet for å presse siden bred.
+
+## Egnet til
+
+- Transaksjonslister og oversikter der brukeren sammenligner tall nedover en kolonne
+- Sammenligning av produkter eller kontotyper, med ett alternativ per kolonne
+- Nøkkeltall der en sumrad hører med nederst
+- Data brukeren skal kunne sortere selv for å finne det største eller det nyeste
+
+## Uegnet til
+
+- Å plassere innhold i et rutenett når rader og kolonner ikke betyr noe. Bruk
+  [Grid](./primitives/grid) eller [Stack](./primitives/stack) til layout
+- Lister der hver rad er én selvstendig ting uten kolonner å sammenligne. Bruk
+  [Card](./card) per element
+- Innhold som skal kunne åpnes og lukkes seksjon for seksjon. Bruk
+  [Accordion](./accordion)
+- Datasett som er så store at de må hentes og filtreres side for side på serveren.
+  Tabellen sorterer det som ligger i DOM-en, og paginering hører i
+  [Pagination](./pagination)
+
+## Bruk
+
+En tabell trenger ingen klasser inni seg. Klassen på `<table>` styler `th` og `td`
+direkte, så ren semantisk HTML er nok.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-table-scroll" role="region" aria-labelledby="bruk-caption" tabindex="0">
+  <table class="ix-table">
+    <caption id="bruk-caption">Gebyrer på brukskonto</caption>
+    <thead>
+      <tr>
+        <th scope="col">Tjeneste</th>
+        <th scope="col">Pris</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Årsgebyr kort</th>
+        <td>250,00 kr</td>
+      </tr>
+      <tr>
+        <th scope="row">Uttak i utlandet</th>
+        <td>45,00 kr</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table>
+  <Table.Caption>Gebyrer på brukskonto</Table.Caption>
+  <Table.Head>
+    <Table.Row>
+      <Table.ColumnHeader>Tjeneste</Table.ColumnHeader>
+      <Table.ColumnHeader>Pris</Table.ColumnHeader>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.RowHeader>Årsgebyr kort</Table.RowHeader>
+      <Table.Cell>250,00 kr</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>Uttak i utlandet</Table.RowHeader>
+      <Table.Cell>45,00 kr</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+I React rendrer `Table` scroll-rammen og `<table>` sammen, og kobler navnet fra
+`Table.Caption` til rammen. I HTML skriver du rammen selv.
+
+## Eksempler
+
+### Tetthet
+
+`sm` strammer inn radhøyden når tabellen har mange rader. `lg` gir mer luft.
+Tekststørrelsen følger bare med i `sm`, fordi en luftigere tabell skal ha samme
+lesestørrelse som en vanlig.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-table-scroll" role="region" aria-labelledby="tett-caption" tabindex="0">
+  <table class="ix-table" data-density="sm">
+    <caption id="tett-caption">Renter, tett visning</caption>
+    <thead>
+      <tr>
+        <th scope="col">Konto</th>
+        <th scope="col">Rente</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">Brukskonto</th><td>0,10 %</td></tr>
+      <tr><th scope="row">Sparekonto</th><td>2,40 %</td></tr>
+      <tr><th scope="row">BSU</th><td>3,10 %</td></tr>
+    </tbody>
+  </table>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="lg">
+  <Table density="sm">
+    <Table.Caption>Renter, tett visning</Table.Caption>
+    <Table.Body>
+      <Table.Row>
+        <Table.RowHeader>Brukskonto</Table.RowHeader>
+        <Table.Cell>0,10 %</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.RowHeader>Sparekonto</Table.RowHeader>
+        <Table.Cell>2,40 %</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table>
+  <Table density="lg">
+    <Table.Caption>Renter, luftig visning</Table.Caption>
+    <Table.Body>
+      <Table.Row>
+        <Table.RowHeader>Brukskonto</Table.RowHeader>
+        <Table.Cell>0,10 %</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.RowHeader>Sparekonto</Table.RowHeader>
+        <Table.Cell>2,40 %</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table>
+</VStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Striper og hover
+
+Striper hjelper øyet å følge en rad bortover i brede tabeller. Hover-tinten viser hvilken
+rad pekeren står på.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-table-scroll" role="region" aria-labelledby="zebra-caption" tabindex="0">
+  <table class="ix-table" data-zebra data-hover>
+    <caption id="zebra-caption">Månedlige utgifter</caption>
+    <thead>
+      <tr>
+        <th scope="col">Kategori</th>
+        <th scope="col">Beløp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">Bolig</th><td>12 000,00 kr</td></tr>
+      <tr><th scope="row">Mat</th><td>6 400,00 kr</td></tr>
+      <tr><th scope="row">Transport</th><td>1 850,00 kr</td></tr>
+      <tr><th scope="row">Forsikring</th><td>980,00 kr</td></tr>
+    </tbody>
+  </table>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table zebra hover>
+  <Table.Caption>Månedlige utgifter</Table.Caption>
+  <Table.Head>
+    <Table.Row>
+      <Table.ColumnHeader>Kategori</Table.ColumnHeader>
+      <Table.ColumnHeader>Beløp</Table.ColumnHeader>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.RowHeader>Bolig</Table.RowHeader>
+      <Table.Cell>12 000,00 kr</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>Mat</Table.RowHeader>
+      <Table.Cell>6 400,00 kr</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>Transport</Table.RowHeader>
+      <Table.Cell>1 850,00 kr</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+### Festet overskriftsrad
+
+Overskriftsraden blir stående når brukeren scroller nedover. Det krever at noe utenfor
+tabellen begrenser høyden, ellers er det ingenting å scrolle inne i.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-table-scroll" role="region" aria-labelledby="sticky-caption" tabindex="0" style={{ maxHeight: '11rem', overflowY: 'auto' }}>
+  <table class="ix-table" data-sticky-header data-zebra>
+    <caption id="sticky-caption">Transaksjoner</caption>
+    <thead>
+      <tr>
+        <th scope="col">Dato</th>
+        <th scope="col">Beskrivelse</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">01.09.2026</th><td>Kiwi Majorstuen</td></tr>
+      <tr><th scope="row">30.08.2026</th><td>Vipps til Ola</td></tr>
+      <tr><th scope="row">28.08.2026</th><td>Lønn</td></tr>
+      <tr><th scope="row">22.08.2026</th><td>Ruter</td></tr>
+      <tr><th scope="row">15.08.2026</th><td>Husleie</td></tr>
+      <tr><th scope="row">03.08.2026</th><td>Circle K</td></tr>
+    </tbody>
+  </table>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table stickyHeader zebra scrollStyle={{ maxHeight: '11rem' }}>
+  <Table.Caption>Transaksjoner</Table.Caption>
+  <Table.Head>
+    <Table.Row>
+      <Table.ColumnHeader>Dato</Table.ColumnHeader>
+      <Table.ColumnHeader>Beskrivelse</Table.ColumnHeader>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.RowHeader>01.09.2026</Table.RowHeader>
+      <Table.Cell>Kiwi Majorstuen</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>30.08.2026</Table.RowHeader>
+      <Table.Cell>Vipps til Ola</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>28.08.2026</Table.RowHeader>
+      <Table.Cell>Lønn</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>22.08.2026</Table.RowHeader>
+      <Table.Cell>Ruter</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>15.08.2026</Table.RowHeader>
+      <Table.Cell>Husleie</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+Høydebegrensningen hører på scroll-rammen selv, ikke på noe utenfor den. Rammen har
+`overflow-x: auto`, og CSS gjør da også den vertikale aksen til `auto`, så den er
+scroll-containeren i begge retninger. Ligger høydebegrensningen lenger ut, finnes det
+ingenting å scrolle her, og overskriftsraden får aldri festet seg. I React setter du den
+med `scrollStyle` eller en egen klasse via `scrollClassName`.
+
+### Sortering
+
+Klikk en kolonneoverskrift for å sortere. Syklusen er toveis: stigende, så synkende, så
+stigende igjen.
+
+Legg merke til `data-sort-value` på beløpskolonnen. Uten den ville «32 500,00 kr» blitt
+sortert som tekst, og «1 250» havnet før «250».
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-table-scroll" role="region" aria-labelledby="sort-caption" tabindex="0">
+  <table
+    class="ix-table"
+    data-zebra
+    data-ix-sort-client
+    data-ix-sort-ascending-text="Sortert etter {column}, stigende"
+    data-ix-sort-descending-text="Sortert etter {column}, synkende"
+  >
+    <caption id="sort-caption">Transaksjoner, klikk en overskrift for å sortere</caption>
+    <thead>
+      <tr>
+        <th scope="col">
+          <button type="button" data-ix-sort="date" data-sort-key="dato">Dato</button>
+        </th>
+        <th scope="col">
+          <button type="button" data-ix-sort="text" data-sort-key="tekst">Beskrivelse</button>
+        </th>
+        <th scope="col">
+          <button type="button" data-ix-sort="number" data-sort-key="belop">Beløp</button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row" data-sort-value="2026-09-01">01.09.2026</th>
+        <td>Kiwi Majorstuen</td>
+        <td data-sort-value="-249.5">-249,50 kr</td>
+      </tr>
+      <tr>
+        <th scope="row" data-sort-value="2026-08-28">28.08.2026</th>
+        <td>Lønn</td>
+        <td data-sort-value="32500">32 500,00 kr</td>
+      </tr>
+      <tr>
+        <th scope="row" data-sort-value="2026-08-15">15.08.2026</th>
+        <td>Husleie</td>
+        <td data-sort-value="-12000">-12 000,00 kr</td>
+      </tr>
+      <tr>
+        <th scope="row" data-sort-value="2026-08-03">03.08.2026</th>
+        <td>Ruter</td>
+        <td data-sort-value="-853">-853,00 kr</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table
+  zebra
+  clientSort
+  sortAscendingText="Sortert etter {column}, stigende"
+  sortDescendingText="Sortert etter {column}, synkende"
+>
+  <Table.Caption>Transaksjoner, klikk en overskrift for å sortere</Table.Caption>
+  <Table.Head>
+    <Table.Row>
+      <Table.ColumnHeader sortable sortType="date" sortKey="dato">Dato</Table.ColumnHeader>
+      <Table.ColumnHeader sortable sortKey="tekst">Beskrivelse</Table.ColumnHeader>
+      <Table.ColumnHeader sortable sortType="number" sortKey="belop">Beløp</Table.ColumnHeader>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.RowHeader sortValue="2026-09-01">01.09.2026</Table.RowHeader>
+      <Table.Cell>Kiwi Majorstuen</Table.Cell>
+      <Table.Cell sortValue={-249.5}>-249,50 kr</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader sortValue="2026-08-28">28.08.2026</Table.RowHeader>
+      <Table.Cell>Lønn</Table.Cell>
+      <Table.Cell sortValue={32500}>32 500,00 kr</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader sortValue="2026-08-15">15.08.2026</Table.RowHeader>
+      <Table.Cell>Husleie</Table.Cell>
+      <Table.Cell sortValue={-12000}>-12 000,00 kr</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+### Sammenligningstabell
+
+Ett alternativ per kolonne, én egenskap per rad. Den anbefalte kolonnen utheves med
+`<col data-highlighted>`, og festet førstekolonne holder egenskapsnavnene synlige når
+brukeren scroller sidelengs på mobil.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-table-scroll" role="region" aria-labelledby="sammenlign-caption" tabindex="0">
+  <table class="ix-table" data-sticky-column>
+    <caption id="sammenlign-caption">Sammenlign kontotyper</caption>
+    <colgroup>
+      <col />
+      <col />
+      <col data-highlighted />
+      <col />
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">Egenskap</th>
+        <th scope="col">Brukskonto</th>
+        <th scope="col">Sparekonto (anbefalt)</th>
+        <th scope="col">BSU</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Rente</th>
+        <td>0,10 %</td>
+        <td>2,40 %</td>
+        <td>3,10 %</td>
+      </tr>
+      <tr>
+        <th scope="row">Månedspris</th>
+        <td>0 kr</td>
+        <td>0 kr</td>
+        <td>0 kr</td>
+      </tr>
+      <tr>
+        <th scope="row">Frie uttak</th>
+        <td>Ubegrenset</td>
+        <td>Ubegrenset</td>
+        <td>Ingen</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table stickyColumn>
+  <Table.Caption>Sammenlign kontotyper</Table.Caption>
+  <Table.ColumnGroup>
+    <Table.Column />
+    <Table.Column />
+    <Table.Column highlighted />
+    <Table.Column />
+  </Table.ColumnGroup>
+  <Table.Head>
+    <Table.Row>
+      <Table.ColumnHeader>Egenskap</Table.ColumnHeader>
+      <Table.ColumnHeader>Brukskonto</Table.ColumnHeader>
+      <Table.ColumnHeader>Sparekonto (anbefalt)</Table.ColumnHeader>
+      <Table.ColumnHeader>BSU</Table.ColumnHeader>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.RowHeader>Rente</Table.RowHeader>
+      <Table.Cell>0,10 %</Table.Cell>
+      <Table.Cell>2,40 %</Table.Cell>
+      <Table.Cell>3,10 %</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>Månedspris</Table.RowHeader>
+      <Table.Cell>0 kr</Table.Cell>
+      <Table.Cell>0 kr</Table.Cell>
+      <Table.Cell>0 kr</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>Frie uttak</Table.RowHeader>
+      <Table.Cell>Ubegrenset</Table.Cell>
+      <Table.Cell>Ubegrenset</Table.Cell>
+      <Table.Cell>Ingen</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+:::warning Uthevet kolonne kan ikke kombineres med radbakgrunn
+Tabeller maler bakgrunn i rekkefølgen tabell, kolonne, rad, celle. En celle- eller
+radbakgrunn dekker derfor alltid kolonnebakgrunnen under. Slår du på `zebra`, `hover`
+eller `stickyHeader` sammen med en uthevet kolonne, forsvinner uthevingen. Dette er en
+egenskap ved CSS-tabeller, ikke noe komponenten kan omgå.
+:::
+
+### Sumrad
+
+`tfoot` gir sumraden en tydelig linje over seg, og skjermlesere kan skille den fra
+datarader.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-table-scroll" role="region" aria-labelledby="sum-caption" tabindex="0">
+  <table class="ix-table">
+    <caption id="sum-caption">Gebyrer i august</caption>
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+        <th scope="col">Beløp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">Årsgebyr kort</th><td>250,00 kr</td></tr>
+      <tr><th scope="row">Uttak i utlandet</th><td>45,00 kr</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><th scope="row">Sum</th><td>295,00 kr</td></tr>
+    </tfoot>
+  </table>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table>
+  <Table.Caption>Gebyrer i august</Table.Caption>
+  <Table.Head>
+    <Table.Row>
+      <Table.ColumnHeader>Type</Table.ColumnHeader>
+      <Table.ColumnHeader>Beløp</Table.ColumnHeader>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.RowHeader>Årsgebyr kort</Table.RowHeader>
+      <Table.Cell>250,00 kr</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>Uttak i utlandet</Table.RowHeader>
+      <Table.Cell>45,00 kr</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+  <Table.Foot>
+    <Table.Row>
+      <Table.RowHeader>Sum</Table.RowHeader>
+      <Table.Cell>295,00 kr</Table.Cell>
+    </Table.Row>
+  </Table.Foot>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+### Mange kolonner
+
+Er tabellen bredere enn plassen, scroller den inne i sin egen ramme. Siden står stille.
+Prøv å gjøre nettleservinduet smalere i eksempelet under.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-table-scroll" role="region" aria-labelledby="bred-caption" tabindex="0">
+  <table class="ix-table" data-sticky-column data-zebra style={{ minWidth: '48rem' }}>
+    <caption id="bred-caption">Saldo per måned</caption>
+    <thead>
+      <tr>
+        <th scope="col">Konto</th>
+        <th scope="col">Januar</th>
+        <th scope="col">Februar</th>
+        <th scope="col">Mars</th>
+        <th scope="col">April</th>
+        <th scope="col">Mai</th>
+        <th scope="col">Juni</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Brukskonto</th>
+        <td>12 400 kr</td><td>9 800 kr</td><td>14 250 kr</td>
+        <td>11 900 kr</td><td>13 050 kr</td><td>10 700 kr</td>
+      </tr>
+      <tr>
+        <th scope="row">Sparekonto</th>
+        <td>84 000 kr</td><td>86 500 kr</td><td>89 100 kr</td>
+        <td>91 800 kr</td><td>94 600 kr</td><td>97 500 kr</td>
+      </tr>
+      <tr>
+        <th scope="row">BSU</th>
+        <td>27 500 kr</td><td>29 800 kr</td><td>32 100 kr</td>
+        <td>34 400 kr</td><td>36 700 kr</td><td>39 000 kr</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table stickyColumn zebra style={{ minWidth: '48rem' }}>
+  <Table.Caption>Saldo per måned</Table.Caption>
+  <Table.Head>
+    <Table.Row>
+      <Table.ColumnHeader>Konto</Table.ColumnHeader>
+      <Table.ColumnHeader>Januar</Table.ColumnHeader>
+      <Table.ColumnHeader>Februar</Table.ColumnHeader>
+      <Table.ColumnHeader>Mars</Table.ColumnHeader>
+      <Table.ColumnHeader>April</Table.ColumnHeader>
+      <Table.ColumnHeader>Mai</Table.ColumnHeader>
+      <Table.ColumnHeader>Juni</Table.ColumnHeader>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.RowHeader>Brukskonto</Table.RowHeader>
+      <Table.Cell>12 400 kr</Table.Cell>
+      <Table.Cell>9 800 kr</Table.Cell>
+      <Table.Cell>14 250 kr</Table.Cell>
+      <Table.Cell>11 900 kr</Table.Cell>
+      <Table.Cell>13 050 kr</Table.Cell>
+      <Table.Cell>10 700 kr</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.RowHeader>Sparekonto</Table.RowHeader>
+      <Table.Cell>84 000 kr</Table.Cell>
+      <Table.Cell>86 500 kr</Table.Cell>
+      <Table.Cell>89 100 kr</Table.Cell>
+      <Table.Cell>91 800 kr</Table.Cell>
+      <Table.Cell>94 600 kr</Table.Cell>
+      <Table.Cell>97 500 kr</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Oppgi sorteringsverdien på formaterte celler
+
+Sorteringen leser celleteksten hvis du ikke sier noe annet, og norsk tallformatering
+sorterer feil som tekst: «1 250,00 kr» kommer før «250,00 kr». Samme gjelder datoer
+skrevet `dd.mm.åååå`, der dagen står først og styrer rekkefølgen.
+
+Sett `sortValue` på cellen til råverdien: et tall for beløp, og `åååå-mm-dd` for datoer.
+Ren tekst trenger ingenting, den sorteres alfabetisk etter norsk sorteringsrekkefølge.
+
+### La React eie radene sine
+
+Sorteringen ligger i en atferds-modul i `@sb1/indeks-web` som lytter på klikk i hele
+dokumentet. Den flytter rader bare når tabellen ber om det med `clientSort`
+(`data-ix-sort-client` i HTML).
+
+Ren HTML kan trygt slå den på, siden ingen andre eier radene. I React er den av som
+standard, fordi React holder sitt eget bilde av hvilke `<tr>` som ligger hvor, og neste
+re-render kan sette rekkefølgen tilbake. Har tabellen datadrevne rader, lytt på `onSort`
+og sorter dataene dine i stedet. Er radene statiske, som i en prisliste du har skrevet
+ut, er `clientSort` det enkleste som virker.
+
+### Skriv «anbefalt» i teksten, ikke bare i fargen
+
+Uthevet kolonne er en bakgrunnsfarge. En skjermleserbruker får ingenting ut av den, og
+med nedsatt fargesyn er den svak. Skriv «Anbefalt» i kolonneoverskriften også, slik at
+informasjonen finnes i teksten uansett hvordan brukeren leser siden.
+
+### Fest første kolonne i stedet for å krympe teksten
+
+En bred tabell på mobil har to utfall: teksten blir for liten å lese, eller brukeren
+mister oversikten mens hen scroller sidelengs. `stickyColumn` løser det andre uten å
+skape det første. Radoverskriften står stille med en skillelinje, og resten av kolonnene
+glir under den.
+
+Ikke gjør tabellen om til kort på smal skjerm. Da mister brukeren nettopp det tabellen er
+til for: å sammenligne en verdi med den under.
+
+### Velg én bakgrunn av gangen
+
+`zebra`, `hover` og uthevet kolonne konkurrerer om samme flate, og cellebakgrunnen vinner
+alltid over kolonnebakgrunnen. Bruk striper i lange datatabeller og uthevet kolonne i
+sammenligningstabeller.
+
+### Regn med to sorteringsretninger
+
+En kolonne er enten stigende eller synkende sortert. Det finnes ingen tredje tilstand som
+tar brukeren tilbake til den opprinnelige rekkefølgen. Er den opprinnelige rekkefølgen
+meningsbærende, for eksempel nyeste transaksjon først, sorter tabellen slik fra start og
+gi den kolonnen `aria-sort` med en gang.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- Gi tabellen en caption. Den navngir både tabellen og scroll-området rundt den. Har du
+  en synlig overskrift rett over tabellen i stedet, sett `scrollLabel`.
+- Bruk `Table.RowHeader` for cellen som identifiserer raden. Skjermlesere leser den
+  sammen med hver celle brukeren flytter seg til.
+- Send inn `sortAscendingText` og `sortDescendingText`. Uten dem annonseres ikke
+  sorteringen, fordi det ikke finnes noen hardkodet tekst å falle tilbake på. Oversett
+  dem til brukerens språk.
+- Sett `sortValue` på formaterte tall og datoer, ellers sorterer tabellen på noe annet
+  enn brukeren tror.
+- Ikke bruk tabellen som layout. Rader og kolonner annonseres som sammenhenger, og en
+  tabell brukt til plassering lover sammenhenger som ikke finnes.
+- Har cellene lenker eller knapper, kan `stickyHeader` legge seg over elementet
+  brukeren tabber til. Sett `scroll-margin-block-start` på cellene, minst like høyt som
+  overskriftsraden, eller la `stickyHeader` stå av i slike tabeller.
+
+### Hva komponenten gjør automatisk
+
+- `<table>`, `<caption>`, `<th scope="col">` og `<th scope="row">` gir rad- og
+  kolonnesammenhenger uten en linje ARIA.
+- Sorteringskontrollen er et `<button type="button">`, så Tab, Enter og Space kommer fra
+  elementet. Knappen er 44 px høy og fyller cellen i bredden.
+- `aria-sort` står på høyst én kolonne av gangen. Modulen nullstiller søskenkolonnene.
+- Sorteringen annonseres i en skjult `role="status"`-region, fordi endring i `aria-sort`
+  ikke annonseres pålitelig.
+- Scroll-området er fokuserbart og navngitt, slik at tastaturbrukere kan scrolle en bred
+  tabell med piltaster.
+- Sorteringspilen er en form, ikke en farge, og leses av `aria-sort` slik at den ikke kan
+  komme ut av synk med tilstanden.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+### HTML
+
+Attributter på `<table class="ix-table">`:
+
+| Attributt | Verdier | Beskrivelse |
+|---|---|---|
+| `data-density` | `sm`, `md`, `lg` | Radhøyde. Uten attributt gjelder `md` |
+| `data-zebra` | tilstede | Bakgrunn på annenhver rad i `tbody` |
+| `data-hover` | tilstede | Bakgrunn på raden pekeren står på |
+| `data-sticky-header` | tilstede | Fester `thead` ved vertikal scroll |
+| `data-sticky-column` | tilstede | Fester første kolonne ved horisontal scroll |
+| `data-ix-sort-client` | tilstede | Lar atferds-modulen flytte radene i DOM-en |
+| `data-ix-sort-ascending-text` | streng | Annonseringsmal for stigende sortering. `{column}` byttes ut med kolonnenavnet |
+| `data-ix-sort-descending-text` | streng | Annonseringsmal for synkende sortering |
+
+Attributter inni tabellen:
+
+| Attributt | Element | Beskrivelse |
+|---|---|---|
+| `data-ix-sort` | `<button>` i `<th>` | Gjør overskriften sorterbar. Verdien velger komparator: `text`, `number` eller `date` |
+| `data-sort-key` | `<button>` i `<th>` | Identifiserer kolonnen i `ix-sort`-hendelsen |
+| `data-sort-value` | `<th>`, `<td>` | Verdien det sorteres på i stedet for celleteksten |
+| `data-highlighted` | `<col>` | Uthever hele kolonnen |
+| `aria-sort` | `<th>` | Gjeldende retning: `ascending` eller `descending`. Settes av modulen |
+
+Atferds-modulen sender en `ix-sort`-hendelse på `<table>` ved hver sortering. Den bobler,
+og `detail` inneholder `index`, `key`, `type` og `direction`.
+
+### React
+
+`Table`:
+
+| Prop | Type | Standard | Beskrivelse |
+|---|---|---|---|
+| `density` | `'sm' \| 'md' \| 'lg'` | `'md'` | Radhøyde |
+| `zebra` | `boolean` | | Bakgrunn på annenhver rad |
+| `hover` | `boolean` | | Bakgrunn på raden pekeren står på |
+| `stickyHeader` | `boolean` | | Fester overskriftsraden ved vertikal scroll |
+| `stickyColumn` | `boolean` | | Fester første kolonne ved horisontal scroll |
+| `clientSort` | `boolean` | `false` | Lar atferds-modulen flytte radene. Kun for statiske rader |
+| `onSort` | `(detail: IxSortDetail) => void` | | Kalles ved sortering med `index`, `key`, `type` og `direction` |
+| `sortAscendingText` | `string` | | Annonseringsmal for stigende sortering. `{column}` byttes ut med kolonnenavnet |
+| `sortDescendingText` | `string` | | Annonseringsmal for synkende sortering |
+| `scrollLabel` | `string` | | Navn på scroll-området. Trengs bare uten `Table.Caption` |
+| `scrollClassName` | `string` | | Klasse på scroll-området utenfor `<table>` |
+| `scrollStyle` | `CSSProperties` | | Stil på scroll-området. Her setter du høydebegrensningen `stickyHeader` trenger |
+
+Delkomponenter:
+
+| Komponent | Element | Props |
+|---|---|---|
+| `Table.Caption` | `<caption>` | |
+| `Table.ColumnGroup` | `<colgroup>` | |
+| `Table.Column` | `<col>` | `highlighted` |
+| `Table.Head` | `<thead>` | |
+| `Table.Body` | `<tbody>` | |
+| `Table.Foot` | `<tfoot>` | |
+| `Table.Row` | `<tr>` | |
+| `Table.ColumnHeader` | `<th scope="col">` | `sortable`, `sortType`, `sortKey`, `sortDirection` |
+| `Table.RowHeader` | `<th scope="row">` | `sortValue` |
+| `Table.Cell` | `<td>` | `sortValue` |
+
+| Prop | Type | Standard | Beskrivelse |
+|---|---|---|---|
+| `highlighted` | `boolean` | | Uthever kolonnen (`Table.Column`) |
+| `sortable` | `boolean` | | Gjør overskriften til en sorteringsknapp |
+| `sortType` | `'text' \| 'number' \| 'date'` | `'text'` | Komparator for kolonnen |
+| `sortKey` | `string` | | Identifiserer kolonnen i `onSort` |
+| `sortDirection` | `'ascending' \| 'descending'` | | Kontrollert sorteringsretning, når du eier tilstanden selv |
+| `sortValue` | `string \| number` | | Verdien det sorteres på i stedet for celleteksten |
+
+I tillegg støttes standard HTML-attributter på alle delkomponentene.
+
+## Tilpasning med CSS
+
+Tabellen har ingen web component, og CSS-en styler `th` og `td` direkte. En håndskrevet
+`<table class="ix-table">` er derfor ferdig stylet uten klasser inne i tabellen, og du
+trenger bare de to klassene under.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---|---|
+| Tabell | `.ix-table` |
+| Scroll-ramme rundt tabellen | `.ix-table-scroll` |
+| Celler | `.ix-table th`, `.ix-table td` |
+| Overskriftsrad | `.ix-table > thead` |
+| Sumrad | `.ix-table > tfoot` |
+| Sorteringsknapp | `.ix-table th > button[data-ix-sort]` |
+| Uthevet kolonne | `.ix-table col[data-highlighted]` |
+
+Sorteringspilen er et `::after`-element på knappen, og hvilken pil som vises styres av
+`aria-sort` på `<th>`.
+
+### Eksempel: ren HTML
+
+```html
+<div class="ix-table-scroll" role="region" aria-labelledby="min-caption" tabindex="0">
+  <table class="ix-table" data-density="sm" data-zebra>
+    <caption id="min-caption">Renter</caption>
+    <thead>
+      <tr>
+        <th scope="col">Konto</th>
+        <th scope="col">
+          <button type="button" data-ix-sort="number" data-sort-key="rente">Rente</button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Sparekonto</th>
+        <td data-sort-value="2.4">2,40 %</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+Sortering krever at `@sb1/indeks-web` er lastet, og at tabellen har
+`data-ix-sort-client` hvis modulen skal flytte radene.
+
+## Relatert
+
+- [Pagination](./pagination) — når datasettet er for stort for én tabell
+- [Card](./card) — når hver rad egentlig er en selvstendig enhet
+- [Grid](./primitives/grid) — for layout i rader og kolonner uten tabellsemantikk
+- [Accordion](./accordion) — når innholdet skal kunne åpnes og lukkes seksjonsvis
