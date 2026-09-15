@@ -1,5 +1,11 @@
 # @sb1/indeks-css
 
+## 0.22.1
+
+### Patch Changes
+
+- d1af84a: Button beholder nå bredden i loading state — viser kun spinner, ikke loadingLabel-tekst
+
 ## 0.22.0
 
 ### Minor Changes
