@@ -15,7 +15,7 @@ packages:
 minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
     - '@sb1/*'
-trustPolicy: no-downgrad
+#trustPolicy: no-downgrade
 #trustPolicyExclude:
 #trustPolicyIgnoreAfter:
 

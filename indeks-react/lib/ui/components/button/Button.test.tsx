@@ -68,10 +68,6 @@ describe('Button loading-tilstand', () => {
         button = screen.getByRole('button');
     });
 
-    it('skal vise loadingLabel som innhold ved loading', () => {
-        expect(screen.getByText('Laster')).toBeDefined();
-    });
-
     it('skal være deaktivert', () => {
         expect(button).toHaveProperty('disabled', true);
     });

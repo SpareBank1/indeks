@@ -114,3 +114,16 @@ export const IconOnly: Story = {
         </Button>
     ),
 };
+
+/**
+ * Knapp som rendres som en lenke (`<a>`). Bruk dette når knappen skal navigere
+ * til en annen side. Husk å sette `href`.
+ */
+export const AsLink: Story = {
+    name: 'Som lenke',
+    render: (args) => (
+        <Button {...args} as="a" href="https://www.sparebank1.no">
+            Gå til SpareBank 1
+        </Button>
+    ),
+};
