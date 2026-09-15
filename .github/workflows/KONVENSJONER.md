@@ -48,6 +48,40 @@ on:
 
 Noen PR-workflows filtrerer på `paths` for å unngå unødvendige kjøringer.
 
+### Unntak: `pull_request_target`
+
+Brukes i **én** workflow, `pr-cleanup.yml`:
+
+```yaml
+on:
+    # zizmor: ignore[dangerous-triggers] - ingen checkout av PR-koden; trengs for secrets når dependabot lukker PR-en
+    pull_request_target:
+        types: [closed]
+        branches:
+            - main
+```
+
+`pull_request` kjører i den triggende aktørens kontekst, og når aktøren er `dependabot[bot]` holder
+GitHub tilbake vanlige Actions-secrets — de ligger i et eget Dependabot-scope. Azure-tokenet blir da
+tomt, opprydningen dør med «deployment_token was not provided», og staging-miljøet ligger igjen til
+Azure-kvoten er full. `pull_request_target` kjører i base-repoets kontekst og får secrets uansett hvem
+som lukket PR-en.
+
+Prisen er at jobben har secrets og skrivetilgang i samme kjøring som en potensielt upålitelig PR. Tre
+krav må holde for at unntaket skal kunne brukes igjen:
+
+1. **Ingen `actions/checkout`.** Ingenting fra PR-en — kode, skript, konfig, lockfiler — inn i jobben.
+   Legges checkout til, faller begrunnelsen bort.
+2. **Ingen PR-kontrollerte verdier inn i `run:`.** Tittel, branchnavn og forfatter er angriperstyrt
+   tekst.
+3. **Minimale `permissions`.** Bare det stegene faktisk bruker.
+
+Zizmor flagger `pull_request_target` som `dangerous-triggers` (high) uansett, så unntaket krever en
+`# zizmor: ignore[dangerous-triggers]`-kommentar innenfor `on:`-blokka med begrunnelse.
+
+`pull_request_target` kjører alltid base-branchens kopi av workflow-fila. Endringer i den kan derfor
+ikke testes i en PR — de virker først etter merge til `main`.
+
 ### Push til main
 ```yaml
 on:

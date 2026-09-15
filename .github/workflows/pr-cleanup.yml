@@ -1,20 +1,32 @@
 name: PR - Rydd opp forhåndsvisning
 
+# Bevisst pull_request_target og ikke pull_request: med pull_request kjører jobben i den
+# triggende aktørens kontekst, og når aktøren er dependabot[bot] holder GitHub tilbake vanlige
+# Actions-secrets (de ligger i et eget Dependabot-scope). Azure-tokenet ble da tomt, steget døde
+# med «deployment_token was not provided», og staging-miljøet lå igjen til Azure-kvoten var full.
+# pull_request_target kjører i base-repoets kontekst og får secrets uansett hvem som lukket PR-en.
+#
+# Trygt her fordi jobben ikke sjekker ut PR-koden i det hele tatt — ingen actions/checkout, ingen
+# kode fra PR-en kjøres, bare Azure-actionen med action: close. Legg aldri til et checkout-steg her.
 on:
-    pull_request:
+    # zizmor: ignore[dangerous-triggers] - ingen checkout av PR-koden; trengs for secrets når dependabot lukker PR-en
+    pull_request_target:
         types: [closed]
         branches:
             - main
 
 jobs:
     cleanup:
+        # Fork-PR-er får aldri deployet et forhåndsvisningsmiljø, så det er ingenting å rydde.
         if: ${{ !github.event.pull_request.head.repo.fork }}
         runs-on: ubuntu-latest
         timeout-minutes: 5
         name: Slett forhåndsvisning
+        # Ingen pull-requests: write. Azure-actionen kommenterer bare på PR-en når den får
+        # repo_token, og det gjør den ikke her (til forskjell fra deploy-steget i
+        # pr-build-and-preview.yml). Docker-actionen ser aldri GITHUB_TOKEN på annet vis.
         permissions:
             contents: read
-            pull-requests: write
         steps:
             - name: Slett Azure-forhåndsvisning
               id: closepullrequest
