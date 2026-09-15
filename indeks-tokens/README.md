@@ -30,7 +30,7 @@ Du trenger kun å installere `@sb1/indeks-tokens` hvis du:
 Via CDN (anbefalt):
 
 ```html
-<link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/<versjon>.css" />
+<link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/<versjon>/index.css" />
 ```
 
 Via npm:

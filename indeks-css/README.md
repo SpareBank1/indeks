@@ -16,10 +16,10 @@ Du trenger ikke å installere tokens eller utils separat — alt ligger i `@sb1/
 ### Via CDN (anbefalt)
 
 ```html
-<link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/<versjon>.css" />
+<link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/<versjon>/index.css" />
 ```
 
-Erstatt `<versjon>` med ønsket versjon, f.eks. `0.1.1`.
+Erstatt `<versjon>` med ønsket versjon, f.eks. `0.22.0`.
 
 ### Via npm
 
@@ -35,7 +35,7 @@ npm install @sb1/indeks-css
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/0.1.1.css" />
+        <link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/0.22.0/index.css" />
     </head>
     <body>
         <button class="ix-button">Klikk her</button>
@@ -101,7 +101,7 @@ Via CDN + npm:
 
 ```jsx
 // index.html
-<link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/0.1.1.css">
+<link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/0.22.0/index.css">
 
 // App.jsx
 import { Button, Card } from '@sb1/indeks-react';

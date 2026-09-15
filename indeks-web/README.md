@@ -16,7 +16,7 @@ CDN er anbefalt fordi URL-en deles på tvers av SB1-applikasjoner. Nettleseren k
 
 ```html
 <!-- Last inn CSS -->
-<link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/<versjon>.css" />
+<link rel="stylesheet" href="https://cdn.sparebank1.no/indeks/css/<versjon>/index.css" />
 
 <!-- Last inn og registrer web components -->
 <script type="module" src="https://cdn.sparebank1.no/indeks/web/<versjon>/index.js"></script>
