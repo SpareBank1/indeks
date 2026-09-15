@@ -157,8 +157,23 @@
 
 /* Loading */
 :where(.ix-button[data-loading='true']) {
+    position: relative;
     cursor: wait;
     pointer-events: none;
+}
+
+:where(.ix-button__content) {
+    display: inline-flex;
+    align-items: center;
+    gap: inherit;
+}
+
+:where(.ix-button[data-loading='true'] .ix-button__content) {
+    opacity: 0;
+}
+
+:where(.ix-button__spinner) {
+    position: absolute;
 }
 
 /* Ikon-only (rund) */

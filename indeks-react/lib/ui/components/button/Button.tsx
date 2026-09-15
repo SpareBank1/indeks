@@ -76,14 +76,8 @@ export const Button: OverridableComponent<ButtonProps, HTMLButtonElement> = forw
             type={type}
             {...props}
         >
-            {loading ? (
-                <>
-                    <Spinner aria-hidden />
-                    {loadingLabel}
-                </>
-            ) : (
-                children
-            )}
+            {loading && <Spinner aria-hidden className="ix-button__spinner" />}
+            <span className="ix-button__content">{children}</span>
         </Component>
     );
 });
