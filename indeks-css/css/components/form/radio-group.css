@@ -112,6 +112,8 @@
     color: var(--ix-color-foreground-main-default);
     user-select: none;
     transition: var(--ix-transition-all);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
 }
 
 /* Radio-indikator: ytre ring (::after) + indre prikk (::before) */
@@ -182,8 +184,7 @@
 
 :where(ix-radio-group, .ix-radio-group) input[type='radio']:focus-visible + label,
 :where(.ix-radio-button__input:focus-visible) + :where(.ix-radio-button__label) {
-    outline: var(--ix-outline-default);
-    outline-offset: var(--ix-outline-offset-default);
+    outline-color: var(--ix-color-border-focus-default);
     border-radius: var(--ix-border-radius-xs);
 }
 

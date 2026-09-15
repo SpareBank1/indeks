@@ -23,6 +23,8 @@
    Samme spesifisitets-hensyn som padding-inline-end nedenfor. */
 .ix-card--clickable {
     transition: var(--ix-transition-all);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
 }
 
 /* Chevron som permanent «dette gjør noe»-signal — et ekte ix-icon (byttbart via
@@ -57,9 +59,8 @@
     background-color: var(--ix-color-fill-interactive-active);
 }
 
-:where(.ix-card--clickable:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: var(--ix-outline-offset-default);
+.ix-card--clickable:focus-visible {
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 @media (prefers-reduced-motion: reduce) {

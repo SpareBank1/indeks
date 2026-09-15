@@ -60,6 +60,8 @@
     border: var(--ix-border-width-default) solid var(--ii-checkbox-box-border);
     border-radius: var(--ix-border-radius-xs);
     transition: var(--ix-transition-all);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
 }
 
 /* Glyfen (hake eller strek) — skjult til checked/indeterminate slår den på */
@@ -93,8 +95,7 @@
 
 :where(.ix-checkbox) input[type='checkbox']:focus-visible + label::before,
 :where(.ix-checkbox__input:focus-visible) + :where(.ix-checkbox__label)::before {
-    outline: var(--ix-outline-default);
-    outline-offset: var(--ix-outline-offset-default);
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 /* ── Checked ─────────────────────────────────────────────────────────────── */

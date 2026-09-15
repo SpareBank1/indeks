@@ -147,6 +147,8 @@
     border-radius: var(--ix-border-radius-sm);
     cursor: pointer;
     transition: var(--ix-transition-all);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
 }
 
 :where(.ix-modal__close:hover) {
@@ -154,8 +156,7 @@
 }
 
 :where(.ix-modal__close:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: var(--ix-outline-offset-default);
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 /* --- Body ------------------------------------------------------------------ */
