@@ -34,28 +34,28 @@
     /* top-* — pil ned */
     &[data-placement^='top']::before {
         bottom: calc(var(--ix-tooltip-arrow-size) / -2);
-        left: calc(var(--_arrow-x) - var(--ix-tooltip-arrow-size) / 2);
+        left: calc(var(--_arrow-x, 50%) - var(--ix-tooltip-arrow-size) / 2);
         transform: rotate(45deg);
     }
 
     /* bottom-* — pil opp */
     &[data-placement^='bottom']::before {
         top: calc(var(--ix-tooltip-arrow-size) / -2);
-        left: calc(var(--_arrow-x) - var(--ix-tooltip-arrow-size) / 2);
+        left: calc(var(--_arrow-x, 50%) - var(--ix-tooltip-arrow-size) / 2);
         transform: rotate(45deg);
     }
 
     /* left — pil høyre */
     &[data-placement='left']::before {
         right: calc(var(--ix-tooltip-arrow-size) / -2);
-        top: calc(var(--_arrow-y) - var(--ix-tooltip-arrow-size) / 2);
+        top: calc(var(--_arrow-y, 50%) - var(--ix-tooltip-arrow-size) / 2);
         transform: rotate(45deg);
     }
 
     /* right — pil venstre */
     &[data-placement='right']::before {
         left: calc(var(--ix-tooltip-arrow-size) / -2);
-        top: calc(var(--_arrow-y) - var(--ix-tooltip-arrow-size) / 2);
+        top: calc(var(--_arrow-y, 50%) - var(--ix-tooltip-arrow-size) / 2);
         transform: rotate(45deg);
     }
 }
