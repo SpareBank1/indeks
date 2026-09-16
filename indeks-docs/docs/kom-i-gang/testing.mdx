@@ -1,0 +1,124 @@
+# Testing
+
+Skriver du tester mot skjemaelementene i Indeks, trenger du én linje i testoppsettet først. Uten den finner ikke testen checkboxene dine, og feilmeldingen sier ingenting om hvorfor.
+
+## Registrer web components i testoppsettet
+
+Legg denne importen i setup-filen testkjøreren din laster, for eksempel `vitest.setup.ts`:
+
+```ts
+import '@sb1/indeks-web';
+```
+
+Pakken registrerer alle `ix-*`-elementene selv når den importeres. Du skal ikke kalle `customElements.define` for hånd.
+
+`@sb1/indeks-web` hører i `devDependencies`:
+
+```bash
+npm install --save-dev @sb1/indeks-web
+```
+
+Har du den allerede for [TypeScript-typene](/docs/kom-i-gang/utvikler#3a-typescript-typer-valgfritt), er du ferdig.
+
+Koble den så på i vitest-konfigurasjonen:
+
+```ts
+// vitest.config.ts
+export default defineConfig({
+    test: {
+        environment: 'jsdom',
+        setupFiles: ['./vitest.setup.ts'],
+    },
+});
+```
+
+## Hvorfor oppsettet trengs
+
+React-pakken er et tynt lag oppå web components. For grupperte skjemakomponenter er det web-komponenten som kobler `<label>` til `<input>` når den mounter, og som setter `role` og `aria-labelledby` på gruppen.
+
+I nettleseren skjer det av seg selv, fordi du laster web components fra CDN. I en jsdom-test finnes ikke CDN-en, så uten importen over blir `<label>` stående uten `for`. Checkboxen har da ikke noe tilgjengelig navn, og dette finner ingenting:
+
+```ts
+screen.getByRole('checkbox', { name: 'GET /kunder' });
+```
+
+Feilen ser ut som en feil i testen din, men er egentlig et manglende testoppsett.
+
+## Spør etter rolle og tilgjengelig navn
+
+Rolle pluss tilgjengelig navn er det som ligner mest på hvordan en bruker finner feltet, og det tåler at vi endrer markup internt.
+
+```tsx
+render(<TextField label="E-post" />);
+screen.getByRole('textbox', { name: 'E-post' });
+
+render(<Checkbox label="GET /kunder" />);
+screen.getByRole('checkbox', { name: 'GET /kunder' });
+
+render(<CheckboxGroup legend="Endepunkter" name="endepunkter" options={endepunkter} />);
+screen.getByRole('group', { name: 'Endepunkter' });
+
+render(<RadioGroup legend="Kontaktmåte" name="kontakt" options={valg} />);
+screen.getByRole('radiogroup', { name: 'Kontaktmåte' });
+```
+
+Rollen følger elementet: `textbox` for `TextField` og `TextArea`, `checkbox`, `radio`, `combobox` for `Select` og `Combobox`. Gruppen får `group` fra `CheckboxGroup` og `radiogroup` fra `RadioGroup`, med legend-teksten som navn.
+
+Trenger du å skille to felt med samme rolle, bruk `getByLabel('E-post')`.
+
+## Klikk labelen, ikke inputen
+
+Den native inputen i checkbox og radio er visuelt skjult. CSS-en tegner boksen og haken på labelen i stedet. I Playwright klikker du derfor den synlige teksten, slik en bruker gjør, og sjekker etterpå at inputen ble avmerket:
+
+```ts
+await page.getByText('Nettbank', { exact: true }).click();
+await expect(page.getByLabel('Nettbank')).toBeChecked();
+```
+
+`getByLabel` gir deg selve inputen, og den er `opacity: 0` uten `pointer-events`. Bruk den til å lese tilstand, ikke til å klikke.
+
+Ta med `exact: true` når teksten du søker på er starten av en annen tekst i samme skjema. Uten den treffer «Land» også «Landkode».
+
+## Bruk data-testid bare når rollen ikke holder
+
+Alle skjemakomponentene sender ukjente props videre til den native kontrollen, så `data-testid` virker hvis du trenger det:
+
+```tsx
+render(<Checkbox label="Godta vilkår" data-testid="godta" />);
+screen.getByTestId('godta'); // <input type="checkbox">
+```
+
+To ting er verdt å vite før du velger den utveien. `data-testid` sier ingenting om hvorvidt feltet faktisk er tilgjengelig for en skjermleser, mens et rollesøk med navn feiler hvis koblingen mangler. Og på `CheckboxGroup` og `RadioGroup` havner attributtet på selve gruppe-elementet, ikke på hvert valg, fordi valgene kommer fra `options`-objekter.
+
+## Hva som virker uten web components
+
+Noen komponenter kobler label og felt selv når de rendrer. Resten venter på web-komponenten.
+
+| Virker med React alene | Krever `@sb1/indeks-web` registrert |
+| --- | --- |
+| Label-kobling på enkeltfelt: `Checkbox`, `TextField`, `TextArea`, `Select`, `Combobox` og `DateField` setter `id` og `htmlFor` når de rendrer | Label-kobling for valgene i `CheckboxGroup` og `RadioGroup` |
+| `data-testid` og andre native attributter | `role` og `aria-labelledby` på gruppene |
+| Verdier, `disabled` og `checked` satt direkte på ett felt | `aria-describedby` for hjelpetekst og feilmelding |
+| | `aria-invalid` utledet fra feilmeldingstekst |
+| | Navnet `RadioGroup` genererer når du ikke setter `name` |
+| | Piltast-navigasjon og blokkering av skrivebeskyttede felt |
+| | `disabled` som arves fra gruppen ned til valgene |
+| | Alt som skjer inni `Combobox`, `DateField` og `PhoneNumberField` |
+
+Tabellen er ikke en anbefaling om å klare seg uten importen. Registrer web components, så gjelder venstre kolonne pluss høyre.
+
+## Sett name på CheckboxGroup
+
+`CheckboxGroup` genererer ikke et `name` for deg. Uten `name`-propen får valgene ingen `name`-attributt, og da får verken skjema-innsending eller React Hook Form ut noen verdi:
+
+```tsx
+<CheckboxGroup legend="Endepunkter" name="endepunkter" options={endepunkter} />
+```
+
+`RadioGroup` genererer et navn selv, fordi radioknapper trenger et felles `name` for å utelukke hverandre. Sett det likevel eksplisitt når verdien skal sendes videre.
+
+## Hold de tre versjonene i takt
+
+Med `@sb1/indeks-web` i `devDependencies` bor versjonen nå tre steder: React-pakken i `package.json`, CDN-URL-en i `index.html`, og web-pakken i `devDependencies`. `indeks-react sync-cdn --check` ser bare de to første, så den tredje må du holde i takt selv.
+
+De tre pakkene publiseres alltid med samme versjonsnummer, så regelen er kort: samme versjon overalt. Se [Hold CDN-URL-er i takt](/docs/kom-i-gang/utvikler) for hvordan sync-scriptet settes opp.
