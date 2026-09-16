@@ -22,7 +22,6 @@
         "**/dist",
         "**/storybook-static",
         "indeks-react/sb1-indeks-react-*",
-        "indeks-react/plopfile.cjs",
         "indeks-docs/build",
         "indeks-docs/.docusaurus"
     ],
