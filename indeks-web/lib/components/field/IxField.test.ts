@@ -1043,5 +1043,50 @@ describe('IxField', () => {
             expect(field.querySelector('.ix-field__label-row')).not.toBeNull();
             expect(field.querySelector('.ix-field__tooltip-btn')).toBeNull();
         });
+
+        it('lar en label som allerede er input sin adjacent sibling stå urørt (Checkbox-mønster)', () => {
+            // Checkbox sin egen markup er <div class="ix-checkbox"><input><label>...</label></div>.
+            // checkbox.css styrer :checked/:indeterminate/[aria-invalid]/:disabled/:focus-visible
+            // via input+label-nabokombinatoren — IxField må ikke flytte denne labelen inn i en
+            // label-row, ellers slås all tilstandsstyling av.
+            const field = createField(`
+                <ix-field>
+                    <span data-field="description">Hjelpetekst</span>
+                    <div class="ix-checkbox">
+                        <input type="checkbox" />
+                        <label>Godta vilkårene</label>
+                    </div>
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            const label = field.querySelector('label')!;
+
+            expect(field.querySelector('.ix-field__label-row')).toBeNull();
+            // input og label må fortsatt være direkte, adjacent søsken.
+            expect(input.nextElementSibling).toBe(label);
+            expect(label.htmlFor).toBe(input.id);
+        });
+
+        it('setter tooltip-knapp som labelens neste sibling naar labelen ikke er wrappet i label-row', () => {
+            const field = createField(`
+                <ix-field tooltip="Hjelpetekst" tooltip-label="Mer informasjon">
+                    <div class="ix-checkbox">
+                        <input type="checkbox" />
+                        <label>Godta vilkårene</label>
+                    </div>
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            const label = field.querySelector('label')!;
+            const btn = field.querySelector('.ix-field__tooltip-btn');
+
+            expect(field.querySelector('.ix-field__label-row')).toBeNull();
+            expect(btn).not.toBeNull();
+            // input + label-nabokoblingen må fortsatt være intakt.
+            expect(input.nextElementSibling).toBe(label);
+            expect(label.nextElementSibling).toBe(btn);
+        });
     });
 });
