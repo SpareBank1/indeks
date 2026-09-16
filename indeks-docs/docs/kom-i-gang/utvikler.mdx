@@ -157,6 +157,19 @@ function App() {
 }
 ```
 
+### 4a. Testoppsett
+
+Skriver du tester mot komponentene, trenger du én import i testoppsettet:
+
+```ts
+// vitest.setup.ts
+import '@sb1/indeks-web';
+```
+
+Flere av skjemakomponentene får label-koblingen og ARIA-attributtene sine fra web-komponenten når den mounter. Registrerer du den ikke i testene, finner ikke `getByRole` feltene dine.
+
+[Testing](/docs/kom-i-gang/testing) går gjennom oppsettet, hvordan du spør etter feltene, og hva som virker uten web components.
+
 ### 5. Hold CDN-URL-er i takt
 
 `@sb1/indeks-css` og `@sb1/indeks-web` versjonslåses til samme versjon som `@sb1/indeks-react`. Når Dependabot bumper React-pakken i `package.json`, må CDN-URL-ene i `index.html` og CSS-filene dine oppdateres til samme versjon — ellers kjører nettleseren en annen versjon av CSS og web components enn React-komponentene forventer.
