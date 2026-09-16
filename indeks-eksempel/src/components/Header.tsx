@@ -13,7 +13,7 @@ const Header: React.FC<Props> = ({ activeArea, setActiveArea }) => {
             textDecoration: activeArea === path ? 'underline' : 'none',
             color:
                 activeArea === path
-                    ? 'var(--ix-color-foreground-interactive-active)'
+                    ? 'var(--ix-color-foreground-link-active)'
                     : 'var(--ix-color-foreground-main-subtle)',
             fontWeight: activeArea === path ? 'bold' : 'normal',
         };
