@@ -43,7 +43,7 @@
         "build:color-utils": "node scripts/build-colors/index.js",
         "build:bundle": "postcss ./index.css -o ./dist/index.css",
         "build:tailwind": "postcss ./.build/css/tailwind-utils.css -o ./dist/tailwind.css",
-        "lint": "stylelint \"css/**/*.css\" && node ../scripts/check-css-variables.js css"
+        "lint": "stylelint \"css/**/*.css\" && node ../scripts/check-css-variables.js ."
     },
     "author": "",
     "license": "MIT",
