@@ -64,7 +64,22 @@ screen.getByRole('radiogroup', { name: 'Kontaktmåte' });
 
 Rollen følger elementet: `textbox` for `TextField` og `TextArea`, `checkbox`, `radio`, `combobox` for `Select` og `Combobox`. Gruppen får `group` fra `CheckboxGroup` og `radiogroup` fra `RadioGroup`, med legend-teksten som navn.
 
-Trenger du å skille to felt med samme rolle, bruk `getByLabel('E-post')`.
+## Når getByLabelText holder, og når det ikke gjør det
+
+`getByLabelText` finner de samme elementene som eksemplene over, med samme navn:
+
+```tsx
+screen.getByLabelText('E-post');
+screen.getByLabelText('GET /kunder');
+screen.getByLabelText('Endepunkter');
+screen.getByLabelText('Kontaktmåte');
+```
+
+For `TextField` og `Checkbox` er dette et likeverdig valg. Label og felt kobles med `id`/`htmlFor` uansett hvilken rolle du spør etter, så testen sier det samme uansett query.
+
+For `CheckboxGroup` og `RadioGroup` er det en svakere test, ikke bare en annen syntaks. `getByLabelText` ser etter alle elementer med `aria-labelledby`, ikke bare native formkontroller, så den finner gruppe-elementet — men den bekrefter bare navnet, ikke at elementet faktisk eksponeres som `group` eller `radiogroup` til en skjermleser. Forsvinner `role`-attributtet ved en feil mens `aria-labelledby` blir stående, gir `getByLabelText` fortsatt grønt, mens `getByRole('group', { name })` feiler. Det er nettopp derfor Testing Library selv rangerer `getByRole` øverst i sin egen prioritetsliste over queries.
+
+Trenger du å skille to felt med samme rolle, bruk `getByLabelText('E-post')` alene i stedet for å legge til flere alternativer i `name`.
 
 ## Klikk labelen, ikke inputen
 
