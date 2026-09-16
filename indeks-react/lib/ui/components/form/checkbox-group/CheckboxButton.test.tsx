@@ -67,6 +67,20 @@ describe('CheckboxButton', () => {
             expect(container.querySelector('input')?.getAttribute('name')).toBe('gruppe-name');
         });
 
+        it('eget name på knappen slår context-navnet når gruppen ikke har name', () => {
+            // Hver checkbox som sitt eget felt. Låser presedensen i CheckboxButton:
+            // uten host-name lar WC-en forfatterens navn stå.
+            const { container } = render(
+                <CheckboxGroup legend="Velg">
+                    <CheckboxButton value="on" label="Nettbank" name="nettbank" />
+                    <CheckboxButton value="on" label="Mobilbank" name="mobilbank" />
+                </CheckboxGroup>
+            );
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            expect(inputs[0].name).toBe('nettbank');
+            expect(inputs[1].name).toBe('mobilbank');
+        });
+
         it('WC genererer id på input', () => {
             const { container } = render(
                 <CheckboxGroup legend="Velg" name="g">

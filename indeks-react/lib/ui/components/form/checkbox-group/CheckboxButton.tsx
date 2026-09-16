@@ -18,7 +18,9 @@ export type CheckboxButtonProps = {
 // React-wrapper for én checkbox i en gruppe. Rendrer .ix-checkbox-strukturen
 // (input + label som søsken; indikatoren tegnes som pseudo-element på label av
 // checkbox.css). WC (ix-checkbox-group) eier id-generering, htmlFor-kobling og
-// name-propagering fra host.
+// name-propagering fra host. Setter du `name` her, brukes den i stedet for
+// gruppens — men bare når gruppen selv ikke har `name`, ellers vasker WC-en den
+// bort ved mount.
 //
 // Flere kan velges samtidig: checked leses fra gruppens value-array (medlemskap).
 // onChange videresender det EKTE change-eventet til context, så RHF register/
@@ -27,11 +29,14 @@ export type CheckboxButtonProps = {
 // Per-knapp `disabled` settes direkte som HTML-attributt og bevares av WC
 // gjennom group disable-toggle (se IxCheckboxGroup._ownDisabled).
 export const CheckboxButton = forwardRef<HTMLInputElement, CheckboxButtonProps>(function CheckboxButton(
-    { value, label, disabled, className, id, ...restInputAttrs },
+    { value, label, disabled, className, id, name: ownName, ...restInputAttrs },
     ref
 ): JSX.Element {
     const ctx = useCheckboxGroupContext();
-    const name = ctx?.name;
+    // Eget `name` på knappen vinner over gruppens, så hvert valg kan være sitt
+    // eget felt i skjemaet. Uten host-name lar WC-en disse stå; med host-name
+    // overskriver den dem ved mount (se IxCheckboxGroup._wireInputs).
+    const name = ownName ?? ctx?.name;
     // I register-modus (uncontrolled) eier RHF/native checked — ikke sett den fra
     // React, ellers slåss React-propen mot RHF sine DOM-skrivinger. Kontrollert
     // modus (value satt) setter checked via medlemskap i value-arrayet.

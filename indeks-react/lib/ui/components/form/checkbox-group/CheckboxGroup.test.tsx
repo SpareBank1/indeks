@@ -251,6 +251,158 @@ describe('CheckboxGroup', () => {
             fireEvent.click(inputs[0]);
             expect(firstEvent(onChange).target.value).toBe('a');
         });
+
+        it('setter eget name per option når gruppen ikke har name', () => {
+            const { container } = render(
+                <CheckboxGroup
+                    legend="Velg"
+                    options={[
+                        { value: 'ja', label: 'Nettbank', name: 'nettbank' },
+                        { value: 'ja', label: 'Mobilbank', name: 'mobilbank' },
+                    ]}
+                    ref={createRef<HTMLInputElement>()}
+                />
+            );
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            expect(inputs[0].name).toBe('nettbank');
+            expect(inputs[1].name).toBe('mobilbank');
+        });
+
+        it('gruppens name vinner over name på option', () => {
+            // WC-en overskriver alle input-navn med host-name ved mount
+            // (IxCheckboxGroup._wireInputs). Låser den presedensen.
+            const { container } = render(
+                <CheckboxGroup
+                    legend="Velg"
+                    name="tjenester"
+                    options={[
+                        { value: 'a', label: 'A', name: 'egen-a' },
+                        { value: 'b', label: 'B' },
+                    ]}
+                />
+            );
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            expect(inputs[0].name).toBe('tjenester');
+            expect(inputs[1].name).toBe('tjenester');
+        });
+
+        it('beholder gruppens name på options uten eget name', () => {
+            // Regresjonsvakt: `name={option.name}` som undefined må ikke slette
+            // navnet gruppen alt har satt.
+            const { container } = render(
+                <CheckboxGroup
+                    legend="Velg"
+                    name="tjenester"
+                    options={[
+                        { value: 'a', label: 'A' },
+                        { value: 'b', label: 'B' },
+                    ]}
+                />
+            );
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            expect(inputs[0].name).toBe('tjenester');
+            expect(inputs[1].name).toBe('tjenester');
+        });
+
+        it('advarer i dev når både gruppen og et option har name', () => {
+            const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+            render(
+                <CheckboxGroup
+                    legend="Velg"
+                    name="tjenester"
+                    options={[{ value: 'a', label: 'A', name: 'egen-a' }]}
+                />
+            );
+            expect(warn).toHaveBeenCalledTimes(1);
+            warn.mockRestore();
+        });
+
+        it('advarer ikke når bare én av modellene brukes', () => {
+            const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+            render(<CheckboxGroup legend="Velg" name="tjenester" options={[{ value: 'a', label: 'A' }]} />);
+            render(<CheckboxGroup legend="Velg" options={[{ value: 'on', label: 'A', name: 'egen-a' }]} />);
+            expect(warn).not.toHaveBeenCalled();
+            warn.mockRestore();
+        });
+
+        it('advarer når to options deler value utenfor register-modus', () => {
+            // Kontrollert/ukontrollert modus sporer avkryssing på value, så like
+            // verdier toggler i takt. Per-valg-name frister til `value="on"` overalt.
+            const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+            render(
+                <CheckboxGroup
+                    legend="Velg"
+                    options={[
+                        { value: 'on', label: 'Nettbank', name: 'nettbank' },
+                        { value: 'on', label: 'Mobilbank', name: 'mobilbank' },
+                    ]}
+                />
+            );
+            expect(warn).toHaveBeenCalledTimes(1);
+            expect(warn.mock.calls[0][0]).toContain('samme value');
+            warn.mockRestore();
+        });
+
+        it('advarer ikke om like verdier i register-modus (RHF eier checked)', () => {
+            const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+            render(
+                <CheckboxGroup
+                    legend="Velg"
+                    ref={createRef<HTMLInputElement>()}
+                    options={[
+                        { value: 'on', label: 'Nettbank', name: 'nettbank' },
+                        { value: 'on', label: 'Mobilbank', name: 'mobilbank' },
+                    ]}
+                />
+            );
+            expect(warn).not.toHaveBeenCalled();
+            warn.mockRestore();
+        });
+    });
+
+    describe('innsending', () => {
+        // Beviset på at modellene faktisk løser det de skal: hva FormData får ut.
+        it('per-option name gir ett felt per avkrysset valg', () => {
+            // Register-modus: RHF/DOM eier checked, så `value="on"` på hvert valg er
+            // trygt. Det er den idiomatiske koblingen for denne modellen.
+            const { container } = render(
+                <form>
+                    <CheckboxGroup
+                        legend="Tjenester"
+                        ref={createRef<HTMLInputElement>()}
+                        options={[
+                            { value: 'on', label: 'Nettbank', name: 'nettbank' },
+                            { value: 'on', label: 'Mobilbank', name: 'mobilbank' },
+                        ]}
+                    />
+                </form>
+            );
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            fireEvent.click(inputs[0]);
+            const data = new FormData(container.querySelector('form') as HTMLFormElement);
+            expect(Array.from(data.keys())).toEqual(['nettbank']);
+            expect(data.get('nettbank')).toBe('on');
+        });
+
+        it('gruppe-name gir flere verdier under ett felt', () => {
+            const { container } = render(
+                <form>
+                    <CheckboxGroup
+                        legend="Tjenester"
+                        name="tjenester"
+                        options={[
+                            { value: 'nettbank', label: 'Nettbank' },
+                            { value: 'mobilbank', label: 'Mobilbank' },
+                        ]}
+                    />
+                </form>
+            );
+            const inputs = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+            fireEvent.click(inputs[0]);
+            fireEvent.click(inputs[1]);
+            const data = new FormData(container.querySelector('form') as HTMLFormElement);
+            expect(data.getAll('tjenester')).toEqual(['nettbank', 'mobilbank']);
+        });
     });
 
     describe('videresending av øvrige attributter', () => {

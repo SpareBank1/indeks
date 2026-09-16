@@ -1,6 +1,7 @@
 import { cn } from '../../../../cn';
 import {
     forwardRef,
+    useEffect,
     useState,
     type ChangeEventHandler,
     type FocusEventHandler,
@@ -15,6 +16,16 @@ import { toggleValue } from './toggle-value';
 export type CheckboxOption = {
     value: string;
     label: string;
+    /**
+     * Eget `name` på denne checkboxen, for skjemaer der hvert valg er sitt eget
+     * felt (`nettbank=on`) framfor flere verdier under ett navn. Utelates når
+     * gruppen har `name` — se forklaringen på `name` der.
+     *
+     * `value` må fortsatt være unik per valg utenfor register-modus: kontrollert
+     * og ukontrollert modus sporer avkryssing på `value`, så to valg med samme
+     * verdi toggler i takt.
+     */
+    name?: string;
 };
 
 /*
@@ -31,6 +42,11 @@ export interface CheckboxGroupProps extends Omit<HTMLAttributes<HTMLElement>, 'o
     legend: string;
     description?: string;
     errorMessage?: string;
+    /**
+     * Felles `name` for alle valgene, så de sendes inn som flere verdier under
+     * ett felt. Skal hvert valg være sitt eget felt i stedet, dropp denne og sett
+     * `name` per option. Setter du begge, vinner denne.
+     */
     name?: string;
     value?: string[];
     defaultValue?: string[];
@@ -111,10 +127,40 @@ export const CheckboxGroup = forwardRef<HTMLInputElement, CheckboxGroupProps>(fu
         onChange?.(event);
     };
 
+    // De to name-modellene utelukker hverandre: har gruppen `name`, overskriver
+    // web-komponenten alle input-navn med den ved mount, så per-valg-navnene blir
+    // borte uten spor. Si det i dev framfor å la utvikleren lete.
+    const hasOptionName = options?.some((option) => option.name) ?? false;
+    // Kontrollert og ren uncontrolled modus sporer avkryssing på `value` (medlemskap
+    // i arrayet). Deler to valg verdi, slår de av og på i takt. Per-valg-`name`
+    // frister til `value="on"` overalt, så si det her framfor å la utvikleren feilsøke
+    // to checkboxer som følger hverandre.
+    const hasDuplicateValue = options ? new Set(options.map((option) => option.value)).size < options.length : false;
+    useEffect(() => {
+        if (!import.meta.env.DEV) return;
+        if (name && hasOptionName) {
+            console.warn(
+                `<CheckboxGroup name="${name}"> har også name på enkeltvalg. Gruppens name overskriver dem — velg én av modellene.`
+            );
+        }
+        if (hasDuplicateValue && !isRegister) {
+            console.warn(
+                '<CheckboxGroup> har flere options med samme value. Kontrollert og ukontrollert modus sporer avkryssing på value, så de toggler i takt. Gi hvert valg egen value, eller koble gruppen med register().'
+            );
+        }
+    }, [name, hasOptionName, hasDuplicateValue, isRegister]);
+
     const dataState = errorMessage ? 'error' : readOnly ? 'readonly' : disabled ? 'disabled' : undefined;
     const renderedChildren = options
         ? options.map((option) => (
-              <CheckboxButton key={option.value} value={option.value} label={option.label} />
+              // Nøkkelen er navnet når valget har eget: i den modellen deler valgene
+              // typisk `value="on"`, så `value` alene er ikke unik.
+              <CheckboxButton
+                  key={option.name ?? option.value}
+                  value={option.value}
+                  label={option.label}
+                  name={option.name}
+              />
           ))
         : children;
 

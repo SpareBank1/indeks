@@ -338,6 +338,33 @@ valgene ligge øverst, men vær klar over at det du legger først, blir valgt of
 En liste med tjue avkryssinger er tung å holde oversikt over. Del den i flere grupper med
 egne legender, eller la brukeren filtrere seg fram til det som er relevant.
 
+### Velg hvor `name` skal stå
+
+En checkbox-gruppe er en visuell gruppering, ikke et gjensidig utelukkende valg. Derfor
+finnes det to måter å navngi feltene, og du velger etter hvordan backend vil ha dataene:
+
+- **`name` på gruppen** gir ett felt med flere verdier: `tjenester=nettbank&tjenester=mobilbank`. Bruk denne når valgene er samme spørsmål besvart flere ganger.
+- **`name` per valg** gir ett felt per avkryssing: `nettbank=on&mobilbank=on`. Bruk denne når hvert valg er sitt eget felt i skjemaet, som når backend forventer én boolsk verdi per tjeneste.
+
+To ting å vite når du bruker per-valg-`name`:
+
+- Modellene kan ikke kombineres. Setter du `name` på gruppen også, overskriver web-komponenten alle input-navn med gruppens ved mount. Du får en advarsel i dev.
+- `value` må fortsatt være unik per valg i kontrollert og ukontrollert modus, fordi gruppen sporer avkryssing på `value`. Kobler du gruppen med `register()`, eier React Hook Form `checked`, og da kan alle valgene ha `value="on"`.
+
+```tsx
+<CheckboxGroup
+    legend="Hvilke tjenester vil du ha?"
+    {...register('tjenester')}
+    options={[
+        { value: 'on', label: 'Nettbank', name: 'nettbank' },
+        { value: 'on', label: 'Mobilbank', name: 'mobilbank' },
+    ]}
+/>
+```
+
+Radio er ikke slik: der må alle inputs dele `name` for at nettleseren skal håndheve at bare
+ett valg er aktivt. `RadioGroup` har derfor ingen per-valg-`name`.
+
 ### Designvalg
 
 CheckboxGroup bruker `role="group"` framfor `<fieldset>`, `value` er et array, og
@@ -430,7 +457,7 @@ Når du bruker `<ix-checkbox-group>` eller React-komponenten, settes dette opp f
 | `legend` | `string` | Ja | | Gruppens label. Vises og leses opp av skjermlesere |
 | `description` | `string` | Nei | | Hjelpetekst for hele gruppen |
 | `errorMessage` | `string` | Nei | | Feilmelding. Trigger `aria-invalid` automatisk når satt |
-| `name` | `string` | Nei | | `name`-attributtet på alle inputs. Propageres til hver input når satt |
+| `name` | `string` | Nei | | Felles `name` på alle inputs, så valgene sendes inn som flere verdier under ett felt. Overskriver `name` satt per valg . Se [Velg hvor `name` skal stå](#velg-hvor-name-skal-stå) |
 | `value` | `string[]` | Nei | | Kontrollert modus: hvilke alternativer som er valgt. Bruk sammen med `onChange` |
 | `defaultValue` | `string[]` | Nei | `[]` | Ukontrollert modus: initielt valgte verdier. Brukeren kan endre fritt |
 | `onChange` | `ChangeEventHandler<HTMLInputElement>` | Nei | | Event-basert. Kalles med det native change-eventet — toggl-verdien i `event.target.value`, av/på i `event.target.checked`. RHF samler de avmerkede verdiene til et `string[]`; i kontrollert bruk bygger du selv neste array. Lar `{...register()}` spres rett på |
@@ -465,6 +492,7 @@ To unntak:
 |------|------|---------|-------------|
 | `value` | `string` | Ja | Verdien som settes på input |
 | `label` | `string` | Ja | Synlig labeltekst |
+| `name` | `string` | Nei | Eget `name` på denne checkboxen, så valget blir sitt eget felt i skjemaet. Utelates når gruppen har `name` . Se [Velg hvor `name` skal stå](#velg-hvor-name-skal-stå) |
 
 ### CheckboxButtonProps
 
@@ -472,11 +500,12 @@ To unntak:
 |------|------|---------|----------|-------------|
 | `value` | `string` | Ja | | Verdien som settes på input. Identifiserer alternativet i gruppens `value`-array |
 | `label` | `string` | Ja | | Synlig labeltekst |
+| `name` | `string` | Nei | | Eget `name` på denne checkboxen. Vinner over gruppens context-navn, men bare når gruppen selv ikke har `name` . Se [Velg hvor `name` skal stå](#velg-hvor-name-skal-stå) |
 | `disabled` | `boolean` | Nei | `false` | Deaktiverer denne enkelt-knappen (kommer i tillegg til gruppe-disabled) |
 | `className` | `string` | Nei | | CSS-klasse på wrapper-div |
 | `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet |
 
-I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocus`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten og sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
+I tillegg støttes alle standard HTML input-attributter (`id`, `autoFocus`, `defaultChecked`, `aria-*`, osv.) som settes direkte på komponenten og sendes videre til `<input>`. `value`, `type`, `size`, `children` og `onChange` håndteres av komponenten.
 
 `CheckboxButton` er laget for bruk inne i `CheckboxGroup`. Den har ingen `onChange`-prop, fordi gruppen håndterer endringene. Trenger du én enkeltstående checkbox, bruk `Checkbox`.
 
