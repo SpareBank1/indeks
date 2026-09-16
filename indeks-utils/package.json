@@ -34,7 +34,6 @@
         "access": "public"
     },
     "scripts": {
-        "dev": "echo not implemented",
         "build": "rm -rf ./dist ./.build && pnpm run build:utils && pnpm run build:color-utils && pnpm run build:bundle && pnpm run build:tailwind",
         "test": "vitest run",
         "update-packages": "ncu -i --format group",

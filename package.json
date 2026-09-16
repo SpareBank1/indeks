@@ -14,7 +14,6 @@
         "test": "pnpm turbo run test -- --run",
         "update-packages": "pnpm -r update",
         "changeset": "changeset",
-        "version": "changeset version",
         "release": "changeset version && pnpm build && changeset publish",
         "ci:publish": "pnpm turbo run build --filter=@sb1/indeks-tokens --filter=@sb1/indeks-utils --filter=@sb1/indeks-css --filter=@sb1/indeks-react --filter=@sb1/indeks-web && changeset publish",
         "ci:version": "pnpm changeset version",
