@@ -516,6 +516,97 @@ describe('run — gammel URL-form på disk', () => {
     });
 });
 
+// Kjernen i den nye saken: --check leste tidligere aldri node_modules/<pkg>,
+// så et prosjekt der CDN-URL-ene allerede pekte riktig, men den npm-installerte
+// pakken sto på en annen versjon, fikk et falskt grønt lys.
+describe('run — --check ser npm-installert versjon, ikke bare CDN-URL-er', () => {
+    function skrivInstallertPakke(navn: string, versjon: string) {
+        mkdirSync(join(tmp, 'node_modules', navn), { recursive: true });
+        writeFileSync(join(tmp, 'node_modules', navn, 'package.json'), JSON.stringify({ name: navn, version: versjon }));
+    }
+
+    test('feiler med exit 1 når npm-installert web-versjon avviker, selv om alle CDN-URL-er matcher', () => {
+        writeFileSync(join(tmp, 'index.html'), `<link href="https://cdn.sparebank1.no/indeks/css/${OWN_VERSION}/index.css">`);
+        writeFileSync(
+            join(tmp, 'package.json'),
+            JSON.stringify({ name: 'demo', dependencies: { '@sb1/indeks-web': '^0.1.0' } })
+        );
+        skrivInstallertPakke('@sb1/indeks-web', '0.1.0');
+        const output = fangConsole();
+
+        const exit = run(['node', 'bin', 'sync-cdn', '--root', tmp, '--check']);
+
+        expect(exit).toBe(1);
+        expect(output()).toContain(`web: npm 0.1.0 installert, forventet ${OWN_VERSION} ✗`);
+    });
+
+    test('gir exit 0 når npm-installert versjon matcher og alle CDN-URL-er matcher', () => {
+        writeFileSync(join(tmp, 'index.html'), `<link href="https://cdn.sparebank1.no/indeks/css/${OWN_VERSION}/index.css">`);
+        writeFileSync(
+            join(tmp, 'package.json'),
+            JSON.stringify({ name: 'demo', dependencies: { '@sb1/indeks-css': '^0.1.0' } })
+        );
+        skrivInstallertPakke('@sb1/indeks-css', OWN_VERSION);
+        fangConsole();
+
+        const exit = run(['node', 'bin', 'sync-cdn', '--root', tmp, '--check']);
+
+        expect(exit).toBe(0);
+    });
+
+    test('uendret oppførsel når pakken ikke er npm-installert i det hele tatt', () => {
+        writeFileSync(join(tmp, 'index.html'), `<link href="https://cdn.sparebank1.no/indeks/css/${OWN_VERSION}/index.css">`);
+        fangConsole();
+
+        const exit = run(['node', 'bin', 'sync-cdn', '--root', tmp, '--check']);
+
+        expect(exit).toBe(0);
+    });
+
+    test('teller ikke som avvik når pakken bare er deklarert, ikke faktisk installert', () => {
+        writeFileSync(join(tmp, 'index.html'), `<link href="https://cdn.sparebank1.no/indeks/css/${OWN_VERSION}/index.css">`);
+        writeFileSync(
+            join(tmp, 'package.json'),
+            JSON.stringify({ name: 'demo', dependencies: { '@sb1/indeks-web': '^0.1.0' } })
+        );
+        // Ingen node_modules/@sb1/indeks-web/package.json — deklarert, men ikke installert.
+        fangConsole();
+
+        const exit = run(['node', 'bin', 'sync-cdn', '--root', tmp, '--check']);
+
+        expect(exit).toBe(0);
+    });
+
+    test('npm-avvik feiler CI også når det ikke finnes noen CDN-URL-er', () => {
+        writeFileSync(join(tmp, 'index.html'), `<link href="/lokal.css">`);
+        writeFileSync(
+            join(tmp, 'package.json'),
+            JSON.stringify({ name: 'demo', dependencies: { '@sb1/indeks-web': '^0.1.0' } })
+        );
+        skrivInstallertPakke('@sb1/indeks-web', '0.1.0');
+        const output = fangConsole();
+
+        const exit = run(['node', 'bin', 'sync-cdn', '--root', tmp, '--check']);
+
+        expect(exit).toBe(1);
+        expect(output()).toContain(`web: npm 0.1.0 installert, forventet ${OWN_VERSION} ✗`);
+    });
+
+    test('vanlig (ikke-check) kjøring feiler ikke på npm-versjonsavvik', () => {
+        writeFileSync(join(tmp, 'index.html'), `<link href="https://cdn.sparebank1.no/indeks/css/0.1.0/index.css">`);
+        writeFileSync(
+            join(tmp, 'package.json'),
+            JSON.stringify({ name: 'demo', dependencies: { '@sb1/indeks-web': '^0.1.0' } })
+        );
+        skrivInstallertPakke('@sb1/indeks-web', '0.1.0');
+        fangConsole();
+
+        const exit = run(['node', 'bin', 'sync-cdn', '--root', tmp]);
+
+        expect(exit).toBe(0);
+    });
+});
+
 describe('findSyncCommand', () => {
     function skrivScripts(scripts: Record<string, string>) {
         writeFileSync(join(tmp, 'package.json'), JSON.stringify({ name: 'demo', scripts }));

@@ -288,7 +288,10 @@ export async function cdnHasVersion(type, version, { timeoutMs = NETWORK_TIMEOUT
 // --- Pakkestatus -----------------------------------------------------------
 
 // Leser konsumentens package.json og node_modules for å svare på om pakken
-// hentes fra npm i tillegg til (eller i stedet for) CDN.
+// hentes fra npm i tillegg til (eller i stedet for) CDN. Returnerer et
+// strukturert objekt (ikke en formatert streng) slik at kallere som skal
+// sammenligne versjonstall — se findNpmVersionMismatches — ikke må parse en
+// menneskelesbar streng tilbake til data.
 function readNpmUsage(root, name) {
     let declared;
     try {
@@ -306,7 +309,46 @@ function readNpmUsage(root, name) {
         installed = undefined;
     }
     if (!declared && !installed) return undefined;
+    return { declared, installed };
+}
+
+// Formaterer readNpmUsage()s resultat til Pakkestatus-linjen. Egen funksjon
+// slik at det strukturerte resultatet kan brukes til tallsammenligning andre
+// steder (findNpmVersionMismatches) uten å gå via denne teksten.
+function formatNpmUsage(usage) {
+    if (!usage) return undefined;
+    const { declared, installed } = usage;
     return installed ? `npm ${installed}${declared ? ` (${declared})` : ''}` : `npm (${declared})`;
+}
+
+// --check skal fange versjonsavvik i npm-installert css/web, ikke bare i
+// CDN-URL-er — versjonen «bor» i tre steder (react sin package.json, CDN-URL-er
+// i kildekoden, og node_modules/<pkg> sin egen versjon), og alle tre skal
+// stemme for grønt lys. Uten en `installed`-versjon er det ikke noe konkret
+// tall å sammenligne (bare deklarert i package.json, ikke faktisk installert),
+// så det telles bevisst ikke som avvik — vi feiler ikke CI på noe vi ikke kan
+// bekrefte.
+function findNpmVersionMismatches(root, targetVersion) {
+    const mismatches = [];
+    for (const type of SYNCED_TYPES) {
+        const usage = readNpmUsage(root, PACKAGE_NAMES[type]);
+        if (usage?.installed && usage.installed !== targetVersion) {
+            mismatches.push({ type, from: usage.installed, to: targetVersion });
+        }
+    }
+    return mismatches;
+}
+
+function formatNpmCheck(mismatch) {
+    return `    ${mismatch.type}: npm ${mismatch.from} installert, forventet ${mismatch.to} ✗`;
+}
+
+function printNpmMismatches(mismatches, targetVersion) {
+    console.log('');
+    console.log(`npm-installert versjon stemmer ikke med @sb1/indeks-react (${targetVersion}):`);
+    for (const mismatch of mismatches) {
+        console.log(formatNpmCheck(mismatch));
+    }
 }
 
 // Konsumenten navngir scriptet sitt selv («sync-indeks» er bare det vi anbefaler
@@ -343,7 +385,9 @@ function printPackageStatus({ version, cdnHits, root, latest, cdnHas, offline, s
     const rows = [[REACT_PACKAGE, `npm ${version} — installert, styrer versjonen under`]];
     for (const type of SYNCED_TYPES) {
         const name = PACKAGE_NAMES[type];
-        const sources = [formatCdnUsage(type, cdnHits[type], version), readNpmUsage(root, name)].filter(Boolean);
+        const sources = [formatCdnUsage(type, cdnHits[type], version), formatNpmUsage(readNpmUsage(root, name))].filter(
+            Boolean
+        );
         rows.push([name, sources.length > 0 ? sources.join(' · ') : 'ikke i bruk']);
     }
 
@@ -418,7 +462,9 @@ function printHelp() {
 Holder CDN-URL-er for @sb1/indeks-css og @sb1/indeks-web i takt med
 installert @sb1/indeks-react-versjon, og rapporterer status for de tre.
 
-  --check         Exit 1 og list URL-er med ulik versjon, uten å skrive. For CI.
+  --check         Exit 1 og list URL-er med ulik versjon, uten å skrive. Feiler
+                  også hvis npm-installert @sb1/indeks-css eller -web avviker
+                  fra @sb1/indeks-react, selv om alle CDN-URL-er matcher. For CI.
   --dry-run       Vis hva som ville blitt endret uten å skrive.
   --require-urls  Exit 1 hvis ingen CDN-URL-er ble funnet. For prosjekter som
                   vet at de bruker CDN. Default: ingen funn er OK, fordi et
@@ -527,6 +573,12 @@ export function run(argv, { cwd = process.cwd(), write = true, latest, cdnHas = 
 
     const syncCommand = findSyncCommand(root);
 
+    // Kun relevant i --check: et npm-installert avvik skal telle likt med et
+    // CDN-URL-avvik, uansett hvilken av grenene under vi ender i — inkludert
+    // «alle CDN-URL-er matcher allerede», som er nettopp scenariet der dette
+    // tidligere ga et falskt grønt lys.
+    const npmMismatches = args.check ? findNpmVersionMismatches(root, version) : [];
+
     if (filesChanged > 0) console.log('');
     printPackageStatus({ version, cdnHits, root, latest, cdnHas, offline: args.offline, syncCommand });
     console.log('');
@@ -537,7 +589,7 @@ export function run(argv, { cwd = process.cwd(), write = true, latest, cdnHas = 
         console.warn(`Advarsel: ingen filer ble skannet under ${root}.`);
         console.warn('Sjekk --root, --include og --exclude — mappen kan også være tom.');
         printCdnSetup(version);
-        return finish(args, ignoredHits, 0);
+        return finish(args, ignoredHits, 0, npmMismatches, version);
     }
 
     // Filer ble lest, men ingen av dem nevner css/web på CDN. Da er det ikke
@@ -552,13 +604,18 @@ export function run(argv, { cwd = process.cwd(), write = true, latest, cdnHas = 
         console.log("Bruker prosjektet npm-import (import '@sb1/indeks-css') er dette som forventet — da");
         console.log('trenger du ikke sync-cdn, og «sync-indeks»/«prebuild» kan fjernes fra package.json.');
         printCdnSetup(version);
-        return finish(args, ignoredHits, 0);
+        return finish(args, ignoredHits, 0, npmMismatches, version);
     }
 
     if (urlsChanged === 0) {
         console.log(
             `Alle ${urlsFound} CDN-URL-er i ${filesWithSyncedUrls} fil(er) bruker samme versjon som installert @sb1/indeks-react (${version}).`
         );
+        if (npmMismatches.length > 0) {
+            printNpmMismatches(npmMismatches, version);
+            if (ignoredHits.length > 0) printIgnored(ignoredHits);
+            return 1;
+        }
         if (ignoredHits.length > 0) printIgnored(ignoredHits);
         return 0;
     }
@@ -575,6 +632,7 @@ export function run(argv, { cwd = process.cwd(), write = true, latest, cdnHas = 
             console.log('CDN-en og migreres til …/css/<versjon>/index.css.');
         }
         console.log(`Kjør \`${syncCommand}\` for å oppdatere.`);
+        if (npmMismatches.length > 0) printNpmMismatches(npmMismatches, version);
         if (ignoredHits.length > 0) printIgnored(ignoredHits);
         return 1;
     }
@@ -593,9 +651,14 @@ export function run(argv, { cwd = process.cwd(), write = true, latest, cdnHas = 
     return 0;
 }
 
-// Felles hale for de to «fant ingenting»-utfallene: rapporter ignorerte
-// URL-er, og la --require-urls avgjøre exit-koden.
-function finish(args, ignoredHits, exitCode) {
+// Felles hale for de to «fant ingenting»-utfallene: rapporter npm-versjonsavvik
+// (kun relevant i --check) og ignorerte URL-er, og la --require-urls avgjøre
+// exit-koden til slutt.
+function finish(args, ignoredHits, exitCode, npmMismatches = [], version) {
+    if (npmMismatches.length > 0) {
+        printNpmMismatches(npmMismatches, version);
+        exitCode = 1;
+    }
     if (ignoredHits.length > 0) printIgnored(ignoredHits);
     if (args.requireUrls) {
         console.error('');
