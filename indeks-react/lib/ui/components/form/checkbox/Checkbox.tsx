@@ -50,7 +50,11 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
     const modifierClasses = disabled ? 'ix-checkbox--disabled' : '';
 
     const checkboxContent = (
-        <div className={`ix-checkbox${modifierClasses ? ` ${modifierClasses}` : ''}`}>
+        <div
+            className={`ix-checkbox${modifierClasses ? ` ${modifierClasses}` : ''}${
+                className && !hasFieldWrapper ? ` ${className}` : ''
+            }`}
+        >
             <input
                 ref={inputRef}
                 {...inputAttrs}

@@ -405,6 +405,8 @@ Denne versjonen støtter `min`/`max`, men ikke sperring av enkeltdager eller hel
 | `id` | `string` | Nei | | Id på inputfeltet. Genereres automatisk om utelatt |
 | `ref` | `Ref<HTMLInputElement>` | Nei | | Register-kompatibel proxy: `ref.value` gir/setter ISO, `ref.focus()` fokuserer feltet. (Ikke `ix-date-field`-elementet — verdien eies av web-komponenten) |
 
+I tillegg støttes øvrige HTML-attributter (`aria-*`, `data-*`, `tabIndex`, osv.) som settes direkte på komponenten. De sendes videre til `<ix-date-field>`-**host-elementet**, ikke den native inputen — web-komponenten eier all ARIA/tastatur/state der.
+
 </TabItem>
 </Tabs>
 

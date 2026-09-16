@@ -355,12 +355,12 @@ Trenger checkboxen hjelpetekst, feilmelding eller tooltip, legger du den inni `<
 | `tooltip` | `string` | Nei | | Tooltip-innhold. Gir en info-knapp i label-raden |
 | `tooltipLabel` | `string` | Nei | | Tilgjengelig navn på info-knappen. Må settes når `tooltip` er satt, og skal oversettes |
 | `tooltipPlacement` | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'right'` | Nei | `'top'` | Plassering av tooltipen |
-| `className` | `string` | Nei | | CSS-klasse på `<ix-field>`. Har ingen effekt uten field-wrapper, se under |
+| `className` | `string` | Nei | | CSS-klasse på ytterste element: `<ix-field>` når komponenten har en field-wrapper (se under), ellers direkte på `.ix-checkbox`-wrapperen |
 | `ref` | `Ref<HTMLInputElement>` | Nei | | Ref videresendes til `<input>`-elementet |
 
 I tillegg støttes alle standard HTML input-attributter (`name`, `value`, `checked`, `defaultChecked`, `disabled`, `required`, `onChange`, `onBlur`, `id`, `aria-*`, osv.) som settes direkte på komponenten og sendes videre til `<input>`. `type` håndteres av komponenten.
 
-`description`, `errorMessage` og `tooltip` er det som avgjør om komponenten wrappes i `<ix-field>`. Er ingen av dem satt, rendres bare `.ix-checkbox`-blokken, og `className` har ingenting å sitte på. Trenger du en klasse på selve wrapperen uten hjelpetekst, sett den i HTML i stedet.
+`description`, `errorMessage` og `tooltip` er det som avgjør om komponenten wrappes i `<ix-field>`. Er ingen av dem satt, rendres bare `.ix-checkbox`-blokken, og `className` legges da rett på den i stedet for på `<ix-field>`.
 
 Skal flere checkboxer høre sammen under en felles legend, bruk [CheckboxGroup](./checkbox-group) framfor flere `Checkbox`.
 

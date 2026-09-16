@@ -545,6 +545,8 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 | `className` | `string` | Nei | | CSS-klasse på ytterste wrapper (`.ix-field`) |
 | `ref` | `Ref<IxCombobox>` | Nei | | Ref videresendes til `<ix-combobox>`-elementet |
 
+I tillegg støttes øvrige HTML-attributter (`aria-*`, `data-*`, `tabIndex`, osv.) som settes direkte på komponenten. De sendes videre til `<ix-combobox>`-**host-elementet**, ikke den indre inputen — web-komponenten eier all ARIA/tastatur/state der.
+
 ### ComboboxOption
 
 | Prop | Type | Påkrevd | Beskrivelse |
