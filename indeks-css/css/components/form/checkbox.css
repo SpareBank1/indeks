@@ -174,6 +174,24 @@
     box-shadow: none;
 }
 
+/* Hover ved error: behold rød boks/kant. Uten dette vinner den generelle
+ * hover-regelen over (0,3,2) mot error-regelen over (0,2,2). Speiler
+ * radio-group.css og checkbox-group.css (chip). */
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:not(:disabled) + label:hover,
+:where(.ix-checkbox__input[aria-invalid='true']:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);
+    --ii-checkbox-box-border: var(--ix-color-border-danger-default);
+}
+
+/* Hover ved error + valgt/indeterminate: behold den fylte danger-boksen. */
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked:not(:disabled) + label:hover,
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:indeterminate:not(:disabled) + label:hover,
+:where(.ix-checkbox__input[aria-invalid='true']:checked:not(:disabled)) + :where(.ix-checkbox__label:hover),
+:where(.ix-checkbox__input[aria-invalid='true']:indeterminate:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-default);
+    --ii-checkbox-box-border: var(--ix-color-fill-danger-default);
+}
+
 /* ── Disabled ────────────────────────────────────────────────────────────── */
 
 :where(.ix-checkbox--disabled) {
