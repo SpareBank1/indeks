@@ -106,7 +106,7 @@
      * delelinjer. Vertikal luft mellom seksjonene kommer fra body/footer over. */
     padding: var(--ix-spacing-lg) var(--ix-spacing-lg) 0;
     /* Reserver plass i inline-end så en lang tittel aldri løper under den
-     * absolutt-plasserte lukk-knappen (44 px touch-mål + luft mot teksten). */
+     * absolutt-plasserte lukk-knappen. */
     padding-inline-end: calc(var(--ix-spacing-lg) + 44px);
 }
 
@@ -127,19 +127,17 @@
 
 /* Ikon-knapp for lukking. Absolutt plassert i modalens øvre høyre hjørne (relativt
  * til <dialog>, som alltid er et posisjonert element), så den står i hjørnet
- * uansett tittellengde og selv uten header. Touch-mål min. 44×44 px (WCAG 2.5.8). */
+ * uansett tittellengde og selv uten header. */
 :where(.ix-modal__close) {
     position: absolute;
     /* Trekk knappen litt inn så den optiske kanten matcher header-paddingen,
      * uten å ofre touch-flaten. */
-    inset-block-start: calc(var(--ix-spacing-lg) - var(--ix-spacing-xs));
-    inset-inline-end: calc(var(--ix-spacing-lg) - var(--ix-spacing-xs));
+    inset-block-start: var(--ix-spacing-sm);
+    inset-inline-end: var(--ix-spacing-sm);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    min-width: 44px;
-    min-height: 44px;
     padding: var(--ix-spacing-xs);
     color: var(--ix-color-foreground-main-default);
     background: none;
