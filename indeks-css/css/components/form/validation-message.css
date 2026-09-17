@@ -5,10 +5,10 @@
  * — og skjules visuelt med :empty. <ix-field>/<ix-radio-group>/<ix-checkbox-group>
  * kobler det til inputen via aria-describedby og setter aria-live="polite".
  *
- * Ikonet er en badge (<ix-icon data-badge>): en glyf på en farget sirkel. Den
+ * Ikonet er en badge (<ix-icon data-badge>): en glyf på en farget oktagon. Den
  * gjenbruker badge-primitiven i icons/icon.css. `data-status="danger"` kobler
  * --ix-color-status-* (se @sb1/indeks-utils/css/status-colors.css) slik at
- * sirkelen får danger-fyll automatisk. Badgen krympes fra standard 32px til en
+ * badgen får danger-fyll automatisk. Badgen krympes fra standard 32px til en
  * inline-vennlig størrelse som flukter med teksten (--ix-font-size-md ≈ 16px).
  *
  * Denne komponenten har ingen egen web component — kun klassen/attributtet
@@ -19,7 +19,7 @@
 :where([data-field='error']) {
     display: inline-flex;
     align-items: center;
-    gap: var(--ix-spacing-2xs);
+    gap: var(--ix-spacing-xs);
     font-size: var(--ix-font-size-md);
     line-height: 150%;
     color: var(--ix-color-foreground-danger-default);
@@ -31,8 +31,8 @@
     display: none;
 }
 
-/* Badge-ikonet: krymp sirkel + glyf til inline-størrelse. `data-status="danger"`
-   på selve ikonet fyller sirkelen med danger-farge (icon.css badge-regel). */
+/* Badge-ikonet: krymp badge + glyf til inline-størrelse. `data-status="danger"`
+   på selve ikonet fyller badgen med danger-farge (icon.css badge-regel). */
 :where([data-field='error'] ix-icon[data-badge]) {
     flex: 0 0 auto;
     --ix-icon-badge-size: var(--ix-font-size-lg);
