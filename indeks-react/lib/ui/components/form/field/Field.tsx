@@ -3,7 +3,7 @@ import { Label } from '../label/Label';
 import { ValidationMessage } from '../validation-message/ValidationMessage';
 import type { IxField } from '@sb1/indeks-web';
 
-export type FieldProps = {
+type FieldOwnProps = {
     className?: string;
     label?: string;
     children: ReactNode;
@@ -16,6 +16,13 @@ export type FieldProps = {
     tooltipLabel?: string;
     tooltipPlacement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
 };
+
+/**
+ * `Field.tsx` sender allerede `...restProps` videre til `<ix-field>` (host-elementet)
+ * i praksis — typen tillater nå det samme, slik at konsumenter kan sende native/aria/
+ * data-attributter (`data-testid`, `aria-describedby`, osv.) uten TS-feil.
+ */
+export type FieldProps = FieldOwnProps & Omit<React.HTMLAttributes<HTMLElement>, 'className' | 'children'>;
 
 export const Field = forwardRef<IxField, FieldProps>(function Field({
     className,

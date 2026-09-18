@@ -425,6 +425,8 @@ Tab flytter fokus fra landvelger til nummerfelt (samme som leserekkefølgen). La
 | `id` | `string` | Nei | | id på gruppen |
 | `ref` | `Ref<IxPhoneNumberField>` | Nei | | Ref videresendes til `<ix-phone-number-field>` |
 
+I tillegg støttes øvrige HTML-attributter (`aria-*`, `data-*`, `tabIndex`, osv.) som settes direkte på komponenten. De sendes videre til `<ix-phone-number-field>`-**host-elementet**, ikke de indre delfeltene.
+
 ### FieldRegistration
 
 Struktur-typen `countryField`/`numberField` tar. Matcher det React Hook Form `register()` returnerer, men er en ren struktur-type. Pakka har ingen RHF-avhengighet, så egne handlers eller en `<Controller>`-kobling fungerer også.

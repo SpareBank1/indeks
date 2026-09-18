@@ -41,7 +41,7 @@ export type CountryOption = {
 /** Språk for den innebygde landlista i web-komponenten. */
 export type CountryLocale = 'nb' | 'nn' | 'en';
 
-export type PhoneNumberFieldProps = {
+type PhoneNumberFieldOwnProps = {
     /** Synlig felles label over begge feltene (f.eks. «Mobilnummer»). */
     label: string;
     /** Felles hjelpetekst under label. */
@@ -125,6 +125,14 @@ export type PhoneNumberFieldProps = {
     id?: string;
 };
 
+/**
+ * Øvrige native/aria/data-attributter spres på `<ix-phone-number-field>`
+ * (host-elementet), ikke de indre delfeltene — WC-en eier gruppe-ARIA. Se
+ * `TextField.tsx` for det samme mønsteret på en native input.
+ */
+export type PhoneNumberFieldProps = PhoneNumberFieldOwnProps &
+    Omit<React.HTMLAttributes<HTMLElement>, keyof PhoneNumberFieldOwnProps | 'children'>;
+
 // React-laget er tynt: <ix-phone-number-field> (WC) eier alt innholds-relatert —
 // gruppe-ARIA (role=group, aria-labelledby/describedby, aria-invalid), propagering
 // av disabled/readonly/required, landlista (injiseres i den tomme <Combobox>),
@@ -158,6 +166,7 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
         required,
         className,
         id,
+        ...restProps
     },
     ref
 ) {
@@ -167,6 +176,7 @@ export const PhoneNumberField = forwardRef<IxPhoneNumberFieldElement, PhoneNumbe
 
     return (
         <ix-phone-number-field
+            {...restProps}
             ref={ref}
             id={groupId}
             class={className}

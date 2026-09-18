@@ -11,7 +11,7 @@ export type ComboboxOption = {
     disabled?: boolean;
 };
 
-export type ComboboxProps = {
+type ComboboxOwnProps = {
     /** Synlig label over feltet. Utelates hvis `ariaLabel` brukes i stedet. */
     label?: string;
     /** Tilgjengelig navn når det ikke finnes en synlig label. */
@@ -75,6 +75,14 @@ export type ComboboxProps = {
 };
 
 /**
+ * Øvrige native/aria/data-attributter spres på `<ix-combobox>` (host-elementet),
+ * ikke den indre inputen — ix-combobox eier all ARIA/tastatur/state. Se
+ * `TextField.tsx` for det samme mønsteret på en native input.
+ */
+export type ComboboxProps = ComboboxOwnProps &
+    Omit<React.HTMLAttributes<HTMLElement>, keyof ComboboxOwnProps | 'children'>;
+
+/**
  * Syntetisk change/blur-event Combobox sender. Formen (`target.name`, `target.value`)
  * er den samme React Hook Form selv bygger for `<Controller>`, og er det både
  * `register()` og `<Controller>` leser verdien fra via `getEventValue`
@@ -128,6 +136,7 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
         arrowHintText,
         resultsText,
         id,
+        ...restProps
     },
     ref
 ) {
@@ -226,6 +235,7 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
             tooltipPlacement={tooltipPlacement}
         >
             <ix-combobox
+                {...restProps}
                 ref={(node: IxCombobox | null) => {
                     hostRef.current = node;
                     if (typeof ref === 'function') ref(node);

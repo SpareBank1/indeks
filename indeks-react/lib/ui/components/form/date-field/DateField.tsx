@@ -3,7 +3,7 @@ import type { IxDateField } from '@sb1/indeks-web';
 import { Field } from '../field/Field';
 import { createFieldEvent } from '../synthetic-events';
 
-export type DateFieldProps = {
+type DateFieldOwnProps = {
     /** Synlig label over feltet. Utelates hvis `ariaLabel` brukes i stedet. */
     label?: string;
     /** Tilgjengelig navn når det ikke finnes en synlig label. */
@@ -60,6 +60,14 @@ export type DateFieldProps = {
     id?: string;
 };
 
+/**
+ * Øvrige native/aria/data-attributter spres på `<ix-date-field>` (host-elementet),
+ * ikke den indre inputen — ix-date-field eier all ARIA/tastatur/state. Se
+ * `TextField.tsx` for det samme mønsteret på en native input.
+ */
+export type DateFieldProps = DateFieldOwnProps &
+    Omit<React.HTMLAttributes<HTMLElement>, keyof DateFieldOwnProps | 'children'>;
+
 // React-laget er tynt: ix-date-field (WC) genererer kalenderknappen og den
 // overlagte native date-inputen, kabler formatering via ix-field, og synker
 // dd.mm.åååå ↔ ISO. React eksponerer kun props-API og kontrollert/ukontrollert
@@ -89,6 +97,7 @@ export const DateField = forwardRef<HTMLInputElement, DateFieldProps>(function D
         tooltipLabel,
         tooltipPlacement,
         id,
+        ...restProps
     },
     ref
 ) {
@@ -210,6 +219,7 @@ export const DateField = forwardRef<HTMLInputElement, DateFieldProps>(function D
             tooltipPlacement={tooltipPlacement}
         >
             <ix-date-field
+                {...restProps}
                 ref={setHostRef}
                 class="ix-date-field"
                 name={name}
