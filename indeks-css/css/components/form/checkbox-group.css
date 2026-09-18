@@ -71,6 +71,21 @@
     left: calc(var(--ii-chip-indicator-inset) + (var(--ii-checkbox-size) - 12px) / 2);
 }
 
+/* Fokus på chip: flytt outline fra checkbox-boksen (::before) til hele pillen
+   (label). checkbox.css setter outline på ::before, men for chips skal ringen
+   gå rundt hele pillen som på radio chips. Base outline må settes her siden
+   checkbox.css ikke har det på labelen. */
+:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label {
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
+}
+:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:focus-visible + label::before {
+    outline-color: transparent;
+}
+:where(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox input[type='checkbox']:focus-visible + label {
+    outline-color: var(--ix-color-border-focus-default);
+}
+
 /* ── Chip-indikator ved error og read-only ───────────────────────────────────
  * Pillen styles av chip.css; her følger bare firkant-indikatoren etter.
  *
