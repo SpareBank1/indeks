@@ -1,5 +1,45 @@
 # @sb1/indeks-react
 
+## 0.23.0
+
+### Minor Changes
+
+- 18bfb09: `indeks-react sync-cdn` rapporterer nå hva den faktisk fant
+  
+  Tidligere endte kommandoen på «Ingen drift funnet.» både når alle CDN-URL-er var i takt og når den ikke hadde funnet en eneste URL — to helt ulike situasjoner med samme grønne svar. Nå skiller den mellom utfallene:
+  
+  - **URL-er funnet, alle i takt:** `Alle 5 CDN-URL-er i 2 fil(er) bruker samme versjon som installert @sb1/indeks-react (0.22.0).`
+  - **Ingen URL-er funnet:** sier det eksplisitt, forklarer at det er forventet i et npm-basert prosjekt, og skriver ut et ferdig CDN-oppsett med installert versjon pluss lenke til utvikler-guiden.
+  - **Ingen filer skannet:** advarer om at `--root`/`--include`/`--exclude` kan være feil, i stedet for å melde at alt er i orden.
+  - **Ulik versjon:** viser hvilken versjon hver URL gikk fra og til.
+  
+  I tillegg kommer en `Pakkestatus` for de tre versjonslåste pakkene (`@sb1/indeks-react`, `@sb1/indeks-css`, `@sb1/indeks-web`): versjon i bruk, om den hentes fra CDN eller npm, om du er på siste versjon på npm, og om CDN-en har artefaktene for versjonen ennå. Nettverksoppslagene er «best effort», påvirker aldri exit-koden, og kan skrus av med `--offline`.
+  
+  Ligger du bak siste versjon, skrives oppgraderingen ut ferdig utfylt — `npm install @sb1/indeks-react@<ny> && npm run <ditt sync-script>`. Kommandoen oppgraderer ikke avhengigheten selv og skriver aldri en URL til en versjon som ikke er installert; da ville nettleseren kjørt CSS og web components fra en annen versjon enn React-koden. Scriptnavnet leses fra `scripts` i konsumentens `package.json` i stedet for å gjette på «sync-indeks», med `npx indeks-react sync-cdn` som fallback.
+  
+  Nytt flagg `--require-urls` gir exit 1 når ingen CDN-URL-er blir funnet, for prosjekter som vet at de bruker CDN. Ugyldig `--root` gir nå exit 2 i stedet for å passere stille på null filer.
+  
+  URL-er på den gamle formen `…/indeks/css/<versjon>.css` blir gjenkjent og migrert til `…/indeks/css/<versjon>/index.css`. Den flate formen finnes ikke på CDN-en (den svarer 403), men var dokumentert i READMEene våre — de er nå rettet i `indeks-css`, `indeks-react`, `indeks-tokens`, `indeks-utils` og `indeks-web`. Merk at `--check` derfor kan feile i et prosjekt som tidligere passerte; i så fall lastet ikke stilarket, og `npm run sync-indeks` retter det.
+  
+  `@sb1/indeks-tokens` og `@sb1/indeks-utils` har egne versjoner og blir aldri skrevet om til react-versjonen. De blir nå rapportert til slutt i stedet for å forsvinne i stillhet.
+
+### Patch Changes
+
+- 9eff1d6: `indeks-react sync-cdn --check` fanger nå npm-versjonsavvik i css/web, ikke bare i CDN-URL-er
+  
+  Versjonen til `@sb1/indeks-css` og `@sb1/indeks-web` «bor» i tre steder: installert `@sb1/indeks-react`, CDN-URL-ene i kildekoden, og den faktiske versjonen i `node_modules/<pkg>` hvis pakken også er npm-installert. `--check` sammenlignet tidligere kun de to første — hvis alle CDN-URL-er allerede pekte på riktig versjon (fordi noen hadde limt dem inn riktig manuelt), meldte kommandoen «alt OK» selv om den npm-installerte web- eller css-pakken sto på en helt annen versjon. I CI ga det et falskt grønt lys.
+  
+  `--check` sjekker nå også npm-installert versjon og feiler (exit 1) hvis den avviker fra installert `@sb1/indeks-react`, uansett om CDN-URL-ene i seg selv matcher. Er pakken bare deklarert i `package.json` uten å være faktisk installert, er det ikke noe konkret versjonstall å sammenligne mot — det telles ikke som avvik.
+  
+  Oppslaget følger nå samme oppgang som Node sin egen modulresolusjon, slik at npm/yarn/pnpm-hoisting til et workspace-rot lenger opp enn `--root` ikke lenger skjuler et reelt avvik. Feilmeldingen forklarer hvor pakken ble funnet når det ikke var i `--root` selv, f.eks. `web: npm 0.1.0 installert (funnet i ../../node_modules), forventet 0.4.0 ✗`. Nytt flagg `--node-modules-root <path>` er en unntaksventil for oppsett der selv den oppgangen ikke finner pakken. Npm-avviksrapporten er også tydeligere merket (`FEIL: ...`), så den ikke kan mistolkes som en fortsettelse av en «alt matcher»-linje.
+- efef69c: Fikser manglende prop/rest-videresending i flere skjemakomponenter.
+  
+  - **Checkbox:** `className` forsvant stille når komponenten rendres uten field-wrapper (ingen `description`/`errorMessage`/`tooltip`). Legges nå på `.ix-checkbox`-wrapperen i det tilfellet.
+  - **Combobox, DateField, PhoneNumberField:** hadde ingen rest-props-spredning i det hele tatt — vilkårlige native/aria/data-attributter (f.eks. `data-testid`, ekstra `aria-*`) forsvant. Spres nå på host-elementet (`<ix-combobox>`, `<ix-date-field>`, `<ix-phone-number-field>`), som eier ARIA/tastatur/state for disse web component-baserte feltene.
+  - **Field:** typen tillot ikke ekstra HTML-attributter selv om implementasjonen allerede videresendte dem i praksis. `FieldProps` utvider nå riktig type slik at TypeScript ikke lenger avviser gyldige rest-props.
+  
+  Dokumentasjonen for Checkbox, Combobox, DateField og PhoneNumberField er oppdatert til å beskrive den faktiske (nå rettede) oppførselen.
+
 ## 0.22.1
 
 ### Patch Changes
