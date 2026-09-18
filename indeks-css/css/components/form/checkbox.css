@@ -6,11 +6,22 @@
  *
  * Dual-targeting: styler både naken markup (.ix-checkbox > input + label) OG
  * BEM-hooks (.ix-checkbox__input / .ix-checkbox__label) for forfattere som vil
- * ha eksplisitte selektorer. BEM-klassene er valgfrie. */
+ * ha eksplisitte selektorer. BEM-klassene er valgfrie.
+ *
+ * VIKTIG: input og label må forbli DIREKTE, adjacent søsken (`input + label`)
+ * — hele tilstands-stylingen (checked/indeterminate/invalid/disabled/
+ * focus-visible) er bygget på nabokombinatoren. Når Checkbox brukes med
+ * description/errorMessage/tooltip (via <ix-field>) lar IxField._wire() derfor
+ * denne labelen stå urørt i stedet for å flytte den inn i en label-row (se
+ * kommentar i IxField.ts). Én konsekvens: tooltip-knappen kan ikke ligge i en
+ * egen label-row-wrapper her — den settes i stedet inn som labelens neste
+ * søsken, og .ix-checkbox er derfor en rad-layout (ikke kolonne) slik at
+ * knappen lander på samme linje som label-teksten i stedet for under. */
 
 :where(.ix-checkbox) {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: var(--ix-spacing-2xs);
 }
 
 /* Skjul native input visuelt, men hold det i DOM for tastatur og skjermleser */
@@ -34,6 +45,10 @@
     position: relative;
     display: inline-flex;
     align-items: center;
+    /* Fyller resten av .ix-checkbox sin bredde (samme klikkeflate som før
+     * .ix-checkbox ble rad-layout) — også når en tooltip-knapp legger seg som
+     * neste søsken på samme rad. */
+    flex: 1 1 auto;
     gap: var(--ix-spacing-xs);
     padding-left: calc(var(--ii-checkbox-size) + var(--ix-spacing-xs));
     min-height: var(--ii-checkbox-size);
@@ -157,6 +172,24 @@
 :where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked + label::before,
 :where(.ix-checkbox__input[aria-invalid='true']:checked) + :where(.ix-checkbox__label)::before {
     box-shadow: none;
+}
+
+/* Hover ved error: behold rød boks/kant. Uten dette vinner den generelle
+ * hover-regelen over (0,3,2) mot error-regelen over (0,2,2). Speiler
+ * radio-group.css og checkbox-group.css (chip). */
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:not(:disabled) + label:hover,
+:where(.ix-checkbox__input[aria-invalid='true']:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);
+    --ii-checkbox-box-border: var(--ix-color-border-danger-default);
+}
+
+/* Hover ved error + valgt/indeterminate: behold den fylte danger-boksen. */
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked:not(:disabled) + label:hover,
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:indeterminate:not(:disabled) + label:hover,
+:where(.ix-checkbox__input[aria-invalid='true']:checked:not(:disabled)) + :where(.ix-checkbox__label:hover),
+:where(.ix-checkbox__input[aria-invalid='true']:indeterminate:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-default);
+    --ii-checkbox-box-border: var(--ix-color-fill-danger-default);
 }
 
 /* ── Disabled ────────────────────────────────────────────────────────────── */
