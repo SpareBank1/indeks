@@ -236,7 +236,17 @@ export class IxField extends HTMLElement {
         // Wrap label i label-row om den ikke allerede er wrappet.
         // label-row er alltid til stede slik at tooltip-knappen kan injiseres uten
         // å endre DOM-strukturen rundt labelen.
-        if (label && !label.closest('.ix-field__label-row')) {
+        //
+        // Unntak: en label som allerede står som kontrollen sin ADJACENT sibling
+        // (f.eks. Checkbox sin markup: <input><label>) eies av kontrollens egen
+        // CSS, som styrer :checked/:indeterminate/[aria-invalid]/:disabled/
+        // :focus-visible via input+label-nabokombinatoren (se checkbox.css). Å
+        // flytte en slik label inn i en nyopprettet wrapper-div ville brutt
+        // nabokoblingen og slått av all tilstandsstyling. IxField lar derfor
+        // disse labelene stå urørt — se _setupTooltipBtn() for hvordan
+        // tooltip-knappen håndteres når det ikke finnes en label-row å injisere i.
+        const labelOwnedByControl = label?.previousElementSibling === control;
+        if (label && !labelOwnedByControl && !label.closest('.ix-field__label-row')) {
             const labelRow = document.createElement('div');
             labelRow.className = 'ix-field__label-row';
             label.parentNode!.insertBefore(labelRow, label);
@@ -635,8 +645,17 @@ export class IxField extends HTMLElement {
             return;
         }
 
+        // Normaltilfelle: _wire() har lagt labelen i en label-row — knappen hører
+        // hjemme der (side ved side med labelteksten).
+        //
+        // Unntak: labels som _wire() lot stå urørt fordi de allerede eies av
+        // kontrollens egen adjacent-sibling-kobling (f.eks. Checkbox sin
+        // <input><label>, se _wire()) har ingen label-row. Da settes knappen inn
+        // som labelens neste sibling i stedet, slik at input+label-nabokoblingen
+        // i kontrollens egen CSS (checkbox.css) ikke brytes.
         const labelRow = this.querySelector<HTMLElement>('.ix-field__label-row');
-        if (!labelRow) return;
+        const label = labelRow ? null : this.querySelector<HTMLLabelElement>('label');
+        if (!labelRow && !label) return;
 
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -651,7 +670,11 @@ export class IxField extends HTMLElement {
         icon.style.maskImage = `url(${ICON_URL})`;
         btn.appendChild(icon);
 
-        labelRow.appendChild(btn);
+        if (labelRow) {
+            labelRow.appendChild(btn);
+        } else {
+            label!.after(btn);
+        }
     }
 
     // Fjerner kun tooltip-knappen — label-row beholdes.
