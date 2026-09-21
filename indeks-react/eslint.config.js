@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import { baseConfig } from '../eslint.shared.js';
 
 export default [
-    { ignores: ['dist', 'storybook-static', 'sb1-indeks-react-*', 'plopfile.cjs'] },
+    { ignores: ['dist', 'storybook-static', 'sb1-indeks-react-*'] },
     ...baseConfig,
     {
         files: ['**/*.{ts,tsx}'],

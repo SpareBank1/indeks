@@ -115,7 +115,10 @@ for å bygge de statiske resursene. På sikt vil de også tilby en dev alternati
 
 `pnpm dev` starter opp docs, eksempel og storybook.
 
-`pnpm update-packages` gir deg en `ncu` interactiv view for å oppdatere pakker.
+`pnpm update-packages` kjører `pnpm -r update` i alle pakker, altså oppdatering
+innenfor versjonsområdene som alt står i `package.json`. Vil du løfte selve
+områdene, har hver pakke sitt eget `update-packages` med en interaktiv
+`npm-check-updates`-visning.
 
 ## Versjonering og Release
 
