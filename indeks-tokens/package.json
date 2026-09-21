@@ -67,7 +67,7 @@
         "@figma/rest-api-spec": "^0.42.0",
         "typescript": "~6.0.3",
         "@types/node": "^26.4.1",
-        "autoprefixer": "^10.5.5",
+        "autoprefixer": "^10.6.0",
         "colorjs.io": "^0.7.1",
         "cssnano": "^8.0.10",
         "dotenv": "^17.4.2",
