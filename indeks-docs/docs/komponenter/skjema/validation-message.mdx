@@ -25,7 +25,7 @@ designsystem-teamet før du bygger på success.
 
 ## Bruk
 
-ValidationMessage rendrer et `<span data-field="error">` med et dekorativt feilikon (en badge — hvit glyf på rød sirkel) foran teksten. Elementet styles av Indeks-CSS. Når det ligger inne i en `<ix-field>` eller `<ix-radio-group>`, kobles det automatisk til input via `aria-describedby` og setter `aria-invalid="true"` på inputen når meldingen har innhold.
+ValidationMessage rendrer et `<span data-field="error">` med et dekorativt feilikon (hvit glyf på rød badge) foran teksten. Elementet styles av Indeks-CSS. Når det ligger inne i en `<ix-field>` eller `<ix-radio-group>`, kobles det automatisk til input via `aria-describedby` og setter `aria-invalid="true"` på inputen når meldingen har innhold.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -166,7 +166,7 @@ ValidationMessage styles av globale regler på `[data-field="error"]` i `form/va
 |----------|-------|
 | Skriftstørrelse | `--ix-font-size-md` |
 | Tekstfarge | `--ix-color-foreground-danger-default` |
-| Ikon-badge sirkelfarge | `--ix-color-status-fill` (via `data-status="danger"`) |
+| Ikon-badge bakgrunnsfarge | `--ix-color-status-fill` (via `data-status="danger"`) |
 | Ikon-badge størrelse | `--ix-icon-badge-size` (satt til `--ix-font-size-lg`) |
 
 ## Relatert
