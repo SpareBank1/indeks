@@ -12,18 +12,19 @@
    - Radio chip     → <ix-radio-group data-variant="chip">         (label styles som pill)
    - Checkbox chip  → <ix-checkbox-group data-variant="chip">      (label styles som pill)
 
-   Tre selektor-armer gjentas i reglene under:
-     A  .ix-chip
-     B  ix-radio-group[data-variant='chip'] … label
-     C  ix-checkbox-group[data-variant='chip'] … .ix-checkbox label
+   Tre selektorer gjentas i reglene under:
+     1. .ix-chip                                          (button/removable chip)
+     2. ix-radio-group[data-variant='chip'] … label       (radio chip)
+     3. ix-checkbox-group[data-variant='chip'] … label    (checkbox chip)
 
    [data-variant='chip'] ligger med vilje UTENFOR :where(). Helt innpakket blir
-   B og C (0,0,0) og taper mot base-label-reglene i radio-group.css og
-   checkbox.css, som cascader senere (chip.css importeres først i
-   components/index.css). Ett attributt utenfor løfter armene til (0,1,0) — over
-   base-reglene, men lavt nok at konsumenter fortsatt overstyrer med én klasse.
+   radio- og checkbox-selektorene (0,0,0) og taper mot base-label-reglene i
+   radio-group.css og checkbox.css, som cascader senere (chip.css importeres
+   først i components/index.css). Ett attributt utenfor løfter til (0,1,0) —
+   over base-reglene, men lavt nok at konsumenter fortsatt overstyrer med én
+   klasse.
 
-   Alle tre armene ligger på samme spesifisitet i hver regel, så det er
+   Alle tre selektorene har samme spesifisitet i hver regel, så det er
    KILDEREKKEFØLGEN i denne filen som avgjør presedens: passiv → hover → active
    → selected → selected hover/active. Det holder bare så lenge tilstandsreglene
    setter KUN --ii-chip-*-variabler og ingen konkurrerende properties. Ikke bryt
@@ -78,13 +79,13 @@
 /* Checkbox chip er den ene varianten som ikke er en pille. Etter design-spec:
    firkantet indikator hører sammen med en avrundet, ikke helt rund, pille.
    Radien går via variabelen fordi focus-regelen nederst setter border-radius om
-   igjen for gruppe-armene, og de to må ikke kunne komme i utakt. */
+   igjen for radio/checkbox chips, og de to må ikke kunne komme i utakt. */
 :where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'] :where(.ix-checkbox label) {
     --ii-chip-radius: var(--ix-border-radius-sm);
 }
 
-/* Kun arm A: .ix-chip er selve boksen og må lage layouten selv. Gruppe-labelene
-   har allerede inline-flex + gap fra base-reglene sine.
+/* Kun .ix-chip: button chip er selve boksen og må lage layouten selv. Radio- og
+   checkbox-labelene har allerede inline-flex + gap fra base-reglene sine.
    Bevisst forskjell: justify-content og white-space settes bare her — en
    gruppe-label skal kunne brytes over linjer. Ikke «fiks» ved å flytte dem opp. */
 :where(.ix-chip) {
@@ -123,8 +124,8 @@
     font-size: var(--ix-font-size-sm);
 }
 
-/* Gruppe-armenes padding: indikatoren får plass til venstre. Arm A får samme
-   padding fra layout-regelen over, uten indikator-plassen.
+/* Radio/checkbox chips: indikatoren får plass til venstre. Button chip får
+   samme padding fra layout-regelen over, uten indikator-plassen.
    Venstre bygges av innrykket, ikke av --ii-chip-padding-inline: innrykket
    krymper på sm, høyre padding gjør det ikke. */
 :where(ix-radio-group, .ix-radio-group)[data-variant='chip'] :where(label),
@@ -146,7 +147,7 @@
 }
 
 /* ── Hover ───────────────────────────────────────────────────────────────────
-   Gruppe-armene vokter mot disabled; arm A trenger det ikke fordi
+   Radio/checkbox chips vokter mot disabled; button chip trenger det ikke fordi
    disabled-regelen nederst setter pointer-events: none. */
 
 :where(.ix-chip:hover),
@@ -246,19 +247,19 @@
     outline-color: var(--ix-color-border-focus-default);
 }
 
-/* Gruppe-armene får selve outlinen fra focus-regelen i sin egen fil, men den
-   setter border-radius-xs på labelen. Uten dette blir en fokusert radio-chip
-   firkantet. (0,1,0) slår radio-group.css' (0,0,2). Variabelen holder radien lik
+/* Radio/checkbox chips får outline fra focus-regelen i sin egen fil, men den
+   setter border-radius-xs på labelen. radio-group.css har (0,2,2) på input-
+   selektoren, så vi må matche det for å vinne. Variabelen holder radien lik
    den passive: pill for radio chip, sm for checkbox chip. */
-:where(ix-radio-group, .ix-radio-group)[data-variant='chip'] :where(input[type='radio']:focus-visible + label),
+:where(ix-radio-group, .ix-radio-group)[data-variant='chip'] input[type='radio']:focus-visible + label,
 :where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip']
-    :where(.ix-checkbox input[type='checkbox']:focus-visible + label) {
+    .ix-checkbox input[type='checkbox']:focus-visible + label {
     border-radius: var(--ii-chip-radius);
 }
 
 /* ── Disabled ────────────────────────────────────────────────────────────────
-   Kun arm A. Gruppene har egne disabled-regler (opacity på hele gruppen, eller
-   på labelen ved input:disabled) i sine filer. */
+   Kun button chip. Gruppene har egne disabled-regler (opacity på hele gruppen,
+   eller på labelen ved input:disabled) i sine filer. */
 
 :where(.ix-chip[aria-disabled='true'], .ix-chip:disabled) {
     /* opacity går via variabelen så read-only-regelen under kan skru den av
@@ -279,12 +280,12 @@
      3. gruppen              <ix-radio-group data-variant='chip' data-state='error'>
 
    Gruppene eksponerer også [aria-invalid='true'] (settes av web componenten når
-   error-elementet får innhold), så error-armene godtar begge.
+   error-elementet får innhold), så error-selektorene godtar begge.
 
-   Reglene ligger ETTER disabled med vilje. Alle tilstandsarmene er (0,2,0), så
-   kilderekkefølgen koder presedensen error > read-only > disabled — samme
-   rangering som RadioGroup.tsx utleder data-state med. Selected-armene ligger ett
-   attributt høyere, som er riktig retning: valgt skal slå uvalgt. */
+   Reglene ligger ETTER disabled med vilje. Alle tilstands-selektorene er (0,2,0),
+   så kilderekkefølgen koder presedensen error > read-only > disabled — samme
+   rangering som RadioGroup.tsx utleder data-state med. Selected-selektorene
+   ligger ett attributt høyere, som er riktig retning: valgt skal slå uvalgt. */
 
 /* Read-only — én regel for valgt og uvalgt. Design viser begge med samme grå
    flate, så read-only overstyrer selected-aksenten helt. Hus-oppskriften er
@@ -299,8 +300,8 @@
     --ii-chip-shadow: none;
 }
 
-/* Kun arm A: gruppene setter cursor og pointer-events selv i sine filer, og på
-   (0,2,0) her ville cursor tapt mot radio-group.css' base-label uansett. */
+/* Kun button chip: gruppene setter cursor og pointer-events selv i sine filer,
+   og på (0,2,0) her ville cursor tapt mot radio-group.css' base-label uansett. */
 .ix-chip[data-state='readonly'],
 :where(ix-combobox, .ix-combobox)[data-state='readonly'] .ix-chip {
     --ii-chip-opacity: 1;
@@ -337,9 +338,9 @@
 
 /* Error, uvalgt, hover og active — regelen over setter nå --ii-chip-fill og er mer
    spesifikk enn hover- og active-reglene lenger opp i filen: (0,2,0) mot (0,0,0)
-   for arm A og (0,1,0) for gruppe-armene. Uten disse to reglene blir fyllet låst
-   gjennomsiktig også under pekeren, og chipen slutter å svare på musa så snart
-   validering slår inn.
+   for button chip og (0,1,0) for radio/checkbox chips. Uten disse to reglene blir
+   fyllet låst gjennomsiktig også under pekeren, og chipen slutter å svare på musa
+   så snart validering slår inn.
    Vaktene, ikke spesifisiteten, holder den valgte feil-chipen utenfor: den skal
    beholde det mørkerøde fyllet. Kanten skrives ikke om — error-regelen over vinner
    fortsatt over hover-regelen på den, så den blir liggende rød av seg selv. */
@@ -356,8 +357,8 @@
     --ii-chip-fill: var(--ix-color-fill-interactive-hover);
 }
 
-/* Kun arm A, samme bevisste begrensning som active-regelen lenger opp: gruppe-chips
-   får sin active-feedback på indikatoren, ikke på pillen. */
+/* Kun button chip, samme bevisste begrensning som active-regelen lenger opp:
+   radio/checkbox chips får sin active-feedback på indikatoren, ikke på pillen. */
 .ix-chip[data-state='error']:not([data-removable]):active,
 .ix-chip[aria-invalid='true']:not([data-removable]):active {
     --ii-chip-fill: var(--ix-color-fill-interactive-active);
