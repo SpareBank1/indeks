@@ -5,7 +5,7 @@ export type ValidationMessageProps = {
     children?: ReactNode;
     className?: string;
     /**
-     * Vis feilikonet (en badge: hvit glyf på rød sirkel) foran teksten.
+     * Vis feilikonet (hvit glyf på rød badge) foran teksten.
      * Ikonet er dekorativt (`aria-hidden`) — feilen formidles av teksten.
      * @default true
      */

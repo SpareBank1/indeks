@@ -40,6 +40,13 @@
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
+:where([data-field='error'] ix-icon[data-badge], [data-field='error'] .ix-icon[data-badge]) {
+    border-radius: 0;
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+
+}
+
 /* Når badgen har en status (data-status kobler --ix-color-status-* via
    @sb1/indeks-utils), bruker sirkelen statusfargen automatisk. */
 :where(ix-icon[data-badge][data-status], .ix-icon[data-badge][data-status]) {
