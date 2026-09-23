@@ -18,7 +18,7 @@ export const SubMenu: React.FC<SubMenuProps> = ({ menuItems, basePath }) => {
     const linkStyles = (path: string) => ({
         color:
             activePage === path
-                ? 'var(--ix-color-foreground-interactive-active)'
+                ? 'var(--ix-color-foreground-link-active)'
                 : 'var(--ix-color-foreground-main-subtle)',
     });
 

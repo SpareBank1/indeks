@@ -1,7 +1,7 @@
 /* Border til dokumentasjonen */
 
 .border-hover {
-    transition: var(--ix-transition);
+    transition: var(--ix-transition-all);
 }
 
 .border-bold-width {
@@ -56,10 +56,6 @@
     &:active {
         border-color: var(--ix-color-border-info-active);
     }
-}
-
-.border-single--main {
-    border: var(--ix-border-width-bold) solid var(--ix-color-border-main-emphasis);
 }
 
 .border-single--focus {
