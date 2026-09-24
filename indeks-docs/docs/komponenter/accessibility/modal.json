@@ -35,7 +35,7 @@
     { "id": "1.4.3", "notes": "Tekst bruker --ix-color-foreground-main-default på --ix-color-surface-main-default, som oppfyller kontrastkravet i både light og dark mode." },
     { "id": "1.4.4", "notes": "Relative enheter (font-size-tokens) — tekst skalerer korrekt ved 200 % zoom uten at innhold brytes; body scroller ved behov." },
     { "id": "1.4.10", "notes": "Mobile-first uten faste bredder — dialogen er nær full bredde på mobil og reflower korrekt ned til 320px viewport uten horisontal scroll." },
-    { "id": "1.4.11", "notes": "Fokusindikator på lukk-knapp og interaktive elementer oppfyller 3:1 kontrastkrav via --ix-outline-default. Den dempede ::backdrop er ikke informasjonsbærende." },
+    { "id": "1.4.11", "notes": "Fokusindikator på lukk-knapp og interaktive elementer oppfyller 3:1 kontrastkrav via --ix-color-border-focus-default. Den dempede ::backdrop er ikke informasjonsbærende." },
     { "id": "1.4.13", "notes": "Dialogen viser ikke innhold ved hover/fokus som forsvinner; den er vedvarende til brukeren lukker den." },
     { "id": "2.1.1", "notes": "Fullt tastaturopererbart via native <dialog> åpnet med showModal(): alle handlinger er fokuserbare knapper som aktiveres med Enter/Space." },
     { "id": "2.1.2", "notes": "Ingen tastaturfelle. Fokus-trap inne i dialogen er tilsiktet modal-oppførsel og har en escape-mekanisme: Escape lukker dialogen og frigjør fokus tilbake til triggeren." },

@@ -628,9 +628,12 @@ Indeks bygger på en variant av reset.css, mens FFE bruker normalize.css. Kommer
 
 ## Outline
 
+Outline brukes ved fokus på skjemaelementer. Outline defineres direkte på elementet og er satt til `transparent` når elementet ikke er i fokus for å unngå hopping i layouten. På fokus endres `outline-color` til `var(--ix-outline-default-visible)`.
+
 | CSS-klasse            | Verdi                                                                                    |
 | --------------------- | ---------------------------------------------------------------------------------------- |
-| `.ix-outline-default` | `outline: var(--ix-outline-width-default) solid var(--ix-color-border-focus-default);`   |
+| `.ix-outline-default` | `outline: var(--ix-outline-width-default) solid transparent;`<br/> `outline-offset: var(--ix-outline-offset-default);`   |
+| `.ix-outline-default:focus-visible` | `outline-color: var(--ix-outline-default-visible);`   |
 
 <UtilsTable tokens={outlineTokens.outline.width} prefix="outline-width" />
 <UtilsTable tokens={outlineTokens.outline.offset} prefix="outline-offset" />

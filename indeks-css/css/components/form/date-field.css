@@ -96,15 +96,18 @@
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
-:where(.ix-date-field__toggle:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: calc(-1 * var(--ix-outline-offset-default));
-}
-
 /* Knappen er en gjennomsiktig overlay oppå inputen — input eier ramme og flate. */
 :where(.ix-text-field) > .ix-date-field__toggle {
     background-color: transparent;
     border: none;
+    border-radius: 0 var(--ix-border-radius-sm) var(--ix-border-radius-sm) 0;
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: calc(-1 * var(--ix-outline-offset-default));
+    transition: var(--ix-transition-all);
+}
+
+:where(.ix-text-field) > .ix-date-field__toggle:focus-visible {
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 /* Disabled / read-only felt toner ned ikonet sammen med inputen. */
