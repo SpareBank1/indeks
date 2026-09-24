@@ -36,7 +36,7 @@
 :where(.ix-text-area) > textarea:focus,
 :where(.ix-text-area__textarea:active),
 :where(.ix-text-area__textarea:focus) {
-    outline: var(--ix-outline-default);
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 :where(.ix-text-area) > textarea:disabled,

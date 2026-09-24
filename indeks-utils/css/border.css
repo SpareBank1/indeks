@@ -2,7 +2,8 @@
     --ix-border-default: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
     --ix-border-dashed: var(--ix-border-width-default) dashed var(--ix-color-border-main-default);
     --ix-border-none: none;
-    --ix-outline-default: var(--ix-outline-width-default) solid var(--ix-color-border-focus-default);
+    --ix-outline-default: var(--ix-outline-width-default) solid transparent;
+    --ix-outline-default-visible: var(--ix-color-border-focus-default);
 }
 
 .ix-border-default {
@@ -35,4 +36,9 @@
 
 .ix-outline-default {
     outline: var(--ix-outline-default);
+    outline-offset: var(--ix-outline-offset-default);
+}
+
+.ix-outline-default:focus-visible {
+    outline-color: var(--ix-outline-default-visible);
 }

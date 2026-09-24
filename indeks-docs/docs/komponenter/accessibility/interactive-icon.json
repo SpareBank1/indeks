@@ -26,7 +26,7 @@
     { "id": "2.1.1", "notes": "Native <button> aktiveres med Enter og Space. Fullt opererbart med tastatur." },
     { "id": "2.1.2", "notes": "Fokus kan navigeres ut med Tab og Shift+Tab — ingen tastaturfelle." },
     { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
-    { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med --ix-outline-default." },
+    { "id": "2.4.7", "notes": "Tydelig fokusindikator via :focus-visible med --ix-color-border-focus-default." },
     { "id": "2.5.8", "notes": "min-width og min-height på 44 px gir klikkflate godt over minstekravet på 24×24 px." },
     { "id": "3.2.1", "notes": "Fokus trigger ingen kontekstendring." },
     { "id": "4.1.2", "notes": "Native <button> med implisitt rolle=button. Tilgjengelig navn fra påkrevd aria-label. Ikonet er aria-hidden og bidrar ikke til navnet." }

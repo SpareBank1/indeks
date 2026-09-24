@@ -26,7 +26,7 @@
     { "id": "1.4.3", "notes": "Label bruker --ix-color-component-button-tertiary-foreground-default (samme tekstfarge som en tertiary-knapp) og innhold --ix-color-foreground-main-default på --ix-color-surface-main, som oppfyller kontrastkravet i både light og dark mode." },
     { "id": "1.4.4", "notes": "Relative enheter (font-size-tokens) — tekst skalerer korrekt ved 200 % zoom uten at innhold brytes." },
     { "id": "1.4.10", "notes": "Mobile-first uten faste bredder — reflower korrekt ned til 320px viewport uten horisontal scroll." },
-    { "id": "1.4.11", "notes": "Fokusindikator på label oppfyller 3:1 kontrastkrav via --ix-outline-default." },
+    { "id": "1.4.11", "notes": "Fokusindikator på label oppfyller 3:1 kontrastkrav via --ix-color-border-focus-default." },
     { "id": "2.1.1", "notes": "Labelen er en native <summary> — fokuserbar med Tab og åpnes/lukkes med Enter og Space. Fullt opererbart med tastatur." },
     { "id": "2.1.2", "notes": "Ingen tastaturfeller — fokus navigeres fritt ut med Tab/Shift+Tab." },
     { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM: label før innhold." },

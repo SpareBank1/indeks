@@ -41,7 +41,7 @@
     { "id": "1.4.3", "notes": "Tekst bruker --ix-color-foreground-main-default på status-surface, som oppfyller kontrastkravet for alle statuser i både light og dark mode." },
     { "id": "1.4.4", "notes": "Relative enheter (font-size-tokens) — skalerer korrekt ved 200 % zoom." },
     { "id": "1.4.10", "notes": "Mobile-first uten faste bredder — reflower korrekt ned til 320px viewport uten horisontal scroll." },
-    { "id": "1.4.11", "notes": "Fokusindikator oppfyller 3:1 kontrastkrav via --ix-outline-default. Kun lukkeknappen har sin egen ring (:focus-visible) — meldingen ringes ikke rundt seg selv." },
+    { "id": "1.4.11", "notes": "Fokusindikator oppfyller 3:1 kontrastkrav via --ix-color-border-focus-default. Kun lukkeknappen har sin egen ring (:focus-visible) — meldingen ringes ikke rundt seg selv." },
     { "id": "2.1.1", "notes": "Lukkeknapp er native <button> og aktiveres med Enter/Space. Fullt opererbart med tastatur." },
     { "id": "2.1.2", "notes": "Ingen tastaturfeller — fokus navigeres fritt ut med Tab/Shift+Tab." },
     { "id": "2.4.3", "notes": "Følger naturlig tab-rekkefølge i DOM." },
