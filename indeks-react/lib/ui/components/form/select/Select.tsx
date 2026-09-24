@@ -65,36 +65,38 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
             tooltipLabel={tooltipLabel}
             tooltipPlacement={tooltipPlacement}
         >
-            <select
-                ref={ref}
-                {...selectAttrs}
-                id={selectId}
-                className="ix-select"
-                disabled={disabled}
-                aria-label={ariaLabel}
-                aria-invalid={errorMessage?.trim() ? 'true' : undefined}
-            >
-                {placeholder && (
-                    <option value="" disabled>
-                        {placeholder}
-                    </option>
-                )}
-                {options.map((option) =>
-                    isOptionGroup(option) ? (
-                        <optgroup key={option.label} label={option.label}>
-                            {option.options.map((opt) => (
-                                <option key={opt.value} value={opt.value} disabled={opt.disabled}>
-                                    {opt.label}
-                                </option>
-                            ))}
-                        </optgroup>
-                    ) : (
-                        <option key={option.value} value={option.value} disabled={option.disabled}>
-                            {option.label}
+            <div className="ix-select-wrapper">
+                <select
+                    ref={ref}
+                    {...selectAttrs}
+                    id={selectId}
+                    className="ix-select"
+                    disabled={disabled}
+                    aria-label={ariaLabel}
+                    aria-invalid={errorMessage?.trim() ? 'true' : undefined}
+                >
+                    {placeholder && (
+                        <option value="" disabled>
+                            {placeholder}
                         </option>
-                    )
-                )}
-            </select>
+                    )}
+                    {options.map((option) =>
+                        isOptionGroup(option) ? (
+                            <optgroup key={option.label} label={option.label}>
+                                {option.options.map((opt) => (
+                                    <option key={opt.value} value={opt.value} disabled={opt.disabled}>
+                                        {opt.label}
+                                    </option>
+                                ))}
+                            </optgroup>
+                        ) : (
+                            <option key={option.value} value={option.value} disabled={option.disabled}>
+                                {option.label}
+                            </option>
+                        )
+                    )}
+                </select>
+            </div>
         </Field>
     );
 });
