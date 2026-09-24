@@ -64,10 +64,11 @@ describe('Select', () => {
         expect(error?.textContent).toBe('');
     });
 
-    it('rendrer select med ix-select klasse', () => {
+    it('rendrer select med ix-select klasse inni ix-select-wrapper', () => {
         const { container } = render(<Select label="Land" options={basicOptions} />);
-        const select = container.querySelector('.ix-select');
+        const select = container.querySelector('.ix-select-wrapper .ix-select');
         expect(select).toBeDefined();
+        expect(select).not.toBeNull();
         expect(select?.tagName).toBe('SELECT');
     });
 
