@@ -112,20 +112,22 @@ export const HTML: Story = {
                 Land
             </label>
             <span data-field="description">Velg landet du bor i</span>
-            <select name="land">
-                <option value="" disabled>
-                    Velg land...
-                </option>
-                <optgroup label="Norden">
-                    <option value="no">Norge</option>
-                    <option value="se">Sverige</option>
-                    <option value="dk">Danmark</option>
-                </optgroup>
-                <optgroup label="Europa">
-                    <option value="de">Tyskland</option>
-                    <option value="fr">Frankrike</option>
-                </optgroup>
-            </select>
+            <div className="ix-select-wrapper">
+                <select className="ix-select" name="land">
+                    <option value="" disabled>
+                        Velg land...
+                    </option>
+                    <optgroup label="Norden">
+                        <option value="no">Norge</option>
+                        <option value="se">Sverige</option>
+                        <option value="dk">Danmark</option>
+                    </optgroup>
+                    <optgroup label="Europa">
+                        <option value="de">Tyskland</option>
+                        <option value="fr">Frankrike</option>
+                    </optgroup>
+                </select>
+            </div>
             <span data-field="error" aria-live="polite"></span>
         </ix-field>
     ),
