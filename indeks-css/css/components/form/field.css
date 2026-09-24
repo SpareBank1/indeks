@@ -78,8 +78,12 @@
     }
 }
 
-:where(.ix-field__tooltip-btn:focus-visible) {
-    outline: var(--ix-outline-default);
+:where(.ix-field__tooltip-btn) {
+    outline: var(--ix-outline-width-default) solid transparent;
     outline-offset: var(--ix-outline-offset-default);
     border-radius: var(--ix-border-radius-xs);
+}
+
+:where(.ix-field__tooltip-btn:focus-visible) {
+    outline-color: var(--ix-color-border-focus-default);
 }

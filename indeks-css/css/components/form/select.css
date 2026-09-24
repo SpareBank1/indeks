@@ -27,7 +27,7 @@
 }
 
 :where(.ix-select:focus-visible) {
-    outline: var(--ix-outline-default);
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 :where(.ix-select:disabled) {
