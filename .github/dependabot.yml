@@ -24,3 +24,7 @@ updates:
           time: '06:00'
       cooldown:
           default-days: 7
+      groups:
+          github-actions:
+              patterns:
+                  - '*'
