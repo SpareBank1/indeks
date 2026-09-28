@@ -75,11 +75,6 @@
     display: inline-block;
 }
 
-/* Gjenopprett fokusring på textarea — høyere spesifisitet enn Infima sin regel */
-body:not(.navigation-with-keyboard) .ix-text-area textarea:focus {
-    outline: var(--ix-outline-default);
-}
-
 .theme-doc-footer-rapporter {
     margin-top: var(--ifm-leading);
     padding-top: var(--ifm-leading);

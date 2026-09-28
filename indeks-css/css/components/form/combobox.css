@@ -114,11 +114,6 @@
     transform: rotate(180deg);
 }
 
-:where(.ix-combobox .ix-text-field > button:focus-visible, .ix-combobox__toggle:focus-visible) {
-    outline: var(--ix-outline-default);
-    outline-offset: calc(-1 * var(--ix-outline-offset-default));
-}
-
 /* Knappen er en gjennomsiktig overlay oppå inputen — input eier ramme og flate. */
 :where(.ix-combobox .ix-text-field > button, .ix-text-field > .ix-combobox__toggle) {
     background-color: transparent;

@@ -34,7 +34,7 @@
 :where(.ix-text-field) > input:focus,
 :where(.ix-text-field__input:active),
 :where(.ix-text-field__input:focus) {
-    outline: var(--ix-outline-default);
+    outline-color: var(--ix-color-border-focus-default);
 }
 
 :where(.ix-text-field[data-has-prefix]) > input,
