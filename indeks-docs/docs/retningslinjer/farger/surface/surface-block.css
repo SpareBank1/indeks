@@ -1,6 +1,6 @@
 /* Surface */
 .surface-hover {
-    transition: var(--ix-transition);
+    transition: var(--ix-transition-all);
 }
 
 .surface-hover--main {

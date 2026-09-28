@@ -1,7 +1,7 @@
 /* Fill */
 
 .fill-hover {
-    transition: var(--ix-transition);
+    transition: var(--ix-transition-all);
 }
 
 .fill-hover-default--main {

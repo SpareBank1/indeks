@@ -1,7 +1,7 @@
 .ix-table {
     border-collapse: collapse;
     border-radius: var(--ix-border-radius-sm);
-    font-size: var(--ix-base-font-size);
+    font-size: var(--ix-font-size-md);
 }
 
 .ix-table--sm .ix-table__cell {
