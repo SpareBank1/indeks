@@ -54,7 +54,7 @@ jobs:
               id: gate
               run: |
                   # Betaer filtreres ut: sort -V rangerer 0.23.0-beta.0 over 0.23.0.
-                  nyeste() { git tag --list "@sb1/$1@*" | sed "s|^@sb1/$1@||" | grep -v -- '-' | sort -V | tail -1; }
+                  nyeste() { git tag --list "@sb1/$1@*" | sed "s|^@sb1/$1@||" | grep -v -e '-' | sort -V | tail -1; }
                   ikke_deploy() { echo "$1"; echo "deploy=false" >> "$GITHUB_OUTPUT"; exit 0; }
 
                   css=$(nyeste indeks-css)
