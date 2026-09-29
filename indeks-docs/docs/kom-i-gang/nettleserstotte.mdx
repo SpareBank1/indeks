@@ -5,17 +5,28 @@ import TabItem from '@theme/TabItem';
 
 Indeks virker helt ned til Safari 15.4 og Chrome 100, fordi mange av kundene våre har telefoner som er flere år gamle. Disse eldste versjonene kaller vi *gulvet*. Koden du skriver rundt Indeks, må virke på det samme gulvet. Denne siden viser hvordan vi passer på det i Indeks, og hvordan du setter opp det samme i ditt eget prosjekt.
 
+## Dette må du gjøre
+
+Stegene med nummer er oppsettet du gjør én gang. Resten av siden forklarer hvorfor, og hva du gjør når du skriver kode.
+
+1. [Installer pakkene](#installer)
+2. [Lag `.browserslistrc` med samme gulv som Indeks](#browserslistrc)
+3. [Sett `build.target` i Vite så det matcher `.browserslistrc`](#build-target)
+4. [Sett `lib` i `tsconfig.app.json` til `ES2022`](#typescript-lib)
+5. [Slå på `compat/compat` i lint, som `error`](#nettleser-api)
+6. [Slå på `plugin/no-unsupported-browser-features` i Stylelint, som `error`](#stylelint)
+7. [Kjør lint og `tsc -b` i CI, og la dem stoppe PR-er som feiler](#ci)
+
+Når oppsettet er på plass, gjelder to regler hver gang du skriver kode:
+
+- Slå opp nye API-er og CSS-egenskaper, og sørg for at siden virker uten dem. Se [Bruk nye ting som forbedring](#bruk-nye-ting-som-forbedring).
+- Nevn regelen ved navn og skriv en begrunnelse når du gjør et unntak. Se [Gjør unntak med begrunnelse](#gjør-unntak-med-begrunnelse).
+
 ## Før du starter
 
 Siden forutsetter et prosjekt med Vite 8 og TypeScript, slik du får det fra `npm create vite@latest`. Bruker du et annet byggeverktøy, gjelder de samme sjekkene, men konfigurasjonen ser annerledes ut.
 
 Kodeeksemplene under er deler du legger inn i filer du allerede har. Ikke erstatt en hel fil med eksempelet, for da mister du det som sto der fra før. Det gjelder også når du ber en KI-assistent gjøre jobben, se [Få hjelp av en KI-assistent](#få-hjelp-av-en-ki-assistent).
-
-Installer pakkene:
-
-```bash
-npm install --save-dev eslint-plugin-compat stylelint stylelint-no-unsupported-browser-features
-```
 
 ## Ikke stol på byggesteget alene
 
@@ -42,9 +53,17 @@ Derfor trenger du flere verktøy, som hver fanger sin del:
 | Nettleser-API-er | `URLPattern`, `CompressionStream` | `eslint-plugin-compat`, delvis |
 | Ny CSS | `:has()`, `@container`, `dvh` | `stylelint-no-unsupported-browser-features`, delvis |
 
-Ingen av sjekkene er komplette. Resten av siden viser oppsettet, og hva du gjør med hullene.
+Ingen av sjekkene er komplette. Stegene under viser oppsettet, og resten av siden viser hva du gjør med hullene.
 
-## Sett et felles gulv i `.browserslistrc`
+## 1. Installer pakkene {#installer}
+
+```bash
+npm install --save-dev eslint-plugin-compat stylelint stylelint-no-unsupported-browser-features
+```
+
+Bruker prosjektet ESLint i stedet for oxlint, trenger du også `typescript-eslint`, se [steg 5](#nettleser-api).
+
+## 2. Sett et felles gulv i `.browserslistrc` {#browserslistrc}
 
 Lag fila `.browserslistrc` i rota av prosjektet. Bruk samme liste som Indeks, så du ikke lover mer eller mindre enn komponentene du bygger på:
 
@@ -62,7 +81,7 @@ samsung >= 17
 
 ESLint, oxlint og Stylelint leser denne fila selv. De leter oppover i mappetreet, så har du flere prosjekter i samme repo, holder det med én fil i rota.
 
-## Sett `build.target` i Vite
+## 3. Sett `build.target` i Vite {#build-target}
 
 Uten `build.target` bygger Vite 8 for Safari 16.4 og Chrome 111. Det er over gulvet vårt. Vite leser ikke `.browserslistrc`, så du må skrive listen inn selv. Legg `build` til i `vite.config.ts`, ved siden av det som står der:
 
@@ -83,7 +102,7 @@ Med `build.target` på plass skriver Vite også om CSS-nesting til flat CSS og l
 
 Bruker du Tailwind, må du ha versjon 4.1 eller nyere. Se [Tailwind](/docs/grunnleggende/tokens/tailwind).
 
-## Begrens språket med TypeScript `lib`
+## 4. Begrens språket med TypeScript `lib` {#typescript-lib}
 
 `lib` bestemmer hvilke innebygde funksjoner TypeScript kjenner. Vite-malen setter den til `ES2023`, og da slipper `toSorted()` gjennom. Sett den til `ES2022`. I Vite-malen ligger innstillingene i `tsconfig.app.json`, ikke i `tsconfig.json`:
 
@@ -106,10 +125,10 @@ Do you need to change your target library? Try changing the 'lib' compiler optio
 
 Dette er den mest pålitelige sjekken for JavaScript, og den koster ingen ekstra pakker. To ting er verdt å vite:
 
-- **Vite typesjekker ikke.** Vite fjerner bare typene. Du må kjøre `tsc -b` selv, se [Kjør sjekkene i CI](#kjør-sjekkene-i-ci). Bruk `-b`: i Vite-malen finner `tsc --noEmit` ingen filer å sjekke, og svarer grønt uansett.
+- **Vite typesjekker ikke.** Vite fjerner bare typene. Du må kjøre `tsc -b` selv, se [steg 7](#ci). Bruk `-b`: i Vite-malen finner `tsc --noEmit` ingen filer å sjekke, og svarer grønt uansett.
 - **`DOM` følger alltid nyeste nettleser.** TypeScript sier ingenting om `showPopover()` eller andre nye nettleser-API-er. Der må lint ta over.
 
-## Sjekk nettleser-API-er
+## 5. Sjekk nettleser-API-er {#nettleser-api}
 
 [`eslint-plugin-compat`](https://github.com/amilajack/eslint-plugin-compat) sammenligner koden mot `.browserslistrc`. Nye Vite-prosjekter bruker oxlint, eldre bruker ESLint. Pluginen virker i begge:
 
@@ -166,7 +185,7 @@ Bruk `error`, ikke `warn`. En advarsel stopper ikke en PR, og da blir den overse
 
 Pluginen er best på ting som lages med `new`, som `new URLPattern()`. Da vi testet, fant den `URLPattern` og `CompressionStream`, men ikke `navigator.share()`, `showPopover()`, `Object.groupBy()` eller `CloseWatcher`. Tenk på den som et sikkerhetsnett med hull. Tar du i bruk et nettleser-API du ikke har brukt før, slår du opp støtten på [MDN](https://developer.mozilla.org/) eller [caniuse.com](https://caniuse.com/) selv.
 
-## Sjekk CSS med Stylelint
+## 6. Sjekk CSS med Stylelint {#stylelint}
 
 [`stylelint-no-unsupported-browser-features`](https://github.com/RJWadley/stylelint-no-unsupported-browser-features) gjør det samme for CSS. Lag `stylelint.config.js` i rota av prosjektet:
 
@@ -196,7 +215,7 @@ Den fanger blant annet `:has()`, `@container`, `subgrid`, `dvh` og `oklch()`. Da
 
 Første gang du kjører Stylelint, får du trolig treff i CSS-en som fulgte med Vite-malen, for eksempel `dvh`. Skriv dem om, eller slett CSS-en du ikke bruker.
 
-## Kjør sjekkene i CI
+## 7. Kjør sjekkene i CI {#ci}
 
 Sjekkene hjelper bare hvis de stopper en PR. Legg dem inn som scripts i `package.json`. Står det allerede et `lint`-script der, utvider du det:
 
@@ -236,6 +255,8 @@ Gjør deretter jobben til en [påkrevd sjekk](https://docs.github.com/en/reposit
 ## Bruk nye ting som forbedring
 
 Du kan gjerne bruke CSS og JavaScript som er nyere enn gulvet. Regelen er at siden skal *virke* i Safari 15.4. Den må ikke *se lik ut*. En animasjon som mangler, er greit. En knapp som ikke gjør noe, er det ikke.
+
+Dette kalles *progressive enhancement*, eller progressiv forbedring: du bygger først noe som virker overalt, og legger det nye oppå for nettlesere som støtter det.
 
 Tre måter å gjøre det trygt på i CSS:
 
@@ -314,14 +335,3 @@ Kjør lint og typesjekk til slutt, og vis meg resultatet.
 ```
 
 Se over endringene før du merger. Står det `eslint-disable` eller `stylelint-disable` uten begrunnelse, spør hvorfor.
-
-## Sjekkliste
-
-- [ ] `.browserslistrc` i rota, med samme gulv som Indeks
-- [ ] `build.target` i Vite matcher `.browserslistrc`
-- [ ] `lib` i `tsconfig.app.json` er `ES2022`
-- [ ] `tsc -b` kjører i CI
-- [ ] `compat/compat` og `plugin/no-unsupported-browser-features` står på `error`
-- [ ] Lint og typesjekk stopper PR-er som feiler
-- [ ] Nye API-er og CSS-egenskaper er slått opp, og har en vei videre der de mangler
-- [ ] Hvert unntak nevner regelen og har en begrunnelse
