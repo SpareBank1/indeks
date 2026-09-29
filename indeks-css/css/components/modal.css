@@ -122,7 +122,7 @@
  * tittelen eller øverst i body. */
 :where(.ix-modal__description) {
     margin: 0;
-    color: var(--ix-color-foreground-subtle-default);
+    color: var(--ix-color-foreground-main-subtle);
 }
 
 /* Ikon-knapp for lukking. Absolutt plassert i modalens øvre høyre hjørne (relativt

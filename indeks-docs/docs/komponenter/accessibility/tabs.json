@@ -30,7 +30,7 @@
     { "id": "1.4.3", "notes": "Fane-tekst bruker `--ix-color-foreground-main-default` (aktiv) og `--ix-color-foreground-main-subtle` (passiv) mot `--ix-color-surface-main`, som oppfyller kontrastkravet i både lys og mørk modus." },
     { "id": "1.4.4", "notes": "Relative enheter (font-size-tokens) — tekst skalerer korrekt ved 200 % zoom uten at innhold brytes." },
     { "id": "1.4.10", "notes": "Ved plassmangel scroller kun tablisten horisontalt (én rad, bevart rekkefølge); siden får ingen horisontal scroll. Reflower korrekt ned til 320 px viewport." },
-    { "id": "1.4.11", "notes": "Fokusindikatoren på fanene oppfyller 3:1 kontrastkrav via `--ix-outline-default`. Aktiv-indikatoren (understreken) bruker brand-fargen `--ix-color-fill-main-default`; passiv/hover-understrek bruker `--ix-color-border-main-default`/`--ix-color-border-main-hover`." },
+    { "id": "1.4.11", "notes": "Fokusindikatoren på fanene oppfyller 3:1 kontrastkrav via `--ix-color-border-focus-default`. Aktiv-indikatoren (understreken) bruker brand-fargen `--ix-color-fill-main-default`; passiv/hover-understrek bruker `--ix-color-border-main-default`/`--ix-color-border-main-hover`." },
     { "id": "2.1.1", "notes": "Full tastaturstøtte: Tab inn/ut av tablisten (roving tabindex — kun én tab-stopp), pil venstre/høyre flytter fokus mellom faner, Home/End til første/siste, Enter/Mellomrom aktiverer fokusert fane." },
     { "id": "2.1.2", "notes": "Ingen tastaturfeller — fokus navigeres fritt ut av tablisten med Tab/Shift+Tab." },
     { "id": "2.4.3", "notes": "Roving tabindex gir én tab-stopp for hele tablisten; fokusrekkefølgen følger DOM: tablist før panel." },

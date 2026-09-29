@@ -43,7 +43,7 @@
         "build:color-utils": "node scripts/build-colors/index.js",
         "build:bundle": "postcss ./index.css -o ./dist/index.css",
         "build:tailwind": "postcss ./.build/css/tailwind-utils.css -o ./dist/tailwind.css",
-        "lint": "stylelint \"css/**/*.css\""
+        "lint": "stylelint \"css/**/*.css\" && node ../scripts/check-css-variables.js ."
     },
     "author": "",
     "license": "MIT",
@@ -52,7 +52,7 @@
     },
     "devDependencies": {
         "autoprefixer": "^10.6.1",
-        "cssnano": "^9.0.1",
+        "cssnano": "^9.0.5",
         "postcss": "^8.5.28",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^17.0.0",

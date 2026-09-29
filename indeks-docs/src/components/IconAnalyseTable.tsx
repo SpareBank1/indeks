@@ -119,7 +119,7 @@ export default function IconAnalyseTable() {
                         border: '1px solid var(--ix-color-border-main-default)',
                         borderRadius: 'var(--ix-border-radius-sm)',
                         fontSize: 'var(--ix-font-size-sm)',
-                        background: 'var(--ix-color-background-main-default)',
+                        background: 'var(--ix-color-background-default)',
                         color: 'var(--ix-color-foreground-main-default)',
                     }}
                 />

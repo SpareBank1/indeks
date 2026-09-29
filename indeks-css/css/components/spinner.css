@@ -27,7 +27,6 @@
     border: var(--ii-spinner-border) solid transparent;
     border-top-color: var(--ix-color-foreground-main-default);
     border-radius: var(--ix-border-radius-circle);
-    box-shadow: 0 0 0 var(--ii-spinner-border) var(--ix-color-border-subtle-default);
     animation: ix-spinner-spin 0.9s linear infinite;
 }
 
@@ -38,7 +37,6 @@
 
 :where(.ix-button .ix-spinner)::before {
     border-top-color: currentcolor;
-    box-shadow: 0 0 0 var(--ii-spinner-border) transparent;
 }
 
 @keyframes ix-spinner-spin {

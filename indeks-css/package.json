@@ -39,7 +39,7 @@
         "build:npm": "rm -rf ./dist/npm && postcss ./index.css -o ./dist/npm/index.css",
         "build:tailwind": "postcss ./tailwind.css -o ./dist/npm/tailwind.css",
         "build:cdn": "rm -rf ./dist/cdn && postcss ./index.css -o ./dist/cdn/index.css --env cdn",
-        "lint": "stylelint \"css/**/*.css\"",
+        "lint": "stylelint \"css/**/*.css\" && node ../scripts/check-css-variables.js .",
         "update-packages": "echo not implemented",
         "test": "echo \"Ingen tester\""
     },
@@ -49,7 +49,7 @@
         "@sb1/indeks-tokens": "workspace:*",
         "@sb1/indeks-utils": "workspace:*",
         "autoprefixer": "^10.6.1",
-        "cssnano": "^9.0.1",
+        "cssnano": "^9.0.5",
         "postcss": "^8.5.28",
         "postcss-cli": "^11.0.1",
         "postcss-import": "^17.0.0",
