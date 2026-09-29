@@ -222,6 +222,12 @@ console.error('\ncheck-css-variables: var() peker på navn som ikke defineres no
 for (const { file, line, column, name } of problems) {
     console.error(`  ${file}:${line}:${column}  ${name}`);
 }
+/* I CI blir treffene annotasjoner på riktig linje i PR-diffen. */
+if (process.env.GITHUB_ACTIONS) {
+    for (const { file, line, column, name } of problems) {
+        console.log(`::error file=${file},line=${line},col=${column}::Ukjent CSS-variabel ${name}`);
+    }
+}
 console.error(
     `\n${problems.length} treff. Rett navnet, eller gi var() en fallback hvis navnet` +
         ' med vilje kan være usatt.\n',
