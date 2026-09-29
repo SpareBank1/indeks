@@ -1,5 +1,6 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { KiPromptBlock } from './KiPrompt';
 
 # Nettleserstøtte
 
@@ -183,7 +184,7 @@ export default [
 
 Bruk `error`, ikke `warn`. En advarsel stopper ikke en PR, og da blir den oversett.
 
-Pluginen er best på ting som lages med `new`, som `new URLPattern()`. Da vi testet, fant den `URLPattern` og `CompressionStream`, men ikke `navigator.share()`, `showPopover()`, `Object.groupBy()` eller `CloseWatcher`. Tenk på den som et sikkerhetsnett med hull. Tar du i bruk et nettleser-API du ikke har brukt før, slår du opp støtten på [MDN](https://developer.mozilla.org/) eller [caniuse.com](https://caniuse.com/) selv.
+Pluginen er best på ting som lages med `new`, som `new URLPattern()`. Da vi testet, fant den `URLPattern` og `CompressionStream`, men ikke `navigator.share()`, `showPopover()`, `Object.groupBy()` eller `CloseWatcher`. Det skyldes at kompatibilitetsdataene i pluginen er fra 2025, og kjente hull som `Object.groupBy` er meldt inn, men ikke rettet. Tenk på den som et sikkerhetsnett med hull. Tar du i bruk et nettleser-API du ikke har brukt før, slår du opp støtten på [MDN](https://developer.mozilla.org/) eller [caniuse.com](https://caniuse.com/) selv.
 
 ## 6. Sjekk CSS med Stylelint {#stylelint}
 
@@ -326,12 +327,6 @@ To ting skal du aldri gjøre:
 
 Ber du en KI-assistent sette opp dette, gi den lenken til denne siden og si tydelig at den skal flette inn, ikke erstatte. For eksempel:
 
-```text
-Sett opp nettleserstøtte i prosjektet etter
-https://design.sparebank1.no/docs/kom-i-gang/nettleserstotte.
-Flett inn i eksisterende konfigurasjonsfiler, ikke erstatt dem.
-Ikke skru av regler eller bruk warn for å få sjekkene grønne.
-Kjør lint og typesjekk til slutt, og vis meg resultatet.
-```
+<KiPromptBlock />
 
 Se over endringene før du merger. Står det `eslint-disable` eller `stylelint-disable` uten begrunnelse, spør hvorfor.
