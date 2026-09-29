@@ -24,7 +24,11 @@
     "pnpm": {
         "overrides": {
             "webpackbar": "^7.0.0",
-            "postcss": "^8.5.19"
+            "postcss": "^8.5.19",
+            "image-size": "^2.0.3",
+            "qs": "^6.16.0",
+            "uuid": "^11.1.1",
+            "serialize-javascript": "^7.0.5"
         }
     },
     "devDependencies": {
