@@ -1,10 +1,25 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Nettleserstøtte
 
-Indeks virker helt ned til Safari 15.4 og Chrome 100, fordi mange av kundene våre har telefoner som er flere år gamle. Koden du skriver rundt Indeks, må tåle de samme nettleserne. Denne siden viser hvordan vi passer på det i Indeks, og hvordan du setter opp det samme i ditt eget prosjekt.
+Indeks virker helt ned til Safari 15.4 og Chrome 100, fordi mange av kundene våre har telefoner som er flere år gamle. Disse eldste versjonene kaller vi *gulvet*. Koden du skriver rundt Indeks, må virke på det samme gulvet. Denne siden viser hvordan vi passer på det i Indeks, og hvordan du setter opp det samme i ditt eget prosjekt.
+
+## Før du starter
+
+Siden forutsetter et prosjekt med Vite 8 og TypeScript, slik du får det fra `npm create vite@latest`. Bruker du et annet byggeverktøy, gjelder de samme sjekkene, men konfigurasjonen ser annerledes ut.
+
+Kodeeksemplene under er deler du legger inn i filer du allerede har. Ikke erstatt en hel fil med eksempelet, for da mister du det som sto der fra før. Det gjelder også når du ber en KI-assistent gjøre jobben, se [Få hjelp av en KI-assistent](#få-hjelp-av-en-ki-assistent).
+
+Installer pakkene:
+
+```bash
+npm install --save-dev eslint-plugin-compat stylelint stylelint-no-unsupported-browser-features
+```
 
 ## Ikke stol på byggesteget alene
 
-Mange setter `build.target` i Vite og tror de er ferdige. Men Vite (via esbuild) skriver bare om *syntaks*. Møter bygget en metode eller et API nettleseren mangler, sendes koden videre uendret, og bygget går grønt.
+Mange setter `build.target` i Vite og tror de er ferdige. Men Vite skriver bare om *syntaks*, altså måten koden er skrevet på, som `a?.b`. Bruker koden en innebygd funksjon nettleseren mangler, sendes den videre uendret, og bygget går grønt.
 
 Denne fila bygger uten feil med `target: ['safari15.4']`:
 
@@ -15,23 +30,23 @@ dialog.showPopover(); // Safari 17
 const regex = /[\p{L}--[a-z]]/v; // Safari 17
 ```
 
-I Safari 15.4 kaster alle fire linjene en feil. Den siste er lumsk: esbuild gjør regex-literalen om til `new RegExp('…', 'v')`, som ser trygt ut, men feiler først når koden kjøres. CSS behandles på samme måte. En egenskap nettleseren ikke kjenner, slippes gjennom uten advarsel.
+I Safari 15.4 kaster alle fire linjene en feil. Den siste er lumsk: Vite gjør regex-literalen om til `RegExp('…', 'v')`, som ser trygt ut, men feiler først når koden kjøres. CSS behandles på samme måte. En egenskap nettleseren ikke kjenner, slippes gjennom uten advarsel.
 
 Derfor trenger du flere verktøy, som hver fanger sin del:
 
 | Hva | Eksempel | Fanges av |
 |-----|----------|-----------|
 | Ny syntaks | `a?.b`, `static {}` i klasser | `build.target` (skrives om) |
-| Nye metoder i språket | `toSorted()`, `Object.groupBy()` | TypeScript `lib` |
+| CSS-nesting og prefikser | `.a { .b {} }`, `-webkit-mask` | `build.target` (skrives om) |
+| Nye funksjoner i språket | `toSorted()`, `Object.groupBy()` | TypeScript `lib` |
 | Nettleser-API-er | `URLPattern`, `CompressionStream` | `eslint-plugin-compat`, delvis |
-| CSS | `:has()`, `@container`, `dvh` | `stylelint-no-unsupported-browser-features`, delvis |
-| Prefikser i CSS | `-webkit-mask` | Autoprefixer |
+| Ny CSS | `:has()`, `@container`, `dvh` | `stylelint-no-unsupported-browser-features`, delvis |
 
 Ingen av sjekkene er komplette. Resten av siden viser oppsettet, og hva du gjør med hullene.
 
-## Sett ett gulv i `.browserslistrc`
+## Sett et felles gulv i `.browserslistrc`
 
-Legg en `.browserslistrc` i rota av prosjektet. Bruk samme liste som Indeks, så du ikke lover mer eller mindre enn komponentene du bygger på:
+Lag fila `.browserslistrc` i rota av prosjektet. Bruk samme liste som Indeks, så du ikke lover mer eller mindre enn komponentene du bygger på:
 
 ```text
 # .browserslistrc
@@ -45,14 +60,35 @@ and_ff >= 100
 samsung >= 17
 ```
 
-ESLint, Stylelint, PostCSS og Autoprefixer leser denne fila selv. De leter oppover i mappetreet, så i et monorepo holder det med én fil i rota.
+ESLint, oxlint og Stylelint leser denne fila selv. De leter oppover i mappetreet, så har du flere prosjekter i samme repo, holder det med én fil i rota.
+
+## Sett `build.target` i Vite
+
+Uten `build.target` bygger Vite for omtrent Safari 16 og Chrome 107. Det er over gulvet vårt. Vite leser ikke `.browserslistrc`, så du må skrive listen inn selv. Legg `build` til i `vite.config.ts`, ved siden av det som står der:
+
+```ts
+// vite.config.ts
+export default defineConfig({
+    plugins: [react()],
+    build: {
+        // Holdes i takt med .browserslistrc for hånd.
+        target: ['chrome100', 'edge100', 'firefox100', 'safari15.4', 'ios15.4'],
+    },
+});
+```
+
+Samsung Internet og Android-variantene har ingen egne navn her. De bygger på Chrome, så `chrome100` dekker dem.
+
+Med `build.target` på plass skriver Vite også om CSS-nesting til flat CSS og legger på `-webkit-`-prefiksene Safari 15.4 trenger. Du trenger ikke PostCSS eller Autoprefixer for det.
+
+Bruker du Tailwind, må du ha versjon 4.1 eller nyere. Se [Tailwind](/docs/grunnleggende/tokens/tailwind).
 
 ## Begrens språket med TypeScript `lib`
 
-`lib` bestemmer hvilke innebygde metoder TypeScript kjenner. Står den på `ES2022`, blir `toSorted()` og `Object.groupBy()` typefeil:
+`lib` bestemmer hvilke innebygde funksjoner TypeScript kjenner. Vite-malen setter den til `ES2023`, og da slipper `toSorted()` gjennom. Sett den til `ES2022`. I Vite-malen ligger innstillingene i `tsconfig.app.json`, ikke i `tsconfig.json`:
 
 ```json
-// tsconfig.json
+// tsconfig.app.json
 {
     "compilerOptions": {
         "target": "ES2022",
@@ -61,6 +97,8 @@ ESLint, Stylelint, PostCSS og Autoprefixer leser denne fila selv. De leter oppov
 }
 ```
 
+Nå blir `toSorted()`, `Object.groupBy()` og `v`-flagget på regex typefeil:
+
 ```text
 error TS2550: Property 'toSorted' does not exist on type 'number[]'.
 Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
@@ -68,37 +106,69 @@ Do you need to change your target library? Try changing the 'lib' compiler optio
 
 Dette er den mest pålitelige sjekken for JavaScript, og den koster ingen ekstra pakker. To ting er verdt å vite:
 
-- **Vite typesjekker ikke.** esbuild fjerner bare typene. Du må kjøre `tsc --noEmit` selv, se [Kjør sjekkene i CI](#kjør-sjekkene-i-ci).
-- **`DOM` følger alltid nyeste nettleser.** TypeScript sier ingenting om `showPopover()` eller andre nye DOM-API-er. Der må ESLint ta over.
+- **Vite typesjekker ikke.** Vite fjerner bare typene. Du må kjøre `tsc -b` selv, se [Kjør sjekkene i CI](#kjør-sjekkene-i-ci). Bruk `-b`: i Vite-malen finner `tsc --noEmit` ingen filer å sjekke, og svarer grønt uansett.
+- **`DOM` følger alltid nyeste nettleser.** TypeScript sier ingenting om `showPopover()` eller andre nye nettleser-API-er. Der må lint ta over.
 
-## Sjekk nettleser-API-er med ESLint
+## Sjekk nettleser-API-er
 
-[`eslint-plugin-compat`](https://github.com/amilajack/eslint-plugin-compat) sammenligner API-kall mot `.browserslistrc`:
+[`eslint-plugin-compat`](https://github.com/amilajack/eslint-plugin-compat) sammenligner koden mot `.browserslistrc`. Nye Vite-prosjekter bruker oxlint, eldre bruker ESLint. Pluginen virker i begge:
+
+<Tabs groupId="linter">
+<TabItem value="oxlint" label="oxlint">
+
+Legg `jsPlugins` og regelen til i `.oxlintrc.json`:
+
+```json
+// .oxlintrc.json
+{
+    "jsPlugins": ["eslint-plugin-compat"],
+    "rules": {
+        "compat/compat": "error"
+    }
+}
+```
+
+</TabItem>
+<TabItem value="eslint" label="ESLint">
+
+ESLint trenger `typescript-eslint` for å lese `.ts`-filer:
+
+```bash
+npm install --save-dev typescript-eslint
+```
+
+Legg blokkene til i lista i `eslint.config.js`:
 
 ```js
 // eslint.config.js
 import compat from 'eslint-plugin-compat';
+import tseslint from 'typescript-eslint';
 
 export default [
+    { ignores: ['dist'] },
     {
+        files: ['**/*.{js,jsx,ts,tsx}'],
+        languageOptions: { parser: tseslint.parser },
         plugins: { compat },
         rules: {
             'compat/compat': 'error',
-        },
-        settings: {
-            polyfills: [],
         },
     },
 ];
 ```
 
+`ignores: ['dist']` hindrer at ESLint sjekker den ferdigbygde koden.
+
+</TabItem>
+</Tabs>
+
 Bruk `error`, ikke `warn`. En advarsel stopper ikke en PR, og da blir den oversett.
 
-Pluginen er best på globale konstruktører. Da vi testet, fant den `URLPattern`, `CompressionStream` og `toSorted()`, men ikke `navigator.share()`, `showPopover()`, `Object.groupBy()` eller `CloseWatcher`. Tenk på den som et sikkerhetsnett med hull. Tar du i bruk et DOM-API du ikke har brukt før, slår du opp støtten på [MDN](https://developer.mozilla.org/) eller [caniuse.com](https://caniuse.com/) selv.
+Pluginen er best på ting som lages med `new`, som `new URLPattern()`. Da vi testet, fant den `URLPattern` og `CompressionStream`, men ikke `navigator.share()`, `showPopover()`, `Object.groupBy()` eller `CloseWatcher`. Tenk på den som et sikkerhetsnett med hull. Tar du i bruk et nettleser-API du ikke har brukt før, slår du opp støtten på [MDN](https://developer.mozilla.org/) eller [caniuse.com](https://caniuse.com/) selv.
 
 ## Sjekk CSS med Stylelint
 
-[`stylelint-no-unsupported-browser-features`](https://github.com/RJWadley/stylelint-no-unsupported-browser-features) gjør det samme for CSS:
+[`stylelint-no-unsupported-browser-features`](https://github.com/RJWadley/stylelint-no-unsupported-browser-features) gjør det samme for CSS. Lag `stylelint.config.js` i rota av prosjektet:
 
 ```js
 // stylelint.config.js
@@ -106,10 +176,17 @@ import noUnsupportedBrowserFeatures from 'stylelint-no-unsupported-browser-featu
 
 export default {
     plugins: [noUnsupportedBrowserFeatures],
+    ignoreFiles: ['dist/**'],
     rules: {
         'plugin/no-unsupported-browser-features': [
             true,
-            { severity: 'error', ignore: [] },
+            {
+                severity: 'error',
+                ignore: [
+                    // Vite skriver nesting om til flat CSS
+                    'css-nesting',
+                ],
+            },
         ],
     },
 };
@@ -117,41 +194,44 @@ export default {
 
 Den fanger blant annet `:has()`, `@container`, `subgrid`, `dvh` og `oklch()`. Da vi testet, slapp `color-mix()`, `text-wrap: balance`, `field-sizing` og `@starting-style` gjennom. Samme råd gjelder her: slå opp det du ikke har brukt før.
 
-Skriver du CSS-nesting, trenger du også [`postcss-preset-env`](https://preset-env.cssdb.org/), som skriver den om til flat CSS. [Autoprefixer](https://github.com/postcss/autoprefixer) legger på `-webkit-`-prefiksene Safari 15.4 trenger. Begge leser `.browserslistrc`.
-
-## Synk `build.target` med gulvet
-
-esbuild leser ikke `.browserslistrc`, så Vite må få listen sin for hånd:
-
-```ts
-// vite.config.ts
-export default defineConfig({
-    build: {
-        // Holdes i takt med .browserslistrc for hånd.
-        target: ['chrome100', 'edge100', 'firefox100', 'safari15.4', 'ios15.4'],
-    },
-});
-```
-
-Samsung Internet og Android-variantene er ikke gyldige esbuild-targets. De bygger på Chromium, så `chrome100` dekker dem. Vil du slippe å synke for hånd, finnes det pakker som gjør om `.browserslistrc` til esbuild-targets.
-
-Bruker du Tailwind, må du ha versjon 4.1 eller nyere. Se [Tailwind](/docs/grunnleggende/tokens/tailwind).
+Første gang du kjører Stylelint, får du trolig treff i CSS-en som fulgte med Vite-malen, for eksempel `dvh`. Skriv dem om, eller slett CSS-en du ikke bruker.
 
 ## Kjør sjekkene i CI
 
-Sjekkene hjelper bare hvis de stopper en PR. Legg dem inn som scripts:
+Sjekkene hjelper bare hvis de stopper en PR. Legg dem inn som scripts i `package.json`. Står det allerede et `lint`-script der, utvider du det:
 
 ```json
 // package.json
 {
     "scripts": {
-        "lint": "eslint . && stylelint \"src/**/*.css\"",
-        "typecheck": "tsc --noEmit"
+        "lint": "oxlint && stylelint \"src/**/*.css\"",
+        "typecheck": "tsc -b"
     }
 }
 ```
 
-Kjør begge på hver PR, og gjør jobben til en påkrevd sjekk før merge.
+Bytt `oxlint` med `eslint .` hvis prosjektet bruker ESLint.
+
+Kjør begge på hver PR. Med GitHub Actions kan det se slik ut:
+
+```yaml
+# .github/workflows/sjekk.yml
+name: Sjekk
+on: pull_request
+jobs:
+    sjekk:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v7
+            - uses: actions/setup-node@v6
+              with:
+                  node-version: 24
+            - run: npm ci
+            - run: npm run lint
+            - run: npm run typecheck
+```
+
+Gjør deretter jobben til en [påkrevd sjekk](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-status-checks-to-pass-before-merging) i repoets regler, så en PR ikke kan merges før den er grønn.
 
 ## Bruk nye ting som forbedring
 
@@ -160,7 +240,7 @@ Du kan gjerne bruke CSS og JavaScript som er nyere enn gulvet. Regelen er at sid
 Tre måter å gjøre det trygt på i CSS:
 
 - **Egenskaper som ignoreres.** Accordion i Indeks bruker `interpolate-size: allow-keywords` for å animere høyden. Eldre nettlesere hopper over linjen, og accordion åpner seg uten animasjon.
-- **`@supports`.** Modal legger inn- og uttoning i en `@supports (transition-behavior: allow-discrete)`-blokk. Safari 15.4 viser dialogen rett frem, uten toning.
+- **`@supports`.** Med `@supports` spør CSS-en om nettleseren kan noe, og bruker blokken bare hvis svaret er ja. Modal legger inn- og uttoning i en `@supports (transition-behavior: allow-discrete)`-blokk. Safari 15.4 viser dialogen rett frem, uten toning.
 - **Reserveverdi først.** En verdi nettleseren ikke forstår, forkaster hele deklarasjonen. Står en enklere verdi rett over, er det den som gjelder:
 
   ```css
@@ -205,29 +285,43 @@ interpolate-size: allow-keywords;
 /* stylelint-enable plugin/no-unsupported-browser-features */
 ```
 
-**Én linje i JavaScript.** Bruk `--` for begrunnelsen:
+**Én linje i JavaScript.** Bruk `--` for begrunnelsen. Kommentaren virker i både ESLint og oxlint:
 
 ```ts
 // eslint-disable-next-line compat/compat -- bare i admin-verktøy, som krever nyeste Chrome
 const monster = new URLPattern({ pathname: '/sak/:id' });
 ```
 
-**Polyfill.** Laster du en polyfill, legg API-et i `settings.polyfills` i ESLint-konfigurasjonen, for eksempel `'URLPattern'`. Da slipper du unntak på hver linje.
+**Polyfill.** En polyfill er et script som legger inn en manglende funksjon i gamle nettlesere. Laster du en, legger du navnet på API-et i `settings.polyfills` i lint-konfigurasjonen, for eksempel `'URLPattern'`. Da slipper du unntak på hver linje.
 
-**Hele prosjektet.** Bruk `ignore` i Stylelint bare for falske positiver, og skriv en kommentar per oppføring. Indeks ignorerer for eksempel `multicolumn`, fordi pluginen tror at `column-gap` i flex og grid betyr kolonnelayout.
+**Hele prosjektet.** Bruk `ignore` i Stylelint bare når regelen tar feil, og skriv en kommentar per oppføring. Indeks ignorerer for eksempel `multicolumn`, fordi pluginen tror at `column-gap` i flex og grid betyr kolonnelayout.
 
 To ting skal du aldri gjøre:
 
 - Slå av regelen uten å nevne den ved navn (`/* stylelint-disable-next-line */`). Da skrur du av alle andre regler på linjen også.
 - Sette regelen til `warn` for å få en PR gjennom.
 
+## Få hjelp av en KI-assistent
+
+Ber du en KI-assistent sette opp dette, gi den lenken til denne siden og si tydelig at den skal flette inn, ikke erstatte. For eksempel:
+
+```text
+Sett opp nettleserstøtte i prosjektet etter
+https://design.sparebank1.no/docs/kom-i-gang/nettleserstotte.
+Flett inn i eksisterende konfigurasjonsfiler, ikke erstatt dem.
+Ikke skru av regler eller bruk warn for å få sjekkene grønne.
+Kjør lint og typesjekk til slutt, og vis meg resultatet.
+```
+
+Se over endringene før du merger. Står det `eslint-disable` eller `stylelint-disable` uten begrunnelse, spør hvorfor.
+
 ## Sjekkliste
 
 - [ ] `.browserslistrc` i rota, med samme gulv som Indeks
-- [ ] `lib` i `tsconfig.json` er `ES2022`
-- [ ] `tsc --noEmit` kjører i CI
-- [ ] `compat/compat` og `plugin/no-unsupported-browser-features` står på `error`
 - [ ] `build.target` i Vite matcher `.browserslistrc`
+- [ ] `lib` i `tsconfig.app.json` er `ES2022`
+- [ ] `tsc -b` kjører i CI
+- [ ] `compat/compat` og `plugin/no-unsupported-browser-features` står på `error`
 - [ ] Lint og typesjekk stopper PR-er som feiler
 - [ ] Nye API-er og CSS-egenskaper er slått opp, og har en vei videre der de mangler
 - [ ] Hvert unntak nevner regelen og har en begrunnelse
