@@ -117,7 +117,7 @@ for å bygge de statiske resursene. På sikt vil de også tilby en dev alternati
 
 `pnpm update-packages` kjører `pnpm -r update` i alle pakker, altså oppdatering
 innenfor versjonsområdene som alt står i `package.json`. Vil du løfte selve
-områdene, har hver pakke sitt eget `update-packages` med en interaktiv
+områdene, har de fleste pakkene sitt eget `update-packages` med en interaktiv
 `npm-check-updates`-visning.
 
 ## Versjonering og Release
