@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - main
+            - beta
 
 permissions: {}
 
@@ -37,10 +38,34 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile --ignore-scripts
 
+            # .changeset/pre.json styrer pre-modus. mode "pre" gir betaer, mode "exit" gjør at neste
+            # changeset version lager stabile versjoner av betaens changesets og sletter pre.json.
+            # main: betaer skal aldri lages her, men exit er slik en ferdig beta kommer inn.
+            # beta: bare betaer. I exit venter vi på merge til main, ellers lager beta en stabil release.
+            - name: Sjekk pre-modus
+              id: pre
+              env:
+                  BRANCH: ${{ github.ref_name }}
+              run: |
+                  MODE=$( [ -f .changeset/pre.json ] && node -p "require('./.changeset/pre.json').mode" || echo ingen )
+                  echo "pre-modus: $MODE"
+                  case "$BRANCH:$MODE" in
+                      main:pre)
+                          echo "::error::.changeset/pre.json står i pre-modus på main. Kjør pnpm changeset pre exit på beta før merge."
+                          exit 1 ;;
+                      beta:ingen)
+                          echo "::error::.changeset/pre.json mangler på beta. Kjør pnpm changeset pre enter beta."
+                          exit 1 ;;
+                      beta:exit)
+                          echo "::notice::Betaen er avsluttet med pre exit. Versjoneres på main etter merge."
+                          echo "hopp=true" >> "$GITHUB_OUTPUT" ;;
+                  esac
+
             # Bare versjonering. Publiseringen skjer i release-publiser.yml, fordi
             # changesets/action alltid velger versjonering når det finnes changesets —
             # den kan derfor ikke gjenbrukes til en schedulert publisering.
             - name: Opprett eller oppdater versjons-PR
+              if: steps.pre.outputs.hopp != 'true'
               uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
               with:
                   version-script: pnpm ci:version

@@ -2,7 +2,7 @@ name: PR - Eksempel e2e
 
 on:
     pull_request:
-        branches: [main]
+        branches: [main, beta]
         paths:
             - 'indeks-eksempel/**'
             - 'indeks-react/**'

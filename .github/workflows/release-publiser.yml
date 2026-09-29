@@ -6,6 +6,11 @@ on:
         # Kjøringen er en no-op når alt i versjons-commiten allerede er publisert,
         # så en forsinket eller droppet kjøring er ufarlig — den prøver igjen neste time.
         - cron: '5 7-14 * * 1-5'
+    # Betaer publiseres med en gang versjons-PR-en på beta er merget. Pre-modus
+    # (.changeset/pre.json) gjør at changeset publish bruker dist-tag beta, ikke latest.
+    push:
+        branches:
+            - beta
     workflow_dispatch:
         inputs:
             dry_run:
@@ -14,7 +19,7 @@ on:
                 default: false
                 type: boolean
             ref:
-                description: 'Commit/tag å publisere fra (tom = nyeste versjons-commit på main)'
+                description: 'Commit/tag/branch å publisere fra (tom = nyeste versjons-commit på main)'
                 required: false
                 type: string
 
@@ -26,6 +31,11 @@ concurrency:
 
 jobs:
     publiser:
+        # På beta kjører vi bare når versjons-PR-en merges. Meldingen står med i merge-, squash-
+        # og rebase-commits.
+        if: >-
+            github.event_name != 'push' ||
+            contains(github.event.head_commit.message, 'chore: version packages')
         runs-on: ubuntu-latest
         timeout-minutes: 30
         permissions:
@@ -45,9 +55,13 @@ jobs:
               id: finn
               env:
                   INPUT_REF: ${{ inputs.ref }}
+                  IS_BETA: ${{ github.event_name == 'push' }}
               run: |
                   if [ -n "$INPUT_REF" ]; then
                       SHA="$INPUT_REF"
+                  elif [ "$IS_BETA" = true ]; then
+                      # ^origin/main: main merges inn i beta, og da skal ikke versjons-commits derfra telle.
+                      SHA=$(git rev-list -1 --grep='^chore: version packages' origin/beta ^origin/main)
                   else
                       SHA=$(git rev-list -1 --grep='^chore: version packages' origin/main)
                   fi
@@ -59,6 +73,13 @@ jobs:
               env:
                   SHA: ${{ steps.finn.outputs.sha }}
               run: git checkout --detach "$SHA"
+
+            # Sikkerhetsnett: fra beta publiseres bare betaer, så latest aldri kan flyttes derfra.
+            - name: Sjekk at beta er i pre-modus
+              if: ${{ github.event_name == 'push' }}
+              run: |
+                  MODE=$( [ -f .changeset/pre.json ] && node -p "require('./.changeset/pre.json').mode" || echo ingen )
+                  [ "$MODE" = pre ] || { echo "::error::Versjons-commiten på beta er ikke i pre-modus ($MODE)"; exit 1; }
 
             - name: Install pnpm
               uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -110,5 +131,8 @@ jobs:
                           continue
                       fi
                       NOTES=$(awk -v h="## $V" 'index($0,h)==1{f=1;next} f&&/^## /{exit} f' "$pkg/CHANGELOG.md")
-                      gh release create "$TAG" --verify-tag --title "$TAG" --notes "${NOTES:-Se $pkg/CHANGELOG.md}"
+                      # Uten --prerelease blir en beta merket som «Latest release» på GitHub.
+                      PRE=()
+                      case "$V" in *-*) PRE=(--prerelease) ;; esac
+                      gh release create "$TAG" --verify-tag "${PRE[@]}" --title "$TAG" --notes "${NOTES:-Se $pkg/CHANGELOG.md}"
                   done

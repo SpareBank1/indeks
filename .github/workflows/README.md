@@ -56,8 +56,8 @@ det finnes ingen varsling.
 
 | Workflow                        | Fil                       | Trigger                                     | Beskrivelse                                                                                        |
 | ------------------------------- | ------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| **Release - Opprett versjons-PR** | `release-versjons-pr.yml` | Push til `main`                             | Kjører `changeset version` og oppretter/oppdaterer PR-en «chore: version packages». Publiserer ikke. |
-| **Release - Publiser til npm**    | `release-publiser.yml`    | `cron: '5 7-14 * * 1-5'` + manuell kjøring  | Publiserer fra nyeste versjons-commit, pusher git-tags og oppretter én GitHub-release per pakke.     |
+| **Release - Opprett versjons-PR** | `release-versjons-pr.yml` | Push til `main` og `beta`                   | Kjører `changeset version` og oppretter/oppdaterer PR-en «chore: version packages». Publiserer ikke. |
+| **Release - Publiser til npm**    | `release-publiser.yml`    | cron + push til `beta` + manuell kjøring    | Publiserer fra nyeste versjons-commit, pusher git-tags og oppretter én GitHub-release per pakke.     |
 
 Publiseringen gjør fire ting fordi `changeset publish` bare gjør det første:
 
@@ -73,6 +73,33 @@ Publiseringen gjør fire ting fordi `changeset publish` bare gjør det første:
 
 Manuell kjøring tar `dry_run` (viser publiseringsplanen uten å publisere) og `ref` (publiser fra en
 gitt commit eller tag i stedet for nyeste versjons-commit).
+
+### Beta
+
+Én beta om gangen, på branchen `beta`, i changesets' pre-modus. Flyten er den samme som på `main`,
+men publiseringen skjer med en gang versjons-PR-en er merget, med dist-tag `beta`. `latest` på npm,
+docs-nettstedet og `main` merker ingenting, så hotfikser releases som vanlig underveis.
+
+1. **Start:** `git switch -c beta main`, `pnpm changeset pre enter beta`, push.
+2. **Jobb:** PR-er mot `beta` med changesets. Versjons-PR-en mot `beta` gir `0.23.0-beta.0`,
+   `-beta.1` osv.
+3. **Hotfiks på `main`:** merg `main` inn i `beta` jevnlig. Behold beta-siden i konflikter om
+   `version` og `CHANGELOG.md`.
+4. **Ferdig:** `pnpm changeset pre exit` på `beta`, merg `main` inn og behold beta-versjonene
+   i `version`. PR fra `beta` til `main`. Versjons-PR-en på `main` gir da stabil `0.23.0` med alle
+   endringene i én changelog-seksjon, og sletter `pre.json`. Slett `beta` etter merge.
+
+I pre-modus flytter changesets v3 brukte changesets til `.changeset/pre/`. Ikke slett `pre.json`
+for hånd, da blir de liggende der og kommer aldri med i den stabile versjonen.
+
+Konsumenter installerer med `npm i @sb1/indeks-react@beta`. Versjonsspenn som `^0.22.1` plukker
+aldri opp en beta.
+
+`release-versjons-pr.yml` stopper hvis `main` står i pre-modus eller `beta` mangler `pre.json`, og
+hopper over `beta` etter `pre exit`. `release-publiser.yml` publiserer ingenting fra `beta` som
+ikke er i pre-modus, så `latest` kan ikke flyttes derfra.
+Docs-deployen og CDN-synken i `sb1-indeks` filtrerer bort betaer når de leter etter nyeste
+versjon, fordi `sort -V` rangerer `0.23.0-beta.0` over `0.23.0`.
 
 > Versjons-PR-en lages av `changesets/action` med `GITHUB_TOKEN`. Events fra den tokenen trigger ikke
 > workflows, så PR-en får **null statussjekker** og kan bare merges av en admin med bypass. Merge-gaten

@@ -5,7 +5,7 @@ name: PR - Playwright-tester
 # fullføre checken på PR-er utenfor kode-pathene, og de ville henge på BLOCKED.
 on:
     pull_request:
-        branches: [main]
+        branches: [main, beta]
 
 concurrency:
     group: playwright-${{ github.head_ref || github.ref }}

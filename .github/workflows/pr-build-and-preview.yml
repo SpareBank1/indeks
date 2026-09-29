@@ -2,7 +2,7 @@ name: PR - Bygg, test og forhåndsvisning
 
 on:
     pull_request:
-        branches: [main]
+        branches: [main, beta]
 
 concurrency:
     group: pr-${{ github.head_ref || github.ref }}

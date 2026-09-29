@@ -14,6 +14,7 @@ on:
         types: [closed]
         branches:
             - main
+            - beta
 
 jobs:
     cleanup:
