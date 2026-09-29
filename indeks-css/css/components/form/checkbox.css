@@ -8,15 +8,9 @@
  * BEM-hooks (.ix-checkbox__input / .ix-checkbox__label) for forfattere som vil
  * ha eksplisitte selektorer. BEM-klassene er valgfrie.
  *
- * VIKTIG: input og label må forbli DIREKTE, adjacent søsken (`input + label`)
- * — hele tilstands-stylingen (checked/indeterminate/invalid/disabled/
- * focus-visible) er bygget på nabokombinatoren. Når Checkbox brukes med
- * description/errorMessage/tooltip (via <ix-field>) lar IxField._wire() derfor
- * denne labelen stå urørt i stedet for å flytte den inn i en label-row (se
- * kommentar i IxField.ts). Én konsekvens: tooltip-knappen kan ikke ligge i en
- * egen label-row-wrapper her — den settes i stedet inn som labelens neste
- * søsken, og .ix-checkbox er derfor en rad-layout (ikke kolonne) slik at
- * knappen lander på samme linje som label-teksten i stedet for under. */
+ * VIKTIG: input og label må være direkte søsken — all tilstandsstyling bruker
+ * `input + label`. Derfor lar IxField labelen stå, og legger tooltip-knappen
+ * rett etter den (rad-layout). */
 
 :where(.ix-checkbox) {
     display: flex;
@@ -45,9 +39,7 @@
     position: relative;
     display: inline-flex;
     align-items: center;
-    /* Fyller resten av .ix-checkbox sin bredde (samme klikkeflate som før
-     * .ix-checkbox ble rad-layout) — også når en tooltip-knapp legger seg som
-     * neste søsken på samme rad. */
+    /* Fyll raden, så klikkflaten er like bred som før rad-layouten. */
     flex: 1 1 auto;
     gap: var(--ix-spacing-xs);
     padding-left: calc(var(--ii-checkbox-size) + var(--ix-spacing-xs));
@@ -128,13 +120,6 @@
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M13.5 4.5L6 12L2.5 8.5' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
-/* Hover på valgt boks */
-:where(.ix-checkbox) input[type='checkbox']:checked:not(:disabled) + label:hover,
-:where(.ix-checkbox__input:checked:not(:disabled)) + :where(.ix-checkbox__label:hover) {
-    --ii-checkbox-box-bg: var(--ix-color-fill-main-default-hover);
-    --ii-checkbox-box-border: transparent;
-}
-
 /* ── Indeterminate (delvis valgt) ────────────────────────────────────────── */
 
 :where(.ix-checkbox) input[type='checkbox']:indeterminate + label,
@@ -150,46 +135,92 @@
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3 8H13' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
+/* Hover/active på valgt eller delvis valgt boks */
+:where(.ix-checkbox) input[type='checkbox']:checked:not(:disabled) + label:hover,
+:where(.ix-checkbox) input[type='checkbox']:indeterminate:not(:disabled) + label:hover,
+:where(.ix-checkbox__input:checked:not(:disabled)) + :where(.ix-checkbox__label:hover),
+:where(.ix-checkbox__input:indeterminate:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-main-default-hover);
+    --ii-checkbox-box-border: transparent;
+}
+
+:where(.ix-checkbox) input[type='checkbox']:checked:not(:disabled) + label:active,
+:where(.ix-checkbox) input[type='checkbox']:indeterminate:not(:disabled) + label:active,
+:where(.ix-checkbox__input:checked:not(:disabled)) + :where(.ix-checkbox__label:active),
+:where(.ix-checkbox__input:indeterminate:not(:disabled)) + :where(.ix-checkbox__label:active) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-main-default-active);
+}
+
 /* ── Feil (aria-invalid) ─────────────────────────────────────────────────── */
 
+/* CheckboxGroup setter feil på gruppa, ikke per input. `.ix-checkbox` i
+ * gruppeselektoren gir samme spesifisitet som `[aria-invalid]`. */
+
 :where(.ix-checkbox) input[type='checkbox'][aria-invalid='true'] + label,
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox'] + label,
 :where(.ix-checkbox__input[aria-invalid='true']) + :where(.ix-checkbox__label) {
     --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);
     --ii-checkbox-box-border: var(--ix-color-border-danger-default);
 }
 
 :where(.ix-checkbox) input[type='checkbox'][aria-invalid='true'] + label::before,
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox'] + label::before,
 :where(.ix-checkbox__input[aria-invalid='true']) + :where(.ix-checkbox__label)::before {
-    box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
+    box-shadow: inset 0 0 0 1px var(--ii-checkbox-box-border);
 }
 
 :where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked + label,
-:where(.ix-checkbox__input[aria-invalid='true']:checked) + :where(.ix-checkbox__label) {
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:checked + label,
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:indeterminate + label,
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:indeterminate + label,
+:where(.ix-checkbox__input[aria-invalid='true']:checked) + :where(.ix-checkbox__label),
+:where(.ix-checkbox__input[aria-invalid='true']:indeterminate) + :where(.ix-checkbox__label) {
     --ii-checkbox-box-bg: var(--ix-color-fill-danger-default);
-    --ii-checkbox-box-border: var(--ix-color-fill-danger-default);
+    --ii-checkbox-box-border: var(--ii-checkbox-box-bg);
 }
 
 :where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked + label::before,
-:where(.ix-checkbox__input[aria-invalid='true']:checked) + :where(.ix-checkbox__label)::before {
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:checked + label::before,
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:indeterminate + label::before,
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:indeterminate + label::before,
+:where(.ix-checkbox__input[aria-invalid='true']:checked) + :where(.ix-checkbox__label)::before,
+:where(.ix-checkbox__input[aria-invalid='true']:indeterminate) + :where(.ix-checkbox__label)::before {
     box-shadow: none;
 }
 
-/* Hover ved error: behold rød boks/kant. Uten dette vinner den generelle
- * hover-regelen over (0,3,2) mot error-regelen over (0,2,2). Speiler
- * radio-group.css og checkbox-group.css (chip). */
+/* Hover/active ved error. Må slå de generelle hover-reglene (0,3,2). */
 :where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:not(:disabled) + label:hover,
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:not(:disabled) + label:hover,
 :where(.ix-checkbox__input[aria-invalid='true']:not(:disabled)) + :where(.ix-checkbox__label:hover) {
-    --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);
-    --ii-checkbox-box-border: var(--ix-color-border-danger-default);
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle-hover);
+    --ii-checkbox-box-border: var(--ix-color-border-danger-hover);
 }
 
-/* Hover ved error + valgt/indeterminate: behold den fylte danger-boksen. */
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:not(:disabled) + label:active,
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:not(:disabled) + label:active,
+:where(.ix-checkbox__input[aria-invalid='true']:not(:disabled)) + :where(.ix-checkbox__label:active) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle-active);
+    --ii-checkbox-box-border: var(--ix-color-border-danger-active);
+}
+
 :where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked:not(:disabled) + label:hover,
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:checked:not(:disabled) + label:hover,
 :where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:indeterminate:not(:disabled) + label:hover,
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:indeterminate:not(:disabled) + label:hover,
 :where(.ix-checkbox__input[aria-invalid='true']:checked:not(:disabled)) + :where(.ix-checkbox__label:hover),
 :where(.ix-checkbox__input[aria-invalid='true']:indeterminate:not(:disabled)) + :where(.ix-checkbox__label:hover) {
-    --ii-checkbox-box-bg: var(--ix-color-fill-danger-default);
-    --ii-checkbox-box-border: var(--ix-color-fill-danger-default);
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-default-hover);
+    --ii-checkbox-box-border: var(--ii-checkbox-box-bg);
+}
+
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked:not(:disabled) + label:active,
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:checked:not(:disabled) + label:active,
+:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:indeterminate:not(:disabled) + label:active,
+:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:indeterminate:not(:disabled) + label:active,
+:where(.ix-checkbox__input[aria-invalid='true']:checked:not(:disabled)) + :where(.ix-checkbox__label:active),
+:where(.ix-checkbox__input[aria-invalid='true']:indeterminate:not(:disabled)) + :where(.ix-checkbox__label:active) {
+    --ii-checkbox-box-bg: var(--ix-color-fill-danger-default-active);
+    --ii-checkbox-box-border: var(--ii-checkbox-box-bg);
 }
 
 /* ── Disabled ────────────────────────────────────────────────────────────── */

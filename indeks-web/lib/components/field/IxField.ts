@@ -237,14 +237,8 @@ export class IxField extends HTMLElement {
         // label-row er alltid til stede slik at tooltip-knappen kan injiseres uten
         // å endre DOM-strukturen rundt labelen.
         //
-        // Unntak: en label som allerede står som kontrollen sin ADJACENT sibling
-        // (f.eks. Checkbox sin markup: <input><label>) eies av kontrollens egen
-        // CSS, som styrer :checked/:indeterminate/[aria-invalid]/:disabled/
-        // :focus-visible via input+label-nabokombinatoren (se checkbox.css). Å
-        // flytte en slik label inn i en nyopprettet wrapper-div ville brutt
-        // nabokoblingen og slått av all tilstandsstyling. IxField lar derfor
-        // disse labelene stå urørt — se _setupTooltipBtn() for hvordan
-        // tooltip-knappen håndteres når det ikke finnes en label-row å injisere i.
+        // Unntak: står labelen rett etter kontrollen (Checkbox), eies den av
+        // kontrollens `input + label`-CSS og må ikke flyttes.
         const labelOwnedByControl = label?.previousElementSibling === control;
         if (label && !labelOwnedByControl && !label.closest('.ix-field__label-row')) {
             const labelRow = document.createElement('div');
@@ -645,14 +639,7 @@ export class IxField extends HTMLElement {
             return;
         }
 
-        // Normaltilfelle: _wire() har lagt labelen i en label-row — knappen hører
-        // hjemme der (side ved side med labelteksten).
-        //
-        // Unntak: labels som _wire() lot stå urørt fordi de allerede eies av
-        // kontrollens egen adjacent-sibling-kobling (f.eks. Checkbox sin
-        // <input><label>, se _wire()) har ingen label-row. Da settes knappen inn
-        // som labelens neste sibling i stedet, slik at input+label-nabokoblingen
-        // i kontrollens egen CSS (checkbox.css) ikke brytes.
+        // Uten label-row (Checkbox, se _wire()) legges knappen rett etter labelen.
         const labelRow = this.querySelector<HTMLElement>('.ix-field__label-row');
         const label = labelRow ? null : this.querySelector<HTMLLabelElement>('label');
         if (!labelRow && !label) return;
