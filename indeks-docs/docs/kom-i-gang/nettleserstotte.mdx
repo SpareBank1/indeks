@@ -16,7 +16,7 @@ Stegene med nummer er oppsettet du gjør én gang. Resten av siden forklarer hvo
 4. [Sett `lib` i `tsconfig.app.json` til `ES2022`](#typescript-lib)
 5. [Slå på `compat/compat` i lint, som `error`](#nettleser-api)
 6. [Slå på `plugin/no-unsupported-browser-features` i Stylelint, som `error`](#stylelint)
-7. [Kjør lint og `tsc -b` i CI, og la dem stoppe PR-er som feiler](#ci)
+7. [Legg lint og `tsc -b` inn i `build` eller CI, så PR-er som feiler, blir stoppet](#ci)
 
 Når oppsettet er på plass, gjelder to regler hver gang du skriver kode:
 
@@ -25,7 +25,10 @@ Når oppsettet er på plass, gjelder to regler hver gang du skriver kode:
 
 ## Før du starter
 
-Siden forutsetter et prosjekt med Vite 8 og TypeScript, slik du får det fra `npm create vite@latest`. Bruker du et annet byggeverktøy, gjelder de samme sjekkene, men konfigurasjonen ser annerledes ut.
+Siden er skrevet for Vite 8 og TypeScript, slik du får det fra `npm create vite@latest`. Har du et annet oppsett, gjelder dette:
+
+- **Vite 4–7:** alle stegene er like. Bare standardverdien i steg 3 er en annen.
+- **Next.js, eller webpack med Babel:** hopp over steg 3. De leser `.browserslistrc` selv. Resten av stegene gjelder.
 
 Kodeeksemplene under er deler du legger inn i filer du allerede har. Ikke erstatt en hel fil med eksempelet, for da mister du det som sto der fra før. Det gjelder også når du ber en KI-assistent gjøre jobben, se [Få hjelp av en KI-assistent](#få-hjelp-av-en-ki-assistent).
 
@@ -66,7 +69,7 @@ Bruker prosjektet ESLint i stedet for oxlint, trenger du også `typescript-eslin
 
 ## 2. Sett et felles gulv i `.browserslistrc` {#browserslistrc}
 
-Lag fila `.browserslistrc` i rota av prosjektet. Bruk samme liste som Indeks, så du ikke lover mer eller mindre enn komponentene du bygger på:
+Lag fila `.browserslistrc` i rota av prosjektet. Bruk samme liste som Indeks. Fra september 2026 er det også nettleserstandarden i SpareBank 1:
 
 ```text
 # .browserslistrc
@@ -80,11 +83,13 @@ and_ff >= 100
 samsung >= 17
 ```
 
+Før september 2026 var standarden [`since 2021-04`](https://design.sparebank1.no/grunnleggende/nettleserversjoner/), som tilsvarer Safari 14.1 og iOS 14.5. Står den fortsatt i prosjektet ditt, bytter du den ut med lista over. En app med Indeks-komponenter kan uansett ikke love støtte lenger ned enn komponentene har.
+
 ESLint, oxlint og Stylelint leser denne fila selv. De leter oppover i mappetreet, så har du flere prosjekter i samme repo, holder det med én fil i rota.
 
 ## 3. Sett `build.target` i Vite {#build-target}
 
-Uten `build.target` bygger Vite 8 for Safari 16.4 og Chrome 111. Det er over gulvet vårt. Vite leser ikke `.browserslistrc`, så du må skrive listen inn selv. Legg `build` til i `vite.config.ts`, ved siden av det som står der:
+Uten `build.target` bygger Vite 8 for Safari 16.4 og Chrome 111, og Vite 7 for Safari 16 og Chrome 107. Det er over gulvet vårt. Vite 4–6 bygger for Safari 14, men sett `build.target` der også, så bygget følger lista. Vite leser ikke `.browserslistrc`, så du må skrive listen inn selv. Legg `build` til i `vite.config.ts`, ved siden av det som står der:
 
 ```ts
 // vite.config.ts
@@ -99,7 +104,7 @@ export default defineConfig({
 
 Samsung Internet og Android-variantene har ingen egne navn her. De bygger på Chrome, så `chrome100` dekker dem.
 
-Med `build.target` på plass skriver Vite også om CSS-nesting til flat CSS og legger på `-webkit-`-prefiksene Safari 15.4 trenger. Du trenger ikke PostCSS eller Autoprefixer for det.
+Med `build.target` på plass skriver Vite også om CSS-nesting til flat CSS og legger på `-webkit-`-prefiksene Safari 15.4 trenger. Det gjelder fra Vite 4 og oppover, så du trenger ikke PostCSS eller Autoprefixer for det.
 
 Bruker du Tailwind, må du ha versjon 4.1 eller nyere. Se [Tailwind](/docs/grunnleggende/tokens/tailwind).
 
@@ -218,21 +223,27 @@ Første gang du kjører Stylelint, får du trolig treff i CSS-en som fulgte med 
 
 ## 7. Kjør sjekkene i CI {#ci}
 
-Sjekkene hjelper bare hvis de stopper en PR. Legg dem inn som scripts i `package.json`. Står det allerede et `lint`-script der, utvider du det:
+Sjekkene hjelper bare hvis de stopper en PR. Legg dem inn som scripts i `package.json`. Står det allerede et `lint`- eller `build`-script der, utvider du det:
 
 ```json
 // package.json
 {
     "scripts": {
         "lint": "oxlint && stylelint \"src/**/*.css\"",
-        "typecheck": "tsc -b"
+        "typecheck": "tsc -b",
+        "build": "tsc -b && npm run lint && vite build"
     }
 }
 ```
 
 Bytt `oxlint` med `eslint .` hvis prosjektet bruker ESLint.
 
-Kjør begge på hver PR. Med GitHub Actions kan det se slik ut:
+Hvordan sjekkene blir kjørt, avhenger av hvem som eier CI-oppsettet:
+
+- **Kjører CI-en bare `npm run build`,** for eksempel fordi du ikke eier workflowen, er `build`-scriptet over nok. Da feiler bygget når en sjekk feiler.
+- **Eier du workflowen selv,** kan du i tillegg kjøre sjekkene som egne steg. Da ser du i PR-en hvilken sjekk som feilet.
+
+Med GitHub Actions kan det se slik ut:
 
 ```yaml
 # .github/workflows/sjekk.yml
@@ -252,6 +263,25 @@ jobs:
 ```
 
 Gjør deretter jobben til en [påkrevd sjekk](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-status-checks-to-pass-before-merging) i repoets regler, så en PR ikke kan merges før den er grønn.
+
+## Test i WebKit med Playwright
+
+Har prosjektet Playwright-tester, kan du kjøre dem i WebKit, motoren i Safari, i tillegg til Chrome. Legg til prosjekter i `playwright.config.ts`:
+
+```ts
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+    projects: [
+        { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+        { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+        { name: 'iphone', use: { ...devices['iPhone 13'] } },
+    ],
+});
+```
+
+Playwright kjører nyeste WebKit, ikke Safari 15.4. Testene fanger feil som bare skjer i Safari, men ikke funksjoner som kom etter gulvet. `showPopover()`, `Object.groupBy()` og `color-mix()` virker i WebKit-kjøringen, selv om de feiler i Safari 15.4. De må du fortsatt slå opp selv, eller teste på en eldre enhet.
 
 ## Bruk nye ting som forbedring
 
@@ -315,6 +345,25 @@ const monster = new URLPattern({ pathname: '/sak/:id' });
 ```
 
 **Polyfill.** En polyfill er et script som legger inn en manglende funksjon i gamle nettlesere. Laster du en, legger du navnet på API-et i `settings.polyfills` i lint-konfigurasjonen, for eksempel `'URLPattern'`. Da slipper du unntak på hver linje.
+
+For funksjoner i språket kan [`@vitejs/plugin-legacy`](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy) legge inn polyfills fra `core-js` for deg. List opp bare dem du trenger, for hver polyfill gjør bundelen større:
+
+```ts
+// vite.config.ts
+import legacy from '@vitejs/plugin-legacy';
+
+export default defineConfig({
+    plugins: [
+        react(),
+        legacy({
+            renderLegacyChunks: false,
+            modernPolyfills: ['es.object.group-by', 'es.array.to-sorted'],
+        }),
+    ],
+});
+```
+
+Legg samtidig typene til i `lib`, for eksempel `ES2024.Object` og `ES2023.Array`, ellers stopper TypeScript deg fortsatt. `core-js` dekker bare språket. Nettleser-API-er som `showPopover()` trenger en egen polyfill.
 
 **Hele prosjektet.** Bruk `ignore` i Stylelint bare når regelen tar feil, og skriv en kommentar per oppføring. Indeks ignorerer for eksempel `multicolumn`, fordi pluginen tror at `column-gap` i flex og grid betyr kolonnelayout.
 
