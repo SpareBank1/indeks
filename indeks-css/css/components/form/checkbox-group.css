@@ -88,11 +88,7 @@
 
 /* ── Chip-indikator ved error og read-only ───────────────────────────────────
  * Pillen styles av chip.css; her følger bare firkant-indikatoren etter.
- *
- * Merk: den generelle checkbox-gruppen har fortsatt ingen error-styling — i
- * checkbox.css drives error per input via aria-invalid, og CheckboxGroup setter
- * det ikke. Det hullet er en egen oppgave; reglene under er scopet til
- * chip-varianten. */
+ * Error for vanlig gruppe ligger i checkbox.css. */
 
 /* Error, uvalgt — samme røde boks som checkbox.css gir ved aria-invalid. */
 :where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] .ix-checkbox label,

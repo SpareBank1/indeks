@@ -236,7 +236,11 @@ export class IxField extends HTMLElement {
         // Wrap label i label-row om den ikke allerede er wrappet.
         // label-row er alltid til stede slik at tooltip-knappen kan injiseres uten
         // å endre DOM-strukturen rundt labelen.
-        if (label && !label.closest('.ix-field__label-row')) {
+        //
+        // Unntak: står labelen rett etter kontrollen (Checkbox), eies den av
+        // kontrollens `input + label`-CSS og må ikke flyttes.
+        const labelOwnedByControl = label?.previousElementSibling === control;
+        if (label && !labelOwnedByControl && !label.closest('.ix-field__label-row')) {
             const labelRow = document.createElement('div');
             labelRow.className = 'ix-field__label-row';
             label.parentNode!.insertBefore(labelRow, label);
@@ -635,8 +639,10 @@ export class IxField extends HTMLElement {
             return;
         }
 
+        // Uten label-row (Checkbox, se _wire()) legges knappen rett etter labelen.
         const labelRow = this.querySelector<HTMLElement>('.ix-field__label-row');
-        if (!labelRow) return;
+        const label = labelRow ? null : this.querySelector<HTMLLabelElement>('label');
+        if (!labelRow && !label) return;
 
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -651,7 +657,11 @@ export class IxField extends HTMLElement {
         icon.style.maskImage = `url(${ICON_URL})`;
         btn.appendChild(icon);
 
-        labelRow.appendChild(btn);
+        if (labelRow) {
+            labelRow.appendChild(btn);
+        } else {
+            label!.after(btn);
+        }
     }
 
     // Fjerner kun tooltip-knappen — label-row beholdes.
