@@ -4,7 +4,7 @@ import { KiPromptBlock } from './KiPrompt';
 
 # Nettleserstøtte
 
-Indeks virker helt ned til Safari 15.4 og Chrome 100, fordi mange av kundene våre har telefoner som er flere år gamle. Disse eldste versjonene kaller vi *gulvet*. Koden du skriver rundt Indeks, må virke på det samme gulvet. Denne siden viser hvordan vi passer på det i Indeks, og hvordan du setter opp det samme i ditt eget prosjekt.
+Indeks virker helt ned til Safari 15.4 og Chrome 100, fordi mange av kundene våre har telefoner som er flere år gamle. Disse eldste versjonene kaller vi *gulvet*. Koden du skriver rundt Indeks, må virke på det samme gulvet. Denne siden viser hvordan vi passer på det i Indeks, og hvordan du setter opp det samme i ditt eget prosjekt. Kunder med eldre nettlesere enn gulvet ber vi om å [oppdatere nettleseren](https://www.sparebank1.no/nb/bank/privat/info/anbefalte-nettlesere.html).
 
 ## Dette må du gjøre
 
@@ -83,9 +83,11 @@ and_ff >= 100
 samsung >= 17
 ```
 
-Før september 2026 var standarden [`since 2021-04`](https://design.sparebank1.no/grunnleggende/nettleserversjoner/), som tilsvarer Safari 14.1 og iOS 14.5. Står den fortsatt i prosjektet ditt, bytter du den ut med lista over. En app med Indeks-komponenter kan uansett ikke love støtte lenger ned enn komponentene har.
+Standarden står også på [design.sparebank1.no](https://design.sparebank1.no/grunnleggende/nettleserversjoner/). Før september 2026 var den `since 2021-04`, som tilsvarer Safari 14.1 og iOS 14.5. Står den fortsatt i prosjektet ditt, bytter du den ut med lista over. En app med Indeks-komponenter kan uansett ikke love støtte lenger ned enn komponentene har.
 
 ESLint, oxlint og Stylelint leser denne fila selv. De leter oppover i mappetreet, så har du flere prosjekter i samme repo, holder det med én fil i rota.
+
+Hvilke nettlesere lista dekker, ser du i [browsersl.ist][browserslist-gulvet]. Om en funksjon virker på gulvet, slår du opp i [caniuse med gulvet ferdig utfylt][caniuse-gulvet]. Den lenken bruker du resten av siden når det står «slå opp».
 
 ## 3. Sett `build.target` i Vite {#build-target}
 
@@ -189,7 +191,7 @@ export default [
 
 Bruk `error`, ikke `warn`. En advarsel stopper ikke en PR, og da blir den oversett.
 
-Pluginen er best på ting som lages med `new`, som `new URLPattern()`. Da vi testet, fant den `URLPattern` og `CompressionStream`, men ikke `navigator.share()`, `showPopover()`, `Object.groupBy()` eller `CloseWatcher`. Det skyldes at kompatibilitetsdataene i pluginen er fra 2025, og kjente hull som `Object.groupBy` er meldt inn, men ikke rettet. Tenk på den som et sikkerhetsnett med hull. Tar du i bruk et nettleser-API du ikke har brukt før, slår du opp støtten på [MDN](https://developer.mozilla.org/) eller [caniuse.com](https://caniuse.com/) selv.
+Pluginen er best på ting som lages med `new`, som `new URLPattern()`. Da vi testet, fant den `URLPattern` og `CompressionStream`, men ikke `navigator.share()`, `showPopover()`, `Object.groupBy()` eller `CloseWatcher`. Det skyldes at kompatibilitetsdataene i pluginen er fra 2025, og kjente hull som `Object.groupBy` er meldt inn, men ikke rettet. Tenk på den som et sikkerhetsnett med hull. Tar du i bruk et nettleser-API du ikke har brukt før, slår du opp støtten på [MDN](https://developer.mozilla.org/) eller [caniuse][caniuse-gulvet] selv.
 
 ## 6. Sjekk CSS med Stylelint {#stylelint}
 
@@ -217,7 +219,7 @@ export default {
 };
 ```
 
-Den fanger blant annet `:has()`, `@container`, `subgrid`, `dvh` og `oklch()`. Da vi testet, slapp `color-mix()`, `text-wrap: balance`, `field-sizing` og `@starting-style` gjennom. Samme råd gjelder her: slå opp det du ikke har brukt før.
+Den fanger blant annet `:has()`, `@container`, `subgrid`, `dvh` og `oklch()`. Da vi testet, slapp `color-mix()`, `text-wrap: balance`, `field-sizing` og `@starting-style` gjennom. Samme råd gjelder her: [slå opp][caniuse-gulvet] det du ikke har brukt før.
 
 Første gang du kjører Stylelint, får du trolig treff i CSS-en som fulgte med Vite-malen, for eksempel `dvh`. Skriv dem om, eller slett CSS-en du ikke bruker.
 
@@ -281,7 +283,19 @@ export default defineConfig({
 });
 ```
 
-Playwright kjører nyeste WebKit, ikke Safari 15.4. Testene fanger feil som bare skjer i Safari, men ikke funksjoner som kom etter gulvet. `showPopover()`, `Object.groupBy()` og `color-mix()` virker i WebKit-kjøringen, selv om de feiler i Safari 15.4. De må du fortsatt slå opp selv, eller teste på en eldre enhet.
+Playwright kjører nyeste WebKit, ikke Safari 15.4. Testene fanger feil som bare skjer i Safari, men ikke funksjoner som kom etter gulvet. `showPopover()`, `Object.groupBy()` og `color-mix()` virker i WebKit-kjøringen, selv om de feiler i Safari 15.4. De må du fortsatt [slå opp][caniuse-gulvet] selv, eller teste på en eldre enhet.
+
+## Sjekk avhengighetene du legger til
+
+Lint og TypeScript sjekker bare koden i prosjektet ditt, ikke pakkene i `node_modules`. Syntaksen i avhengighetene skrives om av `build.target` som resten av koden. Men en ny funksjon i språket eller et nettleser-API slippes gjennom uendret. Kaller et bibliotek `toSorted()` eller `showPopover()`, går bygget grønt, og siden feiler i Safari 15.4.
+
+Da vi testet i Vite 6 og 8 med et gammelt `build.target`, ble `a?.b`, `??` og `static {}` i en avhengighet skrevet om, mens `xs.at(-1)` sto igjen uendret.
+
+Indeks-pakkene holder gulvet. For andre pakker gjelder dette:
+
+- Se hvilke nettlesere pakken sier den støtter. Står det ingenting, må du regne med at den bare er testet i nyeste versjon.
+- Små og nye biblioteker er mest utsatt. Er du usikker, søk i koden deres etter API-ene du vet er nye, som `toSorted`, `Object.groupBy` eller `showPopover`.
+- Playwright i WebKit fanger ikke dette, for nyeste WebKit har funksjonene.
 
 ## Bruk nye ting som forbedring
 
@@ -372,6 +386,8 @@ To ting skal du aldri gjøre:
 - Slå av regelen uten å nevne den ved navn (`/* stylelint-disable-next-line */`). Da skrur du av alle andre regler på linjen også.
 - Sette regelen til `warn` for å få en PR gjennom.
 
+Er du i tvil, spør i `#ext-frontend` på Slack.
+
 ## Få hjelp av en KI-assistent
 
 Ber du en KI-assistent sette opp dette, gi den lenken til denne siden og si tydelig at den skal flette inn, ikke erstatte. For eksempel:
@@ -379,3 +395,6 @@ Ber du en KI-assistent sette opp dette, gi den lenken til denne siden og si tyde
 <KiPromptBlock />
 
 Se over endringene før du merger. Står det `eslint-disable` eller `stylelint-disable` uten begrunnelse, spør hvorfor.
+
+[browserslist-gulvet]: https://browsersl.ist/#q=Chrome%20%3E%3D%20100%2C%20Edge%20%3E%3D%20100%2C%20Firefox%20%3E%3D%20100%2C%20Safari%20%3E%3D%2015.4%2C%20ios_saf%20%3E%3D%2015.4%2C%20and_chr%20%3E%3D%20100%2C%20and_ff%20%3E%3D%20100%2C%20samsung%20%3E%3D%2017&region=NO
+[caniuse-gulvet]: https://caniuse.com/?compare=chrome+100,edge+100,firefox+100,safari+15.4,ios_saf+15.4,samsung+17&compareCats=all#results
