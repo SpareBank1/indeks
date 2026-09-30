@@ -139,3 +139,22 @@
     font-size: 0.875rem;
     cursor: pointer;
 }
+
+/* Alfa/beta-banner (themeConfig.announcementBar). Info-tokens gir riktig farge i mørk modus.
+   Dobbel klasse fordi Docusaurus' CSS-modul lastes etter custom.css og ellers vinner. */
+.theme-announcement-bar.theme-announcement-bar {
+    background-color: var(--ix-color-surface-info-default);
+    color: var(--ix-color-foreground-info-default);
+    border-bottom: 1px solid var(--ix-color-border-info-default);
+}
+
+.theme-announcement-bar a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+/* Infima demper lukkeknappen med opacity: .5, som gir for lav kontrast. */
+.theme-announcement-bar button {
+    color: inherit;
+    opacity: 1;
+}

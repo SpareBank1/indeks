@@ -105,6 +105,13 @@ const config: Config = {
     ],
 
     themeConfig: {
+        // Lukking huskes per id. Ny id (f.eks. 'beta') viser banneret på nytt for alle.
+        announcementBar: {
+            id: 'alfa',
+            content:
+                '<strong>Alfa:</strong> Indeks er under utvikling, og API-er kan endre seg. Spørsmål og tilbakemeldinger i <a href="https://slack.com/channels/ext-designsystem">#ext-designsystem</a>.',
+            isCloseable: true,
+        },
         tableOfContents: {
             maxHeadingLevel: 3,
         },
