@@ -59,7 +59,7 @@
         },
         "hover": {
           "$type": "color",
-          "$value": "{color.brand.100}",
+          "$value": "{color.brand.150}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -534,7 +534,7 @@
         },
         "hover": {
           "$type": "color",
-          "$value": "{color.brand.100}",
+          "$value": "{color.brand.150}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -551,7 +551,7 @@
         },
         "active": {
           "$type": "color",
-          "$value": "{color.brand.150}",
+          "$value": "{color.brand.200}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1138,7 +1138,7 @@
         },
         "hover": {
           "$type": "color",
-          "$value": "{color.brand.700}",
+          "$value": "{color.brand.800}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1152,7 +1152,7 @@
         },
         "active": {
           "$type": "color",
-          "$value": "{color.brand.750}",
+          "$value": "{color.brand.900}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -2109,7 +2109,7 @@
           "fill": {
             "default-hover": {
               "$type": "color",
-              "$value": "{color.brand.100}",
+              "$value": "{color.brand.150}",
               "$description": "",
               "$extensions": {
                 "com.figma": {
@@ -2126,7 +2126,7 @@
             },
             "default-active": {
               "$type": "color",
-              "$value": "{color.brand.150}",
+              "$value": "{color.brand.200}",
               "$description": "",
               "$extensions": {
                 "com.figma": {
