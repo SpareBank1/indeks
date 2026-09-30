@@ -190,6 +190,12 @@
     gap: var(--ix-spacing-sm);
 }
 
+/* Unngår 1px-hopp på første hover i Chromium. Modal-animasjonens scale()
+ * trigger subpixel-artefakter; translateZ(0) tvinger GPU-lag fra start. */
+:where(.ix-modal__button-group) > * {
+    transform: translateZ(0);
+}
+
 /* --- Animasjon (progressiv forbedring) ------------------------------------
  * Fade + lett scale-in på dialogen og fade på backdrop. Krever @starting-style +
  * transition-behavior:allow-discrete (Chrome/Edge 116+, Safari 17.4+). Eldre
