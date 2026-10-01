@@ -192,7 +192,7 @@
 
 /* Unngår 1px-hopp på første hover i Chromium. Modal-animasjonens scale()
  * trigger subpixel-artefakter; translateZ(0) tvinger GPU-lag fra start. */
-:where(.ix-modal__button-group) > * {
+:where(.ix-modal__button-group) > :where(button, a.ix-button) {
     transform: translateZ(0);
 }
 
