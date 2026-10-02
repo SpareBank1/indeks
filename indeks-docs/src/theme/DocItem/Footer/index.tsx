@@ -8,6 +8,8 @@ type Props = WrapperProps<typeof FooterType>;
 
 function useDocSafe() {
     try {
+        // useDoc kaster utenfor dokumentsider. Kallet skjer alltid, så rekkefølgen på hooks er lik i hver render.
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         return useDoc();
     } catch {
         return null;

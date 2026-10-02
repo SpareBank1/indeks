@@ -8,7 +8,7 @@
         "dev": "npm run cp:themes && vite --open",
         "build": "tsc --noEmit && npm run cp:themes && vite build",
         "cp:themes": "mkdir -p ./public/themes && cp -r ../indeks-tokens/.build/css/themes/* ./public/themes && node ../indeks-tokens/dist/cli.js build-colors platform=web path=./.theme-build theme=./themes/kredittbanken.json && cp ./.theme-build/themes/kredittbanken.css ./public/themes/",
-        "lint": "eslint . && node ../scripts/check-css-variables.js .",
+        "lint": "oxlint -c ../.oxlintrc.json . && node ../scripts/check-css-variables.js .",
         "update-packages": "npx npm-check-updates -i --format group",
         "preview": "vite preview",
         "test:e2e": "playwright test",
@@ -36,7 +36,6 @@
         "@types/react-dom": "^19.2.7",
         "@vitejs/plugin-react": "^6.1.1",
         "debug": "^4.4.3",
-        "eslint-plugin-react-refresh": "^0.5.7",
         "typescript": "~6.0.3",
         "vite": "^8.2.2"
     }
