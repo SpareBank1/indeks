@@ -62,10 +62,10 @@ Ingen av sjekkene er komplette. Stegene under viser oppsettet, og resten av side
 ## 1. Installer pakkene {#installer}
 
 ```bash
-npm install --save-dev eslint-plugin-compat stylelint stylelint-no-unsupported-browser-features
+npm install --save-dev oxlint eslint-plugin-compat stylelint stylelint-no-unsupported-browser-features
 ```
 
-Bruker prosjektet ESLint i stedet for oxlint, trenger du også `typescript-eslint`, se [steg 5](#nettleser-api).
+Har prosjektet oxlint fra før, kan du droppe den. Blir prosjektet på ESLint, trenger du `typescript-eslint` i stedet for `oxlint`, se [steg 5](#nettleser-api).
 
 ## 2. Sett et felles gulv i `.browserslistrc` {#browserslistrc}
 
@@ -138,12 +138,22 @@ Dette er den mest pålitelige sjekken for JavaScript, og den koster ingen ekstra
 
 ## 5. Sjekk nettleser-API-er {#nettleser-api}
 
-[`eslint-plugin-compat`](https://github.com/amilajack/eslint-plugin-compat) sammenligner koden mot `.browserslistrc`. Nye Vite-prosjekter bruker oxlint, eldre bruker ESLint. Pluginen virker i begge:
+[`eslint-plugin-compat`](https://github.com/amilajack/eslint-plugin-compat) sammenligner koden mot `.browserslistrc`. Pluginen virker i både oxlint og ESLint.
+
+Vi anbefaler [oxlint](https://oxc.rs/docs/guide/usage/linter), også for prosjekter som bruker ESLint i dag. Før manglet oxlint regler vi trengte, men nå har den dem, blant annet reglene for React-hooks. Den er mye raskere, og den kjører ESLint-plugins som `eslint-plugin-compat` uendret. Nye Vite-prosjekter får oxlint fra start.
+
+Bytter du fra ESLint, lager [`@oxlint/migrate`](https://github.com/oxc-project/oxlint-migrate) en `.oxlintrc.json` fra `eslint.config.js`. Med `--js-plugins` blir plugins som ikke finnes i oxlint, med som `jsPlugins`, også `compat`:
+
+```bash
+npx @oxlint/migrate --js-plugins
+```
+
+Se over fila den lager, kjør `npx oxlint`, og fjern ESLint når resultatet er det samme. Vil du ikke bytte nå, bruker du ESLint-fanen.
 
 <Tabs groupId="linter">
 <TabItem value="oxlint" label="oxlint">
 
-Legg `jsPlugins` og regelen til i `.oxlintrc.json`:
+Legg `jsPlugins` og regelen til i `.oxlintrc.json`. Heter fila `.oxlintrc.jsonc`, gjelder det samme:
 
 ```json
 // .oxlintrc.json
@@ -158,7 +168,7 @@ Legg `jsPlugins` og regelen til i `.oxlintrc.json`:
 </TabItem>
 <TabItem value="eslint" label="ESLint">
 
-ESLint trenger `typescript-eslint` for å lese `.ts`-filer:
+Blir prosjektet på ESLint inntil videre, trenger du `typescript-eslint` for å lese `.ts`-filer:
 
 ```bash
 npm install --save-dev typescript-eslint
@@ -238,7 +248,7 @@ Sjekkene hjelper bare hvis de stopper en PR. Legg dem inn som scripts i `package
 }
 ```
 
-Bytt `oxlint` med `eslint .` hvis prosjektet bruker ESLint.
+Bytt `oxlint` med `eslint .` hvis prosjektet fortsatt bruker ESLint.
 
 Hvordan sjekkene blir kjørt, avhenger av hvem som eier CI-oppsettet:
 
