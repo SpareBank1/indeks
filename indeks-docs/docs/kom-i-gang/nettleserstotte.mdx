@@ -29,6 +29,7 @@ Siden er skrevet for Vite 8 og TypeScript, slik du får det fra `npm create vite
 
 - **Vite 4–7:** alle stegene er like. Bare standardverdien i steg 3 er en annen.
 - **Next.js, eller webpack med Babel:** hopp over steg 3. De leser `.browserslistrc` selv. Resten av stegene gjelder.
+- **Biome:** stegene gjelder, med en liten oxlint-konfigurasjon i steg 5. Se [Bruker du Biome?](#biome)
 
 Kodeeksemplene under er deler du legger inn i filer du allerede har. Ikke erstatt en hel fil med eksempelet, for da mister du det som sto der fra før. Det gjelder også når du ber en KI-assistent gjøre jobben, se [Få hjelp av en KI-assistent](#få-hjelp-av-en-ki-assistent).
 
@@ -275,6 +276,42 @@ jobs:
 ```
 
 Gjør deretter jobben til en [påkrevd sjekk](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-status-checks-to-pass-before-merging) i repoets regler, så en PR ikke kan merges før den er grønn.
+
+## Bruker du Biome? {#biome}
+
+Biome kan fortsatt ta seg av lint og formatering. Den sjekker bare ikke nettleserstøtte godt nok ennå, så du legger oxlint og Stylelint ved siden av, med én regel hver.
+
+Biome har ingen regel for nettleser-API-er i JavaScript. Bruk oxlint med bare `compat/compat`, og skru av oxlints egne regler, så de ikke overlapper med Biome. Installer `oxlint` i tillegg til pakkene i [steg 1](#installer):
+
+```bash
+npm install --save-dev oxlint
+```
+
+```json
+// .oxlintrc.json
+{
+    "jsPlugins": ["eslint-plugin-compat"],
+    "categories": { "correctness": "off" },
+    "rules": {
+        "compat/compat": "error"
+    }
+}
+```
+
+For CSS bruker du Stylelint-oppsettet fra [steg 6](#stylelint) som det står. Det har bare den ene regelen, så det krasjer ikke med Biome.
+
+Biome har en egen CSS-regel, [`useBaseline`](https://biomejs.dev/linter/rules/use-baseline/css/), men den er ikke god nok ennå. Da vi testet Biome 2.5, fanget den `subgrid`, `text-wrap`, `field-sizing` og `@starting-style`. `:has()`, `@container`, `dvh`, `oklch()` og `color-mix()` slapp gjennom, uansett hvilket årstall vi satte i `available`. Regelen er i nursery-gruppen, altså under utvikling. Se på den igjen når den er ferdig.
+
+Scriptene i steg 7 blir da slik:
+
+```json
+// package.json
+{
+    "scripts": {
+        "lint": "biome check && oxlint && stylelint \"src/**/*.css\""
+    }
+}
+```
 
 ## Test i WebKit med Playwright
 
