@@ -2,8 +2,8 @@ import type { ThemeableProperties } from './types';
 
 export const themeableDefaults: ThemeableProperties = {
     'font-family': {
-        normal: 'Roboto',
-        heading: 'Roboto',
+        normal: 'Roboto, Arial, sans-serif',
+        heading: 'Roboto, Arial, sans-serif',
     },
     'font-weight': {
         regular: 400,
