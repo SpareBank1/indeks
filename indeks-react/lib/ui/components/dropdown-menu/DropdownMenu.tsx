@@ -52,6 +52,7 @@ export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(function 
         const host = hostRef.current;
         if (!host || isControlled || !defaultOpen) return;
         host.setAttribute('open', '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- defaultOpen gjelder bare ved mount
     }, []);
 
     useEffect(() => {

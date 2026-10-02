@@ -42,7 +42,7 @@
         "build": "rm -rf ./dist && pnpm run build:npm",
         "build:npm": "rm -rf ./dist/npm && vite build --mode npm",
         "build:cdn": "rm -rf ./dist/cdn && vite build --mode cdn",
-        "lint": "eslint .",
+        "lint": "oxlint -c ../.oxlintrc.json .",
         "update-packages": "echo not implemented",
         "test": "vitest"
     },

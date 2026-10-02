@@ -157,6 +157,7 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
         if (!host) return;
         const toggle = host.querySelector<HTMLButtonElement>('.ix-combobox__toggle');
         toggle?.click();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- defaultOpen gjelder bare ved mount
     }, []);
 
     // Kontrollert modus: speil `value` inn i options' aria-selected når den endres.
