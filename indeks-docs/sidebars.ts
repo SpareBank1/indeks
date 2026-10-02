@@ -24,6 +24,7 @@ const sidebars: SidebarsConfig = {
                 'kom-i-gang/designer',
                 'kom-i-gang/utvikler',
                 'kom-i-gang/testing',
+                'kom-i-gang/nettleserstotte',
                 'kom-i-gang/migrering',
                 'kom-i-gang/kontakt',
                 'kom-i-gang/bidra',
