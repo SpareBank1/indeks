@@ -25,6 +25,18 @@ const sidebars: SidebarsConfig = {
                 'kom-i-gang/utvikler',
                 'kom-i-gang/testing',
                 'kom-i-gang/migrering',
+                {
+                    type: 'category',
+                    label: 'Endringslogg',
+                    link: { type: 'doc', id: 'endringslogg/index' },
+                    items: [
+                        'endringslogg/indeks-css',
+                        'endringslogg/indeks-react',
+                        'endringslogg/indeks-web',
+                        'endringslogg/indeks-tokens',
+                        'endringslogg/indeks-utils',
+                    ],
+                },
                 'kom-i-gang/kontakt',
                 'kom-i-gang/bidra',
             ],
