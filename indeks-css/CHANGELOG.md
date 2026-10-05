@@ -1,5 +1,77 @@
 # @sb1/indeks-css
 
+## 0.23.0
+
+### Patch Changes
+
+- 1e51aa3: Fikser at Checkbox mistet all tilstandsstyling (checked, indeterminate, feil, disabled, fokus) når den brukes med `description`, `errorMessage` eller `tooltip`. `<ix-field>` flyttet labelen bort fra inputen, så `input + label`-selektorene sluttet å treffe. Labelen blir nå stående, og tooltip-knappen legges rett etter den.
+- 1e51aa3: Retter hover- og active-farger på Checkbox etter Figma:
+  
+  - Indeterminate bruker samme hover/active som checked, i stedet for den uvalgte hoveren.
+  - Feil-tilstand har egne danger-farger for hover og active.
+  - Indeterminate i feil-tilstand er nå rød, som checked.
+  - CheckboxGroup med feilmelding viser nå feil-tilstand på boksene.
+- 3bff705: Fikser fokusring på checkbox chip: ringen går nå rundt hele pillen i stedet for bare checkbox. Fikser også en bug der radio chip fikk pill-radius ved fokus i stedet for å beholde sin opprinnelige radius.
+- 9c66ad2: Rett `var()`-referanser som pekte på tokennavn som ikke finnes.
+  
+  Fem steder i CSS-en refererte navn som aldri defineres. En slik `var()` feiler
+  stille: deklarasjonen blir ugyldig ved beregning av verdien, og egenskapen faller
+  til arv eller initialverdi, uten konsollfeil og uten at stylelint sier noe.
+  
+  To av dem endrer utseende, fordi de nå faktisk virker. En deaktivert checkbox i
+  delvis avkrysset tilstand fikk ingen fyllfarge og står nå grå, og beskrivelsen i
+  en Modal var like mørk som brødteksten og er nå dempet.
+  
+  Spinneren og Popover mistet en deklarasjon hver. Spinneren skulle hatt et dempet
+  spor bak buen og Popover en skygge, men systemet har verken en dempet
+  border-farge eller en shadow-skala å gi dem. Ingen av dem er malt i dag, så
+  fjerningen endrer ingenting visuelt — den gjør bare intensjonen ærlig, slik at
+  den kan tas som et designvalg senere.
+  
+  Tooltip-pilen leser to variabler som settes fra JavaScript. De har nå samme
+  fallback som Popover alt hadde, så pilen står midtstilt i stedet for å miste
+  posisjonen sin hvis stilen rekker frem før skriptet.
+- 7efc477: Fikser fokus-outline for skjemakomponenter. Komponentene setter nå base outline med transparent farge, og endrer kun `outline-color` på focus. Dette sikrer at fargen oppdateres korrekt i dark mode, og at animasjonen ikke hakker.
+  
+  **indeks-utils:**
+  - `--ix-outline-default` er nå base outline med transparent farge
+  - `.ix-outline-default` utility-klassen setter base + offset, og viser farge på `:focus-visible`
+  
+  **indeks-css:**
+  - TextField, TextArea, Select, Combobox, DateField og Field bruker nå `outline-color` på focus i stedet for full outline-shorthand
+- 63c7b22: Fikser 1px-hopp på knapper i modal ved første hover i Chromium. Problemet skyldes at modal-animasjonens `scale()` trigger subpixel-artefakter når nettleseren oppretter GPU-lag ved hover. Løst ved å tvinge GPU-lag fra start med `transform: translateZ(0)` på elementer i `.ix-modal__button-group`.
+- 416ccd6: Justerer plassering av lukkeknappen i Modal.
+- b262fba: Fikser chevron-ikonet i Select som hadde feil farge i dark mode. Ikonet bruker nå CSS mask i stedet for background-image, slik at fargen følger `currentColor` og oppdateres korrekt ved bytte av fargemodus.
+  
+  **HTML-brukere:** Select må nå wrappes i `<div class="ix-select-wrapper">` for at chevron-ikonet skal vises.
+- 9269858: Fikser hakkete fokus-outline-animasjon og klipping av outline i visse komponenter.
+  
+  **Jevnere fokus-outline-transition:**
+  Flytter `outline` og `outline-offset` til base-elementet med `transparent` farge, slik at `transition: all` kun animerer `outline-color` ved fokus og ikke tegner opp outline på nytt hver gang staten endres. Påvirker: Accordion, Button, Card, Chip, Checkbox, Radio, InteractiveIcon, Modal, Pagination, ReadMore og Tabs.
+  
+  **Fikser klipping av fokus-outline:**
+  - **Accordion:** Legger til `border-radius` på første og siste summary slik at innvendig outline følger containerens avrundede hjørner og ikke klippes av `overflow: hidden`.
+  - **Pagination:** Legger til padding/margin for å gi plass til outline innenfor `overflow-x: auto`.
+- 18bfb09: `indeks-react sync-cdn` rapporterer nå hva den faktisk fant
+  
+  Tidligere endte kommandoen på «Ingen drift funnet.» både når alle CDN-URL-er var i takt og når den ikke hadde funnet en eneste URL — to helt ulike situasjoner med samme grønne svar. Nå skiller den mellom utfallene:
+  
+  - **URL-er funnet, alle i takt:** `Alle 5 CDN-URL-er i 2 fil(er) bruker samme versjon som installert @sb1/indeks-react (0.22.0).`
+  - **Ingen URL-er funnet:** sier det eksplisitt, forklarer at det er forventet i et npm-basert prosjekt, og skriver ut et ferdig CDN-oppsett med installert versjon pluss lenke til utvikler-guiden.
+  - **Ingen filer skannet:** advarer om at `--root`/`--include`/`--exclude` kan være feil, i stedet for å melde at alt er i orden.
+  - **Ulik versjon:** viser hvilken versjon hver URL gikk fra og til.
+  
+  I tillegg kommer en `Pakkestatus` for de tre versjonslåste pakkene (`@sb1/indeks-react`, `@sb1/indeks-css`, `@sb1/indeks-web`): versjon i bruk, om den hentes fra CDN eller npm, om du er på siste versjon på npm, og om CDN-en har artefaktene for versjonen ennå. Nettverksoppslagene er «best effort», påvirker aldri exit-koden, og kan skrus av med `--offline`.
+  
+  Ligger du bak siste versjon, skrives oppgraderingen ut ferdig utfylt — `npm install @sb1/indeks-react@<ny> && npm run <ditt sync-script>`. Kommandoen oppgraderer ikke avhengigheten selv og skriver aldri en URL til en versjon som ikke er installert; da ville nettleseren kjørt CSS og web components fra en annen versjon enn React-koden. Scriptnavnet leses fra `scripts` i konsumentens `package.json` i stedet for å gjette på «sync-indeks», med `npx indeks-react sync-cdn` som fallback.
+  
+  Nytt flagg `--require-urls` gir exit 1 når ingen CDN-URL-er blir funnet, for prosjekter som vet at de bruker CDN. Ugyldig `--root` gir nå exit 2 i stedet for å passere stille på null filer.
+  
+  URL-er på den gamle formen `…/indeks/css/<versjon>.css` blir gjenkjent og migrert til `…/indeks/css/<versjon>/index.css`. Den flate formen finnes ikke på CDN-en (den svarer 403), men var dokumentert i READMEene våre — de er nå rettet i `indeks-css`, `indeks-react`, `indeks-tokens`, `indeks-utils` og `indeks-web`. Merk at `--check` derfor kan feile i et prosjekt som tidligere passerte; i så fall lastet ikke stilarket, og `npm run sync-indeks` retter det.
+  
+  `@sb1/indeks-tokens` og `@sb1/indeks-utils` har egne versjoner og blir aldri skrevet om til react-versjonen. De blir nå rapportert til slutt i stedet for å forsvinne i stillhet.
+- b71d4c7: Endrer formen på badge-ikonet i ValidationMessage fra sirkel til oktagon. Øker også gap mellom ikon og tekst fra `--ix-spacing-2xs` til `--ix-spacing-xs`.
+
 ## 0.22.1
 
 ### Patch Changes
