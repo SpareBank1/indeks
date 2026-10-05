@@ -190,6 +190,12 @@
     gap: var(--ix-spacing-sm);
 }
 
+/* Unngår 1px-hopp på første hover i Chromium når knappen står på en halv
+ * piksel. Eget lag fra start hindrer ny rasterisering med annen avrunding. */
+:where(.ix-modal__button-group) > :where(button, a.ix-button) {
+    transform: translateZ(0);
+}
+
 /* --- Animasjon (progressiv forbedring) ------------------------------------
  * Fade + lett scale-in på dialogen og fade på backdrop. Krever @starting-style +
  * transition-behavior:allow-discrete (Chrome/Edge 116+, Safari 17.4+). Eldre
