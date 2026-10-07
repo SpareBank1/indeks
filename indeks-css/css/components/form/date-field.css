@@ -14,7 +14,7 @@
    - __toggle   kalenderknapp i feltet
    - __native   gjennomsiktig native date-input oppå knappen */
 
-:where(ix-date-field, .ix-date-field) {
+ix-date-field, .ix-date-field {
     display: block;
     position: relative;
 
@@ -43,11 +43,11 @@
    Kalenderikonet er en CSS-maske som følger currentColor, så fargen arver
    felt-tilstand (disabled/read-only). Feltet reserverer plass til høyre med
    padding (se input under). */
-:where(.ix-date-field .ix-text-field) {
+.ix-date-field :where(.ix-text-field) {
     position: relative;
 }
 
-:where(.ix-date-field__toggle) {
+.ix-date-field__toggle {
     all: unset;
     box-sizing: border-box;
 
@@ -75,11 +75,11 @@
 /* Reserver plass til kalenderikonet så teksten ikke havner under det — samme
    mål som .ix-combobox__toggle (spacing-sm + ikon-bredde). Kun i date-field-
    kontekst, så den globale text-field-inputen ikke påvirkes. */
-:where(.ix-date-field .ix-text-field) > input {
+.ix-date-field :where(.ix-text-field) > :where(input) {
     padding-inline-end: calc(var(--ix-spacing-sm) + 1.5em);
 }
 
-:where(.ix-date-field__toggle)::after {
+.ix-date-field__toggle::after {
     content: '';
     width: 1em;
     height: 1em;
@@ -97,7 +97,7 @@
 }
 
 /* Knappen er en gjennomsiktig overlay oppå inputen — input eier ramme og flate. */
-:where(.ix-text-field) > .ix-date-field__toggle {
+.ix-text-field > :where(.ix-date-field__toggle) {
     background-color: transparent;
     border: none;
     border-radius: 0 var(--ix-border-radius-sm) var(--ix-border-radius-sm) 0;
@@ -106,13 +106,13 @@
     transition: var(--ix-transition-all);
 }
 
-:where(.ix-text-field) > .ix-date-field__toggle:focus-visible {
+.ix-text-field > :where(.ix-date-field__toggle:focus-visible) {
     outline-color: var(--ix-color-border-focus-default);
 }
 
 /* Disabled / read-only felt toner ned ikonet sammen med inputen. */
-:where(.ix-text-field) > input:disabled ~ .ix-date-field__toggle,
-:where(.ix-text-field) > input:read-only ~ .ix-date-field__toggle {
+.ix-text-field > :where(input:disabled) ~ :where(.ix-date-field__toggle),
+.ix-text-field > :where(input:read-only) ~ :where(.ix-date-field__toggle) {
     color: var(--ix-color-foreground-main-disabled);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
@@ -132,7 +132,7 @@
    ut den native inputen som et synlig flex-felt ved siden av tekstfeltet. Vi
    matcher derfor med den sammensatte `input.ix-date-field__native` (0,0,2) så
    overlegg-stylingen vinner uavhengig av kilde-rekkefølge. */
-:where(.ix-date-field .ix-text-field) > input.ix-date-field__native {
+.ix-date-field :where(.ix-text-field) > :where(input.ix-date-field__native) {
     position: absolute;
     inset-block: 0;
     inset-inline-end: 0;
@@ -153,7 +153,7 @@
 /* Skjul den native kalender-indikatoren visuelt (hele inputen er allerede
    opacity:0), men behold den klikkbar så tap åpner kalenderen. */
 /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
-:where(.ix-date-field__native)::-webkit-calendar-picker-indicator {
+.ix-date-field__native::-webkit-calendar-picker-indicator {
     opacity: 0;
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: pointer;
@@ -167,7 +167,7 @@
    (kun via egen indikator / showPicker med brukeraktivering), så uten dette
    virker feltet "dødt" for peker i FF. På touch beholder native-inputen pekeren
    (regelen slår ikke inn), så et tapp åpner OS-velgeren direkte. */
-:where(.ix-date-field:not([data-touch]) .ix-text-field) > input.ix-date-field__native {
+.ix-date-field:not([data-touch]) :where(.ix-text-field) > :where(input.ix-date-field__native) {
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     pointer-events: none;
 }
@@ -179,14 +179,14 @@
    har flagget ingen effekt (native-inputen har pointer-events:none der uansett).
    Sammensatt input.ix-date-field__native beholder spesifisiteten over
    text-field.css sin `> input`-regel. */
-:where(.ix-date-field[data-touch][data-native-picker-mobile] .ix-text-field) > input.ix-date-field__native {
+.ix-date-field[data-touch][data-native-picker-mobile] :where(.ix-text-field) > :where(input.ix-date-field__native) {
     inset-inline-start: 0;
 }
 
 /* Disabled / read-only: native-inputen skal ikke fange tap. WC speiler
    tilstanden fra den synlige inputen til den native. */
-:where(.ix-text-field) > input:disabled ~ .ix-date-field__native,
-:where(.ix-text-field) > input:read-only ~ .ix-date-field__native {
+.ix-text-field > :where(input:disabled) ~ :where(.ix-date-field__native),
+.ix-text-field > :where(input:read-only) ~ :where(.ix-date-field__native) {
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
     pointer-events: none;

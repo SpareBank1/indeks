@@ -27,7 +27,7 @@
    anker (__option-check/label/description, __no-hits — role=status er tvetydig
    mot den skjulte results-regionen) forblir rene klasse-selektorer. */
 
-:where(ix-combobox, .ix-combobox) {
+ix-combobox, .ix-combobox {
     display: block;
     position: relative;
 }
@@ -35,7 +35,7 @@
 /* ── Chips-wrapper (kun multiselect) ────────────────────────────────────────
    Chipene selv er <data class="ix-chip" data-removable> og styles av chip.css.
    Her styles kun oppsettet: flyt over flere linjer ved mange valg (1.4.10). */
-:where(.ix-combobox [data-field='chips'], .ix-combobox__chips) {
+.ix-combobox [data-field='chips'], .ix-combobox__chips {
     display: flex;
     flex-wrap: wrap;
     gap: var(--ix-spacing-xs);
@@ -43,7 +43,7 @@
 }
 
 /* Tom wrapper skal ikke ta plass før noe er valgt. */
-:where(.ix-combobox [data-field='chips']:empty, .ix-combobox__chips:empty) {
+.ix-combobox [data-field='chips']:empty, .ix-combobox__chips:empty {
     display: none;
 }
 
@@ -53,11 +53,11 @@
    .ix-select, men her en ekte <button> for touch-mål og tastatur/aria. Chevron
    er en CSS-maske som følger currentColor, så fargen arver felt-tilstand
    (disabled/error). Feltet reserverer plass til høyre med padding (se input). */
-:where(.ix-combobox .ix-text-field) {
+.ix-combobox :where(.ix-text-field) {
     position: relative;
 }
 
-:where(.ix-combobox .ix-text-field > button, .ix-combobox__toggle) {
+.ix-combobox :where(.ix-text-field) > :where(button), .ix-combobox__toggle {
     all: unset;
     box-sizing: border-box;
 
@@ -85,12 +85,12 @@
 /* Reserver plass til chevronen så teksten ikke havner under den — samme mål som
    .ix-select (spacing-sm + chevron-bredde). Kun i combobox-kontekst, så den
    globale text-field-inputen ikke påvirkes. */
-:where(.ix-combobox .ix-text-field) > input,
-:where(.ix-combobox .ix-text-field__input) {
+.ix-combobox :where(.ix-text-field) > :where(input),
+.ix-combobox :where(.ix-text-field__input) {
     padding-inline-end: calc(var(--ix-spacing-sm) + 1.5em);
 }
 
-:where(.ix-combobox .ix-text-field > button, .ix-combobox__toggle)::after {
+.ix-combobox :where(.ix-text-field) > :where(button)::after, .ix-combobox__toggle::after {
     content: '';
     width: 1em;
     height: 1em;
@@ -109,22 +109,22 @@
 }
 
 /* Chevron peker opp når lista er åpen. Host [data-open] settes av web componenten. */
-:where(ix-combobox[data-open], .ix-combobox[data-open]) .ix-text-field > button::after,
-:where(ix-combobox[data-open], .ix-combobox[data-open]) .ix-combobox__toggle::after {
+:is(ix-combobox[data-open], .ix-combobox[data-open]) :where(.ix-text-field) > :where(button)::after,
+:is(ix-combobox[data-open], .ix-combobox[data-open]) .ix-combobox__toggle::after {
     transform: rotate(180deg);
 }
 
 /* Knappen er en gjennomsiktig overlay oppå inputen — input eier ramme og flate. */
-:where(.ix-combobox .ix-text-field > button, .ix-text-field > .ix-combobox__toggle) {
+.ix-combobox :where(.ix-text-field) > :where(button), .ix-text-field > :where(.ix-combobox__toggle) {
     background-color: transparent;
     border: none;
 }
 
 /* Disabled / read-only felt toner ned chevronen sammen med inputen. */
-:where(.ix-text-field) > input:disabled ~ button,
-:where(.ix-text-field) > input:read-only ~ button,
-:where(.ix-text-field) > input:disabled ~ .ix-combobox__toggle,
-:where(.ix-text-field) > input:read-only ~ .ix-combobox__toggle {
+.ix-text-field > :where(input:disabled) ~ :where(button),
+.ix-text-field > :where(input:read-only) ~ :where(button),
+.ix-text-field > :where(input:disabled) ~ :where(.ix-combobox__toggle),
+.ix-text-field > :where(input:read-only) ~ :where(.ix-combobox__toggle) {
     color: var(--ix-color-foreground-main-disabled);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
@@ -137,7 +137,7 @@
    popover-API, ingen avhengighet, hele browserslist). Panelet ligger
    position: fixed i viewport-koordinater. Ingen shadow-token finnes ennå, så
    panelet løftes med tydelig kant + flate, som tooltip. */
-:where(.ix-combobox [role='listbox'], .ix-combobox__listbox) {
+.ix-combobox [role='listbox'], .ix-combobox__listbox {
     position: fixed;
     margin: 0;
     padding: var(--ix-spacing-2xs);
@@ -160,7 +160,7 @@
 
 /* Lukket: web componenten setter hidden. [hidden] i seg selv gir display: none,
    men vi er eksplisitte her siden panelet ellers har display fra listen. */
-:where(.ix-combobox [role='listbox'][hidden], .ix-combobox__listbox[hidden]) {
+.ix-combobox [role='listbox'][hidden], .ix-combobox__listbox[hidden] {
     display: none;
 }
 
@@ -169,7 +169,7 @@
    plass alltid (checkmark er visibility:hidden når ikke valgt), slik at label
    ikke hopper når valgt tilstand endres. Valgt vises med checkmark (struktur)
    + fetere label — ikke farge alene (WCAG 1.4.1). */
-:where(.ix-combobox [role='option'], .ix-combobox__option) {
+.ix-combobox [role='option'], .ix-combobox__option {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
@@ -189,12 +189,12 @@
    componenten — IKKE :hover alene, for tastatur og mus skal se likt ut.
    Lyseblå flate; valgt tilstand vises i tillegg med checkmark (ikke farge alene,
    WCAG 1.4.1). */
-:where(.ix-combobox [role='option']:hover, .ix-combobox__option:hover),
-:where(.ix-combobox [role='option'][data-active], .ix-combobox__option[data-active]) {
+.ix-combobox [role='option']:hover, .ix-combobox__option:hover,
+.ix-combobox [role='option'][data-active], .ix-combobox__option[data-active] {
     background-color: var(--ix-color-fill-interactive-hover);
 }
 
-:where(.ix-combobox [role='option'][aria-disabled='true'], .ix-combobox__option[aria-disabled='true']) {
+.ix-combobox [role='option'][aria-disabled='true'], .ix-combobox__option[aria-disabled='true'] {
     color: var(--ix-color-foreground-main-disabled);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
@@ -203,12 +203,12 @@
 
 /* Tekstkolonne: label over valgfri description i kolonne 2 (checkmark-kolonnen
    er kolonne 1 i begge moduser). */
-:where(.ix-combobox__option-label) {
+.ix-combobox__option-label {
     grid-column: 2;
     font-size: var(--ix-font-size-md);
 }
 
-:where(.ix-combobox__option-description) {
+.ix-combobox__option-description {
     grid-column: 2;
     font-size: var(--ix-font-size-sm);
     color: var(--ix-color-foreground-main-subtle);
@@ -219,7 +219,7 @@
    options får krysset midtstilt. Kolonnen reserverer plass i begge moduser
    (visibility: hidden når ikke valgt) så label ikke hopper — krysset gjøres
    synlig når option er valgt, se regelen under. */
-:where(.ix-combobox__option-check) {
+.ix-combobox__option-check {
     grid-column: 1;
     grid-row: 1 / -1;
     width: 1.25em;
@@ -239,12 +239,12 @@
 }
 
 /* Valgt option viser krysset (begge moduser). */
-:where(.ix-combobox [role='option'][aria-selected='true'], .ix-combobox__option[aria-selected='true']) .ix-combobox__option-check {
+.ix-combobox [role='option'][aria-selected='true'] .ix-combobox__option-check, .ix-combobox__option[aria-selected='true'] .ix-combobox__option-check {
     visibility: visible;
 }
 
 /* Valgt option får litt tyngre label så tilstanden ikke hviler på farge alene. */
-:where(.ix-combobox [role='option'][aria-selected='true'], .ix-combobox__option[aria-selected='true']) .ix-combobox__option-label {
+.ix-combobox [role='option'][aria-selected='true'] .ix-combobox__option-label, .ix-combobox__option[aria-selected='true'] .ix-combobox__option-label {
     font-weight: var(--ix-font-weight-medium);
 }
 
@@ -253,14 +253,14 @@
    componenten styrer synlighet via tekstinnhold (ikke hidden/display:none), så
    skjermleser annonseres når teksten dukker opp. Tom melding skjules visuelt
    med :empty — samme mønster som [data-field="error"] i ix-field. */
-:where(.ix-combobox__no-hits) {
+.ix-combobox__no-hits {
     padding: var(--ix-spacing-sm);
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-subtle);
 }
 
 /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
-:where(.ix-combobox__no-hits:empty) {
+.ix-combobox__no-hits:empty {
     display: none;
 }
 
@@ -268,7 +268,7 @@
    Playwright kjører med reducedMotion: 'reduce'; stopp chevron-rotasjonens
    transition slik at snapshots blir deterministiske. */
 @media (prefers-reduced-motion: reduce) {
-    :where(.ix-combobox .ix-text-field > button, .ix-combobox__toggle)::after {
+    .ix-combobox :where(.ix-text-field) > :where(button)::after, .ix-combobox__toggle::after {
         transition: none;
     }
 }

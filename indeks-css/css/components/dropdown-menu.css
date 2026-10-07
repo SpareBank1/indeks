@@ -12,13 +12,13 @@
    - __submenu-trigger        item som åpner en submeny (aria-haspopup)
    - __chevron                høyrepil på submenu-trigger */
 
-:where(ix-dropdown, .ix-dropdown) {
+ix-dropdown, .ix-dropdown {
     display: inline-block;
     position: relative;
 }
 
 /* Submenu bruker samme styling, men plasseres absolutt relativt til parent item. */
-:where(ix-dropdown[data-submenu], .ix-dropdown[data-submenu]) {
+ix-dropdown[data-submenu], .ix-dropdown[data-submenu] {
     display: block;
 }
 
@@ -26,7 +26,7 @@
    Posisjonering (top/left) settes inline av web componenten med
    getBoundingClientRect + viewport-clamp — samme grep som tooltip og combobox.
    Panelet ligger position: fixed i viewport-koordinater for root-menyen. */
-:where(.ix-dropdown__menu) {
+.ix-dropdown__menu {
     position: fixed;
     inset: 0 auto auto 0;
     margin: 0;
@@ -48,14 +48,14 @@
 }
 
 /* Lukket: web componenten setter hidden. */
-:where(.ix-dropdown__menu[hidden]) {
+.ix-dropdown__menu[hidden] {
     display: none;
 }
 
 /* ── Item (meny-element) ────────────────────────────────────────────────────
    Fullt klikk-/touch-mål på hele bredden. Items er <button> eller <a> for
    korrekt tastatur/skjermleser-støtte. */
-:where(.ix-dropdown__item) {
+.ix-dropdown__item {
     all: unset;
     box-sizing: border-box;
 
@@ -76,19 +76,19 @@
     cursor: pointer;
 }
 
-:where(.ix-dropdown__item:hover),
-:where(.ix-dropdown__item[data-active]) {
+.ix-dropdown__item:hover,
+.ix-dropdown__item[data-active] {
     background-color: var(--ix-color-fill-interactive-hover);
 }
 
 /* Active (klikk/press) — mørkere bakgrunn. */
-:where(.ix-dropdown__item:active) {
+.ix-dropdown__item:active {
     background-color: var(--ix-color-fill-interactive-active);
 }
 
 /* Disabled item. */
-:where(.ix-dropdown__item[disabled]),
-:where(.ix-dropdown__item[aria-disabled='true']) {
+.ix-dropdown__item[disabled],
+.ix-dropdown__item[aria-disabled='true'] {
     color: var(--ix-color-foreground-main-disabled);
     /* stylelint-disable-next-line */
     cursor: not-allowed;
@@ -96,24 +96,24 @@
 }
 
 /* Danger-variant for destruktive handlinger. */
-:where(.ix-dropdown__item[data-danger]) {
+.ix-dropdown__item[data-danger] {
     color: var(--ix-color-foreground-danger-default);
 }
 
-:where(.ix-dropdown__item[data-danger]:hover),
-:where(.ix-dropdown__item[data-danger][data-active]) {
+.ix-dropdown__item[data-danger]:hover,
+.ix-dropdown__item[data-danger][data-active] {
     background-color: var(--ix-color-fill-danger-default);
     color: var(--ix-color-foreground-inverse-default);
 }
 
-:where(.ix-dropdown__item[data-danger]:active) {
+.ix-dropdown__item[data-danger]:active {
     background-color: var(--ix-color-fill-danger-default);
     color: var(--ix-color-foreground-inverse-default);
 }
 
 /* ── Divider ────────────────────────────────────────────────────────────────
    Visuell separator mellom grupper. */
-:where(.ix-dropdown__divider) {
+.ix-dropdown__divider {
     all: unset;
     display: block;
     height: var(--ix-border-width-default);
@@ -123,12 +123,12 @@
 
 /* ── Submenu trigger ────────────────────────────────────────────────────────
    Item som åpner en submeny — chevron til høyre indikerer nøsting. */
-:where(.ix-dropdown__submenu-trigger) {
+.ix-dropdown__submenu-trigger {
     justify-content: space-between;
 }
 
 /* Chevron (høyrepil) — CSS-maske som følger currentColor. */
-:where(.ix-dropdown__chevron) {
+.ix-dropdown__chevron {
     flex-shrink: 0;
     width: 1em;
     height: 1em;
@@ -147,8 +147,8 @@
 
 /* ── Ikon i item ────────────────────────────────────────────────────────────
    Ikoner justeres vertikalt med teksten. */
-:where(.ix-dropdown__item) > svg,
-:where(.ix-dropdown__item) > [data-icon] {
+.ix-dropdown__item > :where(svg),
+.ix-dropdown__item > [data-icon] {
     flex-shrink: 0;
     width: 1.25em;
     height: 1.25em;

@@ -1,4 +1,4 @@
-:where(.ix-text-area) {
+.ix-text-area {
     display: flex;
     align-items: stretch;
 }
@@ -6,8 +6,8 @@
 /* BEM-selektoren `.ix-text-area__textarea` brukes ikke av React-komponenten —
    den er et tilgjengelig hook for konsumenter som rendrer <textarea> utenfor
    `.ix-text-area`-wrapperen og fortsatt vil ha samme styling. */
-:where(.ix-text-area) > textarea,
-:where(.ix-text-area__textarea) {
+.ix-text-area > :where(textarea),
+.ix-text-area__textarea {
     all: unset;
     box-sizing: border-box;
     min-width: 0;
@@ -32,15 +32,15 @@
     }
 }
 
-:where(.ix-text-area) > textarea:active,
-:where(.ix-text-area) > textarea:focus,
-:where(.ix-text-area__textarea:active),
-:where(.ix-text-area__textarea:focus) {
+.ix-text-area > :where(textarea:active),
+.ix-text-area > :where(textarea:focus),
+.ix-text-area__textarea:active,
+.ix-text-area__textarea:focus {
     outline-color: var(--ix-color-border-focus-default);
 }
 
-:where(.ix-text-area) > textarea:disabled,
-:where(.ix-text-area__textarea:disabled) {
+.ix-text-area > :where(textarea:disabled),
+.ix-text-area__textarea:disabled {
     background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-disabled);
     border-color: var(--ix-color-border-main-default);
@@ -51,8 +51,8 @@
     resize: none;
 }
 
-:where(.ix-text-area) > textarea:read-only,
-:where(.ix-text-area__textarea:read-only) {
+.ix-text-area > :where(textarea:read-only),
+.ix-text-area__textarea:read-only {
     background-color: var(--ix-color-fill-interactive-read-only);
     color: var(--ix-color-foreground-main-read-only);
     border-color: var(--ix-color-border-main-default);
@@ -60,14 +60,14 @@
     resize: none;
 }
 
-:where(.ix-text-area) > textarea[aria-invalid="true"],
-:where(.ix-text-area__textarea[aria-invalid="true"]) {
+.ix-text-area > :where(textarea[aria-invalid="true"]),
+.ix-text-area__textarea[aria-invalid="true"] {
     color: var(--ix-color-foreground-danger-default);
     border-color: var(--ix-color-border-danger-default);
     box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
 }
 
-:where(.ix-text-area) > textarea::placeholder,
-:where(.ix-text-area__textarea)::placeholder {
+.ix-text-area > :where(textarea)::placeholder,
+.ix-text-area__textarea::placeholder {
     color: var(--ix-color-foreground-main-subtle);
 }

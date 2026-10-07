@@ -1,4 +1,4 @@
-:where(.ix-card) {
+.ix-card {
     /* Kort har alltid en solid kantlinje — også i ren HTML uten ekstra klasser. */
     border: var(--ix-border-default);
     border-radius: var(--ix-border-radius-md);
@@ -10,7 +10,7 @@
 /* Klikkbart kort. Affordansen er synlig i hviletilstand (chevron), ikke kun på
    :hover — slik at klikkbarhet også er tydelig på touch. Kortet er flatt:
    ingen skygge, hover gir bakgrunns-tint. */
-:where(.ix-card--clickable) {
+.ix-card--clickable {
     position: relative;
     cursor: pointer;
     color: inherit;
@@ -29,7 +29,7 @@
 
 /* Chevron som permanent «dette gjør noe»-signal — et ekte ix-icon (byttbart via
    `chevronIcon`-propen), vertikalt sentrert mot høyre kant. */
-:where(.ix-card--clickable) > .ix-card__chevron {
+.ix-card--clickable > .ix-card__chevron {
     position: absolute;
     inset-block: 0;
     inset-inline-end: var(--ix-spacing-md);
@@ -49,13 +49,13 @@
 }
 
 /* Flat hover-feedback: bakgrunns-tint i stedet for skygge/løft. */
-:where(.ix-card--clickable:hover) {
+.ix-card--clickable:hover {
     background-color: var(--ix-color-surface-main-hover);
     border-color: var(--ix-color-border-main-hover);
 }
 
 /* Pressed-feedback — bekrefter klikket på touch der :hover ikke finnes. */
-:where(.ix-card--clickable:active) {
+.ix-card--clickable:active {
     background-color: var(--ix-color-fill-interactive-active);
 }
 
@@ -70,7 +70,7 @@
         transition: none;
     }
 
-    :where(.ix-card--clickable) > .ix-card__chevron {
+    .ix-card--clickable > .ix-card__chevron {
         transition: none;
     }
 }

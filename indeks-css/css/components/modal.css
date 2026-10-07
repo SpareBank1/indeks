@@ -22,7 +22,7 @@
  *   </dialog>
  */
 
-:where(.ix-modal) {
+.ix-modal {
     /* Scrim-en må være mørk i både lys og mørk modus — en tema-avhengig farge
      * ville gitt lys scrim på lyst innhold. Named color `black` er
      * tema-uavhengig; lokal variabel så konsumenter kan overstyre dekkevnen. */
@@ -56,13 +56,13 @@
 
 /* display:flex kun når dialogen er åpen — [open] settes av showModal(). En lukket
  * <dialog> har display:none fra native styling, og den arven skal bevares. */
-:where(.ix-modal[open]) {
+.ix-modal[open] {
     display: flex;
 }
 
 /* Backdrop = den mørke flaten bak dialogen. Native ::backdrop er ikke en egen
  * DOM-node; et klikk på den treffer selve <dialog> (håndteres i JS-laget). */
-:where(.ix-modal)::backdrop {
+.ix-modal::backdrop {
     background: var(--ix-modal-backdrop);
 }
 
@@ -72,21 +72,21 @@
 
 /* matches --ix-breakpoint-sm */
 @media (min-width: 768px) {
-    :where(.ix-modal) {
+    .ix-modal {
         max-width: 640px;
     }
 
-    :where(.ix-modal[data-size='small']) {
+    .ix-modal[data-size='small'] {
         max-width: 480px;
     }
 
-    :where(.ix-modal[data-size='large']) {
+    .ix-modal[data-size='large'] {
         max-width: 800px;
     }
 }
 
 /* Fullskjerm — gjelder alle viewporter, ikke bare desktop. */
-:where(.ix-modal[data-size='full']) {
+.ix-modal[data-size='full'] {
     width: 100%;
     height: 100%;
     max-width: none;
@@ -98,7 +98,7 @@
 
 /* --- Header ---------------------------------------------------------------- */
 
-:where(.ix-modal__header) {
+.ix-modal__header {
     display: flex;
     align-items: flex-start;
     gap: var(--ix-spacing-sm);
@@ -110,7 +110,7 @@
     padding-inline-end: calc(var(--ix-spacing-lg) + 44px);
 }
 
-:where(.ix-modal__title) {
+.ix-modal__title {
     margin: 0;
     font-family: var(--ix-font-family-heading);
     font-size: var(--ix-font-size-xl);
@@ -120,7 +120,7 @@
 
 /* Valgfri beskrivelse (aria-describedby). Dempet tekst; kan stå i header under
  * tittelen eller øverst i body. */
-:where(.ix-modal__description) {
+.ix-modal__description {
     margin: 0;
     color: var(--ix-color-foreground-main-subtle);
 }
@@ -128,7 +128,7 @@
 /* Ikon-knapp for lukking. Absolutt plassert i modalens øvre høyre hjørne (relativt
  * til <dialog>, som alltid er et posisjonert element), så den står i hjørnet
  * uansett tittellengde og selv uten header. */
-:where(.ix-modal__close) {
+.ix-modal__close {
     position: absolute;
     /* Trekk knappen litt inn så den optiske kanten matcher header-paddingen,
      * uten å ofre touch-flaten. */
@@ -149,41 +149,41 @@
     outline-offset: var(--ix-outline-offset-default);
 }
 
-:where(.ix-modal__close:hover) {
+.ix-modal__close:hover {
     background-color: var(--ix-color-surface-main-hover);
 }
 
-:where(.ix-modal__close:focus-visible) {
+.ix-modal__close:focus-visible {
     outline-color: var(--ix-color-border-focus-default);
 }
 
 /* --- Body ------------------------------------------------------------------ */
 
 /* Eneste scrollende region — header/footer står fast. */
-:where(.ix-modal__body) {
+.ix-modal__body {
     flex: 1 1 auto;
     overflow-y: auto;
     padding: var(--ix-spacing-lg);
 }
 
-:where(.ix-modal__body)> :first-child {
+.ix-modal__body> :first-child {
     margin-top: 0;
 }
 
-:where(.ix-modal__body)> :last-child {
+.ix-modal__body> :last-child {
     margin-bottom: 0;
 }
 
 /* --- Footer ---------------------------------------------------------------- */
 
-:where(.ix-modal__footer) {
+.ix-modal__footer {
     /* Ingen topp-delelinje — footeren flyter sammen med body-en. Body-en har egen
      * bunn-padding, så knapperaden får luft over seg uten en ekstra topp-padding. */
     padding: 0 var(--ix-spacing-lg) var(--ix-spacing-lg);
 }
 
 /* Knapperad — brytes til flere linjer på smale skjermer, høyrejustert. */
-:where(.ix-modal__button-group) {
+.ix-modal__button-group {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -192,7 +192,7 @@
 
 /* Unngår 1px-hopp på første hover i Chromium når knappen står på en halv
  * piksel. Eget lag fra start hindrer ny rasterisering med annen avrunding. */
-:where(.ix-modal__button-group) > :where(button, a.ix-button) {
+.ix-modal__button-group > :where(button, a.ix-button) {
     transform: translateZ(0);
 }
 
@@ -203,7 +203,7 @@
  * funksjonelt, bare uten toning. */
 /* stylelint-disable plugin/no-unsupported-browser-features */
 @supports (transition-behavior: allow-discrete) {
-    :where(.ix-modal) {
+    .ix-modal {
         opacity: 0;
         transform: scale(0.98);
         transition:
@@ -218,19 +218,19 @@
      * havner flytende paneler (combobox-liste, dropdown-meny, tooltip, popover)
      * forskjøvet fordi de regner i viewport-koordinater. `none` interpolerer mot
      * identitetsmatrisen, så både inn- og ut-animasjonen er uendret. */
-    :where(.ix-modal[open]) {
+    .ix-modal[open] {
         opacity: 1;
         transform: none;
     }
 
     @starting-style {
-        :where(.ix-modal[open]) {
+        .ix-modal[open] {
             opacity: 0;
             transform: scale(0.98);
         }
     }
 
-    :where(.ix-modal)::backdrop {
+    .ix-modal::backdrop {
         opacity: 0;
         transition:
             opacity var(--ix-transition-duration) var(--ix-transition-animation),
@@ -238,12 +238,12 @@
             display var(--ix-transition-duration) allow-discrete;
     }
 
-    :where(.ix-modal[open])::backdrop {
+    .ix-modal[open]::backdrop {
         opacity: 1;
     }
 
     @starting-style {
-        :where(.ix-modal[open])::backdrop {
+        .ix-modal[open]::backdrop {
             opacity: 0;
         }
     }
@@ -252,8 +252,8 @@
      * bevegelse. Dialogen er synlig umiddelbart. */
     @media (prefers-reduced-motion: reduce) {
 
-        :where(.ix-modal),
-        :where(.ix-modal)::backdrop {
+        .ix-modal,
+        .ix-modal::backdrop {
             opacity: 1;
             transform: none;
             transition: none;

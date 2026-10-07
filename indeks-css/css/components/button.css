@@ -10,7 +10,7 @@
    Sett aldri border-width eller box-shadow i en variantregel. Da er de to
    halvdelene av kanten ute av takt, og høyden hopper igjen. */
 
-:where(.ix-button) {
+.ix-button {
     --ii-button-border-color: transparent;
 
     display: inline-flex;
@@ -40,154 +40,154 @@
 }
 
 /* Størrelser */
-:where(.ix-button[data-size='sm']) {
+.ix-button[data-size='sm'] {
     font-size: var(--ix-font-size-sm);
     padding: var(--ix-spacing-2xs) var(--ix-spacing-sm);
     gap: var(--ix-spacing-xs);
 }
 
-:where(.ix-button[data-size='lg']) {
+.ix-button[data-size='lg'] {
     font-size: var(--ix-font-size-lg);
     padding: var(--ix-spacing-sm) var(--ix-spacing-lg);
 }
 
 /* Primary */
-:where(.ix-button[data-variant='primary']) {
+.ix-button[data-variant='primary'] {
     --ii-button-border-color: var(--ix-color-component-button-primary-border-default);
     background-color: var(--ix-color-component-button-primary-fill-default);
     color: var(--ix-color-component-button-primary-foreground-default);
 }
 
-:where(.ix-button[data-variant='primary']:hover) {
+.ix-button[data-variant='primary']:hover {
     --ii-button-border-color: var(--ix-color-component-button-primary-border-default-hover);
     background-color: var(--ix-color-component-button-primary-fill-default-hover);
 }
 
-:where(.ix-button[data-variant='primary']:active) {
+.ix-button[data-variant='primary']:active {
     --ii-button-border-color: var(--ix-color-component-button-primary-border-default-active);
     background-color: var(--ix-color-component-button-primary-fill-default-active);
 }
 
 /* Secondary */
-:where(.ix-button[data-variant='secondary']) {
+.ix-button[data-variant='secondary'] {
     --ii-button-border-color: var(--ix-color-component-button-secondary-border-default);
     background-color: transparent;
     color: var(--ix-color-component-button-secondary-foreground-default);
 }
 
-:where(.ix-button[data-variant='secondary']:hover) {
+.ix-button[data-variant='secondary']:hover {
     --ii-button-border-color: var(--ix-color-component-button-secondary-border-default-hover);
     background-color: var(--ix-color-component-button-secondary-fill-default-hover);
 }
 
-:where(.ix-button[data-variant='secondary']:active) {
+.ix-button[data-variant='secondary']:active {
     --ii-button-border-color: var(--ix-color-component-button-secondary-border-default-active);
     background-color: var(--ix-color-component-button-secondary-fill-default-active);
 }
 
 /* Tertiary */
-:where(.ix-button[data-variant='tertiary']) {
+.ix-button[data-variant='tertiary'] {
     background-color: transparent;
     color: var(--ix-color-component-button-tertiary-foreground-default);
 }
 
-:where(.ix-button[data-variant='tertiary']:hover) {
+.ix-button[data-variant='tertiary']:hover {
     background-color: var(--ix-color-component-button-tertiary-fill-default-hover);
 }
 
-:where(.ix-button[data-variant='tertiary']:active) {
+.ix-button[data-variant='tertiary']:active {
     background-color: var(--ix-color-component-button-tertiary-fill-default-active);
 }
 
 /* Danger-varianter */
-:where(.ix-button[data-variant='primary'][data-danger='true']) {
+.ix-button[data-variant='primary'][data-danger='true'] {
     --ii-button-border-color: var(--ix-color-component-button-primary-border-danger);
     background-color: var(--ix-color-component-button-primary-fill-danger);
     color: var(--ix-color-component-button-primary-foreground-danger);
 }
 
-:where(.ix-button[data-variant='primary'][data-danger='true']:hover) {
+.ix-button[data-variant='primary'][data-danger='true']:hover {
     --ii-button-border-color: var(--ix-color-component-button-primary-border-danger-hover);
     background-color: var(--ix-color-component-button-primary-fill-danger-hover);
 }
 
-:where(.ix-button[data-variant='primary'][data-danger='true']:active) {
+.ix-button[data-variant='primary'][data-danger='true']:active {
     --ii-button-border-color: var(--ix-color-component-button-primary-border-danger-active);
     background-color: var(--ix-color-component-button-primary-fill-danger-active);
 }
 
-:where(.ix-button[data-variant='secondary'][data-danger='true']) {
+.ix-button[data-variant='secondary'][data-danger='true'] {
     --ii-button-border-color: var(--ix-color-component-button-secondary-border-danger);
     background-color: var(--ix-color-component-button-secondary-fill-danger);
     color: var(--ix-color-component-button-secondary-foreground-danger);
 }
 
-:where(.ix-button[data-variant='secondary'][data-danger='true']:hover) {
+.ix-button[data-variant='secondary'][data-danger='true']:hover {
     --ii-button-border-color: var(--ix-color-component-button-secondary-border-danger-hover);
     background-color: var(--ix-color-component-button-secondary-fill-danger-hover);
 }
 
-:where(.ix-button[data-variant='secondary'][data-danger='true']:active) {
+.ix-button[data-variant='secondary'][data-danger='true']:active {
     --ii-button-border-color: var(--ix-color-component-button-secondary-border-danger-active);
     background-color: var(--ix-color-component-button-secondary-fill-danger-active);
 }
 
-:where(.ix-button[data-variant='tertiary'][data-danger='true']) {
+.ix-button[data-variant='tertiary'][data-danger='true'] {
     background-color: var(--ix-color-component-button-tertiary-fill-danger);
     color: var(--ix-color-component-button-tertiary-foreground-danger);
 }
 
-:where(.ix-button[data-variant='tertiary'][data-danger='true']:hover) {
+.ix-button[data-variant='tertiary'][data-danger='true']:hover {
     background-color: var(--ix-color-component-button-tertiary-fill-danger-hover);
 }
 
-:where(.ix-button[data-variant='tertiary'][data-danger='true']:active) {
+.ix-button[data-variant='tertiary'][data-danger='true']:active {
     background-color: var(--ix-color-component-button-tertiary-fill-danger-active);
 }
 
 /* Focus */
-:where(.ix-button:focus-visible) {
+.ix-button:focus-visible {
     outline-color: var(--ix-color-border-focus-default);
 }
 
 /* Disabled */
-:where(.ix-button:disabled:not([data-loading])) {
+.ix-button:disabled:not([data-loading]) {
     opacity: 0.4;
     pointer-events: none;
 }
 
 /* Loading */
-:where(.ix-button[data-loading='true']) {
+.ix-button[data-loading='true'] {
     position: relative;
     cursor: wait;
     pointer-events: none;
 }
 
-:where(.ix-button__content) {
+.ix-button__content {
     display: inline-flex;
     align-items: center;
     gap: inherit;
 }
 
-:where(.ix-button[data-loading='true'] .ix-button__content) {
+.ix-button[data-loading='true'] .ix-button__content {
     opacity: 0;
 }
 
-:where(.ix-button__spinner) {
+.ix-button__spinner {
     position: absolute;
 }
 
 /* Ikon-only (rund) */
-:where(.ix-button[data-icon-only]) {
+.ix-button[data-icon-only] {
     aspect-ratio: 1 / 1;
     padding: var(--ix-spacing-xs);
     border-radius: 50%;
 }
 
-:where(.ix-button[data-size='sm'][data-icon-only]) {
+.ix-button[data-size='sm'][data-icon-only] {
     padding: var(--ix-spacing-2xs);
 }
 
-:where(.ix-button[data-size='lg'][data-icon-only]) {
+.ix-button[data-size='lg'][data-icon-only] {
     padding: var(--ix-spacing-sm);
 }

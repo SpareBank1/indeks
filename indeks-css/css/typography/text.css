@@ -1,32 +1,32 @@
-:where(.ix-text) {
+.ix-text {
     line-height: 1.2;
     color: var(--ix-color-foreground-main-default);
 }
 
-:where(.ix-text--long) {
+.ix-text--long {
     line-height: 1.4;
 }
 
-:where(.ix-text[data-size="xs"]) {
+.ix-text[data-size="xs"] {
     font-size: var(--ix-font-size-xs);
 }
 
-:where(.ix-text[data-size="sm"]) {
+.ix-text[data-size="sm"] {
     font-size: var(--ix-font-size-sm);
 }
 
-:where(.ix-text[data-size="md"]) {
+.ix-text[data-size="md"] {
     font-size: var(--ix-font-size-md);
 }
 
-:where(.ix-text[data-size="lg"]) {
+.ix-text[data-size="lg"] {
     font-size: var(--ix-font-size-lg);
 }
 
-:where(.ix-text[data-size="xl"]) {
+.ix-text[data-size="xl"] {
     font-size: var(--ix-font-size-xl);
 }
 
-:where(.ix-text[data-size="2xl"]) {
+.ix-text[data-size="2xl"] {
     font-size: var(--ix-font-size-2xl);
 }

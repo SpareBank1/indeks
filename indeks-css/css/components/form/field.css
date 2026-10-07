@@ -1,25 +1,25 @@
-:where(ix-field, .ix-field) {
+ix-field, .ix-field {
     display: flex;
     flex-direction: column;
     gap: var(--ix-spacing-2xs);
 }
 
-:where(ix-field, .ix-field)[data-disabled],
-:where(.ix-field--disabled) {
+ix-field[data-disabled], .ix-field[data-disabled],
+.ix-field--disabled {
     opacity: var(--ix-opacity-disabled);
 }
 
-:where(ix-field, .ix-field)[data-disabled] > label,
-:where(.ix-field--disabled) > label {
+:is(ix-field, .ix-field)[data-disabled] > :where(label),
+.ix-field--disabled > :where(label) {
     color: var(--ix-color-foreground-main-default);
 }
 
-:where(ix-field, .ix-field)[data-readonly] > label,
-:where(.ix-field--readonly) > label {
+:is(ix-field, .ix-field)[data-readonly] > :where(label),
+.ix-field--readonly > :where(label) {
     color: var(--ix-color-foreground-main-read-only);
 }
 
-:where(ix-field, .ix-field) [data-field='description'] {
+:is(ix-field, .ix-field) [data-field='description'] {
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-subtle);
     line-height: 150%;
@@ -35,30 +35,30 @@
    ekstra margin-top oppå gapet for å få totalen til xs. Reglene aktiveres
    bare når elementet faktisk har innhold — ellers er det display: none og
    skal ikke påvirke layout. */
-:where(ix-field, .ix-field) > [data-field='description']:not(:empty) + * {
+:is(ix-field, .ix-field) > [data-field='description']:not(:empty) + * {
     margin-block-start: calc(var(--ix-spacing-xs) - var(--ix-spacing-2xs));
 }
 
-:where(ix-field, .ix-field) > [data-field='error']:not(:empty) {
+:is(ix-field, .ix-field) > [data-field='error']:not(:empty) {
     margin-block-start: calc(var(--ix-spacing-xs) - var(--ix-spacing-2xs));
 }
 
 /* Selve feilmeldingens typografi, farge, ikon-layout og :empty-skjul ligger nå
    i form/validation-message.css (delt av alle feltkomponenter). */
 
-:where(ix-field, .ix-field) [data-field='char-count'] {
+:is(ix-field, .ix-field) [data-field='char-count'] {
     font-size: var(--ix-font-size-sm);
     color: var(--ix-color-foreground-main-subtle);
     text-align: right;
 }
 
-:where(.ix-field__label-row) {
+.ix-field__label-row {
     display: flex;
     align-items: center;
     gap: var(--ix-spacing-2xs);
 }
 
-:where(.ix-field__tooltip-btn) {
+.ix-field__tooltip-btn {
     all: unset;
     box-sizing: border-box;
     cursor: pointer;
@@ -78,12 +78,12 @@
     }
 }
 
-:where(.ix-field__tooltip-btn) {
+.ix-field__tooltip-btn {
     outline: var(--ix-outline-width-default) solid transparent;
     outline-offset: var(--ix-outline-offset-default);
     border-radius: var(--ix-border-radius-xs);
 }
 
-:where(.ix-field__tooltip-btn:focus-visible) {
+.ix-field__tooltip-btn:focus-visible {
     outline-color: var(--ix-color-border-focus-default);
 }
