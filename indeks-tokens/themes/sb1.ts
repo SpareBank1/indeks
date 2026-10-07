@@ -16,7 +16,7 @@ export const sb1: Theme = {
     themeable: {
         'font-family': {
             normal: 'SpareBank1, Arial, sans-serif',
-            heading: '"SpareBank1 Title", SpareBank1, Arial, sans-serif',
+            heading: 'SpareBank1, Arial, sans-serif',
         },
     },
 };

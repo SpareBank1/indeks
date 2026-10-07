@@ -3,15 +3,9 @@
 ## Våre fonter
 Skrifttypene våre er egenutviklet og bygget på det samme sirkulære formspråket som resten av merkevaren. Det er derfor de er gjenkjennelige som SpareBank 1, og en av de tydeligste forskjellene mellom våre flater og konkurrentenes.
 
-Vi bruker to fonter: SpareBank 1 Title til de største overskriftene og SpareBank 1 til all øvrig tekst.
+Vi bruker SpareBank 1-fonten til all tekst, både overskrifter og brødtekst. Den er optimalisert for lesbarhet i mengdetekst.
 
-### SpareBank 1 Title
-Brukes på de største overskriftene og er derfor ekstra distinkt. Fonten kjennetegnes av tydelige, sirkulære former som skaper kontrast mot de smalere bokstavene og gir et sterkt visuelt uttrykk. SpareBank 1 Title skal ikke brukes i lengre brødtekster, da den ikke er optimalisert for lesbarhet i mengdetekst.
-
-### SpareBank 1
-I brødtekst og lengre tekster bruker vi en mindre distinkt font som er optimalisert for lesbarhet i mengdetekst.
-
-Begge fontene er tilgjengelige i Figma og kan brukes direkte, uten behov for lokal installasjon.
+Fonten er tilgjengelig i Figma og kan brukes direkte, uten behov for lokal installasjon.
 
 ## Store bokstaver og kursiv
 Unngå å bruke tekst med kun store bokstaver, da dette gir dårligere lesbarhet. Det samme gjelder kursiv, som ikke bør brukes i overskrifter eller i større tekstmengder, ettersom det kan gjøre teksten vanskeligere å lese.
