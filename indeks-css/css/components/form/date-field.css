@@ -50,23 +50,18 @@
 :where(.ix-date-field__toggle) {
     all: unset;
     box-sizing: border-box;
-
     position: absolute;
     inset-block: 0;
     inset-inline-end: 0;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     /* Touch-mål ≥ 44×44 px (WCAG 2.5.5). */
     min-width: 44px;
     min-height: 44px;
     padding: var(--ix-spacing-sm);
-
     /* Over inputens elevated z-index så knappen tar klikket. */
     z-index: var(--ix-z-index-overlay);
-
     color: var(--ix-color-foreground-main-default);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: pointer;
@@ -103,7 +98,9 @@
     border-radius: 0 var(--ix-border-radius-sm) var(--ix-border-radius-sm) 0;
     outline: var(--ix-outline-width-default) solid transparent;
     outline-offset: calc(-1 * var(--ix-outline-offset-default));
-    transition: var(--ix-transition-all);
+    transition:
+        color var(--ix-transition-duration) var(--ix-transition-animation),
+        outline-color var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
 :where(.ix-text-field) > .ix-date-field__toggle:focus-visible {
@@ -136,13 +133,11 @@
     position: absolute;
     inset-block: 0;
     inset-inline-end: 0;
-
     min-width: 44px;
     min-height: 44px;
     margin: 0;
     padding: 0;
     border: 0;
-
     opacity: 0;
     /* Over knappen (som ligger på overlay) så tap treffer native-inputen. */
     z-index: var(--ix-z-index-dialog);

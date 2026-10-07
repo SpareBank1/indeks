@@ -32,18 +32,14 @@
     margin: 0;
     padding: var(--ix-spacing-sm);
     box-sizing: border-box;
-
     min-width: 10rem;
     max-width: 20rem;
     max-height: calc(100vh - var(--ix-spacing-lg));
     overflow-y: auto;
-
     background-color: var(--ix-color-surface-main-default);
     border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
     border-radius: var(--ix-border-radius-sm);
-
     z-index: var(--ix-z-index-overlay);
-
     list-style: none;
 }
 
@@ -58,22 +54,21 @@
 :where(.ix-dropdown__item) {
     all: unset;
     box-sizing: border-box;
-
     display: flex;
     align-items: center;
     gap: var(--ix-spacing-xs);
     width: 100%;
-
     min-height: 32px;
     padding: 0 var(--ix-spacing-2xs);
-
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-default);
     text-align: start;
     white-space: nowrap;
-
     border-radius: var(--ix-border-radius-xs);
     cursor: pointer;
+    transition: 
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        color var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
 :where(.ix-dropdown__item:hover),
