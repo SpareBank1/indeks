@@ -1,0 +1,52 @@
+.spesifisitet {
+    max-width: 1400px;
+    margin-inline: auto;
+}
+
+.spesifisitet-liste {
+    display: grid;
+    gap: var(--ix-spacing-2xs);
+}
+
+.spesifisitet-sammenligning {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--ix-spacing-md);
+}
+
+.spesifisitet-alternativ {
+    display: grid;
+    align-content: start;
+    gap: var(--ix-spacing-xs);
+    margin: 0;
+    padding: var(--ix-spacing-md);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-md);
+
+    & iframe {
+        width: 100%;
+        border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+        border-radius: var(--ix-border-radius-sm);
+        background: #ffffff;
+    }
+
+    & summary {
+        cursor: pointer;
+    }
+}
+
+.spesifisitet-kode {
+    margin: var(--ix-spacing-xs) 0 0;
+    padding: var(--ix-spacing-sm);
+    overflow-x: auto;
+    font-size: var(--ix-font-size-xs);
+    background: var(--ix-color-fill-neutral-subtle);
+    border-radius: var(--ix-border-radius-sm);
+}
+
+.spesifisitet-forslag {
+    padding: var(--ix-spacing-sm) var(--ix-spacing-md);
+    border-inline-start: 4px solid var(--ix-color-border-info-default);
+    background: var(--ix-color-surface-info-default);
+}
