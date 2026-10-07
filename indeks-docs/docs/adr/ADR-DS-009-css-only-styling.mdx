@@ -31,7 +31,9 @@ Responsive varianter følger mønsteret `ix-{breakpoint}-{klasse}`, f.eks. `ix-s
 
 ### CSS-struktur
 
-`indeks-css/css/`: components/, icons/, layout/, surface/, typography/.
+`indeks-css/css/`: reset.css, components/, icons/, layout/, surface/, typography/.
+
+Bundelen lastes i rekkefølgen tokens → reset og komponenter → utils. Utilities lastes sist, så de kan overstyre komponentene. På CDN er `index.css` bare en liste med imports (tokens, `components.css`, utils). Grunnen er at en `@import` etter vanlige regler ignoreres av nettleseren.
 
 ### Dark mode
 

@@ -81,12 +81,12 @@ Ferdiglagde CSS-klasser for vanlige behov:
 -   **Farger** - Bakgrunns- og tilstandsfarger
 -   **Border og transitions** - Kantlinjer og animasjoner
 -   **Accessibility** - Hjelpeklasser for tilgjengelighet
--   **Reset** - CSS reset for konsistent utgangspunkt
 
 ### @sb1/indeks-css — Komponent-CSS
 
 CSS som er spesifikk for Indeks sine komponenter:
 
+-   **Reset** - CSS reset for konsistent utgangspunkt, lastet før komponentene
 -   **Komponenter** - Button, Card, Table, Tag, Spinner, Divider, List, Form-elementer
 -   **Typografi** - Heading, Text, Link
 -   **Surface** - Surface (bakgrunns- og flateflater)
