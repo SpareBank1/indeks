@@ -41,7 +41,7 @@
         "build:cdn": "rm -rf ./dist/cdn && postcss ./css/index.css -o ./dist/cdn/components.css --env cdn && postcss ./index.css -o ./dist/cdn/index.css --env cdn",
         "lint": "stylelint \"css/**/*.css\" && node ../scripts/check-css-variables.js .",
         "update-packages": "echo not implemented",
-        "test": "echo \"Ingen tester\""
+        "test": "node --test ../scripts/fjern-where.test.ts"
     },
     "author": "",
     "license": "MIT",
