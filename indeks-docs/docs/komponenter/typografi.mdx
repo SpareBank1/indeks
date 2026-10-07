@@ -425,7 +425,7 @@ navigerer etter, og lenketeksten er det de leser løsrevet fra avsnittet rundt.
 - **Understrek på lenker** som standard, så de skilles fra brødteksten uten at farge er eneste signal
 - **rem-basert skala:** alle størrelser bygges fra `--ii-font-base-size` (`1rem`) med faktor 1.125, og typografi-CSS-en har ingen px-verdier. Teksten følger skriftstørrelsen brukeren har valgt i nettleseren, og skalerer ved 200 % zoom
 - **Ingen faste bredder:** teksten flyter og brekker ved 320 px viewport uten horisontal scroll
-- **Overstyrbar linjeavstand:** linjehøyde og farge settes i `:where()`, som har spesifisitet 0. En brukerstil som øker linjehøyde eller bokstavavstand vinner uten `!important`
+- **Overstyrbar linjeavstand:** linjehøyde og farge settes på klassen (`0,1,0`). Verktøy for tekstavstand (WCAG 1.4.12) bruker `!important` og vinner over komponent-CSS-en
 - **Fokusmarkeringen beholdes:** `ix-link-text` fjerner ikke nettleserens fokusring
 
 <KeyboardAndScreenReader data={a11yData} />

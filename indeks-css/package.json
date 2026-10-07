@@ -39,7 +39,7 @@
         "build:npm": "rm -rf ./dist/npm && postcss ./index.css -o ./dist/npm/index.css",
         "build:tailwind": "postcss ./tailwind.css -o ./dist/npm/tailwind.css",
         "build:cdn": "rm -rf ./dist/cdn && postcss ./css/index.css -o ./dist/cdn/components.css --env cdn && postcss ./index.css -o ./dist/cdn/index.css --env cdn",
-        "lint": "stylelint \"css/**/*.css\" && node ../scripts/check-css-variables.js .",
+        "lint": "stylelint \"css/**/*.css\" && node ../scripts/check-css-variables.js . && node ../scripts/fjern-where.ts --check css",
         "update-packages": "echo not implemented",
         "test": "node --test ../scripts/fjern-where.test.ts"
     },

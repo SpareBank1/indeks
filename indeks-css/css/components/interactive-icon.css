@@ -59,7 +59,7 @@
  * neutral er unntatt fordi det betyr det samme som ingen status — da gjelder
  * basis-regelen (secondary-button) og ikonet er uendret.
  */
-:where([data-status]:not([data-status='neutral']) .ix-interactive-icon:not([data-status])) {
+:where([data-status]:not([data-status='neutral'])) .ix-interactive-icon:not([data-status]) {
     --ii-interactive-icon-fill-hover: var(--ix-color-status-fill-subtle-hover);
     --ii-interactive-icon-fill-active: var(--ix-color-status-fill-subtle-active);
 }

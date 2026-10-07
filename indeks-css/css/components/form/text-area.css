@@ -3,9 +3,9 @@
     align-items: stretch;
 }
 
-/* BEM-selektoren `.ix-text-area__textarea` brukes ikke av React-komponenten —
-   den er et tilgjengelig hook for konsumenter som rendrer <textarea> utenfor
-   `.ix-text-area`-wrapperen og fortsatt vil ha samme styling. */
+/* `.ix-text-area__textarea` er offentlig API. `> :where(textarea)` dekker
+   håndskrevet HTML uten klassen, og er like sterk (0,1,0), så en konsument som
+   overstyrer BEM-klassen, vinner. Se ADR-DS-009. */
 .ix-text-area > :where(textarea),
 .ix-text-area__textarea {
     all: unset;

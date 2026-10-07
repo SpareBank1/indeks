@@ -52,9 +52,8 @@ ix-radio-group, .ix-radio-group {
 
 /* ── RadioButton — enkelt valg ───────────────────────────────────────────────
  * Styler både naken input/label inni <ix-radio-group> OG BEM-klassene.
- * BEM-klassene er hooks for konsumenter som vil bruke radio-styling utenfor
- * <ix-radio-group>; React-laget setter dem på sine egne elementer. Forfattere
- * som skriver HTML inni <ix-radio-group> trenger ikke klassene.
+ * BEM-klassene er offentlig API. Den nakne input/label-strukturen er intern og
+ * står i :where(), så den ikke slår en konsument som overstyrer BEM-klassene.
  */
 
 /* Wrapper rundt én input+label. Inni gruppen: alle direkte barn av items-
@@ -265,7 +264,7 @@ ix-radio-group[aria-invalid='true'] :where(.ix-radio-button__input:checked) + :w
 
 /* Chip-variant, error + valgt: chip.css fyller pillen mørkerødt, så ringen og
  * prikken må flippe til inverse for å være synlige. Ligger etter hover-ved-error-
- * regelen over på samme spesifisitet (0,4,2), slik at en hovret valgt error-chip
+ * regelen over på samme spesifisitet, slik at en hovret valgt error-chip
  * beholder den hvite ringen. Uvalgt error trenger ingenting — reglene over gir
  * allerede rød ring på nøytralt pill-fyll. */
 :is(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='error'] :where(input[type='radio']:checked) + :where(label),

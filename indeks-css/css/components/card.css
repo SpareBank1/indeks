@@ -17,10 +17,9 @@
     text-decoration: none;
 }
 
-/* Uten :where() slik at transition vinner over en global bar a{transition:color}
-   (Infima i docs, eller en reset i konsumentapp) — ellers faller
-   background/border ut av transition-settet på <a>-kortet og hover snapper.
-   Samme spesifisitets-hensyn som padding-inline-end nedenfor. */
+/* Transition står på klassen (0,1,0), så den vinner over en global bar
+   a{transition:color} (Infima i docs, eller en reset i konsumentapp). Ellers faller
+   background/border ut av transition-settet på <a>-kortet og hover snapper. */
 .ix-card--clickable {
     transition: var(--ix-transition-all);
     outline: var(--ix-outline-width-default) solid transparent;
@@ -64,8 +63,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    /* Uten :where() på kortet for å matche spesifisiteten til transition-regelen
-       over (0,1,0) — ellers slås ikke animasjonen av. */
+    /* Samme spesifisitet som transition-regelen over (0,1,0), ellers slås ikke
+       animasjonen av. */
     .ix-card--clickable {
         transition: none;
     }

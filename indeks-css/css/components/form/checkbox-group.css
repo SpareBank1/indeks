@@ -97,8 +97,8 @@ ix-checkbox-group, .ix-checkbox-group {
     --ii-checkbox-box-border: var(--ix-color-border-danger-default);
 }
 
-/* Hover ved error: behold den røde boksen. Uten dette vinner hover-regelen i
- * checkbox.css (0,3,2) over regelen over (0,3,1). Speiler radio-group.css. */
+/* Hover ved error: behold den røde boksen, så hover-regelen i checkbox.css ikke
+ * tar over under pekeren. Speiler radio-group.css. */
 :is(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='error'] :where(.ix-checkbox) :where(input[type='checkbox']:not(:disabled)) + :where(label:hover),
 :is(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][aria-invalid='true'] :where(.ix-checkbox) :where(input[type='checkbox']:not(:disabled)) + :where(label:hover) {
     --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);

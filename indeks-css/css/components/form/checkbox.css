@@ -153,8 +153,8 @@
 
 /* ── Feil (aria-invalid) ─────────────────────────────────────────────────── */
 
-/* CheckboxGroup setter feil på gruppa, ikke per input. `.ix-checkbox` i
- * gruppeselektoren gir samme spesifisitet som `[aria-invalid]`. */
+/* CheckboxGroup setter feil på gruppa, ikke per input. Gruppeselektoren (0,2,0)
+ * er sterkere enn den strukturelle input-selektoren (0,1,0). */
 
 .ix-checkbox :where(input[type='checkbox'][aria-invalid='true']) + :where(label),
 :is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']) + :where(label),
