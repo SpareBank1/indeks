@@ -12,15 +12,15 @@
  * `input + label`. Derfor lar IxField labelen stå, og legger tooltip-knappen
  * rett etter den (rad-layout). */
 
-:where(.ix-checkbox) {
+.ix-checkbox {
     display: flex;
     align-items: center;
     gap: var(--ix-spacing-2xs);
 }
 
 /* Skjul native input visuelt, men hold det i DOM for tastatur og skjermleser */
-:where(.ix-checkbox) input[type='checkbox'],
-:where(.ix-checkbox__input) {
+.ix-checkbox :where(input[type='checkbox']),
+.ix-checkbox__input {
     position: absolute;
     opacity: 0;
     width: 0;
@@ -30,8 +30,8 @@
 }
 
 /* Label = klikkflate. Indikatoren får plass via padding-left. */
-:where(.ix-checkbox) label,
-:where(.ix-checkbox__label) {
+.ix-checkbox :where(label),
+.ix-checkbox__label {
     --ii-checkbox-size: 24px;
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-default);
     --ii-checkbox-box-border: var(--ix-color-border-main-default);
@@ -53,8 +53,8 @@
 }
 
 /* Boksen */
-:where(.ix-checkbox) label::before,
-:where(.ix-checkbox__label)::before {
+.ix-checkbox :where(label)::before,
+.ix-checkbox__label::before {
     content: '';
     position: absolute;
     left: 0;
@@ -72,8 +72,8 @@
 }
 
 /* Glyfen (hake eller strek) — skjult til checked/indeterminate slår den på */
-:where(.ix-checkbox) label::after,
-:where(.ix-checkbox__label)::after {
+.ix-checkbox :where(label)::after,
+.ix-checkbox__label::after {
     content: '';
     position: absolute;
     left: calc((var(--ii-checkbox-size) - 16px) / 2);
@@ -92,29 +92,29 @@
 
 /* ── Hover ───────────────────────────────────────────────────────────────── */
 
-:where(.ix-checkbox) input[type='checkbox']:not(:disabled) + label:hover,
-:where(.ix-checkbox__input:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+.ix-checkbox :where(input[type='checkbox']:not(:disabled)) + :where(label:hover),
+.ix-checkbox__input:not(:disabled) + .ix-checkbox__label:hover {
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-hover);
     --ii-checkbox-box-border: var(--ix-color-border-main-hover);
 }
 
 /* ── Focus ───────────────────────────────────────────────────────────────── */
 
-:where(.ix-checkbox) input[type='checkbox']:focus-visible + label::before,
-:where(.ix-checkbox__input:focus-visible) + :where(.ix-checkbox__label)::before {
+.ix-checkbox :where(input[type='checkbox']:focus-visible) + :where(label)::before,
+.ix-checkbox__input:focus-visible + .ix-checkbox__label::before {
     outline-color: var(--ix-color-border-focus-default);
 }
 
 /* ── Checked ─────────────────────────────────────────────────────────────── */
 
-:where(.ix-checkbox) input[type='checkbox']:checked + label,
-:where(.ix-checkbox__input:checked) + :where(.ix-checkbox__label) {
+.ix-checkbox :where(input[type='checkbox']:checked) + :where(label),
+.ix-checkbox__input:checked + .ix-checkbox__label {
     --ii-checkbox-box-bg: var(--ix-color-fill-main-default);
     --ii-checkbox-box-border: transparent;
 }
 
-:where(.ix-checkbox) input[type='checkbox']:checked + label::after,
-:where(.ix-checkbox__input:checked) + :where(.ix-checkbox__label)::after {
+.ix-checkbox :where(input[type='checkbox']:checked) + :where(label)::after,
+.ix-checkbox__input:checked + .ix-checkbox__label::after {
     display: block;
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M13.5 4.5L6 12L2.5 8.5' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -122,125 +122,125 @@
 
 /* ── Indeterminate (delvis valgt) ────────────────────────────────────────── */
 
-:where(.ix-checkbox) input[type='checkbox']:indeterminate + label,
-:where(.ix-checkbox__input:indeterminate) + :where(.ix-checkbox__label) {
+.ix-checkbox :where(input[type='checkbox']:indeterminate) + :where(label),
+.ix-checkbox__input:indeterminate + .ix-checkbox__label {
     --ii-checkbox-box-bg: var(--ix-color-fill-main-default);
     --ii-checkbox-box-border: transparent;
 }
 
-:where(.ix-checkbox) input[type='checkbox']:indeterminate + label::after,
-:where(.ix-checkbox__input:indeterminate) + :where(.ix-checkbox__label)::after {
+.ix-checkbox :where(input[type='checkbox']:indeterminate) + :where(label)::after,
+.ix-checkbox__input:indeterminate + .ix-checkbox__label::after {
     display: block;
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3 8H13' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
 /* Hover/active på valgt eller delvis valgt boks */
-:where(.ix-checkbox) input[type='checkbox']:checked:not(:disabled) + label:hover,
-:where(.ix-checkbox) input[type='checkbox']:indeterminate:not(:disabled) + label:hover,
-:where(.ix-checkbox__input:checked:not(:disabled)) + :where(.ix-checkbox__label:hover),
-:where(.ix-checkbox__input:indeterminate:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+.ix-checkbox :where(input[type='checkbox']:checked:not(:disabled)) + :where(label:hover),
+.ix-checkbox :where(input[type='checkbox']:indeterminate:not(:disabled)) + :where(label:hover),
+.ix-checkbox__input:checked:not(:disabled) + .ix-checkbox__label:hover,
+.ix-checkbox__input:indeterminate:not(:disabled) + .ix-checkbox__label:hover {
     --ii-checkbox-box-bg: var(--ix-color-fill-main-default-hover);
     --ii-checkbox-box-border: transparent;
 }
 
-:where(.ix-checkbox) input[type='checkbox']:checked:not(:disabled) + label:active,
-:where(.ix-checkbox) input[type='checkbox']:indeterminate:not(:disabled) + label:active,
-:where(.ix-checkbox__input:checked:not(:disabled)) + :where(.ix-checkbox__label:active),
-:where(.ix-checkbox__input:indeterminate:not(:disabled)) + :where(.ix-checkbox__label:active) {
+.ix-checkbox :where(input[type='checkbox']:checked:not(:disabled)) + :where(label:active),
+.ix-checkbox :where(input[type='checkbox']:indeterminate:not(:disabled)) + :where(label:active),
+.ix-checkbox__input:checked:not(:disabled) + .ix-checkbox__label:active,
+.ix-checkbox__input:indeterminate:not(:disabled) + .ix-checkbox__label:active {
     --ii-checkbox-box-bg: var(--ix-color-fill-main-default-active);
 }
 
 /* ── Feil (aria-invalid) ─────────────────────────────────────────────────── */
 
-/* CheckboxGroup setter feil på gruppa, ikke per input. `.ix-checkbox` i
- * gruppeselektoren gir samme spesifisitet som `[aria-invalid]`. */
+/* CheckboxGroup setter feil på gruppa, ikke per input. Gruppeselektoren (0,2,0)
+ * er sterkere enn den strukturelle input-selektoren (0,1,0). */
 
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true'] + label,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox'] + label,
-:where(.ix-checkbox__input[aria-invalid='true']) + :where(.ix-checkbox__label) {
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']) + :where(label),
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']) + :where(label),
+.ix-checkbox__input[aria-invalid='true'] + .ix-checkbox__label {
     --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle);
     --ii-checkbox-box-border: var(--ix-color-border-danger-default);
 }
 
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true'] + label::before,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox'] + label::before,
-:where(.ix-checkbox__input[aria-invalid='true']) + :where(.ix-checkbox__label)::before {
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']) + :where(label)::before,
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']) + :where(label)::before,
+.ix-checkbox__input[aria-invalid='true'] + .ix-checkbox__label::before {
     box-shadow: inset 0 0 0 1px var(--ii-checkbox-box-border);
 }
 
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked + label,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:checked + label,
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:indeterminate + label,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:indeterminate + label,
-:where(.ix-checkbox__input[aria-invalid='true']:checked) + :where(.ix-checkbox__label),
-:where(.ix-checkbox__input[aria-invalid='true']:indeterminate) + :where(.ix-checkbox__label) {
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']:checked) + :where(label),
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']:checked) + :where(label),
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']:indeterminate) + :where(label),
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']:indeterminate) + :where(label),
+.ix-checkbox__input[aria-invalid='true']:checked + .ix-checkbox__label,
+.ix-checkbox__input[aria-invalid='true']:indeterminate + .ix-checkbox__label {
     --ii-checkbox-box-bg: var(--ix-color-fill-danger-default);
     --ii-checkbox-box-border: var(--ii-checkbox-box-bg);
 }
 
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked + label::before,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:checked + label::before,
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:indeterminate + label::before,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:indeterminate + label::before,
-:where(.ix-checkbox__input[aria-invalid='true']:checked) + :where(.ix-checkbox__label)::before,
-:where(.ix-checkbox__input[aria-invalid='true']:indeterminate) + :where(.ix-checkbox__label)::before {
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']:checked) + :where(label)::before,
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']:checked) + :where(label)::before,
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']:indeterminate) + :where(label)::before,
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']:indeterminate) + :where(label)::before,
+.ix-checkbox__input[aria-invalid='true']:checked + .ix-checkbox__label::before,
+.ix-checkbox__input[aria-invalid='true']:indeterminate + .ix-checkbox__label::before {
     box-shadow: none;
 }
 
 /* Hover/active ved error. Må slå de generelle hover-reglene (0,3,2). */
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:not(:disabled) + label:hover,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:not(:disabled) + label:hover,
-:where(.ix-checkbox__input[aria-invalid='true']:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']:not(:disabled)) + :where(label:hover),
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']:not(:disabled)) + :where(label:hover),
+.ix-checkbox__input[aria-invalid='true']:not(:disabled) + .ix-checkbox__label:hover {
     --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle-hover);
     --ii-checkbox-box-border: var(--ix-color-border-danger-hover);
 }
 
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:not(:disabled) + label:active,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:not(:disabled) + label:active,
-:where(.ix-checkbox__input[aria-invalid='true']:not(:disabled)) + :where(.ix-checkbox__label:active) {
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']:not(:disabled)) + :where(label:active),
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']:not(:disabled)) + :where(label:active),
+.ix-checkbox__input[aria-invalid='true']:not(:disabled) + .ix-checkbox__label:active {
     --ii-checkbox-box-bg: var(--ix-color-fill-danger-subtle-active);
     --ii-checkbox-box-border: var(--ix-color-border-danger-active);
 }
 
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked:not(:disabled) + label:hover,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:checked:not(:disabled) + label:hover,
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:indeterminate:not(:disabled) + label:hover,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:indeterminate:not(:disabled) + label:hover,
-:where(.ix-checkbox__input[aria-invalid='true']:checked:not(:disabled)) + :where(.ix-checkbox__label:hover),
-:where(.ix-checkbox__input[aria-invalid='true']:indeterminate:not(:disabled)) + :where(.ix-checkbox__label:hover) {
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']:checked:not(:disabled)) + :where(label:hover),
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']:checked:not(:disabled)) + :where(label:hover),
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']:indeterminate:not(:disabled)) + :where(label:hover),
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']:indeterminate:not(:disabled)) + :where(label:hover),
+.ix-checkbox__input[aria-invalid='true']:checked:not(:disabled) + .ix-checkbox__label:hover,
+.ix-checkbox__input[aria-invalid='true']:indeterminate:not(:disabled) + .ix-checkbox__label:hover {
     --ii-checkbox-box-bg: var(--ix-color-fill-danger-default-hover);
     --ii-checkbox-box-border: var(--ii-checkbox-box-bg);
 }
 
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:checked:not(:disabled) + label:active,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:checked:not(:disabled) + label:active,
-:where(.ix-checkbox) input[type='checkbox'][aria-invalid='true']:indeterminate:not(:disabled) + label:active,
-:where(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) .ix-checkbox input[type='checkbox']:indeterminate:not(:disabled) + label:active,
-:where(.ix-checkbox__input[aria-invalid='true']:checked:not(:disabled)) + :where(.ix-checkbox__label:active),
-:where(.ix-checkbox__input[aria-invalid='true']:indeterminate:not(:disabled)) + :where(.ix-checkbox__label:active) {
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']:checked:not(:disabled)) + :where(label:active),
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']:checked:not(:disabled)) + :where(label:active),
+.ix-checkbox :where(input[type='checkbox'][aria-invalid='true']:indeterminate:not(:disabled)) + :where(label:active),
+:is(ix-checkbox-group[aria-invalid='true'], ix-checkbox-group[data-state='error'], .ix-checkbox-group[data-state='error']) :where(.ix-checkbox) :where(input[type='checkbox']:indeterminate:not(:disabled)) + :where(label:active),
+.ix-checkbox__input[aria-invalid='true']:checked:not(:disabled) + .ix-checkbox__label:active,
+.ix-checkbox__input[aria-invalid='true']:indeterminate:not(:disabled) + .ix-checkbox__label:active {
     --ii-checkbox-box-bg: var(--ix-color-fill-danger-default-active);
     --ii-checkbox-box-border: var(--ii-checkbox-box-bg);
 }
 
 /* ── Disabled ────────────────────────────────────────────────────────────── */
 
-:where(.ix-checkbox--disabled) {
+.ix-checkbox--disabled {
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
     pointer-events: none;
 }
 
-:where(.ix-checkbox) input[type='checkbox']:disabled + label,
-:where(.ix-checkbox__input:disabled) + :where(.ix-checkbox__label) {
+.ix-checkbox :where(input[type='checkbox']:disabled) + :where(label),
+.ix-checkbox__input:disabled + .ix-checkbox__label {
     opacity: var(--ix-opacity-disabled);
     color: var(--ix-color-foreground-main-read-only);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
 }
 
-:where(.ix-checkbox) input[type='checkbox']:disabled:indeterminate + label,
-:where(.ix-checkbox__input:disabled:indeterminate) + :where(.ix-checkbox__label) {
+.ix-checkbox :where(input[type='checkbox']:disabled:indeterminate) + :where(label),
+.ix-checkbox__input:disabled:indeterminate + .ix-checkbox__label {
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-disabled);
     --ii-checkbox-box-border: var(--ix-color-fill-interactive-disabled);
 }
@@ -248,12 +248,12 @@
 /* ── prefers-reduced-motion ──────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-    :where(.ix-checkbox) label,
-    :where(.ix-checkbox) label::before,
-    :where(.ix-checkbox) label::after,
-    :where(.ix-checkbox__label),
-    :where(.ix-checkbox__label)::before,
-    :where(.ix-checkbox__label)::after {
+    .ix-checkbox :where(label),
+    .ix-checkbox :where(label)::before,
+    .ix-checkbox :where(label)::after,
+    .ix-checkbox__label,
+    .ix-checkbox__label::before,
+    .ix-checkbox__label::after {
         transition: none;
     }
 }
@@ -264,29 +264,29 @@
  * og HighlightText på glyfen så haken/streken er synlig mot Highlight-boksen.
  */
 @media (forced-colors: active) {
-    :where(.ix-checkbox) label::before,
-    :where(.ix-checkbox__label)::before {
+    .ix-checkbox :where(label)::before,
+    .ix-checkbox__label::before {
         border-color: CanvasText;
         background-color: Canvas;
     }
 
-    :where(.ix-checkbox) input[type='checkbox']:checked + label::before,
-    :where(.ix-checkbox) input[type='checkbox']:indeterminate + label::before,
-    :where(.ix-checkbox__input:checked) + :where(.ix-checkbox__label)::before,
-    :where(.ix-checkbox__input:indeterminate) + :where(.ix-checkbox__label)::before {
+    .ix-checkbox :where(input[type='checkbox']:checked) + :where(label)::before,
+    .ix-checkbox :where(input[type='checkbox']:indeterminate) + :where(label)::before,
+    .ix-checkbox__input:checked + .ix-checkbox__label::before,
+    .ix-checkbox__input:indeterminate + .ix-checkbox__label::before {
         border-color: Highlight;
         background-color: Highlight;
     }
 
-    :where(.ix-checkbox) input[type='checkbox']:checked + label::after,
-    :where(.ix-checkbox) input[type='checkbox']:indeterminate + label::after,
-    :where(.ix-checkbox__input:checked) + :where(.ix-checkbox__label)::after,
-    :where(.ix-checkbox__input:indeterminate) + :where(.ix-checkbox__label)::after {
+    .ix-checkbox :where(input[type='checkbox']:checked) + :where(label)::after,
+    .ix-checkbox :where(input[type='checkbox']:indeterminate) + :where(label)::after,
+    .ix-checkbox__input:checked + .ix-checkbox__label::after,
+    .ix-checkbox__input:indeterminate + .ix-checkbox__label::after {
         background-color: HighlightText;
     }
 
-    :where(.ix-checkbox) input[type='checkbox']:focus-visible + label::before,
-    :where(.ix-checkbox__input:focus-visible) + :where(.ix-checkbox__label)::before {
+    .ix-checkbox :where(input[type='checkbox']:focus-visible) + :where(label)::before,
+    .ix-checkbox__input:focus-visible + .ix-checkbox__label::before {
         outline-color: Highlight;
     }
 }

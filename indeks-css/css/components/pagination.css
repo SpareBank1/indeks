@@ -17,13 +17,13 @@
  *   </nav>
  */
 
-:where(.ix-pagination) {
+.ix-pagination {
     display: flex;
     align-items: center;
     gap: var(--ix-spacing-md);
 }
 
-:where(.ix-pagination__list) {
+.ix-pagination__list {
     --ii-outline-space: calc(var(--ix-outline-width-default, 2px) + var(--ix-outline-offset-default, 3px));
 
     display: flex;
@@ -36,18 +36,18 @@
     overflow-x: auto;
 }
 
-:where(.ix-pagination__list > li) {
+.ix-pagination__list > :where(li) {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
 /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
-:where(.ix-pagination__list > li)::marker {
+.ix-pagination__list > :where(li)::marker {
     content: none;
 }
 
-:where(.ix-pagination__button) {
+.ix-pagination__button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -67,43 +67,43 @@
     transition: var(--ix-transition-all);
 }
 
-:where(.ix-pagination__button:hover:not([aria-current='page'])) {
+.ix-pagination__button:hover:not([aria-current='page']) {
     background-color: var(--ix-color-component-button-tertiary-fill-default-hover);
 }
 
-:where(.ix-pagination__button:active) {
+.ix-pagination__button:active {
     background-color: var(--ix-color-component-button-tertiary-fill-default-active);
 }
 
-:where(.ix-pagination__button:focus-visible) {
+.ix-pagination__button:focus-visible {
     outline-color: var(--ix-color-border-focus-default);
 }
 
-:where(.ix-pagination__button:disabled) {
+.ix-pagination__button:disabled {
     color: var(--ix-color-foreground-main-disabled);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
     pointer-events: none;
 }
 
-:where(.ix-pagination__button[aria-current='page']) {
+.ix-pagination__button[aria-current='page'] {
     background-color: var(--ix-color-component-button-primary-fill-default);
     color: var(--ix-color-component-button-primary-foreground-default);
     pointer-events: none;
 }
 
-:where(.ix-pagination__button[data-type='prev']),
-:where(.ix-pagination__button[data-type='next']) {
+.ix-pagination__button[data-type='prev'],
+.ix-pagination__button[data-type='next'] {
     min-width: auto;
     padding: var(--ix-spacing-xs);
 }
 
-:where(.ix-pagination__button[data-type='prev'][data-show-text]),
-:where(.ix-pagination__button[data-type='next'][data-show-text]) {
+.ix-pagination__button[data-type='prev'][data-show-text],
+.ix-pagination__button[data-type='next'][data-show-text] {
     padding: var(--ix-spacing-xs) var(--ix-spacing-sm);
 }
 
-:where(.ix-pagination__ellipsis) {
+.ix-pagination__ellipsis {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -115,7 +115,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    :where(.ix-pagination__button:hover) {
+    .ix-pagination__button:hover {
         transition: none;
     }
 }

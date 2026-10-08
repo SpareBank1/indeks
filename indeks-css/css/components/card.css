@@ -1,4 +1,4 @@
-:where(.ix-card) {
+.ix-card {
     /* Kort har alltid en solid kantlinje — også i ren HTML uten ekstra klasser. */
     border: var(--ix-border-default);
     border-radius: var(--ix-border-radius-md);
@@ -10,17 +10,16 @@
 /* Klikkbart kort. Affordansen er synlig i hviletilstand (chevron), ikke kun på
    :hover — slik at klikkbarhet også er tydelig på touch. Kortet er flatt:
    ingen skygge, hover gir bakgrunns-tint. */
-:where(.ix-card--clickable) {
+.ix-card--clickable {
     position: relative;
     cursor: pointer;
     color: inherit;
     text-decoration: none;
 }
 
-/* Uten :where() slik at transition vinner over en global bar a{transition:color}
-   (Infima i docs, eller en reset i konsumentapp) — ellers faller
-   background/border ut av transition-settet på <a>-kortet og hover snapper.
-   Samme spesifisitets-hensyn som padding-inline-end nedenfor. */
+/* Transition står på klassen (0,1,0), så den vinner over en global bar
+   a{transition:color} (Infima i docs, eller en reset i konsumentapp). Ellers faller
+   background/border ut av transition-settet på <a>-kortet og hover snapper. */
 .ix-card--clickable {
     transition: var(--ix-transition-all);
     outline: var(--ix-outline-width-default) solid transparent;
@@ -29,7 +28,7 @@
 
 /* Chevron som permanent «dette gjør noe»-signal — et ekte ix-icon (byttbart via
    `chevronIcon`-propen), vertikalt sentrert mot høyre kant. */
-:where(.ix-card--clickable) > .ix-card__chevron {
+.ix-card--clickable > .ix-card__chevron {
     position: absolute;
     inset-block: 0;
     inset-inline-end: var(--ix-spacing-md);
@@ -49,13 +48,13 @@
 }
 
 /* Flat hover-feedback: bakgrunns-tint i stedet for skygge/løft. */
-:where(.ix-card--clickable:hover) {
+.ix-card--clickable:hover {
     background-color: var(--ix-color-surface-main-hover);
     border-color: var(--ix-color-border-main-hover);
 }
 
 /* Pressed-feedback — bekrefter klikket på touch der :hover ikke finnes. */
-:where(.ix-card--clickable:active) {
+.ix-card--clickable:active {
     background-color: var(--ix-color-fill-interactive-active);
 }
 
@@ -64,13 +63,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    /* Uten :where() på kortet for å matche spesifisiteten til transition-regelen
-       over (0,1,0) — ellers slås ikke animasjonen av. */
+    /* Samme spesifisitet som transition-regelen over (0,1,0), ellers slås ikke
+       animasjonen av. */
     .ix-card--clickable {
         transition: none;
     }
 
-    :where(.ix-card--clickable) > .ix-card__chevron {
+    .ix-card--clickable > .ix-card__chevron {
         transition: none;
     }
 }

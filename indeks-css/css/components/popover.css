@@ -16,7 +16,7 @@
     to   { opacity: 1; }
 }
 
-:where(ix-popover, .ix-popover) {
+ix-popover, .ix-popover {
     display: inline-block;
     position: relative;
 }
@@ -24,7 +24,7 @@
 /* ── Content (flytende panel) ───────────────────────────────────────────────
    Posisjonering (top/left) settes inline av web componenten med
    getBoundingClientRect + viewport-clamp. */
-:where(.ix-popover__content) {
+.ix-popover__content {
     --ix-popover-arrow-size: 8px;
     --ix-popover-background: var(--ix-color-surface-main-default);
     --ix-popover-border-color: var(--ix-color-border-main-default);
@@ -49,14 +49,14 @@
     animation: ix-popover-fade-in 0.15s ease-in-out forwards;
 }
 
-:where(.ix-popover__content[hidden]) {
+.ix-popover__content[hidden] {
     display: none;
 }
 
 /* ── Pil (arrow) ────────────────────────────────────────────────────────────
    Rotert firkant med border på to sider. Posisjoneres via --_arrow-x/y
    som settes av web componenten. */
-:where(.ix-popover__content)::before {
+.ix-popover__content::before {
     content: '';
     position: absolute;
     width: var(--ix-popover-arrow-size);
@@ -66,7 +66,7 @@
 }
 
 /* top-* — pil ned */
-:where(.ix-popover__content[data-placement^='top'])::before {
+.ix-popover__content[data-placement^='top']::before {
     bottom: calc(var(--ix-popover-arrow-size) / -2 - var(--ix-border-width-default));
     left: calc(var(--_arrow-x, 50%) - var(--ix-popover-arrow-size) / 2);
     border-right: var(--ix-border-width-default) solid var(--ix-popover-border-color);
@@ -74,7 +74,7 @@
 }
 
 /* bottom-* — pil opp */
-:where(.ix-popover__content[data-placement^='bottom'])::before {
+.ix-popover__content[data-placement^='bottom']::before {
     top: calc(var(--ix-popover-arrow-size) / -2 - var(--ix-border-width-default));
     left: calc(var(--_arrow-x, 50%) - var(--ix-popover-arrow-size) / 2);
     border-left: var(--ix-border-width-default) solid var(--ix-popover-border-color);
@@ -82,7 +82,7 @@
 }
 
 /* left — pil høyre */
-:where(.ix-popover__content[data-placement='left'])::before {
+.ix-popover__content[data-placement='left']::before {
     right: calc(var(--ix-popover-arrow-size) / -2 - var(--ix-border-width-default));
     top: calc(var(--_arrow-y, 50%) - var(--ix-popover-arrow-size) / 2);
     border-right: var(--ix-border-width-default) solid var(--ix-popover-border-color);
@@ -90,7 +90,7 @@
 }
 
 /* right — pil venstre */
-:where(.ix-popover__content[data-placement='right'])::before {
+.ix-popover__content[data-placement='right']::before {
     left: calc(var(--ix-popover-arrow-size) / -2 - var(--ix-border-width-default));
     top: calc(var(--_arrow-y, 50%) - var(--ix-popover-arrow-size) / 2);
     border-left: var(--ix-border-width-default) solid var(--ix-popover-border-color);
@@ -99,7 +99,7 @@
 
 /* ── Heading ────────────────────────────────────────────────────────────────
    Valgfri overskrift øverst i popoveren. */
-:where(.ix-popover__heading) {
+.ix-popover__heading {
     margin: 0 0 var(--ix-spacing-xs);
     font-size: var(--ix-font-size-lg);
     font-weight: var(--ix-font-weight-medium);
@@ -109,7 +109,7 @@
 
 /* ── Body ───────────────────────────────────────────────────────────────────
    Innholdstekst. */
-:where(.ix-popover__body) {
+.ix-popover__body {
     margin: 0;
     font-size: var(--ix-font-size-md);
     line-height: 150%;
@@ -118,7 +118,7 @@
 
 /* ── Actions ────────────────────────────────────────────────────────────────
    Valgfri handlingsrad nederst i popoveren. */
-:where(.ix-popover__actions) {
+.ix-popover__actions {
     display: flex;
     gap: var(--ix-spacing-sm);
     justify-content: flex-end;
@@ -128,7 +128,7 @@
 /* ── Reduced motion ─────────────────────────────────────────────────────────
    Fjern animasjon for brukere som foretrekker redusert bevegelse. */
 @media (prefers-reduced-motion: reduce) {
-    :where(.ix-popover__content) {
+    .ix-popover__content {
         animation: none;
     }
 }

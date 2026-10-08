@@ -4,7 +4,7 @@
    tilbake på `main`-flaten, og `data-status="info|success|warning|danger"`
    bytter til den tilhørende status-flaten — samme mønster som Message/Card.
    Border, radius, spacing og flex kommer fra utility-klasser. */
-:where(.ix-surface) {
+.ix-surface {
     display: flex;
     flex-direction: column;
     background-color: var(--ix-color-status-surface);

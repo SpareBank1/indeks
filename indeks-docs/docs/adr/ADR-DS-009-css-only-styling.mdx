@@ -9,7 +9,12 @@ import Term from '@site/src/components/Term';
 
 # ADR-DS-009: CSS-arkitektur
 
-<AdrStatusLogg historikk={[{ status: 'Besluttet', dato: '2026-07-24' }]} />
+<AdrStatusLogg
+    historikk={[
+        { status: 'Besluttet', dato: '2026-07-24' },
+        { status: 'Besluttet', dato: '2026-10-07' },
+    ]}
+/>
 
 ## Beslutning
 
@@ -31,7 +36,27 @@ Responsive varianter følger mønsteret `ix-{breakpoint}-{klasse}`, f.eks. `ix-s
 
 ### CSS-struktur
 
-`indeks-css/css/`: components/, icons/, layout/, surface/, typography/.
+`indeks-css/css/`: reset.css, components/, icons/, layout/, surface/, typography/.
+
+Bundelen lastes i rekkefølgen tokens → reset og komponenter → utils. Utilities lastes sist, så de kan overstyre komponentene. På CDN er `index.css` bare en liste med imports (tokens, `components.css`, utils). Grunnen er at en `@import` etter vanlige regler ignoreres av nettleseren.
+
+### Spesifisitet
+
+Indeks skal vinne over vertens elementregler (Infima, normalize, app-resetter), og samtidig være enkel å overstyre.
+
+- **Offentlig API skrives rett fram.** Det gjelder komponentklassen, BEM-klasser, `data-*`, `aria-*` og pseudoklasser. Varianter og tilstander får dermed høyere spesifisitet enn basisregelen, og en konsumentklasse sletter ikke en tilstand ved et uhell.
+  - `.ix-button` er 0,1,0.
+  - `.ix-button[data-variant='primary']:hover` er 0,3,0, og slår også vertens `a:hover` (0,1,1).
+- **`:where()` brukes bare rundt det som ikke er API:**
+  - Nakne barneelementer, sammen med tilstandene på dem: `.ix-text-field > :where(input:disabled)`. Den strukturelle selektoren blir like sterk som BEM-klassen, så en overstyring av BEM-klassen vinner.
+  - Andre komponenter i kontekst: `.ix-card :where(.ix-heading)`.
+- **Resetten** (`reset.css`) har `:where()` rundt alle regler og taper mot alt.
+- **Ingen `@layer`.** CSS i lag taper mot all CSS uten lag, uansett spesifisitet. Konsumenter som bruker lag, kan importere indeks med `layer(...)` selv, men vi fraråder det, fordi indeks er hovedstylingen.
+- **Generelle fargeendringer** gjøres med tema og tokens. Token-overstyringer må stå utenfor lag.
+
+Det som står i tabellen «Tilgjengelige klasser og selektorer» på hver komponentside, er kontrakten.
+
+`scripts/fjern-where.ts --check` kjøres i `lint` og feiler hvis en selektor har komponentens egen klasse i `:where()`.
 
 ### Dark mode
 
@@ -78,6 +103,14 @@ Alle konsumenter av designsystemet — både React-konsumenter og team som kun b
 - TypeScript-typer for komponent-props gir type safety der det er mulig
 
 ## Forkastede alternativer
+
+### `:where()` rundt hele komponentselektoren
+
+Var regelen fram til 2026-10-07. Spesifisitet 0,0,0 taper mot enhver elementregel hos verten, som `a {}`, `h2 {}` og `table {}`. Det måtte lappes i Docusaurus, og rekkefølgen mellom filene ble avgjørende.
+
+### Hele indeks i `@layer`
+
+CSS i lag taper mot all CSS uten lag. Infima og de fleste app-stiler ligger ikke i lag, så konflikten ville blitt verre.
 
 ### Tailwind CSS
 
