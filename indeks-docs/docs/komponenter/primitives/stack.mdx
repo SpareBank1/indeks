@@ -134,6 +134,15 @@ På vanlige elementer bruker du CSS-klasser — se [CSS-klasser](#css-klasser) i
 </TabItem>
 </Tabs>
 
+`align="stretch"` gir barn full bredde — nyttig for skjemafelt som `Select` som skal fylle containeren sin:
+
+```tsx live
+<VStack gap="sm" align="stretch">
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Fyller bredden</div>
+  <div className="ix-color-surface-info-default ix-px-sm ix-py-2xs">Fyller bredden</div>
+</VStack>
+```
+
 ### Horisontal — align
 
 <Tabs groupId="variant">
@@ -299,9 +308,11 @@ Attributter kan bare brukes på `<ix-stack>`-elementet, ikke på vanlige `<div>`
 | `horizontal` | *(ingen verdi)* eller `"center"` | Horisontal retning, barn midtstilt |
 | `horizontal` | `"start"` | Horisontal retning, barn toppjustert |
 | `horizontal` | `"end"` | Horisontal retning, barn bunnjustert |
+| `horizontal` | `"stretch"` | Horisontal retning, barn strekker seg til full høyde |
 | `vertical` | *(ingen verdi)* | Vertikal retning, barn startjustert (eksplisitt) |
 | `vertical` | `"center"` | Vertikal retning, barn midtstilt |
 | `vertical` | `"end"` | Vertikal retning, barn bunnjustert |
+| `vertical` | `"stretch"` | Vertikal retning, barn strekker seg til full bredde |
 | `gap` | `none` \| `2xs` \| `xs` \| `sm` \| `md` \| `lg` \| `xl` \| `2xl` \| `3xl` \| `4xl` | Avstand mellom barn. Standard: `md` |
 | `reverse` | *(ingen verdi)* | Reverserer retningen |
 | `nowrap` | *(ingen verdi)* | Hindrer linjebryting |
@@ -316,10 +327,12 @@ Klasser fungerer på både `<ix-stack>` og vanlige elementer som `<div>`.
 | `ix-stack-vertical` | Eksplisitt vertikal, tilsvarende `ix-stack` |
 | `ix-stack-vertical-center` | Vertikal, barn midtstilt |
 | `ix-stack-vertical-end` | Vertikal, barn høyrejustert |
+| `ix-stack-vertical-stretch` | Vertikal, barn strekker seg til full bredde |
 | `ix-stack-horizontal` | Horisontal, barn midtstilt (center) |
 | `ix-stack-horizontal-center` | Horisontal, barn midtstilt (eksplisitt) |
 | `ix-stack-horizontal-start` | Horisontal, barn toppjustert |
 | `ix-stack-horizontal-end` | Horisontal, barn bunnjustert |
+| `ix-stack-horizontal-stretch` | Horisontal, barn strekker seg til full høyde |
 | `ix-stack-reverse` | Reverserer retningen. Kombiner med retningsklasse |
 | `ix-stack-nowrap` | Hindrer linjebryting |
 
@@ -333,7 +346,7 @@ Standard gap er `md`. Bruk `gap`-attributtet på `<ix-stack>` eller `ix-gap-*` u
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
 | `as` | `ElementType` | | Rendrer et native element med CSS-klasser i stedet for `<ix-stack>` med attributter. Bruk for semantikk — f.eks. `as="nav"`. |
-| `align` | `'start' \| 'center' \| 'end'` | `'center'` | Kryssaksejustering av barn |
+| `align` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'center'` | Kryssaksejustering av barn |
 | `gap` | `GapSize` | `'md'` | Avstand mellom barn |
 | `className` | `string` | | Ekstra CSS-klasser |
 | `ref` | `Ref<HTMLElement>` | | Ref til rotelementet |
@@ -345,7 +358,7 @@ Støtter alle standard HTML-attributter for det rendrede elementet (`id`, `style
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
 | `as` | `ElementType` | | Rendrer et native element med CSS-klasser i stedet for `<ix-stack>` med attributter. Bruk for semantikk — f.eks. `as="ul"`. |
-| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Kryssaksejustering av barn |
+| `align` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'start'` | Kryssaksejustering av barn |
 | `gap` | `GapSize` | `'md'` | Avstand mellom barn |
 | `className` | `string` | | Ekstra CSS-klasser |
 | `ref` | `Ref<HTMLElement>` | | Ref til rotelementet |

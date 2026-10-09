@@ -31,6 +31,10 @@ export const AlignEnd: Story = {
   args: { align: "end" },
 };
 
+export const AlignStretch: Story = {
+  args: { align: "stretch" },
+};
+
 export const HTML: Story = {
   render: () => (
     <div dangerouslySetInnerHTML={{ __html: `
