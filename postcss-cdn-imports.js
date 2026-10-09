@@ -8,9 +8,13 @@ const __dirname = dirname(__filename);
 /**
  * PostCSS plugin to replace package imports with CDN URLs
  * Replaces @import '@sb1/package' with @import 'https://cdn.example.com/@sb1/package@version/index.css'
+ *
+ * `localRewrites` bytter lokale imports med en annen fil i samme CDN-mappe. CSS-bundelen
+ * bruker det til å peke på `./components.css` i stedet for å inline komponentene: utils skal
+ * lastes etter komponentene, og en `@import` etter inlinede regler ignoreres av nettleseren.
  */
 export default function postcssCdnImports(opts = {}) {
-    const { cdnBaseUrl = '/', enabled = false } = opts;
+    const { cdnBaseUrl = '/', enabled = false, localRewrites = {} } = opts;
 
     return {
         postcssPlugin: 'postcss-cdn-imports',
@@ -21,6 +25,11 @@ export default function postcssCdnImports(opts = {}) {
 
             root.walkAtRules('import', (rule) => {
                 const importValue = rule.params.replace(/['"]/g, '');
+
+                if (localRewrites[importValue]) {
+                    rule.params = `'${localRewrites[importValue]}'`;
+                    return;
+                }
 
                 // Check if it's a package import (not relative path)
                 if (importValue.startsWith('@sb1/')) {

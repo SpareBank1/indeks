@@ -13,6 +13,7 @@ export default ({ env }) => {
             postcssCdnImports({
                 cdnBaseUrl: '/indeks',
                 enabled: isCdn,
+                localRewrites: { './css/index.css': './components.css' },
             }),
 
             // Resolves @import statements
@@ -21,6 +22,11 @@ export default ({ env }) => {
                     // CDN-bygget beholder CDN-URL-refs som eksterne imports
                     // (postcssCdnImports har allerede erstattet @sb1/-imports).
                     if (isCdn && path.startsWith('/indeks/')) {
+                        return false;
+                    }
+                    // Komponentene lastes som egen fil ved siden av index.css,
+                    // så utils kan importeres etter dem.
+                    if (isCdn && path === './components.css') {
                         return false;
                     }
                     // npm-bygget inlines alt — tokens og utils havner i
