@@ -23,6 +23,11 @@
     align-items: flex-end;
 }
 
+:where(ix-stack[vertical="stretch"], ix-stack.ix-stack-vertical-stretch, .ix-stack-vertical-stretch) {
+    flex-direction: column;
+    align-items: stretch;
+}
+
 /* --- Horisontal --- */
 
 :where(ix-stack[horizontal], ix-stack[horizontal="center"], ix-stack.ix-stack-horizontal, .ix-stack-horizontal),
@@ -39,6 +44,11 @@
 :where(ix-stack[horizontal="end"], ix-stack.ix-stack-horizontal-end, .ix-stack-horizontal-end) {
     flex-direction: row;
     align-items: flex-end;
+}
+
+:where(ix-stack[horizontal="stretch"], ix-stack.ix-stack-horizontal-stretch, .ix-stack-horizontal-stretch) {
+    flex-direction: row;
+    align-items: stretch;
 }
 
 /* --- Gap --- */
@@ -66,14 +76,17 @@
     ix-stack[horizontal="center"][reverse],
     ix-stack[horizontal="start"][reverse],
     ix-stack[horizontal="end"][reverse],
+    ix-stack[horizontal="stretch"][reverse],
     ix-stack.ix-stack-horizontal.ix-stack-reverse,
     ix-stack.ix-stack-horizontal-center.ix-stack-reverse,
     ix-stack.ix-stack-horizontal-start.ix-stack-reverse,
     ix-stack.ix-stack-horizontal-end.ix-stack-reverse,
+    ix-stack.ix-stack-horizontal-stretch.ix-stack-reverse,
     .ix-stack-horizontal.ix-stack-reverse,
     .ix-stack-horizontal-center.ix-stack-reverse,
     .ix-stack-horizontal-start.ix-stack-reverse,
-    .ix-stack-horizontal-end.ix-stack-reverse
+    .ix-stack-horizontal-end.ix-stack-reverse,
+    .ix-stack-horizontal-stretch.ix-stack-reverse
 ) {
     flex-direction: row-reverse;
 }
