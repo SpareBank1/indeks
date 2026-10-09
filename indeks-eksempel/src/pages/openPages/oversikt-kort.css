@@ -7,6 +7,10 @@
     border-radius: var(--ix-border-radius-circle);
 }
 
+.eksempel-kort {
+    transition: background-color var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
 .eksempel-kort--main {
     background-color: var(--ix-color-surface-main-default);
     border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
