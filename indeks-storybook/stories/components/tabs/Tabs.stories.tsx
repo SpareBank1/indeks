@@ -133,3 +133,44 @@ export const HTML: Story = {
         </ix-tabs>
     ),
 };
+
+/**
+ * Fokusringen på en passiv og på den valgte fanen. storybook-addon-pseudo-states
+ * tvinger `:focus-visible` på fanene med `data-demo-focus`, så tilstanden kommer
+ * med i skjermbildet.
+ */
+export const Fokus: Story = {
+    parameters: {
+        pseudo: { focusVisible: ['[data-demo-focus]'] },
+    },
+    render: () => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <ix-tabs class="ix-tabs">
+                <ix-tab-list class="ix-tabs__list" aria-label="Fokus på passiv fane">
+                    <ix-tab class="ix-tabs__tab" aria-selected="true">
+                        Oversikt
+                    </ix-tab>
+                    <ix-tab class="ix-tabs__tab" aria-selected="false" data-demo-focus="">
+                        Transaksjoner
+                    </ix-tab>
+                    <ix-tab class="ix-tabs__tab" aria-selected="false">
+                        Innstillinger
+                    </ix-tab>
+                </ix-tab-list>
+            </ix-tabs>
+            <ix-tabs class="ix-tabs">
+                <ix-tab-list class="ix-tabs__list" aria-label="Fokus på valgt fane">
+                    <ix-tab class="ix-tabs__tab" aria-selected="true" data-demo-focus="">
+                        Oversikt
+                    </ix-tab>
+                    <ix-tab class="ix-tabs__tab" aria-selected="false">
+                        Transaksjoner
+                    </ix-tab>
+                    <ix-tab class="ix-tabs__tab" aria-selected="false">
+                        Innstillinger
+                    </ix-tab>
+                </ix-tab-list>
+            </ix-tabs>
+        </div>
+    ),
+};
