@@ -34,11 +34,8 @@
     flex-wrap: nowrap;
     overflow-x: auto;
     /* overflow-x: auto klipper mot padding-boksen på ALLE sider (og tvinger
-     * overflow-y til `auto`), så en fokusring som ligger utover fanen ville blitt
-     * klippet — i topp/bunn, og på første/siste fane også horisontalt. Vi
-     * reserverer luft på alle fire sider så ringen (offset 3px + bredde 2px = 5px
-     * per side) ligger innenfor padding-boksen og ikke klippes. Midterste faner
-     * trenger det ikke (naboene fyller plassen); det er ytterfanene som kuttes. */
+     * overflow-y til `auto`). Fokusringen ligger innover og klippes ikke, men
+     * luften beholdes så layouten er uendret. */
     padding: var(--ix-spacing-xs);
     /* Skjul rullefeltet diskret, men behold scrollbarhet (tastatur/touch/trackpad). */
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
@@ -85,7 +82,9 @@
     /* --ix-transition-all blir automatisk `none` ved prefers-reduced-motion. */
     transition: var(--ix-transition-all);
     outline: var(--ix-outline-width-default) solid transparent;
-    outline-offset: var(--ix-outline-offset-default);
+    /* Innover (som accordion.css): fanene ligger kant i kant, så en ring
+     * utover ville lagt seg over nabofanen. */
+    outline-offset: calc(var(--ix-outline-offset-default) * -1);
 }
 
 /* Hover — tydeligere tekst + tykkere, mørkere understrek. */
@@ -94,13 +93,12 @@
     box-shadow: inset 0 -3px 0 var(--ix-color-border-main-hover);
 }
 
-/* Fokus — synlig ring utover fanen, som resten av systemet. Fanen er boksløs
- * (kun tekst + understrek i hvile), så ringen har ingen border-radius — den blir
- * en ren rektangel-ramme rundt hele fanen, og understreken forblir urørt nederst.
- * Tablisten reserverer vertikal luft (padding-block) så den ikke klippes av
- * overflow-x: auto. */
+/* Fokus — ring med avrundede hjørner, som resten av systemet. Radiusen settes
+ * bare ved fokus: den runder også av understreken (inset box-shadow), og i
+ * hvile ville det gitt hakk i linja mellom fanene. */
 :where(ix-tab:focus-visible, .ix-tabs__tab:focus-visible) {
     outline-color: var(--ix-color-border-focus-default);
+    border-radius: var(--ix-border-radius-xs);
 }
 
 /* Aktiv/valgt — full tekstfarge + tykkere understrek i brand-farge (blå). */
