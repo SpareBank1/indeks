@@ -19,7 +19,10 @@
     padding: var(--ix-spacing-sm);
     outline: var(--ix-outline-width-default) solid transparent;
     outline-offset: var(--ix-outline-offset-default);
-    transition: var(--ix-transition-all);
+    transition:
+        outline-color var(--ix-transition-duration) var(--ix-transition-animation),
+        border-color var(--ix-transition-duration) var(--ix-transition-animation),
+        box-shadow var(--ix-transition-duration) var(--ix-transition-animation);
     z-index: var(--ix-z-index-elevated);
 
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */

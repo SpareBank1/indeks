@@ -1,6 +1,7 @@
 .ix-link-text {
     color: var(--ix-color-foreground-link-default);
     text-decoration: underline;
+    transition: color var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
 .ix-link-text:hover {
