@@ -13,6 +13,7 @@ import OpenPagesWrapper from './components/OpenPagesWrapper';
 import FargeskalaerEksempler from './pages/openPages/FargeskalaerEksempler';
 import FlytendePanelerIModal from './pages/openPages/FlytendePanelerIModal';
 import FormValidering from './pages/openPages/FormValidering';
+import Spesifisitet from './pages/openPages/Spesifisitet';
 import GenererFarger from './pages/openPages/GenererFarger';
 import OpenPagesOverview from './pages/openPages/Oversikt';
 import ResponsivLayout from './pages/openPages/ResponsivLayout';
@@ -92,6 +93,10 @@ const router = createHashRouter([
                     {
                         path: 'flytende-paneler-i-modal',
                         element: <FlytendePanelerIModal />,
+                    },
+                    {
+                        path: 'spesifisitet',
+                        element: <Spesifisitet />,
                     },
                     {
                         path: 'generer-farger',
