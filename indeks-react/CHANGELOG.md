@@ -1,5 +1,9 @@
 # @sb1/indeks-react
 
+## 0.24.0
+
+No changes in this release.
+
 ## 0.23.0
 
 ### Minor Changes
