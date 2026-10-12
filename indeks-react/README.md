@@ -152,16 +152,6 @@ Full dokumentasjon finnes på:
 **[Midlertidig lenke Indeks](https://automatic-meme-yv23n9e.pages.github.io/)**
 
 
-## 🧩 Opprette nye komponenter
-
-Nye komponenter genereres med [Plop](https://plopjs.com/):
-
-```bash
-npm run create-component
-```
-
-Dette oppretter komponent, story og test i riktig mappestruktur under `lib/components/`.
-
 ## 🎯 Peer Dependencies
 
 Denne pakken krever:

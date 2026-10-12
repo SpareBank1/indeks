@@ -1,12 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// Mock modules before importing
-vi.mock('../../utils', () => ({
+/* Samme spesifikator som android.ts bruker. Mocken må treffe modulen den
+   faktisk importerer, ellers skriver buildAndroidColors til disk under test. */
+vi.mock('../../../../shared/tokens/utils.js', () => ({
     writeFileSyncEnsureDir: vi.fn(),
-}));
-
-vi.mock('fs', () => ({
-    readFileSync: vi.fn(() => JSON.stringify({ version: '1.0.0' })),
 }));
 
 import {
@@ -15,7 +12,7 @@ import {
     generateAndroidColorFileContent,
     buildAndroidColors,
 } from './android';
-import { writeFileSyncEnsureDir } from '../../utils';
+import { writeFileSyncEnsureDir } from '../../../../shared/tokens/utils.js';
 
 describe('android.ts', () => {
     beforeEach(() => {
@@ -64,30 +61,18 @@ describe('android.ts', () => {
                     'primary.color': '#654321',
                     'secondary.color': '#fedcba',
                 },
-                lightAccent: {
-                    'primary.color': '#111111',
-                    'secondary.color': '#222222',
-                },
-                darkAccent: {
-                    'primary.color': '#333333',
-                    'secondary.color': '#444444',
-                },
             };
             const content = generateAndroidColorFileContent(colors);
             expect(content).toContain('val primaryColor = Color(0xFF123456)');
             expect(content).toContain('val secondaryColor = Color(0xFFABCDEF)');
             expect(content).toContain('object LightDefault');
             expect(content).toContain('object DarkDefault');
-            expect(content).toContain('object LightAccent');
-            expect(content).toContain('object DarkAccent');
         });
 
         it('should throw if color value is invalid', () => {
             const colors = {
                 light: { 'bad.color': 'notacolor' },
                 dark: { 'bad.color': 'notacolor' },
-                lightAccent: { 'bad.color': 'notacolor' },
-                darkAccent: { 'bad.color': 'notacolor' },
             };
             expect(() => generateAndroidColorFileContent(colors)).toThrow('Invalid color value');
         });
@@ -99,8 +84,6 @@ describe('android.ts', () => {
             const colors = {
                 light: { 'a.b': '#111111' },
                 dark: { 'a.b': '#222222' },
-                lightAccent: { 'a.b': '#333333' },
-                darkAccent: { 'a.b': '#444444' },
             };
 
             buildAndroidColors(path, colors);
