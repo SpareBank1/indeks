@@ -1,5 +1,18 @@
 # @sb1/indeks-css
 
+## 0.25.0
+
+### Minor Changes
+
+- a193f07: `VStack` og `HStack` (og `<ix-stack>`) støtter nå `align="stretch"`, slik at barn strekker seg til full bredde/høyde. Nyttig for skjemafelt som `Select` som skal fylle containeren sin.
+
+### Patch Changes
+
+- 4f7a493: Fjerner overflødig styling for disabled indeterminate checkbox som overstyrte riktig visuell tilstand.
+- beeb0de: Endrer `transition: var(--ix-transition-all)` til eksplisitte transition-properties i alle komponenter. Dette gir bedre ytelse (nettleseren slipper å sjekke alle properties) og forutsigbarhet (unngår uventede animasjoner ved fremtidige CSS-endringer).
+- e0b1b9a: Avstanden fra label til feltet er nå 8px (`--ix-spacing-xs`) også når feltet ikke har description. Label til description er fortsatt 4px. Gjelder alle felt som bruker `ix-field`, og PhoneNumberField.
+- bafec44: Legger til `color` i transition-properties for text-field og text-area, slik at tekstfargen animeres jevnt ved tilstandsendringer i likhet med andre komponenter.
+
 ## 0.24.0
 
 ### Minor Changes
