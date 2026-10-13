@@ -89,6 +89,8 @@ Bruk `ariaLabel` når ikonet formidler informasjon som ikke er tilgjengelig andr
 </TabItem>
 </Tabs>
 
+Sett `ariaLabel` (React) eller `aria-label` (HTML) direkte på ikonet. Ikke pakk det inn i et eget element med `role="img"`; det gjør komponenten selv.
+
 ### Badge
 
 Sett `data-badge` for å vise ikonet som en glyf på en farget sirkel. Selve elementet blir sirkelen, og glyfen tegnes oppå. Standardstørrelsen er 32&nbsp;px. Glyfen bruker den inverse forgrunnsfargen. Setter du i tillegg `data-status`, bruker sirkelen statusfargen automatisk (`--ix-color-status-fill` kobles av `data-status`). Brukes blant annet av statusikonet i [Message](./message).

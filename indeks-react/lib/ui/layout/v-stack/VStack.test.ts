@@ -20,6 +20,11 @@ describe('VStack', () => {
         expect(container.firstElementChild!.getAttribute('vertical')).toBe('end');
     });
 
+    it('sets vertical="stretch" when align is stretch', () => {
+        const { container } = render(VStack({ align: 'stretch', children: 'test' }) as never);
+        expect(container.firstElementChild!.getAttribute('vertical')).toBe('stretch');
+    });
+
     it('sets gap attribute when gap is provided', () => {
         const { container } = render(VStack({ gap: 'lg', children: 'test' }) as never);
         expect(container.firstElementChild!.getAttribute('gap')).toBe('lg');
@@ -52,6 +57,11 @@ describe('VStack', () => {
         it('applies align class for center', () => {
             const { container } = render(VStack({ as: 'ul', align: 'center', children: 'test' }) as never);
             expect(container.firstElementChild!.classList).toContain('ix-stack-vertical-center');
+        });
+
+        it('applies align class for stretch', () => {
+            const { container } = render(VStack({ as: 'ul', align: 'stretch', children: 'test' }) as never);
+            expect(container.firstElementChild!.classList).toContain('ix-stack-vertical-stretch');
         });
 
         it('applies gap class when gap is provided', () => {

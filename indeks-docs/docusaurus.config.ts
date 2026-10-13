@@ -1,6 +1,6 @@
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Config } from '@docusaurus/types';
-import { readFileSync } from 'fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { themes as prismThemes } from 'prism-react-renderer';
 
@@ -12,6 +12,17 @@ import { themes as prismThemes } from 'prism-react-renderer';
 const readVersion = (pkg: string): string =>
     process.env[`INDEKS_${pkg.replace('indeks-', '').toUpperCase()}_VERSJON`] ??
     JSON.parse(readFileSync(path.resolve(__dirname, `../${pkg}/package.json`), 'utf-8')).version;
+
+// Changelogene kopieres inn som docs-sider, så de havner i llms-full.txt. `format: md` fordi
+// changeset-tekst kan inneholde < og { som MDX ikke tåler. Filene er gitignorert.
+const endringsloggPakker = ['indeks-css', 'indeks-react', 'indeks-web', 'indeks-tokens', 'indeks-utils'];
+const endringsloggMappe = path.resolve(__dirname, 'docs/endringslogg');
+mkdirSync(endringsloggMappe, { recursive: true });
+for (const pkg of endringsloggPakker) {
+    const changelog = readFileSync(path.resolve(__dirname, `../${pkg}/CHANGELOG.md`), 'utf-8');
+    const frontMatter = `---\ntitle: '@sb1/${pkg}'\nsidebar_label: ${pkg}\nmdx:\n    format: md\ncustom_edit_url: null\n---\n`;
+    writeFileSync(path.join(endringsloggMappe, `${pkg}.md`), frontMatter + changelog.replace(/^# .*\n/, ''));
+}
 
 const config: Config = {
     title: 'Indeks Designsystem',

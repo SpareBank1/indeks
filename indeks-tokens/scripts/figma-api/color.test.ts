@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { colorApproximatelyEqual, parseColor, rgbToHex } from './color';
 
 describe('colorApproximatelyEqual', () => {

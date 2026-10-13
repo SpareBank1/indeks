@@ -20,6 +20,11 @@ describe('HStack', () => {
         expect(container.firstElementChild!.getAttribute('horizontal')).toBe('end');
     });
 
+    it('sets horizontal="stretch" when align is stretch', () => {
+        const { container } = render(HStack({ align: 'stretch', children: 'test' }) as never);
+        expect(container.firstElementChild!.getAttribute('horizontal')).toBe('stretch');
+    });
+
     it('sets gap attribute when gap is provided', () => {
         const { container } = render(HStack({ gap: 'md', children: 'test' }) as never);
         expect(container.firstElementChild!.getAttribute('gap')).toBe('md');
@@ -46,6 +51,11 @@ describe('HStack', () => {
         it('applies align class for start', () => {
             const { container } = render(HStack({ as: 'nav', align: 'start', children: 'test' }) as never);
             expect(container.firstElementChild!.classList).toContain('ix-stack-horizontal-start');
+        });
+
+        it('applies align class for stretch', () => {
+            const { container } = render(HStack({ as: 'nav', align: 'stretch', children: 'test' }) as never);
+            expect(container.firstElementChild!.classList).toContain('ix-stack-horizontal-stretch');
         });
 
         it('applies gap class when gap is provided', () => {

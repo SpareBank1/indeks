@@ -2,7 +2,7 @@ import { cn } from '../../../cn';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 import type { GapSize } from '../../../types/types';
 
-export type HStackAlign = 'start' | 'center' | 'end';
+export type HStackAlign = 'start' | 'center' | 'end' | 'stretch';
 
 export type HStackProps<As extends ElementType = 'div'> = {
     as?: As;

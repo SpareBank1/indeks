@@ -28,9 +28,8 @@ async function boks(locator: Locator) {
 /**
  * Venter til den rendrede boksen står stille før den måles.
  *
- * Eksempelappen har `* { transition: var(--ix-transition-all) }` i src/index.css
- * (samme grep som SB1-plattformens CSS, jf. kommentaren i card.css). Den treffer
- * også `top`/`left`, så panelene glir inn fra utgangsposisjonen sin i stedet for å
+ * Konsumentapper kan ha en global `* { transition: all }`, som også treffer
+ * `top`/`left`. Da glir panelene inn fra utgangsposisjonen sin i stedet for å
  * dukke opp ferdig plassert. Inline-stilen JS skriver er riktig umiddelbart — det
  * er den rendrede posisjonen som trenger et øyeblikk, og det er den vi må måle,
  * siden feilen nettopp var at riktig inline-verdi ble tolket i feil koordinatsystem.

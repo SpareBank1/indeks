@@ -86,13 +86,13 @@ On main branch, when ready to release:
 
 ```bash
 # Create new versions and update CHANGELOGs
-npm run version
+pnpm changeset version
 
 # Build and publish to npm
 npm run release
 ```
 
-The `version` command will:
+The `changeset version` command will:
 
 -   Consume all changesets
 -   Update package.json versions

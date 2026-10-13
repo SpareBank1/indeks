@@ -23,6 +23,11 @@ ix-stack[vertical="end"], ix-stack.ix-stack-vertical-end, .ix-stack-vertical-end
     align-items: flex-end;
 }
 
+ix-stack[vertical="stretch"], ix-stack.ix-stack-vertical-stretch, .ix-stack-vertical-stretch {
+    flex-direction: column;
+    align-items: stretch;
+}
+
 /* --- Horisontal --- */
 
 ix-stack[horizontal], ix-stack[horizontal="center"], ix-stack.ix-stack-horizontal, .ix-stack-horizontal,
@@ -39,6 +44,11 @@ ix-stack[horizontal="start"], ix-stack.ix-stack-horizontal-start, .ix-stack-hori
 ix-stack[horizontal="end"], ix-stack.ix-stack-horizontal-end, .ix-stack-horizontal-end {
     flex-direction: row;
     align-items: flex-end;
+}
+
+ix-stack[horizontal="stretch"], ix-stack.ix-stack-horizontal-stretch, .ix-stack-horizontal-stretch {
+    flex-direction: row;
+    align-items: stretch;
 }
 
 /* --- Gap --- */
@@ -61,7 +71,7 @@ ix-stack[reverse], ix-stack.ix-stack-reverse, .ix-stack.ix-stack-reverse {
     flex-direction: column-reverse;
 }
 
-ix-stack[horizontal][reverse], ix-stack[horizontal="center"][reverse], ix-stack[horizontal="start"][reverse], ix-stack[horizontal="end"][reverse], ix-stack.ix-stack-horizontal.ix-stack-reverse, ix-stack.ix-stack-horizontal-center.ix-stack-reverse, ix-stack.ix-stack-horizontal-start.ix-stack-reverse, ix-stack.ix-stack-horizontal-end.ix-stack-reverse, .ix-stack-horizontal.ix-stack-reverse, .ix-stack-horizontal-center.ix-stack-reverse, .ix-stack-horizontal-start.ix-stack-reverse, .ix-stack-horizontal-end.ix-stack-reverse {
+ix-stack[horizontal][reverse], ix-stack[horizontal="center"][reverse], ix-stack[horizontal="start"][reverse], ix-stack[horizontal="end"][reverse], ix-stack[horizontal="stretch"][reverse], ix-stack.ix-stack-horizontal.ix-stack-reverse, ix-stack.ix-stack-horizontal-center.ix-stack-reverse, ix-stack.ix-stack-horizontal-start.ix-stack-reverse, ix-stack.ix-stack-horizontal-end.ix-stack-reverse, ix-stack.ix-stack-horizontal-stretch.ix-stack-reverse, .ix-stack-horizontal.ix-stack-reverse, .ix-stack-horizontal-center.ix-stack-reverse, .ix-stack-horizontal-start.ix-stack-reverse, .ix-stack-horizontal-end.ix-stack-reverse, .ix-stack-horizontal-stretch.ix-stack-reverse {
     flex-direction: row-reverse;
 }
 

@@ -1,0 +1,447 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { KiPromptBlock } from './KiPrompt';
+
+# Nettleserstøtte
+
+Indeks virker helt ned til Safari 15.4 og Chrome 100, fordi mange av kundene våre har telefoner som er flere år gamle. Disse eldste versjonene kaller vi *gulvet*. Koden du skriver rundt Indeks, må virke på det samme gulvet. Denne siden viser hvordan vi passer på det i Indeks, og hvordan du setter opp det samme i ditt eget prosjekt. Kunder med eldre nettlesere enn gulvet ber vi om å [oppdatere nettleseren](https://www.sparebank1.no/nb/bank/privat/info/anbefalte-nettlesere.html).
+
+## Dette må du gjøre
+
+Stegene med nummer er oppsettet du gjør én gang. Hvert steg lenker til en egen del lenger ned, som viser hvordan du gjør det, med kode du kan kopiere.
+
+1. [Installer pakkene](#installer)
+2. [Lag `.browserslistrc` med samme gulv som Indeks](#browserslistrc)
+3. [Sett `build.target` i Vite så det matcher `.browserslistrc`](#build-target)
+4. [Sett `lib` i `tsconfig.app.json` til `ES2022`](#typescript-lib)
+5. [Slå på `compat/compat` i lint, som `error`](#nettleser-api)
+6. [Slå på `plugin/no-unsupported-browser-features` i Stylelint, som `error`](#stylelint)
+7. [Legg lint og `tsc -b` inn i `build` eller CI, så PR-er som feiler, blir stoppet](#ci)
+
+Når oppsettet er på plass, gjelder to regler hver gang du skriver kode:
+
+- Slå opp nye API-er og CSS-egenskaper, og sørg for at siden virker uten dem. Se [Bruk nye ting som forbedring](#bruk-nye-ting-som-forbedring).
+- Nevn regelen ved navn og skriv en begrunnelse når du gjør et unntak. Se [Gjør unntak med begrunnelse](#gjør-unntak-med-begrunnelse).
+
+## Før du starter
+
+Siden er skrevet for Vite 8 og TypeScript, slik du får det fra `npm create vite@latest`. Har du et annet oppsett, gjelder dette:
+
+- **Vite 4–7:** alle stegene er like. Bare standardverdien i steg 3 er en annen.
+- **Next.js, eller webpack med Babel:** hopp over steg 3. De leser `.browserslistrc` selv. Resten av stegene gjelder.
+- **Biome:** stegene gjelder, med en liten oxlint-konfigurasjon i steg 5. Se [Bruker du Biome?](#biome)
+
+Kodeeksemplene under er deler du legger inn i filer du allerede har. Ikke erstatt en hel fil med eksempelet, for da mister du det som sto der fra før. Det gjelder også når du ber en KI-assistent gjøre jobben, se [Få hjelp av en KI-assistent](#få-hjelp-av-en-ki-assistent).
+
+## Ikke stol på byggesteget alene
+
+Mange setter `build.target` i Vite og tror de er ferdige. Men Vite skriver bare om *syntaks*, altså måten koden er skrevet på, som `a?.b`. Bruker koden en innebygd funksjon nettleseren mangler, sendes den videre uendret, og bygget går grønt.
+
+Denne fila bygger uten feil med `target: ['safari15.4']`:
+
+```ts
+const gruppert = Object.groupBy(kontoer, (k) => k.type); // Safari 17.4
+const sortert = belop.toSorted(); // Safari 16
+dialog.showPopover(); // Safari 17
+const regex = /[\p{L}--[a-z]]/v; // Safari 17
+```
+
+I Safari 15.4 kaster alle fire linjene en feil. Den siste er lumsk: Vite gjør regex-literalen om til `RegExp('…', 'v')`, som ser trygt ut, men feiler først når koden kjøres. CSS behandles på samme måte. En egenskap nettleseren ikke kjenner, slippes gjennom uten advarsel.
+
+Derfor trenger du flere verktøy, som hver fanger sin del:
+
+| Hva | Eksempel | Fanges av |
+|-----|----------|-----------|
+| Ny syntaks | `a?.b`, `static {}` i klasser | `build.target` (skrives om) |
+| CSS-nesting og prefikser | `.a { .b {} }`, `-webkit-mask` | `build.target` (skrives om) |
+| Nye funksjoner i språket | `toSorted()`, `Object.groupBy()` | TypeScript `lib` |
+| Nettleser-API-er | `URLPattern`, `CompressionStream` | `eslint-plugin-compat`, delvis |
+| Ny CSS | `:has()`, `@container`, `dvh` | `stylelint-no-unsupported-browser-features`, delvis |
+
+Ingen av sjekkene er komplette. Stegene under viser oppsettet, og resten av siden viser hva du gjør med hullene.
+
+## 1. Installer pakkene {#installer}
+
+```bash
+npm install --save-dev oxlint eslint-plugin-compat stylelint stylelint-no-unsupported-browser-features
+```
+
+Har prosjektet oxlint fra før, kan du droppe den. Blir prosjektet på ESLint, trenger du `typescript-eslint` i stedet for `oxlint`, se [steg 5](#nettleser-api).
+
+## 2. Sett et felles gulv i `.browserslistrc` {#browserslistrc}
+
+Lag fila `.browserslistrc` i rota av prosjektet. Bruk samme liste som Indeks. Fra september 2026 er det også nettleserstandarden i SpareBank 1:
+
+```text
+# .browserslistrc
+Chrome >= 100
+Edge >= 100
+Firefox >= 100
+Safari >= 15.4
+ios_saf >= 15.4
+and_chr >= 100
+and_ff >= 100
+samsung >= 17
+```
+
+Standarden står også på [design.sparebank1.no](https://design.sparebank1.no/grunnleggende/nettleserversjoner/). Før september 2026 var den `since 2021-04`, som tilsvarer Safari 14.1 og iOS 14.5. Står den fortsatt i prosjektet ditt, bytter du den ut med lista over. En app med Indeks-komponenter kan uansett ikke love støtte lenger ned enn komponentene har.
+
+ESLint, oxlint og Stylelint leser denne fila selv. De leter oppover i mappetreet, så har du flere prosjekter i samme repo, holder det med én fil i rota.
+
+Hvilke nettlesere lista dekker, ser du i [browsersl.ist][browserslist-gulvet]. Om en funksjon virker på gulvet, slår du opp i [caniuse med gulvet ferdig utfylt][caniuse-gulvet]. Den lenken bruker du resten av siden når det står «slå opp».
+
+## 3. Sett `build.target` i Vite {#build-target}
+
+Uten `build.target` bygger Vite 8 for Safari 16.4 og Chrome 111, og Vite 7 for Safari 16 og Chrome 107. Det er over gulvet vårt. Vite 4–6 bygger for Safari 14, men sett `build.target` der også, så bygget følger lista. Vite leser ikke `.browserslistrc`, så du må skrive listen inn selv. Legg `build` til i `vite.config.ts`, ved siden av det som står der:
+
+```ts
+// vite.config.ts
+export default defineConfig({
+    plugins: [react()],
+    build: {
+        // Holdes i takt med .browserslistrc for hånd.
+        target: ['chrome100', 'edge100', 'firefox100', 'safari15.4', 'ios15.4'],
+    },
+});
+```
+
+Samsung Internet og Android-variantene har ingen egne navn her. De bygger på Chrome, så `chrome100` dekker dem.
+
+Med `build.target` på plass skriver Vite også om CSS-nesting til flat CSS og legger på `-webkit-`-prefiksene Safari 15.4 trenger. Det gjelder fra Vite 4 og oppover, så du trenger ikke PostCSS eller Autoprefixer for det.
+
+Bruker du Tailwind, må du ha versjon 4.1 eller nyere. Se [Tailwind](/docs/grunnleggende/tokens/tailwind).
+
+## 4. Begrens språket med TypeScript `lib` {#typescript-lib}
+
+`lib` bestemmer hvilke innebygde funksjoner TypeScript kjenner. Vite-malen setter den til `ES2023`, og da slipper `toSorted()` gjennom. Sett den til `ES2022`. I Vite-malen ligger innstillingene i `tsconfig.app.json`, ikke i `tsconfig.json`:
+
+```json
+// tsconfig.app.json
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"]
+    }
+}
+```
+
+Nå blir `toSorted()`, `Object.groupBy()` og `v`-flagget på regex typefeil:
+
+```text
+error TS2550: Property 'toSorted' does not exist on type 'number[]'.
+Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+```
+
+Dette er den mest pålitelige sjekken for JavaScript, og den koster ingen ekstra pakker. To ting er verdt å vite:
+
+- **Vite typesjekker ikke.** Vite fjerner bare typene. Du må kjøre `tsc -b` selv, se [steg 7](#ci). Bruk `-b`: i Vite-malen finner `tsc --noEmit` ingen filer å sjekke, og svarer grønt uansett.
+- **`DOM` følger alltid nyeste nettleser.** TypeScript sier ingenting om `showPopover()` eller andre nye nettleser-API-er. Der må lint ta over.
+
+## 5. Sjekk nettleser-API-er {#nettleser-api}
+
+[`eslint-plugin-compat`](https://github.com/amilajack/eslint-plugin-compat) sammenligner koden mot `.browserslistrc`. Pluginen virker i både oxlint og ESLint.
+
+Vi anbefaler [oxlint](https://oxc.rs/docs/guide/usage/linter), også for prosjekter som bruker ESLint i dag. Før manglet oxlint regler vi trengte, men nå har den dem, blant annet reglene for React-hooks. Den er mye raskere, og den kjører ESLint-plugins som `eslint-plugin-compat` uendret. Nye Vite-prosjekter får oxlint fra start.
+
+Bytter du fra ESLint, lager [`@oxlint/migrate`](https://github.com/oxc-project/oxlint-migrate) en `.oxlintrc.json` fra `eslint.config.js`. Med `--js-plugins` blir plugins som ikke finnes i oxlint, med som `jsPlugins`, også `compat`:
+
+```bash
+npx @oxlint/migrate --js-plugins
+```
+
+Se over fila den lager, kjør `npx oxlint`, og fjern ESLint når resultatet er det samme. Vil du ikke bytte nå, bruker du ESLint-fanen.
+
+<Tabs groupId="linter">
+<TabItem value="oxlint" label="oxlint">
+
+Legg `jsPlugins` og regelen til i `.oxlintrc.json`. Heter fila `.oxlintrc.jsonc`, gjelder det samme:
+
+```json
+// .oxlintrc.json
+{
+    "jsPlugins": ["eslint-plugin-compat"],
+    "rules": {
+        "compat/compat": "error"
+    }
+}
+```
+
+</TabItem>
+<TabItem value="eslint" label="ESLint">
+
+Blir prosjektet på ESLint inntil videre, trenger du `typescript-eslint` for å lese `.ts`-filer:
+
+```bash
+npm install --save-dev typescript-eslint
+```
+
+Legg blokkene til i lista i `eslint.config.js`:
+
+```js
+// eslint.config.js
+import compat from 'eslint-plugin-compat';
+import tseslint from 'typescript-eslint';
+
+export default [
+    { ignores: ['dist'] },
+    {
+        files: ['**/*.{js,jsx,ts,tsx}'],
+        languageOptions: { parser: tseslint.parser },
+        plugins: { compat },
+        rules: {
+            'compat/compat': 'error',
+        },
+    },
+];
+```
+
+`ignores: ['dist']` hindrer at ESLint sjekker den ferdigbygde koden.
+
+</TabItem>
+</Tabs>
+
+Bruk `error`, ikke `warn`. En advarsel stopper ikke en PR, og da blir den oversett.
+
+Pluginen er best på ting som lages med `new`, som `new URLPattern()`. Da vi testet, fant den `URLPattern` og `CompressionStream`, men ikke `navigator.share()`, `showPopover()`, `Object.groupBy()` eller `CloseWatcher`. Det skyldes at kompatibilitetsdataene i pluginen er fra 2025, og kjente hull som `Object.groupBy` er meldt inn, men ikke rettet. Tenk på den som et sikkerhetsnett med hull. Tar du i bruk et nettleser-API du ikke har brukt før, slår du opp støtten på [MDN](https://developer.mozilla.org/) eller [caniuse][caniuse-gulvet] selv.
+
+## 6. Sjekk CSS med Stylelint {#stylelint}
+
+[`stylelint-no-unsupported-browser-features`](https://github.com/RJWadley/stylelint-no-unsupported-browser-features) gjør det samme for CSS. Lag `stylelint.config.js` i rota av prosjektet:
+
+```js
+// stylelint.config.js
+import noUnsupportedBrowserFeatures from 'stylelint-no-unsupported-browser-features';
+
+export default {
+    plugins: [noUnsupportedBrowserFeatures],
+    ignoreFiles: ['dist/**'],
+    rules: {
+        'plugin/no-unsupported-browser-features': [
+            true,
+            {
+                severity: 'error',
+                ignore: [
+                    // Vite skriver nesting om til flat CSS
+                    'css-nesting',
+                ],
+            },
+        ],
+    },
+};
+```
+
+Den fanger blant annet `:has()`, `@container`, `subgrid`, `dvh` og `oklch()`. Da vi testet, slapp `color-mix()`, `text-wrap: balance`, `field-sizing` og `@starting-style` gjennom. Samme råd gjelder her: [slå opp][caniuse-gulvet] det du ikke har brukt før.
+
+Første gang du kjører Stylelint, får du trolig treff i CSS-en som fulgte med Vite-malen, for eksempel `dvh`. Skriv dem om, eller slett CSS-en du ikke bruker.
+
+## 7. Kjør sjekkene i CI {#ci}
+
+Sjekkene hjelper bare hvis de stopper en PR. Legg dem inn som scripts i `package.json`. Står det allerede et `lint`- eller `build`-script der, utvider du det:
+
+```json
+// package.json
+{
+    "scripts": {
+        "lint": "oxlint && stylelint \"src/**/*.css\"",
+        "typecheck": "tsc -b",
+        "build": "tsc -b && npm run lint && vite build"
+    }
+}
+```
+
+Bytt `oxlint` med `eslint .` hvis prosjektet fortsatt bruker ESLint.
+
+Hvordan sjekkene blir kjørt, avhenger av hvem som eier CI-oppsettet:
+
+- **Kjører CI-en bare `npm run build`,** for eksempel fordi du ikke eier workflowen, er `build`-scriptet over nok. Da feiler bygget når en sjekk feiler.
+- **Eier du workflowen selv,** kan du i tillegg kjøre sjekkene som egne steg. Da ser du i PR-en hvilken sjekk som feilet.
+
+Med GitHub Actions kan det se slik ut:
+
+```yaml
+# .github/workflows/sjekk.yml
+name: Sjekk
+on: pull_request
+jobs:
+    sjekk:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v7
+            - uses: actions/setup-node@v6
+              with:
+                  node-version: 24
+            - run: npm ci
+            - run: npm run lint
+            - run: npm run typecheck
+```
+
+Gjør deretter jobben til en [påkrevd sjekk](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-status-checks-to-pass-before-merging) i repoets regler, så en PR ikke kan merges før den er grønn.
+
+## Bruker du Biome? {#biome}
+
+Biome kan fortsatt ta seg av lint og formatering. Den sjekker bare ikke nettleserstøtte godt nok ennå, så du legger oxlint og Stylelint ved siden av, med én regel hver.
+
+Biome har ingen regel for nettleser-API-er i JavaScript. Bruk oxlint med bare `compat/compat`, og skru av oxlints egne regler, så de ikke overlapper med Biome. Installer `oxlint` i tillegg til pakkene i [steg 1](#installer):
+
+```bash
+npm install --save-dev oxlint
+```
+
+```json
+// .oxlintrc.json
+{
+    "jsPlugins": ["eslint-plugin-compat"],
+    "categories": { "correctness": "off" },
+    "rules": {
+        "compat/compat": "error"
+    }
+}
+```
+
+For CSS bruker du Stylelint-oppsettet fra [steg 6](#stylelint) som det står. Det har bare den ene regelen, så det krasjer ikke med Biome.
+
+Biome har en egen CSS-regel, [`useBaseline`](https://biomejs.dev/linter/rules/use-baseline/css/), men den er ikke god nok ennå. Da vi testet Biome 2.5, fanget den `subgrid`, `text-wrap`, `field-sizing` og `@starting-style`. `:has()`, `@container`, `dvh`, `oklch()` og `color-mix()` slapp gjennom, uansett hvilket årstall vi satte i `available`. Regelen er i nursery-gruppen, altså under utvikling. Se på den igjen når den er ferdig.
+
+Scriptene i steg 7 blir da slik:
+
+```json
+// package.json
+{
+    "scripts": {
+        "lint": "biome check && oxlint && stylelint \"src/**/*.css\""
+    }
+}
+```
+
+## Test i WebKit med Playwright
+
+Har prosjektet Playwright-tester, kan du kjøre dem i WebKit, motoren i Safari, i tillegg til Chrome. Legg til prosjekter i `playwright.config.ts`:
+
+```ts
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+    projects: [
+        { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+        { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+        { name: 'iphone', use: { ...devices['iPhone 13'] } },
+    ],
+});
+```
+
+Playwright kjører nyeste WebKit, ikke Safari 15.4. Testene fanger feil som bare skjer i Safari, men ikke funksjoner som kom etter gulvet. `showPopover()`, `Object.groupBy()` og `color-mix()` virker i WebKit-kjøringen, selv om de feiler i Safari 15.4. De må du fortsatt [slå opp][caniuse-gulvet] selv, eller teste på en eldre enhet.
+
+## Sjekk avhengighetene du legger til
+
+Lint og TypeScript sjekker bare koden i prosjektet ditt, ikke pakkene i `node_modules`. Syntaksen i avhengighetene skrives om av `build.target` som resten av koden. Men en ny funksjon i språket eller et nettleser-API slippes gjennom uendret. Kaller et bibliotek `toSorted()` eller `showPopover()`, går bygget grønt, og siden feiler i Safari 15.4.
+
+Da vi testet i Vite 6 og 8 med et gammelt `build.target`, ble `a?.b`, `??` og `static {}` i en avhengighet skrevet om, mens `xs.at(-1)` sto igjen uendret.
+
+Indeks-pakkene holder gulvet. For andre pakker gjelder dette:
+
+- Se hvilke nettlesere pakken sier den støtter. Står det ingenting, må du regne med at den bare er testet i nyeste versjon.
+- Små og nye biblioteker er mest utsatt. Er du usikker, søk i koden deres etter API-ene du vet er nye, som `toSorted`, `Object.groupBy` eller `showPopover`.
+- Playwright i WebKit fanger ikke dette, for nyeste WebKit har funksjonene.
+
+## Bruk nye ting som forbedring
+
+Du kan gjerne bruke CSS og JavaScript som er nyere enn gulvet. Regelen er at siden skal *virke* i Safari 15.4. Den må ikke *se lik ut*. En animasjon som mangler, er greit. En knapp som ikke gjør noe, er ikke greit.
+
+Dette kalles *progressive enhancement*, eller progressiv forbedring: du bygger først noe som virker overalt, og legger det nye oppå for nettlesere som støtter det.
+
+Tre måter å gjøre det trygt på i CSS:
+
+- **Egenskaper som ignoreres.** Accordion i Indeks bruker `interpolate-size: allow-keywords` for å animere høyden. Eldre nettlesere hopper over linjen, og accordion åpner seg uten animasjon.
+- **`@supports`.** Med `@supports` spør CSS-en om nettleseren kan noe, og bruker blokken bare hvis svaret er ja. Modal legger inn- og uttoning i en `@supports (transition-behavior: allow-discrete)`-blokk. Safari 15.4 viser dialogen rett frem, uten toning.
+- **Reserveverdi først.** En verdi nettleseren ikke forstår, forkaster hele deklarasjonen. Står en enklere verdi rett over, er det den som gjelder:
+
+  ```css
+  .kort {
+      background-color: var(--ix-color-surface-main-default);
+      background-color: color-mix(in srgb, var(--ix-color-surface-main-default) 80%, transparent);
+  }
+  ```
+
+I JavaScript sjekker du om funksjonen finnes før du bruker den, og har en vei videre når den mangler:
+
+```ts
+if ('share' in navigator) {
+    await navigator.share({ url });
+} else {
+    await kopierLenke(url);
+}
+```
+
+`eslint-plugin-compat` kjenner igjen `'x' in y` og `typeof x === 'function'`, så en slik sjekk trenger ingen unntak.
+
+## Gjør unntak med begrunnelse
+
+Noen ganger vet du bedre enn verktøyet: funksjonen er en ren forbedring, eller regelen tar feil. Da gjør du et unntak. Skriv alltid hvorfor, og gjør unntaket så smalt som mulig.
+
+**Én linje i CSS.** Forklar over, og nevn regelen ved navn:
+
+```css
+/* Lar høyden animeres. Ignoreres trygt der det ikke støttes. */
+/* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+interpolate-size: allow-keywords;
+```
+
+**En `@supports`-blokk.** Stylelint forstår ikke `@supports` og klager på innholdet selv om det er beskyttet. Slå av regelen rundt blokken, og slå den på igjen etterpå:
+
+```css
+/* Uten støtte vises dialogen uten toning. */
+/* stylelint-disable plugin/no-unsupported-browser-features */
+@supports (transition-behavior: allow-discrete) {
+    /* … */
+}
+/* stylelint-enable plugin/no-unsupported-browser-features */
+```
+
+**Én linje i JavaScript.** Bruk `--` for begrunnelsen. Kommentaren virker i både ESLint og oxlint:
+
+```ts
+// eslint-disable-next-line compat/compat -- bare i admin-verktøy, som krever nyeste Chrome
+const monster = new URLPattern({ pathname: '/sak/:id' });
+```
+
+**Polyfill.** En polyfill er et script som legger inn en manglende funksjon i gamle nettlesere. Laster du en, legger du navnet på API-et i `settings.polyfills` i lint-konfigurasjonen, for eksempel `'URLPattern'`. Da slipper du unntak på hver linje.
+
+For funksjoner i språket kan [`@vitejs/plugin-legacy`](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy) legge inn polyfills fra `core-js` for deg. List opp bare dem du trenger, for hver polyfill gjør bundelen større:
+
+```ts
+// vite.config.ts
+import legacy from '@vitejs/plugin-legacy';
+
+export default defineConfig({
+    plugins: [
+        react(),
+        legacy({
+            renderLegacyChunks: false,
+            modernPolyfills: ['es.object.group-by', 'es.array.to-sorted'],
+        }),
+    ],
+});
+```
+
+Legg samtidig typene til i `lib`, for eksempel `ES2024.Object` og `ES2023.Array`, ellers stopper TypeScript deg fortsatt. `core-js` dekker bare språket. Nettleser-API-er som `showPopover()` trenger en egen polyfill.
+
+**Hele prosjektet.** Bruk `ignore` i Stylelint bare når regelen tar feil, og skriv en kommentar per oppføring. Indeks ignorerer for eksempel `multicolumn`, fordi pluginen tror at `column-gap` i flex og grid betyr kolonnelayout.
+
+To ting skal du aldri gjøre:
+
+- Slå av regelen uten å nevne den ved navn (`/* stylelint-disable-next-line */`). Da skrur du av alle andre regler på linjen også.
+- Sette regelen til `warn` for å få en PR gjennom.
+
+Er du i tvil, spør i `#ext-frontend` på Slack.
+
+## Få hjelp av en KI-assistent
+
+Ber du en KI-assistent sette opp dette, gi den lenken til denne siden og si tydelig at den skal flette inn, ikke erstatte. For eksempel:
+
+<KiPromptBlock />
+
+Se over endringene før du merger. Står det `eslint-disable` eller `stylelint-disable` uten begrunnelse, spør hvorfor.
+
+[browserslist-gulvet]: https://browsersl.ist/#q=Chrome%20%3E%3D%20100%2C%20Edge%20%3E%3D%20100%2C%20Firefox%20%3E%3D%20100%2C%20Safari%20%3E%3D%2015.4%2C%20ios_saf%20%3E%3D%2015.4%2C%20and_chr%20%3E%3D%20100%2C%20and_ff%20%3E%3D%20100%2C%20samsung%20%3E%3D%2017&region=NO
+[caniuse-gulvet]: https://caniuse.com/?compare=chrome+100,edge+100,firefox+100,safari+15.4,ios_saf+15.4,samsung+17&compareCats=all#results

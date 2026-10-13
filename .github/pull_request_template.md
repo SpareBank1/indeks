@@ -11,6 +11,7 @@
 - [ ] Bygger uten feil (`pnpm build`)
 - [ ] Linter passerer (`pnpm lint`)
 - [ ] Visuelt testet i Storybook
+- [ ] Sjekket med design
 - [ ] Tilgjengelighet: tastaturnavigasjon og skjermleser vurdert
 - [ ] Kontrastforhold OK (WCAG AA)
 - [ ] Fungerer på mobil

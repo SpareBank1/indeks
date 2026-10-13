@@ -124,8 +124,8 @@ declare module 'react' {
             };
             'ix-stack': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
                 class?: string;
-                horizontal?: boolean | 'center' | 'start' | 'end';
-                vertical?: 'center' | 'end';
+                horizontal?: boolean | 'center' | 'start' | 'end' | 'stretch';
+                vertical?: 'center' | 'end' | 'stretch';
                 reverse?: boolean;
                 nowrap?: boolean;
                 gap?: import('./types/types').GapSize;

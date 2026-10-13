@@ -1,6 +1,6 @@
 {
     "name": "@sb1/indeks-css",
-    "version": "0.23.0",
+    "version": "0.24.0",
     "description": "CSS library for Indeks design system",
     "main": "dist/npm/index.css",
     "type": "module",
@@ -34,7 +34,6 @@
         "access": "public"
     },
     "scripts": {
-        "dev": "echo not implemented",
         "build": "rm -rf ./dist && pnpm run build:npm && pnpm run build:tailwind",
         "build:npm": "rm -rf ./dist/npm && postcss ./index.css -o ./dist/npm/index.css",
         "build:tailwind": "postcss ./tailwind.css -o ./dist/npm/tailwind.css",

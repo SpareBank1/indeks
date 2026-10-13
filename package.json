@@ -14,7 +14,6 @@
         "test": "pnpm turbo run test -- --run",
         "update-packages": "pnpm -r update",
         "changeset": "changeset",
-        "version": "changeset version",
         "release": "changeset version && pnpm build && changeset publish",
         "ci:publish": "pnpm turbo run build --filter=@sb1/indeks-tokens --filter=@sb1/indeks-utils --filter=@sb1/indeks-css --filter=@sb1/indeks-react --filter=@sb1/indeks-web && changeset publish",
         "ci:version": "pnpm changeset version",
@@ -28,7 +27,8 @@
             "image-size": "^2.0.3",
             "qs": "^6.16.0",
             "uuid": "^11.1.1",
-            "serialize-javascript": "^7.0.5"
+            "serialize-javascript": "^7.0.5",
+            "tinypool": "^2.1.2"
         }
     },
     "devDependencies": {

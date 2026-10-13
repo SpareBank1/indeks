@@ -1,6 +1,6 @@
 {
     "name": "@sb1/indeks-web",
-    "version": "0.23.0",
+    "version": "0.24.0",
     "type": "module",
     "description": "Web components for Indeks design system",
     "homepage": "https://design.sparebank1.no",
@@ -38,12 +38,10 @@
         "access": "public"
     },
     "scripts": {
-        "dev": "echo not implemented",
         "build": "rm -rf ./dist && pnpm run build:npm",
         "build:npm": "rm -rf ./dist/npm && vite build --mode npm",
         "build:cdn": "rm -rf ./dist/cdn && vite build --mode cdn",
         "lint": "oxlint -c ../.oxlintrc.json .",
-        "update-packages": "echo not implemented",
         "test": "vitest"
     },
     "author": "",
