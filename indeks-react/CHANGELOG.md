@@ -1,5 +1,15 @@
 # @sb1/indeks-react
 
+## 0.25.0
+
+### Minor Changes
+
+- a193f07: `VStack` og `HStack` (og `<ix-stack>`) støtter nå `align="stretch"`, slik at barn strekker seg til full bredde/høyde. Nyttig for skjemafelt som `Select` som skal fylle containeren sin.
+
+### Patch Changes
+
+- a9b06b0: `Icon` har fått JSDoc på `ariaLabel` og `aria-hidden`: med `ariaLabel` setter ikonet selv `role="img"`, uten blir det `aria-hidden`.
+
 ## 0.24.0
 
 No changes in this release.
