@@ -1,7 +1,7 @@
 :where(ix-field, .ix-field) {
     display: flex;
     flex-direction: column;
-    gap: var(--ix-spacing-2xs);
+    gap: var(--ix-spacing-xs);
 }
 
 :where(ix-field, .ix-field)[data-disabled],
@@ -30,17 +30,12 @@
     }
 }
 
-/* Label↔description beholder wrapper-gapet på 2xs (de hører visuelt sammen).
-   Description↔input og input↔error skal være xs (litt mer luft). Legger en
-   ekstra margin-top oppå gapet for å få totalen til xs. Reglene aktiveres
-   bare når elementet faktisk har innhold — ellers er det display: none og
-   skal ikke påvirke layout. */
-:where(ix-field, .ix-field) > [data-field='description']:not(:empty) + * {
-    margin-block-start: calc(var(--ix-spacing-xs) - var(--ix-spacing-2xs));
-}
-
-:where(ix-field, .ix-field) > [data-field='error']:not(:empty) {
-    margin-block-start: calc(var(--ix-spacing-xs) - var(--ix-spacing-2xs));
+/* Gapet er xs (label↔input, description↔input, input↔error). Label↔description
+   og input↔char-count hører tettere sammen og trekkes ned til 2xs. Tomme
+   elementer er display: none og påvirker ikke layout. */
+:where(ix-field, .ix-field) > * + [data-field='description'],
+:where(ix-field, .ix-field) > [data-field='char-count'] {
+    margin-block-start: calc(var(--ix-spacing-2xs) - var(--ix-spacing-xs));
 }
 
 /* Selve feilmeldingens typografi, farge, ikon-layout og :empty-skjul ligger nå

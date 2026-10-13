@@ -14,7 +14,8 @@
 :where(ix-phone-number-field, .ix-phone-number-field) {
     display: flex;
     flex-direction: column;
-    gap: var(--ix-spacing-2xs);
+    /* Samme avstander som ix-field: xs, med legend↔description trukket ned til 2xs. */
+    gap: var(--ix-spacing-xs);
     padding: 0;
     border: 0;
 }
@@ -41,6 +42,10 @@
     color: var(--ix-color-foreground-main-subtle);
     line-height: 150%;
     margin: 0;
+}
+
+:where(ix-phone-number-field, .ix-phone-number-field) > * + [data-field='description'] {
+    margin-block-start: calc(var(--ix-spacing-2xs) - var(--ix-spacing-xs));
 }
 
 /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
