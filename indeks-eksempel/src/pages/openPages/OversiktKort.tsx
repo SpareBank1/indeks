@@ -21,7 +21,7 @@ const randomFacts = [
 
 const OversiktKort: React.FC<OversiktKortProps> = ({ title, variant = 'default' }) => {
     return (
-        <VStack className={`eksempel-kort--${variant} ix-border-radius-md ix-p-sm`}>
+        <VStack className={`eksempel-kort eksempel-kort--${variant} ix-border-radius-md ix-p-sm`}>
             <HStack gap="2xs">
                 <div className={`ikon-sirkel ix-color-fill-${variant}-default`}>
                     <Icon name="home" size="lg" className={` ix-color-foreground-main-default`} />
