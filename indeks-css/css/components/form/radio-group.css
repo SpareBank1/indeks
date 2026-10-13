@@ -101,7 +101,7 @@
     padding-left: calc(var(--ii-radio-size) + var(--ix-spacing-xs));
     cursor: pointer;
     font-size: var(--ix-font-size-md);
-
+    border-radius: var(--ix-border-radius-xs);
     /* Linjeboksen settes lik ringen, som en lengde. Ringen står på top: 50% av
        linjeboksen, så en linjeboks på 19,2px (arvet 1,2 fra .ix-body) ga ringen
        y = −2,4 og en 1px-kant som straddler en enhetspiksel i begge ender. Nå blir
@@ -111,7 +111,12 @@
     line-height: var(--ii-radio-size);
     color: var(--ix-color-foreground-main-default);
     user-select: none;
-    transition: var(--ix-transition-all);
+    transition: 
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        border-color var(--ix-transition-duration) var(--ix-transition-animation),
+        box-shadow var(--ix-transition-duration) var(--ix-transition-animation),
+        color var(--ix-transition-duration) var(--ix-transition-animation),
+        outline-color var(--ix-transition-duration) var(--ix-transition-animation);
     outline: var(--ix-outline-width-default) solid transparent;
     outline-offset: var(--ix-outline-offset-default);
 }
@@ -126,7 +131,10 @@
     box-sizing: border-box;
     border-radius: 50%;
     pointer-events: none;
-    transition: var(--ix-transition-all);
+    transition:
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        border-color var(--ix-transition-duration) var(--ix-transition-animation),
+        transform var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
 /* Ytre ring */
@@ -185,7 +193,6 @@
 :where(ix-radio-group, .ix-radio-group) input[type='radio']:focus-visible + label,
 :where(.ix-radio-button__input:focus-visible) + :where(.ix-radio-button__label) {
     outline-color: var(--ix-color-border-focus-default);
-    border-radius: var(--ix-border-radius-xs);
 }
 
 /* ── Selected ────────────────────────────────────────────────────────────── */
@@ -327,8 +334,6 @@
     pointer-events: none;
     cursor: default;
 }
-
-/* ── prefers-reduced-motion ──────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
     :where(ix-radio-group, .ix-radio-group) label,

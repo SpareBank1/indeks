@@ -144,7 +144,9 @@
     border: 0;
     border-radius: var(--ix-border-radius-sm);
     cursor: pointer;
-    transition: var(--ix-transition-all);
+    transition: 
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        outline-color var(--ix-transition-duration) var(--ix-transition-animation);
     outline: var(--ix-outline-width-default) solid transparent;
     outline-offset: var(--ix-outline-offset-default);
 }
@@ -248,12 +250,10 @@
         }
     }
 
-    /* Deterministiske Playwright-snapshots + WCAG 2.3.3: stabilt endepunkt uten
-     * bevegelse. Dialogen er synlig umiddelbart. */
     @media (prefers-reduced-motion: reduce) {
-
         :where(.ix-modal),
-        :where(.ix-modal)::backdrop {
+        :where(.ix-modal)::backdrop,
+        :where(.ix-modal__close) {
             opacity: 1;
             transform: none;
             transition: none;

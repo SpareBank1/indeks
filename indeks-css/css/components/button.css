@@ -34,7 +34,11 @@
        følger paddingen videre ned og opp — 28/22 i compact, 44/34 i comfortable —
        og er da lik chip på pikselen i alle tre. */
     line-height: 1.125;
-    transition: var(--ix-transition-all);
+    transition: 
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        border-color var(--ix-transition-duration) var(--ix-transition-animation),
+        box-shadow var(--ix-transition-duration) var(--ix-transition-animation),
+        outline-color var(--ix-transition-duration) var(--ix-transition-animation);
     outline: var(--ix-outline-width-default) solid transparent;
     outline-offset: var(--ix-outline-offset-default);
 }
