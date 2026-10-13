@@ -1,4 +1,4 @@
-:where(.ix-message) {
+.ix-message {
     /* Farge: `data-status` kobler --ix-color-status-* automatisk (se
        @sb1/indeks-utils/css/status-colors.css). Bakgrunnen bruker `surface`
        (lyseste status-flate). Statusikonet rendres som en <ix-icon data-badge>
@@ -26,7 +26,7 @@
    ix-stack (og andre flex-kolonner) har `align-items: flex-start`, så en
    melding krymper ellers til innholdsbredden; `align-self: stretch` overstyrer
    det. `width: 100%` dekker block-kontekster utenfor flex. Radius beholdes. */
-:where(.ix-message[data-full-width]) {
+.ix-message[data-full-width] {
     align-self: stretch;
     width: 100%;
 }
@@ -34,7 +34,7 @@
 /* Statusikon-badge: <ix-icon data-badge> rendrer sirkel + glyf (se icon.css).
    Sirkelen bruker status-`fill`; glyfen settes med `name` på selve
    ikonet (per status — info, hake, utropstegn), ikke via CSS. */
-:where(.ix-message ix-icon[data-badge]) {
+.ix-message :where(ix-icon[data-badge]) {
     flex: 0 0 auto;
     /* Hold ikonet ved toppen/tittelen når meldingen går over flere linjer
        (roten sentrerer ellers alt vertikalt). */
@@ -43,7 +43,7 @@
     --ix-icon-badge-background: var(--ix-color-status-fill);
 }
 
-:where(.ix-message__body) {
+.ix-message__body {
     display: flex;
     flex-direction: column;
     gap: var(--ix-spacing-2xs);
@@ -51,13 +51,13 @@
     min-width: 0;
 }
 
-:where(.ix-message__body)>p {
+.ix-message__body>:where(p) {
     margin: 0;
 }
 
 /* Tittel: «headline xs»-typografi (matcher .ix-heading[data-size="xs"]).
    Arver tekstfarge fra roten — tittelen skal ikke ha egen farge. */
-:where(.ix-message__title) {
+.ix-message__title {
     font-weight: var(--ix-font-weight-medium);
     line-height: 1.2;
 }
@@ -65,7 +65,7 @@
 /* Lukkeknapp — valgfri. Selve knappen er en InteractiveIcon
    (.ix-interactive-icon) i «sm», som eier touch-mål, ikon (ix-icon «lukk»),
    hover og fokusring. Her settes kun Message-spesifikk plassering. */
-:where(.ix-message__close) {
+.ix-message__close {
     flex: 0 0 auto;
     /* Lukkeknappen er siste barn. Negativ margin trekker det store touch-målet
        delvis inn så ikonet flukter med toppkanten uten å øke høyden unødig.

@@ -1,4 +1,4 @@
-:where(ix-progress-bar, .ix-progress-bar) {
+ix-progress-bar, .ix-progress-bar {
     /* Lokale variabler:
        - `--ii-progress-bar-height`: linjens høyde. Fast px (ingen height-token
          finnes — samme tilnærming som spinner). Skal ikke reduseres på noen
@@ -32,18 +32,13 @@
    (success/danger) settes av web componenten på host og remapper
    --ix-color-status-* (surface/border/fill) automatisk — lys og mørk modus
    følger tokenene uten egne regler. */
-:where(
-    ix-progress-bar[data-state="success"],
-    .ix-progress-bar[data-state="success"],
-    ix-progress-bar[data-state="error"],
-    .ix-progress-bar[data-state="error"]
-) {
+ix-progress-bar[data-state="success"], .ix-progress-bar[data-state="success"], ix-progress-bar[data-state="error"], .ix-progress-bar[data-state="error"] {
     --ii-progress-bar-fill-color: var(--ix-color-status-fill);
 }
 
 /* Label-rad: label til venstre, verdi/statusikon til høyre. Kan brytes over
    flere linjer ved behov (label-teksten wrapper, verdien holdes samlet). */
-:where(.ix-progress-bar__header) {
+.ix-progress-bar__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -51,14 +46,14 @@
     min-width: 0;
 }
 
-:where(.ix-progress-bar__label) {
+.ix-progress-bar__label {
     font-weight: var(--ix-font-weight-medium);
     line-height: 1.3;
     min-width: 0;
 }
 
 /* Prosentverdi — høyrejustert, brytes ikke. */
-:where(.ix-progress-bar__value) {
+.ix-progress-bar__value {
     flex: 0 0 auto;
     white-space: nowrap;
     color: var(--ix-color-foreground-main-subtle);
@@ -66,7 +61,7 @@
 
 /* Track = ufylt bakgrunn. Tydelig visuell differens mot fyllet dekkes av
    non-text-kontrast mellom neutral-subtle (track) og fill-fargen (WCAG 1.4.11). */
-:where(.ix-progress-bar__track) {
+.ix-progress-bar__track {
     position: relative;
     width: 100%;
     height: var(--ii-progress-bar-height);
@@ -86,7 +81,7 @@
    ekspanderer til `all <dur> <easing>`, som ville gitt to property-navn i samme
    transition-ledd (ugyldig). Bygg leddene av duration + animation-tokenene i
    stedet. */
-:where(.ix-progress-bar__fill) {
+.ix-progress-bar__fill {
     width: var(--ii-progress-bar-fill);
     height: 100%;
     background-color: var(--ii-progress-bar-fill-color);
@@ -99,7 +94,7 @@
 /* Statusikon-badge — kun success/error (web componenten injiserer den).
    Sirkelen bruker status-fill; glyfen settes via `name` på selve ikonet.
    Speiler message.css. */
-:where(.ix-progress-bar ix-icon[data-badge]) {
+.ix-progress-bar :where(ix-icon[data-badge]) {
     flex: 0 0 auto;
     --ix-icon-badge-size: var(--ix-font-size-lg);
     --ix-icon-badge-background: var(--ix-color-status-fill);
@@ -108,7 +103,7 @@
 /* Støttetekst — valgfri forklarende tekst under baren. Er en aria-live-region
    (role="status") satt av web componenten, så den skal aldri `display: none`
    selv når tom (skjermlesere fanger ikke opp endringer i skjulte live-regioner). */
-:where(.ix-progress-bar__support) {
+.ix-progress-bar__support {
     color: var(--ix-color-foreground-main-subtle);
     line-height: 1.3;
 }
@@ -117,7 +112,7 @@
    bevegelse. Fyllet hopper da direkte til endelig bredde/farge — stabilt
    sluttpunkt, deterministisk for Playwright-snapshots. */
 @media (prefers-reduced-motion: reduce) {
-    :where(.ix-progress-bar__fill) {
+    .ix-progress-bar__fill {
         transition: none;
     }
 }

@@ -1,4 +1,4 @@
-:where(ix-spinner, .ix-spinner) {
+ix-spinner, .ix-spinner {
     --ii-spinner-size: 40px;
     --ii-spinner-border: 5px;
 
@@ -8,17 +8,17 @@
     gap: var(--ix-spacing-2xs);
 }
 
-:where(ix-spinner[data-size="sm"], .ix-spinner[data-size="sm"]) {
+ix-spinner[data-size="sm"], .ix-spinner[data-size="sm"] {
     --ii-spinner-size: 24px;
     --ii-spinner-border: 3px;
 }
 
-:where(ix-spinner[data-size="lg"], .ix-spinner[data-size="lg"]) {
+ix-spinner[data-size="lg"], .ix-spinner[data-size="lg"] {
     --ii-spinner-size: 64px;
     --ii-spinner-border: 7px;
 }
 
-:where(ix-spinner, .ix-spinner)::before {
+ix-spinner::before, .ix-spinner::before {
     content: '';
     display: block;
     width: var(--ii-spinner-size);
@@ -30,12 +30,12 @@
     animation: ix-spinner-spin 0.9s linear infinite;
 }
 
-:where(.ix-button .ix-spinner) {
+.ix-button :where(.ix-spinner) {
     --ii-spinner-size: 1em;
     --ii-spinner-border: 0.125em;
 }
 
-:where(.ix-button .ix-spinner)::before {
+.ix-button :where(.ix-spinner)::before {
     border-top-color: currentcolor;
 }
 
@@ -46,7 +46,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    :where(ix-spinner, .ix-spinner)::before {
+    ix-spinner::before, .ix-spinner::before {
         animation: none;
     }
 }

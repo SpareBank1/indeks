@@ -1,4 +1,4 @@
-:where(ix-icon, .ix-icon) {
+ix-icon, .ix-icon {
     background-color: currentColor;
     /* setter fargen til ikonet */
     color: inherit;
@@ -17,7 +17,7 @@
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
-:where(ix-icon[data-size="sm"], .ix-icon[data-size="sm"]) {
+ix-icon[data-size="sm"], .ix-icon[data-size="sm"] {
     width: 18px;
     height: 18px;
 }
@@ -26,7 +26,7 @@
    glyfen flyttes til ::before (maskert) — to paint-lag fordi ett mask-image kun
    gir ett lag. Glyfen leser --ii-icon-url (samme variabel som base-ikonet), så
    badgen virker både CSS-drevet (variabel satt direkte) og navn/WC-drevet. */
-:where(ix-icon[data-badge], .ix-icon[data-badge]) {
+ix-icon[data-badge], .ix-icon[data-badge] {
     display: inline-grid;
     place-items: center;
     width: var(--ix-icon-badge-size, 32px);
@@ -49,11 +49,11 @@
 
 /* Når badgen har en status (data-status kobler --ix-color-status-* via
    @sb1/indeks-utils), bruker sirkelen statusfargen automatisk. */
-:where(ix-icon[data-badge][data-status], .ix-icon[data-badge][data-status]) {
+ix-icon[data-badge][data-status], .ix-icon[data-badge][data-status] {
     --ix-icon-badge-background: var(--ix-color-status-fill);
 }
 
-:where(ix-icon[data-badge], .ix-icon[data-badge])::before {
+ix-icon[data-badge]::before, .ix-icon[data-badge]::before {
     content: '';
     width: var(--ix-icon-badge-glyph-size, var(--ix-font-size-lg));
     height: var(--ix-icon-badge-glyph-size, var(--ix-font-size-lg));
@@ -71,12 +71,12 @@
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
-:where(ix-icon[data-size="lg"], .ix-icon[data-size="lg"]) {
+ix-icon[data-size="lg"], .ix-icon[data-size="lg"] {
     width: 24px;
     height: 24px;
 }
 
-:where(ix-icon[data-size="xl"], .ix-icon[data-size="xl"]) {
+ix-icon[data-size="xl"], .ix-icon[data-size="xl"] {
     width: 32px;
     height: 32px;
 }

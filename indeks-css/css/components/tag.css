@@ -13,7 +13,7 @@
  * Ingen web component: Tag er en ren etikett uten atferd, så rotselektoren
  * treffer kun klassen (.ix-tag) — det finnes ingen <ix-tag>-tag i DOM.
  */
-:where(.ix-tag) {
+.ix-tag {
     /* Lokale variabler går igjen på flate, tekst og border på tvers av
        variant-reglene under — derfor lokale props, ikke direkte tokens. */
     --ix-tag-background: var(--ix-color-status-fill);
@@ -35,16 +35,16 @@
 }
 
 /* Ikon arver tekstfargen (både emphasis-invers og subtle-mørk). */
-:where(.ix-tag .ix-icon),
-:where(.ix-tag ix-icon) {
+.ix-tag :where(.ix-icon),
+.ix-tag :where(ix-icon) {
     color: var(--ix-tag-color);
 }
 
-:where(.ix-tag[data-size='sm']) {
+.ix-tag[data-size='sm'] {
     font-size: var(--ix-font-size-sm);
 }
 
-:where(.ix-tag[data-size='lg']) {
+.ix-tag[data-size='lg'] {
     font-size: var(--ix-font-size-lg);
 }
 
@@ -58,7 +58,7 @@
  * subtle-flatene. Målt mot ekte token-verdier gir en mettet per-status-farge
  * kun 1.5–4.5:1 (info faller helt til 1.48:1). Mørk main-tekst gir 10.8–13.2:1
  * på alle subtle-flater — trygt og konsistent. Se accessibility/tag.json. */
-:where(.ix-tag[data-variant='subtle']) {
+.ix-tag[data-variant='subtle'] {
     --ix-tag-background: var(--ix-color-status-fill-subtle);
     --ix-tag-color: var(--ix-color-foreground-main-default);
     --ix-tag-border-color: var(--ix-color-status-border);
