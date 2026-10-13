@@ -2,7 +2,7 @@ import { cn } from '../../../cn';
 import type { ComponentPropsWithoutRef, ElementType, JSX, ReactNode } from 'react';
 import type { GapSize } from '../../../types/types';
 
-export type VStackAlign = 'start' | 'center' | 'end';
+export type VStackAlign = 'start' | 'center' | 'end' | 'stretch';
 
 export type VStackProps<As extends ElementType = 'div'> = {
     as?: As;

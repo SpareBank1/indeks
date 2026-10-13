@@ -45,6 +45,17 @@ export const AlignEnd: Story = {
   ),
 };
 
+export const AlignStretch: Story = {
+  args: { align: "stretch" },
+  render: (args) => (
+    <HStack {...args}>
+      <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Lav</div>
+      <div className="ix-color-surface-info-default ix-px-md ix-py-lg">Høy</div>
+      <div className="ix-color-surface-info-default ix-px-md ix-py-2xs">Lav</div>
+    </HStack>
+  ),
+};
+
 export const HTML: Story = {
   render: () => (
     <div dangerouslySetInnerHTML={{ __html: `
