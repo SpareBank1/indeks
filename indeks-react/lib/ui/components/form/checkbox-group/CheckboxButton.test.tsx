@@ -34,10 +34,10 @@ describe('CheckboxButton', () => {
             expect(container.querySelector('input')?.getAttribute('value')).toBe('epost');
         });
 
-        it('setter disabled på input og --disabled-modifier på wrapper', () => {
+        it('setter disabled på input, uten modifier-klasse på wrapper', () => {
             const { container } = render(<CheckboxButton value="a" label="A" disabled />);
             expect((container.querySelector('input') as HTMLInputElement).disabled).toBe(true);
-            expect(container.querySelector('.ix-checkbox')?.classList.contains('ix-checkbox--disabled')).toBe(true);
+            expect(container.querySelector('.ix-checkbox')?.className).toBe('ix-checkbox');
         });
 
         it('legger className på wrapperen', () => {
