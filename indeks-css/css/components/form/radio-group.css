@@ -27,6 +27,10 @@
     margin: 0;
 }
 
+:where(ix-radio-group, .ix-radio-group) [data-field='legend']:not(.ix-sr-only) + [data-field='description'] {
+     margin-top: calc(var(--ix-spacing-2xs) - var(--ix-spacing-sm));
+ }
+
 /* Feilmeldingen ([data-field='error']) styles i form/validation-message.css. */
 
 :where(ix-radio-group, .ix-radio-group) [data-field='items'] {
