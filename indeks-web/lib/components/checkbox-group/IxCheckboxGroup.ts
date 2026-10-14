@@ -233,7 +233,7 @@ export class IxCheckboxGroup extends HTMLElement {
             // label togglar riktig input.
             const wrapper = input.closest('.ix-checkbox') ?? input.parentElement;
             if (wrapper) {
-                const label = wrapper.querySelector<HTMLLabelElement>('label, .ix-checkbox__label');
+                const label = wrapper.querySelector<HTMLLabelElement>('label');
                 if (label instanceof HTMLLabelElement && !label.htmlFor) {
                     label.htmlFor = input.id;
                 }

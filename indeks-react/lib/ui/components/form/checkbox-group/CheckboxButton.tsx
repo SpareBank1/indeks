@@ -48,7 +48,7 @@ export const CheckboxButton = forwardRef<HTMLInputElement, CheckboxButtonProps>(
     );
 
     return (
-        <div className={`ix-checkbox${disabled ? ' ix-checkbox--disabled' : ''}${className ? ` ${className}` : ''}`}>
+        <div className={`ix-checkbox${className ? ` ${className}` : ''}`}>
             <input
                 ref={mergedRef}
                 type="checkbox"

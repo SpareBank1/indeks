@@ -47,13 +47,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
 
     const hasFieldWrapper = description || errorMessage || tooltip;
 
-    const modifierClasses = disabled ? 'ix-checkbox--disabled' : '';
-
     const checkboxContent = (
         <div
-            className={`ix-checkbox${modifierClasses ? ` ${modifierClasses}` : ''}${
-                className && !hasFieldWrapper ? ` ${className}` : ''
-            }`}
+            className={`ix-checkbox${className && !hasFieldWrapper ? ` ${className}` : ''}`}
         >
             <input
                 ref={inputRef}

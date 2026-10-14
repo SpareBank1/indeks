@@ -4,7 +4,7 @@
   "consumerResponsibilities": [
     {
       "summary": "Gjør klikkbarhet synlig uten hover",
-      "details": "På touch finnes ikke :hover. Et klikkbart kort må derfor signalisere klikkbarhet i hviletilstand — komponenten gir en chevron automatisk via .ix-card--clickable. Ikke skjul klikkbarhet bak hover alene.",
+      "details": "På touch finnes ikke :hover. Et klikkbart kort må derfor signalisere klikkbarhet i hviletilstand — komponenten gir en chevron automatisk via [data-clickable]. Ikke skjul klikkbarhet bak hover alene.",
       "wcag": ["1.4.1", "1.3.1"]
     },
     {
