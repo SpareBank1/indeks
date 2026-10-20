@@ -1,5 +1,5 @@
 import { cn } from '../../../cn';
-import { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { ForwardRefExoticComponent, JSX, ReactNode, RefAttributes } from 'react';
 import { ModalContext } from './ModalContext';
 import type { ModalContextValue } from './ModalContext';
@@ -139,11 +139,21 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
     // fokus-trap + top-layer + inert bakgrunn. Scroll-lås og åpningsfokus følger av
     // at `open` settes — atferds-modulet i @sb1/indeks-web observerer det og gjør
     // resten (samme kodevei som ren HTML). Denne wrapperen gjør ikke noe av det selv.
-    useEffect(() => {
+    //
+    // Lukking skjer i cleanup: både når `open` går til false og når Modal fjernes
+    // mens den er åpen (forelder som fjerner den i onOpenChange, ruteskifte). Layout-
+    // cleanup kjører før <dialog> tas ut av DOM-en, så close() gir native fokus-retur
+    // til triggeren og web-modulet slipper scroll-låsen på vanlig måte.
+    const ownCloseRef = useRef(false);
+    useLayoutEffect(() => {
         const dialog = dialogRef.current;
-        if (!dialog) return;
-        if (open && !dialog.open) dialog.showModal();
-        else if (!open && dialog.open) dialog.close();
+        if (!dialog || !open) return;
+        if (!dialog.open) dialog.showModal();
+        return () => {
+            if (!dialog.open) return;
+            ownCloseRef.current = true;
+            dialog.close();
+        };
     }, [open]);
 
     const registerTitle = useCallback((id: string | null) => {
@@ -198,9 +208,13 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
             // klikk (web-modulet). `close` bobler ikke, men React-syntetiske onClose
             // fanger det på elementet selv. Vi speiler tilbake til `open`-state.
             onClose={() => {
-                // onClose fyrer også etter vår egen .close() i useEffect (open=false
-                // allerede). Kall kun handleOpenChange når state fortsatt er åpen, så
-                // vi ikke looper eller varsler dobbelt.
+                // Vår egen .close() i cleanup er ikke en lukke-forespørsel: enten er
+                // open=false allerede, Modal er på vei ut, eller StrictMode åpner
+                // dialogen igjen rett etterpå. Varsle bare om lukkinger utenfra.
+                if (ownCloseRef.current) {
+                    ownCloseRef.current = false;
+                    return;
+                }
                 if (open) handleOpenChange(false);
             }}
         >

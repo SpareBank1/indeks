@@ -101,6 +101,29 @@ describe('Modal + @sb1/indeks-web (integrasjon)', () => {
         expect(document.body.style.overflow).toBe('');
     });
 
+    it('slipper scroll-låsen når forelderen fjerner modalen i onOpenChange', async () => {
+        function Conditional() {
+            const [show, setShow] = useState(true);
+            return show ? (
+                <Modal open onOpenChange={(open) => !open && setShow(false)}>
+                    <Modal.Header>
+                        <Modal.Title>Tittel</Modal.Title>
+                        <Modal.CloseButton label="Lukk" />
+                    </Modal.Header>
+                </Modal>
+            ) : null;
+        }
+        render(<Conditional />);
+        await flush();
+        expect(document.body.style.overflow).toBe('hidden');
+
+        fireEvent.click(screen.getByRole('button', { name: 'Lukk' }));
+        await flush();
+
+        expect(document.querySelector('dialog')).toBeNull();
+        expect(document.body.style.overflow).toBe('');
+    });
+
     it('flytter åpningsfokus til dialogen, ikke lukk-knappen', async () => {
         const { container } = render(
             <Modal open onOpenChange={vi.fn()}>
