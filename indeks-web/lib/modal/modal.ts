@@ -4,7 +4,8 @@
  * Escape-lukking, top-layer, fokus-retur og aria-modal. Denne modulen legger til
  * det <dialog> IKKE gir, og gjør det for enhver ix-modal uansett hvem som åpnet
  * den:
- *   • scroll-lås på <body> mens minst én modal er åpen
+ *   • scroll-lås på <body> mens minst én modal er åpen (slippes også når en åpen
+ *     modal fjernes fra DOM-en)
  *   • åpningsfokus på selve dialogen (ikke lukk-knappen — se moveOpeningFocus)
  *   • deklarativ åpne/lukke-trigger (data-modal-open / data-modal-close)
  *   • backdrop-klikk-lukking (opt-out via data-no-close-on-backdrop)
@@ -118,14 +119,22 @@ function handleClose(e: Event): void {
 }
 
 /* Fanger åpne/lukke-transisjoner uansett hvem som endret `open` — særlig React som
- * kaller showModal() uten et klikk. Idempotent mot klikk-/close-veien over. */
+ * kaller showModal() uten et klikk. Idempotent mot klikk-/close-veien over.
+ *
+ * Fanger også at en åpen modal fjernes fra DOM-en (forelder som fjerner den i
+ * onOpenChange, ruteskifte, tilbakeknapp). Da fyrer verken `close` eller noen
+ * `open`-endring, så uten dette ble låsen liggende. */
 const observer = new MutationObserver((records) => {
     for (const record of records) {
+        if (record.type !== 'attributes') continue;
         const dialog = record.target;
         if (!(dialog instanceof HTMLDialogElement)) continue;
         if (!dialog.classList.contains('ix-modal')) continue;
         if (dialog.open) handleOpened(dialog);
         else handleClosed(dialog);
+    }
+    for (const dialog of openModals) {
+        if (!dialog.isConnected) handleClosed(dialog);
     }
 });
 
@@ -133,6 +142,7 @@ document.addEventListener('click', handleClick);
 document.addEventListener('close', handleClose, true);
 observer.observe(document.documentElement, {
     subtree: true,
+    childList: true,
     attributes: true,
     attributeFilter: ['open'],
 });
