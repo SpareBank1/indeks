@@ -14,7 +14,7 @@
 
 .ix-table__row {
     font-size: inherit;
-    border-top: 1px solid var(--ix-color-border-main-emphasis);
+    border-top: 1px solid var(--ix-color-border-main-default);
 }
 
 .ix-table__cell {
