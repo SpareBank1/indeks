@@ -34,7 +34,7 @@
 :where(.ix-checkbox__label) {
     --ii-checkbox-size: 24px;
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-default);
-    --ii-checkbox-box-border: var(--ix-color-border-main-default);
+    --ii-checkbox-box-border: var(--ix-color-border-main-emphasis);
 
     position: relative;
     display: inline-flex;
@@ -104,7 +104,7 @@
 :where(.ix-checkbox) input[type='checkbox']:not(:disabled) + label:hover,
 :where(.ix-checkbox__input:not(:disabled)) + :where(.ix-checkbox__label:hover) {
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-hover);
-    --ii-checkbox-box-border: var(--ix-color-border-main-hover);
+    --ii-checkbox-box-border: var(--ix-color-border-main-emphasis-hover);
 }
 
 /* ── Focus ───────────────────────────────────────────────────────────────── */
@@ -241,7 +241,7 @@
  :where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox__input:checked + .ix-checkbox__label,
  :where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox__input:indeterminate + .ix-checkbox__label {
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-read-only);
-    --ii-checkbox-box-border: var(--ix-color-border-main-default);
+    --ii-checkbox-box-border: var(--ix-color-border-main-emphasis);
 }
 
 :where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input:checked + label::after {

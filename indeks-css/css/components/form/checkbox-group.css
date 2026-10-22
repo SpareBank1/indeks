@@ -137,7 +137,7 @@
 }
 
 /* Read-only, passiv — ingen hvit flate inne i boksen. Bare fyllet fjernes: kanten
-   er alt 1px border-main-default fra checkbox.css, og ingen read-only-regel rører
+   er alt 1px border-main-emphasis fra checkbox.css, og ingen read-only-regel rører
    den, så å skrive den om igjen ville duplisert en verdi som alt stemmer.
    Uvalgt-vakten holder regelen unna den valgte boksen over, som skal være grå. */
 :where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='readonly']
