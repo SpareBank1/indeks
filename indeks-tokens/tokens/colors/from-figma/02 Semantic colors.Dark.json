@@ -1234,7 +1234,7 @@
       "main": {
         "default": {
           "$type": "color",
-          "$value": "{color.gray.800}",
+          "$value": "{color.gray.750}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1251,7 +1251,7 @@
         },
         "default-hover": {
           "$type": "color",
-          "$value": "{color.gray.750}",
+          "$value": "{color.gray.700}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1268,7 +1268,7 @@
         },
         "default-active": {
           "$type": "color",
-          "$value": "{color.gray.700}",
+          "$value": "{color.gray.650}",
           "$description": "",
           "$extensions": {
             "com.figma": {
