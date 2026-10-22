@@ -207,6 +207,28 @@
     --ii-checkbox-box-border: var(--ii-checkbox-box-bg);
 }
 
+/* ── ReadOnly ────────────────────────────────────────────────────────────── */
+
+:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox label,
+:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox__label,
+:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input:checked + label,
+:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input:indeterminate + label,
+ :where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox__input:checked + .ix-checkbox__label,
+ :where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox__input:indeterminate + .ix-checkbox__label {
+    --ii-checkbox-box-bg: var(--ix-color-fill-interactive-read-only);
+    --ii-checkbox-box-border: var(--ix-color-border-main-default);
+}
+
+:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input:checked + label::after {
+    background-color: var(--ix-color-foreground-main-read-only);
+}
+
+
+:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox {
+    cursor: default;
+    pointer-events: none;
+}
+
 /* ── Disabled ────────────────────────────────────────────────────────────── */
 
 .ix-checkbox input:disabled + label {
