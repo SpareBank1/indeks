@@ -209,24 +209,16 @@
 
 /* ── ReadOnly ────────────────────────────────────────────────────────────── */
 
-:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox label,
-:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox__label,
-:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input:checked + label,
-:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input:indeterminate + label,
- :where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox__input:checked + .ix-checkbox__label,
- :where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox__input:indeterminate + .ix-checkbox__label {
+/* Grunnformen input + label dekker også :checked og :indeterminate, og har flere
+ * betingelser enn checked-regelen over. Pekeren er slått av i checkbox-group.css,
+ * så hover-reglene slår aldri inn. */
+:is(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input + label {
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-read-only);
     --ii-checkbox-box-border: var(--ix-color-border-main-default);
 }
 
-:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input:checked + label::after {
+:is(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input:checked + label::after {
     background-color: var(--ix-color-foreground-main-read-only);
-}
-
-
-:where(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox {
-    cursor: default;
-    pointer-events: none;
 }
 
 /* ── Disabled ────────────────────────────────────────────────────────────── */

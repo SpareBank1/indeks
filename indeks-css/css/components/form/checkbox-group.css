@@ -31,9 +31,9 @@
     margin: 0;
 }
 
-:where(ix-checkbox-group, .ix-checkbox-group) [data-field='legend']:not(.ix-sr-only) + [data-field='description'] {
-     margin-top: calc(var(--ix-spacing-2xs) - var(--ix-spacing-sm));
- }
+:is(ix-checkbox-group, .ix-checkbox-group) [data-field='legend']:not(.ix-sr-only) + [data-field='description'] {
+    margin-top: calc(var(--ix-spacing-2xs) - var(--ix-spacing-sm));
+}
 
 /* Feilmeldingen ([data-field='error']) styles i form/validation-message.css. */
 
