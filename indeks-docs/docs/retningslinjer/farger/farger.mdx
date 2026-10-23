@@ -152,9 +152,12 @@ leser den. `neutral` — og elementer uten `data-status` — får
 
 Farger som brukes til border, for eksempel rundt bokser, input-felt og meldinger. Disse finnes kun som variabler, ikke som util-klasser.
 
+Main har to nivåer: `default` er den lyse kanten for kort, modaler og andre flater, og `emphasis` er den tydelige kanten for skjemafelt og andre elementer som må oppfylle 3:1.
+
 <table>
     <tbody>
         <BorderBlock variant="main" />
+        <BorderBlock variant="main" level="emphasis" />
         <BorderBlock variant="info" />
         <BorderBlock variant="success" />
         <BorderBlock variant="warning" />
@@ -256,12 +259,12 @@ Denne oversikten er et utgangspunkt for migrering, og ikke nødvendigvis en 1-ti
 | --ffe-color-foreground-feedback-warning                         | ix-color-foreground-warning-default  |
 | --ffe-color-foreground-feedback-critical                        | ix-color-foreground-danger-default   |
 | --ffe-color-foreground-feedback-tip                             |                                      |
-| --ffe-color-border-primary-default                              | ix-color-border-main-default         |
-| --ffe-color-border-primary-default-hover                        | ix-color-border-main-hover           |
-| --ffe-color-border-primary-default-pressed                      | ix-color-border-main-active          |
-| --ffe-color-border-primary-subtle                               |                                      |
-| --ffe-color-border-primary-subtle-hover                         |                                      |
-| --ffe-color-border-primary-subtle-pressed                       |                                      |
+| --ffe-color-border-primary-default                              | ix-color-border-main-emphasis        |
+| --ffe-color-border-primary-default-hover                        | ix-color-border-main-emphasis-hover  |
+| --ffe-color-border-primary-default-pressed                      | ix-color-border-main-emphasis-active |
+| --ffe-color-border-primary-subtle                               | ix-color-border-main-default         |
+| --ffe-color-border-primary-subtle-hover                         | ix-color-border-main-default-hover   |
+| --ffe-color-border-primary-subtle-pressed                       | ix-color-border-main-default-active  |
 | --ffe-color-border-primary-emphasis                             |                                      |
 | --ffe-color-border-feedback-info                                | ix-color-border-info-default         |
 | --ffe-color-border-feedback-success                             | ix-color-border-success-default      |

@@ -1,5 +1,6 @@
 :root {
     --ix-border-default: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    --ix-border-emphasis: var(--ix-border-width-default) solid var(--ix-color-border-main-emphasis);
     --ix-border-dashed: var(--ix-border-width-default) dashed var(--ix-color-border-main-default);
     --ix-border-none: none;
 }
@@ -22,6 +23,26 @@
 
 .ix-border-right-default {
     border-right: var(--ix-border-default);
+}
+
+.ix-border-emphasis {
+    border: var(--ix-border-emphasis);
+}
+
+.ix-border-bottom-emphasis {
+    border-bottom: var(--ix-border-emphasis);
+}
+
+.ix-border-top-emphasis {
+    border-top: var(--ix-border-emphasis);
+}
+
+.ix-border-left-emphasis {
+    border-left: var(--ix-border-emphasis);
+}
+
+.ix-border-right-emphasis {
+    border-right: var(--ix-border-emphasis);
 }
 
 .ix-border-dashed {

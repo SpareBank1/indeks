@@ -177,6 +177,7 @@ token-navn og lever med at API-verdien heter `neutral`? Ikke løst her.
 ```jsx live
 <ix-stack horizontal>
   <div class="ix-surface ix-border-default ix-radius-md ix-p-md">default</div>
+  <div class="ix-surface ix-border-emphasis ix-radius-md ix-p-md">emphasis</div>
   <div class="ix-surface ix-border-dashed ix-radius-md ix-p-md">dashed</div>
 </ix-stack>
 ```
@@ -187,6 +188,7 @@ token-navn og lever med at API-verdien heter `neutral`? Ikke løst her.
 ```tsx live
 <HStack gap="md">
   <Surface border="default" radius="md" padding="md">default</Surface>
+  <Surface border="emphasis" radius="md" padding="md">emphasis</Surface>
   <Surface border="dashed" radius="md" padding="md">dashed</Surface>
 </HStack>
 ```
@@ -253,7 +255,7 @@ Surface er en ikke-interaktiv container og tilfører ingen rolle eller fokus-hå
 |------|------|----------|-------------|
 | `as` | `ElementType` | `'div'` | Hvilket HTML-element flaten rendres som (f.eks. `'section'`) |
 | `status` | `Status` | `'neutral'` | Statusfarge; settes som `data-status`. `neutral` gir den nøytrale flaten, ellers `info` / `success` / `warning` / `danger` |
-| `border` | `'default' \| 'dashed'` | | Kantlinjestil |
+| `border` | `'default' \| 'emphasis' \| 'dashed'` | | Kantlinjestil |
 | `radius` | `Radius` | | Avrundede hjørner: `xs` / `sm` / `md` / `lg` / `xl` / `pill` / `circle` |
 | `padding` | `Size` | | Indre luft (også `paddingX`/`paddingY`/`paddingTop` osv.) |
 | `margin` | `Size` | | Ytre luft (også `marginX`/`marginY` osv.) |
@@ -275,7 +277,7 @@ statusfarge kobles med `data-status`, resten er utility-klasser:
 |----------|--------|
 | Flate (base, nøytral) | `.ix-surface` |
 | Statusfarge | `data-status="neutral\|info\|success\|warning\|danger"` |
-| Border | `.ix-border-default` / `.ix-border-dashed` |
+| Border | `.ix-border-default` / `.ix-border-emphasis` / `.ix-border-dashed` |
 | Radius | `.ix-radius-{xs\|sm\|md\|lg\|xl\|pill\|circle}` |
 | Spacing | `.ix-p-*` / `.ix-m-*` |
 | Retning | `.ix-flex-row` / `.ix-flex-col` |

@@ -47,7 +47,7 @@
        fra 12px på md til 8px på sm. Derfor er innrykket en egen variabel og
        krysset ikke. */
     --ii-chip-fill: var(--ix-color-fill-interactive-default);
-    --ii-chip-border-color: var(--ix-color-border-main-default);
+    --ii-chip-border-color: var(--ix-color-border-main-emphasis);
     --ii-chip-foreground: var(--ix-color-foreground-main-default);
     --ii-chip-radius: var(--ix-border-radius-pill);
     --ii-chip-line-height: 1.125;
@@ -161,7 +161,7 @@
 :where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip']
     :where(.ix-checkbox input[type='checkbox']:not(:disabled) + label:hover) {
     --ii-chip-fill: var(--ix-color-fill-interactive-hover);
-    --ii-chip-border-color: var(--ix-color-border-main-hover);
+    --ii-chip-border-color: var(--ix-color-border-main-emphasis-hover);
 }
 
 /* ── Active ──────────────────────────────────────────────────────────────────
@@ -171,7 +171,7 @@
 
 :where(.ix-chip:active) {
     --ii-chip-fill: var(--ix-color-fill-interactive-active);
-    --ii-chip-border-color: var(--ix-color-border-main-active);
+    --ii-chip-border-color: var(--ix-color-border-main-emphasis-active);
 }
 
 /* ── Selected ────────────────────────────────────────────────────────────────
@@ -300,7 +300,7 @@
 :where(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='readonly'] :where(label),
 :where(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'][data-state='readonly'] :where(.ix-checkbox label) {
     --ii-chip-fill: var(--ix-color-fill-interactive-read-only);
-    --ii-chip-border-color: var(--ix-color-border-main-default);
+    --ii-chip-border-color: var(--ix-color-border-main-emphasis);
     --ii-chip-foreground: var(--ix-color-foreground-main-read-only);
     --ii-chip-shadow: none;
 }

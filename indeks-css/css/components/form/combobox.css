@@ -138,7 +138,7 @@
     padding: var(--ix-spacing-2xs);
     box-sizing: border-box;
     background-color: var(--ix-color-surface-main-default);
-    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-emphasis);
     border-radius: var(--ix-border-radius-sm);
 
     /* Egen min-bredde uavhengig av feltet. _position() (IxCombobox.ts) setter

@@ -18,7 +18,7 @@
     resize: vertical;
     background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-default);
-    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-emphasis);
     border-radius: var(--ix-border-radius-sm);
     padding: var(--ix-spacing-sm);
     outline: var(--ix-outline-width-default) solid transparent;
@@ -31,8 +31,8 @@
 
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     &:hover {
-        border-color: var(--ix-color-border-main-hover);
-        box-shadow: inset 0 0 0 1px var(--ix-color-border-main-hover);
+        border-color: var(--ix-color-border-main-emphasis-hover);
+        box-shadow: inset 0 0 0 1px var(--ix-color-border-main-emphasis-hover);
     }
 }
 
@@ -47,7 +47,7 @@
 :where(.ix-text-area__textarea:disabled) {
     background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-disabled);
-    border-color: var(--ix-color-border-main-default);
+    border-color: var(--ix-color-border-main-emphasis);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
     pointer-events: none;
@@ -59,7 +59,7 @@
 :where(.ix-text-area__textarea:read-only) {
     background-color: var(--ix-color-fill-interactive-read-only);
     color: var(--ix-color-foreground-main-read-only);
-    border-color: var(--ix-color-border-main-default);
+    border-color: var(--ix-color-border-main-emphasis);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     resize: none;
 }
