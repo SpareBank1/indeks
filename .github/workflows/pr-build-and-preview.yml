@@ -31,6 +31,9 @@ jobs:
               with:
                   node-version: '24'
                   cache: 'pnpm'
+                  # Uten denne tar setup-node versjonen som ligger i verktøycachen på
+                  # runneren, og den kan være eldre enn siste sikkerhetsrelease.
+                  check-latest: true
 
             - name: Install dependencies
               run: pnpm install --frozen-lockfile --ignore-scripts
@@ -63,6 +66,9 @@ jobs:
               with:
                   node-version: '24'
                   cache: 'pnpm'
+                  # Uten denne tar setup-node versjonen som ligger i verktøycachen på
+                  # runneren, og den kan være eldre enn siste sikkerhetsrelease.
+                  check-latest: true
 
             - name: Install dependencies
               run: pnpm install --frozen-lockfile --ignore-scripts
