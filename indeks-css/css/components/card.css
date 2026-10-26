@@ -51,7 +51,7 @@
 /* Flat hover-feedback: bakgrunns-tint i stedet for skygge/løft. */
 :where(.ix-card--clickable:hover) {
     background-color: var(--ix-color-surface-main-hover);
-    border-color: var(--ix-color-border-main-hover);
+    border-color: var(--ix-color-border-main-default-hover);
 }
 
 /* Pressed-feedback — bekrefter klikket på touch der :hover ikke finnes. */

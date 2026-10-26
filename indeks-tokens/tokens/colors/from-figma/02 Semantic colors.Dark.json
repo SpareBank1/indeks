@@ -1234,6 +1234,40 @@
       "main": {
         "default": {
           "$type": "color",
+          "$value": "{color.gray.750}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "default-hover": {
+          "$type": "color",
+          "$value": "{color.gray.700}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "default-active": {
+          "$type": "color",
           "$value": "{color.gray.650}",
           "$description": "",
           "$extensions": {
@@ -1249,9 +1283,9 @@
             }
           }
         },
-        "hover": {
+        "emphasis": {
           "$type": "color",
-          "$value": "{color.gray.600}",
+          "$value": "{color.gray.500}",
           "$description": "",
           "$extensions": {
             "com.figma": {
@@ -1266,9 +1300,26 @@
             }
           }
         },
-        "active": {
+        "emphasis-hover": {
           "$type": "color",
-          "$value": "{color.gray.550}",
+          "$value": "{color.gray.450}",
+          "$description": "",
+          "$extensions": {
+            "com.figma": {
+              "hiddenFromPublishing": false,
+              "scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL",
+                "STROKE_COLOR",
+                "EFFECT_COLOR"
+              ],
+              "codeSyntax": {}
+            }
+          }
+        },
+        "emphasis-active": {
+          "$type": "color",
+          "$value": "{color.gray.400}",
           "$description": "",
           "$extensions": {
             "com.figma": {

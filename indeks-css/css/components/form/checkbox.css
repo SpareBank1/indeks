@@ -33,7 +33,7 @@
 .ix-checkbox label {
     --ii-checkbox-size: 24px;
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-default);
-    --ii-checkbox-box-border: var(--ix-color-border-main-default);
+    --ii-checkbox-box-border: var(--ix-color-border-main-emphasis);
 
     position: relative;
     display: inline-flex;
@@ -100,7 +100,7 @@
 
 .ix-checkbox input:not(:disabled) + label:hover {
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-hover);
-    --ii-checkbox-box-border: var(--ix-color-border-main-hover);
+    --ii-checkbox-box-border: var(--ix-color-border-main-emphasis-hover);
 }
 
 /* ── Focus ───────────────────────────────────────────────────────────────── */
@@ -214,7 +214,7 @@
  * så hover-reglene slår aldri inn. */
 :is(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input + label {
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-read-only);
-    --ii-checkbox-box-border: var(--ix-color-border-main-default);
+    --ii-checkbox-box-border: var(--ix-color-border-main-emphasis);
 }
 
 :is(ix-checkbox-group[data-state='readonly'], .ix-checkbox-group[data-state='readonly']) .ix-checkbox input:checked + label::after {

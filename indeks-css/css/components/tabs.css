@@ -107,7 +107,7 @@
     color: var(--ix-color-foreground-main-default);
 
     &::after {
-        background-color: var(--ix-color-border-main-hover);
+        background-color: var(--ix-color-border-main-emphasis);
         height: 3px;
     }
 }
