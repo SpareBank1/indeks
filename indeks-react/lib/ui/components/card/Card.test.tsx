@@ -8,7 +8,7 @@ describe('Card', () => {
         const card = screen.getByText('Statisk innhold');
         expect(card.tagName).toBe('DIV');
         expect(card.classList).toContain('ix-card');
-        expect(card.hasAttribute('data-clickable')).toBe(false);
+        expect(card.classList).not.toContain('ix-card--clickable');
     });
 
     it('skal rendre som lenke når href er satt', () => {
@@ -16,7 +16,7 @@ describe('Card', () => {
         const link = screen.getByRole('link', { name: 'Lenke-kort' });
         expect(link.tagName).toBe('A');
         expect(link.getAttribute('href')).toBe('https://example.com');
-        expect(link.hasAttribute('data-clickable')).toBe(true);
+        expect(link.classList).toContain('ix-card--clickable');
     });
 
     it('skal rendre som button når kun onClick er satt', () => {
@@ -24,7 +24,7 @@ describe('Card', () => {
         const button = screen.getByRole('button', { name: 'Knapp-kort' });
         expect(button.tagName).toBe('BUTTON');
         expect(button.getAttribute('type')).toBe('button');
-        expect(button.hasAttribute('data-clickable')).toBe(true);
+        expect(button.classList).toContain('ix-card--clickable');
     });
 
     it('skal kalle onClick når button-kort aktiveres', () => {

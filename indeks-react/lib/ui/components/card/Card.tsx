@@ -54,7 +54,12 @@ export const Card = forwardRef<HTMLElement, CardProps>(
             return `ix-p-${padding}`;
         };
 
-        const cardClass = cn('ix-card', getSpacingClassName(), className);
+        const cardClass = cn(
+            'ix-card',
+            getSpacingClassName(),
+            className,
+            isClickable && 'ix-card--clickable'
+        );
 
         // Chevronen bæres av et ekte ix-icon (ikke et CSS-tegn) slik at den kan
         // byttes ut via `chevronIcon`. Dekorativt → aria-hidden.
@@ -69,7 +74,6 @@ export const Card = forwardRef<HTMLElement, CardProps>(
                 <a
                     href={href}
                     className={cardClass}
-                    data-clickable=""
                     ref={ref as React.Ref<HTMLAnchorElement>}
                     onClick={onClick}
                     target={openInNewTab ? '_blank' : undefined}
@@ -87,7 +91,6 @@ export const Card = forwardRef<HTMLElement, CardProps>(
                 <button
                     type="button"
                     className={cardClass}
-                    data-clickable=""
                     ref={ref as React.Ref<HTMLButtonElement>}
                     onClick={onClick}
                     {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}

@@ -67,7 +67,7 @@ trenger ikke peke på det for å forstå at det kan trykkes.
     <h3>Statisk</h3>
     <p>Flat, ingen chevron.</p>
   </div>
-  <a class="ix-card ix-p-md" data-clickable href="https://www.sparebank1.no">
+  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
     <h3>Klikkbart</h3>
     <p>Chevron i hviletilstand, helt uten hover.</p>
     <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
@@ -103,7 +103,7 @@ Sett `href` når kortet navigerer til en URL. Det rendres som `<a>` og får rikt
 
 ```jsx live
 <ix-stack horizontal="start">
-  <a class="ix-card ix-p-md" data-clickable href="https://www.sparebank1.no">
+  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
     <h3>Sparekonto</h3>
     <p>Se saldo og renter</p>
     <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
@@ -135,7 +135,7 @@ Bruk et `<button>` når kortet utfører en handling. I React rendres `<button>` 
 
 ```jsx live
 <ix-stack horizontal="start">
-  <button type="button" class="ix-card ix-p-md" data-clickable>
+  <button type="button" class="ix-card ix-card--clickable ix-p-md">
     <h3>Vis detaljer</h3>
     <p>Åpner et panel</p>
     <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
@@ -170,7 +170,7 @@ chevron-ikonet selv.
 
 ```jsx live
 <ix-stack horizontal="start">
-  <a class="ix-card ix-p-md" data-clickable href="https://www.sparebank1.no" target="_blank" rel="noopener noreferrer">
+  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no" target="_blank" rel="noopener noreferrer">
     <h3>Åpner i ny fane</h3>
     <p>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</p>
     <ix-icon class="ix-card__chevron" name="open_in_new" data-size="lg" aria-hidden="true"></ix-icon>
@@ -277,7 +277,7 @@ bruke klassene direkte. Husk at klikkbart kort skal være et `<a>` eller `<butto
 | Element/tilstand | Selektor |
 |-----------------|----------|
 | Kort | `.ix-card` |
-| Klikkbart kort (flat, sentrert chevron) | `.ix-card[data-clickable]` |
+| Klikkbart kort (flat, sentrert chevron) | `.ix-card--clickable` |
 | Chevron-ikon | `.ix-card__chevron` (et `ix-icon`) |
 
 `.ix-card` har kantlinje som standard — ingen ekstra klasse trengs. Klikkbart kort trenger et
@@ -294,7 +294,7 @@ aria-hidden="true">`.
 </div>
 
 <!-- Klikkbart (navigasjon) -->
-<a class="ix-card ix-p-md" data-clickable href="/konto">
+<a class="ix-card ix-card--clickable ix-p-md" href="/konto">
   <h3>Sparekonto</h3>
   <p>Se saldo</p>
   <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
