@@ -61,7 +61,9 @@
     content: '';
     position: absolute;
     left: 0;
-    top: 50%;
+    /* Midt på første linje, ikke midt på labelen: ved linjebrudd skal boksen
+       stå ved første linje. Boksen er like høy som en linje (min-height). */
+    top: calc(var(--ii-checkbox-size) / 2);
     transform: translateY(-50%);
     box-sizing: border-box;
     width: var(--ii-checkbox-size);
@@ -83,7 +85,7 @@
     content: '';
     position: absolute;
     left: calc((var(--ii-checkbox-size) - 16px) / 2);
-    top: 50%;
+    top: calc(var(--ii-checkbox-size) / 2);
     transform: translateY(-50%);
     display: none;
     width: 16px;

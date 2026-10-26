@@ -146,7 +146,9 @@
 :where(.ix-radio-button__label)::after {
     width: var(--ii-radio-size);
     height: var(--ii-radio-size);
-    top: 50%;
+    /* Midt på første linje, ikke midt på labelen: ved linjebrudd skal ringen
+       stå ved første linje. Linjeboksen er lik ringen, se line-height over. */
+    top: calc(var(--ii-radio-size) / 2);
     left: 0;
     transform: translateY(-50%);
     background-color: var(--ii-radio-bg);
@@ -158,7 +160,7 @@
 :where(.ix-radio-button__label)::before {
     width: var(--ii-radio-dot-size);
     height: var(--ii-radio-dot-size);
-    top: 50%;
+    top: calc(var(--ii-radio-size) / 2);
     /* Ankre prikken på ringens senter (radio-size/2 fra ringens venstrekant) og
        selv-sentrer med translate(-50%). Det felles ankeret er nødvendig, men det
        er ikke nok: translate(-50%) av en odde prikk er selv en halv piksel, så
@@ -236,7 +238,12 @@
 /* Flytt sirkelen (ytre ring + indre prikk) inn fra pill-kanten. Ett uttrykk
  * dekker begge størrelser — --ii-chip-indicator-inset bytter selv fra md til sm.
  * Ikke bytt til --ii-chip-padding-inline: den er tallet for den nakne siden av
- * pillen og er likt i begge størrelser. */
+ * pillen og er likt i begge størrelser. Pillen har padding og én linje, så
+ * sirkelen sentreres på hele labelen, ikke på første linje. */
+:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::before,
+:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::after {
+    top: 50%;
+}
 :where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::after {
     left: var(--ii-chip-indicator-inset);
 }
