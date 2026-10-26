@@ -13,12 +13,9 @@ import Term from '@site/src/components/Term';
     historikk={[
         { status: 'Besluttet', dato: '2026-07-24' },
         { status: 'Forslag', dato: '2026-10-14' },
+        { status: 'Besluttet', dato: '2026-10-26' },
     ]}
 />
-
-:::info Forslag til endring
-Seksjonen «Selektorer og spesifisitet» er foreslått i [indeks#304](https://github.com/SpareBank1/indeks/pull/304). Resten av ADR-en er besluttet.
-:::
 
 ## Beslutning
 
@@ -60,7 +57,7 @@ Komponentene skal vinne over vertens elementregler, som `a {}` og `h2 {}` i Docu
 7. **Ingen `:where()`**, bortsett fra i `reset.css`, som skal tape mot alt. `:is()` er greit for selektorlister.
 8. **Ingen `:has()`**, fordi gulvet i `.browserslistrc` ikke støtter det.
 
-En utility-klasse (`0,1,0`) på ytterste element vinner på rekkefølgen, fordi utils lastes sist. Unntaket er der en variant eller tilstand med vilje setter samme egenskap, som plassen til chevronen i `.ix-card[data-clickable]`.
+En utility-klasse (`0,1,0`) på ytterste element vinner på rekkefølgen, fordi utils lastes sist. Unntaket er der en variant eller tilstand med vilje setter samme egenskap.
 
 ```css
 /* Del med to hooks blir én */
@@ -68,9 +65,9 @@ En utility-klasse (`0,1,0`) på ytterste element vinner på rekkefølgen, fordi 
 :where(.ix-checkbox__input:checked) + :where(.ix-checkbox__label) { … }   /* før */
 .ix-checkbox input:checked + label { … }                                    /* etter */
 
-/* Modifier blir dataattributt */
-:where(.ix-card--clickable:hover) { … }    /* før */
-.ix-card[data-clickable]:hover { … }        /* etter */
+/* Modifier blir tilstand på elementet */
+:where(.ix-checkbox--disabled) { … }          /* før */
+.ix-checkbox input:disabled + label { … }    /* etter */
 
 /* Gruppetilstand over intern tilstand: samme grunnform, read-only står sist */
 :is(ix-radio-group, .ix-radio-group)[data-variant='chip'] input:checked + label { … }                 /* 0,3,2 */

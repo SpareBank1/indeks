@@ -4,6 +4,6 @@
 "@sb1/indeks-web": minor
 ---
 
-Prototype, ikke for release: én hook per del og ingen `:where()` i checkbox, checkbox-group, chip, card og modal.
+Én hook per del og ingen `:where()` i checkbox, checkbox-group, chip og modal (ADR-DS-009).
 
-Breaking: `ix-checkbox--disabled` og `ix-card--clickable` er fjernet. Bruk `disabled` på inputen og `data-clickable` på kortet. `ix-checkbox__input` og `ix-checkbox__label` styles ikke lenger, men gjør ingen skade i markupen.
+Breaking: `ix-checkbox--disabled` er fjernet. Bruk `disabled` på inputen. `ix-checkbox__input` og `ix-checkbox__label` styles ikke lenger, men gjør ingen skade i markupen.
