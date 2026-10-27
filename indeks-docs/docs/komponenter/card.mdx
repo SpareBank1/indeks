@@ -5,22 +5,21 @@ import a11yData from './accessibility/card.json';
 
 # Card
 
-Card er én ting: en avgrenset, selvstendig innholdsenhet med fast ramme og bakgrunn. Et kort kan
-være rent statisk (en beholder for innhold) eller klikkbart (navigerer til en side eller utfører
-en handling).
+Card presenterer innhold og navigasjon i én samlet, klikkbar flate. Hele kortet leder til ett sted, og et ikon viser om du blir værende på siden eller åpner en ekstern side. Kortet finnes i en kompakt variant og i to mediarike varianter med bilde eller illustrasjon.
 
 ## Egnet til
 
-- Gruppere relatert innhold i en visuelt avgrenset enhet
-- Klikkbare inngangsporter til detaljsider (f.eks. en konto, et produkt)
-- Lister av likeverdige valg der hele flaten skal være trykkbar
+- Inngang til en konto, et produkt eller en tjeneste (f.eks. en liste over kontoer på forsiden)
+- Navigasjon videre til en underside der kortet oppsummerer hva du finner der
+- Innhold som skal vises med bilde eller illustrasjon, f.eks. produkter eller artikler
+- Oppfordring til å opprette noe nytt (stiplet variant)
 
 ## Uegnet til
 
-- Som erstatning for en knapp i et skjema — bruk [Button](./button)
-- Dypt nøstede interaktive elementer inni et klikkbart kort (ugyldig HTML)
-- Når innholdet ikke hører naturlig sammen — da skaper kortet falsk gruppering
-- Kun en flate å gruppere eller skille ut flere elementer på, uten avgrensning eller klikk — bruk [Surface](./surface)
+- Innhold som ikke leder noe sted — bruk [Surface](./surface) for å gruppere innhold
+- Kort med flere handlinger, knapper eller lenker inni — bruk [Surface](./surface) med vanlige knapper og lenker
+- Handlinger som utfører noe på siden (lagre, slette, åpne dialog) — bruk [Button](./button)
+- Lenker i løpende tekst
 
 ## Bruk
 
@@ -28,50 +27,78 @@ en handling).
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-stack horizontal="start">
-  <div class="ix-card ix-p-md">
-    <h3>Statisk kort</h3>
-    <p>Et kort uten interaktivitet er bare en beholder.</p>
+<div class="ix-card" data-variant="small">
+  <div class="ix-card__content">
+    <div class="ix-card__heading">
+      <h3 class="ix-card__title">
+        <a class="ix-card__link" href="#">Brukskonto</a>
+      </h3>
+      <ix-icon class="ix-card__nav-icon" name="arrow_forward" aria-hidden="true"></ix-icon>
+    </div>
+    <p class="ix-card__subtitle">1234 56 78901</p>
   </div>
-</ix-stack>
+</div>
 ```
 
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
-<VStack align="start">
-  <Card padding="md">
-    <Heading as="h3" size="sm">Statisk kort</Heading>
-    <Text>Et kort uten href eller onClick er bare en beholder.</Text>
-  </Card>
-</VStack>
+<Card href="#" title="Brukskonto" subtitle="1234 56 78901" />
 ```
 
 </TabItem>
 </Tabs>
+
+Kortet er én lenke: tittelen er en ekte `<a>`, og klikkflaten strekkes over hele kortet med CSS. Det finnes derfor bare ett mål for tastatur og skjermleser, mens musebrukere kan klikke hvor som helst på flaten.
 
 ## Eksempler
 
-### Statisk vs. klikkbart side om side
+### Small med leading
 
-Legg merke til at det klikkbare kortet har en chevron allerede i hviletilstand — du
-trenger ikke peke på det for å forstå at det kan trykkes.
+Den kompakte varianten kan ha et ikon, et ikon med rund bakgrunn eller en illustrasjon foran tittelen.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-stack horizontal="start" gap="md">
-  <div class="ix-card ix-p-md">
-    <h3>Statisk</h3>
-    <p>Flat, ingen chevron.</p>
+<ix-stack vertical="stretch" gap="md">
+  <div class="ix-card" data-variant="small">
+    <span class="ix-card__leading" data-type="icon">
+      <ix-icon name="account_balance"></ix-icon>
+    </span>
+    <div class="ix-card__content">
+      <div class="ix-card__heading">
+        <h3 class="ix-card__title"><a class="ix-card__link" href="#">Ikon</a></h3>
+        <ix-icon class="ix-card__nav-icon" name="arrow_forward" aria-hidden="true"></ix-icon>
+      </div>
+      <p class="ix-card__subtitle">1234 56 78901</p>
+    </div>
   </div>
-  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
-    <h3>Klikkbart</h3>
-    <p>Chevron i hviletilstand, helt uten hover.</p>
-    <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
-  </a>
+  <div class="ix-card" data-variant="small">
+    <span class="ix-card__leading" data-type="icon-background">
+      <ix-icon name="account_balance"></ix-icon>
+    </span>
+    <div class="ix-card__content">
+      <div class="ix-card__heading">
+        <h3 class="ix-card__title"><a class="ix-card__link" href="#">Ikon med bakgrunn</a></h3>
+        <ix-icon class="ix-card__nav-icon" name="arrow_forward" aria-hidden="true"></ix-icon>
+      </div>
+      <p class="ix-card__subtitle">1234 56 78901</p>
+    </div>
+  </div>
+  <div class="ix-card" data-variant="small">
+    <span class="ix-card__leading" data-type="illustration">
+      <img src="/img/komponenter/card/hus.svg" alt="" />
+    </span>
+    <div class="ix-card__content">
+      <div class="ix-card__heading">
+        <h3 class="ix-card__title"><a class="ix-card__link" href="#">Illustrasjon</a></h3>
+        <ix-icon class="ix-card__nav-icon" name="arrow_forward" aria-hidden="true"></ix-icon>
+      </div>
+      <p class="ix-card__subtitle">1234 56 78901</p>
+    </div>
+  </div>
 </ix-stack>
 ```
 
@@ -79,115 +106,199 @@ trenger ikke peke på det for å forstå at det kan trykkes.
 <TabItem value="react" label="React">
 
 ```tsx live
-<HStack gap="md" align="start">
-  <Card padding="md">
-    <Heading as="h3" size="sm">Statisk</Heading>
-    <Text>Flat, ingen chevron.</Text>
-  </Card>
-  <Card padding="md" href="https://www.sparebank1.no">
-    <Heading as="h3" size="sm">Klikkbart</Heading>
-    <Text>Chevron i hviletilstand, helt uten hover.</Text>
-  </Card>
-</HStack>
-```
-
-</TabItem>
-</Tabs>
-
-### Som lenke (navigasjon)
-
-Sett `href` når kortet navigerer til en URL. Det rendres som `<a>` og får riktig lenke-semantikk.
-
-<Tabs groupId="variant">
-<TabItem value="html" label="HTML">
-
-```jsx live
-<ix-stack horizontal="start">
-  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no">
-    <h3>Sparekonto</h3>
-    <p>Se saldo og renter</p>
-    <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
-  </a>
-</ix-stack>
-```
-
-</TabItem>
-<TabItem value="react" label="React">
-
-```tsx live
-<VStack align="start">
-  <Card padding="md" href="https://www.sparebank1.no">
-    <Heading as="h3" size="sm">Sparekonto</Heading>
-    <Text>Se saldo og renter</Text>
-  </Card>
+<VStack align="stretch" gap="md">
+  <Card
+    href="#"
+    title="Ikon"
+    subtitle="1234 56 78901"
+    leading={<Icon name="account_balance" />}
+    leadingType="icon"
+  />
+  <Card
+    href="#"
+    title="Ikon med bakgrunn"
+    subtitle="1234 56 78901"
+    leading={<Icon name="account_balance" />}
+    leadingType="icon-background"
+  />
+  <Card
+    href="#"
+    title="Illustrasjon"
+    subtitle="1234 56 78901"
+    leading={<img src="/img/komponenter/card/hus.svg" alt="" />}
+    leadingType="illustration"
+  />
 </VStack>
 ```
 
 </TabItem>
 </Tabs>
 
-### Som knapp (handling)
+### Stiplet
 
-Bruk et `<button>` når kortet utfører en handling. I React rendres `<button>` når du gir `onClick`.
+Den stiplede varianten er gjennomsiktig i hvile og brukes til å opprette noe nytt. Ved hover og trykk blir kanten heltrukket og flaten fylt.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-stack horizontal="start">
-  <button type="button" class="ix-card ix-card--clickable ix-p-md">
-    <h3>Vis detaljer</h3>
-    <p>Åpner et panel</p>
-    <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
-  </button>
-</ix-stack>
+<div class="ix-card" data-variant="small" data-appearance="dashed">
+  <span class="ix-card__leading" data-type="icon">
+    <ix-icon name="add_circle"></ix-icon>
+  </span>
+  <div class="ix-card__content">
+    <div class="ix-card__heading">
+      <h3 class="ix-card__title"><a class="ix-card__link" href="#">Opprett ny sparekonto</a></h3>
+      <ix-icon class="ix-card__nav-icon" name="arrow_forward" aria-hidden="true"></ix-icon>
+    </div>
+    <p class="ix-card__subtitle">Spar på konto, i fond eller til pensjon</p>
+  </div>
+</div>
 ```
 
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
-<VStack align="start">
-  <Card padding="md" onClick={() => alert('Kort klikket')}>
-    <Heading as="h3" size="sm">Vis detaljer</Heading>
-    <Text>Åpner et panel</Text>
-  </Card>
-</VStack>
+<Card
+  href="#"
+  appearance="dashed"
+  title="Opprett ny sparekonto"
+  subtitle="Spar på konto, i fond eller til pensjon"
+  leading={<Icon name="add_circle" />}
+/>
 ```
 
 </TabItem>
 </Tabs>
 
-### Eget chevron-ikon
+### Large vertikal
 
-Klikkbart kort viser `chevron_right` som standard. Sett `chevronIcon` for å bytte ikon. Skal kortet
-faktisk åpne lenken i ny fane, setter du `openInNewTab` (som gir `target="_blank"`) — og bytter
-chevronen til `open_in_new` som visuelt signal. I ren HTML setter du `target`/`rel` og
-chevron-ikonet selv.
+Media ligger over innholdet og fyller hele bredden med forholdet 350:200. Kortet kan i tillegg ha beskrivelse og tag.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-stack horizontal="start">
-  <a class="ix-card ix-card--clickable ix-p-md" href="https://www.sparebank1.no" target="_blank" rel="noopener noreferrer">
-    <h3>Åpner i ny fane</h3>
-    <p>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</p>
-    <ix-icon class="ix-card__chevron" name="open_in_new" data-size="lg" aria-hidden="true"></ix-icon>
-  </a>
-</ix-stack>
+<div class="ix-card" data-variant="large-vertical" style={{ maxWidth: '350px' }}>
+  <div class="ix-card__media" data-type="image">
+    <img src="/img/komponenter/card/landskap.svg" alt="" />
+  </div>
+  <div class="ix-card__content">
+    <div class="ix-card__heading">
+      <h3 class="ix-card__title"><a class="ix-card__link" href="#">Boliglån</a></h3>
+      <ix-icon class="ix-card__nav-icon" name="arrow_forward" aria-hidden="true"></ix-icon>
+    </div>
+    <p class="ix-card__subtitle">Fra 4,9 % effektiv rente</p>
+    <p class="ix-card__description">Se hva du kan låne, og søk om finansieringsbevis.</p>
+    <div class="ix-card__tags">
+      <span class="ix-tag" data-status="info" data-variant="emphasis">Nyhet</span>
+    </div>
+  </div>
+</div>
 ```
 
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
-<VStack align="start">
-  <Card padding="md" href="https://www.sparebank1.no" openInNewTab chevronIcon="open_in_new">
-    <Heading as="h3" size="sm">Åpner i ny fane</Heading>
-    <Text>Lenken åpnes i ny fane, og chevronen viser et eksternt-lenke-ikon.</Text>
-  </Card>
-</VStack>
+<div style={{ maxWidth: '350px' }}>
+  <Card
+    href="#"
+    variant="large-vertical"
+    title="Boliglån"
+    subtitle="Fra 4,9 % effektiv rente"
+    description="Se hva du kan låne, og søk om finansieringsbevis."
+    media={<img src="/img/komponenter/card/landskap.svg" alt="" />}
+    tag={<Tag variant="info">Nyhet</Tag>}
+  />
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+### Large horisontal
+
+Media ligger til venstre, 150 px bred og like høy som kortet. På smale skjermer krymper media til maks 40 % av bredden, slik at teksten alltid får plass.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-card" data-variant="large-horizontal">
+  <div class="ix-card__media" data-type="illustration">
+    <img src="/img/komponenter/card/hus.svg" alt="" width="80" height="80" />
+  </div>
+  <div class="ix-card__content">
+    <div class="ix-card__heading">
+      <h3 class="ix-card__title"><a class="ix-card__link" href="#">Forsikring for hjemmet</a></h3>
+      <ix-icon class="ix-card__nav-icon" name="arrow_forward" aria-hidden="true"></ix-icon>
+    </div>
+    <p class="ix-card__subtitle">Innbo og hus</p>
+    <p class="ix-card__description">Beskytt det som betyr mest.</p>
+    <div class="ix-card__tags">
+      <span class="ix-tag">Anbefalt</span>
+    </div>
+  </div>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Card
+  href="#"
+  variant="large-horizontal"
+  title="Forsikring for hjemmet"
+  subtitle="Innbo og hus"
+  description="Beskytt det som betyr mest."
+  media={<img src="/img/komponenter/card/hus.svg" alt="" width={80} height={80} />}
+  mediaType="illustration"
+  tag={<Tag>Anbefalt</Tag>}
+/>
+```
+
+</TabItem>
+</Tabs>
+
+Bruk `image` for fotografier som skal fylle hele flaten, og `illustration` for grafikk som skal sentreres uten å beskjæres.
+
+### Ekstern lenke
+
+Leder kortet til et annet nettsted, åpnes lenken i ny fane og navigasjonsikonet byttes til `open_in_new`. Teksten som forteller skjermleserbrukere at lenken åpnes i ny fane, må du sende inn selv på brukerens språk.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-card" data-variant="small">
+  <div class="ix-card__content">
+    <div class="ix-card__heading">
+      <h3 class="ix-card__title">
+        <a class="ix-card__link" href="https://www.sparebank1.no" target="_blank" rel="noopener noreferrer">
+          Les mer hos SpareBank 1 <span class="ix-sr-only">(åpnes i ny fane)</span>
+        </a>
+      </h3>
+      <ix-icon class="ix-card__nav-icon" name="open_in_new" aria-hidden="true"></ix-icon>
+    </div>
+    <p class="ix-card__subtitle">sparebank1.no</p>
+  </div>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Card
+  href="https://www.sparebank1.no"
+  title="Les mer hos SpareBank 1"
+  subtitle="sparebank1.no"
+  external
+  externalLabel="(åpnes i ny fane)"
+/>
 ```
 
 </TabItem>
@@ -195,57 +306,45 @@ chevron-ikonet selv.
 
 ## Retningslinjer
 
-### Vis klikkbarheten i hviletilstand
+### La tittelen fortelle hvor kortet leder
 
-Et klikkbart kort må se annerledes ut enn et statisk kort før noen peker på det. På desktop
-kan hover antyde det, men hover finnes ikke på touch. Derfor bærer det klikkbare kortet
-signalene sine hele tiden:
+Tittelen er lenketeksten. Skjermleserbrukere hører den alene når de lister opp lenker på siden, så den må gi mening uten resten av kortet. Skriv «Brukskonto» eller «Boliglån», ikke «Les mer» eller «Gå videre». Har flere kort samme tittel, gjør dem unike.
 
-- **Chevron (›):** hovedsignalet, alltid synlig. En form, ikke bare en farge, så det holder
-  kontrastkravet.
-- Hover gir kortet en bakgrunns-tint på desktop.
-- Pressed-tint bekrefter trykket på touch.
-- Fokusring vises for tastaturbrukere via `:focus-visible`.
+### Ett kort, ett mål
 
-Ikke skill klikkbart fra statisk på farge eller kantlinje alene. Det er for svakt på touch,
-og det faller igjennom på kontrastkrav.
+Hele kortet er én lenke. Legg ikke knapper, lenker, avkrysningsbokser eller andre interaktive elementer inni — de havner under klikkflaten, blir vanskelige å treffe og gir to mål på samme sted. Trenger innholdet flere handlinger, bruk [Surface](./surface) med vanlige knapper og lenker.
 
-### Sett href for navigasjon, onClick for handling
+### Velg riktig overskriftsnivå
 
-`href` gir en `<a>` og fører brukeren til en ny side. `onClick` gir en `<button>` og gjør
-noe i grensesnittet. Skjermleseren annonserer «lenke» eller «knapp» ut fra det du velger, og
-chevronen legges på automatisk i begge tilfeller.
+Tittelen er en `<h3>` som standard. Velg nivået som passer i sideoversikten — står kortene rett under sidens hovedoverskrift, bruk `h2`. Skal kortene ikke inngå i overskriftsstrukturen, bruk `span`. I React settes dette med `titleAs`; i HTML bytter du elementet.
 
-### Ikke nøst interaktive elementer
+### Bilder er som regel dekorative
 
-Et klikkbart kort er selv en lenke eller en knapp, og knapper inni knapper er ugyldig HTML.
-Trenger innholdet flere handlinger, bruk et statisk kort med egne knapper og la flaten være
-i fred.
+Tittelen bærer meningen, så bilder og illustrasjoner i kortet er normalt dekorative og skal ha `alt=""`. Gi bildet en beskrivende alt-tekst bare når det formidler noe som ikke står i teksten.
 
-### Gi nok klikkflate
+### Bruk stiplet variant for å opprette noe nytt
 
-Hele kortet er trykkbart, så `padding` er det som bestemmer hvor stort målet blir. Sikt mot
-minst 44 × 44 px, som er terskelen for komfortabel treffsikkerhet på touch.
+Den stiplede varianten skiller «legg til»-kort fra eksisterende innhold. Bruk den sammen med et pluss-ikon, og plasser den etter de eksisterende kortene i listen.
 
 ## Universell utforming
 
 ### Hva du selv må sørge for
 
-- Velg `href` eller `onClick` bevisst. Navigasjon skal være `<a>`, handling skal være
-  `<button>`. Komponenten velger element basert på hvilken du gir.
-- Gi kortet et meningsfylt navn. Innholdet blir det tilgjengelige navnet. Rent visuelle kort
-  trenger `aria-label`.
-- **Ikke nøst interaktive elementer** inni et klikkbart kort.
-- Ikke skill klikkbart fra statisk kun med farge. Chevronen gjør jobben, og må ikke
-  fjernes.
+- Skriv en tittel som forteller hvor kortet leder. Tittelen er lenkenavnet skjermlesere leser opp, og må være unik og beskrivende uten resten av kortet.
+- Velg overskriftsnivå som passer i sidens struktur (`titleAs` i React).
+- Send inn `externalLabel` på brukerens språk når kortet leder til en ekstern side, f.eks. «(åpnes i ny fane)», «(opnar i ny fane)» eller «(opens in a new tab)». Komponenten har ingen innebygd tekst.
+- Gi bilder alt-tekst. Dekorative bilder og illustrasjoner skal ha `alt=""`.
+- Ikke legg andre interaktive elementer inni kortet.
 
 ### Hva komponenten gjør automatisk
 
-- **Semantisk element:** `<a>` ved `href`, `<button>` ved `onClick`, ellers `<div>`.
-- **Tastaturstøtte:** native element gir Enter/Space-aktivering og tab-rekkefølge gratis.
-- **Fokusindikator** via `:focus-visible` — synlig for tastatur, ikke for mus.
-- **Touch-synlig affordanse:** chevron i hviletilstand, pressed-state ved `:active`.
-- **Redusert bevegelse:** transition og skalering deaktiveres ved `prefers-reduced-motion`.
+- **Én ekte lenke** — tittelen er en native `<a>`, så tastatur, kontekstmeny («Åpne i ny fane») og skjermleser fungerer uten JavaScript.
+- **Hele kortet er klikkflaten** — lenkens klikkflate strekkes over hele kortet med CSS.
+- **Fokusring rundt hele kortet** ved `:focus-visible`, ikke bare rundt tittelteksten.
+- **Navigasjonsikonet er skjult for skjermlesere** (`aria-hidden`), så det ikke forstyrrer lenkenavnet.
+- **Ekstern lenke** får `target="_blank"` og `rel="noopener noreferrer"`, og `externalLabel` legges til lenkenavnet som skjult tekst.
+- **Redusert bevegelse** — overganger slås av når brukeren har valgt det i operativsystemet.
+- **Høykontrastmodus** — kant og fokusring bruker systemfarger i Windows høykontrast.
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -257,53 +356,81 @@ minst 44 × 44 px, som er terskelen for komfortabel treffsikkerhet på touch.
 
 | Prop | Type | Standard | Beskrivelse |
 |------|------|----------|-------------|
-| `href` | `string` | | Gjør kortet til en lenke (`<a>`) for navigasjon. Aktiverer klikkbar styling |
-| `onClick` | `(e) => void` | | Gjør kortet til en knapp (`<button>`) for handling. Aktiverer klikkbar styling |
-| `chevronIcon` | `IconName` | `'chevron_right'` | Ikon for affordanse-chevronen på klikkbart kort |
-| `openInNewTab` | `boolean` | | Åpner `href`-lenken i ny fane (`target="_blank"` + `rel="noopener noreferrer"`). Kun sammen med `href` |
-| `padding` | `Size` | | Indre luft via `ix-p-*`-klasse |
-| `className` | `string` | | Ekstra klasser |
+| `href` | `string` | | Påkrevd. Hvor kortet leder |
+| `title` | `ReactNode` | | Påkrevd. Tittelen — er også lenketeksten |
+| `titleAs` | `'h2' \| 'h3' \| 'h4' \| 'h5' \| 'h6' \| 'span'` | `'h3'` | Overskriftsnivå for tittelen |
+| `subtitle` | `ReactNode` | | Kort tekst under tittelen |
+| `variant` | `'small' \| 'large-vertical' \| 'large-horizontal'` | `'small'` | Oppsett |
+| `appearance` | `'default' \| 'dashed'` | `'default'` | Kun `small`. `dashed` gir stiplet, gjennomsiktig flate i hvile |
+| `leading` | `ReactNode` | | Kun `small`. Ikon eller illustrasjon foran tittelen |
+| `leadingType` | `'icon' \| 'icon-background' \| 'illustration'` | `'icon'` | Kun `small`. Hvordan `leading` vises |
+| `media` | `ReactNode` | | Kun `large-*`. Bilde eller illustrasjon |
+| `mediaType` | `'image' \| 'illustration'` | `'image'` | Kun `large-*`. `image` fyller flaten, `illustration` sentreres |
+| `description` | `ReactNode` | | Kun `large-*`. Lengre beskrivelse |
+| `tag` | `ReactNode` | | Kun `large-*`. Én eller flere [Tag](./tag) |
+| `external` | `boolean` | `false` | Åpner lenken i ny fane og viser `open_in_new`-ikonet |
+| `externalLabel` | `string` | | Påkrevd når `external` er satt. Skjult tekst lagt til lenkenavnet |
+| `linkProps` | `AnchorHTMLAttributes` | | Ekstra attributter til `<a>`-elementet, f.eks. `onClick` eller `aria-current` |
 
-I tillegg støttes standard HTML-attributter, som settes direkte på det rendrede elementet
-(`<a>`, `<button>` eller `<div>`). `Card.Action` brukes for en egen handlingsflate inni kortet.
+Øvrige HTML-attributter (`id`, `className`, `data-*` osv.) settes på rotelementet (`<div>`). TypeScript hindrer deg i å kombinere props som ikke hører til varianten, f.eks. `media` på `small`.
 
 ## Tilpasning med CSS
 
-Trenger du `ix-card`-stylingen på HTML du setter sammen selv, uten React-komponenten, kan du
-bruke klassene direkte. Husk at klikkbart kort skal være et `<a>` eller `<button>`.
+Trenger du `ix-card`-stylingen på HTML du setter sammen selv, uten React-komponenten, kan du bruke klassene direkte. Card har ingen web component — alt styres med klasser og attributter.
 
 ### Tilgjengelige klasser og selektorer
 
-| Element/tilstand | Selektor |
-|-----------------|----------|
+| Element/tilstand | Selektor / attributt |
+|-----------------|----------------------|
 | Kort | `.ix-card` |
-| Klikkbart kort (flat, sentrert chevron) | `.ix-card--clickable` |
-| Chevron-ikon | `.ix-card__chevron` (et `ix-icon`) |
-
-`.ix-card` har kantlinje som standard — ingen ekstra klasse trengs. Klikkbart kort trenger et
-chevron-ikon som siste barn: `<ix-icon class="ix-card__chevron" name="chevron_right"
-aria-hidden="true">`.
+| Variant | `data-variant="small"` / `"large-vertical"` / `"large-horizontal"` |
+| Stiplet (kun small) | `data-appearance="dashed"` |
+| Leading (kun small) | `.ix-card__leading` med `data-type="icon"` / `"icon-background"` / `"illustration"` |
+| Media (kun large) | `.ix-card__media` med `data-type="image"` / `"illustration"` |
+| Innhold | `.ix-card__content` |
+| Tittelrad | `.ix-card__heading` |
+| Tittel | `.ix-card__title` (på `h2`–`h6` eller `span`) |
+| Lenke | `.ix-card__link` (på `<a>` inni tittelen) |
+| Navigasjonsikon | `.ix-card__nav-icon` (`arrow_forward` eller `open_in_new`) |
+| Undertittel | `.ix-card__subtitle` |
+| Beskrivelse (kun large) | `.ix-card__description` |
+| Tags (kun large) | `.ix-card__tags` |
+| Skjult tekst for ekstern lenke | `.ix-sr-only` inni lenken |
 
 ### Eksempel: ren HTML
 
 ```html
-<!-- Statisk -->
-<div class="ix-card ix-p-md">
-  <h3>Tittel</h3>
-  <p>Innhold</p>
+<div class="ix-card" data-variant="large-horizontal">
+  <div class="ix-card__media" data-type="image">
+    <img src="/bilder/bolig.jpg" alt="" />
+  </div>
+  <div class="ix-card__content">
+    <div class="ix-card__heading">
+      <h2 class="ix-card__title">
+        <a class="ix-card__link" href="https://example.com" target="_blank" rel="noopener noreferrer">
+          Boliglån <span class="ix-sr-only">(åpnes i ny fane)</span>
+        </a>
+      </h2>
+      <ix-icon class="ix-card__nav-icon" name="open_in_new" aria-hidden="true"></ix-icon>
+    </div>
+    <p class="ix-card__subtitle">Fra 4,9 % effektiv rente</p>
+    <p class="ix-card__description">Se hva du kan låne.</p>
+    <div class="ix-card__tags">
+      <span class="ix-tag">Nyhet</span>
+    </div>
+  </div>
 </div>
-
-<!-- Klikkbart (navigasjon) -->
-<a class="ix-card ix-card--clickable ix-p-md" href="/konto">
-  <h3>Sparekonto</h3>
-  <p>Se saldo</p>
-  <ix-icon class="ix-card__chevron" name="chevron_right" data-size="lg" aria-hidden="true"></ix-icon>
-</a>
 ```
+
+Lenken må ligge inni `.ix-card__title`, og `.ix-card` må ikke ha `overflow: hidden` eller egen `position` overstyrt — klikkflaten og fokusringen er tegnet av lenkens `::after`, som er posisjonert mot kortet.
+
+:::info
+Kantfargene for hover og trykk følger foreløpig dagens fargetokens, ikke de nyeste verdiene i Figma. De oppdateres når tokenene synkroniseres.
+:::
 
 ## Relatert
 
-- [Surface](./surface) — flaten et kort kan ligge oppå; for å gruppere og skille ut innhold uten avgrensning eller klikk
-- [Button](./button) — for handlinger og navigasjon med knappe-styling
-- [Farger](../retningslinjer/farger) — fargetokens for surface og status
-- [Spacing](../grunnleggende/tokens/spacing) — padding-tokens
+- [Surface](./surface) — flate for å gruppere innhold som ikke er én lenke
+- [Tag](./tag) — merkelapper i large-variantene
+- [Icon](./icon) — ikoner i leading og navigasjonsikonet
+- [Button](./button) — for handlinger i stedet for navigasjon

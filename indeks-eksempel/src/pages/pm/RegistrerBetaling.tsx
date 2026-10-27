@@ -1,4 +1,4 @@
-import { Button, Card, Form, Heading, HStack, Select, TextField } from '@sb1/indeks-react';
+import { Button, Form, Heading, HStack, Select, Surface, TextField } from '@sb1/indeks-react';
 
 const kontoOptions = [
     { value: 'brukskonto', label: 'Brukskonto - 1234 56 78901' },
@@ -9,7 +9,7 @@ const kontoOptions = [
 export default function PMRegistrerBetaling() {
     return (
         <div className="ix-max-w-sm ix-m-auto ix-py-xl">
-            <Card className="ix-m-auto ix-mb-5xl ix-p-lg ix-color-surface-main-default">
+            <Surface border="default" radius="md" className="ix-m-auto ix-mb-5xl ix-p-lg ix-color-surface-main-default">
                 <Heading as="h1" addRecommendedSpacing>
                     Betale
                 </Heading>
@@ -36,7 +36,7 @@ export default function PMRegistrerBetaling() {
                         </Button>
                     </div>
                 </Form>
-            </Card>
+            </Surface>
         </div>
     );
 }

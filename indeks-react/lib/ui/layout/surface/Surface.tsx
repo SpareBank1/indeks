@@ -16,7 +16,7 @@ export type SurfaceProps<As extends ElementType = 'div'> = {
     className?: string;
     /**
      * Statusfarge på flaten. Settes som `data-status` og kobler
-     * `--ix-color-status-*` (samme system som Message/Card). `"neutral"` gir
+     * `--ix-color-status-*` (samme system som Message). `"neutral"` gir
      * den nøytrale flaten. @default "neutral"
      */
     status?: Status;
@@ -39,7 +39,7 @@ const justifyClass: Record<NonNullable<SurfaceProps['justifyContent']>, string> 
 
 /**
  * Surface er en enkel visuell flate som grupperer innhold, gjerne med en
- * surface-farge. Den er bevisst enklere enn Card (ingen elevation eller
+ * surface-farge. Den er bevisst enklere enn Card (ingen lenke eller
  * klikk-affordanse), og bygger i sin helhet på utility-klasser.
  */
 export function Surface<As extends ElementType = 'div'>(props: SurfaceProps<As>): JSX.Element {
@@ -76,7 +76,7 @@ export function Surface<As extends ElementType = 'div'>(props: SurfaceProps<As>)
         className
     );
 
-    // Statustema kobles via data-status (som Card/Message): CSS leser
+    // Statustema kobles via data-status (som Message): CSS leser
     // --ix-color-status-surface. "neutral" er nøytral-gruppen i status-colors.css
     // og gir den nøytrale flaten på elementet, uansett forelder.
     return <Component {...propsWitoutSpacingProps} className={_className} data-status={status} />;

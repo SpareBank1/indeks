@@ -108,19 +108,19 @@ URL-er på den gamle formen `…/indeks/css/<versjon>.css` blir migrert til `…
 ## ✨ Bruk
 
 ```jsx
-import { Button, Card, Heading, Text, HStack, VStack } from '@sb1/indeks-react';
+import { Button, Heading, Text, HStack, Surface, VStack } from '@sb1/indeks-react';
 
 function App() {
     return (
         <VStack gap="4">
-            <Card>
+            <Surface border="default" radius="md" padding="md">
                 <Heading as="h1">Velkommen til Indeks</Heading>
                 <Text>Dette er en eksempelapp med Indeks-komponenter.</Text>
                 <HStack gap="2">
                     <Button variant="primary">Primær knapp</Button>
                     <Button variant="secondary">Sekundær knapp</Button>
                 </HStack>
-            </Card>
+            </Surface>
         </VStack>
     );
 }
