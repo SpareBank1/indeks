@@ -37,7 +37,7 @@
     max-height: calc(100vh - var(--ix-spacing-lg));
     overflow-y: auto;
     background-color: var(--ix-color-surface-main-default);
-    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-emphasis);
     border-radius: var(--ix-border-radius-sm);
     z-index: var(--ix-z-index-overlay);
     list-style: none;
@@ -113,7 +113,7 @@
     display: block;
     height: var(--ix-border-width-default);
     margin: var(--ix-spacing-xs) 0;
-    background-color: var(--ix-color-border-main-default);
+    background-color: var(--ix-color-border-main-emphasis);
 }
 
 /* ── Submenu trigger ────────────────────────────────────────────────────────

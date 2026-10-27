@@ -3,6 +3,7 @@ import type { Config } from '@docusaurus/types';
 import { mkdirSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { themes as prismThemes } from 'prism-react-renderer';
+import mildInfima from './plugins/mild-infima';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -191,6 +192,7 @@ const config: Config = {
     } satisfies Preset.ThemeConfig,
 
     plugins: [
+        mildInfima,
         [
             '@signalwire/docusaurus-plugin-llms-txt',
             {

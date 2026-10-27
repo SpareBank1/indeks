@@ -49,7 +49,7 @@ Input-felt, textarea og contenteditable-elementer får alltid `user-select: text
 
 Alle klassene bruker vanlige klasseselektorer (spesifisitet `0,1,0`). `.ix-selectable` og `.ix-selectable-all` overstyrer `.ix-native` via kildeorden.
 
-Klassene er kompatible med komponent-CSS-en i Indeks, som bruker `:where()` (spesifisitet `0,0,0`). Utility-klassene vinner derfor alltid over komponent-CSS.
+Klassene er vanlige klasseselektorer (`0,1,0`) og lastes etter komponent-CSS-en. Legger du en utility på ytterste element i en komponent, vinner den derfor på rekkefølgen. Unntaket er der en variant eller tilstand med vilje setter samme egenskap, som plassen til chevronen i et klikkbart kort. Utility-klasser på indre deler av en komponent er ikke garantert å virke.
 
 ## Eksempler
 

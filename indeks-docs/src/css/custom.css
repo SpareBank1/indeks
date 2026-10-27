@@ -5,6 +5,9 @@
  */
 @import '@sb1/indeks-css';
 
+/* Infimas elementregler i :where(), lastet etter indeks-css. Se plugins/mild-infima.ts. */
+@import '@mild-infima/elementer.css';
+
 @import url(https://cdn.sparebank1.no/fonts/v1.css);
 
 /* You can override the default Infima variables here. */

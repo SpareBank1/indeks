@@ -150,11 +150,11 @@ I HTML må `indeterminate` settes via JavaScript: `checkbox.indeterminate = true
 
 ```jsx live
 <>
-  <div class="ix-checkbox ix-checkbox--disabled">
+  <div class="ix-checkbox">
     <input type="checkbox" id="disabled-1" disabled />
     <label for="disabled-1">Ikke tilgjengelig</label>
   </div>
-  <div class="ix-checkbox ix-checkbox--disabled">
+  <div class="ix-checkbox">
     <input type="checkbox" id="disabled-2" disabled checked />
     <label for="disabled-2">Allerede godtatt</label>
   </div>
@@ -334,7 +334,7 @@ Trenger checkboxen hjelpetekst, feilmelding eller tooltip, legger du den inni `<
 | Attributt | Plassering | Effekt |
 |-----------|------------|--------|
 | `checked` | `<input>` | Avkrysset |
-| `disabled` | `<input>` | Deaktivert. Legg også `ix-checkbox--disabled` på wrapperen for riktig markør og pointer-events |
+| `disabled` | `<input>` | Deaktivert. Labelen får markør og nedtonet farge av seg selv |
 | `aria-invalid="true"` | `<input>` | Feiltilstand. Settes automatisk av `<ix-field>` når feilmeldingen har innhold |
 | `tooltip` / `tooltip-label` / `tooltip-placement` | `<ix-field>` | Info-knapp i label-raden. `tooltip-label` er knappens tilgjengelige navn og må oppgis |
 
@@ -369,18 +369,15 @@ Skal flere checkboxer høre sammen under en felles legend, bruk [CheckboxGroup](
 
 ## Tilpasning med CSS
 
-`.ix-checkbox` styler naken markup: `input[type="checkbox"]` og `<label>` som direkte søsken. Boksen og glyfen tegnes som `label::before` og `label::after`, togglet av nabo-kombinatoren `input:checked + label` og `input:indeterminate + label`. Du trenger ingen ekstra markup for indikatoren.
-
-BEM-klassene `.ix-checkbox__input` og `.ix-checkbox__label` er valgfrie hooks for forfattere som vil ha eksplisitte selektorer. Stilene treffer begge former.
+`.ix-checkbox` styler naken markup: `input[type="checkbox"]` og `<label>` som direkte søsken. Boksen og glyfen tegnes som `label::before` og `label::after`, togglet av nabo-kombinatoren `input:checked + label` og `input:indeterminate + label`. Du trenger ingen ekstra markup for indikatoren, og ingen klasser på input eller label.
 
 ### Tilgjengelige klasser og selektorer
 
 | Element / tilstand | Selektor |
 |--------------------|----------|
 | Wrapper | `.ix-checkbox` |
-| Deaktivert wrapper | `.ix-checkbox--disabled` |
-| Input, visuelt skjult (valgfri hook) | `.ix-checkbox__input` |
-| Label med indikator (valgfri hook) | `.ix-checkbox__label` |
+| Input, visuelt skjult | `.ix-checkbox input` |
+| Label med indikator | `.ix-checkbox label` |
 | Boksen | `label::before` |
 | Hake eller strek | `label::after` |
 | Avkrysset | `input:checked + label` |
@@ -397,7 +394,7 @@ Disse er interne (`--ii-`) og settes på labelen. De kan endres uten varsel, men
 |----------|----------|-------------|
 | `--ii-checkbox-size` | `24px` | Bredde og høyde på boksen, og minimumshøyde på klikkflaten |
 | `--ii-checkbox-box-bg` | `--ix-color-fill-interactive-default` | Bakgrunn i boksen. Byttes av hover, checked, indeterminate og feil |
-| `--ii-checkbox-box-border` | `--ix-color-border-main-default` | Kantfarge på boksen. Settes til `transparent` når boksen er fylt |
+| `--ii-checkbox-box-border` | `--ix-color-border-main-emphasis` | Kantfarge på boksen. Settes til `transparent` når boksen er fylt |
 
 ### Eksempel: ren HTML
 
