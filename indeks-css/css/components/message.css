@@ -55,6 +55,12 @@
     margin: 0;
 }
 
+/* Lenken skal ikke strekkes til full bredde av kolonnen — da blir også
+   fokusringen like bred som meldingen. */
+:where(.ix-message__body)>:where(.ix-link-text) {
+    align-self: flex-start;
+}
+
 /* Tittel: «headline xs»-typografi (matcher .ix-heading[data-size="xs"]).
    Arver tekstfarge fra roten — tittelen skal ikke ha egen farge. */
 :where(.ix-message__title) {
