@@ -32,14 +32,14 @@ Accordion viser og skjuler innhold i seksjoner. Den er nyttig når mye innhold s
 
 ```jsx live
 <div class="ix-accordion">
-  <details class="ix-accordion__item" open>
-    <summary class="ix-accordion__header">Hvordan logger jeg inn?</summary>
+  <details open>
+    <summary>Hvordan logger jeg inn?</summary>
     <div class="ix-accordion__content">
       <p>Du logger inn med BankID eller BankID på mobil øverst til høyre.</p>
     </div>
   </details>
-  <details class="ix-accordion__item">
-    <summary class="ix-accordion__header">Hvordan endrer jeg passord?</summary>
+  <details>
+    <summary>Hvordan endrer jeg passord?</summary>
     <div class="ix-accordion__content">
       <p>Gå til Innstillinger → Sikkerhet og velg «Endre passord».</p>
     </div>
@@ -236,23 +236,23 @@ Trenger du `ix-accordion`-stylingen på HTML du setter sammen selv, kan du bruke
 | Element/tilstand | Selektor / attributt |
 |------------------|----------------------|
 | Rot (gruppe) | `.ix-accordion` på et container-element (f.eks. `<div>`) |
-| Seksjon | `.ix-accordion__item` på `<details>` |
+| Seksjon | `<details>` som direkte barn av `.ix-accordion` |
 | Åpen seksjon | `[open]` på `<details>` (native) |
-| Header | `.ix-accordion__header` på `<summary>` (første barn) |
+| Header | `<summary>` (første barn i `<details>`) |
 | Innhold | `.ix-accordion__content` på `<div>` (etter header) |
 
 ### Eksempel: ren HTML
 
 ```html
 <div class="ix-accordion">
-  <details class="ix-accordion__item" open>
-    <summary class="ix-accordion__header">Første seksjon</summary>
+  <details open>
+    <summary>Første seksjon</summary>
     <div class="ix-accordion__content">
       <p>Innhold i første seksjon.</p>
     </div>
   </details>
-  <details class="ix-accordion__item">
-    <summary class="ix-accordion__header">Andre seksjon</summary>
+  <details>
+    <summary>Andre seksjon</summary>
     <div class="ix-accordion__content">
       <p>Innhold i andre seksjon.</p>
     </div>
