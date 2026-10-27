@@ -1,18 +1,10 @@
 :where(.ix-message) {
-    /* Farge: `data-status` kobler --ix-color-status-* automatisk (se
-       @sb1/indeks-utils/css/status-colors.css). Bakgrunnen bruker `surface`
-       (lyseste status-flate). Statusikonet rendres som en <ix-icon data-badge>
-       (sirkel + glyf) — se badge-koblingen lenger ned. */
-    /* Badge-diameter (fast 20px). Lokal variabel for ev. gjenbruk. */
     --ix-message-icon-size: 20px;
-    /* Høyden på lukkeknappen (InteractiveIcon «md»). */
+    /* Samme som InteractiveIcon «md». */
     --ii-message-close-size: 26px;
 
     display: flex;
-    /* Innholdet sentreres vertikalt mot statusikonet ved kort melding (kun
-       tittel / én linje). Ikon og lukkeknapp selv-justerer til toppen
-       (align-self: flex-start) så de flukter med tittelen når meldingen er høy. */
-    align-items: center;
+    align-items: flex-start;
     gap: var(--ix-spacing-xs);
     padding: var(--ix-spacing-sm);
     color: var(--ix-color-foreground-main-default);
@@ -21,35 +13,25 @@
     border-radius: var(--ix-border-radius-md);
 }
 
-/* Message får ingen ring rundt hele meldingen — kun lukkeknappen har sin egen
-   fokusring (se .ix-message__close:focus-visible). */
-
-/* Full bredde: strekk meldingen til full bredde av forelderen. En vertikal
-   ix-stack (og andre flex-kolonner) har `align-items: flex-start`, så en
-   melding krymper ellers til innholdsbredden; `align-self: stretch` overstyrer
-   det. `width: 100%` dekker block-kontekster utenfor flex. Radius beholdes. */
+/* `align-self` overstyrer flex-kolonner som ix-stack, `width` dekker resten. */
 :where(.ix-message[data-full-width]) {
     align-self: stretch;
     width: 100%;
 }
 
-/* Statusikon-badge: <ix-icon data-badge> rendrer sirkel + glyf (se icon.css).
-   Sirkelen bruker status-`fill`; glyfen settes med `name` på selve
-   ikonet (per status — info, hake, utropstegn), ikke via CSS. */
 :where(.ix-message ix-icon[data-badge]) {
-    flex: 0 0 auto;
-    /* Hold ikonet ved toppen/tittelen når meldingen går over flere linjer
-       (roten sentrerer ellers alt vertikalt). */
-    align-self: flex-start;
+    flex: none;
     --ix-icon-badge-size: var(--ix-message-icon-size);
     --ix-icon-badge-background: var(--ix-color-status-fill);
 }
 
+/* Sentreres mot ikonet når teksten er lavere enn det. */
 :where(.ix-message__body) {
     display: flex;
     flex-direction: column;
     gap: var(--ix-spacing-2xs);
-    flex: 1 1 auto;
+    flex: auto;
+    align-self: center;
     min-width: 0;
 }
 
@@ -57,29 +39,20 @@
     margin: 0;
 }
 
-/* Lenken skal ikke strekkes til full bredde av kolonnen — da blir også
-   fokusringen like bred som meldingen. */
+/* Strekkes ikke, ellers blir fokusringen like bred som meldingen. */
 :where(.ix-message__body)>:where(.ix-link-text) {
     align-self: flex-start;
 }
 
-/* Tittel: «headline xs»-typografi (matcher .ix-heading[data-size="xs"]).
-   Arver tekstfarge fra roten — tittelen skal ikke ha egen farge. */
 :where(.ix-message__title) {
     font-weight: var(--ix-font-weight-medium);
     line-height: 1.2;
 }
 
-/* Lukkeknapp — valgfri. Selve knappen er en InteractiveIcon
-   (.ix-interactive-icon) i «sm», som eier touch-mål, ikon (ix-icon «lukk»),
-   hover og fokusring. Her settes kun Message-spesifikk plassering. */
+/* Lik negativ margin oppe og nede sentrerer knappen mot ikonet uten at den
+   gjør meldingen høyere. */
 :where(.ix-message__close) {
-    flex: 0 0 auto;
-    /* Lukkeknappen er siste barn. Den sentreres mot statusikonet, som alltid
-       står ved første linje. Knappen er høyere enn ikonet, så marginen oppe og
-       nede er negativ og like stor. Da tar knappen like mye plass som ikonet og
-       gjør aldri meldingen høyere. Til høyre trekkes knappen `xs` inn mot kanten. */
-    align-self: flex-start;
+    flex: none;
     margin-block: calc((var(--ix-message-icon-size) - var(--ii-message-close-size)) / 2);
     margin-inline-end: calc(var(--ix-spacing-xs) * -1);
 }
