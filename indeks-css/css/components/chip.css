@@ -140,9 +140,8 @@
 }
 
 /* Chips ligger alltid på rad og wrapper — uavhengig av gruppens orientation.
-   Trenger to attributter: den konkurrerer med både base-regelen,
-   [data-orientation='horizontal']-regelen og @media (max-width: 480px)-regelen i
-   radio-group.css, som alle er (0,1,0) og cascader senere. */
+   (0,3,0) slår base-regelen for [data-field='items'] i radio-group.css (0,2,0),
+   som cascader senere. Horizontal-reglene der utelukker chip med :not(). */
 :is(ix-radio-group, .ix-radio-group)[data-variant='chip'] [data-field='items'],
 :is(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'] [data-field='items'] {
     flex-direction: row;
