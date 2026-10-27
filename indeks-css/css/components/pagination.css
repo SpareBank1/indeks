@@ -70,11 +70,14 @@
         outline-color var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
+/* Hover og active har samme grunnform (0,3,0), så active vinner på
+   rekkefølgen når knappen trykkes mens musa står over. Gjeldende side har
+   ingen av dem. */
 .ix-pagination__button:hover:not([aria-current='page']) {
     background-color: var(--ix-color-component-button-tertiary-fill-default-hover);
 }
 
-.ix-pagination__button:active {
+.ix-pagination__button:active:not([aria-current='page']) {
     background-color: var(--ix-color-component-button-tertiary-fill-default-active);
 }
 
