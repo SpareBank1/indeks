@@ -1,50 +1,28 @@
-/* ReadMore — én frittstående vis/skjul-seksjon.
- *
- * ReadMore bygger på native <details>/<summary>. All semantikk og tastatur
- * kommer gratis fra native elementer — ingen JavaScript er nødvendig. Til
- * forskjell fra Accordion er dette én enkelt seksjon (ikke en gruppe): en
- * venstrestilt, klikkbar label med chevron *foran* teksten, uten kant-ramme.
- *
- * Struktur:
- *   <details class="ix-read-more">
- *     <summary>Tittel</summary>
- *     <div class="ix-read-more__content">Innhold</div>
- *   </details>
- */
-
-/* Rot: ingen ramme/bakgrunn — komponenten flyter inline i tekstflaten. */
 .ix-read-more {
     display: block;
     color: var(--ix-color-foreground-main-default);
-    /* Lar block-size animeres mellom 0 og `auto` på ::details-content (se
-     * @supports-blokken nederst). Ignoreres trygt der det ikke støttes. */
+    /* Lar block-size animeres til `auto` på ::details-content (se nederst). */
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     interpolate-size: allow-keywords;
 }
 
-/* Label = <summary>: klikkflaten. Chevron foran (::before), så tittel. Bare så
- * bred som innholdet slik at hover/active-flaten legger seg tett rundt teksten.
- * Styles direkte på elementet — <details> har alltid nøyaktig ett <summary>. */
 .ix-read-more > summary {
     display: inline-flex;
     align-items: center;
     gap: var(--ix-spacing-2xs);
-    /* Litt mer luft til høyre enn til venstre: chevronen tåler å ligge tett i
-     * kanten, mens teksten trenger avstand til hover-flatens høyre kant. */
+    /* Mer luft til høyre: teksten trenger avstand til hover-flatens kant. */
     padding: var(--ix-spacing-xs) var(--ix-spacing-sm) var(--ix-spacing-xs) var(--ix-spacing-xs);
     border-radius: var(--ix-border-radius-sm);
     font-size: var(--ix-font-size-md);
     font-weight: var(--ix-font-weight-medium);
-    /* Samme farge som en tertiary-knapp — labelen *er* en knapp visuelt. */
+    /* Ser ut som en tertiary-knapp. */
     color: var(--ix-color-component-button-tertiary-foreground-default);
     cursor: pointer;
-    /* Myk hover-overgang på klikkflaten (samme token som chevron-en under). */
-    transition: 
+    transition:
         background-color var(--ix-transition-duration) var(--ix-transition-animation),
         outline-color var(--ix-transition-duration) var(--ix-transition-animation);
     outline: var(--ix-outline-width-default) solid transparent;
     outline-offset: calc(var(--ix-outline-offset-default) * -1);
-    /* Skjul native disclosure-marker (trekant) i alle nettlesere. */
     list-style: none;
 }
 
@@ -52,22 +30,18 @@
     display: none;
 }
 
-/* Hover — subtil flate rundt labelen, samme token som tertiary-knappen. */
 .ix-read-more > summary:hover {
     background-color: var(--ix-color-component-button-tertiary-fill-default-hover);
 }
 
-/* Active — noe tydeligere flate ved trykk. */
 .ix-read-more > summary:active {
     background-color: var(--ix-color-component-button-tertiary-fill-default-active);
 }
 
-/* Focus — synlig, konsistent ring (samme som resten av systemet). */
 .ix-read-more > summary:focus-visible {
     outline-color: var(--ix-color-border-focus-default);
 }
 
-/* Chevron *foran* labelen som indikerer åpen/lukket tilstand. */
 .ix-read-more > summary::before {
     content: '';
     flex: 0 0 auto;
@@ -87,37 +61,26 @@
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
-/* Expanded: chevron peker opp. */
 .ix-read-more[open] > summary::before {
     transform: rotate(180deg);
 }
 
-/* Innholdsområde. Luft både over streken (gap mellom knappen og innholdet) og
- * inne i innholdet, slik at streken starter litt under knappen og slutter tett
- * på siste tekstlinje. I tillegg et venstre-innrykk som knytter innholdet til
- * labelen: venstrekanten — og dermed streken under — treffer chevronens senter,
- * mens teksten flukter med label-teksten. Innrykket regnes ut fra summary-ens
- * venstre padding, ikonbredden og gapet. */
+/* Innrykket legger streken under chevronens senter og teksten på linje med
+ * label-teksten. */
 .ix-read-more__content {
-    /* Gapet mot knappen ligger utenfor streken, så det blir faktisk tomt. */
     margin-block-start: var(--ix-spacing-2xs);
     padding-block: var(--ix-spacing-2xs);
-    /* Fram til chevronens senter. Halve kantbredden trekkes fra slik at det er
-     * streken selv, ikke kanten av den, som sentreres på ikonet. */
+    /* Halve kantbredden trekkes fra, så streken selv sentreres på ikonet. */
     margin-inline-start: calc(
         var(--ix-spacing-xs) + var(--ix-font-size-xl) / 2 - var(--ix-border-width-default) / 2
     );
-    /* Resten av veien fram til label-teksten: andre halvdel av ikonet + gapet. */
     padding-inline-start: calc(
         var(--ix-font-size-xl) / 2 + var(--ix-spacing-2xs) - var(--ix-border-width-default) / 2
     );
     padding-inline-end: var(--ix-spacing-md);
 }
 
-/* Vertikal skillelinje langs venstre kant av innholdet når seksjonen er åpen —
- * sentrert rett under chevronen (se innrykket over), slik at den leses som en
- * fortsettelse av labelen. Scopet til [open] slik at streken ikke vises under
- * lukke-animasjonen. Samme border-token som Divider. */
+/* Bare når åpen, så streken ikke vises under lukke-animasjonen. */
 .ix-read-more[open] > .ix-read-more__content {
     border-inline-start: var(--ix-border-default);
 }
@@ -130,10 +93,8 @@
     margin-bottom: 0;
 }
 
-/* Myk åpne/lukke-animasjon som progressiv enhancement. Krever interpolate-size +
- * ::details-content + transition-behavior:allow-discrete (Chrome/Edge 129+,
- * Safari 17.2+). Nettlesere uten støtte hopper bare åpent/lukket — fortsatt fullt
- * funksjonelt. */
+/* Progressiv enhancement: uten støtte (Chrome/Edge 129+, Safari 17.2+) hopper
+ * seksjonen bare åpen/lukket. */
 /* stylelint-disable plugin/no-unsupported-browser-features */
 @supports (interpolate-size: allow-keywords) {
     .ix-read-more::details-content {

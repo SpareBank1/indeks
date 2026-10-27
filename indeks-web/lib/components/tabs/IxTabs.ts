@@ -1,55 +1,17 @@
 /**
- * IxTabs — ARIA-lim for faner (tabs) i light DOM.
+ * IxTabs — ARIA-lim for faner i light DOM. Forfatteren skriver en liste med
+ * faner og ett panel per fane; <ix-tabs> kobler dem med ARIA, roving tabindex,
+ * tastaturnavigasjon og panel-visning. Portet fra u-elements (u-tabs), men uten
+ * Shadow DOM, slik at CSS treffer custom elementene og ARIA-relasjonene virker
+ * på tvers.
  *
- * ## Designfilosofi
- *
- * Komponenten erstatter ingen native elementer. Forfatteren skriver semantisk
- * HTML — en liste med faner og ett panel per fane — og <ix-tabs> kobler dem
- * sammen med ARIA, roving tabindex, tastaturnavigasjon og panel-visning.
- * Logikken er portet fra u-elements (u-tabs), men til Indeks' light-DOM-
- * konvensjon (ingen Shadow DOM, ingen ::slotted).
- *
- * Fire custom elements samarbeider:
- *   - <ix-tabs>       — rot og koordinator. Eier all kabling og tastatur.
- *   - <ix-tab-list>   — role="tablist", horisontal orientering.
- *   - <ix-tab>        — role="tab", én per fane.
- *   - <ix-tab-panel>  — role="tabpanel", ett innholdspanel per fane.
- *
- * Underelementene setter kun sin egen `role` (så de fungerer isolert); <ix-tabs>
- * er den autoritative koordinatoren og kjører ved connectedCallback.
- *
- * ## Hva <ix-tabs> gjør
- *
- * 1. Setter role="tablist" + aria-orientation="horizontal" på tab-lista,
- *    role="tab" på fanene og role="tabpanel" på panelene.
- * 2. Genererer stabile IDer på faner og paneler (der de mangler) og setter opp
- *    kryssreferansene aria-controls (fane → panel) og aria-labelledby
- *    (panel → fane). Eksisterende IDer og aria-controls respekteres. Fane[i]
- *    kobles til panel[i], eller til panelet fanens aria-controls peker på.
- * 3. Manuell aktivering: piltast (Venstre/Høyre) og Home/End flytter kun FOKUS
- *    via roving tabindex (fokusert fane får tabindex=0, resten -1).
- *    Piltast-navigasjonen looper rundt endene. Enter/Space (og klikk) aktiverer
- *    den fokuserte fanen.
- * 4. Kun én fane er valgt om gangen. Ved aktivering flyttes aria-selected +
- *    tabindex til ny fane, tilhørende panel vises, øvrige skjules ([hidden] +
- *    aria-hidden). Panelet gjøres ikke fokuserbart — det er ikke en egen
- *    tab-stopp; innholdet i panelet bærer sin egen fokusrekkefølge.
- *    Fane→panel-kobling skjer via delt data-value (ellers aria-controls,
- *    ellers posisjon) — se _getPanel.
- * 5. Minst én fane er valgt ved mount — enten den som har aria-selected="true"
- *    i markup, ellers den første fanen.
- * 6. Ved aktivering (klikk/tastatur) sendes et bubbling CustomEvent('change')
- *    på <ix-tabs> slik at en React-wrapper kan lese aria-selected og kalle
- *    onChange. Programmatisk init og ekstern (kontrollert) synk sender IKKE
- *    change — kun ekte brukerinteraksjon.
- * 7. En MutationObserver re-wirer når faner/paneler legges til eller fjernes
- *    (typisk React conditional rendering), og reagerer på ekstern endring av
- *    aria-selected (kontrollert React-modus) ved å reconcile-e resten.
- *
- * ## Ingen Shadow DOM
- *
- * Light DOM slik at CSS fra @sb1/indeks-css treffer custom elementene
- * direkte, og ARIA-relasjonene fungerer på tvers av elementene.
+ * - Manuell aktivering: piltaster og Home/End flytter bare fokus; Enter/Space
+ *   og klikk aktiverer. Panelet er ikke en egen tab-stopp.
+ * - Fane og panel kobles via aria-controls, ellers delt data-value, ellers
+ *   posisjon (se _getPanel).
+ * - Ved klikk/tastatur sendes et bubbling `change` på <ix-tabs>. Init og
+ *   ekstern (kontrollert) synk sender ikke change.
+ * - Underelementene setter bare sin egen `role`; <ix-tabs> er koordinatoren.
  *
  * @example
  * <ix-tabs class="ix-tabs">
@@ -80,7 +42,6 @@ function isPanel(el: Element): el is HTMLElement {
 }
 
 export class IxTabs extends HTMLElement {
-    // Én instansvariabel per ressurs som må ryddes i disconnectedCallback.
     private _mutationObserver: MutationObserver | null = null;
     private _clickListener: ((e: MouseEvent) => void) | null = null;
     private _keydownListener: ((e: KeyboardEvent) => void) | null = null;
@@ -182,7 +143,6 @@ export class IxTabs extends HTMLElement {
             return;
         }
 
-        // Roller + ID-er + kryssreferanser. Respekter alt forfatteren har satt.
         tabs.forEach((tab, i) => {
             if (!tab.getAttribute(ROLE)) tab.setAttribute(ROLE, 'tab');
             if (!tab.id) tab.id = `ix-tab-${this._instanceId}-${i}`;
