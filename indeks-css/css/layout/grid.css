@@ -1,75 +1,90 @@
+/* Attributtvariantene setter bare --ii-grid-*. Egenskapene settes her på 0,1,0,
+ * så en utility-klasse som .ix-md-grid-cols-3 eller .ix-gap-sm vinner på
+ * rekkefølgen, også mot attributter som ix-grid[cols="1"] (0,1,1). Variablene
+ * får startverdien sin her, så et nestet grid ikke arver dem. Klassevariantene
+ * er 0,1,0 og setter egenskapene direkte. */
 :is(ix-grid, .ix-grid) {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--ix-spacing-md);
+    --ii-grid-display: grid;
+    --ii-grid-cols: repeat(12, minmax(0, 1fr));
+    --ii-grid-rows: none;
+    --ii-grid-gap: var(--ix-spacing-md);
+    --ii-grid-align: normal;
+    --ii-grid-justify: normal;
+
+    display: var(--ii-grid-display);
+    grid-template-columns: var(--ii-grid-cols);
+    grid-template-rows: var(--ii-grid-rows);
+    gap: var(--ii-grid-gap);
+    align-items: var(--ii-grid-align);
+    justify-items: var(--ii-grid-justify);
 }
 
 /* --- Kolonner --- */
 
-ix-grid[cols="1"]  { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-ix-grid[cols="2"]  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-ix-grid[cols="3"]  { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-ix-grid[cols="4"]  { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-ix-grid[cols="5"]  { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-ix-grid[cols="6"]  { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-ix-grid[cols="7"]  { grid-template-columns: repeat(7, minmax(0, 1fr)); }
-ix-grid[cols="8"]  { grid-template-columns: repeat(8, minmax(0, 1fr)); }
-ix-grid[cols="9"]  { grid-template-columns: repeat(9, minmax(0, 1fr)); }
-ix-grid[cols="10"] { grid-template-columns: repeat(10, minmax(0, 1fr)); }
-ix-grid[cols="11"] { grid-template-columns: repeat(11, minmax(0, 1fr)); }
-ix-grid[cols="12"] { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+ix-grid[cols="1"]  { --ii-grid-cols: repeat(1, minmax(0, 1fr)); }
+ix-grid[cols="2"]  { --ii-grid-cols: repeat(2, minmax(0, 1fr)); }
+ix-grid[cols="3"]  { --ii-grid-cols: repeat(3, minmax(0, 1fr)); }
+ix-grid[cols="4"]  { --ii-grid-cols: repeat(4, minmax(0, 1fr)); }
+ix-grid[cols="5"]  { --ii-grid-cols: repeat(5, minmax(0, 1fr)); }
+ix-grid[cols="6"]  { --ii-grid-cols: repeat(6, minmax(0, 1fr)); }
+ix-grid[cols="7"]  { --ii-grid-cols: repeat(7, minmax(0, 1fr)); }
+ix-grid[cols="8"]  { --ii-grid-cols: repeat(8, minmax(0, 1fr)); }
+ix-grid[cols="9"]  { --ii-grid-cols: repeat(9, minmax(0, 1fr)); }
+ix-grid[cols="10"] { --ii-grid-cols: repeat(10, minmax(0, 1fr)); }
+ix-grid[cols="11"] { --ii-grid-cols: repeat(11, minmax(0, 1fr)); }
+ix-grid[cols="12"] { --ii-grid-cols: repeat(12, minmax(0, 1fr)); }
 
 /* Auto-fit: tilpasser antall kolonner til tilgjengelig plass, strekker celler */
-ix-grid[cols="auto-fit-xs"] { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-ix-grid[cols="auto-fit-sm"] { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-ix-grid[cols="auto-fit-md"] { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-ix-grid[cols="auto-fit-lg"] { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+ix-grid[cols="auto-fit-xs"] { --ii-grid-cols: repeat(auto-fit, minmax(150px, 1fr)); }
+ix-grid[cols="auto-fit-sm"] { --ii-grid-cols: repeat(auto-fit, minmax(200px, 1fr)); }
+ix-grid[cols="auto-fit-md"] { --ii-grid-cols: repeat(auto-fit, minmax(250px, 1fr)); }
+ix-grid[cols="auto-fit-lg"] { --ii-grid-cols: repeat(auto-fit, minmax(300px, 1fr)); }
 
 /* Auto-fill: tilpasser antall kolonner til tilgjengelig plass, beholder cellestørrelse */
-ix-grid[cols="auto-fill-xs"] { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-ix-grid[cols="auto-fill-sm"] { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-ix-grid[cols="auto-fill-md"] { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-ix-grid[cols="auto-fill-lg"] { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+ix-grid[cols="auto-fill-xs"] { --ii-grid-cols: repeat(auto-fill, minmax(150px, 1fr)); }
+ix-grid[cols="auto-fill-sm"] { --ii-grid-cols: repeat(auto-fill, minmax(200px, 1fr)); }
+ix-grid[cols="auto-fill-md"] { --ii-grid-cols: repeat(auto-fill, minmax(250px, 1fr)); }
+ix-grid[cols="auto-fill-lg"] { --ii-grid-cols: repeat(auto-fill, minmax(300px, 1fr)); }
 
 /* --- Rader --- */
 
-ix-grid[rows="1"] { grid-template-rows: repeat(1, minmax(0, 1fr)); }
-ix-grid[rows="2"] { grid-template-rows: repeat(2, minmax(0, 1fr)); }
-ix-grid[rows="3"] { grid-template-rows: repeat(3, minmax(0, 1fr)); }
-ix-grid[rows="4"] { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+ix-grid[rows="1"] { --ii-grid-rows: repeat(1, minmax(0, 1fr)); }
+ix-grid[rows="2"] { --ii-grid-rows: repeat(2, minmax(0, 1fr)); }
+ix-grid[rows="3"] { --ii-grid-rows: repeat(3, minmax(0, 1fr)); }
+ix-grid[rows="4"] { --ii-grid-rows: repeat(4, minmax(0, 1fr)); }
 
 /* --- Gap --- */
 
-ix-grid[gap="none"] { gap: 0; }
-ix-grid[gap="2xs"]  { gap: var(--ix-spacing-2xs); }
-ix-grid[gap="xs"]   { gap: var(--ix-spacing-xs); }
-ix-grid[gap="sm"]   { gap: var(--ix-spacing-sm); }
-ix-grid[gap="md"]   { gap: var(--ix-spacing-md); }
-ix-grid[gap="lg"]   { gap: var(--ix-spacing-lg); }
-ix-grid[gap="xl"]   { gap: var(--ix-spacing-xl); }
-ix-grid[gap="2xl"]  { gap: var(--ix-spacing-2xl); }
-ix-grid[gap="3xl"]  { gap: var(--ix-spacing-3xl); }
-ix-grid[gap="4xl"]  { gap: var(--ix-spacing-4xl); }
-ix-grid[gap="5xl"]  { gap: var(--ix-spacing-5xl); }
+ix-grid[gap="none"] { --ii-grid-gap: 0; }
+ix-grid[gap="2xs"]  { --ii-grid-gap: var(--ix-spacing-2xs); }
+ix-grid[gap="xs"]   { --ii-grid-gap: var(--ix-spacing-xs); }
+ix-grid[gap="sm"]   { --ii-grid-gap: var(--ix-spacing-sm); }
+ix-grid[gap="md"]   { --ii-grid-gap: var(--ix-spacing-md); }
+ix-grid[gap="lg"]   { --ii-grid-gap: var(--ix-spacing-lg); }
+ix-grid[gap="xl"]   { --ii-grid-gap: var(--ix-spacing-xl); }
+ix-grid[gap="2xl"]  { --ii-grid-gap: var(--ix-spacing-2xl); }
+ix-grid[gap="3xl"]  { --ii-grid-gap: var(--ix-spacing-3xl); }
+ix-grid[gap="4xl"]  { --ii-grid-gap: var(--ix-spacing-4xl); }
+ix-grid[gap="5xl"]  { --ii-grid-gap: var(--ix-spacing-5xl); }
 
 /* --- Align (align-items) --- */
 
-ix-grid[align="start"]   { align-items: start; }
-ix-grid[align="end"]     { align-items: end; }
-ix-grid[align="center"]  { align-items: center; }
-ix-grid[align="stretch"] { align-items: stretch; }
+ix-grid[align="start"]   { --ii-grid-align: start; }
+ix-grid[align="end"]     { --ii-grid-align: end; }
+ix-grid[align="center"]  { --ii-grid-align: center; }
+ix-grid[align="stretch"] { --ii-grid-align: stretch; }
 
 /* --- Justify (justify-items) --- */
 
-ix-grid[justify="start"]   { justify-items: start; }
-ix-grid[justify="end"]     { justify-items: end; }
-ix-grid[justify="center"]  { justify-items: center; }
-ix-grid[justify="stretch"] { justify-items: stretch; }
+ix-grid[justify="start"]   { --ii-grid-justify: start; }
+ix-grid[justify="end"]     { --ii-grid-justify: end; }
+ix-grid[justify="center"]  { --ii-grid-justify: center; }
+ix-grid[justify="stretch"] { --ii-grid-justify: stretch; }
 
 /* --- Inline --- */
 
 ix-grid[inline] {
-    display: inline-grid;
+    --ii-grid-display: inline-grid;
 }
 
 /* --- CSS-klasser for bruk på vanlige elementer --- */
@@ -142,30 +157,32 @@ ix-grid[inline] {
 
 /* --- Col-start/end (settes på barn) --- */
 
-.ix-col-start-1  { grid-column-start: 1; }
-.ix-col-start-2  { grid-column-start: 2; }
-.ix-col-start-3  { grid-column-start: 3; }
-.ix-col-start-4  { grid-column-start: 4; }
-.ix-col-start-5  { grid-column-start: 5; }
-.ix-col-start-6  { grid-column-start: 6; }
-.ix-col-start-7  { grid-column-start: 7; }
-.ix-col-start-8  { grid-column-start: 8; }
-.ix-col-start-9  { grid-column-start: 9; }
-.ix-col-start-10 { grid-column-start: 10; }
-.ix-col-start-11 { grid-column-start: 11; }
-.ix-col-start-12 { grid-column-start: 12; }
-.ix-col-start-13 { grid-column-start: 13; }
+/* Inni et grid veier start og slutt like mye som colspan-attributtet (0,2,0)
+ * og står etter det, så colspan="6" og ix-col-start-4 kan kombineres. */
+:is(ix-grid, .ix-grid) > .ix-col-start-1,  .ix-col-start-1  { grid-column-start: 1; }
+:is(ix-grid, .ix-grid) > .ix-col-start-2,  .ix-col-start-2  { grid-column-start: 2; }
+:is(ix-grid, .ix-grid) > .ix-col-start-3,  .ix-col-start-3  { grid-column-start: 3; }
+:is(ix-grid, .ix-grid) > .ix-col-start-4,  .ix-col-start-4  { grid-column-start: 4; }
+:is(ix-grid, .ix-grid) > .ix-col-start-5,  .ix-col-start-5  { grid-column-start: 5; }
+:is(ix-grid, .ix-grid) > .ix-col-start-6,  .ix-col-start-6  { grid-column-start: 6; }
+:is(ix-grid, .ix-grid) > .ix-col-start-7,  .ix-col-start-7  { grid-column-start: 7; }
+:is(ix-grid, .ix-grid) > .ix-col-start-8,  .ix-col-start-8  { grid-column-start: 8; }
+:is(ix-grid, .ix-grid) > .ix-col-start-9,  .ix-col-start-9  { grid-column-start: 9; }
+:is(ix-grid, .ix-grid) > .ix-col-start-10, .ix-col-start-10 { grid-column-start: 10; }
+:is(ix-grid, .ix-grid) > .ix-col-start-11, .ix-col-start-11 { grid-column-start: 11; }
+:is(ix-grid, .ix-grid) > .ix-col-start-12, .ix-col-start-12 { grid-column-start: 12; }
+:is(ix-grid, .ix-grid) > .ix-col-start-13, .ix-col-start-13 { grid-column-start: 13; }
 
-.ix-col-end-1  { grid-column-end: 1; }
-.ix-col-end-2  { grid-column-end: 2; }
-.ix-col-end-3  { grid-column-end: 3; }
-.ix-col-end-4  { grid-column-end: 4; }
-.ix-col-end-5  { grid-column-end: 5; }
-.ix-col-end-6  { grid-column-end: 6; }
-.ix-col-end-7  { grid-column-end: 7; }
-.ix-col-end-8  { grid-column-end: 8; }
-.ix-col-end-9  { grid-column-end: 9; }
-.ix-col-end-10 { grid-column-end: 10; }
-.ix-col-end-11 { grid-column-end: 11; }
-.ix-col-end-12 { grid-column-end: 12; }
-.ix-col-end-13 { grid-column-end: 13; }
+:is(ix-grid, .ix-grid) > .ix-col-end-1,  .ix-col-end-1  { grid-column-end: 1; }
+:is(ix-grid, .ix-grid) > .ix-col-end-2,  .ix-col-end-2  { grid-column-end: 2; }
+:is(ix-grid, .ix-grid) > .ix-col-end-3,  .ix-col-end-3  { grid-column-end: 3; }
+:is(ix-grid, .ix-grid) > .ix-col-end-4,  .ix-col-end-4  { grid-column-end: 4; }
+:is(ix-grid, .ix-grid) > .ix-col-end-5,  .ix-col-end-5  { grid-column-end: 5; }
+:is(ix-grid, .ix-grid) > .ix-col-end-6,  .ix-col-end-6  { grid-column-end: 6; }
+:is(ix-grid, .ix-grid) > .ix-col-end-7,  .ix-col-end-7  { grid-column-end: 7; }
+:is(ix-grid, .ix-grid) > .ix-col-end-8,  .ix-col-end-8  { grid-column-end: 8; }
+:is(ix-grid, .ix-grid) > .ix-col-end-9,  .ix-col-end-9  { grid-column-end: 9; }
+:is(ix-grid, .ix-grid) > .ix-col-end-10, .ix-col-end-10 { grid-column-end: 10; }
+:is(ix-grid, .ix-grid) > .ix-col-end-11, .ix-col-end-11 { grid-column-end: 11; }
+:is(ix-grid, .ix-grid) > .ix-col-end-12, .ix-col-end-12 { grid-column-end: 12; }
+:is(ix-grid, .ix-grid) > .ix-col-end-13, .ix-col-end-13 { grid-column-end: 13; }

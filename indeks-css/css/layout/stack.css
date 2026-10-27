@@ -1,96 +1,96 @@
+/* Variantene setter bare --ii-stack-*. Egenskapene settes her på 0,1,0, så en
+ * utility-klasse som .ix-items-start eller .ix-gap-sm vinner på rekkefølgen,
+ * også mot attributter som ix-stack[horizontal] (0,1,1). Variablene får
+ * startverdien sin her, så en nestet stack ikke arver dem. */
 :is(ix-stack, .ix-stack) {
+    --ii-stack-direction: column;
+    --ii-stack-align: flex-start;
+    --ii-stack-wrap: wrap;
+    --ii-stack-gap: var(--ix-spacing-md);
+
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: var(--ix-spacing-md);
+    flex-direction: var(--ii-stack-direction);
+    flex-wrap: var(--ii-stack-wrap);
+    align-items: var(--ii-stack-align);
+    gap: var(--ii-stack-gap);
 }
 
 /* --- Vertikal --- */
 
-:is(ix-stack[vertical], ix-stack.ix-stack-vertical, .ix-stack-vertical) {
-    flex-direction: column;
-    align-items: flex-start;
+ix-stack[vertical], .ix-stack-vertical {
+    --ii-stack-direction: column;
+    --ii-stack-align: flex-start;
 }
 
-:is(ix-stack[vertical="center"], ix-stack.ix-stack-vertical-center, .ix-stack-vertical-center) {
-    flex-direction: column;
-    align-items: center;
+ix-stack[vertical="center"], .ix-stack-vertical-center {
+    --ii-stack-direction: column;
+    --ii-stack-align: center;
 }
 
-:is(ix-stack[vertical="end"], ix-stack.ix-stack-vertical-end, .ix-stack-vertical-end) {
-    flex-direction: column;
-    align-items: flex-end;
+ix-stack[vertical="end"], .ix-stack-vertical-end {
+    --ii-stack-direction: column;
+    --ii-stack-align: flex-end;
 }
 
-:is(ix-stack[vertical="stretch"], ix-stack.ix-stack-vertical-stretch, .ix-stack-vertical-stretch) {
-    flex-direction: column;
-    align-items: stretch;
+ix-stack[vertical="stretch"], .ix-stack-vertical-stretch {
+    --ii-stack-direction: column;
+    --ii-stack-align: stretch;
 }
 
 /* --- Horisontal --- */
 
-:is(ix-stack[horizontal], ix-stack[horizontal="center"], ix-stack.ix-stack-horizontal, .ix-stack-horizontal),
-:is(ix-stack.ix-stack-horizontal-center, .ix-stack-horizontal-center) {
-    flex-direction: row;
-    align-items: center;
+ix-stack[horizontal], .ix-stack-horizontal, .ix-stack-horizontal-center {
+    --ii-stack-direction: row;
+    --ii-stack-align: center;
 }
 
-:is(ix-stack[horizontal="start"], ix-stack.ix-stack-horizontal-start, .ix-stack-horizontal-start) {
-    flex-direction: row;
-    align-items: flex-start;
+ix-stack[horizontal="start"], .ix-stack-horizontal-start {
+    --ii-stack-direction: row;
+    --ii-stack-align: flex-start;
 }
 
-:is(ix-stack[horizontal="end"], ix-stack.ix-stack-horizontal-end, .ix-stack-horizontal-end) {
-    flex-direction: row;
-    align-items: flex-end;
+ix-stack[horizontal="end"], .ix-stack-horizontal-end {
+    --ii-stack-direction: row;
+    --ii-stack-align: flex-end;
 }
 
-:is(ix-stack[horizontal="stretch"], ix-stack.ix-stack-horizontal-stretch, .ix-stack-horizontal-stretch) {
-    flex-direction: row;
-    align-items: stretch;
+ix-stack[horizontal="stretch"], .ix-stack-horizontal-stretch {
+    --ii-stack-direction: row;
+    --ii-stack-align: stretch;
 }
 
 /* --- Gap --- */
 
-ix-stack[gap="none"] { gap: 0; }
-ix-stack[gap="2xs"]  { gap: var(--ix-spacing-2xs); }
-ix-stack[gap="xs"]   { gap: var(--ix-spacing-xs); }
-ix-stack[gap="sm"]   { gap: var(--ix-spacing-sm); }
-ix-stack[gap="md"]   { gap: var(--ix-spacing-md); }
-ix-stack[gap="lg"]   { gap: var(--ix-spacing-lg); }
-ix-stack[gap="xl"]   { gap: var(--ix-spacing-xl); }
-ix-stack[gap="2xl"]  { gap: var(--ix-spacing-2xl); }
-ix-stack[gap="3xl"]  { gap: var(--ix-spacing-3xl); }
-ix-stack[gap="4xl"]  { gap: var(--ix-spacing-4xl); }
-ix-stack[gap="5xl"]  { gap: var(--ix-spacing-5xl); }
+ix-stack[gap="none"] { --ii-stack-gap: 0; }
+ix-stack[gap="2xs"]  { --ii-stack-gap: var(--ix-spacing-2xs); }
+ix-stack[gap="xs"]   { --ii-stack-gap: var(--ix-spacing-xs); }
+ix-stack[gap="sm"]   { --ii-stack-gap: var(--ix-spacing-sm); }
+ix-stack[gap="md"]   { --ii-stack-gap: var(--ix-spacing-md); }
+ix-stack[gap="lg"]   { --ii-stack-gap: var(--ix-spacing-lg); }
+ix-stack[gap="xl"]   { --ii-stack-gap: var(--ix-spacing-xl); }
+ix-stack[gap="2xl"]  { --ii-stack-gap: var(--ix-spacing-2xl); }
+ix-stack[gap="3xl"]  { --ii-stack-gap: var(--ix-spacing-3xl); }
+ix-stack[gap="4xl"]  { --ii-stack-gap: var(--ix-spacing-4xl); }
+ix-stack[gap="5xl"]  { --ii-stack-gap: var(--ix-spacing-5xl); }
 
 /* --- Modifikatorer --- */
 
-:is(ix-stack[reverse], ix-stack.ix-stack-reverse, .ix-stack.ix-stack-reverse) {
-    flex-direction: column-reverse;
+/* Står etter retningene, og horisontal + reverse har ett ledd mer. */
+ix-stack[reverse], .ix-stack-reverse {
+    --ii-stack-direction: column-reverse;
 }
 
+ix-stack[horizontal][reverse],
 :is(
-    ix-stack[horizontal][reverse],
-    ix-stack[horizontal="center"][reverse],
-    ix-stack[horizontal="start"][reverse],
-    ix-stack[horizontal="end"][reverse],
-    ix-stack[horizontal="stretch"][reverse],
-    ix-stack.ix-stack-horizontal.ix-stack-reverse,
-    ix-stack.ix-stack-horizontal-center.ix-stack-reverse,
-    ix-stack.ix-stack-horizontal-start.ix-stack-reverse,
-    ix-stack.ix-stack-horizontal-end.ix-stack-reverse,
-    ix-stack.ix-stack-horizontal-stretch.ix-stack-reverse,
-    .ix-stack-horizontal.ix-stack-reverse,
-    .ix-stack-horizontal-center.ix-stack-reverse,
-    .ix-stack-horizontal-start.ix-stack-reverse,
-    .ix-stack-horizontal-end.ix-stack-reverse,
-    .ix-stack-horizontal-stretch.ix-stack-reverse
-) {
-    flex-direction: row-reverse;
+    .ix-stack-horizontal,
+    .ix-stack-horizontal-center,
+    .ix-stack-horizontal-start,
+    .ix-stack-horizontal-end,
+    .ix-stack-horizontal-stretch
+).ix-stack-reverse {
+    --ii-stack-direction: row-reverse;
 }
 
-:is(ix-stack[nowrap], ix-stack.ix-stack-nowrap, .ix-stack-nowrap) {
-    flex-wrap: nowrap;
+ix-stack[nowrap], .ix-stack-nowrap {
+    --ii-stack-wrap: nowrap;
 }
