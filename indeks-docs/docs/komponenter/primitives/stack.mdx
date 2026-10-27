@@ -30,7 +30,7 @@ Stack finnes i to bruksformer i HTML:
 | Form | Eksempel | Styring |
 |------|---------|---------|
 | **Custom element** | `<ix-stack horizontal gap="md">` | Attributter direkte på elementet |
-| **CSS-klasse** | `<div class="ix-stack-horizontal ix-gap-md">` | Modifier-klasser — attributter virker ikke her |
+| **CSS-klasse** | `<div class="ix-stack ix-stack-horizontal ix-gap-md">` | Modifier-klasser — attributter virker ikke her |
 
 `<ix-stack>` bruker attributter:
 
@@ -319,7 +319,7 @@ Attributter kan bare brukes på `<ix-stack>`-elementet, ikke på vanlige `<div>`
 
 ### CSS-klasser
 
-Klasser fungerer på både `<ix-stack>` og vanlige elementer som `<div>`.
+Klasser fungerer på både `<ix-stack>` og vanlige elementer som `<div>`. Retnings- og modifierklassene virker bare sammen med `ix-stack`.
 
 | Klasse | Beskrivelse |
 |--------|-------------|
@@ -370,7 +370,7 @@ Støtter alle standard HTML-attributter for det rendrede elementet (`id`, `style
 
 ## Tilpasning med CSS
 
-Stack-komponentene har ingen egne CSS custom properties. Bruk `ix-justify-*` og `ix-items-*` utility-klasser for ytterligere tilpasning:
+Stack-komponentene har ingen egne CSS custom properties. Bruk `ix-justify-*` og `ix-items-*` utility-klasser. De vinner over attributtene og klassene på samme element, også `horizontal`, `vertical` og `gap`:
 
 ```html
 <ix-stack horizontal gap="md" class="ix-justify-between">
