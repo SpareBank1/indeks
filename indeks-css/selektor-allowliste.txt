@@ -32,10 +32,6 @@ components/pagination.css
 components/popover.css
 components/progress-bar.css
 
-# #332 Accordion, ReadMore og Tabs
-components/accordion.css
-components/read-more.css
-components/tabs.css
 
 # #333 Table, LinkText og Text
 components/table.css
