@@ -27,9 +27,8 @@ export const AccordionItem = forwardRef<HTMLDetailsElement, AccordionItemProps>(
         <details
             ref={ref}
             className={className}
-            // `open` brukes som start-tilstand (uncontrolled); native <details>
-            // styrer videre åpne/lukke. `|| undefined` holder attributtet ute av
-            // DOM når seksjonen ikke er åpen.
+            // Start-tilstand; native <details> styrer videre. `|| undefined`
+            // holder attributtet ute av DOM når lukket.
             open={defaultOpen || undefined}
         >
             {children}
