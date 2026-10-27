@@ -34,15 +34,15 @@
 }
 
 .ix-card:hover {
-    --ii-card-border-color: var(--ix-color-border-main-hover);
-    --ii-card-ring-color: var(--ix-color-border-main-hover);
+    --ii-card-border-color: var(--ix-color-border-main-default-hover);
+    --ii-card-ring-color: var(--ix-color-border-main-default-hover);
 }
 
 /* :active treffer også forfedre til den aktiverte lenken, så kortet får
    pressed-feedback uansett hvor på flaten man trykker. */
 .ix-card:active {
-    --ii-card-border-color: var(--ix-color-border-main-active);
-    --ii-card-ring-color: var(--ix-color-border-main-active);
+    --ii-card-border-color: var(--ix-color-border-main-default-active);
+    --ii-card-ring-color: var(--ix-color-border-main-default-active);
 }
 
 /* ── Dashed ──────────────────────────────────────────────────────────────────
