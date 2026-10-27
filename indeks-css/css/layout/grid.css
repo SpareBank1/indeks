@@ -1,8 +1,5 @@
-/* Attributtvariantene setter bare --ii-grid-*. Egenskapene settes her på 0,1,0,
- * så en utility-klasse som .ix-md-grid-cols-3 eller .ix-gap-sm vinner på
- * rekkefølgen, også mot attributter som ix-grid[cols="1"] (0,1,1). Variablene
- * får startverdien sin her, så et nestet grid ikke arver dem. Klassevariantene
- * er 0,1,0 og setter egenskapene direkte. */
+/* Variantene setter bare variabler, så utility-klasser vinner. Grunnreglene gir
+   variablene startverdi, så et nestet grid ikke arver dem. */
 :is(ix-grid, .ix-grid) {
     --ii-grid-display: grid;
     --ii-grid-cols: repeat(12, minmax(0, 1fr));
@@ -19,8 +16,6 @@
     justify-items: var(--ii-grid-justify);
 }
 
-/* --- Kolonner --- */
-
 ix-grid[cols="1"]  { --ii-grid-cols: repeat(1, minmax(0, 1fr)); }
 ix-grid[cols="2"]  { --ii-grid-cols: repeat(2, minmax(0, 1fr)); }
 ix-grid[cols="3"]  { --ii-grid-cols: repeat(3, minmax(0, 1fr)); }
@@ -34,26 +29,20 @@ ix-grid[cols="10"] { --ii-grid-cols: repeat(10, minmax(0, 1fr)); }
 ix-grid[cols="11"] { --ii-grid-cols: repeat(11, minmax(0, 1fr)); }
 ix-grid[cols="12"] { --ii-grid-cols: repeat(12, minmax(0, 1fr)); }
 
-/* Auto-fit: tilpasser antall kolonner til tilgjengelig plass, strekker celler */
 ix-grid[cols="auto-fit-xs"] { --ii-grid-cols: repeat(auto-fit, minmax(150px, 1fr)); }
 ix-grid[cols="auto-fit-sm"] { --ii-grid-cols: repeat(auto-fit, minmax(200px, 1fr)); }
 ix-grid[cols="auto-fit-md"] { --ii-grid-cols: repeat(auto-fit, minmax(250px, 1fr)); }
 ix-grid[cols="auto-fit-lg"] { --ii-grid-cols: repeat(auto-fit, minmax(300px, 1fr)); }
 
-/* Auto-fill: tilpasser antall kolonner til tilgjengelig plass, beholder cellestørrelse */
 ix-grid[cols="auto-fill-xs"] { --ii-grid-cols: repeat(auto-fill, minmax(150px, 1fr)); }
 ix-grid[cols="auto-fill-sm"] { --ii-grid-cols: repeat(auto-fill, minmax(200px, 1fr)); }
 ix-grid[cols="auto-fill-md"] { --ii-grid-cols: repeat(auto-fill, minmax(250px, 1fr)); }
 ix-grid[cols="auto-fill-lg"] { --ii-grid-cols: repeat(auto-fill, minmax(300px, 1fr)); }
 
-/* --- Rader --- */
-
 ix-grid[rows="1"] { --ii-grid-rows: repeat(1, minmax(0, 1fr)); }
 ix-grid[rows="2"] { --ii-grid-rows: repeat(2, minmax(0, 1fr)); }
 ix-grid[rows="3"] { --ii-grid-rows: repeat(3, minmax(0, 1fr)); }
 ix-grid[rows="4"] { --ii-grid-rows: repeat(4, minmax(0, 1fr)); }
-
-/* --- Gap --- */
 
 ix-grid[gap="none"] { --ii-grid-gap: 0; }
 ix-grid[gap="2xs"]  { --ii-grid-gap: var(--ix-spacing-2xs); }
@@ -67,27 +56,19 @@ ix-grid[gap="3xl"]  { --ii-grid-gap: var(--ix-spacing-3xl); }
 ix-grid[gap="4xl"]  { --ii-grid-gap: var(--ix-spacing-4xl); }
 ix-grid[gap="5xl"]  { --ii-grid-gap: var(--ix-spacing-5xl); }
 
-/* --- Align (align-items) --- */
-
 ix-grid[align="start"]   { --ii-grid-align: start; }
 ix-grid[align="end"]     { --ii-grid-align: end; }
 ix-grid[align="center"]  { --ii-grid-align: center; }
 ix-grid[align="stretch"] { --ii-grid-align: stretch; }
-
-/* --- Justify (justify-items) --- */
 
 ix-grid[justify="start"]   { --ii-grid-justify: start; }
 ix-grid[justify="end"]     { --ii-grid-justify: end; }
 ix-grid[justify="center"]  { --ii-grid-justify: center; }
 ix-grid[justify="stretch"] { --ii-grid-justify: stretch; }
 
-/* --- Inline --- */
-
 ix-grid[inline] {
     --ii-grid-display: inline-grid;
 }
-
-/* --- CSS-klasser for bruk på vanlige elementer --- */
 
 .ix-grid-cols-1  { grid-template-columns: repeat(1, minmax(0, 1fr)); }
 .ix-grid-cols-2  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -131,12 +112,6 @@ ix-grid[inline] {
     display: inline-grid;
 }
 
-/* --- Barn --- */
-
-/* colspan og rowspan setter bare --ii-grid-colspan og --ii-grid-rowspan.
- * grid-column og grid-row settes her på 0,1,0, så klassene under og utils som
- * .ix-md-col-span-6 vinner på rekkefølgen. Hvert barn får startverdien sin
- * her, så barn i et nestet grid arver ikke. */
 :is(ix-grid, .ix-grid) > * {
     --ii-grid-colspan: auto;
     --ii-grid-rowspan: auto;
@@ -144,8 +119,6 @@ ix-grid[inline] {
     grid-column: var(--ii-grid-colspan);
     grid-row: var(--ii-grid-rowspan);
 }
-
-/* --- Col-span (settes på barn via attributt eller klasse) --- */
 
 :is(ix-grid, .ix-grid) > [colspan="1"]    { --ii-grid-colspan: span 1 / span 1; }
 :is(ix-grid, .ix-grid) > [colspan="2"]    { --ii-grid-colspan: span 2 / span 2; }
@@ -175,8 +148,6 @@ ix-grid[inline] {
 .ix-col-span-12   { grid-column: span 12 / span 12; }
 .ix-col-span-full { grid-column: 1 / -1; }
 
-/* --- Row-span (settes på barn via attributt eller klasse) --- */
-
 :is(ix-grid, .ix-grid) > [rowspan="1"]    { --ii-grid-rowspan: span 1 / span 1; }
 :is(ix-grid, .ix-grid) > [rowspan="2"]    { --ii-grid-rowspan: span 2 / span 2; }
 :is(ix-grid, .ix-grid) > [rowspan="3"]    { --ii-grid-rowspan: span 3 / span 3; }
@@ -188,8 +159,6 @@ ix-grid[inline] {
 .ix-row-span-3    { grid-row: span 3 / span 3; }
 .ix-row-span-4    { grid-row: span 4 / span 4; }
 .ix-row-span-full { grid-row: 1 / -1; }
-
-/* --- Col-start/end (settes på barn) --- */
 
 .ix-col-start-1  { grid-column-start: 1; }
 .ix-col-start-2  { grid-column-start: 2; }
