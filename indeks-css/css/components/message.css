@@ -5,6 +5,10 @@
        (sirkel + glyf) — se badge-koblingen lenger ned. */
     /* Badge-diameter (fast 20px). Lokal variabel for ev. gjenbruk. */
     --ix-message-icon-size: 20px;
+    /* Tittelens linjehøyde. Lukkeknappen sentreres mot den. */
+    --ii-message-title-line-height: 1.2;
+    /* Høyden på lukkeknappen (InteractiveIcon «md»). */
+    --ii-message-close-size: 26px;
 
     display: flex;
     /* Innholdet sentreres vertikalt mot statusikonet ved kort melding (kun
@@ -65,7 +69,7 @@
    Arver tekstfarge fra roten — tittelen skal ikke ha egen farge. */
 :where(.ix-message__title) {
     font-weight: var(--ix-font-weight-medium);
-    line-height: 1.2;
+    line-height: var(--ii-message-title-line-height);
 }
 
 /* Lukkeknapp — valgfri. Selve knappen er en InteractiveIcon
@@ -73,10 +77,11 @@
    hover og fokusring. Her settes kun Message-spesifikk plassering. */
 :where(.ix-message__close) {
     flex: 0 0 auto;
-    /* Lukkeknappen er siste barn. Negativ margin trekker det store touch-målet
-       delvis inn så ikonet flukter med toppkanten uten å øke høyden unødig.
-       Vi trekker kun `xs` (ikke hele `sm`-paddingen) inn, slik at det blir litt
-       luft mellom det lille ikonet og meldingens kant. */
+    /* Lukkeknappen er siste barn. Toppmarginen sentrerer knappen mot tittelens
+       første linje, på høyde med statusikonet. Knappen er høyere enn linjen, så
+       marginen blir negativ. `em` er tittelens skriftstørrelse, fordi knappen
+       arver fonten. Til høyre trekkes knappen `xs` inn mot kanten. */
     align-self: flex-start;
-    margin: calc(var(--ix-spacing-xs) * -1) calc(var(--ix-spacing-xs) * -1) 0 0;
+    margin-block-start: calc((var(--ii-message-title-line-height) * 1em - var(--ii-message-close-size)) / 2);
+    margin-inline-end: calc(var(--ix-spacing-xs) * -1);
 }
