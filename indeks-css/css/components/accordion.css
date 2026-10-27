@@ -4,23 +4,21 @@
  * kommer gratis fra native elementer — ingen JavaScript er nødvendig. Seksjonene
  * er uavhengige (flere kan stå åpne samtidig).
  *
- * Stylingen treffer <details>/<summary> direkte inni et element med klassen
- * .ix-accordion, så seksjonene trenger ikke egne klasser for å virke. Klassene
- * (.ix-accordion__item/__header/__content) finnes likevel som eksplisitte kroker
- * for tilfeller der man vil style en struktur uten direkte <details>-barn.
+ * Seksjonen (<details>) og headeren (<summary>) styles direkte som barn av
+ * .ix-accordion. Innholdet er en generisk del og får .ix-accordion__content.
  *
  * Struktur:
  *   <div class="ix-accordion">
  *     <details>
  *       <summary>Tittel</summary>
- *       <div>Innhold</div>
+ *       <div class="ix-accordion__content">Innhold</div>
  *     </details>
  *     …
  *   </div>
  */
 
 /* Container: vertikal stabling av seksjoner i et avrundet, kantet kort. */
-:where(.ix-accordion) {
+.ix-accordion {
     display: block;
     border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
     border-radius: var(--ix-border-radius-md);
@@ -36,52 +34,44 @@
 }
 
 /* Hver seksjon = <details>. Skillelinje mellom seksjoner (ikke over den første). */
-:where(.ix-accordion) > details,
-:where(.ix-accordion__item) {
+.ix-accordion > details {
     border-top: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
 }
 
-:where(.ix-accordion) > details:first-child,
-:where(.ix-accordion__item:first-child) {
+.ix-accordion > details:first-child {
     border-top: 0;
 }
 
 /* Border-radius på første og siste summary slik at innvendig fokus-outline
  * følger containerens avrundede hjørner og ikke klippes av overflow: hidden. */
-:where(.ix-accordion) > details:first-child > summary,
-:where(.ix-accordion__item:first-child) .ix-accordion__header {
+.ix-accordion > details:first-child > summary {
     border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
         calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) 0 0;
 }
 
-:where(.ix-accordion) > details:last-child > summary,
-:where(.ix-accordion__item:last-child) .ix-accordion__header {
+.ix-accordion > details:last-child > summary {
     border-radius: 0 0 calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
         calc(var(--ix-border-radius-md) - var(--ix-border-width-default));
 }
 
 /* Når siste seksjon er åpen, fjernes bunnradius — innholdet fyller hjørnene. */
-:where(.ix-accordion) > details:last-child[open] > summary,
-:where(.ix-accordion__item:last-child[open]) .ix-accordion__header {
+.ix-accordion > details:last-child[open] > summary {
     border-radius: 0;
 }
 
 /* Eneste element: alle fire hjørner når lukket, bare topp når åpen. */
-:where(.ix-accordion) > details:only-child > summary,
-:where(.ix-accordion__item:only-child) .ix-accordion__header {
+.ix-accordion > details:only-child > summary {
     border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default));
 }
 
-:where(.ix-accordion) > details:only-child[open] > summary,
-:where(.ix-accordion__item:only-child[open]) .ix-accordion__header {
+.ix-accordion > details:only-child[open] > summary {
     border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
         calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) 0 0;
 }
 
 /* Header = <summary>: hele klikkflaten. Tittel (+ ev. prefiks-ikon) til venstre,
  * chevron til høyre (margin-inline-start:auto). */
-:where(.ix-accordion) summary,
-:where(.ix-accordion__header) {
+.ix-accordion > details > summary {
     display: flex;
     align-items: center;
     gap: var(--ix-spacing-sm);
@@ -101,27 +91,23 @@
     list-style: none;
 }
 
-:where(.ix-accordion) summary::-webkit-details-marker,
-:where(.ix-accordion__header)::-webkit-details-marker {
+.ix-accordion > details > summary::-webkit-details-marker {
     display: none;
 }
 
 /* Hover — tydelig state på klikkflaten. Ingen egen active-state: den ga en
  * synlig flash på trykk (mousedown→open→mouseup) uten å tilføre verdi. */
-:where(.ix-accordion) summary:hover,
-:where(.ix-accordion__header:hover) {
+.ix-accordion > details > summary:hover {
     background-color: var(--ix-color-surface-main-hover);
 }
 
 /* Focus — synlig, konsistent ring (samme som resten av systemet). */
-:where(.ix-accordion) summary:focus-visible,
-:where(.ix-accordion__header:focus-visible) {
+.ix-accordion > details > summary:focus-visible {
     outline-color: var(--ix-color-border-focus-default);
 }
 
 /* Chevron som indikerer åpen/lukket tilstand. Flex-barn skjøvet helt til høyre. */
-:where(.ix-accordion) summary::after,
-:where(.ix-accordion__header)::after {
+.ix-accordion > details > summary::after {
     content: '';
     flex: 0 0 auto;
     margin-inline-start: auto;
@@ -142,25 +128,21 @@
 }
 
 /* Expanded: chevron peker opp. */
-:where(.ix-accordion) > details[open] summary::after,
-:where(.ix-accordion__item[open]) .ix-accordion__header::after {
+.ix-accordion > details[open] > summary::after {
     transform: rotate(180deg);
 }
 
-/* Innholdsområde = alt i <details> som ikke er <summary>. Luft over (mellom header
- * og innhold), på sidene og under — ingen skillelinje mot headeren. */
-:where(.ix-accordion) > details > :not(summary),
-:where(.ix-accordion__content) {
+/* Innholdsområde. Luft over (mellom header og innhold), på sidene og under —
+ * ingen skillelinje mot headeren. */
+.ix-accordion__content {
     padding: var(--ix-spacing-md);
 }
 
-:where(.ix-accordion) > details > :not(summary) > :first-child,
-:where(.ix-accordion__content) > :first-child {
+.ix-accordion__content > :first-child {
     margin-top: 0;
 }
 
-:where(.ix-accordion) > details > :not(summary) > :last-child,
-:where(.ix-accordion__content) > :last-child {
+.ix-accordion__content > :last-child {
     margin-bottom: 0;
 }
 
@@ -170,7 +152,7 @@
  * funksjonelt. */
 /* stylelint-disable plugin/no-unsupported-browser-features */
 @supports (interpolate-size: allow-keywords) {
-    :where(.ix-accordion) > details::details-content {
+    .ix-accordion > details::details-content {
         block-size: 0;
         overflow: hidden;
         transition:
@@ -178,14 +160,13 @@
             content-visibility var(--ix-transition-duration) allow-discrete;
     }
 
-    :where(.ix-accordion) > details[open]::details-content {
+    .ix-accordion > details[open]::details-content {
         block-size: auto;
     }
 
     @media (prefers-reduced-motion: reduce) {
-        :where(.ix-accordion) > details::details-content,
-        :where(.ix-accordion) summary,
-        :where(.ix-accordion__header) {
+        .ix-accordion > details::details-content,
+        .ix-accordion > details > summary {
             transition: none;
         }
     }

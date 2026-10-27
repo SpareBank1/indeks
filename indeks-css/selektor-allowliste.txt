@@ -23,11 +23,6 @@ layout/stack.css
 components/form/combobox.css
 components/form/date-field.css
 
-# #332 Accordion, ReadMore og Tabs
-components/accordion.css
-components/read-more.css
-components/tabs.css
-
 # #333 Table, LinkText og Text
 components/table.css
 typography/link-text.css
