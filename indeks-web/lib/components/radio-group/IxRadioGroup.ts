@@ -1,47 +1,14 @@
 /**
- * IxRadioGroup — ARIA-lim for radioknapp-grupper.
+ * IxRadioGroup kobler ARIA mellom native radioknapper, legend og hjelpetekster.
+ * Forfatteren skriver markupen selv.
  *
- * ## Designfilosofi
- *
- * Komponenten erstatter ingen native HTML-elementer. Forfatteren skriver
- * native <input type="radio">, <label> og hjelpetekster inni <ix-radio-group>.
- * Komponenten sin eneste jobb er å sette opp ARIA-koblingene mellom dem.
- *
- * ## Hva komponenten gjør
- *
- * 1. Setter role="radiogroup" på host slik at skjermlesere annonserer gruppen
- *    med riktig rolle og leser legend-teksten som gruppens tilgjengelige navn.
- *
- * 2. Kobler legend via aria-labelledby — genererer ID på [data-field="legend"]
- *    om nødvendig og peker host til den.
- *
- * 3. Setter aria-describedby på host med IDer til description og error
- *    (description alltid først). Hopper over elementer som mangler.
- *
- * 4. Genererer stabile IDer på hvert input og setter htmlFor på matchende label
- *    om label ikke allerede har det. Respekterer alltid eksisterende IDer.
- *
- * 5. Synkroniserer name-attributt på alle inputs — name er mekanismen
- *    nettleseren bruker for mutual exclusivity (ett valg av gangen) og
- *    ArrowKey-navigasjon mellom alternativene. Alle inputs i gruppen må ha
- *    samme name. Prioritet: name på host > name på input > auto-generert.
- *
- * 6. Setter aria-live="polite" på [data-field="error"] og observerer
- *    textContent-endringer: ikke-tomt innhold → aria-invalid="true" på host;
- *    tomt → aria-invalid fjernes. aria-invalid settes kun på host (ikke per
- *    input) — det er gruppens validitet som telles, og en duplisert flagg
- *    per input gir ingen merverdi for skjermlesere.
- *
- * 7. Propagerer disabled/readonly til alle inputs via attributeChangedCallback.
- *    Per-knapp disabled bevares — settes med en WeakMap ved første _wire().
- *
- * 8. Lytter på childList på host slik at nye <input type="radio">-elementer
- *    som legges til etter mount automatisk wires (id, name, htmlFor, disabled).
- *
- * ## Ingen Shadow DOM
- *
- * Komponenten bruker light DOM slik at CSS fra @sb1/indeks-css når alle
- * delelementer direkte.
+ * - role="radiogroup" og aria-labelledby til [data-field="legend"]
+ * - aria-describedby til [data-field="description"] og [data-field="error"]
+ * - id på hver input og for på labelen i samme forelder, når de mangler
+ * - samme name på alle inputs: name på host, ellers name fra en input, ellers generert
+ * - aria-invalid="true" på host (ikke per input) når error-feltet har tekst
+ * - disabled, readonly og required på host gjelder hele gruppen
+ * - inputs som legges til etter mount, kobles på samme måte
  *
  * @example
  * <ix-radio-group>
@@ -69,8 +36,7 @@ export class IxRadioGroup extends HTMLElement {
     private _childObserver: MutationObserver | null = null;
     private _keydownListener: ((e: KeyboardEvent) => void) | null = null;
     private _instanceId = 0;
-    // Lagrer per-knapp disabled fra forfatter slik at group disable-toggle
-    // ikke overstyrer den. Bruker WeakMap for å unngå memory leak ved DOM-fjerning.
+    // Forfatterens disabled per input, så den står igjen når host-disabled fjernes.
     private _ownDisabled: WeakMap<HTMLInputElement, boolean> = new WeakMap();
 
     static get observedAttributes(): string[] {
@@ -108,14 +74,11 @@ export class IxRadioGroup extends HTMLElement {
     }
 
     private _wire(): void {
-        // ── 1. Rolle ──────────────────────────────────────────────────────────
         this.setAttribute('role', 'radiogroup');
 
-        // Counter inkrementeres alltid så description/error-IDer ikke kolliderer
-        // mellom instanser som mangler legend.
+        // Økes alltid, så description- og error-id-er ikke kolliderer når legend mangler.
         this._instanceId = ++radioGroupCounter;
 
-        // ── 2. Legend → aria-labelledby ───────────────────────────────────────
         const legend = this.querySelector<HTMLElement>('[data-field="legend"]');
         if (legend) {
             if (!legend.id) legend.id = `ix-radio-group-legend-${this._instanceId}`;
@@ -124,7 +87,6 @@ export class IxRadioGroup extends HTMLElement {
             console.warn('[ix-radio-group] Mangler [data-field="legend"]. Legg til en synlig eller visuelt skjult legend-tekst — uten den får ikke gruppen et tilgjengelig navn.');
         }
 
-        // ── 3. aria-describedby (description + error) ─────────────────────────
         const description = this.querySelector<HTMLElement>('[data-field="description"]');
         const error = this.querySelector<HTMLElement>('[data-field="error"]');
         const describedBy: string[] = [];
@@ -137,9 +99,7 @@ export class IxRadioGroup extends HTMLElement {
             if (!error.id) error.id = `ix-radio-group-error-${this._instanceId}`;
             describedBy.push(error.id);
 
-            // aria-live="polite" settes av komponenten — ikke av forfatteren.
-            // "polite" venter til skjermleseren er ferdig med å lese, i motsetning
-            // til role="alert" som impliserer "assertive" og avbryter brukeren.
+            // polite, ikke role="alert", så feilen ikke avbryter skjermleseren.
             error.setAttribute('aria-live', 'polite');
 
             this._errorObserver = new MutationObserver(() => {
@@ -158,16 +118,11 @@ export class IxRadioGroup extends HTMLElement {
             this.setAttribute('aria-describedby', describedBy.join(' '));
         }
 
-        // ── 4. Wire inputs (id, name, htmlFor, disabled-snapshot) ─────────────
         this._wireInputs();
 
-        // ── 5. required: aria-required på host + native required på første input ──
         this._syncRequired();
 
-        // ── 6. ReadOnly: blokker tastatur-endringer ───────────────────────────
-        // readOnly er en no-op på <input type="radio"> (HTML-spec), så vi må
-        // selv blokkere ArrowKeys og Space når readonly er satt på host.
-        // pointer-events: none i CSS dekker mus/touch.
+        // readOnly virker ikke på radio, så piltastene og mellomrom blokkeres her.
         this._keydownListener = (e: KeyboardEvent) => {
             if (
                 this.hasAttribute('readonly') &&
@@ -178,14 +133,7 @@ export class IxRadioGroup extends HTMLElement {
         };
         this.addEventListener('keydown', this._keydownListener);
 
-        // ── 7. Lytt på childList for dynamisk lagt til/fjernet inputs ─────────
-        // Når forfatteren legger til en ny <input type="radio"> etter mount
-        // (typisk i React conditional rendering), må den wires med samme
-        // ID/name/htmlFor/disabled-logikk som ved mount.
-        //
-        // Observerer også attributter på subtree: React kan fjerne name-attributt
-        // ved re-render (f.eks. name={undefined}), så vi må resette name når
-        // det skjer.
+        // Observerer også name, fordi React kan fjerne det ved re-render.
         this._childObserver = new MutationObserver((mutations) => {
             const hasInputChange = mutations.some((m) =>
                 Array.from(m.addedNodes).some((n) => this._containsRadioInput(n)) ||
@@ -219,7 +167,7 @@ export class IxRadioGroup extends HTMLElement {
         return !!el.querySelector?.('input[type="radio"]');
     }
 
-    // Wirer alle inputs i gruppen — idempotent, kan kjøres igjen ved DOM-endring.
+    // Idempotent, fordi den kjøres på nytt ved hver DOM-endring.
     private _wireInputs(): void {
         const inputs = Array.from(this.querySelectorAll<HTMLInputElement>('input[type="radio"]'));
 
@@ -233,7 +181,6 @@ export class IxRadioGroup extends HTMLElement {
         for (const input of inputs) {
             if (!input.id) input.id = `ix-radio-${++radioInputCounter}`;
 
-            // Finn label i samme wrapper som input, som ikke har htmlFor ennå.
             const wrapper = input.parentElement;
             if (wrapper) {
                 const label = wrapper.querySelector<HTMLLabelElement>('label');
@@ -241,9 +188,7 @@ export class IxRadioGroup extends HTMLElement {
             }
         }
 
-        // name-synkronisering: host name → input name → auto-generert
-        // Host name har alltid prioritet — sikrer at alle inputs i gruppen
-        // har samme name selv om forfatteren setter name på én input.
+        // Host-name vinner over name på en input, så hele gruppen får samme name.
         const hostName = this.getAttribute('name');
         const existingName = inputs.find((i) => i.name)?.name;
         const groupName = hostName || existingName || `ix-radio-group-name-${this._instanceId}`;
@@ -267,14 +212,7 @@ export class IxRadioGroup extends HTMLElement {
         const inputs = Array.from(this.querySelectorAll<HTMLInputElement>('input[type="radio"]'));
         const isDisabled = this.hasAttribute('disabled');
 
-        // readOnly settes ikke på input — det er en no-op for radio. Tastatur-
-        // blokkeringen håndteres av keydown-listener i _wire(), pointer-events: none
-        // i CSS dekker mus/touch.
-        //
-        // Per-knapp disabled bevares: snapshot tas KUN når vi er i ferd med å
-        // overskrive den (host disabled toggles på), og restoreres når host
-        // disabled toggles av. Hvis vi aldri har snapshot-et en input, lar vi
-        // dens disabled være i fred — det er authorens valg.
+        // Inputs som aldri er overstyrt av host-disabled, lar vi være i fred.
         for (const input of inputs) {
             if (isDisabled) {
                 if (!this._ownDisabled.has(input)) {
@@ -288,10 +226,8 @@ export class IxRadioGroup extends HTMLElement {
         }
     }
 
-    // Setter aria-required på host slik at skjermleser annonserer påkrevd-tilstand
-    // på gruppenivå (ikke per radio). Setter native required på første input slik at
-    // HTML5-form-validering virker uten at Safari viser valideringsbobel på hvert
-    // alternativ.
+    // Native required bare på første input, så Safari ikke viser valideringsboble
+    // på hvert alternativ.
     private _syncRequired(): void {
         const inputs = Array.from(this.querySelectorAll<HTMLInputElement>('input[type="radio"]'));
         const isRequired = this.hasAttribute('required');

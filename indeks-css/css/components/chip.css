@@ -139,9 +139,8 @@
     padding-left: calc(var(--ii-chip-indicator-inset) + var(--ii-chip-indicator-size) + var(--ii-chip-indicator-gap));
 }
 
-/* Chips ligger alltid på rad og wrapper — uavhengig av gruppens orientation.
-   (0,3,0) slår base-regelen for [data-field='items'] i radio-group.css (0,2,0),
-   som cascader senere. Horizontal-reglene der utelukker chip med :not(). */
+/* Chips ligger alltid på rad, uansett orientation. Variant-attributtet gjør at
+   regelen vinner over items-regelen i radio-group.css, som kommer senere. */
 :is(ix-radio-group, .ix-radio-group)[data-variant='chip'] [data-field='items'],
 :is(ix-checkbox-group, .ix-checkbox-group)[data-variant='chip'] [data-field='items'] {
     flex-direction: row;
