@@ -1,4 +1,3 @@
-import { cn } from '../../../cn';
 import { forwardRef } from 'react';
 import type { JSX, ReactNode } from 'react';
 
@@ -19,7 +18,7 @@ export const AccordionHeader = forwardRef<HTMLElement, AccordionHeaderProps>(fun
     ref,
 ): JSX.Element {
     return (
-        <summary ref={ref} className={cn('ix-accordion__header', className)}>
+        <summary ref={ref} className={className}>
             {children}
         </summary>
     );

@@ -37,6 +37,13 @@ describe('Tabs — rendering', () => {
         expect(root?.classList.contains('ix-tabs')).toBe(true);
         expect(root?.classList.contains('egen-klasse')).toBe(true);
     });
+
+    it('setter ingen klasse på delene, CSS-en treffer custom elementene', () => {
+        const { container } = renderBasic();
+        for (const el of container.querySelectorAll('ix-tab-list, ix-tab, ix-tab-panel')) {
+            expect(el.hasAttribute('class')).toBe(false);
+        }
+    });
 });
 
 describe('Tabs — initial valg', () => {

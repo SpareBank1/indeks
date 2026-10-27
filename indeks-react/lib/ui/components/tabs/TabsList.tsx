@@ -1,4 +1,3 @@
-import { cn } from '../../../cn';
 import { type JSX, type ReactNode } from 'react';
 
 export type TabsListProps = {
@@ -18,7 +17,7 @@ export type TabsListProps = {
  */
 export function TabsList({ children, ariaLabel, className }: TabsListProps): JSX.Element {
     return (
-        <ix-tab-list class={cn('ix-tabs__list', className)} aria-label={ariaLabel}>
+        <ix-tab-list class={className} aria-label={ariaLabel}>
             {children}
         </ix-tab-list>
     );
