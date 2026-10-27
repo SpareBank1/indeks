@@ -9,7 +9,13 @@ import Term from '@site/src/components/Term';
 
 # ADR-DS-009: CSS-arkitektur
 
-<AdrStatusLogg historikk={[{ status: 'Besluttet', dato: '2026-07-24' }]} />
+<AdrStatusLogg
+    historikk={[
+        { status: 'Besluttet', dato: '2026-07-24' },
+        { status: 'Forslag', dato: '2026-10-14' },
+        { status: 'Besluttet', dato: '2026-10-26' },
+    ]}
+/>
 
 ## Beslutning
 
@@ -34,6 +40,39 @@ Responsive varianter følger mønsteret `ix-{breakpoint}-{klasse}`, f.eks. `ix-s
 `indeks-css/css/`: reset.css, components/, icons/, layout/, surface/, typography/.
 
 Bundelen lastes i rekkefølgen tokens → reset og komponenter → utils. Utilities lastes sist, så de kan overstyre komponentene. På CDN er `index.css` bare en liste med imports (tokens, `components.css`, utils). Grunnen er at en `@import` etter vanlige regler ignoreres av nettleseren.
+
+### Selektorer og spesifisitet
+
+Komponentene skal vinne over vertens elementregler, som `a {}` og `h2 {}` i Docusaurus, uten lapper. Utility-klasser skal fortsatt kunne overstyre ytterste element i en komponent. Det får vi ved at hver del har én hook, og ingen ting pakkes i `:where()`.
+
+1. **Blokk** er klassen `.ix-x`. Finnes det en web component, skrives begge: `:is(ix-x, .ix-x)`.
+2. **Én hook per del, aldri to.**
+   - Et entydig native barn, eller eneste type barn i en container, styles direkte: `label`, `input`, `summary`, `td`, `> *`.
+   - En generisk del får BEM-elementklasse: `.ix-x__del`.
+   - Unntak: deler i skjemagruppene som web componenten leser fra markupen, bruker `[data-field='…']`.
+3. **Tilstand og varianter** ligger i `data-*`, `aria-*` og pseudoklasser. Aldri BEM-modifier (`--`).
+4. **Ingen overflødige kvalifikatorer.** `input` inni `.ix-checkbox` er `input`, ikke `input[type='checkbox']`.
+5. **Kombinatorer bare der tilstanden bor på et annet element**: søsken (`input:checked + label`) eller en gruppe rundt (`.ix-checkbox-group[data-state='error'] …`).
+6. **Tilstander overstyrer ved å telle betingelser.** Alle tilstandsregler for en del har samme grunnform, og hver betingelse legger på ett ledd. Ved likt antall avgjør kilderekkefølgen: passiv, hover, active, selected, selected hover/active, read-only, error.
+7. **Ingen `:where()`**, bortsett fra i `reset.css`, som skal tape mot alt. `:is()` er greit for selektorlister.
+8. **Ingen `:has()`**, fordi gulvet i `.browserslistrc` ikke støtter det.
+
+En utility-klasse (`0,1,0`) på ytterste element vinner på rekkefølgen, fordi utils lastes sist. Unntaket er der en variant eller tilstand med vilje setter samme egenskap.
+
+```css
+/* Del med to hooks blir én */
+:where(.ix-checkbox) input[type='checkbox']:checked + label,
+:where(.ix-checkbox__input:checked) + :where(.ix-checkbox__label) { … }   /* før */
+.ix-checkbox input:checked + label { … }                                    /* etter */
+
+/* Modifier blir tilstand på elementet */
+:where(.ix-checkbox--disabled) { … }          /* før */
+.ix-checkbox input:disabled + label { … }    /* etter */
+
+/* Gruppetilstand over intern tilstand: samme grunnform, read-only står sist */
+:is(ix-radio-group, .ix-radio-group)[data-variant='chip'] input:checked + label { … }                 /* 0,3,2 */
+:is(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='readonly'] input + label { … }   /* 0,3,2 */
+```
 
 ### Dark mode
 
@@ -73,6 +112,7 @@ Alle konsumenter av designsystemet — både React-konsumenter og team som kun b
 - Ingen automatisk scoping — `ix-`-prefix er eneste beskyttelse mot navnekollisjoner
 - Ingen compile-time type checking av klassenavn
 - Utility-klasser dekker ikke alle behov (men dette er bevisst — 80/20-regelen)
+- Uten `:where()` må gruppetilstander skrives med full grunnform (`input + label`, ikke bare `label`), og presedensen mellom tilstander hviler på rekkefølgen i fila
 
 ### Tiltak mot ulemper
 
@@ -80,6 +120,18 @@ Alle konsumenter av designsystemet — både React-konsumenter og team som kun b
 - TypeScript-typer for komponent-props gir type safety der det er mulig
 
 ## Forkastede alternativer
+
+### `:where()` rundt hele komponentselektoren
+
+Var praksis fram til 2026-10. Spesifisitet `0,0,0` taper mot enhver elementregel hos verten, som `a {}`, `h2 {}` og `table {}`. Det måtte lappes i Docusaurus, og rekkefølgen mellom filene ble avgjørende.
+
+### `:where()` rundt indre deler
+
+Foreslått i [indeks#291](https://github.com/SpareBank1/indeks/pull/291): ankeret skrives rett fram, og indre deler pakkes i `:where()`. Det løser `0,0,0`, men beholder to hooks for samme del (`label` og `.ix-checkbox__label`) og trenger `:where()` for at de skal veie like mye.
+
+### Fjerne BEM helt
+
+Deler kunne fått `data-field` i stedet for BEM-klasser. Forkastet fordi BEM er den eneste hooken for delene i tolv sammensatte komponenter, web componentene bruker BEM-klassene som runtime-hooks, og konsumentene bruker dem i over hundre kall. `data-field` treffer også deler i nøstede komponenter, noe `.ix-x__del` aldri gjør.
 
 ### Tailwind CSS
 
