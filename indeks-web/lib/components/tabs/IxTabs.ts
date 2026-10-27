@@ -48,17 +48,17 @@
  *
  * ## Ingen Shadow DOM
  *
- * Light DOM slik at CSS fra @sb1/indeks-css treffer .ix-tabs__* og tag-
- * selektorene direkte, og ARIA-relasjonene fungerer på tvers av elementene.
+ * Light DOM slik at CSS fra @sb1/indeks-css treffer custom elementene
+ * direkte, og ARIA-relasjonene fungerer på tvers av elementene.
  *
  * @example
  * <ix-tabs class="ix-tabs">
- *   <ix-tab-list class="ix-tabs__list">
- *     <ix-tab class="ix-tabs__tab">Oversikt</ix-tab>
- *     <ix-tab class="ix-tabs__tab">Detaljer</ix-tab>
+ *   <ix-tab-list>
+ *     <ix-tab>Oversikt</ix-tab>
+ *     <ix-tab>Detaljer</ix-tab>
  *   </ix-tab-list>
- *   <ix-tab-panel class="ix-tabs__panel">Oversikt-innhold</ix-tab-panel>
- *   <ix-tab-panel class="ix-tabs__panel">Detaljer-innhold</ix-tab-panel>
+ *   <ix-tab-panel>Oversikt-innhold</ix-tab-panel>
+ *   <ix-tab-panel>Detaljer-innhold</ix-tab-panel>
  * </ix-tabs>
  */
 

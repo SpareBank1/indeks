@@ -1,4 +1,3 @@
-import { cn } from '../../../cn';
 import { useContext, type JSX, type ReactNode } from 'react';
 import { TabsContext } from './TabsContext';
 
@@ -21,7 +20,7 @@ export function TabsPanel({ value, children, className }: TabsPanelProps): JSX.E
     const selected = ctx?.initialValue === value;
 
     return (
-        <ix-tab-panel class={cn('ix-tabs__panel', className)} data-value={value} hidden={!selected}>
+        <ix-tab-panel class={className} data-value={value} hidden={!selected}>
             {children}
         </ix-tab-panel>
     );

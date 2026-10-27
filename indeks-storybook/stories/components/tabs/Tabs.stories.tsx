@@ -110,24 +110,18 @@ export const KunIkon: Story = {
 export const HTML: Story = {
     render: () => (
         <ix-tabs class="ix-tabs">
-            <ix-tab-list class="ix-tabs__list" aria-label="Kontoinformasjon">
-                <ix-tab class="ix-tabs__tab" aria-selected="true">
-                    Oversikt
-                </ix-tab>
-                <ix-tab class="ix-tabs__tab" aria-selected="false">
-                    Transaksjoner
-                </ix-tab>
-                <ix-tab class="ix-tabs__tab" aria-selected="false">
-                    Innstillinger
-                </ix-tab>
+            <ix-tab-list aria-label="Kontoinformasjon">
+                <ix-tab aria-selected="true">Oversikt</ix-tab>
+                <ix-tab aria-selected="false">Transaksjoner</ix-tab>
+                <ix-tab aria-selected="false">Innstillinger</ix-tab>
             </ix-tab-list>
-            <ix-tab-panel class="ix-tabs__panel">
+            <ix-tab-panel>
                 <p>Saldo og nøkkeltall for kontoen.</p>
             </ix-tab-panel>
-            <ix-tab-panel class="ix-tabs__panel" hidden>
+            <ix-tab-panel hidden>
                 <p>De siste inn- og utbetalingene.</p>
             </ix-tab-panel>
-            <ix-tab-panel class="ix-tabs__panel" hidden>
+            <ix-tab-panel hidden>
                 <p>Navn, varsler og kontoinnstillinger.</p>
             </ix-tab-panel>
         </ix-tabs>
