@@ -131,58 +131,90 @@ ix-grid[inline] {
     display: inline-grid;
 }
 
+/* --- Barn --- */
+
+/* colspan og rowspan setter bare --ii-grid-colspan og --ii-grid-rowspan.
+ * grid-column og grid-row settes her på 0,1,0, så klassene under og utils som
+ * .ix-md-col-span-6 vinner på rekkefølgen. Hvert barn får startverdien sin
+ * her, så barn i et nestet grid arver ikke. */
+:is(ix-grid, .ix-grid) > * {
+    --ii-grid-colspan: auto;
+    --ii-grid-rowspan: auto;
+
+    grid-column: var(--ii-grid-colspan);
+    grid-row: var(--ii-grid-rowspan);
+}
+
 /* --- Col-span (settes på barn via attributt eller klasse) --- */
 
-:is(ix-grid, .ix-grid) > [colspan="1"],  .ix-col-span-1  { grid-column: span 1 / span 1; }
-:is(ix-grid, .ix-grid) > [colspan="2"],  .ix-col-span-2  { grid-column: span 2 / span 2; }
-:is(ix-grid, .ix-grid) > [colspan="3"],  .ix-col-span-3  { grid-column: span 3 / span 3; }
-:is(ix-grid, .ix-grid) > [colspan="4"],  .ix-col-span-4  { grid-column: span 4 / span 4; }
-:is(ix-grid, .ix-grid) > [colspan="5"],  .ix-col-span-5  { grid-column: span 5 / span 5; }
-:is(ix-grid, .ix-grid) > [colspan="6"],  .ix-col-span-6  { grid-column: span 6 / span 6; }
-:is(ix-grid, .ix-grid) > [colspan="7"],  .ix-col-span-7  { grid-column: span 7 / span 7; }
-:is(ix-grid, .ix-grid) > [colspan="8"],  .ix-col-span-8  { grid-column: span 8 / span 8; }
-:is(ix-grid, .ix-grid) > [colspan="9"],  .ix-col-span-9  { grid-column: span 9 / span 9; }
-:is(ix-grid, .ix-grid) > [colspan="10"], .ix-col-span-10 { grid-column: span 10 / span 10; }
-:is(ix-grid, .ix-grid) > [colspan="11"], .ix-col-span-11 { grid-column: span 11 / span 11; }
-:is(ix-grid, .ix-grid) > [colspan="12"], .ix-col-span-12 { grid-column: span 12 / span 12; }
-:is(ix-grid, .ix-grid) > [colspan="full"], .ix-col-span-full { grid-column: 1 / -1; }
+:is(ix-grid, .ix-grid) > [colspan="1"]    { --ii-grid-colspan: span 1 / span 1; }
+:is(ix-grid, .ix-grid) > [colspan="2"]    { --ii-grid-colspan: span 2 / span 2; }
+:is(ix-grid, .ix-grid) > [colspan="3"]    { --ii-grid-colspan: span 3 / span 3; }
+:is(ix-grid, .ix-grid) > [colspan="4"]    { --ii-grid-colspan: span 4 / span 4; }
+:is(ix-grid, .ix-grid) > [colspan="5"]    { --ii-grid-colspan: span 5 / span 5; }
+:is(ix-grid, .ix-grid) > [colspan="6"]    { --ii-grid-colspan: span 6 / span 6; }
+:is(ix-grid, .ix-grid) > [colspan="7"]    { --ii-grid-colspan: span 7 / span 7; }
+:is(ix-grid, .ix-grid) > [colspan="8"]    { --ii-grid-colspan: span 8 / span 8; }
+:is(ix-grid, .ix-grid) > [colspan="9"]    { --ii-grid-colspan: span 9 / span 9; }
+:is(ix-grid, .ix-grid) > [colspan="10"]   { --ii-grid-colspan: span 10 / span 10; }
+:is(ix-grid, .ix-grid) > [colspan="11"]   { --ii-grid-colspan: span 11 / span 11; }
+:is(ix-grid, .ix-grid) > [colspan="12"]   { --ii-grid-colspan: span 12 / span 12; }
+:is(ix-grid, .ix-grid) > [colspan="full"] { --ii-grid-colspan: 1 / -1; }
+
+.ix-col-span-1    { grid-column: span 1 / span 1; }
+.ix-col-span-2    { grid-column: span 2 / span 2; }
+.ix-col-span-3    { grid-column: span 3 / span 3; }
+.ix-col-span-4    { grid-column: span 4 / span 4; }
+.ix-col-span-5    { grid-column: span 5 / span 5; }
+.ix-col-span-6    { grid-column: span 6 / span 6; }
+.ix-col-span-7    { grid-column: span 7 / span 7; }
+.ix-col-span-8    { grid-column: span 8 / span 8; }
+.ix-col-span-9    { grid-column: span 9 / span 9; }
+.ix-col-span-10   { grid-column: span 10 / span 10; }
+.ix-col-span-11   { grid-column: span 11 / span 11; }
+.ix-col-span-12   { grid-column: span 12 / span 12; }
+.ix-col-span-full { grid-column: 1 / -1; }
 
 /* --- Row-span (settes på barn via attributt eller klasse) --- */
 
-:is(ix-grid, .ix-grid) > [rowspan="1"], .ix-row-span-1 { grid-row: span 1 / span 1; }
-:is(ix-grid, .ix-grid) > [rowspan="2"], .ix-row-span-2 { grid-row: span 2 / span 2; }
-:is(ix-grid, .ix-grid) > [rowspan="3"], .ix-row-span-3 { grid-row: span 3 / span 3; }
-:is(ix-grid, .ix-grid) > [rowspan="4"], .ix-row-span-4 { grid-row: span 4 / span 4; }
-:is(ix-grid, .ix-grid) > [rowspan="full"], .ix-row-span-full { grid-row: 1 / -1; }
+:is(ix-grid, .ix-grid) > [rowspan="1"]    { --ii-grid-rowspan: span 1 / span 1; }
+:is(ix-grid, .ix-grid) > [rowspan="2"]    { --ii-grid-rowspan: span 2 / span 2; }
+:is(ix-grid, .ix-grid) > [rowspan="3"]    { --ii-grid-rowspan: span 3 / span 3; }
+:is(ix-grid, .ix-grid) > [rowspan="4"]    { --ii-grid-rowspan: span 4 / span 4; }
+:is(ix-grid, .ix-grid) > [rowspan="full"] { --ii-grid-rowspan: 1 / -1; }
+
+.ix-row-span-1    { grid-row: span 1 / span 1; }
+.ix-row-span-2    { grid-row: span 2 / span 2; }
+.ix-row-span-3    { grid-row: span 3 / span 3; }
+.ix-row-span-4    { grid-row: span 4 / span 4; }
+.ix-row-span-full { grid-row: 1 / -1; }
 
 /* --- Col-start/end (settes på barn) --- */
 
-/* Inni et grid veier start og slutt like mye som colspan-attributtet (0,2,0)
- * og står etter det, så colspan="6" og ix-col-start-4 kan kombineres. */
-:is(ix-grid, .ix-grid) > .ix-col-start-1,  .ix-col-start-1  { grid-column-start: 1; }
-:is(ix-grid, .ix-grid) > .ix-col-start-2,  .ix-col-start-2  { grid-column-start: 2; }
-:is(ix-grid, .ix-grid) > .ix-col-start-3,  .ix-col-start-3  { grid-column-start: 3; }
-:is(ix-grid, .ix-grid) > .ix-col-start-4,  .ix-col-start-4  { grid-column-start: 4; }
-:is(ix-grid, .ix-grid) > .ix-col-start-5,  .ix-col-start-5  { grid-column-start: 5; }
-:is(ix-grid, .ix-grid) > .ix-col-start-6,  .ix-col-start-6  { grid-column-start: 6; }
-:is(ix-grid, .ix-grid) > .ix-col-start-7,  .ix-col-start-7  { grid-column-start: 7; }
-:is(ix-grid, .ix-grid) > .ix-col-start-8,  .ix-col-start-8  { grid-column-start: 8; }
-:is(ix-grid, .ix-grid) > .ix-col-start-9,  .ix-col-start-9  { grid-column-start: 9; }
-:is(ix-grid, .ix-grid) > .ix-col-start-10, .ix-col-start-10 { grid-column-start: 10; }
-:is(ix-grid, .ix-grid) > .ix-col-start-11, .ix-col-start-11 { grid-column-start: 11; }
-:is(ix-grid, .ix-grid) > .ix-col-start-12, .ix-col-start-12 { grid-column-start: 12; }
-:is(ix-grid, .ix-grid) > .ix-col-start-13, .ix-col-start-13 { grid-column-start: 13; }
+.ix-col-start-1  { grid-column-start: 1; }
+.ix-col-start-2  { grid-column-start: 2; }
+.ix-col-start-3  { grid-column-start: 3; }
+.ix-col-start-4  { grid-column-start: 4; }
+.ix-col-start-5  { grid-column-start: 5; }
+.ix-col-start-6  { grid-column-start: 6; }
+.ix-col-start-7  { grid-column-start: 7; }
+.ix-col-start-8  { grid-column-start: 8; }
+.ix-col-start-9  { grid-column-start: 9; }
+.ix-col-start-10 { grid-column-start: 10; }
+.ix-col-start-11 { grid-column-start: 11; }
+.ix-col-start-12 { grid-column-start: 12; }
+.ix-col-start-13 { grid-column-start: 13; }
 
-:is(ix-grid, .ix-grid) > .ix-col-end-1,  .ix-col-end-1  { grid-column-end: 1; }
-:is(ix-grid, .ix-grid) > .ix-col-end-2,  .ix-col-end-2  { grid-column-end: 2; }
-:is(ix-grid, .ix-grid) > .ix-col-end-3,  .ix-col-end-3  { grid-column-end: 3; }
-:is(ix-grid, .ix-grid) > .ix-col-end-4,  .ix-col-end-4  { grid-column-end: 4; }
-:is(ix-grid, .ix-grid) > .ix-col-end-5,  .ix-col-end-5  { grid-column-end: 5; }
-:is(ix-grid, .ix-grid) > .ix-col-end-6,  .ix-col-end-6  { grid-column-end: 6; }
-:is(ix-grid, .ix-grid) > .ix-col-end-7,  .ix-col-end-7  { grid-column-end: 7; }
-:is(ix-grid, .ix-grid) > .ix-col-end-8,  .ix-col-end-8  { grid-column-end: 8; }
-:is(ix-grid, .ix-grid) > .ix-col-end-9,  .ix-col-end-9  { grid-column-end: 9; }
-:is(ix-grid, .ix-grid) > .ix-col-end-10, .ix-col-end-10 { grid-column-end: 10; }
-:is(ix-grid, .ix-grid) > .ix-col-end-11, .ix-col-end-11 { grid-column-end: 11; }
-:is(ix-grid, .ix-grid) > .ix-col-end-12, .ix-col-end-12 { grid-column-end: 12; }
-:is(ix-grid, .ix-grid) > .ix-col-end-13, .ix-col-end-13 { grid-column-end: 13; }
+.ix-col-end-1  { grid-column-end: 1; }
+.ix-col-end-2  { grid-column-end: 2; }
+.ix-col-end-3  { grid-column-end: 3; }
+.ix-col-end-4  { grid-column-end: 4; }
+.ix-col-end-5  { grid-column-end: 5; }
+.ix-col-end-6  { grid-column-end: 6; }
+.ix-col-end-7  { grid-column-end: 7; }
+.ix-col-end-8  { grid-column-end: 8; }
+.ix-col-end-9  { grid-column-end: 9; }
+.ix-col-end-10 { grid-column-end: 10; }
+.ix-col-end-11 { grid-column-end: 11; }
+.ix-col-end-12 { grid-column-end: 12; }
+.ix-col-end-13 { grid-column-end: 13; }
