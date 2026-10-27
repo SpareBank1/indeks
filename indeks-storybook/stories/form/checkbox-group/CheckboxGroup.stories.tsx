@@ -71,6 +71,28 @@ export const MedOptions: Story = {
     },
 };
 
+/**
+ * Labelene brytes over flere linjer. Boksen skal stå ved første linje, ikke midt
+ * på labelen.
+ */
+export const LangeLabels: Story = {
+    args: { legend: 'Hvilke tilganger skal integrasjonen ha?', name: 'tilganger', defaultValue: ['post'] },
+    decorators: [
+        (Story) => (
+            <div style={{ maxWidth: '320px' }}>
+                <Story />
+            </div>
+        ),
+    ],
+    render: (args) => (
+        <CheckboxGroup {...args}>
+            <CheckboxButton value="post" label="POST /corporate/banking/financing/application/soknad/{soknadId}/laan/{laanId}/egenkapital" />
+            <CheckboxButton value="put" label="PUT /corporate/banking/financing/application/soknad/{soknadId}/laan/{laanId}/egenkapital/{egenkapitalId}" />
+            <CheckboxButton value="les" label="Les" />
+        </CheckboxGroup>
+    ),
+};
+
 export const HTML: Story = {
     render: () => (
         <ix-checkbox-group name="kontakt-html">

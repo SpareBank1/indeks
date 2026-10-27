@@ -94,6 +94,8 @@
        spacing-token ville krympet innrykket i compact og latt prikken vokse. */
     --ii-radio-dot-inset: 6px;
     --ii-radio-dot-size: calc(var(--ii-radio-size) - 2 * var(--ii-radio-dot-inset));
+    /* Ringen står ved første linje når labelen brytes. */
+    --ii-radio-indicator-y: calc(var(--ii-radio-size) / 2);
     --ii-radio-outer-color: var(--ix-color-border-main-emphasis);
     --ii-radio-inner-color: transparent;
     --ii-radio-bg: var(--ix-color-surface-main-default);
@@ -146,7 +148,7 @@
 :where(.ix-radio-button__label)::after {
     width: var(--ii-radio-size);
     height: var(--ii-radio-size);
-    top: 50%;
+    top: var(--ii-radio-indicator-y);
     left: 0;
     transform: translateY(-50%);
     background-color: var(--ii-radio-bg);
@@ -158,7 +160,7 @@
 :where(.ix-radio-button__label)::before {
     width: var(--ii-radio-dot-size);
     height: var(--ii-radio-dot-size);
-    top: 50%;
+    top: var(--ii-radio-indicator-y);
     /* Ankre prikken på ringens senter (radio-size/2 fra ringens venstrekant) og
        selv-sentrer med translate(-50%). Det felles ankeret er nødvendig, men det
        er ikke nok: translate(-50%) av en odde prikk er selv en halv piksel, så
@@ -231,6 +233,7 @@
        16 − 8 = 8px på sm. Base-verdien 6px ville gitt 18 − 12 = 6px, altså en prikk
        som krymper når ringen krymper. */
     --ii-radio-dot-inset: 4px;
+    --ii-radio-indicator-y: 50%;
 }
 
 /* Flytt sirkelen (ytre ring + indre prikk) inn fra pill-kanten. Ett uttrykk
