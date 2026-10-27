@@ -1,22 +1,3 @@
-/* Pagination — navigasjon mellom sider med innhold.
- *
- * Brukes for å dele inn større mengder innhold i flere sider og gjøre det
- * enklere å navigere mellom dem. Vises ofte under tabeller, søkeresultater
- * eller lister.
- *
- * Struktur:
- *   <nav class="ix-pagination" aria-label="Sidenavigering">
- *     <ul class="ix-pagination__list">
- *       <li><button class="ix-pagination__button" data-type="prev">...</button></li>
- *       <li><button class="ix-pagination__button" aria-current="page">1</button></li>
- *       <li><button class="ix-pagination__button">2</button></li>
- *       <li><span class="ix-pagination__ellipsis">...</span></li>
- *       <li><button class="ix-pagination__button">10</button></li>
- *       <li><button class="ix-pagination__button" data-type="next">...</button></li>
- *     </ul>
- *   </nav>
- */
-
 .ix-pagination {
     display: flex;
     align-items: center;
@@ -24,7 +5,8 @@
 }
 
 .ix-pagination__list {
-    --ii-outline-space: calc(var(--ix-outline-width-default, 2px) + var(--ix-outline-offset-default, 3px));
+    /* Plass til fokusringen, siden overflow-x: auto ellers klipper den. */
+    --ii-outline-space: calc(var(--ix-outline-width-default) + var(--ix-outline-offset-default));
 
     display: flex;
     align-items: center;
@@ -70,9 +52,7 @@
         outline-color var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
-/* Hover og active har samme grunnform (0,3,0), så active vinner på
-   rekkefølgen når knappen trykkes mens musa står over. Gjeldende side har
-   ingen av dem. */
+/* Active har samme :not som hover, ellers vinner hover når knappen trykkes. */
 .ix-pagination__button:hover:not([aria-current='page']) {
     background-color: var(--ix-color-component-button-tertiary-fill-default-hover);
 }
