@@ -1,31 +1,13 @@
-/* DropdownMenu — nedtrekksmeny for handlinger og navigasjon.
-
-   ARIA-lim-mønster: web componenten <ix-dropdown> kobler trigger og menu,
-   håndterer tastaturnavigasjon (ArrowUp/Down, Enter, Escape) og posisjonering.
-   Støtter nøstede submenyer via <ix-dropdown data-submenu> inne i menyen.
-
-   Deler:
-   - host (ix-dropdown)       relativ container, kobler trigger → menu
-   - __menu                   popover-panel med role="menu"
-   - __item                   meny-element med role="menuitem"
-   - __divider                visuell separator (role="separator")
-   - __submenu-trigger        item som åpner en submeny (aria-haspopup)
-   - __chevron                høyrepil på submenu-trigger */
-
 :is(ix-dropdown, .ix-dropdown) {
     display: inline-block;
     position: relative;
 }
 
-/* Submenu bruker samme styling, men plasseres absolutt relativt til parent item. */
 :is(ix-dropdown[data-submenu], .ix-dropdown[data-submenu]) {
     display: block;
 }
 
-/* ── Menu (flytende panel) ──────────────────────────────────────────────────
-   Posisjonering (top/left) settes inline av web componenten med
-   getBoundingClientRect + viewport-clamp — samme grep som tooltip og combobox.
-   Panelet ligger position: fixed i viewport-koordinater for root-menyen. */
+/* Fixed fordi web componenten setter top/left i viewport-koordinater. */
 .ix-dropdown__menu {
     position: fixed;
     inset: 0 auto auto 0;
@@ -43,14 +25,10 @@
     list-style: none;
 }
 
-/* Lukket: web componenten setter hidden. */
 .ix-dropdown__menu[hidden] {
     display: none;
 }
 
-/* ── Item (meny-element) ────────────────────────────────────────────────────
-   Fullt klikk-/touch-mål på hele bredden. Items er <button> eller <a> for
-   korrekt tastatur/skjermleser-støtte. */
 .ix-dropdown__item {
     all: unset;
     box-sizing: border-box;
@@ -76,38 +54,29 @@
     background-color: var(--ix-color-fill-interactive-hover);
 }
 
-/* Active (klikk/press) — mørkere bakgrunn. */
 .ix-dropdown__item:active {
     background-color: var(--ix-color-fill-interactive-active);
 }
 
-/* Disabled item. */
 .ix-dropdown__item[disabled],
 .ix-dropdown__item[aria-disabled='true'] {
     color: var(--ix-color-foreground-main-disabled);
-    /* stylelint-disable-next-line */
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
     pointer-events: none;
 }
 
-/* Danger-variant for destruktive handlinger. */
 .ix-dropdown__item[data-danger] {
     color: var(--ix-color-foreground-danger-default);
 }
 
 .ix-dropdown__item[data-danger]:hover,
-.ix-dropdown__item[data-danger][data-active] {
-    background-color: var(--ix-color-fill-danger-default);
-    color: var(--ix-color-foreground-inverse-default);
-}
-
+.ix-dropdown__item[data-danger][data-active],
 .ix-dropdown__item[data-danger]:active {
     background-color: var(--ix-color-fill-danger-default);
     color: var(--ix-color-foreground-inverse-default);
 }
 
-/* ── Divider ────────────────────────────────────────────────────────────────
-   Visuell separator mellom grupper. */
 .ix-dropdown__divider {
     all: unset;
     display: block;
@@ -116,13 +85,11 @@
     background-color: var(--ix-color-border-main-emphasis);
 }
 
-/* ── Submenu trigger ────────────────────────────────────────────────────────
-   Item som åpner en submeny — chevron til høyre indikerer nøsting. */
 .ix-dropdown__submenu-trigger {
     justify-content: space-between;
 }
 
-/* Chevron (høyrepil) — CSS-maske som følger currentColor. */
+/* Maske, så pilen får tekstfargen. */
 .ix-dropdown__chevron {
     flex-shrink: 0;
     width: 1em;
@@ -140,8 +107,6 @@
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
-/* ── Ikon i item ────────────────────────────────────────────────────────────
-   Ikoner justeres vertikalt med teksten. */
 .ix-dropdown__item > svg,
 .ix-dropdown__item > [data-icon] {
     flex-shrink: 0;
