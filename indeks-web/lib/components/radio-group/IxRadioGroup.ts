@@ -47,13 +47,15 @@
  * <ix-radio-group>
  *   <span data-field="legend">Velg kundetype</span>
  *   <span data-field="description">Beskrivelse</span>
- *   <div class="ix-radio-button">
- *     <input type="radio" value="privat" />
- *     <label>Privat</label>
- *   </div>
- *   <div class="ix-radio-button">
- *     <input type="radio" value="bedrift" />
- *     <label>Bedrift</label>
+ *   <div data-field="items">
+ *     <div>
+ *       <input type="radio" value="privat" />
+ *       <label>Privat</label>
+ *     </div>
+ *     <div>
+ *       <input type="radio" value="bedrift" />
+ *       <label>Bedrift</label>
+ *     </div>
  *   </div>
  *   <span data-field="error"></span>
  * </ix-radio-group>
@@ -231,9 +233,8 @@ export class IxRadioGroup extends HTMLElement {
         for (const input of inputs) {
             if (!input.id) input.id = `ix-radio-${++radioInputCounter}`;
 
-            // Finn label som er søsken til input (inni samme .ix-radio-button-wrapper)
-            // eller som er et direkte barn av wrapperen og ikke har htmlFor ennå.
-            const wrapper = input.closest('.ix-radio-button') ?? input.parentElement;
+            // Finn label i samme wrapper som input, som ikke har htmlFor ennå.
+            const wrapper = input.parentElement;
             if (wrapper) {
                 const label = wrapper.querySelector<HTMLLabelElement>('label');
                 if (label && !label.htmlFor) label.htmlFor = input.id;
