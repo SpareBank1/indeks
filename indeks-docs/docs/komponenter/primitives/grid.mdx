@@ -422,13 +422,13 @@ Wrapper for grid-barn som trenger colspan eller rowspan.
 
 ## Tilpasning med CSS
 
-Grid-komponentene har ingen egne CSS custom properties. Bruk utility-klasser. På containeren vinner de over attributtene og klassene, så `<ix-grid cols="1" class="ix-md-grid-cols-3">` får tre kolonner fra 1024px.
+Grid-komponentene har ingen egne CSS custom properties. Bruk utility-klasser. På containeren vinner de over attributtene og klassene, så her får gridet én kolonne under 1024px og tre fra 1024px:
 
 ```html
-<ix-grid cols="3" gap="md" class="ix-justify-items-center">
-  <div>Sentrert</div>
-  <div>Sentrert</div>
-  <div>Sentrert</div>
+<ix-grid cols="1" gap="md" class="ix-md-grid-cols-3">
+  <div>Én</div>
+  <div>To</div>
+  <div>Tre</div>
 </ix-grid>
 ```
 

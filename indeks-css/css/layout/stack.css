@@ -1,7 +1,5 @@
-/* Variantene setter bare --ii-stack-*. Egenskapene settes her på 0,1,0, så en
- * utility-klasse som .ix-items-start eller .ix-gap-sm vinner på rekkefølgen,
- * også mot attributter som ix-stack[horizontal] (0,1,1). Variablene får
- * startverdien sin her, så en nestet stack ikke arver dem. */
+/* Variantene setter bare variabler, så utility-klasser vinner. Grunnregelen gir
+   variablene startverdi, så en nestet stack ikke arver dem. */
 :is(ix-stack, .ix-stack) {
     --ii-stack-direction: column;
     --ii-stack-align: flex-start;
@@ -15,29 +13,21 @@
     gap: var(--ii-stack-gap);
 }
 
-/* --- Vertikal --- */
-
 ix-stack[vertical], .ix-stack-vertical {
-    --ii-stack-direction: column;
     --ii-stack-align: flex-start;
 }
 
 ix-stack[vertical="center"], .ix-stack-vertical-center {
-    --ii-stack-direction: column;
     --ii-stack-align: center;
 }
 
 ix-stack[vertical="end"], .ix-stack-vertical-end {
-    --ii-stack-direction: column;
     --ii-stack-align: flex-end;
 }
 
 ix-stack[vertical="stretch"], .ix-stack-vertical-stretch {
-    --ii-stack-direction: column;
     --ii-stack-align: stretch;
 }
-
-/* --- Horisontal --- */
 
 ix-stack[horizontal], .ix-stack-horizontal, .ix-stack-horizontal-center {
     --ii-stack-direction: row;
@@ -59,8 +49,6 @@ ix-stack[horizontal="stretch"], .ix-stack-horizontal-stretch {
     --ii-stack-align: stretch;
 }
 
-/* --- Gap --- */
-
 ix-stack[gap="none"] { --ii-stack-gap: 0; }
 ix-stack[gap="2xs"]  { --ii-stack-gap: var(--ix-spacing-2xs); }
 ix-stack[gap="xs"]   { --ii-stack-gap: var(--ix-spacing-xs); }
@@ -73,9 +61,7 @@ ix-stack[gap="3xl"]  { --ii-stack-gap: var(--ix-spacing-3xl); }
 ix-stack[gap="4xl"]  { --ii-stack-gap: var(--ix-spacing-4xl); }
 ix-stack[gap="5xl"]  { --ii-stack-gap: var(--ix-spacing-5xl); }
 
-/* --- Modifikatorer --- */
-
-/* Står etter retningene, og horisontal + reverse har ett ledd mer. */
+/* Etter retningene, så reverse vinner over dem. */
 ix-stack[reverse], .ix-stack-reverse {
     --ii-stack-direction: column-reverse;
 }
