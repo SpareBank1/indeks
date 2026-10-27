@@ -25,13 +25,6 @@ layout/stack.css
 components/form/combobox.css
 components/form/date-field.css
 
-# #331 Dropdown, Popover, Message, Pagination og ProgressBar
-components/dropdown-menu.css
-components/message.css
-components/pagination.css
-components/popover.css
-components/progress-bar.css
-
 # #332 Accordion, ReadMore og Tabs
 components/accordion.css
 components/read-more.css
