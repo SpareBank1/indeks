@@ -94,6 +94,8 @@
        spacing-token ville krympet innrykket i compact og latt prikken vokse. */
     --ii-radio-dot-inset: 6px;
     --ii-radio-dot-size: calc(var(--ii-radio-size) - 2 * var(--ii-radio-dot-inset));
+    /* Ringen står ved første linje når labelen brytes. */
+    --ii-radio-indicator-y: calc(var(--ii-radio-size) / 2);
     --ii-radio-outer-color: var(--ix-color-border-main-emphasis);
     --ii-radio-inner-color: transparent;
     --ii-radio-bg: var(--ix-color-surface-main-default);
@@ -146,9 +148,7 @@
 :where(.ix-radio-button__label)::after {
     width: var(--ii-radio-size);
     height: var(--ii-radio-size);
-    /* Midt på første linje, ikke midt på labelen: ved linjebrudd skal ringen
-       stå ved første linje. Linjeboksen er lik ringen, se line-height over. */
-    top: calc(var(--ii-radio-size) / 2);
+    top: var(--ii-radio-indicator-y);
     left: 0;
     transform: translateY(-50%);
     background-color: var(--ii-radio-bg);
@@ -160,7 +160,7 @@
 :where(.ix-radio-button__label)::before {
     width: var(--ii-radio-dot-size);
     height: var(--ii-radio-dot-size);
-    top: calc(var(--ii-radio-size) / 2);
+    top: var(--ii-radio-indicator-y);
     /* Ankre prikken på ringens senter (radio-size/2 fra ringens venstrekant) og
        selv-sentrer med translate(-50%). Det felles ankeret er nødvendig, men det
        er ikke nok: translate(-50%) av en odde prikk er selv en halv piksel, så
@@ -233,17 +233,13 @@
        16 − 8 = 8px på sm. Base-verdien 6px ville gitt 18 − 12 = 6px, altså en prikk
        som krymper når ringen krymper. */
     --ii-radio-dot-inset: 4px;
+    --ii-radio-indicator-y: 50%;
 }
 
 /* Flytt sirkelen (ytre ring + indre prikk) inn fra pill-kanten. Ett uttrykk
  * dekker begge størrelser — --ii-chip-indicator-inset bytter selv fra md til sm.
  * Ikke bytt til --ii-chip-padding-inline: den er tallet for den nakne siden av
- * pillen og er likt i begge størrelser. Pillen har padding og én linje, så
- * sirkelen sentreres på hele labelen, ikke på første linje. */
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::before,
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::after {
-    top: 50%;
-}
+ * pillen og er likt i begge størrelser. */
 :where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::after {
     left: var(--ii-chip-indicator-inset);
 }

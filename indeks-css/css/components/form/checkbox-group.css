@@ -59,18 +59,14 @@
  * aldri trenger å nevne --ii-checkbox-*. */
 :is(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label {
     --ii-checkbox-size: var(--ii-chip-indicator-size);
+    --ii-checkbox-indicator-y: 50%;
 }
 
 /* Flytt firkant-indikatoren (boks + glyf) inn fra pill-kanten. Glyfen krympes til
    12px så den står i proporsjon til den mindre chip-boksen. Ett uttrykk dekker
    begge størrelser — --ii-chip-indicator-inset bytter selv fra md til sm. Ikke
    bytt til --ii-chip-padding-inline: den er tallet for den nakne siden av pillen
-   og er likt i begge størrelser. Pillen har padding og én linje, så indikatoren
-   sentreres på hele labelen, ikke på første linje som i checkbox.css. */
-:is(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label::before,
-:is(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label::after {
-    top: 50%;
-}
+   og er likt i begge størrelser. */
 :is(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label::before {
     left: var(--ii-chip-indicator-inset);
 }
