@@ -98,8 +98,10 @@
         text-decoration-thickness var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
+/* :focus-visible på lenken, ikke :focus-within på kortet, så understreken ikke
+   blir stående etter museklikk. */
 .ix-card:hover .ix-card__link,
-.ix-card:focus-within .ix-card__link {
+.ix-card__link:focus-visible {
     text-decoration-thickness: 2px;
 }
 
@@ -138,7 +140,8 @@
 }
 
 /* Ikonet er søsken av tittelen, ikke av lenken, så fokus fanges med
-   :focus-within på kortet (kortet har bare én fokuserbar lenke). */
+   :focus-within på kortet (kortet har bare én fokuserbar lenke). Det slår også
+   inn etter museklikk, men :has(:focus-visible) er utenfor browserslist. */
 .ix-card:hover .ix-card__nav-icon[name='arrow_forward'],
 .ix-card:focus-within .ix-card__nav-icon[name='arrow_forward'] {
     transform: translateX(var(--ix-spacing-2xs));
@@ -254,6 +257,17 @@
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+}
+
+/* ── prefers-reduced-motion ──────────────────────────────────────────────────
+   Tilstandene byttes uten overgang. Pilen hopper fortsatt 4px, men glir ikke. */
+@media (prefers-reduced-motion: reduce) {
+    .ix-card,
+    .ix-card__link,
+    .ix-card__link::after,
+    .ix-card__nav-icon[name='arrow_forward'] {
+        transition: none;
+    }
 }
 
 /* ── forced-colors (Windows høykontrast) ─────────────────────────────────────

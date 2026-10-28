@@ -140,13 +140,13 @@ export default function PMOversikt() {
                                 <AccountRow amount={25000} accountName="Konto for barn" accountNumber="22 334 45 566" />
                             </Surface>
                             <Card
-    className="ix-m-block-xs"
-    href="#"
-    appearance="dashed"
-    leading={<Icon name="add_circle" />}
-    title="HeadingText"
-    subtitle="Spar på konto, i fond, kjøp aksjer eller spar til pensjon"
-/>
+                                className="ix-m-block-xs"
+                                href="#"
+                                appearance="dashed"
+                                leading={<Icon name="add_circle" />}
+                                title="HeadingText"
+                                subtitle="Spar på konto, i fond, kjøp aksjer eller spar til pensjon"
+                            />
                         </div>
                         <div>
                             <HStack
@@ -220,13 +220,13 @@ export default function PMOversikt() {
                             <AccountRow amount={300} accountName="Loan account" accountNumber="Account number" />
                         </Surface>
                         <Card
-    className="ix-m-block-xs"
-    href="#"
-    appearance="dashed"
-    leading={<Icon name="add_circle" />}
-    title="HeadingText"
-    subtitle="Spar på konto, i fond, kjøp aksjer eller spar til pensjon"
-/>
+                            className="ix-m-block-xs"
+                            href="#"
+                            appearance="dashed"
+                            leading={<Icon name="add_circle" />}
+                            title="HeadingText"
+                            subtitle="Spar på konto, i fond, kjøp aksjer eller spar til pensjon"
+                        />
                     </div>
                     <div>
                         <HStack

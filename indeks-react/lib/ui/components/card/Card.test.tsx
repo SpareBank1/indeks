@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import type { AnchorHTMLAttributes } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { Card } from './Card';
 
@@ -86,7 +87,13 @@ describe('Card', () => {
     it('videresender linkProps til lenken og øvrige props til roten', () => {
         const onClick = vi.fn();
         const { container } = render(
-            <Card href="/" title="Tittel" id="kort-1" className="egen" linkProps={{ onClick, 'aria-current': 'page' }} />
+            <Card
+                href="/"
+                title="Tittel"
+                id="kort-1"
+                className="egen"
+                linkProps={{ onClick, 'aria-current': 'page' }}
+            />
         );
         const root = container.firstElementChild;
         expect(root?.id).toBe('kort-1');
@@ -95,5 +102,42 @@ describe('Card', () => {
         link.click();
         expect(onClick).toHaveBeenCalledOnce();
         expect(link.getAttribute('aria-current')).toBe('page');
+    });
+
+    describe('linkAs', () => {
+        // Etterligner React Router: `to` i stedet for `href`.
+        function RouterLink({ to, ...rest }: { to: string } & AnchorHTMLAttributes<HTMLAnchorElement>) {
+            return <a {...rest} href={to} data-router="" />;
+        }
+
+        // Etterligner Next: tar `href`.
+        function NextLink(props: AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; prefetch?: boolean }) {
+            const { prefetch, ...rest } = props;
+            return <a {...rest} data-prefetch={prefetch ? '' : undefined} />;
+        }
+
+        it('rendrer router-lenken med to fra linkProps', () => {
+            render(<Card linkAs={RouterLink} linkProps={{ to: '/konto' }} title="Brukskonto" />);
+            const link = screen.getByRole('link', { name: 'Brukskonto' });
+            expect(link.getAttribute('href')).toBe('/konto');
+            expect(link.hasAttribute('data-router')).toBe(true);
+            expect(link.classList).toContain('ix-card__link');
+        });
+
+        it('videresender href og egne props til en Next-lignende lenke', () => {
+            render(<Card linkAs={NextLink} href="/konto" linkProps={{ prefetch: true }} title="Brukskonto" />);
+            const link = screen.getByRole('link', { name: 'Brukskonto' });
+            expect(link.getAttribute('href')).toBe('/konto');
+            expect(link.hasAttribute('data-prefetch')).toBe(true);
+        });
+
+        it('typesjekker linkAs mot external og linkProps', () => {
+            // @ts-expect-error — linkAs kan ikke kombineres med external.
+            void (<Card linkAs={RouterLink} linkProps={{ to: '/' }} title="T" external externalLabel="(ny fane)" />);
+            // @ts-expect-error — `to` finnes ikke på en vanlig <a>.
+            void (<Card href="/" title="T" linkProps={{ to: '/' }} />);
+            // @ts-expect-error — href er påkrevd uten linkAs.
+            void (<Card title="T" />);
+        });
     });
 });
