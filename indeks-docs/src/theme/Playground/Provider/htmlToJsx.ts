@@ -20,7 +20,7 @@ function textareaChildrenToDefaultValue(code: string): string {
     return code.replace(
         /<textarea(\s[^>]*)?>([^<]+)<\/textarea>/g,
         (_, attrs = '', content: string) =>
-            `<textarea${attrs} defaultValue=${JSON.stringify(content.trim())}></textarea>`,
+            `<textarea${attrs} defaultValue=${JSON.stringify(content.trim())}></textarea>`
     );
 }
 
@@ -51,5 +51,59 @@ export function htmlAttrsToJsx(code: string): string {
         (acc, [html, jsx]) => acc.replace(new RegExp(`\\b${html}`, 'g'), jsx),
         code
     );
-    return inputAttrsToJsx(textareaChildrenToDefaultValue(withAttrs));
+    return styleStringToObject(inputAttrsToJsx(textareaChildrenToDefaultValue(withAttrs)));
+}
+
+// Splitter på `;` utenfor parenteser og anførselstegn, så `url(data:…;base64,…)`
+// ikke deles.
+function splitDeclarations(css: string): string[] {
+    const parts: string[] = [];
+    let depth = 0;
+    let quote: string | null = null;
+    let current = '';
+    for (const ch of css) {
+        if (quote) {
+            if (ch === quote) quote = null;
+        } else if (ch === '"' || ch === "'") {
+            quote = ch;
+        } else if (ch === '(') {
+            depth++;
+        } else if (ch === ')') {
+            depth--;
+        } else if (ch === ';' && depth === 0) {
+            parts.push(current);
+            current = '';
+            continue;
+        }
+        current += ch;
+    }
+    parts.push(current);
+    return parts;
+}
+
+// Custom properties beholdes som de er. Ellers camelCase som React forventer:
+// -webkit-mask-image → WebkitMaskImage, men -ms-… → ms… (Reacts unntak).
+function cssPropertyToJsx(name: string): string {
+    if (name.startsWith('--')) return name;
+    return name.replace(/^-ms-/, 'ms-').replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
+}
+
+export function cssToStyleObject(css: string): Record<string, string> {
+    const style: Record<string, string> = {};
+    for (const declaration of splitDeclarations(css)) {
+        const colon = declaration.indexOf(':');
+        if (colon === -1) continue;
+        const name = declaration.slice(0, colon).trim();
+        const value = declaration.slice(colon + 1).trim();
+        if (name && value) style[cssPropertyToJsx(name)] = value;
+    }
+    return style;
+}
+
+// style="color: red" → style={{"color":"red"}}. React krasjer på style som streng.
+function styleStringToObject(code: string): string {
+    return code.replace(
+        /(\s)style=(["'])([\s\S]*?)\2/g,
+        (_, space: string, _quote: string, css: string) => `${space}style={${JSON.stringify(cssToStyleObject(css))}}`
+    );
 }
