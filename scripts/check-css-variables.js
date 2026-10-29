@@ -111,8 +111,8 @@ function withoutComments(source) {
 }
 
 /* Kravet om {, ; eller linjestart foran navnet holder selektorer utenfor:
-   :where(.ix-card--clickable:hover) ser ellers ut som en definisjon av
-   --clickable. */
+   en BEM-modifier som :where(.ix-foo--bar:hover) ser ellers ut som en
+   definisjon av --bar. */
 function definitionsIn(css) {
     return Array.from(withoutComments(css).matchAll(/(?:^|[{;])\s*(--[A-Za-z0-9_-]+)\s*:/gm), (m) => m[1]);
 }

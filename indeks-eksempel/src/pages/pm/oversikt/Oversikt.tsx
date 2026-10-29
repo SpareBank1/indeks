@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Heading, HStack, Icon, Tag, Text, VStack } from '@sb1/indeks-react';
+import { Button, Card, Divider, Heading, HStack, Icon, Tag, Text, Surface, VStack } from '@sb1/indeks-react';
 import { AccountRow } from './AccountRow';
 import { ClickableRow } from './ClickableRow';
 import './oversikt.css';
@@ -32,7 +32,7 @@ export default function PMOversikt() {
                     <Heading as="h2" size="sm">
                         Til godkjenning
                     </Heading>
-                    <Card className="ix-p-md">
+                    <Surface border="default" radius="md" className="ix-p-md">
                         <HStack className="ix-justify-between">
                             <div>Telenor</div>
                             <div>399 kr</div>
@@ -52,7 +52,7 @@ export default function PMOversikt() {
                                 Godkjenn
                             </Button>
                         </HStack>
-                    </Card>
+                    </Surface>
                 </VStack>
 
                 <div className="ix-grid ix-col-gap-lg ix-px-xl ix-py-2xl ix-justify-center ix-grid-auto-fit-lg ix-max-w-lg ix-m-auto">
@@ -71,7 +71,7 @@ export default function PMOversikt() {
                                 </Button>
                             </div>
                         </HStack>
-                        <Card className="ix-mb-sm">
+                        <Surface border="default" radius="md" className="ix-mb-sm">
                             <HStack
                                 className="ix-p-sm ix-justify-end ix-w-full"
                                 gap="2xs"
@@ -88,7 +88,7 @@ export default function PMOversikt() {
                             <AccountRow amount={5000} accountName="Sparekonto" accountNumber="11 223 34 455" />
                             <Divider />
                             <AccountRow amount={25000} accountName="Konto for barn" accountNumber="22 334 45 566" />
-                        </Card>
+                        </Surface>
                     </div>
                     <div>
                         <HStack
@@ -121,7 +121,7 @@ export default function PMOversikt() {
                                 </div>
                             </HStack>
                             <ClickableRow accountName="Min sparing" iconName="savings" />
-                            <Card className="ix-mb-sm">
+                            <Surface border="default" radius="md" className="ix-mb-sm">
                                 <HStack
                                     className="ix-p-sm ix-justify-end ix-w-full"
                                     gap="2xs"
@@ -138,18 +138,15 @@ export default function PMOversikt() {
                                 <AccountRow amount={5000} accountName="Sparekonto" accountNumber="11 223 34 455" />
                                 <Divider />
                                 <AccountRow amount={25000} accountName="Konto for barn" accountNumber="22 334 45 566" />
-                            </Card>
-                            <Card className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm ix-border-dashed">
-                                <Icon name="add_circle" size="xl" />
-                                <div>
-                                    <Heading as="h3" size="sm" addRecommendedSpacing>
-                                        HeadingText
-                                    </Heading>
-                                    <Text size="sm" className="ix-m-0">
-                                        Spar på konto, i fond, kjøp aksjer eller spar til pensjon
-                                    </Text>
-                                </div>
-                            </Card>
+                            </Surface>
+                            <Card
+                                className="ix-m-block-xs"
+                                href="#"
+                                appearance="dashed"
+                                leading={<Icon name="add_circle" />}
+                                title="HeadingText"
+                                subtitle="Spar på konto, i fond, kjøp aksjer eller spar til pensjon"
+                            />
                         </div>
                         <div>
                             <HStack
@@ -160,11 +157,11 @@ export default function PMOversikt() {
                                     Mine barn
                                 </Heading>
                             </HStack>
-                            <Card className="ix-mb-lg ix-h-fit">
+                            <Surface border="default" radius="md" className="ix-mb-lg ix-h-fit">
                                 <AccountRow amount={12300} accountName="Lise" accountNumber="12 345 67 890" />
                                 <Divider />
                                 <AccountRow amount={300} accountName="Ola" accountNumber="98 765 43 210" />
-                            </Card>
+                            </Surface>
                         </div>
                         <div>
                             <HStack
@@ -176,11 +173,11 @@ export default function PMOversikt() {
                                 </Heading>
                             </HStack>
                             <ClickableRow accountName="Boliglån" iconName="home" />
-                            <Card className="ix-mb-sm ix-h-fit">
+                            <Surface border="default" radius="md" className="ix-mb-sm ix-h-fit">
                                 <AccountRow amount={12300} accountName="Boliglån" accountNumber="12 345 67 890" />
                                 <Divider />
                                 <AccountRow amount={300} accountName="Felles" accountNumber="98 765 43 210" />
-                            </Card>
+                            </Surface>
                         </div>
                     </div>
                 </div>
@@ -202,11 +199,11 @@ export default function PMOversikt() {
                             </div>
                         </HStack>
                         <ClickableRow accountName="Min sparing" iconName="savings" />
-                        <Card className="ix-mb-sm">
+                        <Surface border="default" radius="md" className="ix-mb-sm">
                             <AccountRow amount={12300} accountName="Account name" accountNumber="Account number" />
                             <Divider />
                             <AccountRow amount={300} accountName="Account name" accountNumber="Account number" />
-                        </Card>
+                        </Surface>
                     </div>
                     <div>
                         <HStack
@@ -217,22 +214,19 @@ export default function PMOversikt() {
                                 Lån
                             </Heading>
                         </HStack>
-                        <Card className="ix-mb-sm ix-h-fit">
+                        <Surface border="default" radius="md" className="ix-mb-sm ix-h-fit">
                             <AccountRow amount={12300} accountName="Loan account" accountNumber="Account number" />
                             <Divider />
                             <AccountRow amount={300} accountName="Loan account" accountNumber="Account number" />
-                        </Card>
-                        <Card className="ix-m-block-xs ix-grid ix-grid-stretch-middle ix-items-center ix-p-sm ix-border-dashed">
-                            <Icon name="add_circle" size="xl" />
-                            <div>
-                                <Heading as="h3" size="sm" addRecommendedSpacing>
-                                    HeadingText
-                                </Heading>
-                                <Text size="sm" className="ix-m-0">
-                                    Spar på konto, i fond, kjøp aksjer eller spar til pensjon
-                                </Text>
-                            </div>
-                        </Card>
+                        </Surface>
+                        <Card
+                            className="ix-m-block-xs"
+                            href="#"
+                            appearance="dashed"
+                            leading={<Icon name="add_circle" />}
+                            title="HeadingText"
+                            subtitle="Spar på konto, i fond, kjøp aksjer eller spar til pensjon"
+                        />
                     </div>
                     <div>
                         <HStack

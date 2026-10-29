@@ -1,7 +1,6 @@
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import {
     Button,
-    Card,
     Checkbox,
     CheckboxGroup,
     Combobox,
@@ -10,6 +9,7 @@ import {
     Heading,
     PhoneNumberField,
     RadioGroup,
+    Surface,
     Select,
     TextArea,
     TextField,
@@ -146,7 +146,7 @@ export default function FormValidering() {
 
     return (
         <div className="ix-max-w-sm ix-m-auto ix-py-xl">
-            <Card className="ix-m-auto ix-mb-5xl ix-p-lg ix-color-surface-main-default">
+            <Surface border="default" radius="md" className="ix-m-auto ix-mb-5xl ix-p-lg ix-color-surface-main-default">
                 <Heading as="h1" addRecommendedSpacing>
                     Form-validering
                 </Heading>
@@ -260,16 +260,16 @@ export default function FormValidering() {
                         Send inn
                     </Button>
                 </Form>
-            </Card>
+            </Surface>
 
             {submitted && (
-                <Card className="ix-m-auto ix-mb-5xl ix-p-lg ix-color-surface-main-default">
+                <Surface border="default" radius="md" className="ix-m-auto ix-mb-5xl ix-p-lg ix-color-surface-main-default">
                     <Heading as="h2" addRecommendedSpacing>
                         Innsendt
                     </Heading>
                     {/* data-testid gjør at e2e-testen kan asserte de RÅ verdiene. */}
                     <pre data-testid="submitted-data">{JSON.stringify(submitted, null, 2)}</pre>
-                </Card>
+                </Surface>
             )}
         </div>
     );
