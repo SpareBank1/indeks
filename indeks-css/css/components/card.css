@@ -1,18 +1,8 @@
-/* Card — én klikkbar flate som presenterer innhold og navigerer videre.
+/* Stretched link: lenkens ::after dekker hele kortet, så hele flaten er
+   klikkbar, men skjermlesere og tastatur møter bare én lenke.
 
-   Stretched link: kortet er en vanlig <div>, og den eneste interaktive delen er
-   <a class="ix-card__link"> inni tittelen. Lenkens ::after legges over hele
-   kortet (position absolute, inset 0), så hele flaten er klikkbar, men
-   skjermlesere og tastatur møter bare én lenke med tittelen som navn. Ingen JS.
-
-   Kanten er 1px i layouten og 2px på skjermen ved hover/active.
-   --ii-card-border-color styrer både border-en på kortet og inset-skyggen på
-   ::after, så de to halvdelene ikke kommer i utakt og kortet ikke endrer høyde.
-   Fokusringen bæres også av ::after, slik at den omslutter hele kortet og ikke
-   bare tittelteksten.
-
-   Varianter: data-variant="small|large-vertical|large-horizontal" (small er
-   standard), data-appearance="dashed" (kun small). */
+   ::after bærer også den ekstra kanten ved hover/active og fokusringen, så
+   kortet ikke endrer høyde og ringen omslutter hele kortet. */
 
 .ix-card {
     --ii-card-border-color: var(--ix-color-border-main-default);
@@ -40,16 +30,11 @@
     --ii-card-ring-color: var(--ix-color-border-main-default-hover);
 }
 
-/* :active treffer også forfedre til den aktiverte lenken, så kortet får
-   pressed-feedback uansett hvor på flaten man trykker. */
+/* :active treffer også kortet når lenken trykkes, uansett hvor på flaten. */
 .ix-card:active {
     --ii-card-border-color: var(--ix-color-border-main-default-active);
     --ii-card-ring-color: var(--ix-color-border-main-default-active);
 }
-
-/* ── Dashed ──────────────────────────────────────────────────────────────────
-   Gjennomsiktig og stiplet i hvile — en «legg til»-flate. Ved hover/active blir
-   den et vanlig kort: heltrukket kant og surface-bakgrunn. */
 
 .ix-card[data-appearance='dashed'] {
     border-style: dashed;
@@ -61,8 +46,6 @@
     border-style: solid;
     background-color: var(--ix-color-surface-main-default);
 }
-
-/* ── Innhold ─────────────────────────────────────────────────────────────── */
 
 .ix-card__content {
     display: flex;
@@ -98,6 +81,12 @@
         text-decoration-thickness var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
+/* Ellers vinner vertens a:hover (0,1,1) hver gang kortet er :hover. */
+.ix-card__link:hover {
+    color: inherit;
+    text-decoration-line: underline;
+}
+
 /* :focus-visible på lenken, ikke :focus-within på kortet, så understreken ikke
    blir stående etter museklikk. */
 .ix-card:hover .ix-card__link,
@@ -109,14 +98,12 @@
     content: '';
     position: absolute;
     inset: 0;
-    /* Over innhold som lager egen stacking context, som ikonenes mask, så klikk
-       på navigasjonsikonet også treffer lenken. */
+    /* Over ikonets mask, som lager egen stacking context, så klikk på ikonet treffer lenken. */
     z-index: 1;
     border-radius: var(--ii-card-inner-radius);
     box-shadow: inset 0 0 0 var(--ix-border-width-default) var(--ii-card-ring-color);
     outline: var(--ix-outline-width-default) solid transparent;
-    /* Ringen skal ligge utenfor kortets kant, ikke bare utenfor ::after
-       (som starter innenfor border-en). */
+    /* ::after starter innenfor border-en, men ringen skal ligge utenfor kortet. */
     outline-offset: calc(var(--ix-outline-offset-default) + var(--ix-border-width-default));
     transition:
         box-shadow var(--ix-transition-duration) var(--ix-transition-animation),
@@ -133,15 +120,13 @@
     margin-block-start: calc((1.2 * var(--ix-font-size-lg) - 20px) / 2);
 }
 
-/* Bare pilen (intern lenke) dyttes fremover. open_in_new står stille. */
 .ix-card__nav-icon[name='arrow_forward'] {
     transition:
         transform var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
-/* Ikonet er søsken av tittelen, ikke av lenken, så fokus fanges med
-   :focus-within på kortet (kortet har bare én fokuserbar lenke). Det slår også
-   inn etter museklikk, men :has(:focus-visible) er utenfor browserslist. */
+/* Ikonet er ikke inni lenken, så fokus fanges på kortet. :has(:focus-visible)
+   er utenfor browserslist. */
 .ix-card:hover .ix-card__nav-icon[name='arrow_forward'],
 .ix-card:focus-within .ix-card__nav-icon[name='arrow_forward'] {
     transform: translateX(var(--ix-spacing-2xs));
@@ -158,15 +143,12 @@
     font-size: var(--ix-font-size-md);
 }
 
-/* Tag(s) under beskrivelsen — skal ikke strekkes ut i kolonne-flexen. */
 .ix-card__tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--ix-spacing-xs);
     margin-block-start: var(--ix-spacing-2xs);
 }
-
-/* ── Leading (kun small) ─────────────────────────────────────────────────── */
 
 .ix-card__leading {
     display: inline-flex;
@@ -196,9 +178,7 @@
     object-fit: contain;
 }
 
-/* ── Large ───────────────────────────────────────────────────────────────────
-   Media går helt ut til kanten; paddingen flyttes fra kortet til innholdet. */
-
+/* Media går ut til kanten, så paddingen ligger på innholdet. */
 .ix-card:is([data-variant='large-vertical'], [data-variant='large-horizontal']) {
     align-items: stretch;
     gap: 0;
@@ -270,10 +250,7 @@
     }
 }
 
-/* ── forced-colors (Windows høykontrast) ─────────────────────────────────────
-   Kant og ring tvinges til systemfarger. Den gjennomsiktige outline-en ville
-   ellers blitt synlig rundt alle kort i hvile, så den slås av og settes kun
-   ved fokus. */
+/* Den gjennomsiktige outline-en blir synlig i høykontrast, så den settes bare ved fokus. */
 @media (forced-colors: active) {
     .ix-card {
         border-color: CanvasText;
