@@ -97,8 +97,7 @@ export type CardLinkAsProps<As extends ElementType> = DistributiveOmit<
     externalLabel?: never;
 } & CardLinkAsLinkPropsProp<As>;
 
-// linkProps er påkrevd når lenken har påkrevde props (som `to` i React Router),
-// så de ikke kan glemmes. Next sin Link trenger bare `href`, og da er den valgfri.
+// Påkrevd bare når lenken har påkrevde props, som `to` i React Router. Next sin Link klarer seg med `href`.
 type CardLinkAsLinkPropsProp<As extends ElementType> =
     Partial<CardLinkAsLinkProps<As>> extends CardLinkAsLinkProps<As>
         ? { linkProps?: CardLinkAsLinkProps<As> }
