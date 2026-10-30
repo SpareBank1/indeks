@@ -1,0 +1,54 @@
+# Filer som ikke følger selektorregelen i ADR-DS-009 ennå. Sjekkes av
+# scripts/check-css-selektorer.ts. Lista skal bare krympe.
+#
+# Én gruppe per sak i #325, med blank linje mellom. Fjern hele gruppen din,
+# men la blanklinjen stå, så parallelle PR-er ikke får konflikt her.
+
+# #327 Skjemafelt
+components/form/field.css
+components/form/form.css
+components/form/label.css
+components/form/phone-number-field.css
+components/form/select.css
+components/form/text-area.css
+components/form/text-field.css
+components/form/validation-message.css
+
+# #328 RadioGroup
+components/form/radio-group.css
+
+# #329 Grid og Stack
+layout/grid.css
+layout/stack.css
+
+# #330 Combobox og DateField
+components/form/combobox.css
+components/form/date-field.css
+
+# #331 Dropdown, Popover, Message, Pagination og ProgressBar
+components/dropdown-menu.css
+components/message.css
+components/pagination.css
+components/popover.css
+components/progress-bar.css
+
+# #332 Accordion, ReadMore og Tabs
+components/accordion.css
+components/read-more.css
+components/tabs.css
+
+# #333 Table, LinkText og Text
+components/table.css
+typography/link-text.css
+typography/text.css
+
+# #334 Button, ikoner, typografi og resten
+components/button.css
+components/interactive-icon.css
+components/spinner.css
+components/tag.css
+icons/icon.css
+surface/surface.css
+typography/heading.css
+
+# Card jobbes med separat
