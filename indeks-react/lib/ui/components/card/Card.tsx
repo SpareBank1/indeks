@@ -81,6 +81,11 @@ export type CardProps = CardSmallProps | CardLargeProps;
 
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
 
+type CardLinkAsLinkProps<As extends ElementType> = Omit<
+    ComponentPropsWithoutRef<As>,
+    'className' | 'children' | 'href'
+>;
+
 /** Card med router-lenke. `href` er valgfri, fordi f.eks. React Router bruker `to`. */
 export type CardLinkAsProps<As extends ElementType> = DistributiveOmit<
     CardProps,
@@ -88,10 +93,16 @@ export type CardLinkAsProps<As extends ElementType> = DistributiveOmit<
 > & {
     linkAs: As;
     href?: string;
-    linkProps?: Omit<ComponentPropsWithoutRef<As>, 'className' | 'children' | 'href'>;
     external?: never;
     externalLabel?: never;
-};
+} & CardLinkAsLinkPropsProp<As>;
+
+// linkProps er påkrevd når lenken har påkrevde props (som `to` i React Router),
+// så de ikke kan glemmes. Next sin Link trenger bare `href`, og da er den valgfri.
+type CardLinkAsLinkPropsProp<As extends ElementType> =
+    Partial<CardLinkAsLinkProps<As>> extends CardLinkAsLinkProps<As>
+        ? { linkProps?: CardLinkAsLinkProps<As> }
+        : { linkProps: CardLinkAsLinkProps<As> };
 
 interface CardComponent {
     (props: CardProps & RefAttributes<HTMLDivElement>): ReturnType<FC>;

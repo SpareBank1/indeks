@@ -306,7 +306,7 @@ Leder kortet til et annet nettsted, åpnes lenken i ny fane og navigasjonsikonet
 
 ### Router-lenke
 
-I React kan du bruke lenkekomponenten fra routeren din i stedet for `<a>`, så navigasjonen skjer uten full sidelasting. Send komponenten inn i `linkAs`, og dens egne props i `linkProps`. `href` er valgfri når `linkAs` er satt, og sendes videre hvis du oppgir den. `linkAs` kan ikke kombineres med `external`. I HTML bytter du bare ut `<a class="ix-card__link">` med lenken routeren rendrer.
+I React kan du bruke lenkekomponenten fra routeren din i stedet for `<a>`, så navigasjonen skjer uten full sidelasting. Send komponenten inn i `linkAs`, og dens egne props i `linkProps`. `linkProps` er påkrevd når komponenten har påkrevde props, som `to` i React Router. `href` er valgfri når `linkAs` er satt, og sendes videre hvis du oppgir den. `linkAs` kan ikke kombineres med `external`. I HTML bytter du bare ut `<a class="ix-card__link">` med lenken routeren rendrer.
 
 ```tsx
 // React Router
@@ -387,7 +387,7 @@ Den stiplede varianten skiller «legg til»-kort fra eksisterende innhold. Bruk 
 | `external` | `boolean` | `false` | Åpner lenken i ny fane og viser `open_in_new`-ikonet |
 | `externalLabel` | `string` | | Påkrevd når `external` er satt. Skjult tekst lagt til lenkenavnet |
 | `linkAs` | `ElementType` | | Router-lenke i stedet for `<a>`, f.eks. `Link` fra React Router eller Next. Kan ikke kombineres med `external` |
-| `linkProps` | `AnchorHTMLAttributes` / props til `linkAs` | | Ekstra props til lenken, f.eks. `onClick`, `aria-current` eller `to`. Typen følger `linkAs` |
+| `linkProps` | `AnchorHTMLAttributes` / props til `linkAs` | | Ekstra props til lenken, f.eks. `onClick`, `aria-current` eller `to`. Typen følger `linkAs`, og den er påkrevd når `linkAs` har påkrevde props |
 
 Øvrige HTML-attributter (`id`, `className`, `data-*` osv.) settes på rotelementet (`<div>`). TypeScript hindrer deg i å kombinere props som ikke hører til varianten, f.eks. `media` på `small`.
 
