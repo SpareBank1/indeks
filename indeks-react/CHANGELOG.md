@@ -1,5 +1,27 @@
 # @sb1/indeks-react
 
+## 0.26.0
+
+### Minor Changes
+
+- 389f6ec: Skjemafelt, Chip, DropdownMenu, hover på Tabs og nøytral statuskant (Tag) bruker nå `--ix-color-border-main-emphasis`. Accordion, Card, Modal, Popover, Surface, Table, Divider, ReadMore og den passive understreken i Tabs beholder `default` og får lysere kant.
+  
+  Nye utility-klasser `.ix-border-emphasis` (og `-top`/`-right`/`-bottom`/`-left`), custom property `--ix-border-emphasis` og `border="emphasis"` på Surface.
+- 0c9716a: Ny Card-komponent som erstatter den tidligere plassholderen. Card presenterer innhold og navigasjon i én klikkbar flate: hele kortet er én lenke (tittelen), og et navigasjonsikon viser intern (`arrow_forward`) eller ekstern (`open_in_new`) navigasjon.
+  
+  - Varianter: `small` (med `appearance="default"` eller `"dashed"` og valgfri leading — ikon, ikon med bakgrunn eller illustrasjon), `large-vertical` og `large-horizontal` (med media, beskrivelse og tag).
+  - Ren HTML: `<div class="ix-card" data-variant="…">` med `.ix-card__link` inni `.ix-card__title`.
+  - React: `<Card href title subtitle variant … />`. Ved `external` er `externalLabel` påkrevd (skjult tekst, f.eks. «(åpnes i ny fane)»). Med `linkAs` brukes routerens lenke i stedet for `<a>` (f.eks. `<Card linkAs={Link} linkProps={{ to: '/konto' }} … />`), så navigasjonen skjer uten full sidelasting.
+  
+  Den gamle Card-komponenten er fjernet. `children`, `chevronIcon`, `openInNewTab`, spacing-props og `Card.Action` finnes ikke lenger, og `href` og `title` er nå påkrevd. CSS-klassene `.ix-card--clickable` og `.ix-card__chevron` er fjernet. Bruk `Surface` (`<Surface border="default" radius="md">` / `.ix-surface`) der Card ble brukt som ren innholdsflate uten lenke.
+- 140b0cb: Én hook per del og ingen `:where()` i checkbox, checkbox-group, chip og modal (ADR-DS-009).
+  
+  Breaking: `ix-checkbox--disabled` er fjernet. Bruk `disabled` på inputen. `ix-checkbox__input` og `ix-checkbox__label` styles ikke lenger, men gjør ingen skade i markupen.
+
+### Patch Changes
+
+- dc9139a: Modal: lukkes nå før den fjernes, så du kan rendre den betinget (`{valgt && <Modal open …>}`) uten egen `useEffect`. Fokus går tilbake til triggeren, og scroll-låsen slippes.
+
 ## 0.25.0
 
 ### Minor Changes

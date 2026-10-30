@@ -1,5 +1,33 @@
 # @sb1/indeks-css
 
+## 0.26.0
+
+### Minor Changes
+
+- 389f6ec: Skjemafelt, Chip, DropdownMenu, hover på Tabs og nøytral statuskant (Tag) bruker nå `--ix-color-border-main-emphasis`. Accordion, Card, Modal, Popover, Surface, Table, Divider, ReadMore og den passive understreken i Tabs beholder `default` og får lysere kant.
+  
+  Nye utility-klasser `.ix-border-emphasis` (og `-top`/`-right`/`-bottom`/`-left`), custom property `--ix-border-emphasis` og `border="emphasis"` på Surface.
+- 0c9716a: Ny Card-komponent som erstatter den tidligere plassholderen. Card presenterer innhold og navigasjon i én klikkbar flate: hele kortet er én lenke (tittelen), og et navigasjonsikon viser intern (`arrow_forward`) eller ekstern (`open_in_new`) navigasjon.
+  
+  - Varianter: `small` (med `appearance="default"` eller `"dashed"` og valgfri leading — ikon, ikon med bakgrunn eller illustrasjon), `large-vertical` og `large-horizontal` (med media, beskrivelse og tag).
+  - Ren HTML: `<div class="ix-card" data-variant="…">` med `.ix-card__link` inni `.ix-card__title`.
+  - React: `<Card href title subtitle variant … />`. Ved `external` er `externalLabel` påkrevd (skjult tekst, f.eks. «(åpnes i ny fane)»). Med `linkAs` brukes routerens lenke i stedet for `<a>` (f.eks. `<Card linkAs={Link} linkProps={{ to: '/konto' }} … />`), så navigasjonen skjer uten full sidelasting.
+  
+  Den gamle Card-komponenten er fjernet. `children`, `chevronIcon`, `openInNewTab`, spacing-props og `Card.Action` finnes ikke lenger, og `href` og `title` er nå påkrevd. CSS-klassene `.ix-card--clickable` og `.ix-card__chevron` er fjernet. Bruk `Surface` (`<Surface border="default" radius="md">` / `.ix-surface`) der Card ble brukt som ren innholdsflate uten lenke.
+- 140b0cb: Én hook per del og ingen `:where()` i checkbox, checkbox-group, chip og modal (ADR-DS-009).
+  
+  Breaking: `ix-checkbox--disabled` er fjernet. Bruk `disabled` på inputen. `ix-checkbox__input` og `ix-checkbox__label` styles ikke lenger, men gjør ingen skade i markupen.
+
+### Patch Changes
+
+- db575b4: Legger til `user-select: none` på knapper for å hindre utilsiktet tekstmarkering ved klikk.
+- a0b31bf: Checkbox og radio står nå ved første linje når labelen brytes over flere linjer, ikke midt på labelen. Chip-variantene er uendret.
+- 9557308: Legger til readonly-styling for checkbox, inkludert riktig bakgrunn, border og hakemerke-farge når checkboxen er avkrysset i readonly-tilstand.
+  
+  Reduserer avstanden mellom legend og description i checkbox-group og radio-group.
+- 267258d: `.ix-link-text` har fått Indeks-fokusringen og transition, i stedet for nettleserens hvite og blå standardring. Gjelder alle lenker med klassen, også i Message.
+- d20935a: Message: lukkeknappen står nå på linje med tittelen og statusikonet, og lenker i meldingen strekkes ikke lenger til full bredde.
+
 ## 0.25.0
 
 ### Minor Changes
