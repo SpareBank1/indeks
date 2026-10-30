@@ -1,5 +1,17 @@
 # @sb1/indeks-web
 
+## 0.26.0
+
+### Minor Changes
+
+- 140b0cb: Én hook per del og ingen `:where()` i checkbox, checkbox-group, chip og modal (ADR-DS-009).
+  
+  Breaking: `ix-checkbox--disabled` er fjernet. Bruk `disabled` på inputen. `ix-checkbox__input` og `ix-checkbox__label` styles ikke lenger, men gjør ingen skade i markupen.
+
+### Patch Changes
+
+- dc9139a: Modal: scroll-låsen på `<body>` slippes nå også når en åpen modal fjernes fra DOM-en, for eksempel når forelderen fjerner den i `onOpenChange` eller ved ruteskifte. Før ble siden stående uten scroll.
+
 ## 0.25.0
 
 No changes in this release.
