@@ -259,17 +259,6 @@
     object-fit: contain;
 }
 
-/* ── prefers-reduced-motion ──────────────────────────────────────────────────
-   Tilstandene byttes uten overgang. Pilen hopper fortsatt 4px, men glir ikke. */
-@media (prefers-reduced-motion: reduce) {
-    .ix-card,
-    .ix-card__link,
-    .ix-card__link::after,
-    .ix-card__nav-icon[name='arrow_forward'] {
-        transition: none;
-    }
-}
-
 /* ── forced-colors (Windows høykontrast) ─────────────────────────────────────
    Kant og ring tvinges til systemfarger. Den gjennomsiktige outline-en ville
    ellers blitt synlig rundt alle kort i hvile, så den slås av og settes kun
