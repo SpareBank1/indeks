@@ -185,5 +185,30 @@ describe('modal atferds-modul', () => {
             dialog.close();
             expect(document.body.style.overflow).toBe('');
         });
+
+        it('slipper låsen når en åpen modal fjernes fra DOM-en', async () => {
+            // Forelder som fjerner modalen i onOpenChange, ruteskifte o.l.: verken
+            // `close` eller en `open`-endring fyrer.
+            const dialog = createModal({ id: 'm1' });
+            createOpener('m1').click();
+            expect(document.body.style.overflow).toBe('hidden');
+
+            dialog.remove();
+            await Promise.resolve();
+
+            expect(document.body.style.overflow).toBe('');
+        });
+
+        it('holder låsen når én av flere åpne modaler fjernes', async () => {
+            const first = createModal({ id: 'm1' });
+            createModal({ id: 'm2' });
+            createOpener('m1').click();
+            createOpener('m2').click();
+
+            first.remove();
+            await Promise.resolve();
+
+            expect(document.body.style.overflow).toBe('hidden');
+        });
     });
 });

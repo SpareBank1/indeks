@@ -161,6 +161,18 @@ function Ukontrollert() {
 }
 ```
 
+**Betinget rendring (React):** du kan også rendre modalen bare når den skal vises, for eksempel én modal per valgt rad. Modalen lukkes før den fjernes, så fokus går tilbake til triggeren og scroll-låsen slippes.
+
+```tsx
+{valgtId && (
+  <Modal open onOpenChange={(open) => !open && setValgtId(null)}>
+    …
+  </Modal>
+)}
+```
+
+I ren HTML: kall `close()` før du fjerner en åpen `<dialog>`. Scroll-låsen slippes uansett, men uten `close()` får du ikke fokus-retur.
+
 Skal en trigger-knapp åpne dialogen uten at du holder state, er ren HTML riktig verktøy: det native `<dialog>` åpnes med `showModal()` via `data-modal-open` og eier sin egen tilstand — nettleseren lukker på Escape og bakgrunnsklikk. Se HTML-fanen under «Bruk».
 
 ### Slå av bakgrunnslukking
@@ -302,6 +314,7 @@ lukking, bruk en bekreftelses-dialog framfor å blokkere tasten.
 - Gi tydelig tittel og struktur. Bruk `Modal.Title` (eller `aria-label` på `<dialog>` i ren HTML) og gjerne `Modal.Description`. Tittelen navngir dialogen for skjermlesere, og en tydelig struktur med tittel, beskrivelse og handlinger gjør at hjelpemidler forstår at brukeren har gått inn i en ny kontekst. Uten tittel er dialogen unavngitt. Komponenten gir role `dialog` fra det native `<dialog>`-elementet.
 - **Oversett all tekst:** tittel, `label` på lukk-knappen og knappetekster kommer fra deg og må være på brukerens språk (bokmål, nynorsk, engelsk). Komponenten har ingen hardkodet tekst.
 - Merk triggerknappen. Sett `aria-haspopup="dialog"` på knappen som åpner dialogen (og gjerne `aria-controls` som peker til dialogens `id` i ren HTML), så skjermlesere annonserer at den åpner en dialog.
+- Flytt fokus selv hvis triggeren forsvinner. Fjerner handlingen i modalen elementet som åpnet den (f.eks. «Slett» på en rad), har fokus ingen trigger å gå tilbake til. Sett fokus på et logisk sted, som neste rad eller listens overskrift.
 - Ikke stol på farge alene. Viktig informasjon og handlinger i modalen må ikke kommuniseres med farge alene. Det må være tydelig gjennom tekst og struktur.
 - Vær varsom med bakgrunnslukking. Bakgrunnslukking er på som standard; slå den av med `closeOnBackdropClick={false}` / `data-no-close-on-backdrop` for skjemaer eller destruktive handlinger der et uhell gir datatap.
 - Hold det viktigste synlig. Ved mye innhold må den sentrale informasjonen og handlingene være synlige før brukeren må scrolle. På små skjermer kan `size="full"` gi innholdet hele flaten i stedet for å klemme det inn i en boks.
