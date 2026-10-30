@@ -59,6 +59,7 @@
  * aldri trenger å nevne --ii-checkbox-*. */
 :is(ix-checkbox-group[data-variant='chip'], .ix-checkbox-group[data-variant='chip']) .ix-checkbox label {
     --ii-checkbox-size: var(--ii-chip-indicator-size);
+    --ii-checkbox-indicator-y: 50%;
 }
 
 /* Flytt firkant-indikatoren (boks + glyf) inn fra pill-kanten. Glyfen krympes til

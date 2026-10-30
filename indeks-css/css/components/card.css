@@ -1,76 +1,296 @@
-:where(.ix-card) {
-    /* Kort har alltid en solid kantlinje — også i ren HTML uten ekstra klasser. */
-    border: var(--ix-border-default);
+/* Card — én klikkbar flate som presenterer innhold og navigerer videre.
+
+   Stretched link: kortet er en vanlig <div>, og den eneste interaktive delen er
+   <a class="ix-card__link"> inni tittelen. Lenkens ::after legges over hele
+   kortet (position absolute, inset 0), så hele flaten er klikkbar, men
+   skjermlesere og tastatur møter bare én lenke med tittelen som navn. Ingen JS.
+
+   Kanten er 1px i layouten og 2px på skjermen ved hover/active.
+   --ii-card-border-color styrer både border-en på kortet og inset-skyggen på
+   ::after, så de to halvdelene ikke kommer i utakt og kortet ikke endrer høyde.
+   Fokusringen bæres også av ::after, slik at den omslutter hele kortet og ikke
+   bare tittelteksten.
+
+   Varianter: data-variant="small|large-vertical|large-horizontal" (small er
+   standard), data-appearance="dashed" (kun small). */
+
+.ix-card {
+    --ii-card-border-color: var(--ix-color-border-main-default);
+    --ii-card-ring-color: transparent;
+    --ii-card-inner-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default));
+
+    position: relative;
+    /* Holder z-indexen på lenkens ::after inne i kortet. */
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: var(--ix-spacing-md);
+    padding: var(--ix-spacing-md);
+    border: var(--ix-border-width-default) solid var(--ii-card-border-color);
     border-radius: var(--ix-border-radius-md);
     background-color: var(--ix-color-surface-main-default);
+    color: var(--ix-color-foreground-main-default);
+    transition:
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        border-color var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+.ix-card:hover {
+    --ii-card-border-color: var(--ix-color-border-main-default-hover);
+    --ii-card-ring-color: var(--ix-color-border-main-default-hover);
+}
+
+/* :active treffer også forfedre til den aktiverte lenken, så kortet får
+   pressed-feedback uansett hvor på flaten man trykker. */
+.ix-card:active {
+    --ii-card-border-color: var(--ix-color-border-main-default-active);
+    --ii-card-ring-color: var(--ix-color-border-main-default-active);
+}
+
+/* ── Dashed ──────────────────────────────────────────────────────────────────
+   Gjennomsiktig og stiplet i hvile — en «legg til»-flate. Ved hover/active blir
+   den et vanlig kort: heltrukket kant og surface-bakgrunn. */
+
+.ix-card[data-appearance='dashed'] {
+    border-style: dashed;
+    background-color: transparent;
+}
+
+.ix-card[data-appearance='dashed']:hover,
+.ix-card[data-appearance='dashed']:active {
+    border-style: solid;
+    background-color: var(--ix-color-surface-main-default);
+}
+
+/* ── Innhold ─────────────────────────────────────────────────────────────── */
+
+.ix-card__content {
     display: flex;
     flex-direction: column;
+    flex: 1 1 auto;
+    gap: var(--ix-spacing-2xs);
+    /* Lar lange ord bryte i stedet for å presse kortet bredere enn 320px-viewport. */
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
-/* Klikkbart kort. Affordansen er synlig i hviletilstand (chevron), ikke kun på
-   :hover — slik at klikkbarhet også er tydelig på touch. Kortet er flatt:
-   ingen skygge, hover gir bakgrunns-tint. */
-:where(.ix-card--clickable) {
-    position: relative;
-    cursor: pointer;
+.ix-card__heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--ix-spacing-xs);
+}
+
+.ix-card__title {
+    margin: 0;
+    font-size: var(--ix-font-size-lg);
+    font-weight: var(--ix-font-weight-medium);
+    line-height: 1.2;
+}
+
+.ix-card__link {
     color: inherit;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    /* Fokusringen tegnes av ::after rundt hele kortet. */
+    outline: none;
+    transition:
+        text-decoration-thickness var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
-/* Uten :where() slik at transition vinner over en global bar a{transition:color}
-   (Infima i docs, eller en reset i konsumentapp) — ellers faller
-   background/border ut av transition-settet på <a>-kortet og hover snapper.
-   Samme spesifisitets-hensyn som padding-inline-end nedenfor. */
-.ix-card--clickable {
-    transition: var(--ix-transition-all);
-    outline: var(--ix-outline-width-default) solid transparent;
-    outline-offset: var(--ix-outline-offset-default);
+/* :focus-visible på lenken, ikke :focus-within på kortet, så understreken ikke
+   blir stående etter museklikk. */
+.ix-card:hover .ix-card__link,
+.ix-card__link:focus-visible {
+    text-decoration-thickness: 2px;
 }
 
-/* Chevron som permanent «dette gjør noe»-signal — et ekte ix-icon (byttbart via
-   `chevronIcon`-propen), vertikalt sentrert mot høyre kant. */
-:where(.ix-card--clickable) > .ix-card__chevron {
+.ix-card__link::after {
+    content: '';
     position: absolute;
-    inset-block: 0;
-    inset-inline-end: var(--ix-spacing-md);
-    margin-block: auto;
-    color: var(--ix-color-foreground-link-default, currentcolor);
-    transition: var(--ix-transition-all);
-    pointer-events: none;
+    inset: 0;
+    /* Over innhold som lager egen stacking context, som ikonenes mask, så klikk
+       på navigasjonsikonet også treffer lenken. */
+    z-index: 1;
+    border-radius: var(--ii-card-inner-radius);
+    box-shadow: inset 0 0 0 var(--ix-border-width-default) var(--ii-card-ring-color);
+    outline: var(--ix-outline-width-default) solid transparent;
+    /* Ringen skal ligge utenfor kortets kant, ikke bare utenfor ::after
+       (som starter innenfor border-en). */
+    outline-offset: calc(var(--ix-outline-offset-default) + var(--ix-border-width-default));
+    transition:
+        box-shadow var(--ix-transition-duration) var(--ix-transition-animation),
+        outline-color var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
-/* Reserver en gutter til høyre slik at innhold ikke legger seg under chevronen.
-   Bevisst uten :where() — da vinner regelen over ix-p-*-utility (samme
-   spesifisitet, men komponent-CSS importeres etter utils), slik at
-   chevron-kolonnen holdes klar uansett hvilken padding som velges.
-   Gutteren = posisjonsgapet (--ix-spacing-md) + plass til selve glyfen. */
-.ix-card--clickable {
-    padding-inline-end: calc(var(--ix-spacing-md) + 1.5em);
-}
-
-/* Flat hover-feedback: bakgrunns-tint i stedet for skygge/løft. */
-:where(.ix-card--clickable:hover) {
-    background-color: var(--ix-color-surface-main-hover);
-    border-color: var(--ix-color-border-main-default-hover);
-}
-
-/* Pressed-feedback — bekrefter klikket på touch der :hover ikke finnes. */
-:where(.ix-card--clickable:active) {
-    background-color: var(--ix-color-fill-interactive-active);
-}
-
-.ix-card--clickable:focus-visible {
+.ix-card__link:focus-visible::after {
     outline-color: var(--ix-color-border-focus-default);
 }
 
+.ix-card__nav-icon {
+    flex: none;
+    /* Sentrer 20px-ikonet mot første tittellinje (18px × 1,2 ≈ 21,6px). */
+    margin-block-start: calc((1.2 * var(--ix-font-size-lg) - 20px) / 2);
+}
+
+/* Bare pilen (intern lenke) dyttes fremover. open_in_new står stille. */
+.ix-card__nav-icon[name='arrow_forward'] {
+    transition:
+        transform var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+/* Ikonet er søsken av tittelen, ikke av lenken, så fokus fanges med
+   :focus-within på kortet (kortet har bare én fokuserbar lenke). Det slår også
+   inn etter museklikk, men :has(:focus-visible) er utenfor browserslist. */
+.ix-card:hover .ix-card__nav-icon[name='arrow_forward'],
+.ix-card:focus-within .ix-card__nav-icon[name='arrow_forward'] {
+    transform: translateX(var(--ix-spacing-2xs));
+}
+
+.ix-card__subtitle {
+    margin: 0;
+    font-size: var(--ix-font-size-sm);
+    color: var(--ix-color-foreground-main-subtle);
+}
+
+.ix-card__description {
+    margin: 0;
+    font-size: var(--ix-font-size-md);
+}
+
+/* Tag(s) under beskrivelsen — skal ikke strekkes ut i kolonne-flexen. */
+.ix-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ix-spacing-xs);
+    margin-block-start: var(--ix-spacing-2xs);
+}
+
+/* ── Leading (kun small) ─────────────────────────────────────────────────── */
+
+.ix-card__leading {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.ix-card__leading[data-type='icon-background'] {
+    box-sizing: border-box;
+    width: 40px;
+    height: 40px;
+    padding: var(--ix-spacing-xs);
+    border-radius: var(--ix-border-radius-circle);
+    background-color: var(--ix-color-fill-neutral-subtle);
+}
+
+.ix-card__leading[data-type='illustration'] {
+    max-width: 40px;
+    max-height: 40px;
+}
+
+.ix-card__leading[data-type='illustration'] > :is(img, svg) {
+    display: block;
+    max-width: 100%;
+    max-height: 40px;
+    object-fit: contain;
+}
+
+/* ── Large ───────────────────────────────────────────────────────────────────
+   Media går helt ut til kanten; paddingen flyttes fra kortet til innholdet. */
+
+.ix-card:is([data-variant='large-vertical'], [data-variant='large-horizontal']) {
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+}
+
+.ix-card:is([data-variant='large-vertical'], [data-variant='large-horizontal']) > .ix-card__content {
+    gap: var(--ix-spacing-xs);
+    padding: var(--ix-spacing-md);
+}
+
+/* Tittel og subtitle står tett også i large; 8px-gapet gjelder resten. */
+.ix-card:is([data-variant='large-vertical'], [data-variant='large-horizontal']) .ix-card__subtitle {
+    margin-block-start: calc(var(--ix-spacing-2xs) - var(--ix-spacing-xs));
+}
+
+.ix-card[data-variant='large-vertical'] {
+    flex-direction: column;
+}
+
+.ix-card__media {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--ix-color-fill-neutral-subtle);
+}
+
+.ix-card[data-variant='large-vertical'] > .ix-card__media {
+    width: 100%;
+    aspect-ratio: 350 / 200;
+    border-start-start-radius: var(--ii-card-inner-radius);
+    border-start-end-radius: var(--ii-card-inner-radius);
+}
+
+/* Fast 150px fra designet, men aldri mer enn 40 % av kortet — ellers blir
+   innholdskolonnen for smal ved 320px viewport (WCAG 1.4.10). */
+.ix-card[data-variant='large-horizontal'] > .ix-card__media {
+    width: 150px;
+    max-width: 40%;
+    min-height: 150px;
+    border-start-start-radius: var(--ii-card-inner-radius);
+    border-end-start-radius: var(--ii-card-inner-radius);
+}
+
+.ix-card__media[data-type='image'] > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ix-card__media[data-type='illustration'] > :is(img, svg) {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* ── prefers-reduced-motion ──────────────────────────────────────────────────
+   Tilstandene byttes uten overgang. Pilen hopper fortsatt 4px, men glir ikke. */
 @media (prefers-reduced-motion: reduce) {
-    /* Uten :where() på kortet for å matche spesifisiteten til transition-regelen
-       over (0,1,0) — ellers slås ikke animasjonen av. */
-    .ix-card--clickable {
+    .ix-card,
+    .ix-card__link,
+    .ix-card__link::after,
+    .ix-card__nav-icon[name='arrow_forward'] {
         transition: none;
     }
+}
 
-    :where(.ix-card--clickable) > .ix-card__chevron {
-        transition: none;
+/* ── forced-colors (Windows høykontrast) ─────────────────────────────────────
+   Kant og ring tvinges til systemfarger. Den gjennomsiktige outline-en ville
+   ellers blitt synlig rundt alle kort i hvile, så den slås av og settes kun
+   ved fokus. */
+@media (forced-colors: active) {
+    .ix-card {
+        border-color: CanvasText;
+    }
+
+    .ix-card__link::after {
+        box-shadow: none;
+        outline-style: none;
+    }
+
+    .ix-card:hover .ix-card__link::after,
+    .ix-card:active .ix-card__link::after {
+        box-shadow: inset 0 0 0 var(--ix-border-width-default) Highlight;
+    }
+
+    .ix-card__link:focus-visible::after {
+        outline-style: solid;
+        outline-color: Highlight;
     }
 }

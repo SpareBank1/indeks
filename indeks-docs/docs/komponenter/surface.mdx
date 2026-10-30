@@ -22,7 +22,7 @@ slik at du slipper å forholde deg til klassenavnene direkte.
 
 ## Uegnet til
 
-- Klikkbare flater eller navigasjon (bruk [Card](./card) med `href`/`onClick`)
+- Klikkbare flater eller navigasjon (bruk [Card](./card) med `href`)
 - Innhold som skal fremstå som en avgrenset, klikkbar enhet (bruk [Card](./card))
 - Komplekse layouter med retning og innrykk (vurder [Stack](./primitives/stack))
 
@@ -32,8 +32,8 @@ Surface og [Card](./card) virker på ulike nivåer:
 
 - **Surface** er *flaten flere ting ligger på*. Den signaliserer ingen interaktivitet. Den samler
   en gruppe elementer og skiller dem visuelt fra resten av siden. Tenk bakgrunn, seksjon eller panel.
-- **Card** er *én ting*: en avgrenset, selvstendig innholdsenhet. Det kan være klikkbart og bærer
-  chevron når det er det.
+- **Card** er *én ting*: en avgrenset, selvstendig innholdsenhet. Hele kortet er én lenke, og det bærer
+  et navigasjonsikon som viser at det leder videre.
 
 Et Card kan ligge oppå en Surface: de konkurrerer ikke, de virker på ulike nivåer. Trenger du at
 selve flaten kan trykkes, velg Card. Skal flaten bare gruppere og skille ut innhold, velg Surface.
@@ -47,13 +47,23 @@ selve flaten kan trykkes, velg Card. Skal flaten bare gruppere og skille ut innh
 <div class="ix-surface ix-radius-md ix-p-md ix-gap-sm" data-status="info">
   <h3>Kontoutdrag</h3>
   <p>Surface samler flere beslektede elementer på én flate — skilt visuelt fra siden.</p>
-  <div class="ix-card ix-p-md">
-    <strong>Brukskonto</strong>
-    <p>12 480,50 kr</p>
+  <div class="ix-card" data-variant="small">
+    <div class="ix-card__content">
+      <div class="ix-card__heading">
+        <h4 class="ix-card__title"><a class="ix-card__link" href="#">Brukskonto</a></h4>
+        <ix-icon class="ix-card__nav-icon" name="arrow_forward" aria-hidden="true"></ix-icon>
+      </div>
+      <p class="ix-card__subtitle">12 480,50 kr</p>
+    </div>
   </div>
-  <div class="ix-card ix-p-md">
-    <strong>Sparekonto</strong>
-    <p>85 000,00 kr</p>
+  <div class="ix-card" data-variant="small">
+    <div class="ix-card__content">
+      <div class="ix-card__heading">
+        <h4 class="ix-card__title"><a class="ix-card__link" href="#">Sparekonto</a></h4>
+        <ix-icon class="ix-card__nav-icon" name="arrow_forward" aria-hidden="true"></ix-icon>
+      </div>
+      <p class="ix-card__subtitle">85 000,00 kr</p>
+    </div>
   </div>
 </div>
 ```
@@ -65,14 +75,8 @@ selve flaten kan trykkes, velg Card. Skal flaten bare gruppere og skille ut innh
 <Surface status="info" radius="md" padding="md" gap="sm">
   <Heading as="h3" size="sm">Kontoutdrag</Heading>
   <Text>Surface samler flere beslektede elementer på én flate — skilt visuelt fra siden.</Text>
-  <Card padding="md">
-    <Heading as="h4" size="xs">Brukskonto</Heading>
-    <Text>12 480,50 kr</Text>
-  </Card>
-  <Card padding="md">
-    <Heading as="h4" size="xs">Sparekonto</Heading>
-    <Text>85 000,00 kr</Text>
-  </Card>
+  <Card href="#" titleAs="h4" title="Brukskonto" subtitle="12 480,50 kr" />
+  <Card href="#" titleAs="h4" title="Sparekonto" subtitle="85 000,00 kr" />
 </Surface>
 ```
 
@@ -87,7 +91,7 @@ selve flaten kan trykkes, velg Card. Skal flaten bare gruppere og skille ut innh
 i HTML og `status="neutral"` i React. Det er standardverdien. `.ix-surface` uten `data-status` gir
 også den nøytrale flaten (fallback fra `:root`), men merk at flaten da arver en eventuell `data-status`
 fra en forelder; sett `data-status="neutral"` for å bryte den arven. De andre statusene (`info`,
-`success`, `warning`, `danger`) settes på samme måte. Det er samme status-system som [Card](./card) og
+`success`, `warning`, `danger`) settes på samme måte. Det er samme status-system som
 [Message](./message).
 
 :::note Om nøytral status
@@ -243,7 +247,7 @@ Surface er en ikke-interaktiv container og tilfører ingen rolle eller fokus-hå
 - Ikke kommuniser mening med farge alene. Statusfargen er dekorativ. Innhold som bærer
   betydning må også ha tekst eller annet ikke-visuelt signal.
 - **Trenger flaten å være klikkbar**, er Surface feil verktøy. Bruk [Card](./card), som gir
-  riktig semantikk (`<a>`/`<button>`), tastaturstøtte og fokusring.
+  én ekte lenke, tastaturstøtte og fokusring rundt hele flaten.
 
 ### WCAG-kriterier
 
@@ -293,6 +297,6 @@ statusfarge kobles med `data-status`, resten er utility-klasser:
 
 ## Relatert
 
-- [Card](./card) — avgrenset, evt. klikkbart innholdskort
+- [Card](./card) — klikkbart innholdskort for navigasjon
 - [Stack](./primitives/stack) — layout-primitiver for retning og avstand
 - [Utility-klasser](../utility-klasser/oversikt) — klassene Surface bygger på

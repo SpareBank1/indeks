@@ -132,8 +132,9 @@ const config: Config = {
         navbar: {
             title: 'Indeks',
             logo: {
-                alt: 'Indeks Designsystem Logo',
+                alt: 'SpareBank 1',
                 src: 'img/logo.svg',
+                srcDark: 'img/logo-dark.svg',
             },
             items: [
                 {

@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
-import { createRef } from 'react';
+import { createRef, StrictMode } from 'react';
 import { Modal } from './Modal';
 
 /* jsdom (v29) implementerer ikke <dialog>.showModal()/close(). Vi stubber dem så
@@ -159,8 +159,40 @@ describe('Modal', () => {
         // Escape fyrer native cancel→close; lukk-knapp og backdrop kaller .close().
         // Alle ender i `close`-eventet, som er wrapperens eneste tilstands-synk.
         const { container, onOpenChange } = renderModal();
-        fireEvent(container.querySelector('dialog')!, new Event('close'));
+        container.querySelector('dialog')!.close();
         expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('lukker dialogen før den fjernes når Modal unmountes mens den er åpen', () => {
+        // close() mens dialogen fortsatt er i DOM-en gir native fokus-retur og lar
+        // web-modulet slippe scroll-låsen.
+        const { container, unmount, onOpenChange } = renderModal();
+        const dialog = container.querySelector('dialog')!;
+        let connectedOnClose: boolean | undefined;
+        const close = dialog.close.bind(dialog);
+        dialog.close = () => {
+            connectedOnClose = dialog.isConnected;
+            close();
+        };
+
+        unmount();
+
+        expect(connectedOnClose).toBe(true);
+        expect(dialog.open).toBe(false);
+        expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('varsler ikke onOpenChange når StrictMode åpner dialogen på nytt', () => {
+        const onOpenChange = vi.fn();
+        const { container } = render(
+            <StrictMode>
+                <Modal open onOpenChange={onOpenChange}>
+                    <Modal.Body>x</Modal.Body>
+                </Modal>
+            </StrictMode>,
+        );
+        expect(container.querySelector('dialog')!.open).toBe(true);
+        expect(onOpenChange).not.toHaveBeenCalled();
     });
 
     it('åpner ukontrollert via defaultOpen (uten open-prop)', () => {

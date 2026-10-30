@@ -34,6 +34,8 @@
     --ii-checkbox-size: 24px;
     --ii-checkbox-box-bg: var(--ix-color-fill-interactive-default);
     --ii-checkbox-box-border: var(--ix-color-border-main-emphasis);
+    /* Indikatoren står ved første linje når labelen brytes. */
+    --ii-checkbox-indicator-y: calc(var(--ii-checkbox-size) / 2);
 
     position: relative;
     display: inline-flex;
@@ -61,7 +63,7 @@
     content: '';
     position: absolute;
     left: 0;
-    top: 50%;
+    top: var(--ii-checkbox-indicator-y);
     transform: translateY(-50%);
     box-sizing: border-box;
     width: var(--ii-checkbox-size);
@@ -83,7 +85,7 @@
     content: '';
     position: absolute;
     left: calc((var(--ii-checkbox-size) - 16px) / 2);
-    top: 50%;
+    top: var(--ii-checkbox-indicator-y);
     transform: translateY(-50%);
     display: none;
     width: 16px;

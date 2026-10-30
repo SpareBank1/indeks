@@ -83,6 +83,28 @@ export const MedOptions: Story = {
     },
 };
 
+/**
+ * Labelene brytes over flere linjer. Ringen skal stå ved første linje, ikke midt
+ * på labelen.
+ */
+export const LangeLabels: Story = {
+    args: { legend: 'Hvordan vil du betale?', name: 'betaling', defaultValue: 'faktura' },
+    decorators: [
+        (Story) => (
+            <div style={{ maxWidth: '320px' }}>
+                <Story />
+            </div>
+        ),
+    ],
+    render: (args) => (
+        <RadioGroup {...args}>
+            <RadioButton value="faktura" label="Faktura med betalingsfrist 14 dager etter at varen er sendt fra lageret" />
+            <RadioButton value="avtalegiro" label="AvtaleGiro, trekkes automatisk fra kontoen din på forfallsdato hver måned" />
+            <RadioButton value="kort" label="Kort" />
+        </RadioGroup>
+    ),
+};
+
 export const HTML: Story = {
     render: () => (
         <ix-radio-group name="kundetype-html">

@@ -77,6 +77,26 @@ export const MedTooltip: Story = {
     },
 };
 
+/**
+ * Labelen brytes over flere linjer. Boksen skal stå ved første linje, ikke midt
+ * på labelen.
+ */
+export const LangLabel: Story = {
+    args: {
+        label: 'Jeg bekrefter at jeg har lest og forstått vilkårene for lånet, og at opplysningene jeg har gitt er korrekte',
+        defaultChecked: true,
+        tooltip: 'Vilkårene finner du under Dokumenter',
+        tooltipLabel: 'Mer informasjon om vilkårene',
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ maxWidth: '320px' }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
 export const FlereCheckboxer: Story = {
     render: () => (
         <CheckboxGroup legend="Hvordan vil du bli kontaktet?" name="contact" defaultValue={['email']}>

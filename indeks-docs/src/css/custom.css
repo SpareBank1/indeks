@@ -112,16 +112,14 @@
     color: var(--ix-color-component-button-tertiary-foreground-danger);
 }
 
-/* Klikkbart Card rendres som <a>, og Card sin `color: inherit`/`text-decoration: none`
-   bruker :where() (spesifisitet 0) som taper mot Infima sin `a { color; text-decoration }`
-   (spesifisitet 1). Uten dette blir kortets tekst — inkl. en heading brukt som «header» —
-   blå og understreket i docs. Klasseselektor (spesifisitet 0,1,0) slår Infima.
-   :hover må også overstyres: Infima sin `a:hover` (spesifisitet 0,1,1) gjør teksten blå
-   igjen ved hover, så vi trenger `.ix-card--clickable:hover` (0,2,0) for å vinne. */
-.ix-card--clickable,
-.ix-card--clickable:hover {
+/* Card-lenken (stretched link) bruker :where() (spesifisitet 0) for `color: inherit` og
+   understrek, som taper mot Infima sin `a { color }` og `a:hover { text-decoration }`.
+   Uten dette blir kortets tittel blå i docs. Klasseselektor (0,1,0) slår `a`, og
+   `:hover`-varianten (0,2,0) slår Infima sin `a:hover` (0,1,1). */
+.ix-card__link,
+.ix-card__link:hover {
     color: inherit;
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 .hb-demo {
