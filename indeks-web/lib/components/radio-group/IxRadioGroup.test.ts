@@ -15,8 +15,8 @@ function mount(html: string): IxRadioGroup {
 const SIMPLE = `
 <ix-radio-group>
   <span data-field="legend">Velg kundetype</span>
-  <div class="ix-radio-button"><input type="radio" value="privat" /><label>Privat</label></div>
-  <div class="ix-radio-button"><input type="radio" value="bedrift" /><label>Bedrift</label></div>
+  <div><input type="radio" value="privat" /><label>Privat</label></div>
+  <div><input type="radio" value="bedrift" /><label>Bedrift</label></div>
   <span data-field="error"></span>
 </ix-radio-group>
 `;
@@ -45,7 +45,7 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group>
                     <span data-field="legend" id="min-legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
@@ -56,7 +56,7 @@ describe('IxRadioGroup', () => {
             const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
             mount(`
                 <ix-radio-group>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
@@ -71,7 +71,7 @@ describe('IxRadioGroup', () => {
                 <ix-radio-group>
                     <span data-field="legend">Velg</span>
                     <span data-field="description">Hjelp</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
@@ -90,7 +90,7 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                 </ix-radio-group>
             `);
             expect(el.hasAttribute('aria-describedby')).toBe(false);
@@ -118,7 +118,7 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button">
+                    <div>
                         <input type="radio" id="allerede-satt" value="a" />
                         <label>A</label>
                     </div>
@@ -132,7 +132,7 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button">
+                    <div>
                         <input type="radio" id="mitt-input" value="a" />
                         <label for="mitt-input">A</label>
                     </div>
@@ -146,14 +146,14 @@ describe('IxRadioGroup', () => {
             const el1 = mount(`
                 <ix-radio-group>
                     <span data-field="legend">G1</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
             const el2 = mount(`
                 <ix-radio-group>
                     <span data-field="legend">G2</span>
-                    <div class="ix-radio-button"><input type="radio" value="b" /><label>B</label></div>
+                    <div><input type="radio" value="b" /><label>B</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
@@ -176,11 +176,11 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group name="kundetype">
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button">
+                    <div>
                         <input type="radio" value="a" />
                         <label>A</label>
                     </div>
-                    <div class="ix-radio-button">
+                    <div>
                         <input type="radio" value="b" />
                         <label>B</label>
                     </div>
@@ -196,11 +196,11 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group name="host-name">
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button">
+                    <div>
                         <input type="radio" name="input-name" value="a" />
                         <label>A</label>
                     </div>
-                    <div class="ix-radio-button">
+                    <div>
                         <input type="radio" value="b" />
                         <label>B</label>
                     </div>
@@ -216,11 +216,11 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button">
+                    <div>
                         <input type="radio" name="gruppe" value="a" />
                         <label>A</label>
                     </div>
-                    <div class="ix-radio-button">
+                    <div>
                         <input type="radio" value="b" />
                         <label>B</label>
                     </div>
@@ -262,7 +262,7 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                     <span data-field="error">Feil</span>
                 </ix-radio-group>
             `);
@@ -290,7 +290,7 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                     <span data-field="error">   </span>
                 </ix-radio-group>
             `);
@@ -303,8 +303,8 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group disabled>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
-                    <div class="ix-radio-button"><input type="radio" value="b" /><label>B</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="b" /><label>B</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
@@ -316,8 +316,8 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" disabled /><label>A</label></div>
-                    <div class="ix-radio-button"><input type="radio" value="b" /><label>B</label></div>
+                    <div><input type="radio" value="a" disabled /><label>A</label></div>
+                    <div><input type="radio" value="b" /><label>B</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
@@ -340,8 +340,8 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group readonly>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
-                    <div class="ix-radio-button"><input type="radio" value="b" /><label>B</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="b" /><label>B</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
@@ -365,7 +365,7 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group readonly>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
@@ -377,9 +377,9 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group required>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
-                    <div class="ix-radio-button"><input type="radio" value="b" /><label>B</label></div>
-                    <div class="ix-radio-button"><input type="radio" value="c" /><label>C</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="b" /><label>B</label></div>
+                    <div><input type="radio" value="c" /><label>C</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
@@ -394,7 +394,7 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group required>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
@@ -421,7 +421,6 @@ describe('IxRadioGroup', () => {
         it('wirer en input som legges til etter mount', async () => {
             const el = mount(SIMPLE);
             const wrapper = document.createElement('div');
-            wrapper.className = 'ix-radio-button';
             wrapper.innerHTML = '<input type="radio" value="ny" /><label>Ny</label>';
             el.insertBefore(wrapper, el.querySelector('[data-field="error"]'));
             await new Promise((r) => setTimeout(r, 0));
@@ -441,12 +440,11 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group required>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);
             const wrapper = document.createElement('div');
-            wrapper.className = 'ix-radio-button';
             wrapper.innerHTML = '<input type="radio" value="b" /><label>B</label>';
             el.insertBefore(wrapper, el.querySelector('[data-field="error"]'));
             await new Promise((r) => setTimeout(r, 0));
@@ -489,7 +487,7 @@ describe('IxRadioGroup', () => {
             const el = mount(`
                 <ix-radio-group readonly>
                     <span data-field="legend">Velg</span>
-                    <div class="ix-radio-button"><input type="radio" value="a" /><label>A</label></div>
+                    <div><input type="radio" value="a" /><label>A</label></div>
                     <span data-field="error"></span>
                 </ix-radio-group>
             `);

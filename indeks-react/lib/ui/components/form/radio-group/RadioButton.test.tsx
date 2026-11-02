@@ -17,6 +17,13 @@ describe('RadioButton', () => {
             expect(container.querySelector('div')).not.toBeNull();
         });
 
+        it('rendrer naken markup uten klasser på wrapper, input og label', () => {
+            const { container } = render(<RadioButton value="a" label="A" />);
+            expect(container.querySelector('div')?.className).toBe('');
+            expect(container.querySelector('input')?.className).toBe('');
+            expect(container.querySelector('label')?.className).toBe('');
+        });
+
         it('rendrer input med type="radio"', () => {
             const { container } = render(<RadioButton value="a" label="A" />);
             const input = container.querySelector('input');

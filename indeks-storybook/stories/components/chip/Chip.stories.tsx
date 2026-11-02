@@ -234,15 +234,15 @@ export const RadioChipHTML: Story = {
                     label[for]. Faste id-er ville blitt duplisert når lys/mørk-decoratoren
                     rendrer storyen to ganger i samme dokument, og da peker begge labels
                     på den første inputen. */}
-                <div className="ix-radio-button">
+                <div>
                     <input type="radio" value="1m" />
                     <label>1 måned</label>
                 </div>
-                <div className="ix-radio-button">
+                <div>
                     <input type="radio" value="3m" defaultChecked />
                     <label>3 måneder</label>
                 </div>
-                <div className="ix-radio-button">
+                <div>
                     <input type="radio" value="12m" />
                     <label>12 måneder</label>
                 </div>

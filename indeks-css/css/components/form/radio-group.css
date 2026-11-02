@@ -1,6 +1,4 @@
-/* ── RadioGroup — container ──────────────────────────────────────────────── */
-
-:where(ix-radio-group, .ix-radio-group) {
+:is(ix-radio-group, .ix-radio-group) {
     display: flex;
     flex-direction: column;
     gap: var(--ix-spacing-sm);
@@ -8,7 +6,7 @@
     border: 0;
 }
 
-:where(ix-radio-group, .ix-radio-group) [data-field='legend'] {
+:is(ix-radio-group, .ix-radio-group) [data-field='legend'] {
     display: inline-flex;
     align-items: center;
     gap: var(--ix-spacing-2xs);
@@ -17,61 +15,47 @@
     color: var(--ix-color-foreground-main-default);
 }
 
-:where(ix-radio-group[data-state='error'], .ix-radio-group[data-state='error'], ix-radio-group[aria-invalid='true']) [data-field='legend'] ix-icon {
+:is(ix-radio-group, .ix-radio-group):is([data-state='error'], [aria-invalid='true']) [data-field='legend'] ix-icon {
     color: var(--ix-color-foreground-danger-default);
 }
 
-:where(ix-radio-group, .ix-radio-group) [data-field='description'] {
+:is(ix-radio-group, .ix-radio-group) [data-field='description'] {
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-subtle);
     margin: 0;
 }
 
-:where(ix-radio-group, .ix-radio-group) [data-field='legend']:not(.ix-sr-only) + [data-field='description'] {
-     margin-top: calc(var(--ix-spacing-2xs) - var(--ix-spacing-sm));
- }
+:is(ix-radio-group, .ix-radio-group) [data-field='legend']:not(.ix-sr-only) + [data-field='description'] {
+    margin-top: calc(var(--ix-spacing-2xs) - var(--ix-spacing-sm));
+}
 
-/* Feilmeldingen ([data-field='error']) styles i form/validation-message.css. */
-
-:where(ix-radio-group, .ix-radio-group) [data-field='items'] {
+:is(ix-radio-group, .ix-radio-group) [data-field='items'] {
     display: flex;
     flex-direction: column;
     gap: var(--ix-spacing-sm);
 }
 
-/* Horisontal orientering */
-:where(ix-radio-group[data-orientation='horizontal'], .ix-radio-group[data-orientation='horizontal']) [data-field='items'] {
+/* Chip er unntatt, fordi chips alltid ligger på rad. Uten :not() ville denne
+   regelen vunnet over chip-regelen. */
+:is(ix-radio-group, .ix-radio-group)[data-orientation='horizontal']:not([data-variant='chip']) [data-field='items'] {
     flex-direction: row;
     flex-wrap: wrap;
     gap: var(--ix-spacing-lg);
 }
 
-/* Bryt til vertikal ved liten skjerm */
 @media (max-width: 480px) {
-    :where(ix-radio-group[data-orientation='horizontal'], .ix-radio-group[data-orientation='horizontal']) [data-field='items'] {
+    :is(ix-radio-group, .ix-radio-group)[data-orientation='horizontal']:not([data-variant='chip']) [data-field='items'] {
         flex-direction: column;
         gap: var(--ix-spacing-sm);
     }
 }
 
-/* ── RadioButton — enkelt valg ───────────────────────────────────────────────
- * Styler både naken input/label inni <ix-radio-group> OG BEM-klassene.
- * BEM-klassene er hooks for konsumenter som vil bruke radio-styling utenfor
- * <ix-radio-group>; React-laget setter dem på sine egne elementer. Forfattere
- * som skriver HTML inni <ix-radio-group> trenger ikke klassene.
- */
-
-/* Wrapper rundt én input+label. Inni gruppen: alle direkte barn av items-
- * containeren får wrapper-styling. Utenfor: bruk .ix-radio-button. */
-:where(ix-radio-group, .ix-radio-group) [data-field='items'] > *,
-:where(.ix-radio-button) {
+:is(ix-radio-group, .ix-radio-group) [data-field='items'] > * {
     display: flex;
     flex-direction: column;
 }
 
-/* Skjul native input visuelt, men hold det i DOM for tastatur og skjermleser */
-:where(ix-radio-group, .ix-radio-group) input[type='radio'],
-:where(.ix-radio-button__input) {
+:is(ix-radio-group, .ix-radio-group) input {
     position: absolute;
     opacity: 0;
     width: 0;
@@ -80,18 +64,11 @@
     pointer-events: none;
 }
 
-:where(ix-radio-group, .ix-radio-group) label,
-:where(.ix-radio-button__label) {
+:is(ix-radio-group, .ix-radio-group) label {
     --ii-radio-size: 24px;
 
-    /* Prikken avledes av et heltalls innrykk, ikke av et forholdstall. Ringen og
-       prikken er to selvstendige bokser, og avstanden mellom dem er
-       (ring − prikk) / 2. Er den en halv piksel, snapper Firefox de to boksene i
-       hver sin retning og prikken står synlig skjevt; Chromium kantutjevner i
-       stedet, så der blir den bare uskarp. Med innrykket som utgangspunkt er
-       avstanden et heltall ved konstruksjon, i alle størrelser og tettheter.
-       Faste piksler med vilje: --ii-radio-size er også faste piksler, så et
-       spacing-token ville krympet innrykket i compact og latt prikken vokse. */
+    /* Prikken avledes av et innrykk i hele piksler. En halv piksel mellom ring og
+       prikk gjør at Firefox tegner prikken skjevt. Faste px, som ringen. */
     --ii-radio-dot-inset: 6px;
     --ii-radio-dot-size: calc(var(--ii-radio-size) - 2 * var(--ii-radio-dot-inset));
     /* Ringen står ved første linje når labelen brytes. */
@@ -108,16 +85,12 @@
     cursor: pointer;
     font-size: var(--ix-font-size-md);
     border-radius: var(--ix-border-radius-xs);
-    /* Linjeboksen settes lik ringen, som en lengde. Ringen står på top: 50% av
-       linjeboksen, så en linjeboks på 19,2px (arvet 1,2 fra .ix-body) ga ringen
-       y = −2,4 og en 1px-kant som straddler en enhetspiksel i begge ender. Nå blir
-       50 % nøyaktig 12px og ringen starter på 0. Et forholdstall ville ikke holdt:
-       font-skalaen er flytende, og 1,5 × 15,6px er 23,4. Chip-varianten setter sin
-       egen line-height i chip.css og er upåvirket. */
+    /* En lengde lik ringen, så første linje står midt på ringen. Et forholdstall
+       gir brøkdeler med den flytende font-skalaen. */
     line-height: var(--ii-radio-size);
     color: var(--ix-color-foreground-main-default);
     user-select: none;
-    transition: 
+    transition:
         background-color var(--ix-transition-duration) var(--ix-transition-animation),
         border-color var(--ix-transition-duration) var(--ix-transition-animation),
         box-shadow var(--ix-transition-duration) var(--ix-transition-animation),
@@ -127,13 +100,11 @@
     outline-offset: var(--ix-outline-offset-default);
 }
 
-/* Radio-indikator: ytre ring (::after) + indre prikk (::before) */
-:where(ix-radio-group, .ix-radio-group) label::before,
-:where(ix-radio-group, .ix-radio-group) label::after,
-:where(.ix-radio-button__label)::before,
-:where(.ix-radio-button__label)::after {
+:is(ix-radio-group, .ix-radio-group) label::before,
+:is(ix-radio-group, .ix-radio-group) label::after {
     content: '';
     position: absolute;
+    top: var(--ii-radio-indicator-y);
     box-sizing: border-box;
     border-radius: 50%;
     pointer-events: none;
@@ -143,237 +114,152 @@
         transform var(--ix-transition-duration) var(--ix-transition-animation);
 }
 
-/* Ytre ring */
-:where(ix-radio-group, .ix-radio-group) label::after,
-:where(.ix-radio-button__label)::after {
+:is(ix-radio-group, .ix-radio-group) label::after {
     width: var(--ii-radio-size);
     height: var(--ii-radio-size);
-    top: var(--ii-radio-indicator-y);
     left: 0;
     transform: translateY(-50%);
     background-color: var(--ii-radio-bg);
     border: var(--ix-border-width-default) solid var(--ii-radio-outer-color);
 }
 
-/* Indre prikk — sentrert i den ytre ringen */
-:where(ix-radio-group, .ix-radio-group) label::before,
-:where(.ix-radio-button__label)::before {
+:is(ix-radio-group, .ix-radio-group) label::before {
     width: var(--ii-radio-dot-size);
     height: var(--ii-radio-dot-size);
-    top: var(--ii-radio-indicator-y);
-    /* Ankre prikken på ringens senter (radio-size/2 fra ringens venstrekant) og
-       selv-sentrer med translate(-50%). Det felles ankeret er nødvendig, men det
-       er ikke nok: translate(-50%) av en odde prikk er selv en halv piksel, så
-       den kom tilbake den veien så lenge prikken var 9px i en 18px ring. Derfor
-       er prikken nå avledet av et heltalls innrykk — se --ii-radio-dot-inset. */
+    /* Ankret i ringens senter, så ring og prikk deler utgangspunkt. */
     left: calc(var(--ii-radio-size) / 2);
     z-index: 1;
     background-color: var(--ii-radio-inner-color);
     transform: translate(-50%, -50%) scale(0);
 }
 
-/* ── Hover ───────────────────────────────────────────────────────────────── */
-
-:where(ix-radio-group, .ix-radio-group) input[type='radio']:not(:disabled):not([aria-disabled='true']) + label:hover,
-:where(.ix-radio-button__input:not(:disabled):not([aria-disabled='true'])) + :where(.ix-radio-button__label:hover) {
+/* Gjelder også valgt radio: den får hover-ringen, og prikken står. */
+:is(ix-radio-group, .ix-radio-group) input:not(:disabled):not([aria-disabled='true']) + label:hover {
     --ii-radio-outer-color: var(--ix-color-border-main-emphasis-hover);
     --ii-radio-bg: var(--ix-color-fill-interactive-hover);
 }
 
-/* Hover ved error: behold rød kant og rød bakgrunn */
-:where(ix-radio-group[data-state='error'], .ix-radio-group[data-state='error'], ix-radio-group[aria-invalid='true']) input[type='radio']:not(:disabled):not([aria-disabled='true']) + label:hover,
-:where(ix-radio-group[data-state='error'], .ix-radio-group[data-state='error'], ix-radio-group[aria-invalid='true']) :where(.ix-radio-button__input:not(:disabled):not([aria-disabled='true'])) + :where(.ix-radio-button__label:hover) {
-    --ii-radio-outer-color: var(--ix-color-fill-danger-default);
-    --ii-radio-bg: var(--ix-color-fill-danger-subtle);
-}
-
-/* ── Active ───────────────────────────────────────────────────────────────── */
-
-:where(ix-radio-group, .ix-radio-group) input[type='radio']:not(:disabled):not([aria-disabled='true']) + label:active,
-:where(.ix-radio-button__input:not(:disabled):not([aria-disabled='true'])) + :where(.ix-radio-button__label:active) {
+:is(ix-radio-group, .ix-radio-group) input:not(:disabled):not([aria-disabled='true']) + label:active {
     --ii-radio-bg: var(--ix-color-fill-interactive-active);
 }
 
-/* ── Focus ───────────────────────────────────────────────────────────────── */
-
-:where(ix-radio-group, .ix-radio-group) input[type='radio']:focus-visible + label,
-:where(.ix-radio-button__input:focus-visible) + :where(.ix-radio-button__label) {
+:is(ix-radio-group, .ix-radio-group) input:focus-visible + label {
     outline-color: var(--ix-color-border-focus-default);
 }
 
-/* ── Selected ────────────────────────────────────────────────────────────── */
-
-:where(ix-radio-group, .ix-radio-group) input[type='radio']:checked + label,
-:where(.ix-radio-button__input:checked) + :where(.ix-radio-button__label) {
+:is(ix-radio-group, .ix-radio-group) input:checked + label {
     --ii-radio-outer-color: var(--ix-color-fill-main-default);
     --ii-radio-inner-color: var(--ix-color-fill-main-default);
 }
 
-:where(ix-radio-group, .ix-radio-group) input[type='radio']:checked + label::before,
-:where(.ix-radio-button__input:checked) + :where(.ix-radio-button__label)::before {
+:is(ix-radio-group, .ix-radio-group) input:checked + label::before {
     transform: translate(-50%, -50%) scale(1);
 }
 
-/* ── Chip-variant ─────────────────────────────────────────────────────────────
- * Radio chip: samme radiogruppe-semantikk og sirkel-indikator, men <label>
- * styles som en pill.
- *
- * Selve pillen — form, størrelse, padding, fyll, kant, hover/selected/focus —
- * eies i sin helhet av components/chip.css. Her ligger BARE indikator-
- * geometrien, som er radio-spesifikk. Ikke legg pill-styling tilbake her:
- * chip.css cascader først, så en duplisert property her vinner og skjuler den.
- */
-
-/* Radioens egen størrelsesvariabel mappes på chip-kontrakten. Avhengigheten går
- * denne veien slik at chip.css aldri trenger å nevne --ii-radio-*. */
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label {
+/* Bare indikatoren står her. Pillen styles i chip.css, og en egenskap gjentatt
+   her ville vunnet over den. Størrelsen mappes hit, så chip.css ikke trenger
+   --ii-radio-*. */
+:is(ix-radio-group, .ix-radio-group)[data-variant='chip'] input + label {
     --ii-radio-size: var(--ii-chip-indicator-size);
-
-    /* 4px dekker begge chip-størrelsene og holder prikken jevn: 18 − 8 = 10px på md,
-       16 − 8 = 8px på sm. Base-verdien 6px ville gitt 18 − 12 = 6px, altså en prikk
-       som krymper når ringen krymper. */
+    /* Gir prikk på 10px (md) og 8px (sm). Med 6px ble prikken bare 6px på md. */
     --ii-radio-dot-inset: 4px;
     --ii-radio-indicator-y: 50%;
 }
 
-/* Flytt sirkelen (ytre ring + indre prikk) inn fra pill-kanten. Ett uttrykk
- * dekker begge størrelser — --ii-chip-indicator-inset bytter selv fra md til sm.
- * Ikke bytt til --ii-chip-padding-inline: den er tallet for den nakne siden av
- * pillen og er likt i begge størrelser. */
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::after {
+/* Ikke --ii-chip-padding-inline: den er lik i begge størrelser, mens innrykket
+   krymper på sm. */
+:is(ix-radio-group, .ix-radio-group)[data-variant='chip'] input + label::after {
     left: var(--ii-chip-indicator-inset);
 }
-:where(ix-radio-group[data-variant='chip'], .ix-radio-group[data-variant='chip']) label::before {
+:is(ix-radio-group, .ix-radio-group)[data-variant='chip'] input + label::before {
     left: calc(var(--ii-chip-indicator-inset) + var(--ii-radio-size) / 2);
 }
 
-/* ── Error ───────────────────────────────────────────────────────────────── */
+/* Pekeren slås av i stedet for å vokte hover-reglene mot read-only. */
+:is(ix-radio-group, .ix-radio-group)[data-state='readonly'] input + label {
+    cursor: default;
+    pointer-events: none;
+    color: var(--ix-color-foreground-main-read-only);
+}
 
-:where(ix-radio-group[data-state='error'], .ix-radio-group[data-state='error']) label,
-:where(ix-radio-group[data-state='error'], .ix-radio-group[data-state='error']) :where(.ix-radio-button__label) {
+:is(ix-radio-group, .ix-radio-group)[data-state='readonly'] input:checked + label {
+    --ii-radio-outer-color: var(--ix-color-foreground-main-read-only);
+    --ii-radio-inner-color: var(--ix-color-foreground-main-read-only);
+}
+
+/* Valgt read-only chip beholder flaten i ringen, så den grå prikken ikke
+   smelter sammen med pillen. */
+:is(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='readonly'] input:not(:checked) + label {
+    --ii-radio-bg: transparent;
+}
+
+/* Feilen står på gruppen: data-state, eller aria-invalid fra web componenten. */
+:is(ix-radio-group, .ix-radio-group):is([data-state='error'], [aria-invalid='true']) input + label {
     --ii-radio-outer-color: var(--ix-color-fill-danger-default);
     --ii-radio-bg: var(--ix-color-fill-danger-subtle);
 }
 
-:where(ix-radio-group[data-state='error'], .ix-radio-group[data-state='error']) input[type='radio']:checked + label,
-:where(ix-radio-group[data-state='error'], .ix-radio-group[data-state='error']) :where(.ix-radio-button__input:checked) + :where(.ix-radio-button__label) {
+/* Kanten gjentas, ellers vinner read-only når gruppen også er ugyldig. */
+:is(ix-radio-group, .ix-radio-group):is([data-state='error'], [aria-invalid='true']) input:checked + label {
     --ii-radio-outer-color: var(--ix-color-fill-danger-default);
     --ii-radio-inner-color: var(--ix-color-fill-danger-default);
-    --ii-radio-bg: var(--ix-color-fill-danger-subtle);
 }
 
-/* Alternativt via aria-invalid på host (settes av ix-radio-group WC når
- * error-elementet får innhold). Per-input aria-invalid settes ikke. */
-:where(ix-radio-group[aria-invalid='true']) label,
-:where(ix-radio-group[aria-invalid='true']) :where(.ix-radio-button__label) {
+/* Error hover gjentar kanten og flaten, ellers vinner hover. */
+:is(ix-radio-group, .ix-radio-group):is([data-state='error'], [aria-invalid='true']) input:not(:disabled):not([aria-disabled='true']) + label:hover {
     --ii-radio-outer-color: var(--ix-color-fill-danger-default);
     --ii-radio-bg: var(--ix-color-fill-danger-subtle);
 }
 
-:where(ix-radio-group[aria-invalid='true']) input[type='radio']:checked + label,
-:where(ix-radio-group[aria-invalid='true']) :where(.ix-radio-button__input:checked) + :where(.ix-radio-button__label) {
-    --ii-radio-outer-color: var(--ix-color-fill-danger-default);
-    --ii-radio-inner-color: var(--ix-color-fill-danger-default);
-    --ii-radio-bg: var(--ix-color-fill-danger-subtle);
+/* Samme flate som active uten feil, ellers vinner error hover. */
+:is(ix-radio-group, .ix-radio-group):is([data-state='error'], [aria-invalid='true']) input:not(:disabled):not([aria-disabled='true']) + label:active {
+    --ii-radio-bg: var(--ix-color-fill-interactive-active);
 }
 
-/* Chip-variant, error + valgt: chip.css fyller pillen mørkerødt, så ringen og
- * prikken må flippe til inverse for å være synlige. Ligger etter hover-ved-error-
- * regelen over på samme spesifisitet (0,4,2), slik at en hovret valgt error-chip
- * beholder den hvite ringen. Uvalgt error trenger ingenting — reglene over gir
- * allerede rød ring på nøytralt pill-fyll. */
-:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='error'] input[type='radio']:checked + label,
-:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][aria-invalid='true'] input[type='radio']:checked + label {
+/* Valgt error-chip har mørkerød pille, så ring og prikk blir inverse. Hover må
+   med, ellers vinner error hover. */
+:is(ix-radio-group, .ix-radio-group)[data-variant='chip']:is([data-state='error'], [aria-invalid='true']) input:checked + label,
+:is(ix-radio-group, .ix-radio-group)[data-variant='chip']:is([data-state='error'], [aria-invalid='true']) input:checked:not(:disabled):not([aria-disabled='true']) + label:hover {
     --ii-radio-outer-color: var(--ix-color-foreground-inverse-default);
     --ii-radio-inner-color: var(--ix-color-foreground-inverse-default);
     --ii-radio-bg: transparent;
 }
 
-/* Chip-variant, read-only + passiv: ingen hvit flate inne i ringen. Ringen står
- * alene mot den grå pillen, med 1px border-main-emphasis fra read-only-regelen
- * under. Uvalgt-vakten må stå — en valgt read-only radio beholder flaten, så den
- * grå prikken ikke smelter sammen med pillen. (0,2,0) slår den generelle
- * read-only-regelen på (0,0,1); read-only-valgt er (0,2,2) og vinner uansett. */
-:where(ix-radio-group, .ix-radio-group)[data-variant='chip'][data-state='readonly']
-    :where(input[type='radio']:not(:checked) + label) {
-    --ii-radio-bg: transparent;
-}
-
-/* ── ReadOnly ────────────────────────────────────────────────────────────── */
-
-:where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) label,
-:where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) :where(.ix-radio-button__label) {
-    cursor: default;
-    color: var(--ix-color-foreground-main-read-only);
-
-    /* Samme kant som ringen har i alle andre tilstander. Mot den grå
-     * read-only-flaten gir det ca. 3,5:1. */
-    --ii-radio-outer-color: var(--ix-color-border-main-emphasis);
-}
-
-:where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) input[type='radio']:checked + label,
-:where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) :where(.ix-radio-button__input:checked) + :where(.ix-radio-button__label) {
-    --ii-radio-outer-color: var(--ix-color-foreground-main-read-only);
-    --ii-radio-inner-color: var(--ix-color-foreground-main-read-only);
-}
-
-:where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) input[type='radio'],
-:where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) label,
-:where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) :where(.ix-radio-button__input),
-:where(ix-radio-group[data-state='readonly'], .ix-radio-group[data-state='readonly']) :where(.ix-radio-button__label) {
-    pointer-events: none;
-}
-
-/* ── Disabled ────────────────────────────────────────────────────────────── */
-
-:where(ix-radio-group[data-state='disabled'], .ix-radio-group[data-state='disabled']) {
+:is(ix-radio-group, .ix-radio-group)[data-state='disabled'] {
     opacity: var(--ix-opacity-disabled);
     pointer-events: none;
 }
 
-:where(ix-radio-group, .ix-radio-group) input[type='radio']:disabled + label,
-:where(.ix-radio-button__input:disabled) + :where(.ix-radio-button__label) {
+:is(ix-radio-group, .ix-radio-group) input:disabled + label {
     opacity: var(--ix-opacity-disabled);
     pointer-events: none;
     cursor: default;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    :where(ix-radio-group, .ix-radio-group) label,
-    :where(ix-radio-group, .ix-radio-group) label::before,
-    :where(ix-radio-group, .ix-radio-group) label::after,
-    :where(.ix-radio-button__label),
-    :where(.ix-radio-button__label)::before,
-    :where(.ix-radio-button__label)::after {
+    :is(ix-radio-group, .ix-radio-group) label,
+    :is(ix-radio-group, .ix-radio-group) label::before,
+    :is(ix-radio-group, .ix-radio-group) label::after {
         transition: none;
     }
 }
 
-/* ── forced-colors (Windows høykontrast) ────────────────────────────────────
- * ::before/::after-indikatorene bygger på background-color, som forsvinner
- * når forced-colors er aktiv. Vi bytter til system-farger: CanvasText for ringen
- * og Highlight for valgt tilstand. Se _strategier/high-contrast-mode-strategy.md
- * punkt 5a for begrunnelse.
- */
+/* Ring og prikk er bakgrunnsfarger, som forced-colors fjerner. */
 @media (forced-colors: active) {
-    :where(ix-radio-group, .ix-radio-group) label::after,
-    :where(.ix-radio-button__label)::after {
+    :is(ix-radio-group, .ix-radio-group) label::after {
         border-color: CanvasText;
         background-color: Canvas;
     }
 
-    :where(ix-radio-group, .ix-radio-group) input[type='radio']:checked + label::after,
-    :where(.ix-radio-button__input:checked) + :where(.ix-radio-button__label)::after {
+    :is(ix-radio-group, .ix-radio-group) input:checked + label::after {
         border-color: Highlight;
     }
 
-    :where(ix-radio-group, .ix-radio-group) input[type='radio']:checked + label::before,
-    :where(.ix-radio-button__input:checked) + :where(.ix-radio-button__label)::before {
+    :is(ix-radio-group, .ix-radio-group) input:checked + label::before {
         background-color: Highlight;
     }
 
-    :where(ix-radio-group, .ix-radio-group) input[type='radio']:focus-visible + label,
-    :where(.ix-radio-button__input:focus-visible) + :where(.ix-radio-button__label) {
+    :is(ix-radio-group, .ix-radio-group) input:focus-visible + label {
         outline-color: Highlight;
     }
 }

@@ -557,19 +557,21 @@ I tillegg støttes alle standard HTML input-attributter (`name`, `id`, `autoFocu
 
 ## Tilpasning med CSS
 
-Inni `<ix-radio-group>` styles naken `<input type="radio">` og `<label>` automatisk. Du trenger ikke skrive klasser. BEM-klassene finnes som hooks for konsumenter som vil bruke radio-styling utenfor `<ix-radio-group>`.
+Inni `<ix-radio-group>` styles naken `<input type="radio">` og `<label>` automatisk. Du trenger ingen klasser på wrapperen, inputen eller labelen.
 
 ### Tilgjengelige klasser og selektorer
 
-| Element | Selektor |
-|---------|----------|
+| Element / tilstand | Selektor |
+|--------------------|----------|
 | Gruppe-wrapper | `.ix-radio-group` (eller tagnavn `ix-radio-group`) |
 | Legend | `[data-field="legend"]` |
 | Description | `[data-field="description"]` |
 | Items-container | `[data-field="items"]` |
-| Radio-wrapper (utenfor gruppen) | `.ix-radio-button` |
-| Input — visuelt skjult (utenfor gruppen) | `.ix-radio-button__input` |
-| Label med radio-indikator (utenfor gruppen) | `.ix-radio-button__label` |
+| Radio-wrapper | `[data-field="items"] > *` |
+| Input, visuelt skjult | `input` |
+| Label med radio-indikator | `label` |
+| Valgt | `input:checked + label` |
+| Fokus | `input:focus-visible + label` |
 | Feilmelding | `[data-field="error"]` |
 | Skjult legend | `.ix-sr-only` |
 
@@ -590,12 +592,17 @@ Inni `<ix-radio-group>` kobler komponenten input og label automatisk, så du tre
 </ix-radio-group>
 ```
 
-Bygger du radio-styling utenfor `<ix-radio-group>`, bruk BEM-klassene direkte:
+Uten web componenten bruker du klassen `.ix-radio-group` med samme markup. Da må du selv sette `name`, `id` og `for`, og `role="radiogroup"` med `aria-labelledby`:
 
 ```html
-<div class="ix-radio-button">
-  <input type="radio" class="ix-radio-button__input" id="r-1" name="x" value="1" />
-  <label class="ix-radio-button__label" for="r-1">Alternativ 1</label>
+<div class="ix-radio-group" role="radiogroup" aria-labelledby="kundetype-legend">
+  <span data-field="legend" id="kundetype-legend">Velg kundetype</span>
+  <div data-field="items">
+    <div>
+      <input type="radio" id="r-1" name="kundetype" value="privat" />
+      <label for="r-1">Privat</label>
+    </div>
+  </div>
 </div>
 ```
 
