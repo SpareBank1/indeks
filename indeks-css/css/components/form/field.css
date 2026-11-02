@@ -22,7 +22,8 @@
 :where(ix-field, .ix-field) [data-field='description'] {
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-subtle);
-    line-height: 150%;
+    /* Samme som label (label.css), så label og description er like høye. */
+    line-height: 1.2;
 
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     &:empty {
