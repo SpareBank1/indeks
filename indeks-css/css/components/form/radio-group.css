@@ -13,6 +13,9 @@
     font-size: var(--ix-font-size-md);
     font-weight: var(--ix-font-weight-medium);
     color: var(--ix-color-foreground-main-default);
+    /* Som label i felt (label.css). Arvet linjehøyde fra siden gjør avstanden
+       til description større enn 2xs. */
+    line-height: 1.2;
 }
 
 :is(ix-radio-group, .ix-radio-group):is([data-state='error'], [aria-invalid='true']) [data-field='legend'] ix-icon {
@@ -22,6 +25,7 @@
 :is(ix-radio-group, .ix-radio-group) [data-field='description'] {
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-subtle);
+    line-height: 1.2;
     margin: 0;
 }
 
@@ -205,21 +209,32 @@
     --ii-radio-inner-color: var(--ix-color-fill-danger-default);
 }
 
-/* Error hover gjentar kanten og flaten, ellers vinner hover. */
+/* Error hover og active har egne danger-trinn, som Checkbox. Reglene må
+   gjenta kanten og flaten, ellers vinner hover og active uten feil. Active
+   står etter hover, så den vinner mens musa holdes nede. */
 :is(ix-radio-group, .ix-radio-group):is([data-state='error'], [aria-invalid='true']) input:not(:disabled):not([aria-disabled='true']) + label:hover {
-    --ii-radio-outer-color: var(--ix-color-fill-danger-default);
-    --ii-radio-bg: var(--ix-color-fill-danger-subtle);
+    --ii-radio-outer-color: var(--ix-color-border-danger-hover);
+    --ii-radio-bg: var(--ix-color-fill-danger-subtle-hover);
 }
 
-/* Samme flate som active uten feil, ellers vinner error hover. */
 :is(ix-radio-group, .ix-radio-group):is([data-state='error'], [aria-invalid='true']) input:not(:disabled):not([aria-disabled='true']) + label:active {
-    --ii-radio-bg: var(--ix-color-fill-interactive-active);
+    --ii-radio-outer-color: var(--ix-color-border-danger-active);
+    --ii-radio-bg: var(--ix-color-fill-danger-subtle-active);
 }
 
-/* Valgt error-chip har mørkerød pille, så ring og prikk blir inverse. Hover må
-   med, ellers vinner error hover. */
+:is(ix-radio-group, .ix-radio-group):is([data-state='error'], [aria-invalid='true']) input:checked:not(:disabled):not([aria-disabled='true']) + label:hover {
+    --ii-radio-inner-color: var(--ix-color-fill-danger-default-hover);
+}
+
+:is(ix-radio-group, .ix-radio-group):is([data-state='error'], [aria-invalid='true']) input:checked:not(:disabled):not([aria-disabled='true']) + label:active {
+    --ii-radio-inner-color: var(--ix-color-fill-danger-default-active);
+}
+
+/* Valgt error-chip har mørkerød pille, så ring og prikk blir inverse. Hover og
+   active må med, ellers vinner error hover og active. */
 :is(ix-radio-group, .ix-radio-group)[data-variant='chip']:is([data-state='error'], [aria-invalid='true']) input:checked + label,
-:is(ix-radio-group, .ix-radio-group)[data-variant='chip']:is([data-state='error'], [aria-invalid='true']) input:checked:not(:disabled):not([aria-disabled='true']) + label:hover {
+:is(ix-radio-group, .ix-radio-group)[data-variant='chip']:is([data-state='error'], [aria-invalid='true']) input:checked:not(:disabled):not([aria-disabled='true']) + label:hover,
+:is(ix-radio-group, .ix-radio-group)[data-variant='chip']:is([data-state='error'], [aria-invalid='true']) input:checked:not(:disabled):not([aria-disabled='true']) + label:active {
     --ii-radio-outer-color: var(--ix-color-foreground-inverse-default);
     --ii-radio-inner-color: var(--ix-color-foreground-inverse-default);
     --ii-radio-bg: transparent;
