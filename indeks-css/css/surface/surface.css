@@ -9,3 +9,24 @@
     flex-direction: column;
     background-color: var(--ix-color-status-surface);
 }
+
+/* Med status og border får kanten statusfargen. Uten border er det ingen kant,
+   så borderen er et valg og kommer ikke av seg selv med status. neutral er
+   unntatt: den ville byttet en lys default-kant til emphasis. Bare fargen
+   byttes, så bredde og stil (dashed) kommer fortsatt fra utility-klassen.
+   Selektoren er sterkere enn utility-klassen, som setter hele `border`. */
+.ix-surface:is([data-status='info'], [data-status='success'], [data-status='warning'], [data-status='danger']):is(
+        .ix-border-default,
+        .ix-border-top-default,
+        .ix-border-right-default,
+        .ix-border-bottom-default,
+        .ix-border-left-default,
+        .ix-border-emphasis,
+        .ix-border-top-emphasis,
+        .ix-border-right-emphasis,
+        .ix-border-bottom-emphasis,
+        .ix-border-left-emphasis,
+        .ix-border-dashed
+    ) {
+    border-color: var(--ix-color-status-border);
+}

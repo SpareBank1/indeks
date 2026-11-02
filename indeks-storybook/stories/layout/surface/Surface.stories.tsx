@@ -24,6 +24,18 @@ export const MedBorder: Story = {
   args: { border: "default", radius: "sm" },
 };
 
+export const BorderMedStatusfarge: Story = {
+  render: (args) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--ix-spacing-md)" }}>
+      {(["neutral", "info", "success", "warning", "danger"] as const).map((status) => (
+        <Surface key={status} {...args} status={status} border="default" radius="md">
+          {status}
+        </Surface>
+      ))}
+    </div>
+  ),
+};
+
 export const FlexLayout: Story = {
   args: {
     border: "default",
