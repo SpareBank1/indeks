@@ -239,17 +239,6 @@
     object-fit: contain;
 }
 
-/* ── prefers-reduced-motion ──────────────────────────────────────────────────
-   Tilstandene byttes uten overgang. Pilen hopper fortsatt 4px, men glir ikke. */
-@media (prefers-reduced-motion: reduce) {
-    .ix-card,
-    .ix-card__link,
-    .ix-card__link::after,
-    .ix-card__nav-icon[name='arrow_forward'] {
-        transition: none;
-    }
-}
-
 /* Den gjennomsiktige outline-en blir synlig i høykontrast, så den settes bare ved fokus. */
 @media (forced-colors: active) {
     .ix-card {

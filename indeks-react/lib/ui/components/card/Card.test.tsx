@@ -138,6 +138,9 @@ describe('Card', () => {
             void (<Card href="/" title="T" linkProps={{ to: '/' }} />);
             // @ts-expect-error — href er påkrevd uten linkAs.
             void (<Card title="T" />);
+            // @ts-expect-error — linkProps er påkrevd når lenken krever `to`.
+            void (<Card linkAs={RouterLink} title="T" />);
+            void (<Card linkAs={NextLink} href="/" title="T" />);
         });
     });
 });
