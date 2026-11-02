@@ -1,4 +1,4 @@
-:where(.ix-message) {
+.ix-message {
     --ix-message-icon-size: 20px;
     /* Samme som InteractiveIcon «md». */
     --ii-message-close-size: 26px;
@@ -14,19 +14,19 @@
 }
 
 /* `align-self` overstyrer flex-kolonner som ix-stack, `width` dekker resten. */
-:where(.ix-message[data-full-width]) {
+.ix-message[data-full-width] {
     align-self: stretch;
     width: 100%;
 }
 
-:where(.ix-message ix-icon[data-badge]) {
+.ix-message ix-icon[data-badge] {
     flex: none;
     --ix-icon-badge-size: var(--ix-message-icon-size);
     --ix-icon-badge-background: var(--ix-color-status-fill);
 }
 
 /* Sentreres mot ikonet når teksten er lavere enn det. */
-:where(.ix-message__body) {
+.ix-message__body {
     display: flex;
     flex-direction: column;
     gap: var(--ix-spacing-2xs);
@@ -35,23 +35,23 @@
     min-width: 0;
 }
 
-:where(.ix-message__body)>p {
+.ix-message__body>p {
     margin: 0;
 }
 
 /* Strekkes ikke, ellers blir fokusringen like bred som meldingen. */
-:where(.ix-message__body)>:where(.ix-link-text) {
+.ix-message__body>.ix-link-text {
     align-self: flex-start;
 }
 
-:where(.ix-message__title) {
+.ix-message__title {
     font-weight: var(--ix-font-weight-medium);
     line-height: 1.2;
 }
 
 /* Lik negativ margin oppe og nede sentrerer knappen mot ikonet uten at den
    gjør meldingen høyere. */
-:where(.ix-message__close) {
+.ix-message__close {
     flex: none;
     margin-block: calc((var(--ix-message-icon-size) - var(--ii-message-close-size)) / 2);
     margin-inline-end: calc(var(--ix-spacing-xs) * -1);
