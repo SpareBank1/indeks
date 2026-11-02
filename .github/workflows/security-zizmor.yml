@@ -31,5 +31,5 @@ jobs:
               run: |
                   docker run --rm --network none \
                     -v "${PWD}/.github:/repo/.github" \
-                    ghcr.io/zizmorcore/zizmor:1.18.0 \
+                    ghcr.io/zizmorcore/zizmor:1.31.1 \
                     --offline --config /repo/.github/zizmor.yml /repo
