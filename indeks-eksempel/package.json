@@ -17,7 +17,7 @@
         "test:e2e:docker": "pnpm run build && pnpm run docker:run-e2e"
     },
     "dependencies": {
-        "@hookform/resolvers": "5.9.1",
+        "@hookform/resolvers": "6.0.0",
         "@sb1/indeks-css": "workspace:*",
         "@sb1/indeks-react": "workspace:*",
         "@sb1/indeks-tokens": "workspace:*",
