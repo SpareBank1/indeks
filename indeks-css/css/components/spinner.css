@@ -1,6 +1,5 @@
 :where(ix-spinner, .ix-spinner) {
     --ii-spinner-size: 40px;
-    --ii-spinner-border: 5px;
 
     display: inline-flex;
     flex-direction: column;
@@ -10,12 +9,10 @@
 
 :where(ix-spinner[data-size="sm"], .ix-spinner[data-size="sm"]) {
     --ii-spinner-size: 24px;
-    --ii-spinner-border: 3px;
 }
 
 :where(ix-spinner[data-size="lg"], .ix-spinner[data-size="lg"]) {
     --ii-spinner-size: 64px;
-    --ii-spinner-border: 7px;
 }
 
 :where(ix-spinner, .ix-spinner)::before {
@@ -24,19 +21,21 @@
     width: var(--ii-spinner-size);
     height: var(--ii-spinner-size);
     flex-shrink: 0;
-    border: var(--ii-spinner-border) solid transparent;
-    border-top-color: var(--ix-color-foreground-main-default);
-    border-radius: var(--ix-border-radius-circle);
+    /* Buen er en SVG-maske, fordi en border ikke kan få runde ender. Fargen er
+       bakgrunnen bak masken, så Button kan gi den currentcolor. Streken er 1/8
+       av størrelsen (5 av 40), og buen er 150°, sentrert om toppen. */
+    background-color: var(--ix-color-foreground-main-default);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='17.5' fill='none' stroke='%23000' stroke-width='5' stroke-linecap='round' stroke-dasharray='45.81 200' transform='rotate(-165 20 20)'/%3E%3C/svg%3E") center / contain no-repeat;
     animation: ix-spinner-spin 0.9s linear infinite;
 }
 
 :where(.ix-button .ix-spinner) {
     --ii-spinner-size: 1em;
-    --ii-spinner-border: 0.125em;
 }
 
 :where(.ix-button .ix-spinner)::before {
-    border-top-color: currentcolor;
+    background-color: currentcolor;
 }
 
 @keyframes ix-spinner-spin {
