@@ -51,12 +51,12 @@
     },
     "devDependencies": {
         "autoprefixer": "^10.6.1",
-        "cssnano": "^9.0.5",
+        "cssnano": "^9.9.0",
         "postcss": "^8.5.31",
         "postcss-cli": "^11.0.1",
-        "postcss-import": "^17.0.0",
-        "postcss-preset-env": "^11.5.3",
+        "postcss-import": "^17.0.1",
+        "postcss-preset-env": "^11.6.1",
         "tsx": "^4.23.15",
-        "vitest": "^4.1.10"
+        "vitest": "^4.1.12"
     }
 }

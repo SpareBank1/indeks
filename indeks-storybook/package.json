@@ -17,22 +17,22 @@
         "update-packages": "npx npm-check-updates --groupBy major && pnpm install"
     },
     "devDependencies": {
-        "@axe-core/playwright": "^4.13.0",
-        "@playwright/test": "^1.63.0",
+        "@axe-core/playwright": "^4.14.0",
+        "@playwright/test": "^1.64.1",
         "@sb1/indeks-css": "workspace:*",
         "@sb1/indeks-react": "workspace:*",
         "@sb1/indeks-web": "workspace:*",
-        "@storybook/addon-a11y": "^10.6.0",
-        "@storybook/addon-docs": "^10.5.10",
-        "@storybook/react-vite": "^10.6.0",
-        "@vitejs/plugin-react": "^6.1.1",
-        "eslint-plugin-storybook": "^10.6.0",
-        "playwright": "^1.63.0",
-        "react": "^19.2.8",
-        "react-dom": "^19.2.8",
-        "storybook": "^10.6.0",
-        "storybook-addon-pseudo-states": "10.6.0",
+        "@storybook/addon-a11y": "^10.6.3",
+        "@storybook/addon-docs": "^10.6.3",
+        "@storybook/react-vite": "^10.6.3",
+        "@vitejs/plugin-react": "^6.1.2",
+        "eslint-plugin-storybook": "^10.6.3",
+        "playwright": "^1.64.1",
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1",
+        "storybook": "^10.6.3",
+        "storybook-addon-pseudo-states": "10.6.3",
         "typescript": "~6.0.3",
-        "vite": "^8.2.2"
+        "vite": "^8.3.5"
     }
 }
