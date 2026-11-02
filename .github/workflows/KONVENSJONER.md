@@ -195,13 +195,13 @@ grep -rhoE 'uses: .+@[0-9a-f]{40} # .*' .github/workflows/*.yml | sort -u
 | Action                                  | SHA                                          | Versjon | Brukes til                        |
 |-----------------------------------------|----------------------------------------------|---------|-----------------------------------|
 | `actions/checkout`                      | `3d3c42e5aac5ba805825da76410c181273ba90b1`   | v7.0.1  | Checkout av kode                  |
-| `actions/setup-node`                    | `820762786026740c76f36085b0efc47a31fe5020`   | v6      | Node.js-oppsett                   |
+| `actions/setup-node`                    | `949feb2413d6458794dcd2491c4babbbce0c15c1`   | v7.1.0  | Node.js-oppsett                   |
 | `pnpm/action-setup`                     | `ea17c68df8912ef543352723c149a84f56e3d413`   | v6.1.0  | pnpm-installasjon                 |
-| `actions/upload-artifact`               | `043fb46d1a93c77aae656e7c1c64a875d1fc6a0a`   | v7.0.1  | Last opp testartefakter           |
+| `actions/upload-artifact`               | `cf430e030ddbb5b0abf93d22962f4752f3646cd9`   | v7.0.2  | Last opp testartefakter           |
 | `changesets/action`                     | `ae32849d5ba541f9ae29e40e22a623bc13562f51`   | v2.1.2  | Opprette/oppdatere versjons-PR-en |
 | `Azure/static-web-apps-deploy`          | `1a947af9992250f3bc2e68ad0754c0b0c11566c9`   | v1      | Deploy til Azure Static Web Apps  |
-| `github/codeql-action/init`             | `0c0c5dc2f136b98cb0537075ccfa21f94cd9a63e`   | codeql-bundle-v2.24.3 | Initialisere CodeQL   |
-| `github/codeql-action/analyze`          | `0c0c5dc2f136b98cb0537075ccfa21f94cd9a63e`   | codeql-bundle-v2.24.3 | Kjøre CodeQL-analyse  |
+| `github/codeql-action/init`             | `9b3254085494b55a0f7c4c2b3d2d52cc712ce370`   | v4.39.1               | Initialisere CodeQL   |
+| `github/codeql-action/analyze`          | `9b3254085494b55a0f7c4c2b3d2d52cc712ce370`   | v4.39.1               | Kjøre CodeQL-analyse  |
 
 `changesets/action` brukes **bare** til versjonering, med `version-script` og uten `publish-script`.
 Actionen velger alltid versjonering når det finnes changesets, så den kan ikke gjenbrukes til
@@ -294,7 +294,7 @@ Standard trifecta som brukes i alle bygg-workflows:
   uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 
 - name: Set up Node.js
-  uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
+  uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
   with:
       node-version: '24'
       cache: 'pnpm'
