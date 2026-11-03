@@ -145,7 +145,7 @@ export class IxProgressBar extends HTMLElement {
 
         // --- Støttetekst, som ValidationMessage i success/error ---
         this._supportText.textContent = supportText ?? '';
-        this._updateStatusMessage(state, Boolean(supportText));
+        this._updateStatusMessage(state);
 
         // Et tilgjengelig navn kan komme fra label, aria-label eller
         // aria-labelledby satt av konsumenten.
@@ -233,13 +233,14 @@ export class IxProgressBar extends HTMLElement {
     }
 
     /**
-     * I success/error med tekst blir støtteteksten en ValidationMessage med
-     * badge-ikon foran. Uten tekst vises ingenting, så ikonet ikke står alene.
+     * I success/error blir støtteteksten en ValidationMessage med badge-ikon
+     * foran. Ikonet vises også uten tekst, så tilstanden ikke bare vises med
+     * farge (WCAG 1.4.1).
      */
-    private _updateStatusMessage(state: ProgressBarState, hasText: boolean): void {
+    private _updateStatusMessage(state: ProgressBarState): void {
         if (!this._support || !this._supportText) return;
 
-        if (state === 'active' || !hasText) {
+        if (state === 'active') {
             this._support.removeAttribute('data-field');
             this._support.removeAttribute('data-status');
             this._icon?.remove();

@@ -157,10 +157,11 @@ describe('IxProgressBar', () => {
             expect(el.querySelector('.ix-progress-bar__label')!.textContent).toBe('Opplasting');
         });
 
-        it('viser verken ikon eller ValidationMessage uten støttetekst', () => {
+        it('viser ikonet også uten støttetekst, så status ikke bare vises med farge', () => {
             const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
-            expect(el.querySelector('ix-icon')).toBeNull();
-            expect(el.querySelector('.ix-progress-bar__support')!.hasAttribute('data-field')).toBe(false);
+            const support = el.querySelector('.ix-progress-bar__support')!;
+            expect(support.getAttribute('data-field')).toBe('error');
+            expect(support.querySelector('ix-icon')!.getAttribute('name')).toBe('check');
         });
 
         it('fyller baren til 100 %', () => {
@@ -174,6 +175,11 @@ describe('IxProgressBar', () => {
             const el = mount(`<ix-progress-bar value="60" data-state="error"></ix-progress-bar>`);
             expect(el.hasAttribute('role')).toBe(false);
             expect(el.getAttribute('data-status')).toBe('danger');
+        });
+
+        it('viser close-ikonet også uten støttetekst', () => {
+            const el = mount(`<ix-progress-bar value="60" data-state="error"></ix-progress-bar>`);
+            expect(el.querySelector('.ix-progress-bar__support ix-icon')!.getAttribute('name')).toBe('close');
         });
 
         it('viser støtteteksten som ValidationMessage med close-badge, uten data-status', () => {
