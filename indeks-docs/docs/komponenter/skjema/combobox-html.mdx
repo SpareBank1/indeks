@@ -14,7 +14,7 @@ Et fullstendig combobox-markup ser slik ut. Hver del har en fast rolle:
 
 ```html
 <ix-combobox class="ix-combobox" name="land" data-no-hits-text="Ingen treff">
-  <div class="ix-combobox__chips" data-field="chips"></div>
+  <div data-field="chips"></div>
   <div class="ix-text-field">
     <input />
     <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
@@ -119,7 +119,7 @@ I flervalg gir du hvert forhåndsvalgt alternativ `aria-selected="true"` og lar 
     data-results-text="{n} alternativer"
     name="land"
   >
-    <div class="ix-combobox__chips" data-field="chips"></div>
+    <div data-field="chips"></div>
     <div class="ix-text-field">
       <input id="land-preselect-multi" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
