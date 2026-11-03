@@ -4,11 +4,11 @@
     font-size: var(--ix-font-size-md);
 }
 
-.ix-table--sm .ix-table__cell {
+.ix-table[data-size='sm'] .ix-table__cell {
     font-size: var(--ix-font-size-sm);
 }
 
-.ix-table--lg .ix-table__cell {
+.ix-table[data-size='lg'] .ix-table__cell {
     font-size: var(--ix-font-size-lg);
 }
 
