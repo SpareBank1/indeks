@@ -33,10 +33,6 @@
     margin-block-start: calc(var(--ix-spacing-2xs) - var(--ix-spacing-xs));
 }
 
-:is(ix-phone-number-field, .ix-phone-number-field) [data-field='error'] {
-    gap: var(--ix-spacing-2xs);
-}
-
 /* Alltid på én rad: landvelgeren viser bare kallekoden, så begge får plass på 320 px. */
 :is(ix-phone-number-field, .ix-phone-number-field) [data-field='items'] {
     display: flex;

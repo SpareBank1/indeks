@@ -13,10 +13,10 @@ export type ProgressBarProps = {
     /**
      * Tilstand for prosessen.
      * - `active`: pågående — eksponeres som `role="progressbar"`.
-     * - `success`: fullført. `supportText` vises som en ValidationMessage med
-     *   suksessikon. Ikke lenger en progressbar.
-     * - `error`: feilet. `supportText` vises som en ValidationMessage med
-     *   feilikon. Ikke lenger en progressbar.
+     * - `success`: fullført. `supportText` får suksessikon foran, som i
+     *   ValidationMessage. Ikke lenger en progressbar.
+     * - `error`: feilet. `supportText` får feilikon foran, som i
+     *   ValidationMessage. Ikke lenger en progressbar.
      * @default "active"
      */
     state?: ProgressBarState;

@@ -10,9 +10,11 @@
  *  - `active` (default): role="progressbar" med aria-valuenow/min/max på host.
  *    Nøytral/primær fremdriftsfarge. Ingen statusikon. Kan vise prosent.
  *  - `success` / `error`: rollen `progressbar` FJERNES (prosessen er ferdig/avbrutt).
- *    `data-status` (success/danger) kobler --ix-color-status-* til fyllet.
- *    Støtteteksten vises som en ValidationMessage (`data-field="error"` med
- *    `data-status` og badge-ikon), slik Figma viser. Den er en aria-live-region
+ *    `data-status` (success/danger) kobler --ix-color-status-* til fyllet og
+ *    til støtteteksten, som får badge-ikon foran og ser ut som en
+ *    ValidationMessage, slik Figma viser. Den bruker ikke `data-field="error"`:
+ *    ix-field og gruppene leter etter det i hele subtreet og ville tatt
+ *    meldingen for feltets feilmelding. Støtteteksten er en aria-live-region
  *    (role="status") så overgangen annonseres politely.
  *
  * Komponenten er rent informativ og aldri fokuserbar (setter aldri tabindex).
@@ -143,7 +145,7 @@ export class IxProgressBar extends HTMLElement {
         // --- Verdi (kun active) ---
         this._updateValue(clamped, showValue, isActive, Boolean(label));
 
-        // --- Støttetekst, som ValidationMessage i success/error ---
+        // --- Støttetekst, med statusikon i success/error ---
         this._supportText.textContent = supportText ?? '';
         this._updateStatusMessage(state);
 
@@ -233,31 +235,20 @@ export class IxProgressBar extends HTMLElement {
     }
 
     /**
-     * I success/error blir støtteteksten en ValidationMessage med badge-ikon
-     * foran. Ikonet vises også uten tekst, så tilstanden ikke bare vises med
-     * farge (WCAG 1.4.1).
+     * I success/error får støtteteksten badge-ikon foran. Ikonet vises også
+     * uten tekst, så tilstanden ikke bare vises med farge (WCAG 1.4.1).
      */
     private _updateStatusMessage(state: ProgressBarState): void {
         if (!this._support || !this._supportText) return;
 
         if (state === 'active') {
-            this._support.removeAttribute('data-field');
-            this._support.removeAttribute('data-status');
             this._icon?.remove();
             return;
         }
 
-        const status = STATE_STATUS[state];
-        this._support.setAttribute('data-field', 'error');
-        // Som ValidationMessage: data-status bare for success, feil er standard.
-        if (state === 'success') {
-            this._support.setAttribute('data-status', 'success');
-        } else {
-            this._support.removeAttribute('data-status');
-        }
         const icon = this._ensureIcon();
         icon.setAttribute('name', STATE_ICON[state]);
-        icon.setAttribute('data-status', status);
+        icon.setAttribute('data-status', STATE_STATUS[state]);
         this._support.insertBefore(icon, this._supportText);
     }
 

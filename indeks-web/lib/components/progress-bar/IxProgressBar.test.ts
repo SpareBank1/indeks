@@ -132,13 +132,11 @@ describe('IxProgressBar', () => {
             expect(el.getAttribute('data-status')).toBe('success');
         });
 
-        it('viser støtteteksten som ValidationMessage med check-badge foran', () => {
+        it('viser check-badge foran støtteteksten', () => {
             const el = mount(
                 `<ix-progress-bar value="100" data-state="success" label="Opplasting" data-support-text="Dokumentene er lastet opp."></ix-progress-bar>`,
             );
             const support = el.querySelector('.ix-progress-bar__support')!;
-            expect(support.getAttribute('data-field')).toBe('error');
-            expect(support.getAttribute('data-status')).toBe('success');
             const icon = support.firstElementChild!;
             expect(icon.tagName).toBe('IX-ICON');
             expect(icon.getAttribute('name')).toBe('check');
@@ -160,7 +158,6 @@ describe('IxProgressBar', () => {
         it('viser ikonet også uten støttetekst, så status ikke bare vises med farge', () => {
             const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
             const support = el.querySelector('.ix-progress-bar__support')!;
-            expect(support.getAttribute('data-field')).toBe('error');
             expect(support.querySelector('ix-icon')!.getAttribute('name')).toBe('check');
         });
 
@@ -182,13 +179,11 @@ describe('IxProgressBar', () => {
             expect(el.querySelector('.ix-progress-bar__support ix-icon')!.getAttribute('name')).toBe('close');
         });
 
-        it('viser støtteteksten som ValidationMessage med close-badge, uten data-status', () => {
+        it('viser close-badge foran støtteteksten', () => {
             const el = mount(
                 `<ix-progress-bar value="60" data-state="error" data-support-text="Opplastingen feilet."></ix-progress-bar>`,
             );
             const support = el.querySelector('.ix-progress-bar__support')!;
-            expect(support.getAttribute('data-field')).toBe('error');
-            expect(support.hasAttribute('data-status')).toBe(false);
             const icon = support.querySelector('ix-icon')!;
             expect(icon.getAttribute('name')).toBe('close');
             expect(icon.getAttribute('data-status')).toBe('danger');
@@ -222,18 +217,28 @@ describe('IxProgressBar', () => {
             expect(el.getAttribute('role')).toBe('progressbar');
             expect(el.hasAttribute('data-status')).toBe(false);
             expect(el.querySelector('ix-icon')).toBeNull();
-            expect(el.querySelector('.ix-progress-bar__support')!.hasAttribute('data-field')).toBe(false);
         });
 
-        it('går fra error til success: bytter ikon og setter data-status på meldingen', () => {
+        it('går fra error til success: bytter ikon og status', () => {
             const el = mount(
                 `<ix-progress-bar value="80" data-state="error" data-support-text="Feilet."></ix-progress-bar>`,
             );
             el.setAttribute('data-state', 'success');
             const support = el.querySelector('.ix-progress-bar__support')!;
-            expect(support.getAttribute('data-status')).toBe('success');
+            expect(el.getAttribute('data-status')).toBe('success');
             expect(support.querySelectorAll('ix-icon')).toHaveLength(1);
             expect(support.querySelector('ix-icon')!.getAttribute('name')).toBe('check');
+        });
+    });
+
+    describe('kollisjon med skjemafelt', () => {
+        it('setter aldri data-field, så ix-field og gruppene ikke tar meldingen for sin egen', () => {
+            const el = mount(
+                `<ix-progress-bar value="60" data-state="error" data-support-text="Opplastingen feilet."></ix-progress-bar>`,
+            );
+            expect(el.querySelector('[data-field]')).toBeNull();
+            el.setAttribute('data-state', 'success');
+            expect(el.querySelector('[data-field]')).toBeNull();
         });
     });
 
