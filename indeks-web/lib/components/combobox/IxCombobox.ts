@@ -200,7 +200,7 @@ export class IxCombobox extends HTMLElement {
     // ── Oppkobling ────────────────────────────────────────────────────────────
 
     private _wire(): void {
-        this._input = this.querySelector<HTMLInputElement>('.ix-text-field input, input.ix-text-field__input, input');
+        this._input = this.querySelector<HTMLInputElement>('.ix-text-field > input');
         this._listbox = this.querySelector<HTMLElement>('.ix-combobox__listbox');
         this._toggle = this.querySelector<HTMLButtonElement>('.ix-combobox__toggle');
         this._chips = this.querySelector<HTMLElement>('[data-field="chips"]');
