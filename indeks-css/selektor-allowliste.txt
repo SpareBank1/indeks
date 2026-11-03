@@ -15,10 +15,6 @@ components/form/text-field.css
 components/form/validation-message.css
 
 
-# #329 Grid og Stack
-layout/grid.css
-layout/stack.css
-
 # #330 Combobox og DateField
 components/form/combobox.css
 components/form/date-field.css
