@@ -4,15 +4,6 @@
 # Én gruppe per sak i #325, med blank linje mellom. Fjern hele gruppen din,
 # men la blanklinjen stå, så parallelle PR-er ikke får konflikt her.
 
-# #327 Skjemafelt
-components/form/field.css
-components/form/form.css
-components/form/label.css
-components/form/phone-number-field.css
-components/form/select.css
-components/form/text-area.css
-components/form/text-field.css
-components/form/validation-message.css
 
 
 # #330 Combobox og DateField

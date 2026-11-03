@@ -16,7 +16,7 @@
  * forfatter eller React-wrapperen), ikke en <ix-validation-message>-tag.
  */
 
-:where([data-field='error']) {
+[data-field='error'] {
     display: inline-flex;
     align-items: center;
     gap: var(--ix-spacing-xs);
@@ -27,13 +27,13 @@
 
 /* Tom melding tar ingen plass — elementet blir stående i DOM for aria-live. */
 /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
-:where([data-field='error']):empty {
+[data-field='error']:empty {
     display: none;
 }
 
 /* Badge-ikonet: krymp badge + glyf til inline-størrelse. `data-status="danger"`
    på selve ikonet fyller badgen med danger-farge (icon.css badge-regel). */
-:where([data-field='error'] ix-icon[data-badge]) {
+[data-field='error'] ix-icon[data-badge] {
     flex: 0 0 auto;
     --ix-icon-badge-size: var(--ix-font-size-lg);
     --ix-icon-badge-glyph-size: var(--ix-font-size-sm);

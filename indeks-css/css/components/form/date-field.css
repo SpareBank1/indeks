@@ -70,7 +70,7 @@
 /* Reserver plass til kalenderikonet så teksten ikke havner under det — samme
    mål som .ix-combobox__toggle (spacing-sm + ikon-bredde). Kun i date-field-
    kontekst, så den globale text-field-inputen ikke påvirkes. */
-:where(.ix-date-field .ix-text-field) > input {
+.ix-date-field .ix-text-field > input:not(.ix-date-field__native) {
     padding-inline-end: calc(var(--ix-spacing-sm) + 1.5em);
 }
 
@@ -123,12 +123,11 @@
    Den er aria-hidden + tabindex=-1 i markup: skjermleser/tastatur bruker
    knappen, pekeren bruker denne.
 
-   NB: den native inputen ligger inne i .ix-text-field og treffes ellers av
-   `:where(.ix-text-field) > input` (text-field.css) som har spesifisitet (0,0,1)
-   fordi `input`-typen står utenfor :where. Den regelens `all: unset` ville lagt
-   ut den native inputen som et synlig flex-felt ved siden av tekstfeltet. Vi
-   matcher derfor med den sammensatte `input.ix-date-field__native` (0,0,2) så
-   overlegg-stylingen vinner uavhengig av kilde-rekkefølge. */
+   NB: den native inputen ligger inne i .ix-text-field og treffes også av
+   `.ix-text-field > input` i text-field.css. Den regelens `all: unset` ville lagt
+   den ut som et synlig felt ved siden av tekstfeltet. Regelen under veier like
+   mye og vinner fordi date-field.css lastes etter. Tilstandene i text-field.css
+   veier mer, men inputen er usynlig, så det synes ikke. */
 :where(.ix-date-field .ix-text-field) > input.ix-date-field__native {
     position: absolute;
     inset-block: 0;

@@ -1,13 +1,9 @@
-:where(.ix-text-field) {
+.ix-text-field {
     display: flex;
     align-items: stretch;
 }
 
-/* BEM-selektoren `.ix-text-field__input` brukes ikke av React-komponenten —
-   den er et tilgjengelig hook for konsumenter som rendrer <input> utenfor
-   `.ix-text-field`-wrapperen og fortsatt vil ha samme styling. */
-:where(.ix-text-field) > input,
-:where(.ix-text-field__input) {
+.ix-text-field > input {
     all: unset;
     box-sizing: border-box;
     min-width: 0;
@@ -32,29 +28,27 @@
         box-shadow: inset 0 0 0 1px var(--ix-color-border-main-emphasis-hover);
     }
 
+    &::placeholder {
+        color: var(--ix-color-foreground-main-subtle);
+    }
 }
 
-:where(.ix-text-field) > input:active,
-:where(.ix-text-field) > input:focus,
-:where(.ix-text-field__input:active),
-:where(.ix-text-field__input:focus) {
+.ix-text-field > input:active,
+.ix-text-field > input:focus {
     outline-color: var(--ix-color-border-focus-default);
 }
 
-:where(.ix-text-field[data-has-prefix]) > input,
-:where(.ix-text-field[data-has-prefix]) > .ix-text-field__input {
+.ix-text-field[data-has-prefix] > input {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
 
-:where(.ix-text-field[data-has-suffix]) > input,
-:where(.ix-text-field[data-has-suffix]) > .ix-text-field__input {
+.ix-text-field[data-has-suffix] > input {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
 
-:where(.ix-text-field) > input:disabled,
-:where(.ix-text-field__input:disabled) {
+.ix-text-field > input:disabled {
     background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-disabled);
     border-color: var(--ix-color-border-main-emphasis);
@@ -63,36 +57,27 @@
     pointer-events: none;
 }
 
-:where(.ix-text-field) > input:read-only,
-:where(.ix-text-field__input:read-only) {
+.ix-text-field > input:read-only {
     background-color: var(--ix-color-fill-interactive-read-only);
     color: var(--ix-color-foreground-main-read-only);
     border-color: var(--ix-color-border-main-emphasis);
 }
 
-:where(.ix-text-field) > input[aria-invalid="true"],
-:where(.ix-text-field__input[aria-invalid="true"]) {
+.ix-text-field > input[aria-invalid="true"] {
     color: var(--ix-color-foreground-danger-default);
     border-color: var(--ix-color-border-danger-default);
     box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
 }
 
-:where(.ix-text-field) > input::placeholder,
-:where(.ix-text-field__input)::placeholder {
-    color: var(--ix-color-foreground-main-subtle);
-}
-
-/* ── Formatering: skjult rå-mirror ───────────────────────────────────────────
-   Når en formatter er aktiv legger ix-field en <input type="hidden"> ved siden
-   av den synlige inputen. Den bærer den rå verdien (og feltets name) for
-   <form>-submit. `all: unset` på input over kan nulle ut UA-ens display:none for
-   type=hidden, så vi skjuler den eksplisitt. Se IxField.ts (_wireFormatting). */
-:where(.ix-text-field) > input[type="hidden"] {
+/* Med formatter legger ix-field en <input type="hidden"> med den rå verdien ved
+   siden av den synlige. `all: unset` over nuller UA-ens display: none, så den
+   må skjules igjen. Se IxField.ts (_wireFormatting). */
+.ix-text-field > input[type="hidden"] {
     display: none;
 }
 
-:where(.ix-text-field) > [data-field="prefix"],
-:where(.ix-text-field) > [data-field="suffix"] {
+.ix-text-field > [data-field="prefix"],
+.ix-text-field > [data-field="suffix"] {
     display: flex;
     align-items: center;
     z-index: var(--ix-z-index-default);
@@ -103,13 +88,13 @@
     padding: var(--ix-spacing-sm);
 }
 
-:where(.ix-text-field) > [data-field="prefix"] {
+.ix-text-field > [data-field="prefix"] {
     border-top-left-radius: var(--ix-border-radius-sm);
     border-bottom-left-radius: var(--ix-border-radius-sm);
     border-right-width: 0;
 }
 
-:where(.ix-text-field) > [data-field="suffix"] {
+.ix-text-field > [data-field="suffix"] {
     border-top-right-radius: var(--ix-border-radius-sm);
     border-bottom-right-radius: var(--ix-border-radius-sm);
     border-left-width: 0;

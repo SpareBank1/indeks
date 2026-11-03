@@ -1,25 +1,22 @@
-:where(ix-field, .ix-field) {
+:is(ix-field, .ix-field) {
     display: flex;
     flex-direction: column;
     gap: var(--ix-spacing-xs);
 }
 
-:where(ix-field, .ix-field)[data-disabled],
-:where(.ix-field--disabled) {
+:is(ix-field, .ix-field)[data-disabled] {
     opacity: var(--ix-opacity-disabled);
 }
 
-:where(ix-field, .ix-field)[data-disabled] > label,
-:where(.ix-field--disabled) > label {
+:is(ix-field, .ix-field)[data-disabled] > label {
     color: var(--ix-color-foreground-main-default);
 }
 
-:where(ix-field, .ix-field)[data-readonly] > label,
-:where(.ix-field--readonly) > label {
+:is(ix-field, .ix-field)[data-readonly] > label {
     color: var(--ix-color-foreground-main-read-only);
 }
 
-:where(ix-field, .ix-field) [data-field='description'] {
+:is(ix-field, .ix-field) [data-field='description'] {
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-subtle);
     /* Samme som label (label.css), så label og description er like høye. */
@@ -34,27 +31,26 @@
 /* Gapet er xs (label↔input, description↔input, input↔error). Label↔description
    og input↔char-count hører tettere sammen og trekkes ned til 2xs. Tomme
    elementer er display: none og påvirker ikke layout. */
-:where(ix-field, .ix-field) > * + [data-field='description'],
-:where(ix-field, .ix-field) > [data-field='char-count'] {
+:is(ix-field, .ix-field) > * + [data-field='description'],
+:is(ix-field, .ix-field) > [data-field='char-count'] {
     margin-block-start: calc(var(--ix-spacing-2xs) - var(--ix-spacing-xs));
 }
 
-/* Selve feilmeldingens typografi, farge, ikon-layout og :empty-skjul ligger nå
-   i form/validation-message.css (delt av alle feltkomponenter). */
+/* Feilmeldingen styles i validation-message.css, som deles av alle feltene. */
 
-:where(ix-field, .ix-field) [data-field='char-count'] {
+:is(ix-field, .ix-field) [data-field='char-count'] {
     font-size: var(--ix-font-size-sm);
     color: var(--ix-color-foreground-main-subtle);
     text-align: right;
 }
 
-:where(.ix-field__label-row) {
+.ix-field__label-row {
     display: flex;
     align-items: center;
     gap: var(--ix-spacing-2xs);
 }
 
-:where(.ix-field__tooltip-btn) {
+.ix-field__tooltip-btn {
     all: unset;
     box-sizing: border-box;
     cursor: pointer;
@@ -63,6 +59,9 @@
     align-items: center;
     justify-content: center;
     color: var(--ix-color-foreground-main-default);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
+    border-radius: var(--ix-border-radius-xs);
 
     &::before {
         content: '';
@@ -72,14 +71,8 @@
         height: 44px;
         transform: translate(-50%, -50%);
     }
-}
 
-:where(.ix-field__tooltip-btn) {
-    outline: var(--ix-outline-width-default) solid transparent;
-    outline-offset: var(--ix-outline-offset-default);
-    border-radius: var(--ix-border-radius-xs);
-}
-
-:where(.ix-field__tooltip-btn:focus-visible) {
-    outline-color: var(--ix-color-border-focus-default);
+    &:focus-visible {
+        outline-color: var(--ix-color-border-focus-default);
+    }
 }
