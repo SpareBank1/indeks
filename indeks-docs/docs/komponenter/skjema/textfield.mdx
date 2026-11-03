@@ -604,16 +604,12 @@ React-komponenten eller `<ix-field>`, kan du bruke klassene direkte på elemente
 | Element | Selektor |
 |---------|----------|
 | Input-wrapper | `.ix-text-field` |
-| Inputfelt | `.ix-text-field > input` eller `.ix-text-field__input` |
+| Inputfelt | `.ix-text-field > input` |
 | Prefix | `.ix-text-field > [data-field="prefix"]` |
 | Suffix | `.ix-text-field > [data-field="suffix"]` |
-| Label | `.ix-label` |
+| Label | `ix-field > label`, eller `.ix-label` utenfor `ix-field` |
 | Hjelpetekst | `[data-field="description"]` |
 | Feilmelding | `[data-field="error"]` |
-
-`.ix-text-field__input` gir inputfeltet nøyaktig samme stilregler som
-`.ix-text-field > input`. Bruk den når du ikke kan eller vil bruke komponentens
-HTML-struktur.
 
 ### Eksempel: bruk i egen HTML-struktur
 
@@ -622,7 +618,7 @@ HTML-struktur.
   <label>Kontonummer</label>
   <span data-field="description">11 siffer uten mellomrom</span>
   <div class="ix-text-field">
-    <input class="ix-text-field__input" type="text" inputmode="numeric" name="kontonummer" />
+    <input type="text" inputmode="numeric" name="kontonummer" />
   </div>
   <span data-field="error"></span>
 </ix-field>

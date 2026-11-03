@@ -16,7 +16,7 @@ Et fullstendig combobox-markup ser slik ut. Hver del har en fast rolle:
 <ix-combobox class="ix-combobox" name="land" data-no-hits-text="Ingen treff">
   <div class="ix-combobox__chips" data-field="chips"></div>
   <div class="ix-text-field">
-    <input class="ix-text-field__input" />
+    <input />
     <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
   </div>
   <div class="ix-combobox__listbox" hidden>
@@ -73,7 +73,7 @@ Skal ett eller flere alternativer være valgt når siden lastes, markerer du dem
   <label for="land-preselect-single">Land</label>
   <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
     <div class="ix-text-field">
-      <input id="land-preselect-single" class="ix-text-field__input" />
+      <input id="land-preselect-single" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -121,7 +121,7 @@ I flervalg gir du hvert forhåndsvalgt alternativ `aria-selected="true"` og lar 
   >
     <div class="ix-combobox__chips" data-field="chips"></div>
     <div class="ix-text-field">
-      <input id="land-preselect-multi" class="ix-text-field__input" />
+      <input id="land-preselect-multi" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
     </div>
     <div class="ix-combobox__listbox" hidden>
@@ -196,7 +196,7 @@ Du skriver den semantiske strukturen. Komponenten legger på ARIA og IDer. Her e
 ```html
 <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
   <div class="ix-text-field">
-    <input class="ix-text-field__input" aria-label="Land" />
+    <input aria-label="Land" />
     <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
   </div>
   <div class="ix-combobox__listbox">
@@ -214,7 +214,7 @@ Du skriver den semantiske strukturen. Komponenten legger på ARIA og IDer. Her e
 ```html
 <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="land">
   <div class="ix-text-field">
-    <input class="ix-text-field__input" aria-label="Land"
+    <input aria-label="Land"
            id="ix-combobox-input-1" role="combobox" aria-autocomplete="list"
            autocomplete="off" aria-expanded="false"
            aria-controls="ix-combobox-listbox-1" />

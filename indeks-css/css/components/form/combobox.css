@@ -3,7 +3,7 @@
    ARIA-lim-mønster (som ix-field): web componenten <ix-combobox> kobler
    eksisterende native elementer i light DOM — den eier ikke innholdet.
 
-   Feltet gjenbruker .ix-text-field + .ix-text-field__input (text-field.css).
+   Feltet gjenbruker .ix-text-field > input (text-field.css).
    Chips i multiselect gjenbruker .ix-chip[data-removable] (chip.css) — denne
    filen styler kun chips-WRAPPEREN, ikke selve chipen.
 
@@ -77,11 +77,8 @@
     cursor: pointer;
 }
 
-/* Reserver plass til chevronen så teksten ikke havner under den — samme mål som
-   .ix-select (spacing-sm + chevron-bredde). Kun i combobox-kontekst, så den
-   globale text-field-inputen ikke påvirkes. */
-:where(.ix-combobox .ix-text-field) > input,
-:where(.ix-combobox .ix-text-field__input) {
+/* Plass til chevronen, samme mål som i .ix-select. */
+.ix-combobox .ix-text-field > input {
     padding-inline-end: calc(var(--ix-spacing-sm) + 1.5em);
 }
 
