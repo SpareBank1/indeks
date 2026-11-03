@@ -118,6 +118,7 @@ const sidebars: SidebarsConfig = {
                     items: ['komponenter/skjema/combobox-html'],
                 },
                 'komponenter/skjema/date-field',
+                'komponenter/divider',
                 'komponenter/dropdown-menu',
                 'komponenter/primitives/grid',
                 {

@@ -1,0 +1,180 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/divider.json';
+
+# Divider
+
+Divider er en horisontal strek som deler opp innhold. Den finnes i to varianter: Default er
+subtil og standardvalget, og Emphasis gir et tydeligere skille.
+
+## Egnet til
+
+- Skille mellom grupper av innhold inne i en flate eller et panel, for eksempel mellom
+  betalingsdetaljer og summen
+- Skille mellom rader i en kort oversikt der avstand alene ikke er nok
+
+## Uegnet til
+
+- Å dele en side i seksjoner. Gi hver seksjon en overskrift med [Heading](./typografi#overskrifter-heading) i stedet
+- Å ramme inn innhold. Bruk heller [Surface](./surface) med kant
+- Mellomrom mellom elementer. Bruk `gap` på [Stack](./primitives/stack)
+
+## Bruk
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<hr class="ix-divider" />
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Divider />
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Emphasis
+
+Bruk Emphasis når skillet må synes tydelig, for eksempel foran en totalsum.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-flex ix-flex-col ix-gap-sm">
+  <p>Husleie, november: 12 500,00 kr</p>
+  <p>Strøm, oktober: 1 240,00 kr</p>
+  <hr class="ix-divider" data-variant="emphasis" />
+  <p>Til sammen: 13 740,00 kr</p>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="sm">
+  <Text>Husleie, november: 12 500,00 kr</Text>
+  <Text>Strøm, oktober: 1 240,00 kr</Text>
+  <Divider variant="emphasis" />
+  <Text>Til sammen: 13 740,00 kr</Text>
+</VStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Mellom rader
+
+Default passer mellom rader som hører sammen. Streken er bare pynt her, så den skjules for
+skjermlesere med `aria-hidden`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-flex ix-flex-col ix-gap-sm">
+  <p>Fra konto: Brukskonto 1234.56.78901</p>
+  <hr class="ix-divider" aria-hidden="true" />
+  <p>Til konto: Sparekonto 1234.56.78902</p>
+  <hr class="ix-divider" aria-hidden="true" />
+  <p>Dato: 15. november 2026</p>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="sm">
+  <Text>Fra konto: Brukskonto 1234.56.78901</Text>
+  <Divider aria-hidden="true" />
+  <Text>Til konto: Sparekonto 1234.56.78902</Text>
+  <Divider aria-hidden="true" />
+  <Text>Dato: 15. november 2026</Text>
+</VStack>
+```
+
+</TabItem>
+</Tabs>
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- Default-streken har for lav kontrast til å bære strukturen alene. Er streken det eneste som
+  viser hvor en gruppe slutter, bruk Emphasis eller legg til en overskrift.
+- Skjul streker som bare er pynt med `aria-hidden="true"`. Ellers leser skjermleseren
+  «skillelinje» for hver av dem.
+- En strek erstatter ikke overskrifter. Seksjoner som brukeren skal kunne hoppe mellom, trenger
+  hver sin overskrift.
+
+### Hva komponenten gjør automatisk
+
+- Rendres som `<hr>`, som har rollen `separator`.
+- Får `role="separator"` når du velger et annet element med `as` i React.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+| Attributt | Verdi | Beskrivelse |
+|-----------|-------|-------------|
+| `class` | `ix-divider` | Påkrevd. Gir streken |
+| `data-variant` | `emphasis` | Tydeligere skille. Utelat for Default |
+
+</TabItem>
+<TabItem value="react" label="React">
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `variant` | `'default' \| 'emphasis'` | `'default'` | Settes som `data-variant` |
+| `as` | `ElementType` | `'hr'` | Annet element. Får da `role="separator"` |
+| `className` | `string` | | Ekstra klasser |
+
+Andre HTML-attributter, som `aria-hidden`, settes rett på elementet. Divider tar ikke barn.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Divider er ren CSS. Klassen fungerer på `<hr>` og nullstiller kanten nettleseren og resetten gir
+elementet, så du får én strek uansett.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Strek | `.ix-divider` |
+| Emphasis | `.ix-divider[data-variant='emphasis']` |
+
+### Eksempel: ren HTML
+
+```html
+<section class="ix-surface ix-radius-md ix-p-md ix-gap-sm">
+  <p>Husleie, november: 12 500,00 kr</p>
+  <hr class="ix-divider" data-variant="emphasis" />
+  <p>Til sammen: 12 500,00 kr</p>
+</section>
+```
+
+## Relatert
+
+- [Surface](./surface) for en flate med kant rundt innholdet
+- [Stack](./primitives/stack) for avstand mellom elementer

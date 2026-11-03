@@ -1,0 +1,87 @@
+{
+  "component": "Divider (ix-divider)",
+  "lastReviewed": "2026-11-03",
+  "consumerResponsibilities": [
+    {
+      "summary": "La ikke Default-streken alene bære strukturen",
+      "details": "Default-varianten har kontrast 1,38:1 mot hvit flate (1,26:1 i mørkt tema), under kravet på 3:1 for grafiske objekter. Det er greit når streken bare er pynt. Er streken det eneste som viser hvor en gruppe slutter og neste begynner, bruk Emphasis (4,0:1 / 4,24:1), eller gjør inndelingen tydelig med overskrifter eller avstand i tillegg.",
+      "wcag": ["1.4.11", "1.3.1"]
+    },
+    {
+      "summary": "Skjul rent dekorative streker for skjermlesere",
+      "details": "<hr> leses opp som «skillelinje». Mellom hver rad i en lang liste blir det støy. Er streken bare visuell, sett aria-hidden=\"true\" på den, eller bruk en border-utility som .ix-border-bottom-default på radene i stedet.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Ikke bruk Divider som eneste skille mellom seksjoner",
+      "details": "En strek erstatter ikke overskrifter. Skal innholdet deles i seksjoner som brukeren navigerer mellom, må hver seksjon ha en overskrift.",
+      "wcag": ["1.3.1", "2.4.6"]
+    }
+  ],
+  "handled": [
+    { "id": "1.3.1", "notes": "Rendres som <hr>, som har den implisitte rollen separator. Med et annet element (as=\"div\" i React) settes role=\"separator\" eksplisitt." },
+    { "id": "1.4.4", "notes": "Streken er 1 px bred og full bredde av forelderen. Den skalerer med zoom uten å klippe innhold." },
+    { "id": "1.4.10", "notes": "width: 100 % av forelderen. Ingen fast bredde som gir horisontal scroll ved 320 px." },
+    { "id": "1.4.11", "notes": "Emphasis-varianten har 4,0:1 mot hvit flate og 4,24:1 mot mørk flate. Default er under 3:1 og skal bare brukes dekorativt (se konsumentansvar)." }
+  ],
+  "issues": [],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Ingen bilder eller ikke-tekstlig innhold som trenger tekstalternativ." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.2", "reason": "Ett enkelt element uten innhold." },
+    { "id": "1.3.3", "reason": "Ingen instruksjoner som viser til form eller plassering." },
+    { "id": "1.3.4", "reason": "Ingen orientasjonslåsing." },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt." },
+    { "id": "1.4.1", "reason": "Ingen informasjon formidles med farge." },
+    { "id": "1.4.2", "reason": "Ingen lyd." },
+    { "id": "1.4.3", "reason": "Ingen tekst." },
+    { "id": "1.4.5", "reason": "Ingen bilder av tekst." },
+    { "id": "1.4.12", "reason": "Ingen tekst." },
+    { "id": "1.4.13", "reason": "Ingen hover- eller fokusinnhold." },
+    { "id": "2.1.1", "reason": "Ikke interaktiv og ikke fokuserbar." },
+    { "id": "2.1.2", "reason": "Ingen fokusfelle." },
+    { "id": "2.1.4", "reason": "Ingen hurtigtaster." },
+    { "id": "2.2.1", "reason": "Ingen tidsfrister." },
+    { "id": "2.2.2", "reason": "Ikke bevegelig eller automatisk oppdatert." },
+    { "id": "2.3.1", "reason": "Ingen blinking." },
+    { "id": "2.4.1", "reason": "Ingen blokker som må hoppes over." },
+    { "id": "2.4.2", "reason": "Ikke en side-komponent." },
+    { "id": "2.4.3", "reason": "Ikke fokuserbar." },
+    { "id": "2.4.4", "reason": "Ingen lenker." },
+    { "id": "2.4.5", "reason": "Ikke en navigasjonsstruktur." },
+    { "id": "2.4.6", "reason": "Ingen overskrifter eller labeler i komponenten (se konsumentansvar om seksjoner)." },
+    { "id": "2.4.7", "reason": "Ikke fokuserbar." },
+    { "id": "2.4.11", "reason": "Ikke fokuserbar." },
+    { "id": "2.5.1", "reason": "Ingen pekergester." },
+    { "id": "2.5.2", "reason": "Ingen pekerhandlinger." },
+    { "id": "2.5.3", "reason": "Ingen synlig label." },
+    { "id": "2.5.4", "reason": "Ingen bevegelsesbasert aktivering." },
+    { "id": "2.5.6", "reason": "Ingen begrensning på input-modalitet." },
+    { "id": "2.5.7", "reason": "Ingen dra-funksjonalitet." },
+    { "id": "2.5.8", "reason": "Ikke et interaktivt mål." },
+    { "id": "3.1.1", "reason": "Ikke en side-komponent." },
+    { "id": "3.1.2", "reason": "Ingen tekst." },
+    { "id": "3.2.1", "reason": "Ikke fokuserbar." },
+    { "id": "3.2.2", "reason": "Ingen input." },
+    { "id": "3.2.3", "reason": "Ingen navigasjon." },
+    { "id": "3.2.4", "reason": "Ingen funksjonalitet som må identifiseres likt." },
+    { "id": "3.2.6", "reason": "Ingen hjelpefunksjonalitet." },
+    { "id": "3.3.1", "reason": "Ingen skjemavalidering." },
+    { "id": "3.3.2", "reason": "Ingen skjemafelt." },
+    { "id": "3.3.3", "reason": "Ingen feilforslag." },
+    { "id": "3.3.4", "reason": "Ingen juridisk forpliktende handlinger." },
+    { "id": "3.3.7", "reason": "Ingen redundant input." },
+    { "id": "3.3.8", "reason": "Ingen autentisering." },
+    { "id": "4.1.2", "reason": "Rollen separator kommer fra <hr> eller settes eksplisitt (se 1.3.1). Ingen tilstand eller verdi." },
+    { "id": "4.1.3", "reason": "Ingen statusmeldinger." }
+  ],
+  "keyboard": [],
+  "screenReader": [
+    "<hr>: leses som skillelinje (rollen separator)",
+    "Med aria-hidden=\"true\": leses ikke opp"
+  ]
+}

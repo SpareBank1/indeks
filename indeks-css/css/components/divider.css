@@ -1,4 +1,19 @@
+/* Divider — horisontal skillelinje, normalt på <hr>.
+ *
+ * `border: 0` nullstiller kanten resetten gir <hr> (border-top i tekstfarge),
+ * slik at bare streken herfra vises.
+ *
+ * `data-variant`:
+ *   default (uten attributt) → subtil oppdeling
+ *   emphasis                 → tydeligere skille
+ */
 .ix-divider {
-    border-bottom: var(--ix-border-default);
     width: 100%;
+    border: 0;
+    border-top: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
 }
+
+.ix-divider[data-variant='emphasis'] {
+    border-top-color: var(--ix-color-border-main-emphasis);
+}
+
