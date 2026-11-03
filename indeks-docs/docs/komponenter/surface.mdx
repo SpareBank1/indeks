@@ -148,6 +148,10 @@ token-navn og lever med at API-verdien heter `neutral`? Ikke løst her.
 `radius` mapper til `ix-radius-*`-utility og finnes i størrelsene `xs`, `sm`, `md`, `lg`, `xl`,
 `pill` og `circle`.
 
+`circle` gir bare en sirkel når flaten er like høy som den er bred. På en flate som ikke er
+kvadratisk, blir den en oval. Gi flaten fast og lik bredde og høyde, eller bruk `pill` for en
+avlang flate med runde ender.
+
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
@@ -195,6 +199,38 @@ token-navn og lever med at API-verdien heter `neutral`? Ikke løst her.
   <Surface border="emphasis" radius="md" padding="md">emphasis</Surface>
   <Surface border="dashed" radius="md" padding="md">dashed</Surface>
 </HStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Border med statusfarge
+
+Med både `status` og `border` får kanten statusfargen (`--ix-color-status-border`). Uten `border`
+er det ingen kant. `neutral` beholder den vanlige kantfargen.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-stack>
+  <div class="ix-surface ix-border-default ix-radius-md ix-p-md" data-status="info">Info</div>
+  <div class="ix-surface ix-border-default ix-radius-md ix-p-md" data-status="success">Suksess</div>
+  <div class="ix-surface ix-border-default ix-radius-md ix-p-md" data-status="warning">Advarsel</div>
+  <div class="ix-surface ix-border-default ix-radius-md ix-p-md" data-status="danger">Fare</div>
+</ix-stack>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack gap="md">
+  <Surface status="info" border="default" radius="md" padding="md">Info</Surface>
+  <Surface status="success" border="default" radius="md" padding="md">Suksess</Surface>
+  <Surface status="warning" border="default" radius="md" padding="md">Advarsel</Surface>
+  <Surface status="danger" border="default" radius="md" padding="md">Fare</Surface>
+</VStack>
 ```
 
 </TabItem>
