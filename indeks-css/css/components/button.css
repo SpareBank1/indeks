@@ -16,7 +16,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--ix-spacing-sm);
+    gap: var(--ix-spacing-xs);
     padding: var(--ix-spacing-xs) var(--ix-spacing-md);
     border: var(--ix-border-width-default) solid var(--ii-button-border-color);
     border-radius: var(--ix-border-radius-button);
@@ -48,7 +48,6 @@
 :where(.ix-button[data-size='sm']) {
     font-size: var(--ix-font-size-sm);
     padding: var(--ix-spacing-2xs) var(--ix-spacing-sm);
-    gap: var(--ix-spacing-xs);
 }
 
 :where(.ix-button[data-size='lg']) {
