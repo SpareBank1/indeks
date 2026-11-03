@@ -258,7 +258,6 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
                 <div className="ix-text-field">
                     <input
                         id={inputId}
-                        className="ix-text-field__input"
                         placeholder={placeholder}
                         aria-label={ariaLabel}
                         aria-invalid={errorMessage?.trim() ? 'true' : undefined}
