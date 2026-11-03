@@ -139,7 +139,6 @@ export const HTML: Story = {
                 <div className="ix-text-field">
                     <input
                         id="land-html"
-                        className="ix-text-field__input"
                         placeholder="Søk etter land …"
                     />
                     <button type="button" className="ix-combobox__toggle" aria-label="Vis alternativer" />

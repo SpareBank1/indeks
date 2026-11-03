@@ -43,7 +43,7 @@
  * @example Single
  * <ix-combobox data-no-hits-text="Ingen treff">
  *   <div class="ix-text-field">
- *     <input class="ix-text-field__input" placeholder="Søk …" />
+ *     <input placeholder="Søk …" />
  *     <button class="ix-combobox__toggle"></button>
  *   </div>
  *   <div class="ix-combobox__listbox">

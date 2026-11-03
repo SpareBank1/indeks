@@ -23,7 +23,7 @@ function single(extraHostAttrs = ''): IxCombobox {
     return mount(`
     <ix-combobox data-no-hits-text="Ingen treff" ${extraHostAttrs}>
       <div class="ix-text-field">
-        <input class="ix-text-field__input" aria-label="Land" />
+        <input aria-label="Land" />
         <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
       </div>
       <div class="ix-combobox__listbox">${OPTIONS}</div>
@@ -38,7 +38,7 @@ function multi(extraHostAttrs = ''): IxCombobox {
     <ix-combobox multiple data-no-hits-text="Ingen treff" data-remove-chip-label="fjern" data-arrow-hint-text="Bruk piltast" data-chips-label="Valgte alternativer" ${extraHostAttrs}>
       <div class="ix-combobox__chips" data-field="chips"></div>
       <div class="ix-text-field">
-        <input class="ix-text-field__input" aria-label="Land" />
+        <input aria-label="Land" />
         <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
       </div>
       <div class="ix-combobox__listbox">${OPTIONS}</div>
@@ -360,7 +360,7 @@ describe('IxCombobox', () => {
               <ix-combobox multiple data-no-hits-text="Ingen treff" data-remove-chip-label="fjern" data-chips-label="Valgte" data-arrow-hint-text="Bruk piltast">
                 <div class="ix-combobox__chips" data-field="chips"></div>
                 <div class="ix-text-field">
-                  <input class="ix-text-field__input" aria-label="Land" aria-describedby="ekstern-desc" />
+                  <input aria-label="Land" aria-describedby="ekstern-desc" />
                   <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
                 </div>
                 <div class="ix-combobox__listbox">${OPTIONS}</div>
@@ -400,7 +400,7 @@ describe('IxCombobox', () => {
             return mount(`
               <ix-combobox data-no-hits-text="Ingen treff" data-results-text="{n} alternativer">
                 <div class="ix-text-field">
-                  <input class="ix-text-field__input" aria-label="Land" />
+                  <input aria-label="Land" />
                   <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
                 </div>
                 <div class="ix-combobox__listbox">${OPTIONS}</div>
@@ -568,7 +568,7 @@ describe('IxCombobox', () => {
             const el = mount(`
               <ix-combobox data-no-hits-text="Ingen treff">
                 <div class="ix-text-field">
-                  <input class="ix-text-field__input" aria-label="Land" />
+                  <input aria-label="Land" />
                   <button class="ix-combobox__toggle"></button>
                 </div>
                 <div class="ix-combobox__listbox">${OPTIONS}</div>
@@ -587,7 +587,7 @@ describe('IxCombobox', () => {
               <ix-combobox multiple data-no-hits-text="Ingen treff" data-remove-chip-label="fjern">
                 <div class="ix-combobox__chips" data-field="chips"></div>
                 <div class="ix-text-field">
-                  <input class="ix-text-field__input" aria-label="Land" />
+                  <input aria-label="Land" />
                   <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
                 </div>
                 <div class="ix-combobox__listbox">${OPTIONS}</div>
@@ -603,7 +603,7 @@ describe('IxCombobox', () => {
               <ix-combobox multiple data-no-hits-text="Ingen treff">
                 <div class="ix-combobox__chips" data-field="chips"></div>
                 <div class="ix-text-field">
-                  <input class="ix-text-field__input" aria-label="Land" />
+                  <input aria-label="Land" />
                   <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
                 </div>
                 <div class="ix-combobox__listbox">${OPTIONS}</div>

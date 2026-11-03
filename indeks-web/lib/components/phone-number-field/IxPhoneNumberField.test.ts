@@ -34,7 +34,7 @@ function scaffold(hostAttrs = '', numberInput = '<input />'): IxPhoneNumberField
           <div data-field="items">
             <ix-combobox data-field="country" class="ix-combobox">
               <div class="ix-text-field">
-                <input class="ix-text-field__input" aria-label="Landkode" />
+                <input aria-label="Landkode" />
                 <button type="button" class="ix-combobox__toggle"></button>
               </div>
               <div class="ix-combobox__listbox" hidden></div>

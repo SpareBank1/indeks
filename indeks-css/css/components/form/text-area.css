@@ -1,13 +1,9 @@
-:where(.ix-text-area) {
+.ix-text-area {
     display: flex;
     align-items: stretch;
 }
 
-/* BEM-selektoren `.ix-text-area__textarea` brukes ikke av React-komponenten —
-   den er et tilgjengelig hook for konsumenter som rendrer <textarea> utenfor
-   `.ix-text-area`-wrapperen og fortsatt vil ha samme styling. */
-:where(.ix-text-area) > textarea,
-:where(.ix-text-area__textarea) {
+.ix-text-area > textarea {
     all: unset;
     box-sizing: border-box;
     min-width: 0;
@@ -23,7 +19,7 @@
     padding: var(--ix-spacing-sm);
     outline: var(--ix-outline-width-default) solid transparent;
     outline-offset: var(--ix-outline-offset-default);
-    transition: 
+    transition:
         color var(--ix-transition-duration) var(--ix-transition-animation),
         outline-color var(--ix-transition-duration) var(--ix-transition-animation),
         border-color var(--ix-transition-duration) var(--ix-transition-animation),
@@ -34,20 +30,19 @@
         border-color: var(--ix-color-border-main-emphasis-hover);
         box-shadow: inset 0 0 0 1px var(--ix-color-border-main-emphasis-hover);
     }
+
+    &::placeholder {
+        color: var(--ix-color-foreground-main-subtle);
+    }
 }
 
-:where(.ix-text-area) > textarea:active,
-:where(.ix-text-area) > textarea:focus,
-:where(.ix-text-area__textarea:active),
-:where(.ix-text-area__textarea:focus) {
+.ix-text-area > textarea:active,
+.ix-text-area > textarea:focus {
     outline-color: var(--ix-color-border-focus-default);
 }
 
-:where(.ix-text-area) > textarea:disabled,
-:where(.ix-text-area__textarea:disabled) {
-    background-color: var(--ix-color-fill-interactive-default);
+.ix-text-area > textarea:disabled {
     color: var(--ix-color-foreground-main-disabled);
-    border-color: var(--ix-color-border-main-emphasis);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
     pointer-events: none;
@@ -55,8 +50,7 @@
     resize: none;
 }
 
-:where(.ix-text-area) > textarea:read-only,
-:where(.ix-text-area__textarea:read-only) {
+.ix-text-area > textarea:read-only {
     background-color: var(--ix-color-fill-interactive-read-only);
     color: var(--ix-color-foreground-main-read-only);
     border-color: var(--ix-color-border-main-emphasis);
@@ -64,14 +58,8 @@
     resize: none;
 }
 
-:where(.ix-text-area) > textarea[aria-invalid="true"],
-:where(.ix-text-area__textarea[aria-invalid="true"]) {
+.ix-text-area > textarea[aria-invalid="true"] {
     color: var(--ix-color-foreground-danger-default);
     border-color: var(--ix-color-border-danger-default);
     box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
-}
-
-:where(.ix-text-area) > textarea::placeholder,
-:where(.ix-text-area__textarea)::placeholder {
-    color: var(--ix-color-foreground-main-subtle);
 }

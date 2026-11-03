@@ -67,7 +67,7 @@ import { type CountryOption, getDefaultCountries, normalizeLocale } from './coun
  *   <div data-field="items">
  *     <ix-combobox data-field="country" class="ix-combobox" data-no-hits-text="Ingen treff">
  *       <div class="ix-text-field">
- *         <input class="ix-text-field__input" aria-label="Landkode" />
+ *         <input aria-label="Landkode" />
  *         <button type="button" class="ix-combobox__toggle" aria-label="Vis land"></button>
  *       </div>
  *       <div class="ix-combobox__listbox" hidden></div>

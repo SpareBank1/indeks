@@ -100,7 +100,6 @@ export const HTML: Story = {
                         <div className="ix-text-field">
                             <input
                                 id="tlf-html-country"
-                                className="ix-text-field__input"
                                 aria-label="Landkode"
                             />
                             <button type="button" className="ix-combobox__toggle" aria-label="Vis landkoder" />
@@ -113,7 +112,6 @@ export const HTML: Story = {
                         <div className="ix-text-field">
                             <input
                                 id="tlf-html-number"
-                                className="ix-text-field__input"
                                 aria-label="Telefonnummer"
                                 name="tlf"
                             />
