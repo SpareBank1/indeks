@@ -30,12 +30,9 @@ export function LinkText<As extends ElementType = "a">(
     <Component
       {...restProps}
       data-size={size}
-      className={cn(
-        "ix-link-text",
-        { "ix-link-text--no-underline": !underline },
-        { "ix-link-text--active": isActive },
-        className
-      )}
+      data-active={isActive || undefined}
+      data-no-underline={!underline || undefined}
+      className={cn("ix-link-text", className)}
     />
   );
 }
