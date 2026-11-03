@@ -19,12 +19,12 @@
     },
     {
       "summary": "Behold understreken på lenker i løpende tekst",
-      "details": "underline={false} i React og ix-link-text--no-underline i HTML fjerner det eneste signalet som ikke er farge. Da må lenken skilles fra brødteksten på farge alene, og det er ikke nok for brukere som ikke oppfatter fargeforskjellen. Fjern understreken bare der lenken er tydelig noe annet enn tekst, for eksempel i en navigasjonsmeny.",
+      "details": "underline={false} i React og data-no-underline i HTML fjerner det eneste signalet som ikke er farge. Da må lenken skilles fra brødteksten på farge alene, og det er ikke nok for brukere som ikke oppfatter fargeforskjellen. Fjern understreken bare der lenken er tydelig noe annet enn tekst, for eksempel i en navigasjonsmeny.",
       "wcag": ["1.4.1"]
     },
     {
       "summary": "Marker gjeldende side med mer enn farge",
-      "details": "isActive og ix-link-text--active endrer bare lenkefargen. Brukes den til å vise hvilken side man står på, må tilstanden også finnes for hjelpemidler: sett aria-current=\"page\" på lenken.",
+      "details": "isActive og data-active endrer bare lenkefargen. Brukes den til å vise hvilken side man står på, må tilstanden også finnes for hjelpemidler: sett aria-current=\"page\" på lenken.",
       "wcag": ["1.4.1", "4.1.2"]
     },
     {
@@ -44,7 +44,7 @@
     },
     {
       "summary": "Bruk long for tekst over flere linjer",
-      "details": "Standard linjehøyde er 1.2, som er tett for løpende tekst. long i React og ix-text--long i HTML setter den til 1.4. Bruk den på alt som går over mer enn én linje — lange linjer med tett linjeavstand er tunge å følge, særlig ved forstørret tekst.",
+      "details": "Standard linjehøyde er 1.2, som er tett for løpende tekst. long i React og data-long i HTML setter den til 1.4. Bruk den på alt som går over mer enn én linje — lange linjer med tett linjeavstand er tunge å følge, særlig ved forstørret tekst.",
       "wcag": ["1.4.12"]
     },
     {

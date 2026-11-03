@@ -22,7 +22,7 @@ Begrens linjelengden. WCAG anbefaler det, og både for lange og for korte linjer
 På større skjermer er 50 til 75 tegn per linje målet, mellomrom inkludert. På mobil ligger det lavere, typisk 35 til 50 tegn. Under 20 tegn blir det for mange linjeskift.
 
 ## Linjehøyde
-Standard linjehøyde i Indeks er 1.2. Brødtekst som er lengre enn noen få linjer trenger større linjehøyde for bedre lesbarhet, og kan overstyres til 1.4 med henholdsvis `Text/Body long/md - regular` i Figma, `long`-propen i `Text`-komponenten, eller CSS-klassen `.ix-text--long`.
+Standard linjehøyde i Indeks er 1.2. Brødtekst som er lengre enn noen få linjer trenger større linjehøyde for bedre lesbarhet, og kan overstyres til 1.4 med henholdsvis `Text/Body long/md - regular` i Figma, `long`-propen i `Text`-komponenten, eller attributtet `data-long` på `.ix-text`.
 
 ## Venstrestilt tekst er standard
 Venstrestilt tekst gir best lesbarhet. Midtstilt tekst kan på lengre tekster gjør det vanskeligere å lese, men kan brukes varsomt på korte tekstmengder, for eksempel i overskrifter med enkel støttetekst.
