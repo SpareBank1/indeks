@@ -8,10 +8,6 @@
     opacity: var(--ix-opacity-disabled);
 }
 
-:is(ix-field, .ix-field)[data-disabled] > label {
-    color: var(--ix-color-foreground-main-default);
-}
-
 :is(ix-field, .ix-field)[data-readonly] > label {
     color: var(--ix-color-foreground-main-read-only);
 }
@@ -19,7 +15,7 @@
 :is(ix-field, .ix-field) [data-field='description'] {
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-subtle);
-    /* Samme som label (label.css), så label og description er like høye. */
+    /* Samme som label, så de er like høye. */
     line-height: 1.2;
 
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
@@ -28,15 +24,11 @@
     }
 }
 
-/* Gapet er xs (label↔input, description↔input, input↔error). Label↔description
-   og input↔char-count hører tettere sammen og trekkes ned til 2xs. Tomme
-   elementer er display: none og påvirker ikke layout. */
+/* Label og description, og input og tegnteller, hører tettere sammen. */
 :is(ix-field, .ix-field) > * + [data-field='description'],
 :is(ix-field, .ix-field) > [data-field='char-count'] {
     margin-block-start: calc(var(--ix-spacing-2xs) - var(--ix-spacing-xs));
 }
-
-/* Feilmeldingen styles i validation-message.css, som deles av alle feltene. */
 
 :is(ix-field, .ix-field) [data-field='char-count'] {
     font-size: var(--ix-font-size-sm);

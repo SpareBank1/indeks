@@ -49,9 +49,7 @@
 }
 
 .ix-text-field > input:disabled {
-    background-color: var(--ix-color-fill-interactive-default);
     color: var(--ix-color-foreground-main-disabled);
-    border-color: var(--ix-color-border-main-emphasis);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     cursor: not-allowed;
     pointer-events: none;

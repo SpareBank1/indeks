@@ -77,9 +77,7 @@
     cursor: pointer;
 }
 
-/* Reserver plass til chevronen så teksten ikke havner under den — samme mål som
-   .ix-select (spacing-sm + chevron-bredde). Kun i combobox-kontekst, så den
-   globale text-field-inputen ikke påvirkes. */
+/* Plass til chevronen, samme mål som i .ix-select. */
 .ix-combobox .ix-text-field > input {
     padding-inline-end: calc(var(--ix-spacing-sm) + 1.5em);
 }
