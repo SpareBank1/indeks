@@ -186,6 +186,35 @@ describe('IxField', () => {
             expect(input.hasAttribute('aria-invalid')).toBe(false);
         });
 
+        it('setter ikke aria-invalid naar meldingen er en suksessmelding', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kontonummer</label>
+                    <input />
+                    <span data-field="error" data-status="success">Kontonummeret er gyldig</span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(input.hasAttribute('aria-invalid')).toBe(false);
+        });
+
+        it('fjerner aria-invalid naar feilmeldingen byttes til suksess', async () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kontonummer</label>
+                    <input />
+                    <span data-field="error">Maa ha 11 siffer</span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(input.getAttribute('aria-invalid')).toBe('true');
+            const error = field.querySelector<HTMLElement>('[data-field="error"]')!;
+            error.dataset.status = 'success';
+            error.textContent = 'Kontonummeret er gyldig';
+            await new Promise((r) => setTimeout(r, 0));
+            expect(input.hasAttribute('aria-invalid')).toBe(false);
+        });
+
         it('setter ikke aria-invalid naar error kun har whitespace', () => {
             const field = createField(`
                 <ix-field>

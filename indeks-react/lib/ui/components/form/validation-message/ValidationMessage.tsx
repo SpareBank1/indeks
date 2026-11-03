@@ -10,16 +10,34 @@ export type ValidationMessageProps = {
      * @default true
      */
     showIcon?: boolean;
+    /**
+     * `success` gir en bekreftende melding (grønn, sirkel med hake). Settes som
+     * `data-status`. @default "danger"
+     */
+    status?: 'danger' | 'success';
 } & HTMLAttributes<HTMLSpanElement>;
 
 export const ValidationMessage = forwardRef<HTMLSpanElement, ValidationMessageProps>(function ValidationMessage(
-    { children, className, showIcon = true, ...restProps },
+    { children, className, showIcon = true, status = 'danger', ...restProps },
     ref
 ) {
     const hasContent = children !== undefined && children !== null && children !== '' && children !== false;
     return (
-        <span ref={ref} {...restProps} data-field="error" className={cn(className)}>
-            {hasContent && showIcon && <ix-icon data-badge="" data-status="danger" name="close" aria-hidden="true" />}
+        <span
+            ref={ref}
+            {...restProps}
+            data-field="error"
+            data-status={status === 'success' ? 'success' : undefined}
+            className={cn(className)}
+        >
+            {hasContent && showIcon && (
+                <ix-icon
+                    data-badge=""
+                    data-status={status}
+                    name={status === 'success' ? 'check' : 'close'}
+                    aria-hidden="true"
+                />
+            )}
             {children}
         </span>
     );

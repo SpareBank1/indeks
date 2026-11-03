@@ -292,6 +292,7 @@ export class IxField extends HTMLElement {
                 childList: true,
                 characterData: true,
                 subtree: true,
+                attributeFilter: ['data-status'],
             });
 
             // Sett initial aria-invalid-tilstand i tilfelle feilmelding allerede
@@ -590,7 +591,8 @@ export class IxField extends HTMLElement {
     // hver endring. Synkroniserer også data-invalid til .ix-dropdown-container
     // hvis kontrollen er en select inne i en dropdown.
     private _syncInvalid(control: NativeControl, error: HTMLElement): void {
-        const hasError = !!error.textContent?.trim();
+        // En suksessmelding (data-status="success") er ingen feil.
+        const hasError = !!error.textContent?.trim() && error.dataset.status !== 'success';
         if (hasError) {
             control.setAttribute('aria-invalid', 'true');
         } else {

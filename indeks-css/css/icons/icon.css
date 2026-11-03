@@ -44,7 +44,13 @@
     border-radius: 0;
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
 
+/* Suksessmeldingen beholder sirkelen. */
+:where([data-field='error'][data-status='success'] ix-icon[data-badge], [data-field='error'][data-status='success'] .ix-icon[data-badge]) {
+    border-radius: var(--ix-border-radius-circle);
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    clip-path: none;
 }
 
 /* Når badgen har en status (data-status kobler --ix-color-status-* via

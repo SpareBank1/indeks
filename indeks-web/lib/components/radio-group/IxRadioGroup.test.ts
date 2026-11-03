@@ -258,6 +258,21 @@ describe('IxRadioGroup', () => {
             for (const input of inputs) expect(input.hasAttribute('aria-invalid')).toBe(false);
         });
 
+        it('setter ikke aria-invalid på host for en suksessmelding', async () => {
+            const el = mount(`
+                <ix-radio-group>
+                    <span data-field="legend">Velg</span>
+                    <div><input type="radio" value="a" /><label>A</label></div>
+                    <span data-field="error">Feil</span>
+                </ix-radio-group>
+            `);
+            expect(el.getAttribute('aria-invalid')).toBe('true');
+            const error = el.querySelector<HTMLElement>('[data-field="error"]')!;
+            error.dataset.status = 'success';
+            await new Promise((r) => setTimeout(r, 0));
+            expect(el.hasAttribute('aria-invalid')).toBe(false);
+        });
+
         it('fjerner aria-invalid fra host når error er tom', async () => {
             const el = mount(`
                 <ix-radio-group>

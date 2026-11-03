@@ -11,12 +11,18 @@
  * badgen får danger-fyll automatisk. Badgen krympes fra standard 32px til en
  * inline-vennlig størrelse som flukter med teksten (--ix-font-size-md ≈ 16px).
  *
+ * `data-status="success"` gir suksessvarianten: grønn tekst og sirkel med hake
+ * i stedet for rødt oktagon. Formen settes i icons/icon.css.
+ *
  * Denne komponenten har ingen egen web component — kun klassen/attributtet
  * styles. Rotselektoren treffer derfor [data-field="error"] direkte (satt av
  * forfatter eller React-wrapperen), ikke en <ix-validation-message>-tag.
+ *
+ * Grunnformen er [data-field='error']. Tilstandene (:empty, data-status)
+ * legger til én betingelse og vinner over grunnregelen.
  */
 
-:where([data-field='error']) {
+[data-field='error'] {
     display: inline-flex;
     align-items: center;
     gap: var(--ix-spacing-xs);
@@ -25,15 +31,19 @@
     color: var(--ix-color-foreground-danger-default);
 }
 
+[data-field='error'][data-status='success'] {
+    color: var(--ix-color-foreground-success-default);
+}
+
 /* Tom melding tar ingen plass — elementet blir stående i DOM for aria-live. */
 /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
-:where([data-field='error']):empty {
+[data-field='error']:empty {
     display: none;
 }
 
-/* Badge-ikonet: krymp badge + glyf til inline-størrelse. `data-status="danger"`
-   på selve ikonet fyller badgen med danger-farge (icon.css badge-regel). */
-:where([data-field='error'] ix-icon[data-badge]) {
+/* Badge-ikonet: krymp badge + glyf til inline-størrelse. `data-status` på
+   selve ikonet fyller badgen med statusfargen (icon.css badge-regel). */
+[data-field='error'] ix-icon[data-badge] {
     flex: 0 0 auto;
     --ix-icon-badge-size: var(--ix-font-size-lg);
     --ix-icon-badge-glyph-size: var(--ix-font-size-sm);

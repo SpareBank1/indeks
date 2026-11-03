@@ -12,7 +12,6 @@ components/form/phone-number-field.css
 components/form/select.css
 components/form/text-area.css
 components/form/text-field.css
-components/form/validation-message.css
 
 
 # #330 Combobox og DateField

@@ -5,23 +5,18 @@ import a11yData from './accessibility/validation-message.json';
 
 # ValidationMessage
 
-ValidationMessage viser en feilmelding knyttet til et skjemafelt eller en feltgruppe.
-
-:::info Bare error-tilstand i dag
-Komponenten støtter bare **error**. Figma viser også en **success**-variant, men den er ikke tatt
-i bruk. API-et kan utvides med en status senere uten brytende endringer, så ta kontakt med
-designsystem-teamet før du bygger på success.
-:::
+ValidationMessage viser en kort melding knyttet til et skjemafelt, en feltgruppe eller en
+handling. Den finnes i to varianter: feil, som er standard, og en bekreftende suksessmelding.
 
 ## Egnet til
 
 - Feilmelding under et inputfelt eller en feltgruppe (f.eks. RadioGroup)
 - Korte, handlingsrettede meldinger om hva som må rettes
+- Kort bekreftelse på at noe gikk bra, for eksempel at en opplasting er ferdig
 
 ## Uegnet til
 
-- Generelle informasjonsmeldinger som ikke er feil
-- Suksess- eller advarselsmeldinger (komponenten støtter bare feil)
+- Generelle informasjonsmeldinger og advarsler. Bruk heller [Message](../message)
 
 ## Bruk
 
@@ -66,7 +61,10 @@ Ikonet er dekorativt (`aria-hidden`) — feilen formidles av teksten. Slå det a
   <div class="ix-text-field">
     <input id="email-error" type="email" />
   </div>
-  <span data-field="error">Du må oppgi en gyldig e-postadresse</span>
+  <span data-field="error">
+    <ix-icon data-badge data-status="danger" name="close" aria-hidden="true"></ix-icon>
+    Du må oppgi en gyldig e-postadresse
+  </span>
 </ix-field>
 ```
 
@@ -82,6 +80,32 @@ Ikonet er dekorativt (`aria-hidden`) — feilen formidles av teksten. Slå det a
 ```
 
 I React-komponenter som `TextField` og `Select` er `errorMessage`-propen den foretrukne måten — den rendrer `<ValidationMessage>` internt. Bruk `<ValidationMessage>` direkte når du komponerer felt manuelt eller jobber med gruppe-komponenter som `<RadioGroup>`.
+
+</TabItem>
+</Tabs>
+
+### Bekreftende melding (success)
+
+Med `data-status="success"` blir meldingen grønn med hake i en sirkel. Inne i `<ix-field>` og
+gruppene teller en suksessmelding ikke som feil, så feltet får ikke `aria-invalid`.
+[ProgressBar](../progress-bar) bruker denne varianten når en prosess er ferdig.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<span data-field="error" data-status="success">
+  <ix-icon data-badge data-status="success" name="check" aria-hidden="true"></ix-icon>
+  Kontonummeret er gyldig
+</span>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ValidationMessage status="success">Kontonummeret er gyldig</ValidationMessage>
+```
 
 </TabItem>
 </Tabs>
@@ -131,7 +155,7 @@ ingenting.
 
 ### `[data-field="error"]`
 
-Et element med `data-field="error"` styles automatisk av Indeks-CSS som en feilmelding (rød tekst, riktig spacing, ikon-layout). Inne i `<ix-field>` eller `<ix-radio-group>` kobles det også til input via `aria-describedby`, og inputen får `aria-invalid="true"` når elementet har innhold. Feilikonet skrives som et dekorativt `<ix-icon data-badge>` foran teksten — utelat det for å skjule ikonet.
+Et element med `data-field="error"` styles automatisk av Indeks-CSS som en feilmelding (rød tekst, riktig spacing, ikon-layout). Inne i `<ix-field>` eller `<ix-radio-group>` kobles det også til input via `aria-describedby`, og inputen får `aria-invalid="true"` når elementet har innhold. Feilikonet skrives som et dekorativt `<ix-icon data-badge>` foran teksten — utelat det for å skjule ikonet. Legg til `data-status="success"` for en suksessmelding, og bruk da `data-status="success"` og `name="check"` på ikonet.
 
 ```html
 <span data-field="error">
@@ -148,7 +172,8 @@ Et element med `data-field="error"` styles automatisk av Indeks-CSS som en feilm
 | Prop | Type | Påkrevd | Beskrivelse |
 |------|------|---------|-------------|
 | `children` | `ReactNode` | Nei | Feilmeldingsteksten |
-| `showIcon` | `boolean` | Nei | Vis det dekorative feilikonet foran teksten. Standard `true`. |
+| `status` | `'danger' \| 'success'` | Nei | `success` gir en grønn suksessmelding med hake. Standard `'danger'`. |
+| `showIcon` | `boolean` | Nei | Vis det dekorative ikonet foran teksten. Standard `true`. |
 | `id` | `string` | Nei | ID på elementet — nødvendig hvis du kobler manuelt med `aria-describedby` |
 | `className` | `string` | Nei | Ekstra CSS-klasser |
 | `ref` | `Ref<HTMLSpanElement>` | Nei | Ref videresendes til `<span>`-elementet |
@@ -165,8 +190,9 @@ ValidationMessage styles av globale regler på `[data-field="error"]` i `form/va
 | Egenskap | Token |
 |----------|-------|
 | Skriftstørrelse | `--ix-font-size-md` |
-| Tekstfarge | `--ix-color-foreground-danger-default` |
-| Ikon-badge bakgrunnsfarge | `--ix-color-status-fill` (via `data-status="danger"`) |
+| Tekstfarge | `--ix-color-foreground-danger-default` (success: `--ix-color-foreground-success-default`) |
+| Ikon-badge bakgrunnsfarge | `--ix-color-status-fill` (via `data-status` på ikonet) |
+| Suksessvariant | `[data-field="error"][data-status="success"]` |
 | Ikon-badge størrelse | `--ix-icon-badge-size` (satt til `--ix-font-size-lg`) |
 
 ## Relatert

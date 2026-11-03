@@ -13,8 +13,10 @@ export type ProgressBarProps = {
     /**
      * Tilstand for prosessen.
      * - `active`: pågående — eksponeres som `role="progressbar"`.
-     * - `success`: fullført — viser suksessikon, ikke lenger en progressbar.
-     * - `error`: feilet — viser feilikon, ikke lenger en progressbar.
+     * - `success`: fullført. `supportText` vises som en ValidationMessage med
+     *   suksessikon. Ikke lenger en progressbar.
+     * - `error`: feilet. `supportText` vises som en ValidationMessage med
+     *   feilikon. Ikke lenger en progressbar.
      * @default "active"
      */
     state?: ProgressBarState;
@@ -24,8 +26,9 @@ export type ProgressBarProps = {
      */
     label?: string;
     /**
-     * Valgfri støttetekst under baren. I `error` bør den forklare hva som gikk
-     * galt og evt. neste steg. i18n: sendes inn oversatt av konsumenten.
+     * Valgfri støttetekst under baren. I `success` og `error` vises den som en
+     * ValidationMessage. I `error` bør den forklare hva som gikk galt og evt.
+     * neste steg. i18n: sendes inn oversatt av konsumenten.
      */
     supportText?: string;
     /** Vis prosentverdien («25 %») i label-raden. Kun relevant i `active`. */
@@ -43,7 +46,7 @@ export type ProgressBarProps = {
  * validering, onboarding). Rent informativ og ikke-interaktiv.
  *
  * Tynn wrapper: `<ix-progress-bar>` (web componenten) eier klamping, ARIA-rolle
- * og statusikon. React eksponerer kun props-API-et — ingen logikk dupliseres.
+ * og statusmelding. React eksponerer kun props-API-et — ingen logikk dupliseres.
  */
 export function ProgressBar({
     value,

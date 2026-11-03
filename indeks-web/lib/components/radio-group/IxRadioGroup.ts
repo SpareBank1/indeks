@@ -109,6 +109,7 @@ export class IxRadioGroup extends HTMLElement {
                 childList: true,
                 characterData: true,
                 subtree: true,
+                attributeFilter: ['data-status'],
             });
 
             this._syncInvalid(error);
@@ -200,7 +201,8 @@ export class IxRadioGroup extends HTMLElement {
     }
 
     private _syncInvalid(error: HTMLElement): void {
-        const hasError = !!error.textContent?.trim();
+        // En suksessmelding (data-status="success") er ingen feil.
+        const hasError = !!error.textContent?.trim() && error.dataset.status !== 'success';
         if (hasError) {
             this.setAttribute('aria-invalid', 'true');
         } else {

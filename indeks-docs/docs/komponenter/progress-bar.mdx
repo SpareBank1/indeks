@@ -107,7 +107,7 @@ Label beskriver hva som skjer; støtteteksten gir utfyllende informasjon. Sett `
 
 ### Fullført (success)
 
-I `success` er prosessen ferdig. Baren fylles helt, et suksessikon vises, og komponenten er ikke lenger en `progressbar` — status formidles semantisk på samme måte som i Message.
+I `success` er prosessen ferdig. Baren fylles helt, og støtteteksten under baren vises som en grønn [ValidationMessage](./skjema/validation-message) med hake. Komponenten er ikke lenger en `progressbar`.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -139,7 +139,7 @@ I `success` er prosessen ferdig. Baren fylles helt, et suksessikon vises, og kom
 
 ### Feilet (error)
 
-I `error` er prosessen avbrutt. Et feilikon vises, og støtteteksten skal forklare hva som gikk galt og hva brukeren kan gjøre videre.
+I `error` er prosessen avbrutt. Støtteteksten vises som en rød [ValidationMessage](./skjema/validation-message), og den skal forklare hva som gikk galt og hva brukeren kan gjøre videre.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -170,7 +170,7 @@ I `error` er prosessen avbrutt. Et feilikon vises, og støtteteksten skal forkla
 </Tabs>
 
 :::info
-`success` og `error` ignorerer `value` visuelt — baren er ferdigstilt (100 %) eller beholder fyllet fra da den feilet. Statusikonet rendres alltid i disse tilstandene og kan ikke skjules.
+I `success` er baren alltid full, uansett `value`. I `error` beholder den fyllet fra da prosessen feilet. Uten støttetekst vises verken melding eller ikon, bare fargen på baren.
 :::
 
 ## Universell utforming
@@ -187,7 +187,7 @@ I `error` er prosessen avbrutt. Et feilikon vises, og støtteteksten skal forkla
 - **`role="progressbar"`** settes i `active` med `aria-valuenow` (avrundet), `aria-valuemin="0"` og `aria-valuemax="100"`. Sett `valueText` for en lokalisert `aria-valuetext`.
 - **iOS-tilpasning:** på iOS bytter `active` til `role="img"` og baker verdien inn i `aria-label` (`«label, verdi»`), fordi VoiceOver ikke leser løpende `aria-valuenow`-endringer på en `progressbar`. `valueText` foretrekkes i denne teksten når den er satt. Desktop og Android beholder ekte progressbar-semantikk.
 - **`aria-labelledby` / `aria-describedby`** kobler label og støttetekst programmatisk til baren.
-- Rollen fjernes i `success`/`error`. Komponenten er ikke lenger en progressbar. Status formidles med `data-status` (kobler statusfarger), et dekorativt statusikon og tekst — aldri farge alene.
+- Rollen fjernes i `success`/`error`. Komponenten er ikke lenger en progressbar. Status formidles med statusfarge på baren og en ValidationMessage med dekorativt ikon og tekst, aldri med farge alene.
 - **Overgang annonseres:** støtteteksten er en stabil live-region (`role="status"`), så endringen til `success`/`error` leses høflig uten å flytte fokus.
 - **`prefers-reduced-motion`** fjerner overgangsanimasjonen for brukere som har slått av bevegelse.
 
@@ -239,6 +239,7 @@ Trenger du `ix-progress-bar`-stylingen på HTML du setter sammen selv, uten Reac
 | Track (ufylt del) | `.ix-progress-bar__track` |
 | Fyll (fylt del) | `.ix-progress-bar__fill` |
 | Støttetekst | `.ix-progress-bar__support` |
+| Statusmelding (`success`/`error`) | `.ix-progress-bar__support[data-field="error"]` |
 | Tilstand | `[data-state="success"]`, `[data-state="error"]` |
 
 ### Lokale CSS-variabler
@@ -264,3 +265,4 @@ Trenger du `ix-progress-bar`-stylingen på HTML du setter sammen selv, uten Reac
 
 - [Spinner](./spinner) — når varigheten er ukjent eller fremdrift ikke kan måles
 - [Message](./message) — for varsling og tilbakemelding om en tilstand
+- [ValidationMessage](./skjema/validation-message) — meldingen ProgressBar viser i `success` og `error`

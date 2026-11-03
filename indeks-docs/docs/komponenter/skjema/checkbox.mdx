@@ -91,7 +91,10 @@ labelen — du trenger ingen ekstra markup for indikatoren. Koble label til inpu
     <input type="checkbox" id="terms-invalid" name="terms" aria-invalid="true" />
     <label for="terms-invalid">Jeg godtar vilkårene</label>
   </div>
-  <span data-field="error">Du må godta vilkårene for å fortsette</span>
+  <span data-field="error">
+    <ix-icon data-badge data-status="danger" name="close" aria-hidden="true"></ix-icon>
+    Du må godta vilkårene for å fortsette
+  </span>
 </ix-field>
 ```
 

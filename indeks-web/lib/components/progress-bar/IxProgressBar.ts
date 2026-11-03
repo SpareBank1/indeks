@@ -2,7 +2,7 @@
  * IxProgressBar — viser fremdrift i én sammenhengende prosess.
  *
  * DOM-generator: web componenten eier og genererer all indre HTML (header med
- * label + verdi/statusikon, track + fill, og en støttetekst-region).
+ * label + verdi, track + fill, og en støttetekst-region).
  * Forfatteren skriver kun host-elementet `<ix-progress-bar>` med attributter —
  * ingen intern struktur.
  *
@@ -10,9 +10,9 @@
  *  - `active` (default): role="progressbar" med aria-valuenow/min/max på host.
  *    Nøytral/primær fremdriftsfarge. Ingen statusikon. Kan vise prosent.
  *  - `success` / `error`: rollen `progressbar` FJERNES (prosessen er ferdig/avbrutt).
- *    Status formidles semantisk «tilsvarende Message» — `data-status`
- *    (success/danger) kobler --ix-color-status-* og et dekorativt
- *    `<ix-icon data-badge>` vises alltid. Støtteteksten er en aria-live-region
+ *    `data-status` (success/danger) kobler --ix-color-status-* til fyllet.
+ *    Støtteteksten vises som en ValidationMessage (`data-field="error"` med
+ *    `data-status` og badge-ikon), slik Figma viser. Den er en aria-live-region
  *    (role="status") så overgangen annonseres politely.
  *
  * Komponenten er rent informativ og aldri fokuserbar (setter aldri tabindex).
@@ -30,10 +30,10 @@ let progressBarCounter = 0;
 
 export type ProgressBarState = 'active' | 'success' | 'error';
 
-// Statusikon per tilstand — samme glyfer som Message bruker.
+// Samme ikoner som ValidationMessage.
 const STATE_ICON: Record<Exclude<ProgressBarState, 'active'>, string> = {
     success: 'check',
-    error: 'priority_high',
+    error: 'close',
 };
 
 // data-state → data-status (kobler --ix-color-status-* via status-colors.css).
@@ -82,7 +82,7 @@ export class IxProgressBar extends HTMLElement {
     private _ensureStructure(): void {
         if (this._track) return;
 
-        // Header: label (venstre) + slutt-slot (verdi eller statusikon).
+        // Header: label (venstre) + verdi (høyre).
         this._header = document.createElement('div');
         this._header.className = 'ix-progress-bar__header';
 
@@ -140,11 +140,12 @@ export class IxProgressBar extends HTMLElement {
         this._label.textContent = label ?? '';
         this._label.hidden = !label;
 
-        // --- Statusikon (kun success/error) + verdi (kun active) ---
-        this._updateIconAndValue(state, clamped, showValue, isActive, Boolean(label));
+        // --- Verdi (kun active) ---
+        this._updateValue(clamped, showValue, isActive, Boolean(label));
 
-        // --- Støttetekst ---
+        // --- Støttetekst, som ValidationMessage i success/error ---
         this._supportText.textContent = supportText ?? '';
+        this._updateStatusMessage(state, Boolean(supportText));
 
         // Et tilgjengelig navn kan komme fra label, aria-label eller
         // aria-labelledby satt av konsumenten.
@@ -219,49 +220,44 @@ export class IxProgressBar extends HTMLElement {
         }
     }
 
+    /** Prosentverdien vises i header-slutten, bare i active. */
+    private _updateValue(clamped: number, showValue: boolean, isActive: boolean, hasLabel: boolean): void {
+        if (!this._headerEnd || !this._header) return;
+
+        const visible = isActive && showValue;
+        this._headerEnd.textContent = visible ? `${Math.round(clamped)}\u00A0%` : '';
+        this._headerEnd.hidden = !visible;
+
+        // Header skjules helt når den er tom.
+        this._header.hidden = !hasLabel && !visible;
+    }
+
     /**
-     * Plasserer statusikon og verdi. Følger Figma:
-     *  - active + data-show-value → «NN %» i header-slutten.
-     *  - success/error med label → ikon i header-slutten (til høyre for label).
-     *  - success/error uten label → ikon foran støtteteksten.
+     * I success/error med tekst blir støtteteksten en ValidationMessage med
+     * badge-ikon foran. Uten tekst vises ingenting, så ikonet ikke står alene.
      */
-    private _updateIconAndValue(
-        state: ProgressBarState,
-        clamped: number,
-        showValue: boolean,
-        isActive: boolean,
-        hasLabel: boolean,
-    ): void {
-        if (!this._headerEnd || !this._support || !this._supportText || !this._header) return;
+    private _updateStatusMessage(state: ProgressBarState, hasText: boolean): void {
+        if (!this._support || !this._supportText) return;
 
-        // Verdi vises kun i active.
-        if (isActive && showValue) {
-            this._removeIcon();
-            this._headerEnd.textContent = `${Math.round(clamped)}\u00A0%`;
-            this._headerEnd.hidden = false;
-        } else {
-            this._headerEnd.textContent = '';
-            this._headerEnd.hidden = true;
+        if (state === 'active' || !hasText) {
+            this._support.removeAttribute('data-field');
+            this._support.removeAttribute('data-status');
+            this._icon?.remove();
+            return;
         }
 
-        if (!isActive) {
-            const icon = this._ensureIcon();
-            icon.setAttribute('name', STATE_ICON[state as Exclude<ProgressBarState, 'active'>]);
-            if (hasLabel) {
-                // Ikon til høyre i header-raden.
-                this._headerEnd.hidden = true;
-                this._header.appendChild(icon);
-            } else {
-                // Ikon foran støtteteksten.
-                this._support.insertBefore(icon, this._supportText);
-            }
+        const status = STATE_STATUS[state];
+        this._support.setAttribute('data-field', 'error');
+        // Som ValidationMessage: data-status bare for success, feil er standard.
+        if (state === 'success') {
+            this._support.setAttribute('data-status', 'success');
         } else {
-            this._removeIcon();
+            this._support.removeAttribute('data-status');
         }
-
-        // Header skjules helt når den er tom (ingen label, verdi eller ikon).
-        const headerHasContent = hasLabel || (isActive && showValue) || (!isActive && hasLabel);
-        this._header.hidden = !headerHasContent;
+        const icon = this._ensureIcon();
+        icon.setAttribute('name', STATE_ICON[state]);
+        icon.setAttribute('data-status', status);
+        this._support.insertBefore(icon, this._supportText);
     }
 
     private _ensureIcon(): HTMLElement {
@@ -273,10 +269,6 @@ export class IxProgressBar extends HTMLElement {
             this._icon.setAttribute('aria-hidden', 'true');
         }
         return this._icon;
-    }
-
-    private _removeIcon(): void {
-        this._icon?.remove();
     }
 
     private _resolveState(): ProgressBarState {

@@ -197,6 +197,21 @@ describe('IxCheckboxGroup', () => {
             for (const input of inputs) expect(input.hasAttribute('aria-invalid')).toBe(false);
         });
 
+        it('setter ikke aria-invalid på host for en suksessmelding', async () => {
+            const el = mount(`
+                <ix-checkbox-group>
+                    <span data-field="legend">Velg</span>
+                    <div data-field="items">${ITEM('a', 'A')}</div>
+                    <span data-field="error">Feil</span>
+                </ix-checkbox-group>
+            `);
+            expect(el.getAttribute('aria-invalid')).toBe('true');
+            const error = el.querySelector<HTMLElement>('[data-field="error"]')!;
+            error.dataset.status = 'success';
+            await new Promise((r) => setTimeout(r, 0));
+            expect(el.hasAttribute('aria-invalid')).toBe(false);
+        });
+
         it('fjerner aria-invalid fra host når error er tom', async () => {
             const el = mount(`
                 <ix-checkbox-group>
