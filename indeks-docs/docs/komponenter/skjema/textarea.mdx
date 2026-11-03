@@ -416,14 +416,10 @@ React-komponenten eller `<ix-field>` — kan du bruke klassene direkte på eleme
 | Element | Selektor |
 |---------|----------|
 | Textarea-wrapper | `.ix-text-area` |
-| Tekstområde | `.ix-text-area > textarea` eller `.ix-text-area__textarea` |
-| Label | `.ix-label` |
+| Tekstområde | `.ix-text-area > textarea` |
+| Label | `ix-field > label`, eller `.ix-label` utenfor `ix-field` |
 | Hjelpetekst | `[data-field="description"]` |
 | Feilmelding | `[data-field="error"]` |
-
-`.ix-text-area__textarea` gir textarea-elementet nøyaktig samme stilregler som
-`.ix-text-area > textarea`. Bruk den når du ikke kan eller vil bruke komponentens
-HTML-struktur.
 
 ### Eksempel: bruk i egen HTML-struktur
 
@@ -432,7 +428,7 @@ HTML-struktur.
   <label>Tilbakemelding</label>
   <span data-field="description">Fortell oss hva du synes</span>
   <div class="ix-text-area">
-    <textarea class="ix-text-area__textarea" rows="4"></textarea>
+    <textarea rows="4"></textarea>
   </div>
   <span data-field="error"></span>
 </ix-field>
