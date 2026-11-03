@@ -33,18 +33,18 @@ Marker start-fanen med `defaultValue` (i HTML: `aria-selected="true"` på fanen 
 
 ```jsx live
 <ix-tabs class="ix-tabs">
-  <ix-tab-list class="ix-tabs__list" aria-label="Kontoinformasjon">
-    <ix-tab class="ix-tabs__tab" data-value="oversikt" aria-selected="true">Oversikt</ix-tab>
-    <ix-tab class="ix-tabs__tab" data-value="transaksjoner" aria-selected="false">Transaksjoner</ix-tab>
-    <ix-tab class="ix-tabs__tab" data-value="innstillinger" aria-selected="false">Innstillinger</ix-tab>
+  <ix-tab-list aria-label="Kontoinformasjon">
+    <ix-tab data-value="oversikt" aria-selected="true">Oversikt</ix-tab>
+    <ix-tab data-value="transaksjoner" aria-selected="false">Transaksjoner</ix-tab>
+    <ix-tab data-value="innstillinger" aria-selected="false">Innstillinger</ix-tab>
   </ix-tab-list>
-  <ix-tab-panel class="ix-tabs__panel" data-value="oversikt">
+  <ix-tab-panel data-value="oversikt">
     <p>Saldo og nøkkeltall for kontoen.</p>
   </ix-tab-panel>
-  <ix-tab-panel class="ix-tabs__panel" data-value="transaksjoner" hidden>
+  <ix-tab-panel data-value="transaksjoner" hidden>
     <p>De siste inn- og utbetalingene.</p>
   </ix-tab-panel>
-  <ix-tab-panel class="ix-tabs__panel" data-value="innstillinger" hidden>
+  <ix-tab-panel data-value="innstillinger" hidden>
     <p>Navn, varsler og kontoinnstillinger.</p>
   </ix-tab-panel>
 </ix-tabs>
@@ -86,24 +86,24 @@ En fane kan ha et ikon foran teksten. Ikonet følger samme tilstandsfarge som te
 
 ```jsx live
 <ix-tabs class="ix-tabs">
-  <ix-tab-list class="ix-tabs__list" aria-label="Bankoversikt">
-    <ix-tab class="ix-tabs__tab" data-value="konto" aria-selected="true">
+  <ix-tab-list aria-label="Bankoversikt">
+    <ix-tab data-value="konto" aria-selected="true">
       <ix-icon name="account_balance" aria-hidden="true"></ix-icon> Konto
     </ix-tab>
-    <ix-tab class="ix-tabs__tab" data-value="betalinger" aria-selected="false">
+    <ix-tab data-value="betalinger" aria-selected="false">
       <ix-icon name="payments" aria-hidden="true"></ix-icon> Betalinger
     </ix-tab>
-    <ix-tab class="ix-tabs__tab" data-value="sparing" aria-selected="false">
+    <ix-tab data-value="sparing" aria-selected="false">
       <ix-icon name="savings" aria-hidden="true"></ix-icon> Sparing
     </ix-tab>
   </ix-tab-list>
-  <ix-tab-panel class="ix-tabs__panel" data-value="konto">
+  <ix-tab-panel data-value="konto">
     <p>Oversikt over kontoene dine.</p>
   </ix-tab-panel>
-  <ix-tab-panel class="ix-tabs__panel" data-value="betalinger" hidden>
+  <ix-tab-panel data-value="betalinger" hidden>
     <p>Kommende og utførte betalinger.</p>
   </ix-tab-panel>
-  <ix-tab-panel class="ix-tabs__panel" data-value="sparing" hidden>
+  <ix-tab-panel data-value="sparing" hidden>
     <p>Sparemål og renter.</p>
   </ix-tab-panel>
 </ix-tabs>
@@ -149,24 +149,24 @@ Faner uten synlig tekst må ha et tilgjengelig navn (på brukerens språk) — e
 
 ```jsx live
 <ix-tabs class="ix-tabs">
-  <ix-tab-list class="ix-tabs__list" aria-label="Navigasjon">
-    <ix-tab class="ix-tabs__tab" data-value="hjem" aria-selected="true" aria-label="Hjem">
+  <ix-tab-list aria-label="Navigasjon">
+    <ix-tab data-value="hjem" aria-selected="true" aria-label="Hjem">
       <ix-icon name="home" aria-hidden="true"></ix-icon>
     </ix-tab>
-    <ix-tab class="ix-tabs__tab" data-value="profil" aria-selected="false" aria-label="Profil">
+    <ix-tab data-value="profil" aria-selected="false" aria-label="Profil">
       <ix-icon name="person" aria-hidden="true"></ix-icon>
     </ix-tab>
-    <ix-tab class="ix-tabs__tab" data-value="innstillinger" aria-selected="false" aria-label="Innstillinger">
+    <ix-tab data-value="innstillinger" aria-selected="false" aria-label="Innstillinger">
       <ix-icon name="settings" aria-hidden="true"></ix-icon>
     </ix-tab>
   </ix-tab-list>
-  <ix-tab-panel class="ix-tabs__panel" data-value="hjem">
+  <ix-tab-panel data-value="hjem">
     <p>Hjem-innhold.</p>
   </ix-tab-panel>
-  <ix-tab-panel class="ix-tabs__panel" data-value="profil" hidden>
+  <ix-tab-panel data-value="profil" hidden>
     <p>Profil-innhold.</p>
   </ix-tab-panel>
-  <ix-tab-panel class="ix-tabs__panel" data-value="innstillinger" hidden>
+  <ix-tab-panel data-value="innstillinger" hidden>
     <p>Innstillinger-innhold.</p>
   </ix-tab-panel>
 </ix-tabs>
@@ -275,18 +275,18 @@ Props-tabellen genereres automatisk fra Storybook (`tags: ['autodocs']`).
 
 ## Tilpasning med CSS
 
-Trenger du `ix-tabs`-stylingen på HTML du setter sammen selv, uten React-komponenten, kan du bruke klassene direkte. Web componenten `<ix-tabs>` kobler roller, `aria-controls`, roving `tabindex`, tastatur og panel-visning ved mount; du skriver semantisk markup, gir hver fane og sitt panel et delt `data-value`, og markerer start-fanen med `aria-selected="true"` og de skjulte panelene med `hidden`.
+Trenger du `ix-tabs`-stylingen på HTML du setter sammen selv, uten React-komponenten, kan du bruke `.ix-tabs` og custom elementene direkte. Web componenten `<ix-tabs>` kobler roller, `aria-controls`, roving `tabindex`, tastatur og panel-visning ved mount; du skriver semantisk markup, gir hver fane og sitt panel et delt `data-value`, og markerer start-fanen med `aria-selected="true"` og de skjulte panelene med `hidden`.
 
 ### Tilgjengelige klasser og selektorer
 
 | Element/tilstand | Selektor / attributt |
 |------------------|----------------------|
 | Rot | `.ix-tabs` på `<ix-tabs>` |
-| Fane-liste (tablist) | `.ix-tabs__list` på `<ix-tab-list>` |
-| Enkelt-fane | `.ix-tabs__tab` på `<ix-tab>` |
+| Fane-liste (tablist) | `<ix-tab-list>` |
+| Enkelt-fane | `<ix-tab>` |
 | Fane↔panel-kobling | delt `data-value` på `<ix-tab>` og `<ix-tab-panel>` |
 | Aktiv fane | `[aria-selected="true"]` på fanen |
-| Innholdspanel | `.ix-tabs__panel` på `<ix-tab-panel>` |
+| Innholdspanel | `<ix-tab-panel>` |
 | Skjult panel | `[hidden]` på panelet (native) |
 
 Understreken er synlig i alle tilstander og markerer tilstand med farge: passiv bruker `--ix-color-border-main-default`, hover `--ix-color-border-main-emphasis` og aktiv `--ix-color-fill-main-default` (brand-farge). Passiv fane-tekst bruker `--ix-color-foreground-main-subtle`, aktiv/hover-tekst `--ix-color-foreground-main-default`. Overstyr disse tokenene for å tilpasse fargene.
@@ -295,14 +295,14 @@ Understreken er synlig i alle tilstander og markerer tilstand med farge: passiv 
 
 ```html
 <ix-tabs class="ix-tabs">
-  <ix-tab-list class="ix-tabs__list" aria-label="Kontoinformasjon">
-    <ix-tab class="ix-tabs__tab" data-value="oversikt" aria-selected="true">Oversikt</ix-tab>
-    <ix-tab class="ix-tabs__tab" data-value="detaljer" aria-selected="false">Detaljer</ix-tab>
+  <ix-tab-list aria-label="Kontoinformasjon">
+    <ix-tab data-value="oversikt" aria-selected="true">Oversikt</ix-tab>
+    <ix-tab data-value="detaljer" aria-selected="false">Detaljer</ix-tab>
   </ix-tab-list>
-  <ix-tab-panel class="ix-tabs__panel" data-value="oversikt">
+  <ix-tab-panel data-value="oversikt">
     <p>Innhold for oversikt.</p>
   </ix-tab-panel>
-  <ix-tab-panel class="ix-tabs__panel" data-value="detaljer" hidden>
+  <ix-tab-panel data-value="detaljer" hidden>
     <p>Innhold for detaljer.</p>
   </ix-tab-panel>
 </ix-tabs>

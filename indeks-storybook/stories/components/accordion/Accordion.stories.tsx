@@ -106,14 +106,14 @@ export const RiktInnhold: Story = {
 export const HTML: Story = {
     render: () => (
         <div className="ix-accordion">
-            <details className="ix-accordion__item" open>
-                <summary className="ix-accordion__header">Første seksjon</summary>
+            <details open>
+                <summary>Første seksjon</summary>
                 <div className="ix-accordion__content">
                     <p>Innhold i første seksjon.</p>
                 </div>
             </details>
-            <details className="ix-accordion__item">
-                <summary className="ix-accordion__header">Andre seksjon</summary>
+            <details>
+                <summary>Andre seksjon</summary>
                 <div className="ix-accordion__content">
                     <p>Innhold i andre seksjon.</p>
                 </div>

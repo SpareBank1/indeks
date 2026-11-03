@@ -36,7 +36,8 @@ describe('Accordion', () => {
         const firstItem = details(container)[0];
         const summary = firstItem.firstElementChild!;
         expect(summary.tagName.toLowerCase()).toBe('summary');
-        expect(summary.classList.contains('ix-accordion__header')).toBe(true);
+        expect(summary.hasAttribute('class')).toBe(false);
+        expect(firstItem.hasAttribute('class')).toBe(false);
         expect(firstItem.querySelector('.ix-accordion__content')?.textContent).toBe('Innhold 1');
     });
 
