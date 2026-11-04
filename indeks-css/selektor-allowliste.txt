@@ -8,13 +8,5 @@
 
 
 
-# #334 Button, ikoner, typografi og resten
-components/button.css
-components/interactive-icon.css
-components/spinner.css
-components/tag.css
-icons/icon.css
-surface/surface.css
-typography/heading.css
 
 # Card jobbes med separat

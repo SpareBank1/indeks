@@ -86,32 +86,6 @@
     color: var(--ifm-color-content-secondary);
 }
 
-/* ix-button tekstfarge: :where() har spesifisitet 0 og taper mot Infima sin a { color } (spesifisitet 1).
-   Kun <a>-elementer er berørt — native <button> plukkes ikke opp av Infimas a-regel. */
-.ix-button[data-variant='primary'] {
-    color: var(--ix-color-component-button-primary-foreground-default);
-}
-
-.ix-button[data-variant='secondary'] {
-    color: var(--ix-color-component-button-secondary-foreground-default);
-}
-
-.ix-button[data-variant='tertiary'] {
-    color: var(--ix-color-component-button-tertiary-foreground-default);
-}
-
-.ix-button[data-variant='primary'][data-danger='true'] {
-    color: var(--ix-color-component-button-primary-foreground-danger);
-}
-
-.ix-button[data-variant='secondary'][data-danger='true'] {
-    color: var(--ix-color-component-button-secondary-foreground-danger);
-}
-
-.ix-button[data-variant='tertiary'][data-danger='true'] {
-    color: var(--ix-color-component-button-tertiary-foreground-danger);
-}
-
 .hb-demo {
     display: flex;
     flex-wrap: wrap;

@@ -86,7 +86,7 @@
     },
     {
       "id": "1.4.12",
-      "notes": "Linjehøyde og farge settes i :where(), som har spesifisitet 0. En brukerstil eller et leservisnings-tillegg som øker linjehøyde, ord- eller bokstavavstand vinner derfor uten !important."
+      "notes": "Typografi-CSS-en bruker ikke !important. Verktøy og brukerstiler som øker linjehøyde, ord- eller bokstavavstand, setter verdiene med !important og vinner derfor."
     },
     {
       "id": "2.1.1",
