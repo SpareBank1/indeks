@@ -1,5 +1,78 @@
 # @sb1/indeks-css
 
+## 0.26.0
+
+### Minor Changes
+
+- 389f6ec: Skjemafelt, Chip, DropdownMenu, hover på Tabs og nøytral statuskant (Tag) bruker nå `--ix-color-border-main-emphasis`. Accordion, Card, Modal, Popover, Surface, Table, Divider, ReadMore og den passive understreken i Tabs beholder `default` og får lysere kant.
+  
+  Nye utility-klasser `.ix-border-emphasis` (og `-top`/`-right`/`-bottom`/`-left`), custom property `--ix-border-emphasis` og `border="emphasis"` på Surface.
+- 87f3013: Ingen `:where()` i Button, InteractiveIcon, Spinner, Tag, Icon, Surface og Heading (ADR-DS-009). Komponentene vinner nå over vertens elementregler, for eksempel `a { color }` på en lenke med `ix-button`. Utility-klasser på ytterste element vinner fortsatt, bortsett fra der en størrelse eller variant setter samme egenskap, for eksempel `font-size` på `.ix-heading[data-size]`.
+  
+  Breaking: `--ix-message-icon-size` heter nå `--ii-message-icon-size` og er intern.
+- 0c9716a: Ny Card-komponent som erstatter den tidligere plassholderen. Card presenterer innhold og navigasjon i én klikkbar flate: hele kortet er én lenke (tittelen), og et navigasjonsikon viser intern (`arrow_forward`) eller ekstern (`open_in_new`) navigasjon.
+  
+  - Varianter: `small` (med `appearance="default"` eller `"dashed"` og valgfri leading — ikon, ikon med bakgrunn eller illustrasjon), `large-vertical` og `large-horizontal` (med media, beskrivelse og tag).
+  - Ren HTML: `<div class="ix-card" data-variant="…">` med `.ix-card__link` inni `.ix-card__title`.
+  - React: `<Card href title subtitle variant … />`. Ved `external` er `externalLabel` påkrevd (skjult tekst, f.eks. «(åpnes i ny fane)»). Med `linkAs` brukes routerens lenke i stedet for `<a>` (f.eks. `<Card linkAs={Link} linkProps={{ to: '/konto' }} … />`), så navigasjonen skjer uten full sidelasting. `linkProps` er påkrevd når lenkekomponenten har påkrevde props, som `to` i React Router.
+  
+  Den gamle Card-komponenten er fjernet. `children`, `chevronIcon`, `openInNewTab`, spacing-props og `Card.Action` finnes ikke lenger, og `href` og `title` er nå påkrevd. CSS-klassene `.ix-card--clickable` og `.ix-card__chevron` er fjernet. Bruk `Surface` (`<Surface border="default" radius="md">` / `.ix-surface`) der Card ble brukt som ren innholdsflate uten lenke.
+- 329f308: Én hook per del og ingen `:where()` i combobox og date-field (ADR-DS-009).
+  
+  Breaking: chips-wrapperen i combobox styles fra `data-field="chips"`, ikke `ix-combobox__chips`. Toggle, listbox og option styles bare fra BEM-klassene, ikke fra `role` eller `.ix-text-field > button`. `ix-combobox` finner inputen med `.ix-text-field > input`.
+- 11a12f1: Divider rendres nå som `<hr>` og har fått varianten Emphasis (`variant="emphasis"` i React, `data-variant="emphasis"` i HTML) for et tydeligere skille. `.ix-divider` tegner streken med `border-top` og nullstiller resten av kanten, så den gir én strek også på `<hr>`.
+  
+  Migrering: Divider tar ikke lenger barn, og `size` er fjernet fordi den ikke gjorde noe. Bruker du `<Divider>` med innhold, flytt innholdet ut. Trenger du et annet element enn `<hr>`, bruk `as`. Elementet får da `role="separator"`.
+- 250261e: Én hook per del og ingen `:where()` i accordion, read-more og tabs (ADR-DS-009).
+  
+  Breaking: Accordion styler `<details>` og `<summary>` direkte, og innholdet må ha `ix-accordion__content`. Tabs styler `<ix-tab-list>`, `<ix-tab>` og `<ix-tab-panel>` inni `.ix-tabs`. `ix-accordion__item`, `ix-accordion__header`, `ix-tabs__list`, `ix-tabs__tab` og `ix-tabs__panel` styles ikke lenger, og React setter dem ikke.
+- 140b0cb: Én hook per del og ingen `:where()` i checkbox, checkbox-group, chip og modal (ADR-DS-009).
+  
+  Breaking: `ix-checkbox--disabled` er fjernet. Bruk `disabled` på inputen. `ix-checkbox__input` og `ix-checkbox__label` styles ikke lenger, men gjør ingen skade i markupen.
+- 62b0cca: Ingen `:where()` i dropdown-menu, message, pagination, popover og progress-bar (ADR-DS-009). Delene har samme BEM-klasser som før, men reglene har nå spesifisitet over 0, så de vinner over vertens elementregler.
+- 4dd8253: Ingen `:where()` i Grid og Stack (ADR-DS-009). Utility-klasser på containeren vinner fortsatt over attributtene, også responsive som `ix-md-grid-cols-3`. Det samme gjelder `ix-col-span-*` og `ix-row-span-*` mot `colspan` og `rowspan`.
+  
+  Breaking: retnings- og modifierklassene i Stack (`ix-stack-horizontal`, `ix-stack-reverse` osv.) virker bare sammen med `ix-stack`.
+- 87323f8: De siste BEM-modifierne i Table, LinkText og Text er byttet ut med dataattributter (ADR-DS-009). React-komponentene setter dem selv.
+  
+  Breaking for håndskrevet HTML:
+  
+  | Før | Etter |
+  |---|---|
+  | `ix-table--sm`, `ix-table--lg` | `data-size="sm"`, `data-size="lg"` på `.ix-table` |
+  | `ix-link-text--active` | `data-active` på `.ix-link-text` |
+  | `ix-link-text--no-underline` | `data-no-underline` på `.ix-link-text` |
+  | `ix-text--long` | `data-long` på `.ix-text` |
+  
+  `:where()` er også fjernet fra `text.css`, så `.ix-text` vinner over vertens `p {}`.
+- 04e6c71: ProgressBar viser nå status som i Figma. I `success` og `error` ser støtteteksten under baren ut som en ValidationMessage, med statusikonet foran. Ikonet vises også uten støttetekst.
+  
+  **Breaking:** Statusikonet er flyttet fra headeren til støtteteksten, og feilikonet heter nå `close` i stedet for `priority_high`. Har du stylet `.ix-progress-bar__header ix-icon`, eller lett etter ikonet med navn, må du bruke `.ix-progress-bar__support ix-icon[data-badge]`. Meldingen bruker ikke `data-field="error"`, så et `<ix-field>` rundt en ProgressBar tar den ikke for sin egen feilmelding.
+- 636e79c: Én hook per del og ingen `:where()` i radio-group (ADR-DS-009).
+  
+  Breaking: `ix-radio-button`, `ix-radio-button__input` og `ix-radio-button__label` er fjernet. Radio styles bare inni `ix-radio-group` eller `.ix-radio-group`, og klassene gjør ingen skade i markupen. `ix-radio-group` finner labelen i inputens forelder.
+- cbe7a83: Én hook per del og ingen `:where()` i skjemafeltene (ADR-DS-009): field, label, form, validation-message, text-field, text-area, select og phone-number-field.
+  
+  Breaking: `ix-text-field__input`, `ix-text-area__textarea`, `ix-field--disabled` og `ix-field--readonly` er fjernet. Bruk `.ix-text-field > input`, `.ix-text-area > textarea` og `data-disabled`/`data-readonly` på `ix-field`. Klassene gjør ingen skade om de står igjen i markupen.
+- 4152382: Surface: med både `status` og `border` får kanten statusfargen (`--ix-color-status-border`), som i Figma. Uten `border` er det fortsatt ingen kant, og `neutral` beholder den vanlige kantfargen.
+- 04e6c71: ValidationMessage har fått en suksessvariant: `data-status="success"` i HTML og `status="success"` i React gir grønn tekst og en sirkel med hake. `<ix-field>`, `<ix-checkbox-group>`, `<ix-radio-group>` og `<ix-phone-number-field>` setter ikke `aria-invalid` for en suksessmelding, og `<ix-phone-number-field>` setter heller ikke `data-state="error"`.
+  
+  Feilmeldingen i `<ix-phone-number-field>` har nå samme avstand mellom ikon og tekst som i de andre skjemafeltene (`xs` i stedet for `2xs`).
+
+### Patch Changes
+
+- 5cd2d1d: Button: avstanden mellom ikon og tekst er nå `--ix-spacing-xs` (8px) i alle størrelser, som i Figma. Den var `--ix-spacing-sm` (12px) i md og lg.
+- db575b4: Legger til `user-select: none` på knapper for å hindre utilsiktet tekstmarkering ved klikk.
+- a0b31bf: Checkbox og radio står nå ved første linje når labelen brytes over flere linjer, ikke midt på labelen. Chip-variantene er uendret.
+- 9557308: Legger til readonly-styling for checkbox, inkludert riktig bakgrunn, border og hakemerke-farge når checkboxen er avkrysset i readonly-tilstand.
+  
+  Reduserer avstanden mellom legend og description i checkbox-group og radio-group.
+- c9ceadf: TextField og TextArea: description har `line-height: 1.2` som label, ikke 150 %. Avstanden til label og felt blir som i Figma.
+- 267258d: `.ix-link-text` har fått Indeks-fokusringen og transition, i stedet for nettleserens hvite og blå standardring. Gjelder alle lenker med klassen, også i Message.
+- d20935a: Message: lukkeknappen står nå på linje med tittelen og statusikonet, og lenker i meldingen strekkes ikke lenger til full bredde.
+- 50331e8: RadioGroup: hover og active ved feil har egne danger-farger på ring, flate og prikk, som i Figma og Checkbox. Legend og description har `line-height: 1.2`, så avstanden mellom dem er 2xs uansett linjehøyden på siden rundt.
+- f2a368b: Spinner: buen har runde ender og er 150°, som i Figma. Den tegnes nå med en maske i stedet for en border. Markupen og klassene er de samme. Tykkelsen er 1/8 av størrelsen, så lg går fra 7 til 8px. `--ii-spinner-border` er fjernet.
+
 ## 0.25.0
 
 ### Minor Changes

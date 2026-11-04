@@ -1,5 +1,18 @@
 # @sb1/indeks-utils
 
+## 0.11.0
+
+### Minor Changes
+
+- 389f6ec: Skjemafelt, Chip, DropdownMenu, hover på Tabs og nøytral statuskant (Tag) bruker nå `--ix-color-border-main-emphasis`. Accordion, Card, Modal, Popover, Surface, Table, Divider, ReadMore og den passive understreken i Tabs beholder `default` og får lysere kant.
+  
+  Nye utility-klasser `.ix-border-emphasis` (og `-top`/`-right`/`-bottom`/`-left`), custom property `--ix-border-emphasis` og `border="emphasis"` på Surface.
+
+### Patch Changes
+
+- Updated dependencies [389f6ec]
+  - @sb1/indeks-tokens@0.10.0
+
 ## 0.10.0
 
 ### Minor Changes
