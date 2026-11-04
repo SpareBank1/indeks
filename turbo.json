@@ -3,7 +3,7 @@
     "tasks": {
         "build": {
             "dependsOn": ["^build"],
-            "outputs": ["dist/**", "storybook-static/**", "build/**"],
+            "outputs": ["dist/**", ".build/**", "storybook-static/**", "build/**"],
             "env": ["NODE_ENV"]
         },
         "build-storybook": {
