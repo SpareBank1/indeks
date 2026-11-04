@@ -1,4 +1,4 @@
-:where(ix-spinner, .ix-spinner) {
+:is(ix-spinner, .ix-spinner) {
     --ii-spinner-size: 40px;
 
     display: inline-flex;
@@ -7,15 +7,15 @@
     gap: var(--ix-spacing-2xs);
 }
 
-:where(ix-spinner[data-size="sm"], .ix-spinner[data-size="sm"]) {
+:is(ix-spinner[data-size="sm"], .ix-spinner[data-size="sm"]) {
     --ii-spinner-size: 24px;
 }
 
-:where(ix-spinner[data-size="lg"], .ix-spinner[data-size="lg"]) {
+:is(ix-spinner[data-size="lg"], .ix-spinner[data-size="lg"]) {
     --ii-spinner-size: 64px;
 }
 
-:where(ix-spinner, .ix-spinner)::before {
+:is(ix-spinner, .ix-spinner)::before {
     content: '';
     display: block;
     width: var(--ii-spinner-size);
@@ -30,11 +30,11 @@
     animation: ix-spinner-spin 0.9s linear infinite;
 }
 
-:where(.ix-button .ix-spinner) {
+.ix-button .ix-spinner {
     --ii-spinner-size: 1em;
 }
 
-:where(.ix-button .ix-spinner)::before {
+.ix-button .ix-spinner::before {
     background-color: currentcolor;
 }
 
@@ -45,7 +45,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    :where(ix-spinner, .ix-spinner)::before {
+    :is(ix-spinner, .ix-spinner)::before {
         animation: none;
     }
 }
