@@ -1,5 +1,32 @@
 # @sb1/indeks-web
 
+## 0.26.0
+
+### Minor Changes
+
+- 250261e: Én hook per del og ingen `:where()` i accordion, read-more og tabs (ADR-DS-009).
+  
+  Breaking: Accordion styler `<details>` og `<summary>` direkte, og innholdet må ha `ix-accordion__content`. Tabs styler `<ix-tab-list>`, `<ix-tab>` og `<ix-tab-panel>` inni `.ix-tabs`. `ix-accordion__item`, `ix-accordion__header`, `ix-tabs__list`, `ix-tabs__tab` og `ix-tabs__panel` styles ikke lenger, og React setter dem ikke.
+- 140b0cb: Én hook per del og ingen `:where()` i checkbox, checkbox-group, chip og modal (ADR-DS-009).
+  
+  Breaking: `ix-checkbox--disabled` er fjernet. Bruk `disabled` på inputen. `ix-checkbox__input` og `ix-checkbox__label` styles ikke lenger, men gjør ingen skade i markupen.
+- 04e6c71: ProgressBar viser nå status som i Figma. I `success` og `error` ser støtteteksten under baren ut som en ValidationMessage, med statusikonet foran. Ikonet vises også uten støttetekst.
+  
+  **Breaking:** Statusikonet er flyttet fra headeren til støtteteksten, og feilikonet heter nå `close` i stedet for `priority_high`. Har du stylet `.ix-progress-bar__header ix-icon`, eller lett etter ikonet med navn, må du bruke `.ix-progress-bar__support ix-icon[data-badge]`. Meldingen bruker ikke `data-field="error"`, så et `<ix-field>` rundt en ProgressBar tar den ikke for sin egen feilmelding.
+- 636e79c: Én hook per del og ingen `:where()` i radio-group (ADR-DS-009).
+  
+  Breaking: `ix-radio-button`, `ix-radio-button__input` og `ix-radio-button__label` er fjernet. Radio styles bare inni `ix-radio-group` eller `.ix-radio-group`, og klassene gjør ingen skade i markupen. `ix-radio-group` finner labelen i inputens forelder.
+- 04e6c71: ValidationMessage har fått en suksessvariant: `data-status="success"` i HTML og `status="success"` i React gir grønn tekst og en sirkel med hake. `<ix-field>`, `<ix-checkbox-group>`, `<ix-radio-group>` og `<ix-phone-number-field>` setter ikke `aria-invalid` for en suksessmelding, og `<ix-phone-number-field>` setter heller ikke `data-state="error"`.
+  
+  Feilmeldingen i `<ix-phone-number-field>` har nå samme avstand mellom ikon og tekst som i de andre skjemafeltene (`xs` i stedet for `2xs`).
+
+### Patch Changes
+
+- 329f308: Én hook per del og ingen `:where()` i combobox og date-field (ADR-DS-009).
+  
+  Breaking: chips-wrapperen i combobox styles fra `data-field="chips"`, ikke `ix-combobox__chips`. Toggle, listbox og option styles bare fra BEM-klassene, ikke fra `role` eller `.ix-text-field > button`. `ix-combobox` finner inputen med `.ix-text-field > input`.
+- dc9139a: Modal: scroll-låsen på `<body>` slippes nå også når en åpen modal fjernes fra DOM-en, for eksempel når forelderen fjerner den i `onOpenChange` eller ved ruteskifte. Før ble siden stående uten scroll.
+
 ## 0.25.0
 
 No changes in this release.

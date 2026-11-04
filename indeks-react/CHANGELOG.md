@@ -1,5 +1,51 @@
 # @sb1/indeks-react
 
+## 0.26.0
+
+### Minor Changes
+
+- 389f6ec: Skjemafelt, Chip, DropdownMenu, hover på Tabs og nøytral statuskant (Tag) bruker nå `--ix-color-border-main-emphasis`. Accordion, Card, Modal, Popover, Surface, Table, Divider, ReadMore og den passive understreken i Tabs beholder `default` og får lysere kant.
+  
+  Nye utility-klasser `.ix-border-emphasis` (og `-top`/`-right`/`-bottom`/`-left`), custom property `--ix-border-emphasis` og `border="emphasis"` på Surface.
+- 0c9716a: Ny Card-komponent som erstatter den tidligere plassholderen. Card presenterer innhold og navigasjon i én klikkbar flate: hele kortet er én lenke (tittelen), og et navigasjonsikon viser intern (`arrow_forward`) eller ekstern (`open_in_new`) navigasjon.
+  
+  - Varianter: `small` (med `appearance="default"` eller `"dashed"` og valgfri leading — ikon, ikon med bakgrunn eller illustrasjon), `large-vertical` og `large-horizontal` (med media, beskrivelse og tag).
+  - Ren HTML: `<div class="ix-card" data-variant="…">` med `.ix-card__link` inni `.ix-card__title`.
+  - React: `<Card href title subtitle variant … />`. Ved `external` er `externalLabel` påkrevd (skjult tekst, f.eks. «(åpnes i ny fane)»). Med `linkAs` brukes routerens lenke i stedet for `<a>` (f.eks. `<Card linkAs={Link} linkProps={{ to: '/konto' }} … />`), så navigasjonen skjer uten full sidelasting. `linkProps` er påkrevd når lenkekomponenten har påkrevde props, som `to` i React Router.
+  
+  Den gamle Card-komponenten er fjernet. `children`, `chevronIcon`, `openInNewTab`, spacing-props og `Card.Action` finnes ikke lenger, og `href` og `title` er nå påkrevd. CSS-klassene `.ix-card--clickable` og `.ix-card__chevron` er fjernet. Bruk `Surface` (`<Surface border="default" radius="md">` / `.ix-surface`) der Card ble brukt som ren innholdsflate uten lenke.
+- 11a12f1: Divider rendres nå som `<hr>` og har fått varianten Emphasis (`variant="emphasis"` i React, `data-variant="emphasis"` i HTML) for et tydeligere skille. `.ix-divider` tegner streken med `border-top` og nullstiller resten av kanten, så den gir én strek også på `<hr>`.
+  
+  Migrering: Divider tar ikke lenger barn, og `size` er fjernet fordi den ikke gjorde noe. Bruker du `<Divider>` med innhold, flytt innholdet ut. Trenger du et annet element enn `<hr>`, bruk `as`. Elementet får da `role="separator"`.
+- 250261e: Én hook per del og ingen `:where()` i accordion, read-more og tabs (ADR-DS-009).
+  
+  Breaking: Accordion styler `<details>` og `<summary>` direkte, og innholdet må ha `ix-accordion__content`. Tabs styler `<ix-tab-list>`, `<ix-tab>` og `<ix-tab-panel>` inni `.ix-tabs`. `ix-accordion__item`, `ix-accordion__header`, `ix-tabs__list`, `ix-tabs__tab` og `ix-tabs__panel` styles ikke lenger, og React setter dem ikke.
+- 140b0cb: Én hook per del og ingen `:where()` i checkbox, checkbox-group, chip og modal (ADR-DS-009).
+  
+  Breaking: `ix-checkbox--disabled` er fjernet. Bruk `disabled` på inputen. `ix-checkbox__input` og `ix-checkbox__label` styles ikke lenger, men gjør ingen skade i markupen.
+- 87323f8: De siste BEM-modifierne i Table, LinkText og Text er byttet ut med dataattributter (ADR-DS-009). React-komponentene setter dem selv.
+  
+  Breaking for håndskrevet HTML:
+  
+  | Før | Etter |
+  |---|---|
+  | `ix-table--sm`, `ix-table--lg` | `data-size="sm"`, `data-size="lg"` på `.ix-table` |
+  | `ix-link-text--active` | `data-active` på `.ix-link-text` |
+  | `ix-link-text--no-underline` | `data-no-underline` på `.ix-link-text` |
+  | `ix-text--long` | `data-long` på `.ix-text` |
+  
+  `:where()` er også fjernet fra `text.css`, så `.ix-text` vinner over vertens `p {}`.
+- 04e6c71: ValidationMessage har fått en suksessvariant: `data-status="success"` i HTML og `status="success"` i React gir grønn tekst og en sirkel med hake. `<ix-field>`, `<ix-checkbox-group>`, `<ix-radio-group>` og `<ix-phone-number-field>` setter ikke `aria-invalid` for en suksessmelding, og `<ix-phone-number-field>` setter heller ikke `data-state="error"`.
+  
+  Feilmeldingen i `<ix-phone-number-field>` har nå samme avstand mellom ikon og tekst som i de andre skjemafeltene (`xs` i stedet for `2xs`).
+
+### Patch Changes
+
+- dc9139a: Modal: lukkes nå før den fjernes, så du kan rendre den betinget (`{valgt && <Modal open …>}`) uten egen `useEffect`. Fokus går tilbake til triggeren, og scroll-låsen slippes.
+- cbe7a83: Én hook per del og ingen `:where()` i skjemafeltene (ADR-DS-009): field, label, form, validation-message, text-field, text-area, select og phone-number-field.
+  
+  Breaking: `ix-text-field__input`, `ix-text-area__textarea`, `ix-field--disabled` og `ix-field--readonly` er fjernet. Bruk `.ix-text-field > input`, `.ix-text-area > textarea` og `data-disabled`/`data-readonly` på `ix-field`. Klassene gjør ingen skade om de står igjen i markupen.
+
 ## 0.25.0
 
 ### Minor Changes
