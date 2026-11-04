@@ -203,7 +203,7 @@ I flervalg holdes lista åpen etter valg, inputfeltet tømmes, og valgte alterna
     data-arrow-hint-text="Bruk piltastene for å navigere mellom valgte alternativer"
     name="land"
   >
-    <div class="ix-combobox__chips" data-field="chips"></div>
+    <div data-field="chips"></div>
     <div class="ix-text-field">
       <input id="land-multi" />
       <button type="button" class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
@@ -569,7 +569,7 @@ I tillegg støttes øvrige HTML-attributter (`aria-*`, `data-*`, `tabIndex`, osv
 | Element | Selektor |
 |---------|----------|
 | Rot | `.ix-combobox` |
-| Chips-wrapper | `.ix-combobox__chips` |
+| Chips-wrapper | `[data-field="chips"]` |
 | Toggle-knapp | `.ix-combobox__toggle` |
 | Listbox | `.ix-combobox__listbox` |
 | Alternativ | `.ix-combobox__option` |

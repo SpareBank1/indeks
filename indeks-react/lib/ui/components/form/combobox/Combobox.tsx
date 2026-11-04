@@ -254,7 +254,7 @@ export const Combobox = forwardRef<IxCombobox, ComboboxProps>(function Combobox(
                 data-chips-label={chipsLabel}
                 data-results-text={resultsText}
             >
-                {multiple && <div className="ix-combobox__chips" data-field="chips" />}
+                {multiple && <div data-field="chips" />}
                 <div className="ix-text-field">
                     <input
                         id={inputId}

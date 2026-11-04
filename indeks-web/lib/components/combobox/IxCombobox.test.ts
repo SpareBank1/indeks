@@ -36,7 +36,7 @@ function single(extraHostAttrs = ''): IxCombobox {
 function multi(extraHostAttrs = ''): IxCombobox {
     return mount(`
     <ix-combobox multiple data-no-hits-text="Ingen treff" data-remove-chip-label="fjern" data-arrow-hint-text="Bruk piltast" data-chips-label="Valgte alternativer" ${extraHostAttrs}>
-      <div class="ix-combobox__chips" data-field="chips"></div>
+      <div data-field="chips"></div>
       <div class="ix-text-field">
         <input aria-label="Land" />
         <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
@@ -358,7 +358,7 @@ describe('IxCombobox', () => {
         it('aria-describedby merges additivt med eksisterende id (jf. ix-field)', () => {
             const el = mount(`
               <ix-combobox multiple data-no-hits-text="Ingen treff" data-remove-chip-label="fjern" data-chips-label="Valgte" data-arrow-hint-text="Bruk piltast">
-                <div class="ix-combobox__chips" data-field="chips"></div>
+                <div data-field="chips"></div>
                 <div class="ix-text-field">
                   <input aria-label="Land" aria-describedby="ekstern-desc" />
                   <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
@@ -509,7 +509,7 @@ describe('IxCombobox', () => {
         it('rendrer chips fra initielt valgte options (multi)', () => {
             const el = mount(`
               <ix-combobox multiple>
-                <div class="ix-combobox__chips" data-field="chips"></div>
+                <div data-field="chips"></div>
                 <div class="ix-text-field"><input aria-label="Land" /></div>
                 <div class="ix-combobox__listbox">
                   <div class="ix-combobox__option" data-value="47" aria-selected="true"><span class="ix-combobox__option-label">Norge</span></div>
@@ -585,7 +585,7 @@ describe('IxCombobox', () => {
             const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
             mount(`
               <ix-combobox multiple data-no-hits-text="Ingen treff" data-remove-chip-label="fjern">
-                <div class="ix-combobox__chips" data-field="chips"></div>
+                <div data-field="chips"></div>
                 <div class="ix-text-field">
                   <input aria-label="Land" />
                   <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
@@ -601,7 +601,7 @@ describe('IxCombobox', () => {
             const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
             const el = mount(`
               <ix-combobox multiple data-no-hits-text="Ingen treff">
-                <div class="ix-combobox__chips" data-field="chips"></div>
+                <div data-field="chips"></div>
                 <div class="ix-text-field">
                   <input aria-label="Land" />
                   <button class="ix-combobox__toggle" aria-label="Vis alternativer"></button>
