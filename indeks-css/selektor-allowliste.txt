@@ -7,10 +7,6 @@
 
 
 
-# #333 Table, LinkText og Text
-components/table.css
-typography/link-text.css
-typography/text.css
 
 # #334 Button, ikoner, typografi og resten
 components/button.css

@@ -21,11 +21,8 @@ export function Table(props: TableProps): JSX.Element {
 
   return (
     <table
-      className={cn(
-        "ix-table",
-        [`ix-table--${size}`],
-        className
-      )}
+      data-size={size}
+      className={cn("ix-table", className)}
       {...restProps}
     >
       <caption>Front-end web developer course 2021</caption>

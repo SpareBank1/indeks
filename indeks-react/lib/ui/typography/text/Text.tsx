@@ -31,7 +31,8 @@ export function Text<As extends ElementType = 'p'>(props: TextProps<As>): JSX.El
         <Component
             {...restProps}
             data-size={size}
-            className={cn('ix-text', { 'ix-mb-md': addRecommendedSpacing, 'ix-text--long': long }, className)}
+            data-long={long || undefined}
+            className={cn('ix-text', { 'ix-mb-md': addRecommendedSpacing }, className)}
         />
     );
 }

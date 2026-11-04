@@ -13,14 +13,14 @@
     outline-color: var(--ix-color-border-focus-default);
 }
 
+.ix-link-text[data-active] {
+    color: var(--ix-color-foreground-link-active);
+}
+
 .ix-link-text:hover {
     color: var(--ix-color-foreground-link-hover);
 }
 
-.ix-link-text--active {
-    color: var(--ix-color-foreground-link-active);
-}
-
-.ix-link-text--no-underline {
+.ix-link-text[data-no-underline] {
     text-decoration: none;
 }
