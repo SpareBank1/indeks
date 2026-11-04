@@ -1,8 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { IxField } from './IxField';
+import { IxProgressBar } from '../progress-bar/IxProgressBar';
 
 if (!customElements.get('ix-field')) {
     customElements.define('ix-field', IxField);
+}
+if (!customElements.get('ix-progress-bar')) {
+    customElements.define('ix-progress-bar', IxProgressBar);
 }
 
 function createField(html: string): IxField {
@@ -183,6 +187,55 @@ describe('IxField', () => {
                 </ix-field>
             `);
             const input = field.querySelector('input')!;
+            expect(input.hasAttribute('aria-invalid')).toBe(false);
+        });
+
+        it('kobler seg ikke til statusmeldingen i en progressbar foran feilmeldingen', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Vedlegg</label>
+                    <input type="file" />
+                    <ix-progress-bar value="60" data-state="error" data-support-text="Opplastingen feilet."></ix-progress-bar>
+                    <span data-field="error"></span>
+                </ix-field>
+            `);
+            // Flytt feltet, så det kobles opp på nytt etter at progressbaren har
+            // laget innholdet sitt. Det er da en kollisjon ville vist seg.
+            field.remove();
+            document.body.appendChild(field);
+            const input = field.querySelector('input')!;
+            const error = field.querySelector(':scope > [data-field="error"]')!;
+            expect(input.hasAttribute('aria-invalid')).toBe(false);
+            expect(input.getAttribute('aria-describedby') ?? '').not.toContain('ix-progress-bar');
+            expect(error.getAttribute('aria-live')).toBe('polite');
+        });
+
+        it('setter ikke aria-invalid naar meldingen er en suksessmelding', () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kontonummer</label>
+                    <input />
+                    <span data-field="error" data-status="success">Kontonummeret er gyldig</span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(input.hasAttribute('aria-invalid')).toBe(false);
+        });
+
+        it('fjerner aria-invalid naar feilmeldingen byttes til suksess', async () => {
+            const field = createField(`
+                <ix-field>
+                    <label>Kontonummer</label>
+                    <input />
+                    <span data-field="error">Maa ha 11 siffer</span>
+                </ix-field>
+            `);
+            const input = field.querySelector('input')!;
+            expect(input.getAttribute('aria-invalid')).toBe('true');
+            const error = field.querySelector<HTMLElement>('[data-field="error"]')!;
+            error.dataset.status = 'success';
+            error.textContent = 'Kontonummeret er gyldig';
+            await new Promise((r) => setTimeout(r, 0));
             expect(input.hasAttribute('aria-invalid')).toBe(false);
         });
 

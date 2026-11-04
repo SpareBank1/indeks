@@ -151,6 +151,18 @@ describe('IxPhoneNumberField', () => {
             expect(el.hasAttribute('aria-invalid')).toBe(false);
         });
 
+        it('setter ikke aria-invalid for en suksessmelding, og oppdateres når status endres', async () => {
+            const el = mount(SIMPLE);
+            const error = el.querySelector<HTMLElement>('[data-field="error"]')!;
+            error.textContent = 'Skriv inn et gyldig telefonnummer';
+            await Promise.resolve();
+            expect(el.getAttribute('aria-invalid')).toBe('true');
+
+            error.dataset.status = 'success';
+            await Promise.resolve();
+            expect(el.hasAttribute('aria-invalid')).toBe(false);
+        });
+
         it('setter aria-live="polite" på error-elementet', () => {
             const el = mount(SIMPLE);
             const error = el.querySelector('[data-field="error"]')!;
@@ -354,6 +366,15 @@ describe('IxPhoneNumberField', () => {
             error.textContent = 'Feil';
             await Promise.resolve();
             expect(el.getAttribute('data-state')).toBe('error');
+        });
+
+        it('settes ikke til "error" for en suksessmelding', async () => {
+            const el = scaffold();
+            const error = el.querySelector<HTMLElement>('[data-field="error"]')!;
+            error.dataset.status = 'success';
+            error.textContent = 'Telefonnummeret er gyldig';
+            await Promise.resolve();
+            expect(el.getAttribute('data-state')).not.toBe('error');
         });
 
         it('gjenspeiler readonly og disabled (feil vinner over begge)', () => {

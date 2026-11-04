@@ -176,7 +176,10 @@ Formateringen validerer ikke — den avviser aldri tastetrykk. Valider på blur 
         <input id="fodt-error" inputmode="numeric" data-format="date" aria-invalid="true" />
       </div>
     </ix-date-field>
-    <span data-field="error">Du må oppgi en gyldig dato</span>
+    <span data-field="error">
+      <ix-icon data-badge data-status="danger" name="close" aria-hidden="true"></ix-icon>
+      Du må oppgi en gyldig dato
+    </span>
   </ix-field>
 </ix-stack>
 ```

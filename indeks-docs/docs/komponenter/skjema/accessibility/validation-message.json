@@ -1,6 +1,6 @@
 {
   "component": "ValidationMessage",
-  "lastReviewed": "2026-05-29",
+  "lastReviewed": "2026-11-03",
   "consumerResponsibilities": [
     {
       "summary": "Skriv konkret feilmeldingstekst",
@@ -21,7 +21,7 @@
   "issues": [],
   "handled": [
     { "id": "1.4.3", "notes": "Feilmeldingsteksten bruker --ix-color-foreground-danger-default. Forventes å oppfylle 4,5:1 mot standard bakgrunn. Kontroller med kontrastverktøy ved egendefinerte bakgrunnsfarger." },
-    { "id": "1.4.1", "notes": "Feilmeldingen formidles ikke kun med farge — teksten beskriver feilen eksplisitt, det dekorative badge-ikonet forsterker den visuelt, og inputen får aria-invalid=\"true\" via ix-field/ix-radio-group." },
+    { "id": "1.4.1", "notes": "Feilmeldingen formidles ikke kun med farge — teksten beskriver feilen eksplisitt, det dekorative badge-ikonet forsterker den visuelt, og inputen får aria-invalid=\"true\" via ix-field/ix-radio-group. Suksessvarianten (data-status=\"success\") har eget ikon og egen farge, og gir ikke aria-invalid." },
     { "id": "1.4.4", "notes": "Bruker --ix-font-size-md (relativ enhet) — skalerer korrekt ved 200 % zoom." },
     { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport." },
     { "id": "1.4.12", "notes": "Tåler økt line-height, bokstav- og ordavstand uten tap av innhold." },

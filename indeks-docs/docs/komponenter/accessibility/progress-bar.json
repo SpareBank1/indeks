@@ -1,6 +1,6 @@
 {
   "component": "ProgressBar",
-  "lastReviewed": "2026-07-21",
+  "lastReviewed": "2026-11-03",
   "consumerResponsibilities": [
     {
       "summary": "Gi alltid et tilgjengelig navn",
@@ -9,7 +9,7 @@
     },
     {
       "summary": "La støttetekst følge overgangen til success/error",
-      "details": "Overgangen til success/error annonseres kun for skjermleser dersom støtteteksten (data-support-text / supportText) settes samtidig — teksten leses opp via en polite live-region. Uten støttetekst blir overgangen stille (kun visuell endring av ikon og farge), og skjermleserbrukeren får ikke vite at prosessen ble fullført eller feilet. Web componenten advarer i dev når success/error mangler støttetekst. I error skal teksten dessuten forklare hva som gikk galt og hva brukeren kan gjøre videre. Teksten sendes inn av konsumenten på riktig språk.",
+      "details": "Overgangen til success/error annonseres kun for skjermleser dersom støtteteksten (data-support-text / supportText) settes samtidig — teksten leses opp via en polite live-region. Uten støttetekst blir overgangen stille (bare ikonet og fargen endres), og skjermleserbrukeren får ikke vite at prosessen ble fullført eller feilet. Web componenten advarer i dev når success/error mangler støttetekst. I error skal teksten dessuten forklare hva som gikk galt og hva brukeren kan gjøre videre. Teksten sendes inn av konsumenten på riktig språk.",
       "wcag": ["4.1.3", "1.4.1", "3.3.1"]
     },
     {
@@ -30,9 +30,9 @@
   ],
   "issues": [],
   "handled": [
-    { "id": "1.3.1", "notes": "Semantisk struktur: i active er host role=\"progressbar\" med aria-valuenow/min/max; label kobles via aria-labelledby og støttetekst via aria-describedby. I success/error fjernes progressbar-rollen og status formidles semantisk med ikon + tekst (tilsvarende Message)." },
+    { "id": "1.3.1", "notes": "Semantisk struktur: i active er host role=\"progressbar\" med aria-valuenow/min/max; label kobles via aria-labelledby og støttetekst via aria-describedby. I success/error fjernes progressbar-rollen og støtteteksten får et statusikon foran, som i ValidationMessage." },
     { "id": "1.3.2", "notes": "Innhold følger naturlig leserekkefølge i DOM: label/verdi, deretter track/fyll, deretter støttetekst." },
-    { "id": "1.4.1", "notes": "Tilstand (active/success/error) formidles med ikon + tekst i tillegg til farge — farge er aldri eneste signal. Statusikonet vises alltid i success og error." },
+    { "id": "1.4.1", "notes": "I success og error formidles tilstanden med ikonet foran støtteteksten (hake i sirkel eller kryss i oktagon) i tillegg til fargen på baren. Ikonet vises også uten støttetekst, så farge er aldri eneste signal." },
     { "id": "1.4.3", "notes": "Tekst (label, verdi, støttetekst) bruker foreground-tokens som oppfyller kontrastkravet i både lys og mørk modus." },
     { "id": "1.4.4", "notes": "Relative enheter (font-size-tokens) — tekst skalerer korrekt ved 200 % zoom." },
     { "id": "1.4.10", "notes": "Mobile-first uten faste bredder (width: 100%) — reflower korrekt ned til 320px viewport uten horisontal scroll. Linjehøyden reduseres ikke på noen skjermstørrelse." },

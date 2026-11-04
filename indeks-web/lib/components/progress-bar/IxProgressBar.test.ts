@@ -132,13 +132,33 @@ describe('IxProgressBar', () => {
             expect(el.getAttribute('data-status')).toBe('success');
         });
 
-        it('viser check-ikon som badge', () => {
-            const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
-            const icon = el.querySelector('ix-icon')!;
-            expect(icon).not.toBeNull();
+        it('viser check-badge foran støtteteksten', () => {
+            const el = mount(
+                `<ix-progress-bar value="100" data-state="success" label="Opplasting" data-support-text="Dokumentene er lastet opp."></ix-progress-bar>`,
+            );
+            const support = el.querySelector('.ix-progress-bar__support')!;
+            const icon = support.firstElementChild!;
+            expect(icon.tagName).toBe('IX-ICON');
             expect(icon.getAttribute('name')).toBe('check');
+            expect(icon.getAttribute('data-status')).toBe('success');
             expect(icon.hasAttribute('data-badge')).toBe(true);
             expect(icon.getAttribute('aria-hidden')).toBe('true');
+        });
+
+        it('har ikke ikon i headeren, og labelen blir stående', () => {
+            const el = mount(
+                `<ix-progress-bar value="100" data-state="success" label="Opplasting" data-support-text="Ferdig."></ix-progress-bar>`,
+            );
+            const header = el.querySelector<HTMLElement>('.ix-progress-bar__header')!;
+            expect(header.hidden).toBe(false);
+            expect(header.querySelector('ix-icon')).toBeNull();
+            expect(el.querySelector('.ix-progress-bar__label')!.textContent).toBe('Opplasting');
+        });
+
+        it('viser ikonet også uten støttetekst, så status ikke bare vises med farge', () => {
+            const el = mount(`<ix-progress-bar value="100" data-state="success"></ix-progress-bar>`);
+            const support = el.querySelector('.ix-progress-bar__support')!;
+            expect(support.querySelector('ix-icon')!.getAttribute('name')).toBe('check');
         });
 
         it('fyller baren til 100 %', () => {
@@ -154,9 +174,19 @@ describe('IxProgressBar', () => {
             expect(el.getAttribute('data-status')).toBe('danger');
         });
 
-        it('viser priority_high-ikon', () => {
+        it('viser close-ikonet også uten støttetekst', () => {
             const el = mount(`<ix-progress-bar value="60" data-state="error"></ix-progress-bar>`);
-            expect(el.querySelector('ix-icon')!.getAttribute('name')).toBe('priority_high');
+            expect(el.querySelector('.ix-progress-bar__support ix-icon')!.getAttribute('name')).toBe('close');
+        });
+
+        it('viser close-badge foran støtteteksten', () => {
+            const el = mount(
+                `<ix-progress-bar value="60" data-state="error" data-support-text="Opplastingen feilet."></ix-progress-bar>`,
+            );
+            const support = el.querySelector('.ix-progress-bar__support')!;
+            const icon = support.querySelector('ix-icon')!;
+            expect(icon.getAttribute('name')).toBe('close');
+            expect(icon.getAttribute('data-status')).toBe('danger');
         });
 
         it('beholder klampet fyllgrad', () => {
@@ -171,18 +201,44 @@ describe('IxProgressBar', () => {
             expect(el.getAttribute('role')).toBe('progressbar');
             expect(el.querySelector('ix-icon')).toBeNull();
 
+            el.setAttribute('data-support-text', 'Ferdig.');
             el.setAttribute('data-state', 'success');
             expect(el.hasAttribute('role')).toBe(false);
             expect(el.getAttribute('data-status')).toBe('success');
-            expect(el.querySelector('ix-icon')!.getAttribute('name')).toBe('check');
+            expect(el.querySelector('.ix-progress-bar__support ix-icon')!.getAttribute('name')).toBe('check');
         });
 
-        it('går tilbake til active: gjenoppretter role og fjerner ikon', () => {
-            const el = mount(`<ix-progress-bar value="80" data-state="error"></ix-progress-bar>`);
+        it('går tilbake til active: gjenoppretter role og fjerner ValidationMessage', () => {
+            const el = mount(
+                `<ix-progress-bar value="80" data-state="error" data-support-text="Feilet."></ix-progress-bar>`,
+            );
+            expect(el.querySelector('ix-icon')).not.toBeNull();
             el.setAttribute('data-state', 'active');
             expect(el.getAttribute('role')).toBe('progressbar');
             expect(el.hasAttribute('data-status')).toBe(false);
             expect(el.querySelector('ix-icon')).toBeNull();
+        });
+
+        it('går fra error til success: bytter ikon og status', () => {
+            const el = mount(
+                `<ix-progress-bar value="80" data-state="error" data-support-text="Feilet."></ix-progress-bar>`,
+            );
+            el.setAttribute('data-state', 'success');
+            const support = el.querySelector('.ix-progress-bar__support')!;
+            expect(el.getAttribute('data-status')).toBe('success');
+            expect(support.querySelectorAll('ix-icon')).toHaveLength(1);
+            expect(support.querySelector('ix-icon')!.getAttribute('name')).toBe('check');
+        });
+    });
+
+    describe('kollisjon med skjemafelt', () => {
+        it('setter aldri data-field, så ix-field og gruppene ikke tar meldingen for sin egen', () => {
+            const el = mount(
+                `<ix-progress-bar value="60" data-state="error" data-support-text="Opplastingen feilet."></ix-progress-bar>`,
+            );
+            expect(el.querySelector('[data-field]')).toBeNull();
+            el.setAttribute('data-state', 'success');
+            expect(el.querySelector('[data-field]')).toBeNull();
         });
     });
 

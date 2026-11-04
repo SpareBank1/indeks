@@ -8,6 +8,10 @@
     color: var(--ix-color-foreground-danger-default);
 }
 
+[data-field='error'][data-status='success'] {
+    color: var(--ix-color-foreground-success-default);
+}
+
 /* Elementet blir stående i DOM-en, ellers leser ikke aria-live meldingen. */
 /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
 [data-field='error']:empty {

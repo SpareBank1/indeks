@@ -71,4 +71,17 @@ describe('ValidationMessage', () => {
         const { container } = render(<ValidationMessage showIcon={false}>Feil</ValidationMessage>);
         expect(container.querySelector('ix-icon[data-badge]')).toBeNull();
     });
+
+    it('setter ikke data-status på span som standard', () => {
+        const { container } = render(<ValidationMessage>Feil</ValidationMessage>);
+        expect(container.querySelector('span[data-field="error"]')?.hasAttribute('data-status')).toBe(false);
+    });
+
+    it('setter data-status="success" og hake-ikon for status="success"', () => {
+        const { container } = render(<ValidationMessage status="success">Dokumentene er lastet opp</ValidationMessage>);
+        expect(container.querySelector('span[data-field="error"]')?.getAttribute('data-status')).toBe('success');
+        const icon = container.querySelector('ix-icon[data-badge]');
+        expect(icon?.getAttribute('data-status')).toBe('success');
+        expect(icon?.getAttribute('name')).toBe('check');
+    });
 });

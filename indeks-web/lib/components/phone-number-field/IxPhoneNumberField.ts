@@ -229,6 +229,7 @@ export class IxPhoneNumberField extends HTMLElement {
                 childList: true,
                 characterData: true,
                 subtree: true,
+                attributeFilter: ['data-status'],
             });
 
             this._syncInvalid(error);
@@ -279,9 +280,13 @@ export class IxPhoneNumberField extends HTMLElement {
         ) ?? null;
     }
 
+    // En suksessmelding (data-status="success") er ingen feil.
+    private _hasError(error: HTMLElement | null): boolean {
+        return !!error?.textContent?.trim() && error.dataset.status !== 'success';
+    }
+
     private _syncInvalid(error: HTMLElement): void {
-        const hasError = !!error.textContent?.trim();
-        if (hasError) {
+        if (this._hasError(error)) {
             this.setAttribute('aria-invalid', 'true');
         } else {
             this.removeAttribute('aria-invalid');
@@ -294,8 +299,7 @@ export class IxPhoneNumberField extends HTMLElement {
     // Speiler dataState-utledningen React tidligere gjorde i JSX.
     private _syncDataState(): void {
         const error = this.querySelector<HTMLElement>(':scope > [data-field="error"]');
-        const hasError = !!error?.textContent?.trim();
-        const state = hasError ? 'error' : this.hasAttribute('readonly') ? 'readonly' : this.hasAttribute('disabled') ? 'disabled' : null;
+        const state = this._hasError(error) ? 'error' : this.hasAttribute('readonly') ? 'readonly' : this.hasAttribute('disabled') ? 'disabled' : null;
         if (state) this.setAttribute('data-state', state);
         else this.removeAttribute('data-state');
     }
