@@ -1,6 +1,8 @@
 .ix-interactive-icon {
     --ii-interactive-icon-fill-hover: var(--ix-color-component-button-secondary-fill-default-hover);
     --ii-interactive-icon-fill-active: var(--ix-color-component-button-secondary-fill-default-active);
+    /* Andre komponenter leser størrelsen, for eksempel lukkeknappen i Message. */
+    --ii-interactive-icon-size: 26px;
 
     display: inline-flex;
     align-items: center;
@@ -10,8 +12,8 @@
     cursor: pointer;
     border-radius: var(--ix-border-radius-sm);
     padding: 0;
-    min-width: 26px;
-    min-height: 26px;
+    min-width: var(--ii-interactive-icon-size);
+    min-height: var(--ii-interactive-icon-size);
     color: inherit;
     transition: 
         background-color var(--ix-transition-duration) var(--ix-transition-animation),
@@ -21,24 +23,22 @@
 }
 
 .ix-interactive-icon[data-size='sm'] {
-    min-width: 24px;
-    min-height: 24px;
+    --ii-interactive-icon-size: 24px;
 }
 
 .ix-interactive-icon[data-size='md'] {
-    min-width: 26px;
-    min-height: 26px;
+    --ii-interactive-icon-size: 26px;
 }
 
 .ix-interactive-icon[data-size='lg'] {
-    min-width: 36px;
-    min-height: 36px;
+    --ii-interactive-icon-size: 36px;
+
     padding: var(--ix-spacing-2xs);
 }
 
 .ix-interactive-icon[data-size='xl'] {
-    min-width: 48px;
-    min-height: 48px;
+    --ii-interactive-icon-size: 48px;
+
     padding: var(--ix-spacing-xs);
 }
 

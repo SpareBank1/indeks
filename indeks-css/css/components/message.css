@@ -1,7 +1,5 @@
 .ix-message {
-    --ix-message-icon-size: 20px;
-    /* Samme som InteractiveIcon «md». */
-    --ii-message-close-size: 26px;
+    --ii-message-icon-size: 20px;
 
     display: flex;
     align-items: flex-start;
@@ -21,7 +19,7 @@
 
 .ix-message ix-icon[data-badge] {
     flex: none;
-    --ix-icon-badge-size: var(--ix-message-icon-size);
+    --ix-icon-badge-size: var(--ii-message-icon-size);
     --ix-icon-badge-background: var(--ix-color-status-fill);
 }
 
@@ -53,6 +51,6 @@
    gjør meldingen høyere. */
 .ix-message__close {
     flex: none;
-    margin-block: calc((var(--ix-message-icon-size) - var(--ii-message-close-size)) / 2);
+    margin-block: calc((var(--ii-message-icon-size) - var(--ii-interactive-icon-size)) / 2);
     margin-inline-end: calc(var(--ix-spacing-xs) * -1);
 }
