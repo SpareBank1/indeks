@@ -7,11 +7,11 @@
     gap: var(--ix-spacing-2xs);
 }
 
-:is(ix-spinner[data-size="sm"], .ix-spinner[data-size="sm"]) {
+:is(ix-spinner, .ix-spinner)[data-size='sm'] {
     --ii-spinner-size: 24px;
 }
 
-:is(ix-spinner[data-size="lg"], .ix-spinner[data-size="lg"]) {
+:is(ix-spinner, .ix-spinner)[data-size='lg'] {
     --ii-spinner-size: 64px;
 }
 
@@ -30,11 +30,11 @@
     animation: ix-spinner-spin 0.9s linear infinite;
 }
 
-.ix-button .ix-spinner {
+.ix-button :is(ix-spinner, .ix-spinner) {
     --ii-spinner-size: 1em;
 }
 
-.ix-button .ix-spinner::before {
+.ix-button :is(ix-spinner, .ix-spinner)::before {
     background-color: currentcolor;
 }
 

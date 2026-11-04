@@ -155,7 +155,7 @@
 }
 
 /* Disabled */
-:is(.ix-button:disabled:not([data-loading])) {
+.ix-button:disabled:not([data-loading]) {
     opacity: 0.4;
     pointer-events: none;
 }

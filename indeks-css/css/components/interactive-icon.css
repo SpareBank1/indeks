@@ -61,7 +61,7 @@
  * neutral er unntatt fordi det betyr det samme som ingen status — da gjelder
  * basis-regelen (secondary-button) og ikonet er uendret.
  */
-:is([data-status]:not([data-status='neutral']) .ix-interactive-icon:not([data-status])) {
+[data-status]:not([data-status='neutral']) .ix-interactive-icon:not([data-status]) {
     --ii-interactive-icon-fill-hover: var(--ix-color-status-fill-subtle-hover);
     --ii-interactive-icon-fill-active: var(--ix-color-status-fill-subtle-active);
 }
@@ -73,7 +73,7 @@
  * (@sb1/indeks-utils) inn riktig subtle status-farge automatisk. neutral er
  * unntatt — det skal se ut som et ikon uten status.
  */
-:is(.ix-interactive-icon[data-status]:not([data-status='neutral'])) {
+.ix-interactive-icon[data-status]:not([data-status='neutral']) {
     --ii-interactive-icon-fill-hover: var(--ix-color-status-fill-subtle-hover);
     --ii-interactive-icon-fill-active: var(--ix-color-status-fill-subtle-active);
 }

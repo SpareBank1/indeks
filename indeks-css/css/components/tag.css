@@ -35,8 +35,7 @@
 }
 
 /* Ikon arver tekstfargen (både emphasis-invers og subtle-mørk). */
-.ix-tag .ix-icon,
-.ix-tag ix-icon {
+.ix-tag :is(ix-icon, .ix-icon) {
     color: var(--ix-tag-color);
 }
 
