@@ -48,9 +48,11 @@
 }
 
 /* Lik negativ margin oppe og nede sentrerer knappen mot ikonet uten at den
-   gjør meldingen høyere. */
+   gjør meldingen høyere. Samme margin til høyre gir lik avstand til kanten. */
 .ix-message__close {
+    --_close-offset: calc((var(--ii-message-icon-size) - var(--ii-interactive-icon-size)) / 2);
+
     flex: none;
-    margin-block: calc((var(--ii-message-icon-size) - var(--ii-interactive-icon-size)) / 2);
-    margin-inline-end: calc(var(--ix-spacing-xs) * -1);
+    margin-block: var(--_close-offset);
+    margin-inline-end: var(--_close-offset);
 }
