@@ -27,6 +27,7 @@ const ALLOWED_STORY_TITLES: string[] = [
   'Components/Pagination',
   'Components/Popover',
   'Components/ReadMore',
+  'Components/Row',
   'Components/ProgressBar',
   'Components/Spinner',
   'Components/Tabs',

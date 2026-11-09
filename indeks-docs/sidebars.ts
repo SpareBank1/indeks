@@ -142,6 +142,7 @@ const sidebars: SidebarsConfig = {
                     items: ['komponenter/skjema/radio-group-designvalg'],
                 },
                 'komponenter/read-more',
+                'komponenter/row',
                 'komponenter/skjema/select',
                 'komponenter/spinner',
                 'komponenter/primitives/stack',

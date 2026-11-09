@@ -1,0 +1,292 @@
+{
+  "component": "Row (ix-row)",
+  "lastReviewed": "2026-11-06",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv en tittel som forklarer hvor raden leder",
+      "details": "I en interaktiv rad er tittelen navnet på lenken eller knappen, og det er den skjermlesere leser når brukeren går gjennom lenkene på siden. «Brukskonto» sier hvor raden leder. «Se mer» gjør det ikke.",
+      "wcag": [
+        "2.4.4",
+        "2.4.6"
+      ]
+    },
+    {
+      "summary": "Gi raden ett interaktivt mål",
+      "details": "Bruk enten href eller onClick på hele raden, eller én kontroll i trailingControl. Legg aldri lenker, knapper eller brytere inni en interaktiv rad: de ligger under klikkflaten og kan ikke klikkes, men kan fortsatt nås med Tab. React-typene stopper trailingControl sammen med href eller onClick, men ikke en kontroll i title, trailing eller leading. Det må du passe på selv, også i HTML.",
+      "wcag": [
+        "2.1.1",
+        "4.1.2"
+      ]
+    },
+    {
+      "summary": "Gi kontrollen i en passiv rad et navn som viser til raden",
+      "details": "Har flere rader samme kontroll, for eksempel «Legg til», hører skjermleserbrukere ti like knapper. Sett titleId på raden og aria-describedby på kontrollen, så knappen leses som «Legg til, knapp, Fast trekk». I HTML gir du tittelen en id.",
+      "wcag": [
+        "2.4.6",
+        "4.1.2"
+      ]
+    },
+    {
+      "summary": "Send inn oversatt tekst for ekstern lenke",
+      "details": "Med navigation=\"external\" åpnes lenken i ny fane. externalLabel legges som skjult tekst etter tittelen, for eksempel «(åpnes i ny fane)», så skjermleserbrukere får vite det. Teksten må komme på brukerens språk.",
+      "wcag": [
+        "2.4.4"
+      ]
+    },
+    {
+      "summary": "Gi bilder og illustrasjoner riktig alternativ tekst",
+      "details": "alt er påkrevd på Row.Leading med bilde eller illustrasjon. Bruk alt=\"\" når grafikken bare gjør raden lettere å skanne, og en beskrivende tekst når den bærer informasjon som ikke står i teksten.",
+      "wcag": [
+        "1.1.1"
+      ]
+    },
+    {
+      "summary": "La ikke status hvile på farge eller ikon alene",
+      "details": "Tag og verdier i Trailing må ha tekst som står på egen hånd. Badge-ikonet i Leading og navigasjonsikonet er dekorative og skjult for skjermlesere, så det de betyr må også stå i teksten, for eksempel «Delt med Kari» i subtitle.",
+      "wcag": [
+        "1.4.1",
+        "1.3.1"
+      ]
+    },
+    {
+      "summary": "Grupper flere rader som en liste",
+      "details": "Står flere rader sammen, legg dem i ul og li, slik at skjermlesere sier hvor mange det er. Bruk titleAs med en overskrift når raden innleder innhold som brukeren skal kunne hoppe til.",
+      "wcag": [
+        "1.3.1"
+      ]
+    }
+  ],
+  "handled": [
+    {
+      "id": "1.3.1",
+      "notes": "Interaktiv rad har én ekte <a> eller <button> i tittelen. Subtitle, description og Trailing er vanlig tekst i DOM-rekkefølge."
+    },
+    {
+      "id": "1.3.2",
+      "notes": "Leserekkefølgen følger DOM: Leading, tittel, subtitle, description, Trailing."
+    },
+    {
+      "id": "1.4.3",
+      "notes": "Tekst bruker foreground-tokens som oppfyller kontrastkravet i lyst og mørkt tema."
+    },
+    {
+      "id": "1.4.4",
+      "notes": "Størrelser i rem og tokens. Teksten skalerer til 200 % uten tap av innhold."
+    },
+    {
+      "id": "1.4.10",
+      "notes": "Ingen fast bredde. Tittel og tekst bryter over flere linjer, Trailing tar maks halve raden, og en kontroll beholder plassen sin. Ingen horisontal scroll ved 320 px."
+    },
+    {
+      "id": "1.4.11",
+      "notes": "Fokusringen bruker border-focus-default med samme kontrast som resten av systemet."
+    },
+    {
+      "id": "1.4.12",
+      "notes": "Ingen fast høyde, så økt linje- og ordavstand gir høyere rad i stedet for klippet tekst."
+    },
+    {
+      "id": "2.1.1",
+      "notes": "Interaktiv rad nås med Tab og aktiveres med Enter (lenke) eller Enter og mellomrom (knapp). En kontroll i Trailing har sin egen tastaturstøtte."
+    },
+    {
+      "id": "2.1.2",
+      "notes": "Ingen fokusfelle."
+    },
+    {
+      "id": "2.4.3",
+      "notes": "Raden er ett fokuspunkt, og fokus følger DOM-rekkefølgen."
+    },
+    {
+      "id": "2.4.7",
+      "notes": "Fokusringen tegnes rundt hele raden ved :focus-visible, med --ix-color-border-focus-default, og med Highlight i høykontrast."
+    },
+    {
+      "id": "2.4.11",
+      "notes": "Raden med fokus legges over naboradene, så ringen ikke dekkes av raden under."
+    },
+    {
+      "id": "2.5.2",
+      "notes": "Native <a> og <button> aktiveres ved slipp, så brukeren kan avbryte ved å dra pekeren bort."
+    },
+    {
+      "id": "2.5.3",
+      "notes": "Synlig tittel og tilgjengelig navn er samme tekst, fordi lenken eller knappen inneholder tittelen."
+    },
+    {
+      "id": "2.5.8",
+      "notes": "Hele raden er klikkflate, minst 44 px høy."
+    },
+    {
+      "id": "3.2.1",
+      "notes": "Fokus utløser ingen handling."
+    },
+    {
+      "id": "4.1.2",
+      "notes": "Navn og rolle kommer fra native <a> eller <button> med tittelen som innhold. Dekorative ikoner har aria-hidden."
+    }
+  ],
+  "issues": [],
+  "notRelevant": [
+    {
+      "id": "1.2.1"
+    },
+    {
+      "id": "1.2.2"
+    },
+    {
+      "id": "1.2.3"
+    },
+    {
+      "id": "1.2.4"
+    },
+    {
+      "id": "1.2.5"
+    },
+    {
+      "id": "1.3.3",
+      "reason": "Ingen instruksjoner som viser til form eller plassering."
+    },
+    {
+      "id": "1.3.4",
+      "reason": "Ingen orientasjonslåsing."
+    },
+    {
+      "id": "1.3.5",
+      "reason": "Ikke et skjemafelt."
+    },
+    {
+      "id": "1.4.2",
+      "reason": "Ingen lyd."
+    },
+    {
+      "id": "1.4.5",
+      "reason": "Ingen bilder av tekst."
+    },
+    {
+      "id": "1.4.13",
+      "reason": "Ingen innhold som vises ved hover eller fokus."
+    },
+    {
+      "id": "2.1.4",
+      "reason": "Ingen hurtigtaster."
+    },
+    {
+      "id": "2.2.1",
+      "reason": "Ingen tidsfrister."
+    },
+    {
+      "id": "2.2.2",
+      "reason": "Ikke bevegelig eller automatisk oppdatert."
+    },
+    {
+      "id": "2.3.1",
+      "reason": "Ingen blinking."
+    },
+    {
+      "id": "2.4.1",
+      "reason": "Ingen blokker som må hoppes over."
+    },
+    {
+      "id": "2.4.2",
+      "reason": "Ikke en side-komponent."
+    },
+    {
+      "id": "2.4.5",
+      "reason": "Ikke en navigasjonsstruktur for hele siden."
+    },
+    {
+      "id": "2.5.1",
+      "reason": "Ingen pekergester."
+    },
+    {
+      "id": "2.5.4",
+      "reason": "Ingen bevegelsesbasert aktivering."
+    },
+    {
+      "id": "2.5.6",
+      "reason": "Ingen begrensning på input-modalitet."
+    },
+    {
+      "id": "2.5.7",
+      "reason": "Ingen dra-funksjonalitet."
+    },
+    {
+      "id": "3.1.1",
+      "reason": "Ikke en side-komponent."
+    },
+    {
+      "id": "3.1.2",
+      "reason": "Ingen språkendringer i komponenten."
+    },
+    {
+      "id": "3.2.2",
+      "reason": "Ingen input."
+    },
+    {
+      "id": "3.2.3",
+      "reason": "Ikke en navigasjonsstruktur som gjentas på tvers av sider."
+    },
+    {
+      "id": "3.2.4",
+      "reason": "Konsekvent identifisering er konsumentens ansvar når samme handling går igjen."
+    },
+    {
+      "id": "3.2.6",
+      "reason": "Ingen hjelpefunksjonalitet."
+    },
+    {
+      "id": "3.3.1",
+      "reason": "Ingen skjemavalidering."
+    },
+    {
+      "id": "3.3.2",
+      "reason": "Ingen skjemafelt."
+    },
+    {
+      "id": "3.3.3",
+      "reason": "Ingen feilforslag."
+    },
+    {
+      "id": "3.3.4",
+      "reason": "Ingen juridisk forpliktende handlinger i komponenten selv."
+    },
+    {
+      "id": "3.3.7",
+      "reason": "Ingen inndata."
+    },
+    {
+      "id": "3.3.8",
+      "reason": "Ingen autentisering."
+    },
+    {
+      "id": "4.1.3",
+      "reason": "Ingen statusmeldinger."
+    }
+  ],
+  "keyboard": [
+    {
+      "key": "Tab",
+      "action": "Flytter fokus til raden, med fokusring rundt hele raden. I en passiv rad flyttes fokus til kontrollen i Trailing, med kontrollens egen fokusring."
+    },
+    {
+      "key": "Shift+Tab",
+      "action": "Flytter fokus til forrige fokuserbare element"
+    },
+    {
+      "key": "Enter",
+      "action": "Følger lenken, eller aktiverer knappen"
+    },
+    {
+      "key": "Mellomrom",
+      "action": "Aktiverer raden når den er en knapp"
+    }
+  ],
+  "screenReader": [
+    "Lenke: \"[tittel], lenke\"",
+    "Knapp: \"[tittel], knapp\"",
+    "Ekstern lenke: \"[tittel] [externalLabel], lenke\"",
+    "Subtitle, description og Trailing leses som vanlig tekst når brukeren leser videre i raden",
+    "Passiv rad: teksten leses som vanlig tekst, og kontrollen i Trailing leses med sin egen rolle"
+  ]
+}
