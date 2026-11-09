@@ -204,8 +204,16 @@ for (const file of SET_FROM_JS_SOURCES.flatMap((source) => filesIn(join(root, so
     jsDefinitionsIn(readFileSync(file, 'utf8')).forEach((name) => defined.add(name));
 }
 
+const targetFiles = targets.flatMap((target) => filesIn(resolve(target), SCANNED_EXTENSIONS));
+
+/* En app kan definere egne navn, som eksempelappens stegindikator. De gjelder
+   bare for pakken som sjekkes, så de legges ikke i de felles kildene over. */
+for (const file of targetFiles.filter((file) => file.endsWith('.css'))) {
+    definitionsIn(readFileSync(file, 'utf8')).forEach((name) => defined.add(name));
+}
+
 const problems = [];
-for (const file of targets.flatMap((target) => filesIn(resolve(target), SCANNED_EXTENSIONS))) {
+for (const file of targetFiles) {
     for (const usage of usagesIn(readFileSync(file, 'utf8'))) {
         if (defined.has(usage.name)) continue;
         if (IGNORED_PREFIXES.some((prefix) => usage.name.startsWith(prefix))) continue;
