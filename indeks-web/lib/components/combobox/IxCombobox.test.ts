@@ -534,6 +534,47 @@ describe('IxCombobox', () => {
         });
     });
 
+    describe('value', () => {
+        it('single: gir data-value, ikke etiketten', () => {
+            const el = single();
+            expect(el.value).toBe('');
+            options(el)[0].click();
+            expect(input(el).value).toBe('Norge');
+            expect(el.value).toBe('47');
+        });
+
+        it('single: setter velger option, viser etiketten og synker select uten change', () => {
+            const el = single();
+            const onChange = vi.fn();
+            el.addEventListener('change', onChange);
+            el.value = '46';
+            expect(options(el)[1].getAttribute('aria-selected')).toBe('true');
+            expect(options(el)[0].hasAttribute('aria-selected')).toBe(false);
+            expect(input(el).value).toBe('Sverige');
+            expect(el.querySelector('select')!.value).toBe('46');
+            expect(onChange).not.toHaveBeenCalled();
+        });
+
+        it('single: ukjent eller tom verdi tømmer valget', () => {
+            const el = single();
+            el.value = '47';
+            el.value = '999';
+            expect(el.value).toBe('');
+            expect(input(el).value).toBe('');
+            expect(el.querySelector('select')!.options).toHaveLength(0);
+        });
+
+        it('multi: gir og tar en liste, og synker chips', () => {
+            const el = multi();
+            el.value = ['47', '45'];
+            expect(el.value).toEqual(['47', '45']);
+            expect(Array.from(el.querySelectorAll('data.ix-chip'), (c) => c.getAttribute('value'))).toEqual(['47', '45']);
+            el.value = ['45'];
+            expect(el.value).toEqual(['45']);
+            expect(el.querySelectorAll('data.ix-chip')).toHaveLength(1);
+        });
+    });
+
     describe('opprydding', () => {
         it('fjerner document-lyttere ved disconnect', () => {
             const el = single();

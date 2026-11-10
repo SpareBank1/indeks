@@ -185,6 +185,40 @@ export class IxCombobox extends HTMLElement {
         this.toggleAttribute('multiple', value);
     }
 
+    /**
+     * Valgt verdi: `data-value` til valgt option, eller en liste i multi.
+     *
+     * Uten denne leser form-rammeverk som React Hook Form verdien fra første
+     * `<input>` inni hosten, altså søkefeltet med etiketten (`+47`, ikke `47`).
+     * Setteren fyrer ikke change, på samme måte som native `value`.
+     */
+    get value(): string | string[] {
+        const selected = this._options
+            .filter((o) => o.getAttribute('aria-selected') === 'true')
+            .map((o) => o.getAttribute('data-value') ?? '');
+        return this.multiple ? selected : (selected[0] ?? '');
+    }
+
+    set value(value: string | string[] | null | undefined) {
+        const wanted = new Set(Array.isArray(value) ? value : value ? [value] : []);
+        let matched: HTMLElement | null = null;
+        for (const option of this._options) {
+            const hit = wanted.has(option.getAttribute('data-value') ?? '') && (this.multiple || !matched);
+            if (hit) matched = option;
+            if (this.multiple) option.setAttribute('aria-selected', String(hit));
+            else if (hit) option.setAttribute('aria-selected', 'true');
+            else option.removeAttribute('aria-selected');
+        }
+        if (this.multiple) {
+            for (const chip of this._chipElements()) {
+                if (!wanted.has(chip.getAttribute('value') ?? '')) chip.remove();
+            }
+        } else if (this._input) {
+            this._input.value = matched ? this._optionLabelText(matched) : '';
+        }
+        this._syncFromInitialSelection();
+    }
+
     private get _options(): HTMLElement[] {
         return this._listbox ? Array.from(this._listbox.querySelectorAll<HTMLElement>('.ix-combobox__option')) : [];
     }
