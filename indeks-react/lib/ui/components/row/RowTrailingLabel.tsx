@@ -1,4 +1,5 @@
 import type { JSX, ReactNode } from 'react';
+import { hasContent } from '../../has-content';
 
 export type RowTrailingLabelProps = {
     /** Verdien, f.eks. et beløp. */
@@ -13,7 +14,7 @@ export function RowTrailingLabel({ label, subtitle, tag }: RowTrailingLabelProps
     return (
         <>
             <span className="ix-row__trailing-label">{label}</span>
-            {subtitle && <span className="ix-row__trailing-subtitle">{subtitle}</span>}
+            {hasContent(subtitle) && <span className="ix-row__trailing-subtitle">{subtitle}</span>}
             {tag}
         </>
     );

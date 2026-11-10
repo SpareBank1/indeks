@@ -12,6 +12,7 @@ import {
     type ReactNode,
     type RefAttributes,
 } from 'react';
+import { hasContent } from '../../has-content';
 import { Icon } from '../../icons';
 import { RowLeading } from './RowLeading';
 import { RowTrailingLabel } from './RowTrailingLabel';
@@ -194,12 +195,12 @@ export const Row = forwardRef<HTMLDivElement, RowProps | RowLinkAsProps<ElementT
                     <TitleTag id={titleId} className="ix-row__title">
                         {titleContent}
                     </TitleTag>
-                    {subtitle && <p className="ix-row__subtitle">{subtitle}</p>}
-                    {description && <p className="ix-row__description">{description}</p>}
+                    {hasContent(subtitle) && <p className="ix-row__subtitle">{subtitle}</p>}
+                    {hasContent(description) && <p className="ix-row__description">{description}</p>}
                 </div>
-                {trailing && <div className="ix-row__trailing">{trailing}</div>}
+                {hasContent(trailing) && <div className="ix-row__trailing">{trailing}</div>}
             </div>
-            {trailingControl && <div className="ix-row__control">{trailingControl}</div>}
+            {hasContent(trailingControl) && <div className="ix-row__control">{trailingControl}</div>}
             {navigation && (
                 <Icon
                     name={external ? 'open_in_new' : 'keyboard_arrow_right'}

@@ -40,6 +40,28 @@ describe('Row', () => {
         expect(passiv.container.querySelector('.ix-row > .ix-row__control')).not.toBeNull();
     });
 
+    it('beholder wrapper og klasse når et område er tallet 0', () => {
+        const { container } = render(
+            <Row title="Gebyrer" subtitle={0} description={0} trailing={0} />
+        );
+        expect(container.querySelector('.ix-row__subtitle')!.textContent).toBe('0');
+        expect(container.querySelector('.ix-row__description')!.textContent).toBe('0');
+        expect(container.querySelector('.ix-row__trailing')!.textContent).toBe('0');
+        const kontroll = render(<Row title="Varsler" trailingControl={0} />);
+        expect(kontroll.container.querySelector('.ix-row__control')!.textContent).toBe('0');
+        // Ingen løse tekstnoder rett under radens deler.
+        for (const del of [container.querySelector('.ix-row')!, container.querySelector('.ix-row__body')!]) {
+            expect([...del.childNodes].some((n) => n.nodeType === Node.TEXT_NODE)).toBe(false);
+        }
+    });
+
+    it('utelater områder som er tom streng, false eller null', () => {
+        const { container } = render(<Row title="Brukskonto" subtitle="" description={false} trailing={null} />);
+        expect(container.querySelector('.ix-row__subtitle')).toBeNull();
+        expect(container.querySelector('.ix-row__description')).toBeNull();
+        expect(container.querySelector('.ix-row__trailing')).toBeNull();
+    });
+
     it('utelater områder som ikke er i bruk', () => {
         const { container } = render(<Row title="Brukskonto" />);
         expect(container.querySelector('.ix-row__subtitle')).toBeNull();
@@ -233,6 +255,13 @@ describe('Row.TrailingLabel', () => {
         const { container } = render(<Row.TrailingLabel label="12 345,00 kr" subtitle="Disponibelt" />);
         expect(container.querySelector('.ix-row__trailing-label')!.textContent).toBe('12 345,00 kr');
         expect(container.querySelector('.ix-row__trailing-subtitle')!.textContent).toBe('Disponibelt');
+    });
+
+    it('beholder subtitle-wrapperen når subtitle er tallet 0', () => {
+        const { container } = render(<Row.TrailingLabel label="0,00 kr" subtitle={0} />);
+        const sub = container.querySelector('.ix-row__trailing-subtitle')!;
+        expect(sub.textContent).toBe('0');
+        expect([...container.childNodes].some((n) => n.nodeType === Node.TEXT_NODE)).toBe(false);
     });
 
     it('rendrer label og tag, uten subtitle', () => {
