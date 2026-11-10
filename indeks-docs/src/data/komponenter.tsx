@@ -156,14 +156,17 @@ export const komponenter: KomponentOppføring[] = [
         kategori: 'Layout',
         beskrivelse: 'En horisontal strek som deler opp innhold i en flate.',
         forhåndsvisning: (
-            // Streken forsvinner mot den grå mediaflaten uten en Surface under.
-            <Surface padding="md">
-                <VStack align="stretch" gap="sm">
+            <VStack align="stretch" gap="xs" className="ix-w-full">
+                <div className="ix-flex ix-justify-between">
                     <Text>Beløp</Text>
-                    <Divider />
+                    <Text>500 kr</Text>
+                </div>
+                <Divider />
+                <div className="ix-flex ix-justify-between">
                     <Text>Sum</Text>
-                </VStack>
-            </Surface>
+                    <Text>500 kr</Text>
+                </div>
+            </VStack>
         ),
     },
     {
@@ -350,7 +353,7 @@ export const komponenter: KomponentOppføring[] = [
         kategori: 'Layout',
         beskrivelse: 'En flate som samler beslektede elementer og skiller dem fra resten av siden.',
         forhåndsvisning: (
-            <Surface status="info" radius="md" padding="md">
+            <Surface padding="md">
                 <Text>Samlet på én flate</Text>
             </Surface>
         ),
