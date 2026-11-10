@@ -441,9 +441,10 @@ kommuner, kontoer, verdipapirer. Er det få nok alternativer å lese gjennom, gi
 
 ### La brukeren se hva som er valgt
 
-I enkeltvalg står valgt verdi i feltet. I flervalg ligger valgene som chips over feltet, og
-i lista får de en hake. Haken er en form, ikke bare en farge, slik at valget også er synlig
-for den som ikke skiller fargene.
+I enkeltvalg står valgt verdi i feltet, og i lista får den en hake. I flervalg ligger valgene
+som chips over feltet, og i lista har hvert alternativ en checkbox. Haken og den avkryssede
+boksen er former, ikke bare farger, slik at valget også er synlig for den som ikke skiller
+fargene.
 
 ### Fri tekst hører ikke her
 
@@ -512,7 +513,7 @@ I utviklingsbygg (`import.meta.env.DEV`) varsler web-komponenten med `console.wa
 | `.ix-combobox__toggle` | Nei | Chevron-knapp for å åpne/lukke lista |
 | `.ix-combobox__listbox` | Ja | Panelet med alternativer |
 | `.ix-combobox__option[data-value]` | Ja | Ett alternativ. Label i `.ix-combobox__option-label`. Sett `aria-selected="true"` for forhåndsvalg, `aria-disabled="true"` for å deaktivere |
-| `.ix-combobox__option-check` | Nei | Checkmark, vises når valgt |
+| `.ix-combobox__option-check` | Nei | Hake når valgt i enkeltvalg, checkbox i flervalg |
 | `.ix-combobox__option-description` | Nei | Valgfri andrelinje |
 | `.ix-combobox__no-hits` | Nei | Melding ved 0 treff (`role="status"`) |
 | `[data-field="chips"]` | Kun multi | Tom wrapper du skriver selv. Komponenten fyller den med chips — ikke skriv `<data class="ix-chip">` for hånd |
@@ -573,7 +574,7 @@ I tillegg støttes øvrige HTML-attributter (`aria-*`, `data-*`, `tabIndex`, osv
 | Toggle-knapp | `.ix-combobox__toggle` |
 | Listbox | `.ix-combobox__listbox` |
 | Alternativ | `.ix-combobox__option` |
-| Checkmark | `.ix-combobox__option-check` |
+| Hake eller checkbox | `.ix-combobox__option-check` |
 | Ingen treff | `.ix-combobox__no-hits` |
 
 ## Relatert

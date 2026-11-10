@@ -32,8 +32,8 @@
   "handled": [
     { "id": "1.3.1", "notes": "input får role=combobox med aria-autocomplete=list, aria-expanded og aria-controls til listbox. Lista er role=listbox, alternativer role=option. Single: aria-selected=true kun på valgt (øvrige uten attributt, APG). Multi: valgte vises som chips med role=button i en role=group-wrapper (chipsLabel). Skjult select gir semantisk form-verdi." },
     { "id": "1.3.2", "notes": "Chips, felt, liste og feilmelding følger naturlig rekkefølge i DOM." },
-    { "id": "1.3.3", "notes": "Valgt tilstand vises med checkmark (struktur) i tillegg til bakgrunn — i både single og flervalg, ikke farge alene." },
-    { "id": "1.4.1", "notes": "Valgt og aktivt alternativ kommuniseres med checkmark (begge moduser) og bakgrunn, ikke farge alene. Feiltilstand bruker tekst, ramme og aria-invalid." },
+    { "id": "1.3.3", "notes": "Valgt tilstand vises med hake i enkeltvalg og avkrysset checkbox i flervalg, i tillegg til fet label. Ikke farge alene." },
+    { "id": "1.4.1", "notes": "Valgt alternativ vises med hake eller avkrysset checkbox, aktivt alternativ med bakgrunn. Valgt hviler ikke på farge alene. Feiltilstand bruker tekst, ramme og aria-invalid." },
     { "id": "1.4.4", "notes": "Relative enheter — skalerer korrekt ved 200 % zoom." },
     { "id": "1.4.10", "notes": "Reflower korrekt ned til 320px viewport. Chips brytes over flere linjer." },
     { "id": "1.4.11", "notes": "Ramme, fokusindikator og aktivt alternativ oppfyller 3:1 kontrastkrav." },
@@ -50,7 +50,7 @@
     { "id": "4.1.3", "notes": "To role=status live-regioner: synlig no-hits-melding ved 0 treff, og en skjult (sr-only) region som annonserer antall treff (resultsText, {n}) ved filtrering — debounced og kun når antallet endres, så skjermleseren ikke oversvømmes. Feilmelding annonseres via ix-field sin aria-live=polite." }
   ],
   "notRelevant": [
-    { "id": "1.1.1", "reason": "Checkmark og chevron er dekorative CSS-masker med aria-hidden; ingen informasjonsbærende bilder." },
+    { "id": "1.1.1", "reason": "Hake, checkbox og chevron er dekorative CSS-masker med aria-hidden; ingen informasjonsbærende bilder." },
     { "id": "1.2.1" },
     { "id": "1.2.2" },
     { "id": "1.2.3" },
