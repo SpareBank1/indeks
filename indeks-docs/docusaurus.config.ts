@@ -25,6 +25,11 @@ for (const pkg of endringsloggPakker) {
     writeFileSync(path.join(endringsloggMappe, `${pkg}.md`), frontMatter + changelog.replace(/^# .*\n/, ''));
 }
 
+// Docusaurus kjører clean-css level 2 etter cssnano, og den flytter `all: unset` forbi
+// deklarasjonene etter i samme regel. Da mister skjemafeltene bakgrunn og farge. Uten
+// clean-css minifiserer bare cssnano, som beholder rekkefølgen.
+process.env.USE_SIMPLE_CSS_MINIFIER = 'true';
+
 const config: Config = {
     title: 'Indeks Designsystem',
     tagline:
