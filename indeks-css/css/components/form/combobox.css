@@ -161,6 +161,9 @@
     background-color: var(--ix-color-fill-interactive-default);
     border: var(--ix-border-width-default) solid var(--ix-color-border-main-emphasis);
     border-radius: var(--ix-border-radius-xs);
+    transition:
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        border-color var(--ix-transition-duration) var(--ix-transition-animation);
     /* stylelint-disable plugin/no-unsupported-browser-features */
     mask-image: none;
     -webkit-mask-image: none;
@@ -194,6 +197,17 @@
     }
 }
 
+/* Raden er klikkflaten, så boksen følger radens hover og aktive tilstand, som .ix-checkbox følger labelen. */
+.ix-combobox__listbox[aria-multiselectable='true'] :is(.ix-combobox__option:hover, .ix-combobox__option[data-active]) .ix-combobox__option-check {
+    background-color: var(--ix-color-fill-interactive-hover);
+    border-color: var(--ix-color-border-main-emphasis-hover);
+}
+
+.ix-combobox__listbox[aria-multiselectable='true'] :is(.ix-combobox__option:hover, .ix-combobox__option[data-active])[aria-selected='true'] .ix-combobox__option-check {
+    background-color: var(--ix-color-fill-main-default-hover);
+    border-color: transparent;
+}
+
 .ix-combobox__listbox[aria-multiselectable='true'] .ix-combobox__option[aria-disabled='true'] .ix-combobox__option-check {
     opacity: var(--ix-opacity-disabled);
 }
@@ -216,7 +230,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .ix-combobox__toggle::after {
+    .ix-combobox__toggle::after,
+    .ix-combobox__listbox[aria-multiselectable='true'] .ix-combobox__option-check {
         transition: none;
     }
 }
