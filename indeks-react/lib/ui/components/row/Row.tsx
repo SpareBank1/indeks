@@ -188,14 +188,16 @@ export const Row = forwardRef<HTMLDivElement, RowProps | RowLinkAsProps<ElementT
     return (
         <div ref={ref} className={cn('ix-row', className)} {...rest}>
             {leading}
-            <div className="ix-row__content">
-                <TitleTag id={titleId} className="ix-row__title">
-                    {titleContent}
-                </TitleTag>
-                {subtitle && <p className="ix-row__subtitle">{subtitle}</p>}
-                {description && <p className="ix-row__description">{description}</p>}
+            <div className="ix-row__body">
+                <div className="ix-row__content">
+                    <TitleTag id={titleId} className="ix-row__title">
+                        {titleContent}
+                    </TitleTag>
+                    {subtitle && <p className="ix-row__subtitle">{subtitle}</p>}
+                    {description && <p className="ix-row__description">{description}</p>}
+                </div>
+                {trailing && <div className="ix-row__trailing">{trailing}</div>}
             </div>
-            {trailing && <div className="ix-row__trailing">{trailing}</div>}
             {trailingControl && <div className="ix-row__control">{trailingControl}</div>}
             {navigation && (
                 <Icon

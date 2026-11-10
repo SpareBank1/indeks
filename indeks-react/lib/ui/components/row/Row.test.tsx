@@ -23,6 +23,23 @@ describe('Row', () => {
         expect(row.querySelector('.ix-row__nav-icon')).toBeNull();
     });
 
+    it('legger innhold og Trailing i __body, og kontroll og navigasjonsikon utenfor', () => {
+        const { container } = render(
+            <Row
+                title="Brukskonto"
+                trailing={<Row.TrailingLabel label="12 345,00 kr" />}
+                trailingControl={undefined}
+                href="/konto"
+                navigation="internal"
+            />
+        );
+        const body = container.querySelector('.ix-row > .ix-row__body')!;
+        expect([...body.children].map((c) => c.className)).toEqual(['ix-row__content', 'ix-row__trailing']);
+        expect(container.querySelector('.ix-row > .ix-row__nav-icon')).not.toBeNull();
+        const passiv = render(<Row title="Fast trekk" trailingControl={<button type="button">Legg til</button>} />);
+        expect(passiv.container.querySelector('.ix-row > .ix-row__control')).not.toBeNull();
+    });
+
     it('utelater områder som ikke er i bruk', () => {
         const { container } = render(<Row title="Brukskonto" />);
         expect(container.querySelector('.ix-row__subtitle')).toBeNull();

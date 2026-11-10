@@ -112,9 +112,11 @@ export const Trailing: Story = {
     ),
 };
 
-/** Lang tekst bryter over flere linjer, og Trailing og navigasjonsikonet beholder plassen sin. */
+/** Lang tekst bryter over flere linjer. Blir raden for trang, legger Trailing seg under innholdet. */
 export const LangTekst: Story = {
     name: 'Lang tekst',
+    // Mobil, så skjermbildet viser at Trailing legger seg under innholdet.
+    tags: ['mobile-chromium'],
     args: {
         title: 'Betaling til Sparebank 1 Kredittkort med en lang mottakertekst',
         subtitle: 'Forfaller 20. november 2026, trekkes fra brukskontoen',
@@ -132,24 +134,28 @@ export const HTML: Story = {
                 <span className="ix-row__leading" data-variant="icon">
                     <ix-icon name="account_balance" aria-hidden="true" />
                 </span>
-                <div className="ix-row__content">
-                    <p className="ix-row__title">
-                        <a className="ix-row__action" href="#">
-                            Brukskonto
-                        </a>
-                    </p>
-                    <p className="ix-row__subtitle">1234.56.78901</p>
-                </div>
-                <div className="ix-row__trailing">
-                    <span className="ix-row__trailing-label">12 345,00 kr</span>
-                    <span className="ix-row__trailing-subtitle">Disponibelt</span>
+                <div className="ix-row__body">
+                    <div className="ix-row__content">
+                        <p className="ix-row__title">
+                            <a className="ix-row__action" href="#">
+                                Brukskonto
+                            </a>
+                        </p>
+                        <p className="ix-row__subtitle">1234.56.78901</p>
+                    </div>
+                    <div className="ix-row__trailing">
+                        <span className="ix-row__trailing-label">12 345,00 kr</span>
+                        <span className="ix-row__trailing-subtitle">Disponibelt</span>
+                    </div>
                 </div>
                 <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true" />
             </div>
             <div className="ix-row">
-                <div className="ix-row__content">
-                    <p className="ix-row__title">Fast trekk</p>
-                    <p className="ix-row__subtitle">Ikke satt opp</p>
+                <div className="ix-row__body">
+                    <div className="ix-row__content">
+                        <p className="ix-row__title">Fast trekk</p>
+                        <p className="ix-row__subtitle">Ikke satt opp</p>
+                    </div>
                 </div>
                 <div className="ix-row__control">
                     <button type="button" className="ix-button" data-variant="secondary" data-size="sm">

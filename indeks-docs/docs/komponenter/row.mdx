@@ -37,13 +37,15 @@ til en lenke. Tittelen blir lenketeksten.
   <span class="ix-row__leading" data-variant="icon">
     <ix-icon name="account_balance" aria-hidden="true"></ix-icon>
   </span>
-  <div class="ix-row__content">
-    <p class="ix-row__title"><a class="ix-row__action" href="#">Brukskonto</a></p>
-    <p class="ix-row__subtitle">1234.56.78901</p>
-  </div>
-  <div class="ix-row__trailing">
-    <span class="ix-row__trailing-label">12 345,00 kr</span>
-    <span class="ix-row__trailing-subtitle">Disponibelt</span>
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title"><a class="ix-row__action" href="#">Brukskonto</a></p>
+      <p class="ix-row__subtitle">1234.56.78901</p>
+    </div>
+    <div class="ix-row__trailing">
+      <span class="ix-row__trailing-label">12 345,00 kr</span>
+      <span class="ix-row__trailing-subtitle">Disponibelt</span>
+    </div>
   </div>
   <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
 </div>
@@ -77,9 +79,11 @@ Uten `href` eller `onClick` er raden bare informasjon. Den får verken hover ell
 
 ```jsx live
 <div class="ix-row">
-  <div class="ix-row__content">
-    <p class="ix-row__title">Kontoeier</p>
-    <p class="ix-row__subtitle">Kari Nordmann</p>
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title">Kontoeier</p>
+      <p class="ix-row__subtitle">Kari Nordmann</p>
+    </div>
   </div>
 </div>
 ```
@@ -104,13 +108,15 @@ legges til som skjult tekst, så skjermlesere også får vite at lenken åpnes i
 
 ```jsx live
 <div class="ix-row">
-  <div class="ix-row__content">
-    <p class="ix-row__title">
-      <a class="ix-row__action" href="https://www.skatteetaten.no" target="_blank" rel="noopener noreferrer">
-        Skattemeldingen <span class="ix-sr-only">(åpnes i ny fane)</span>
-      </a>
-    </p>
-    <p class="ix-row__subtitle">Skatteetaten</p>
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title">
+        <a class="ix-row__action" href="https://www.skatteetaten.no" target="_blank" rel="noopener noreferrer">
+          Skattemeldingen <span class="ix-sr-only">(åpnes i ny fane)</span>
+        </a>
+      </p>
+      <p class="ix-row__subtitle">Skatteetaten</p>
+    </div>
   </div>
   <ix-icon class="ix-row__nav-icon" name="open_in_new" aria-hidden="true"></ix-icon>
 </div>
@@ -142,8 +148,10 @@ for eksempel å åpne en Modal.
 
 ```jsx live
 <div class="ix-row">
-  <div class="ix-row__content">
-    <p class="ix-row__title"><button class="ix-row__action" type="button">Varslingsinnstillinger</button></p>
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title"><button class="ix-row__action" type="button">Varslingsinnstillinger</button></p>
+    </div>
   </div>
   <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
 </div>
@@ -197,18 +205,22 @@ Ikon på flate kan ha et lite badge-ikon, for eksempel for en delt konto.
       <ix-icon name="account_balance" aria-hidden="true"></ix-icon>
       <span class="ix-row__leading-badge"><ix-icon name="group" aria-hidden="true"></ix-icon></span>
     </span>
-    <div class="ix-row__content">
-      <p class="ix-row__title">Felleskonto</p>
-      <p class="ix-row__subtitle">Delt med Kari Nordmann</p>
+    <div class="ix-row__body">
+      <div class="ix-row__content">
+        <p class="ix-row__title">Felleskonto</p>
+        <p class="ix-row__subtitle">Delt med Kari Nordmann</p>
+      </div>
     </div>
   </div>
   <div class="ix-row">
     <span class="ix-row__leading" data-variant="illustration">
       <img src="/img/komponenter/card/hus.svg" alt="" />
     </span>
-    <div class="ix-row__content">
-      <p class="ix-row__title">Boliglån</p>
-      <p class="ix-row__subtitle">Restgjeld 2 450 000 kr</p>
+    <div class="ix-row__body">
+      <div class="ix-row__content">
+        <p class="ix-row__title">Boliglån</p>
+        <p class="ix-row__subtitle">Restgjeld 2 450 000 kr</p>
+      </div>
     </div>
   </div>
 </>
@@ -238,19 +250,23 @@ Ikon på flate kan ha et lite badge-ikon, for eksempel for en delt konto.
 ### Trailing
 
 Trailing viser en verdi eller status til høyre: en verdi med subtitle, eller en verdi med Tag.
+Blir raden for trang til at tittelen og verdien får plass side om side, legger Trailing seg under
+innholdet. Det skjer ut fra plassen i raden, så det virker også i smale kolonner.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
 <div class="ix-row">
-  <div class="ix-row__content">
-    <p class="ix-row__title">Strømregning</p>
-    <p class="ix-row__subtitle">Forfaller 20. november</p>
-  </div>
-  <div class="ix-row__trailing">
-    <span class="ix-row__trailing-label">1 240,00 kr</span>
-    <span class="ix-tag" data-status="neutral" data-variant="subtle" data-size="sm">Til godkjenning</span>
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title">Strømregning</p>
+      <p class="ix-row__subtitle">Forfaller 20. november</p>
+    </div>
+    <div class="ix-row__trailing">
+      <span class="ix-row__trailing-label">1 240,00 kr</span>
+      <span class="ix-tag" data-status="neutral" data-variant="subtle" data-size="sm">Til godkjenning</span>
+    </div>
   </div>
 </div>
 ```
@@ -283,9 +299,11 @@ en id og pek på den fra kontrollen med `aria-describedby`. Da hører skjermlese
 
 ```jsx live
 <div class="ix-row">
-  <div class="ix-row__content">
-    <p class="ix-row__title" id="fast-trekk">Fast trekk</p>
-    <p class="ix-row__subtitle">Ikke satt opp</p>
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title" id="fast-trekk">Fast trekk</p>
+      <p class="ix-row__subtitle">Ikke satt opp</p>
+    </div>
   </div>
   <div class="ix-row__control">
     <button type="button" class="ix-button" data-variant="secondary" data-size="sm" aria-describedby="fast-trekk">
@@ -367,7 +385,7 @@ Teksten i taggen må stå på egen hånd, fordi skjermlesere ikke får med seg f
 ### Hva komponenten gjør automatisk
 
 - Den interaktive raden er én ekte `<a>` eller `<button>` med tittelen som navn. Klikkflaten dekker hele raden.
-- Fokusringen tegnes rundt hele raden ved tastaturfokus, over raden under, og med systemets markeringsfarge i høykontrast.
+- Fokusringen tegnes innenfor kanten av raden ved tastaturfokus, så den ikke klippes av en liste med `overflow: hidden` eller dekkes av raden under. I høykontrast brukes systemets markeringsfarge.
 - Navigasjonsikonet, badge-ikonet og ikonene i Leading får `aria-hidden`.
 - Med `navigation="external"` får lenken `target="_blank"`, `rel="noopener noreferrer"` og den skjulte teksten fra `externalLabel`.
 
@@ -385,6 +403,7 @@ Teksten i taggen må stå på egen hånd, fordi skjermlesere ikke får med seg f
 | Element | Beskrivelse |
 |---------|-------------|
 | `.ix-row` | Raden. Påkrevd |
+| `.ix-row__body` | Rundt innholdet og Trailing. Påkrevd, den lar Trailing legge seg under innholdet |
 | `.ix-row__action` | `<a>` eller `<button>` i tittelen. Gjør hele raden interaktiv |
 | `data-variant` på `.ix-row__leading` | `icon`, `icon-background`, `illustration` eller `image` |
 | `.ix-row__control` | Én kontroll i en passiv rad |
@@ -429,6 +448,7 @@ under er de samme som React-komponenten setter.
 | Rad | `.ix-row` |
 | Leading | `.ix-row__leading[data-variant="icon\|icon-background\|illustration\|image"]` |
 | Badge-ikon | `.ix-row__leading-badge` |
+| Innhold og Trailing | `.ix-row__body` |
 | Innhold | `.ix-row__content` |
 | Tittel | `.ix-row__title` |
 | Subtitle | `.ix-row__subtitle` |
@@ -446,12 +466,14 @@ under er de samme som React-komponenten setter.
 <ul class="ix-list-none">
   <li>
     <div class="ix-row">
-      <div class="ix-row__content">
-        <p class="ix-row__title"><a class="ix-row__action" href="/konto/1">Brukskonto</a></p>
-        <p class="ix-row__subtitle">1234.56.78901</p>
-      </div>
-      <div class="ix-row__trailing">
-        <span class="ix-row__trailing-label">12 345,00 kr</span>
+      <div class="ix-row__body">
+        <div class="ix-row__content">
+          <p class="ix-row__title"><a class="ix-row__action" href="/konto/1">Brukskonto</a></p>
+          <p class="ix-row__subtitle">1234.56.78901</p>
+        </div>
+        <div class="ix-row__trailing">
+          <span class="ix-row__trailing-label">12 345,00 kr</span>
+        </div>
       </div>
       <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
     </div>

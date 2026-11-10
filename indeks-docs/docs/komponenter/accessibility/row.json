@@ -1,6 +1,6 @@
 {
   "component": "Row (ix-row)",
-  "lastReviewed": "2026-11-06",
+  "lastReviewed": "2026-11-10",
   "consumerResponsibilities": [
     {
       "summary": "Skriv en tittel som forklarer hvor raden leder",
@@ -75,7 +75,7 @@
     },
     {
       "id": "1.4.10",
-      "notes": "Ingen fast bredde. Tittel og tekst bryter over flere linjer, Trailing tar maks halve raden, og en kontroll beholder plassen sin. Ingen horisontal scroll ved 320 px."
+      "notes": "Ingen fast bredde. Tittel og tekst bryter over flere linjer, og blir raden for trang, legger Trailing seg under innholdet. En kontroll beholder plassen sin. Ingen horisontal scroll ved 320 px."
     },
     {
       "id": "1.4.11",
@@ -83,7 +83,7 @@
     },
     {
       "id": "1.4.12",
-      "notes": "Ingen fast høyde, så økt linje- og ordavstand gir høyere rad i stedet for klippet tekst."
+      "notes": "Ingen fast høyde, og tekst i Trailing kan bryte, så økt linje- og ordavstand gir høyere rad i stedet for klippet tekst."
     },
     {
       "id": "2.1.1",
@@ -99,11 +99,11 @@
     },
     {
       "id": "2.4.7",
-      "notes": "Fokusringen tegnes rundt hele raden ved :focus-visible, med --ix-color-border-focus-default, og med Highlight i høykontrast."
+      "notes": "Fokusringen tegnes innenfor kanten av raden ved :focus-visible, med --ix-color-border-focus-default, og med Highlight i høykontrast."
     },
     {
       "id": "2.4.11",
-      "notes": "Raden med fokus legges over naboradene, så ringen ikke dekkes av raden under."
+      "notes": "Ringen ligger innenfor raden, så den verken klippes av en liste med overflow: hidden eller dekkes av raden under."
     },
     {
       "id": "2.5.2",

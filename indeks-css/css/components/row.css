@@ -16,11 +16,6 @@
     color: var(--ix-color-foreground-main-default);
 }
 
-/* Fokusringen ligger utenfor raden, og neste rad ville ellers dekket den. */
-.ix-row:focus-within {
-    z-index: 1;
-}
-
 .ix-row__leading {
     position: relative;
     flex: none;
@@ -68,9 +63,24 @@
     height: var(--ix-font-size-sm);
 }
 
-.ix-row__content {
+/* Innhold og Trailing står side om side når det er plass. Blir raden for
+   trang til at innholdet får sin basis, legger Trailing seg under, så både
+   tittel og verdi kan leses. Uten media query, så det virker i smale kolonner. */
+.ix-row__body {
     flex: 1 1 auto;
     min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ix-spacing-xs) var(--ix-spacing-md);
+}
+
+.ix-row__content {
+    flex: 1 1 0%;
+    /* Omtrent ti tegn: smalere enn dette er tittelen vanskelig å lese, og
+       Trailing legger seg under i stedet. Som min-width, ikke flex-basis, ellers
+       regner Chrome radhøyden ut fra tekst brutt ved basisbredden. */
+    min-width: 6rem;
     display: flex;
     flex-direction: column;
     gap: var(--ix-spacing-2xs);
@@ -101,27 +111,28 @@
     font-size: var(--ix-font-size-sm);
 }
 
-/* Beløp og status skal kunne leses hele, så Trailing krymper ikke, og
-   innholdet tar krympingen når raden er trang. */
+/* margin-inline-start: auto holder Trailing til høyre også når den har lagt
+   seg under innholdet. */
 .ix-row__trailing {
-    flex: none;
+    flex: 0 1 auto;
+    max-width: 100%;
+    margin-inline-start: auto;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: var(--ix-spacing-2xs);
     line-height: 1.2;
     text-align: end;
+    overflow-wrap: break-word;
 }
 
 .ix-row__trailing-label {
-    white-space: nowrap;
     font-size: var(--ix-font-size-md);
     font-weight: var(--ix-font-weight-medium);
     font-variant-numeric: tabular-nums;
 }
 
 .ix-row__trailing-subtitle {
-    white-space: nowrap;
     font-size: var(--ix-font-size-sm);
     font-variant-numeric: tabular-nums;
     color: var(--ix-color-foreground-main-subtle);
@@ -169,8 +180,9 @@
 .ix-row__action::after {
     z-index: 1;
     outline: var(--ix-outline-width-default) solid transparent;
-    /* Tett inntil raden, så en liste med overflow: hidden ikke klipper ringen. */
-    outline-offset: 0;
+    /* Innenfor raden: en liste med overflow: hidden klipper ikke ringen, og
+       raden under dekker den ikke. all: unset har fjernet den native ringen. */
+    outline-offset: calc(-1 * var(--ix-outline-width-default));
     transition:
         outline-color var(--ix-transition-duration) var(--ix-transition-animation);
 }
