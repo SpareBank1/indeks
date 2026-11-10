@@ -55,6 +55,10 @@ export type { InteractiveIconProps, InteractiveIconStatus } from './interactive-
 export { ListElement } from './list-element/ListElement';
 export { ReadMore } from './read-more/ReadMore';
 export type { ReadMoreProps } from './read-more/ReadMore';
+export { Row } from './row/Row';
+export type { RowProps } from './row/Row';
+export type { RowLeadingProps } from './row/RowLeading';
+export type { RowTrailingLabelProps } from './row/RowTrailingLabel';
 export { Spinner } from './spinner/Spinner';
 export { ProgressBar } from './progress-bar/ProgressBar';
 export type { ProgressBarProps, ProgressBarState } from './progress-bar/ProgressBar';

@@ -1,0 +1,488 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/row.json';
+
+# Row
+
+Row er en fleksibel rad for informasjon, navigasjon og handlinger i lister. Hele raden kan være
+interaktiv, eller den kan inneholde én selvstendig kontroll. Row brukes mest som innhold i en
+liste med flere rader.
+
+## Egnet til
+
+- Ett innholdselement i en liste eller oversikt, som en konto, en transaksjon eller en kommende betaling
+- Informasjon med en tydelig tittel og eventuell tilleggsinformasjon
+- Navigasjon der hele raden leder til ett mål
+- En verdi eller status sammen med informasjonen, som saldo eller «Til godkjenning»
+- Én handling gjennom en kontroll til høyre i raden
+
+## Uegnet til
+
+- Innhold som trenger flere separate seksjoner eller en mer sammensatt layout
+- Rader med flere selvstendige handlinger
+- Rader der både hele raden og en kontroll til høyre skal gjøre hver sin ting
+- Innhold som fungerer bedre som en selvstendig klikkbar flate. Bruk heller [Card](./card)
+
+## Bruk
+
+En rad består av tittel og eventuell subtitle og description. Sett `href` for å gjøre hele raden
+til en lenke. Tittelen blir lenketeksten.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-row">
+  <span class="ix-row__leading" data-variant="icon">
+    <ix-icon name="account_balance" aria-hidden="true"></ix-icon>
+  </span>
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title"><a class="ix-row__action" href="#">Brukskonto</a></p>
+      <p class="ix-row__subtitle">1234.56.78901</p>
+    </div>
+    <div class="ix-row__trailing">
+      <span class="ix-row__trailing-label">12 345,00 kr</span>
+      <span class="ix-row__trailing-subtitle">Disponibelt</span>
+    </div>
+  </div>
+  <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Row
+  title="Brukskonto"
+  subtitle="1234.56.78901"
+  href="#"
+  navigation="internal"
+  leading={<Row.Leading variant="icon" icon="account_balance" />}
+  trailing={<Row.TrailingLabel label="12 345,00 kr" subtitle="Disponibelt" />}
+/>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Passiv rad
+
+Uten `href` eller `onClick` er raden bare informasjon. Den får verken hover eller fokus.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-row">
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title">Kontoeier</p>
+      <p class="ix-row__subtitle">Kari Nordmann</p>
+    </div>
+  </div>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Row title="Kontoeier" subtitle="Kari Nordmann" />
+```
+
+</TabItem>
+</Tabs>
+
+### Ekstern lenke
+
+`navigation="external"` åpner lenken i ny fane og viser ikonet for ekstern lenke. `externalLabel`
+legges til som skjult tekst, så skjermlesere også får vite at lenken åpnes i ny fane.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-row">
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title">
+        <a class="ix-row__action" href="https://www.skatteetaten.no" target="_blank" rel="noopener noreferrer">
+          Skattemeldingen <span class="ix-sr-only">(åpnes i ny fane)</span>
+        </a>
+      </p>
+      <p class="ix-row__subtitle">Skatteetaten</p>
+    </div>
+  </div>
+  <ix-icon class="ix-row__nav-icon" name="open_in_new" aria-hidden="true"></ix-icon>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Row
+  title="Skattemeldingen"
+  subtitle="Skatteetaten"
+  href="https://www.skatteetaten.no"
+  navigation="external"
+  externalLabel="(åpnes i ny fane)"
+/>
+```
+
+</TabItem>
+</Tabs>
+
+### Rad som knapp
+
+Med `onClick` blir tittelen en `<button>`. Bruk det når raden starter en handling på samme side,
+for eksempel å åpne en Modal.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-row">
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title"><button class="ix-row__action" type="button">Varslingsinnstillinger</button></p>
+    </div>
+  </div>
+  <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Row
+  title="Varslingsinnstillinger"
+  onClick={() => alert('Her åpner du varslingsinnstillingene')}
+  navigation="internal"
+/>
+```
+
+</TabItem>
+</Tabs>
+
+### Router-lenke
+
+I React kan du bruke lenkekomponenten fra routeren din i stedet for `<a>`, så navigasjonen skjer
+uten full sidelasting. Send komponenten inn i `linkAs` og dens egne props i `linkProps`, som `to` i
+React Router. `href` er valgfri med `linkAs`. Ekstern navigasjon kan ikke kombineres med `linkAs`.
+I HTML bytter du bare ut `<a class="ix-row__action">` med lenken routeren rendrer.
+
+```tsx
+// React Router
+import { Link } from 'react-router';
+
+<Row linkAs={Link} linkProps={{ to: '/konto/1' }} title="Brukskonto" navigation="internal" />;
+
+// Next.js
+import NextLink from 'next/link';
+
+<Row linkAs={NextLink} href="/konto/1" title="Brukskonto" navigation="internal" />;
+```
+
+### Leading
+
+Leading er valgfritt og kan være et ikon, et ikon på en rund flate, en illustrasjon eller et bilde.
+Ikon på flate kan ha et lite badge-ikon, for eksempel for en delt konto.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<>
+  <div class="ix-row">
+    <span class="ix-row__leading" data-variant="icon-background">
+      <ix-icon name="account_balance" aria-hidden="true"></ix-icon>
+      <span class="ix-row__leading-badge"><ix-icon name="group" aria-hidden="true"></ix-icon></span>
+    </span>
+    <div class="ix-row__body">
+      <div class="ix-row__content">
+        <p class="ix-row__title">Felleskonto</p>
+        <p class="ix-row__subtitle">Delt med Kari Nordmann</p>
+      </div>
+    </div>
+  </div>
+  <div class="ix-row">
+    <span class="ix-row__leading" data-variant="illustration">
+      <img src="/img/komponenter/card/hus.svg" alt="" />
+    </span>
+    <div class="ix-row__body">
+      <div class="ix-row__content">
+        <p class="ix-row__title">Boliglån</p>
+        <p class="ix-row__subtitle">Restgjeld 2 450 000 kr</p>
+      </div>
+    </div>
+  </div>
+</>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack align="stretch" gap="none">
+  <Row
+    title="Felleskonto"
+    subtitle="Delt med Kari Nordmann"
+    leading={<Row.Leading variant="icon-background" icon="account_balance" badgeIcon="group" />}
+  />
+  <Row
+    title="Boliglån"
+    subtitle="Restgjeld 2 450 000 kr"
+    leading={<Row.Leading variant="illustration" src="/img/komponenter/card/hus.svg" alt="" />}
+  />
+</VStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Trailing
+
+Trailing viser en verdi eller status til høyre: en verdi med subtitle, eller en verdi med Tag.
+Blir raden for trang til at tittelen og verdien får plass side om side, legger Trailing seg under
+innholdet. Det skjer ut fra plassen i raden, så det virker også i smale kolonner.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-row">
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title">Strømregning</p>
+      <p class="ix-row__subtitle">Forfaller 20. november</p>
+    </div>
+    <div class="ix-row__trailing">
+      <span class="ix-row__trailing-label">1 240,00 kr</span>
+      <span class="ix-tag" data-status="neutral" data-variant="subtle" data-size="sm">Til godkjenning</span>
+    </div>
+  </div>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Row
+  title="Strømregning"
+  subtitle="Forfaller 20. november"
+  trailing={
+    <Row.TrailingLabel label="1 240,00 kr" tag={<Tag size="sm" type="subtle">Til godkjenning</Tag>} />
+  }
+/>
+```
+
+</TabItem>
+</Tabs>
+
+### Kontroll i Trailing
+
+En passiv rad kan ha én selvstendig kontroll, som en [Button](./button) eller en
+[LinkText](./typografi). Kontrollen krymper ikke, så den er like brukbar i smale rader. Gi tittelen
+en id og pek på den fra kontrollen med `aria-describedby`. Da hører skjermleserbrukere hvilken rad
+«Legg til» gjelder, også i en liste der flere rader har samme knapp.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-row">
+  <div class="ix-row__body">
+    <div class="ix-row__content">
+      <p class="ix-row__title" id="fast-trekk">Fast trekk</p>
+      <p class="ix-row__subtitle">Ikke satt opp</p>
+    </div>
+  </div>
+  <div class="ix-row__control">
+    <button type="button" class="ix-button" data-variant="secondary" data-size="sm" aria-describedby="fast-trekk">
+      Legg til
+    </button>
+  </div>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Row
+  title="Fast trekk"
+  titleId="fast-trekk-react"
+  subtitle="Ikke satt opp"
+  trailingControl={
+    <Button size="sm" variant="secondary" aria-describedby="fast-trekk-react">
+      Legg til
+    </Button>
+  }
+/>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Bruk bare områdene som tilfører noe
+
+Row har fire områder: Leading, Content, Trailing og navigasjonsikonet. Bare Content med tittelen
+er påkrevd. Velg det enkleste oppsettet som får fram innholdet og handlingen, for eksempel:
+
+- Content
+- Leading og Content
+- Content og Trailing
+- Leading, Content og Trailing
+- Leading, Content og navigasjonsikon
+
+Bruk Leading når det gjør elementene lettere å skille fra hverandre, ikke som pynt. Hold Content
+kort og lett å skanne: tittelen er det viktigste, og subtitle og description er for ekstra
+sammenheng. Row er ikke laget for lengre brødtekst. Trailing er for verdier og status som hører
+tydelig til innholdet i raden.
+
+### Gi raden ett interaktivt mål
+
+Enten er hele raden én interaktiv flate, eller så er raden passiv med én kontroll i Trailing.
+Ikke begge deler. Når hele raden leder til ett mål, vis navigasjonsikonet: chevron når målet er i
+samme løsning, og ikonet for ekstern lenke når det åpnes utenfor. Navigasjonsikonet er bare en
+visuell markering av handlingen til hele raden. Det er ikke en egen kontroll.
+
+### Velg LinkText eller Button etter handlingen
+
+Bruk [LinkText](./typografi) når handlingen hører tett sammen med en verdi i raden, for eksempel
+for å kopiere eller endre den. Kopiering skjer på siden og er ingen navigasjon, så render LinkText
+som knapp med `as="button"`. Bruk [Button](./button) når brukeren tar et tydelig valg eller
+starter en handling. I begge tilfeller er resten av raden passiv.
+
+### Bruk Tag for betydning, ikke pynt
+
+Bruk [Tag](./tag) for status, kategori eller type når det er nødvendig for å forstå elementet.
+Teksten i taggen må stå på egen hånd, fordi skjermlesere ikke får med seg fargen.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- Skriv en tittel som forklarer hvor raden leder. I en interaktiv rad er tittelen navnet på lenken eller knappen.
+- Gi raden ett interaktivt mål. Legg aldri lenker, knapper eller brytere inni en rad som selv er interaktiv. React-typene stopper `trailingControl` sammen med `href` eller `onClick`, men ikke en kontroll i `title`, `trailing` eller `leading`. Det må du passe på selv, også i HTML.
+- Gi kontrollen i en passiv rad et navn som viser til raden, med `titleId` og `aria-describedby`.
+- Send inn `externalLabel` på brukerens språk når lenken åpnes i ny fane.
+- Gi bilder og illustrasjoner `alt`. Bruk `alt=""` når grafikken bare er pynt.
+- La ikke status hvile på farge eller ikon alene. Badge-ikonet og navigasjonsikonet er skjult for skjermlesere.
+- Legg flere rader i `<ul>` og `<li>`, så skjermlesere sier hvor mange det er.
+- Tekst i en interaktiv rad kan ikke markeres, fordi klikkflaten ligger over den. Skal brukeren kunne kopiere et kontonummer, la raden være passiv og gi den en kopieringsknapp.
+
+### Hva komponenten gjør automatisk
+
+- Den interaktive raden er én ekte `<a>` eller `<button>` med tittelen som navn. Klikkflaten dekker hele raden.
+- Fokusringen tegnes innenfor kanten av raden ved tastaturfokus, så den ikke klippes av en liste med `overflow: hidden` eller dekkes av raden under. I høykontrast brukes systemets markeringsfarge.
+- Navigasjonsikonet, badge-ikonet og ikonene i Leading får `aria-hidden`.
+- Med `navigation="external"` får lenken `target="_blank"`, `rel="noopener noreferrer"` og den skjulte teksten fra `externalLabel`.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+| Element | Beskrivelse |
+|---------|-------------|
+| `.ix-row` | Raden. Påkrevd |
+| `.ix-row__body` | Rundt innholdet og Trailing. Påkrevd, den lar Trailing legge seg under innholdet |
+| `.ix-row__action` | `<a>` eller `<button>` i tittelen. Gjør hele raden interaktiv |
+| `data-variant` på `.ix-row__leading` | `icon`, `icon-background`, `illustration` eller `image` |
+| `.ix-row__control` | Én kontroll i en passiv rad |
+
+</TabItem>
+<TabItem value="react" label="React">
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `title` | `ReactNode` | | Påkrevd. Lenke- eller knappetekst i en interaktiv rad |
+| `titleAs` | `'p' \| 'h2'`–`'h6' \| 'span'` | `'p'` | Elementet tittelen rendres som |
+| `titleId` | `string` | | Id på tittelen, for `aria-describedby` fra en kontroll |
+| `subtitle` | `ReactNode` | | Sekundær tekst under tittelen |
+| `description` | `ReactNode` | | Utfyllende tekst |
+| `leading` | `ReactNode` | | Bruk `<Row.Leading>` |
+| `trailing` | `ReactNode` | | Verdi eller status, f.eks. `<Row.TrailingLabel>` |
+| `href` | `string` | | Gjør hele raden til en lenke. Valgfri med `linkAs` |
+| `linkAs` | `ElementType` | | Router-lenke i stedet for `<a>`. Kan ikke kombineres med ekstern navigasjon |
+| `linkProps` | `AnchorHTMLAttributes` / props til `linkAs` | | Ekstra props til lenken, f.eks. `to`. Typen følger `linkAs` |
+| `onClick` | `MouseEventHandler` | | Gjør hele raden til en knapp |
+| `buttonProps` | `ButtonHTMLAttributes` | | Ekstra props til knappen. Uten `disabled` |
+| `navigation` | `'internal' \| 'external'` | | Navigasjonsikon. Bare med `href` eller `onClick` |
+| `externalLabel` | `string` | | Påkrevd med `navigation="external"` |
+| `trailingControl` | `ReactNode` | | Én kontroll. Kan ikke kombineres med `href` eller `onClick` |
+
+`Row.Leading` tar `variant` (`icon`, `icon-background`, `illustration`, `image`), `icon`,
+`badgeIcon` (bare `icon-background`), `src` og `alt`. `Row.TrailingLabel` tar `label`, `subtitle`
+og `tag`.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Row er ren CSS uten web component, så markupen i HTML-eksemplene er hele komponenten. Klassene
+under er de samme som React-komponenten setter.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Rad | `.ix-row` |
+| Leading | `.ix-row__leading[data-variant="icon\|icon-background\|illustration\|image"]` |
+| Badge-ikon | `.ix-row__leading-badge` |
+| Innhold og Trailing | `.ix-row__body` |
+| Innhold | `.ix-row__content` |
+| Tittel | `.ix-row__title` |
+| Subtitle | `.ix-row__subtitle` |
+| Description | `.ix-row__description` |
+| Lenke eller knapp | `.ix-row__action` |
+| Trailing | `.ix-row__trailing` |
+| Verdi | `.ix-row__trailing-label` |
+| Verdi-subtitle | `.ix-row__trailing-subtitle` |
+| Kontroll | `.ix-row__control` |
+| Navigasjonsikon | `.ix-row__nav-icon` |
+
+### Eksempel: ren HTML
+
+```html
+<ul class="ix-list-none">
+  <li>
+    <div class="ix-row">
+      <div class="ix-row__body">
+        <div class="ix-row__content">
+          <p class="ix-row__title"><a class="ix-row__action" href="/konto/1">Brukskonto</a></p>
+          <p class="ix-row__subtitle">1234.56.78901</p>
+        </div>
+        <div class="ix-row__trailing">
+          <span class="ix-row__trailing-label">12 345,00 kr</span>
+        </div>
+      </div>
+      <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+    </div>
+  </li>
+</ul>
+```
+
+## Relatert
+
+- [Card](./card) — én selvstendig klikkbar flate
+- [Tag](./tag) — status eller kategori i Trailing
+- [Divider](./divider) — skille mellom innhold
