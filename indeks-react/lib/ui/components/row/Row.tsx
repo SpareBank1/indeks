@@ -97,7 +97,7 @@ export type RowProps = RowBaseProps & (RowLinkProps | RowButtonProps | RowPassiv
 
 type RowLinkAsLinkProps<As extends ElementType> = Omit<
     ComponentPropsWithoutRef<As>,
-    'className' | 'children' | 'href'
+    'className' | 'children' | 'href' | 'target' | 'rel'
 >;
 
 // Påkrevd bare når lenken har påkrevde props, som `to` i React Router. Next sin Link klarer seg med `href`.
@@ -116,7 +116,8 @@ export type RowLinkAsProps<As extends ElementType> = RowBaseProps & {
     onClick?: never;
     buttonProps?: never;
     trailingControl?: never;
-} & RowLinkAsLinkPropsProp<As>;
+} & RowLinkAsLinkPropsProp<As> &
+    (ComponentPropsWithoutRef<As> extends { href: unknown } ? { href: string } : unknown);
 
 interface RowComponent {
     (props: RowProps & RefAttributes<HTMLDivElement>): ReturnType<FC>;
