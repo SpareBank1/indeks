@@ -6,46 +6,54 @@ endres når komponenten får ny radius, farge eller avstand.
 
 ## Regler
 
-- **Bare byggeklossene.** Bruk `Flate`, `Tekst` og `Prikk` fra `byggeklosser.tsx`.
-  Ingen egne `<path>`, ikoner, fonter, skygger eller hex-farger.
+- **Bare byggeklossene.** Bruk `Flate`, `Tekst`, `Prikk` og `Glyf` fra
+  `byggeklosser.tsx`. Ingen egne `<path>`, ikoner, fonter, skygger eller
+  hex-farger. Mangler du et tegn, legg det til i `glyfer`.
+- **Tre farger.** `mørk` og `lys` blå, og `hvit` for flater og tekst på mørk
+  bakgrunn.
+- **Mørk er poenget.** Bruk `mørk` på det som er valgt, aktivt eller primært,
+  og på overskrifter og ledetekst. Alt annet er `lys`.
 - **Tekst er streker.** Ekte ord må oversettes og får ulik lengde. `Tekst` er
   alltid 8 høy.
-- **Ett poeng per illustrasjon.** Bruk aksentfargen bare på det som er
-  komponentens poeng, som valgt radio, aktiv fane eller fremdriften.
-- **Grovt, ikke likt.** Skriv motivet slik du ville tegnet det på en tavle. Hvis
+- **Grovt, ikke likt.** Tegn motivet slik du ville gjort det på en tavle. Hvis
   du lurer på om en detalj må med, la den være ute.
 
 ## Rammen
 
 - `viewBox` er `0 0 280 160`, samme forhold som mediaflaten i Card.
-- Motivet holder seg innenfor `x` 20–260 og `y` 20–140 og er sentrert rundt
+- Motivet holder seg innenfor `x` 40–240 og `y` 24–136 og er sentrert rundt
   (140, 80).
-- Bruk 8-rutenett for posisjon og størrelse. Avstanden mellom rader er 24–36.
+- Bruk 4-rutenett for posisjon og størrelse. Avstanden mellom tekstlinjer er
+  20, og mellom grupper 36.
 
 ## Mål
 
-| Element         | Mål                              |
-| --------------- | -------------------------------- |
-| Felt og knapp   | høyde 40, radius 8               |
-| Tekst           | høyde 8, bredde 64–208           |
-| Prikk           | radius 10, valgt-markør radius 5 |
-| Strek (divider) | `Flate` med høyde 2, `t="kant"`  |
-| Celle i layout  | `Flate` med `t="aksent-svak"`    |
+| Element        | Mål                                         |
+| -------------- | ------------------------------------------- |
+| Felt og knapp  | høyde 44, radius 8                          |
+| Panel          | `fyll="hvit"` med `kant="lys"` eller `mørk` |
+| Tekst          | høyde 8, bredde 32–152                      |
+| Prikk          | radius 10–11, valgt-markør radius 5         |
+| Skillelinje    | `Flate` med høyde 2, `fyll="lys"`, `r={0}`  |
+| Celle i layout | `Flate` med radius 6                        |
+| Glyf           | 16 × 16, strek 2,5                          |
 
-## Toner
+## Farger
 
-| `t`           | Brukes til                             |
-| ------------- | -------------------------------------- |
-| `standard`    | felt, paneler og tomme prikker (kant)  |
-| `kant`        | streker og skillelinjer                |
-| `tekst`       | vanlig tekst og ledetekst              |
-| `tekst-svak`  | plassholder og brødtekst i paneler     |
-| `aksent`      | det som er valgt, aktivt eller primært |
-| `aksent-svak` | bakgrunnsflater og layoutceller        |
-| `invers`      | tekst på `aksent`                      |
+| Farge  | Token                             |
+| ------ | --------------------------------- |
+| `mørk` | `--ix-color-fill-main-default`    |
+| `lys`  | `--ix-color-fill-main-subtle`     |
+| `hvit` | `--ix-color-surface-main-default` |
 
-Fargene er Indeks-tokens i `byggeklosser.module.css`, så mørkt tema og
-høykontrast følger med.
+Bakgrunnen bak illustrasjonen er `--ix-color-background-tinted`. Fargene er
+tokens, så mørkt tema følger med. I høykontrast blir de `CanvasText`,
+`GrayText` og `Canvas`.
+
+## Glyfer
+
+`chevron-ned`, `chevron-opp`, `chevron-høyre`, `chevron-venstre`, `pil-høyre`,
+`pil-venstre`, `pil-opp`, `kryss`, `pluss` og `hake`.
 
 ## Lage en ny
 
@@ -53,16 +61,17 @@ høykontrast følger med.
 2. Legg til en eksport i `illustrasjoner.tsx`:
 
     ```tsx
-    export const TextFieldIllustrasjon = () => (
+    export const SelectIllustrasjon = () => (
         <Illustrasjon>
-            <Tekst x={52} y={44} w={72} />
-            <Flate x={52} y={68} w={176} h={40} />
-            <Tekst x={68} y={84} w={96} t="tekst-svak" />
+            <Tekst x={60} y={36} w={56} fyll="mørk" />
+            <Flate x={60} y={56} w={160} h={44} fyll="hvit" kant="mørk" />
+            <Tekst x={76} y={74} w={64} />
+            <Glyf navn="chevron-ned" x={192} y={70} />
         </Illustrasjon>
     );
     ```
 
-3. Sett `illustrasjon: TextFieldIllustrasjon` på komponenten i
+3. Sett `illustrasjon: SelectIllustrasjon` på komponenten i
    `src/data/komponenter.tsx`.
 4. Se på kortet i lyst og mørkt tema ved siden av de andre. Det skal se ut som
    samme familie.

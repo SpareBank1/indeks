@@ -1,60 +1,67 @@
 .illustrasjon {
+    --_mørk: var(--ix-color-fill-main-default);
+    --_lys: var(--ix-color-fill-main-subtle);
+    --_hvit: var(--ix-color-surface-main-default);
+
     display: block;
     width: 100%;
     height: 100%;
 }
 
-.standard {
-    fill: var(--ix-color-fill-interactive-default);
-    stroke: var(--ix-color-border-main-emphasis);
+.fyll-ingen {
+    fill: none;
+}
+
+.fyll-mørk {
+    fill: var(--_mørk);
+}
+
+.fyll-lys {
+    fill: var(--_lys);
+}
+
+.fyll-hvit {
+    fill: var(--_hvit);
+}
+
+.kant-mørk,
+.kant-lys,
+.kant-hvit,
+.glyf-mørk,
+.glyf-lys,
+.glyf-hvit {
     stroke-width: 2;
 }
 
-.kant {
-    fill: var(--ix-color-border-main-default);
+.kant-mørk,
+.glyf-mørk {
+    stroke: var(--_mørk);
 }
 
-.tekst {
-    fill: var(--ix-color-border-main-emphasis);
+.kant-lys,
+.glyf-lys {
+    stroke: var(--_lys);
 }
 
-.tekst-svak {
-    fill: var(--ix-color-border-main-emphasis);
-    fill-opacity: 0.5;
+.kant-hvit,
+.glyf-hvit {
+    stroke: var(--_hvit);
 }
 
-.aksent {
-    fill: var(--ix-color-fill-main-default);
+.glyf-mørk,
+.glyf-lys,
+.glyf-hvit {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-.aksent-svak {
-    fill: var(--ix-color-fill-main-subtle);
-}
-
-.invers {
-    fill: var(--ix-color-foreground-inverse-default);
-}
-
-/* Høykontrast tvinger ikke fill og stroke i SVG, så formene får systemfargene her. */
+/* Høykontrast tvinger ikke fill og stroke i SVG, så fargene byttes til systemfarger her. */
 @media (forced-colors: active) {
-    .standard {
-        fill: Canvas;
-        stroke: CanvasText;
-    }
-
-    .kant,
-    .tekst,
-    .tekst-svak,
-    .aksent-svak {
-        fill: CanvasText;
-        fill-opacity: 1;
-    }
-
-    .aksent {
-        fill: Highlight;
-    }
-
-    .invers {
-        fill: HighlightText;
+    .illustrasjon {
+        --_mørk: CanvasText;
+        --_lys: GrayText;
+        --_hvit: Canvas;
     }
 }
