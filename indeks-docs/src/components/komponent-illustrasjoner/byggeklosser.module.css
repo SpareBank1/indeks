@@ -1,0 +1,60 @@
+.illustrasjon {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.standard {
+    fill: var(--ix-color-fill-interactive-default);
+    stroke: var(--ix-color-border-main-emphasis);
+    stroke-width: 2;
+}
+
+.kant {
+    fill: var(--ix-color-border-main-default);
+}
+
+.tekst {
+    fill: var(--ix-color-border-main-emphasis);
+}
+
+.tekst-svak {
+    fill: var(--ix-color-border-main-emphasis);
+    fill-opacity: 0.5;
+}
+
+.aksent {
+    fill: var(--ix-color-fill-main-default);
+}
+
+.aksent-svak {
+    fill: var(--ix-color-fill-main-subtle);
+}
+
+.invers {
+    fill: var(--ix-color-foreground-inverse-default);
+}
+
+/* Høykontrast tvinger ikke fill og stroke i SVG, så formene får systemfargene her. */
+@media (forced-colors: active) {
+    .standard {
+        fill: Canvas;
+        stroke: CanvasText;
+    }
+
+    .kant,
+    .tekst,
+    .tekst-svak,
+    .aksent-svak {
+        fill: CanvasText;
+        fill-opacity: 1;
+    }
+
+    .aksent {
+        fill: Highlight;
+    }
+
+    .invers {
+        fill: HighlightText;
+    }
+}

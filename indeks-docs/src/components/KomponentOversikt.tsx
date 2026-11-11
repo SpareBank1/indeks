@@ -24,11 +24,17 @@ function Kortliste({ oppføringer, titleAs }: { oppføringer: KomponentOppførin
                         mediaType="illustration"
                         className={styles.kort}
                         media={
-                            // Bare i nettleseren: web componentene bygger om light DOM-en sin før
-                            // React hydrerer, og da stemmer ikke server-HTML-en.
-                            <div className={styles.forhåndsvisning} inert aria-hidden="true">
-                                <BrowserOnly>{() => k.forhåndsvisning}</BrowserOnly>
-                            </div>
+                            k.illustrasjon ? (
+                                <div className={styles.illustrasjon}>
+                                    <k.illustrasjon />
+                                </div>
+                            ) : (
+                                // Bare i nettleseren: web componentene bygger om light DOM-en sin før
+                                // React hydrerer, og da stemmer ikke server-HTML-en.
+                                <div className={styles.forhåndsvisning} inert aria-hidden="true">
+                                    <BrowserOnly>{() => k.forhåndsvisning}</BrowserOnly>
+                                </div>
+                            )
                         }
                     />
                 </li>

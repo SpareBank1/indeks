@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import React, { type ComponentType, type ReactNode } from 'react';
 import {
     Accordion,
     Button,
@@ -31,6 +31,14 @@ import {
     ValidationMessage,
     VStack,
 } from '@sb1/indeks-react';
+import {
+    ButtonIllustrasjon,
+    GridIllustrasjon,
+    MessageIllustrasjon,
+    RadioGroupIllustrasjon,
+    TabsIllustrasjon,
+    TextFieldIllustrasjon,
+} from '../components/komponent-illustrasjoner/illustrasjoner';
 
 // Rekkefølgen her er rekkefølgen i kategorivisningen.
 export const kategorier = ['Primitiver', 'Layout', 'Innhold', 'Overlay', 'Navigasjon', 'Varsling', 'Skjema'] as const;
@@ -42,8 +50,10 @@ export interface KomponentOppføring {
     href: string;
     kategori: Kategori;
     beskrivelse: string;
-    /** Statisk utsnitt av komponenten. Vises inert og skjult for skjermleser. */
-    forhåndsvisning: ReactNode;
+    /** Stilisert SVG, se components/komponent-illustrasjoner/README.md. */
+    illustrasjon?: ComponentType;
+    /** Statisk utsnitt av komponenten. Brukes til alle har fått illustrasjon. */
+    forhåndsvisning?: ReactNode;
 }
 
 const celle = 'ix-color-surface-info-default ix-px-sm ix-py-2xs';
@@ -72,6 +82,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/button',
         kategori: 'Primitiver',
         beskrivelse: 'Lar brukeren utføre en handling, som å sende inn et skjema eller gå videre.',
+        illustrasjon: ButtonIllustrasjon,
         forhåndsvisning: <Button>Send inn</Button>,
     },
     {
@@ -185,6 +196,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/primitives/grid',
         kategori: 'Layout',
         beskrivelse: 'Layout-primitiv som legger innhold i rader og kolonner.',
+        illustrasjon: GridIllustrasjon,
         forhåndsvisning: (
             <Grid cols={3}>
                 <div className={celle}>1</div>
@@ -228,6 +240,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/message',
         kategori: 'Varsling',
         beskrivelse: 'Formidler status eller resultatet av en handling uten å avbryte flyten.',
+        illustrasjon: MessageIllustrasjon,
         forhåndsvisning: (
             <MessageRegion>
                 <Message status="success">Betalingen er sendt</Message>
@@ -292,6 +305,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/radio-group',
         kategori: 'Skjema',
         beskrivelse: 'Ett valg fra en liste av gjensidig utelukkende alternativer.',
+        illustrasjon: RadioGroupIllustrasjon,
         forhåndsvisning: (
             <RadioGroup
                 legend="Kundetype"
@@ -363,6 +377,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/tabs',
         kategori: 'Navigasjon',
         beskrivelse: 'Veksler mellom likeverdige innholdsseksjoner på samme side.',
+        illustrasjon: TabsIllustrasjon,
         forhåndsvisning: (
             <Tabs defaultValue="oversikt">
                 <Tabs.List ariaLabel="Konto">
@@ -398,6 +413,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/textfield',
         kategori: 'Skjema',
         beskrivelse: 'Kortere tekst eller tall, som kontonummer eller beløp.',
+        illustrasjon: TextFieldIllustrasjon,
         forhåndsvisning: <TextField label="Kontonummer" />,
     },
     {
