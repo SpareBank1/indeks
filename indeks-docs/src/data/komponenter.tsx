@@ -32,7 +32,12 @@ import {
     VStack,
 } from '@sb1/indeks-react';
 import {
+    AccordionIllustrasjon,
     ButtonIllustrasjon,
+    CardIllustrasjon,
+    CheckboxGroupIllustrasjon,
+    CheckboxIllustrasjon,
+    ChipIllustrasjon,
     GridIllustrasjon,
     MessageIllustrasjon,
     RadioGroupIllustrasjon,
@@ -64,6 +69,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/accordion',
         kategori: 'Innhold',
         beskrivelse: 'Viser og skjuler innhold i seksjoner.',
+        illustrasjon: AccordionIllustrasjon,
         forhåndsvisning: (
             <Accordion>
                 <Accordion.Item>
@@ -90,6 +96,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/card',
         kategori: 'Innhold',
         beskrivelse: 'Én klikkbar flate som leder videre, med tittel og eventuelt bilde eller ikon.',
+        illustrasjon: CardIllustrasjon,
         forhåndsvisning: <Card href="#" title="Brukskonto" subtitle="1234 56 78901" />,
     },
     {
@@ -97,6 +104,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/checkbox',
         kategori: 'Skjema',
         beskrivelse: 'Ett enkelt ja/nei-valg, for eksempel å godta vilkår.',
+        illustrasjon: CheckboxIllustrasjon,
         forhåndsvisning: <Checkbox label="Jeg godtar vilkårene" name="oversikt-checkbox" defaultChecked />,
     },
     {
@@ -104,6 +112,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/checkbox-group',
         kategori: 'Skjema',
         beskrivelse: 'Flere relaterte valg der brukeren kan velge ett eller flere.',
+        illustrasjon: CheckboxGroupIllustrasjon,
         forhåndsvisning: (
             <CheckboxGroup
                 legend="Hvordan vil du bli kontaktet?"
@@ -121,6 +130,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/chip',
         kategori: 'Skjema',
         beskrivelse: 'Små, interaktive elementer for raske valg, filtrering eller handlinger.',
+        illustrasjon: ChipIllustrasjon,
         forhåndsvisning: (
             <RadioGroup
                 variant="chip"

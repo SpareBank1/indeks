@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flate, Illustrasjon, Prikk, Tekst } from './byggeklosser';
+import { Flate, Glyf, Illustrasjon, Prikk, Tekst } from './byggeklosser';
 
 // Se README.md i denne mappa før du lager en ny.
 
@@ -61,5 +61,57 @@ export const GridIllustrasjon = () => (
         <Flate x={180} y={32} w={56} h={44} fyll="lys" r={6} />
         <Flate x={44} y={84} w={120} h={44} fyll="lys" r={6} />
         <Flate x={172} y={84} w={64} h={44} fyll="mørk" r={6} />
+    </Illustrasjon>
+);
+
+export const AccordionIllustrasjon = () => (
+    <Illustrasjon>
+        <Flate x={60} y={24} w={160} h={112} fyll="hvit" kant="lys" />
+        <Glyf navn="chevron-opp" x={72} y={34} />
+        <Tekst x={96} y={38} w={88} fyll="mørk" />
+        <Tekst x={72} y={58} w={128} />
+        <Flate x={61} y={76} w={158} h={2} fyll="lys" r={0} />
+        <Glyf navn="chevron-ned" x={72} y={83} />
+        <Tekst x={96} y={87} w={80} />
+        <Flate x={61} y={106} w={158} h={2} fyll="lys" r={0} />
+        <Glyf navn="chevron-ned" x={72} y={113} />
+        <Tekst x={96} y={117} w={64} />
+    </Illustrasjon>
+);
+
+export const CardIllustrasjon = () => (
+    <Illustrasjon>
+        <Flate x={76} y={24} w={128} h={112} fyll="hvit" kant="lys" />
+        <Flate x={82} y={30} w={116} h={52} fyll="lys" r={4} />
+        <Tekst x={88} y={94} w={72} fyll="mørk" />
+        <Tekst x={88} y={110} w={104} />
+        <Tekst x={88} y={122} w={72} />
+    </Illustrasjon>
+);
+
+export const CheckboxIllustrasjon = () => (
+    <Illustrasjon>
+        <Flate x={76} y={69} w={22} h={22} fyll="mørk" r={4} />
+        <Glyf navn="hake" x={79} y={72} farge="hvit" />
+        <Tekst x={110} y={76} w={96} fyll="mørk" />
+    </Illustrasjon>
+);
+
+export const CheckboxGroupIllustrasjon = () => (
+    <Illustrasjon>
+        <Flate x={84} y={51} w={22} h={22} fyll="mørk" r={4} />
+        <Glyf navn="hake" x={87} y={54} farge="hvit" />
+        <Tekst x={118} y={58} w={88} fyll="mørk" />
+        <Flate x={84} y={87} w={22} h={22} fyll="hvit" kant="mørk" r={4} />
+        <Tekst x={118} y={94} w={64} />
+    </Illustrasjon>
+);
+
+export const ChipIllustrasjon = () => (
+    <Illustrasjon>
+        <Flate x={56} y={60} w={80} h={40} fyll="mørk" r={20} />
+        <Tekst x={76} y={76} w={40} fyll="hvit" />
+        <Flate x={144} y={60} w={80} h={40} fyll="hvit" kant="mørk" r={20} />
+        <Tekst x={164} y={76} w={40} />
     </Illustrasjon>
 );

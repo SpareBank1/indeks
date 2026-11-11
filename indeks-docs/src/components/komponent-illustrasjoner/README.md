@@ -84,8 +84,19 @@ ikke har.
 
 ### Ferdig
 
+- **Accordion**: hvitt panel med lys kant, delt i tre rader med lyse
+  skillelinjer. Øverste rad åpen: `chevron-opp`, mørk tittel og en lys
+  tekststrek under. To lukkede rader med `chevron-ned` og lys tittel.
 - **Button**: én mørk flate (136 × 44) midt i rammen med en hvit tekststrek
   sentrert i.
+- **Card**: hvitt panel med lys kant. Øverst en lys flate som bilde, under en
+  mørk tittel og to lyse tekststreker.
+- **Checkbox**: én rad: mørk avkrysningsboks med hvit `hake` og en mørk
+  tekststrek.
+- **CheckboxGroup**: to rader som Checkbox, den øverste avkrysset og mørk, den
+  nederste en hvit boks med mørk kant og lys tekststrek.
+- **Chip**: to piller på rad (høyde 40, radius 20). Den første mørk med hvit tekststrek,
+  den andre hvit med mørk kant og lys tekststrek.
 - **Grid**: to rader celler med radius 6. Øverst lys, mørk og lys; nederst en
   bred lys og en mørk. Viser at celler kan ha ulik bredde.
 - **Message**: lys flate med mørk kant. Mørk prikk med lys strek oppe til
@@ -102,17 +113,6 @@ ikke har.
 
 ### Forslag
 
-- **Accordion**: hvitt panel med lys kant, delt i tre rader med lyse
-  skillelinjer. Øverste rad åpen: `chevron-opp`, mørk tittel og en lys
-  tekststrek under. To lukkede rader med `chevron-ned` og lys tittel.
-- **Card**: hvitt panel med lys kant. Øverst en lys flate som bilde, under en
-  mørk tittel og to lyse tekststreker.
-- **Checkbox**: én rad: mørk avkrysningsboks med hvit `hake` og en mørk
-  tekststrek.
-- **CheckboxGroup**: to rader som Checkbox, den øverste avkrysset og mørk, den
-  nederste en hvit boks med mørk kant og lys tekststrek.
-- **Chip**: to piller på rad (radius 22). Den første mørk med hvit tekststrek,
-  den andre hvit med mørk kant og lys tekststrek.
 - **Combobox**: hvitt felt med mørk kant med lys tekststrek og `chevron-ned`.
   Under, et hvitt panel med lys kant med tre rader; den første har lys flate
   bak og mørk tekststrek (markert treff).
