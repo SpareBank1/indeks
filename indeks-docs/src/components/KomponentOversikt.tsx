@@ -1,4 +1,3 @@
-import BrowserOnly from '@docusaurus/BrowserOnly';
 import Link from '@docusaurus/Link';
 import { Card, RadioGroup } from '@sb1/indeks-react';
 import React, { useState } from 'react';
@@ -24,17 +23,9 @@ function Kortliste({ oppføringer, titleAs }: { oppføringer: KomponentOppførin
                         mediaType="illustration"
                         className={styles.kort}
                         media={
-                            k.illustrasjon ? (
-                                <div className={styles.illustrasjon}>
-                                    <k.illustrasjon />
-                                </div>
-                            ) : (
-                                // Bare i nettleseren: web componentene bygger om light DOM-en sin før
-                                // React hydrerer, og da stemmer ikke server-HTML-en.
-                                <div className={styles.forhåndsvisning} inert aria-hidden="true">
-                                    <BrowserOnly>{() => k.forhåndsvisning}</BrowserOnly>
-                                </div>
-                            )
+                            <div className={styles.illustrasjon}>
+                                <k.illustrasjon />
+                            </div>
                         }
                     />
                 </li>
