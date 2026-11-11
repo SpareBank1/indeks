@@ -38,11 +38,33 @@ import {
     CheckboxGroupIllustrasjon,
     CheckboxIllustrasjon,
     ChipIllustrasjon,
+    ComboboxIllustrasjon,
+    DateFieldIllustrasjon,
+    DividerIllustrasjon,
+    DropdownMenuIllustrasjon,
     GridIllustrasjon,
+    IconIllustrasjon,
+    InteractiveIconIllustrasjon,
+    LabelIllustrasjon,
     MessageIllustrasjon,
+    ModalIllustrasjon,
+    PaginationIllustrasjon,
+    PhoneNumberFieldIllustrasjon,
+    PopoverIllustrasjon,
+    ProgressBarIllustrasjon,
     RadioGroupIllustrasjon,
+    ReadMoreIllustrasjon,
+    SelectIllustrasjon,
+    SpinnerIllustrasjon,
+    StackIllustrasjon,
+    SurfaceIllustrasjon,
     TabsIllustrasjon,
+    TagIllustrasjon,
+    TextAreaIllustrasjon,
     TextFieldIllustrasjon,
+    TooltipIllustrasjon,
+    TypografiIllustrasjon,
+    ValidationMessageIllustrasjon,
 } from '../components/komponent-illustrasjoner/illustrasjoner';
 
 // Rekkefølgen her er rekkefølgen i kategorivisningen.
@@ -152,6 +174,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/combobox',
         kategori: 'Skjema',
         beskrivelse: 'Lar brukeren søke etter og velge fra en liste.',
+        illustrasjon: ComboboxIllustrasjon,
         forhåndsvisning: (
             <Combobox
                 label="Land"
@@ -169,6 +192,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/date-field',
         kategori: 'Skjema',
         beskrivelse: 'Dato i norsk format, med enhetens innebygde kalender.',
+        illustrasjon: DateFieldIllustrasjon,
         forhåndsvisning: <DateField label="Fødselsdato" openLabel="Åpne kalender" name="oversikt-date-field" />,
     },
     {
@@ -176,6 +200,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/divider',
         kategori: 'Layout',
         beskrivelse: 'En horisontal strek som deler opp innhold i en flate.',
+        illustrasjon: DividerIllustrasjon,
         forhåndsvisning: (
             <VStack align="stretch" gap="xs" className="ix-w-full">
                 <div className="ix-flex ix-justify-between">
@@ -195,6 +220,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/dropdown-menu',
         kategori: 'Overlay',
         beskrivelse: 'Nedtrekksmeny for handlinger eller navigasjon.',
+        illustrasjon: DropdownMenuIllustrasjon,
         forhåndsvisning: (
             <Button variant="secondary">
                 Handlinger <Icon name="expand_more" />
@@ -223,6 +249,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/icon',
         kategori: 'Primitiver',
         beskrivelse: 'SVG-ikoner fra SpareBank 1s ikonsett.',
+        illustrasjon: IconIllustrasjon,
         forhåndsvisning: (
             <div className="ix-flex ix-gap-sm">
                 <Icon name="home" size="lg" />
@@ -236,6 +263,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/interactive-icon',
         kategori: 'Primitiver',
         beskrivelse: 'En kompakt knapp som bare viser et ikon.',
+        illustrasjon: InteractiveIconIllustrasjon,
         forhåndsvisning: <InteractiveIcon name="edit" aria-label="Rediger" />,
     },
     {
@@ -243,6 +271,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/label',
         kategori: 'Skjema',
         beskrivelse: 'Ledeteksten til et skjemafelt.',
+        illustrasjon: LabelIllustrasjon,
         forhåndsvisning: <Label>Kontonummer</Label>,
     },
     {
@@ -262,6 +291,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/modal',
         kategori: 'Overlay',
         beskrivelse: 'Innhold oppå siden som brukeren må forholde seg til før hen går videre.',
+        illustrasjon: ModalIllustrasjon,
         forhåndsvisning: <Button variant="secondary">Vis detaljer</Button>,
     },
     {
@@ -269,6 +299,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/pagination',
         kategori: 'Navigasjon',
         beskrivelse: 'Deler store mengder innhold i sider.',
+        illustrasjon: PaginationIllustrasjon,
         forhåndsvisning: (
             <Pagination
                 page={2}
@@ -286,6 +317,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/phone-number-field',
         kategori: 'Skjema',
         beskrivelse: 'Telefonnummer med landkode.',
+        illustrasjon: PhoneNumberFieldIllustrasjon,
         forhåndsvisning: (
             <PhoneNumberField
                 label="Mobilnummer"
@@ -301,6 +333,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/popover',
         kategori: 'Overlay',
         beskrivelse: 'Kontekstuell informasjon eller handlinger knyttet til et element.',
+        illustrasjon: PopoverIllustrasjon,
         forhåndsvisning: <Button variant="secondary">Åpne popover</Button>,
     },
     {
@@ -308,6 +341,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/progress-bar',
         kategori: 'Primitiver',
         beskrivelse: 'Viser fremdriften i én sammenhengende prosess.',
+        illustrasjon: ProgressBarIllustrasjon,
         forhåndsvisning: <ProgressBar value={60} label="Laster opp" showValue />,
     },
     {
@@ -333,6 +367,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/read-more',
         kategori: 'Innhold',
         beskrivelse: 'Viser og skjuler én frittstående tekstblokk.',
+        illustrasjon: ReadMoreIllustrasjon,
         forhåndsvisning: <ReadMore label="Hva betyr dette?">Forklaring.</ReadMore>,
     },
     {
@@ -340,6 +375,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/select',
         kategori: 'Skjema',
         beskrivelse: 'Ett valg fra en nedtrekksliste.',
+        illustrasjon: SelectIllustrasjon,
         forhåndsvisning: (
             <Select
                 label="Land"
@@ -356,6 +392,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/spinner',
         kategori: 'Primitiver',
         beskrivelse: 'Viser at noe lastes inn.',
+        illustrasjon: SpinnerIllustrasjon,
         forhåndsvisning: <Spinner />,
     },
     {
@@ -363,6 +400,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/primitives/stack',
         kategori: 'Layout',
         beskrivelse: 'Layout-primitiv som stabler innhold vertikalt eller horisontalt.',
+        illustrasjon: StackIllustrasjon,
         forhåndsvisning: (
             <VStack>
                 <div className={celle}>Element 1</div>
@@ -376,6 +414,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/surface',
         kategori: 'Layout',
         beskrivelse: 'En flate som samler beslektede elementer og skiller dem fra resten av siden.',
+        illustrasjon: SurfaceIllustrasjon,
         forhåndsvisning: (
             <Surface padding="md">
                 <Text>Samlet på én flate</Text>
@@ -404,6 +443,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/tag',
         kategori: 'Innhold',
         beskrivelse: 'Ikke-interaktiv etikett som merker eller kategoriserer innhold.',
+        illustrasjon: TagIllustrasjon,
         forhåndsvisning: (
             <div className="ix-flex ix-gap-xs">
                 <Tag variant="info">Ny</Tag>
@@ -416,6 +456,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/textarea',
         kategori: 'Skjema',
         beskrivelse: 'Lengre fritekst over flere linjer.',
+        illustrasjon: TextAreaIllustrasjon,
         forhåndsvisning: <TextArea label="Tilbakemelding" rows={2} />,
     },
     {
@@ -431,6 +472,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/tooltip',
         kategori: 'Skjema',
         beskrivelse: 'Liten informasjonsboks knyttet til et skjemafelt.',
+        illustrasjon: TooltipIllustrasjon,
         forhåndsvisning: (
             <TextField label="Navn" tooltip="Fullt navn som i passet" tooltipLabel="Mer informasjon om Navn" />
         ),
@@ -440,6 +482,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/typografi',
         kategori: 'Primitiver',
         beskrivelse: 'Overskrifter, brødtekst og lenketekst.',
+        illustrasjon: TypografiIllustrasjon,
         forhåndsvisning: (
             <div>
                 <Heading as="h3" size="lg">
@@ -454,6 +497,7 @@ export const komponenter: KomponentOppføring[] = [
         href: '/docs/komponenter/skjema/validation-message',
         kategori: 'Skjema',
         beskrivelse: 'Feilmelding knyttet til et skjemafelt eller en feltgruppe.',
+        illustrasjon: ValidationMessageIllustrasjon,
         forhåndsvisning: <ValidationMessage>Du må velge et alternativ</ValidationMessage>,
     },
 ];

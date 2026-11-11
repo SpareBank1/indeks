@@ -57,6 +57,26 @@
     stroke-linejoin: round;
 }
 
+/* Ring og Bue setter strekbredden selv. */
+.strek-mørk,
+.strek-lys,
+.strek-hvit {
+    fill: none;
+    stroke-linecap: round;
+}
+
+.strek-mørk {
+    stroke: var(--_mørk);
+}
+
+.strek-lys {
+    stroke: var(--_lys);
+}
+
+.strek-hvit {
+    stroke: var(--_hvit);
+}
+
 /* Høykontrast tvinger ikke fill og stroke i SVG, så fargene byttes til systemfarger her. */
 @media (forced-colors: active) {
     .illustrasjon {

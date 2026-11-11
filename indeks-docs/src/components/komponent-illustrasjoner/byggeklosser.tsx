@@ -70,6 +70,7 @@ const glyfer = {
     kryss: 'M3 3l10 10M13 3L3 13',
     pluss: 'M8 2v12M2 8h12',
     hake: 'M2 8.5l4 4 8-9',
+    søk: 'M7 12A5 5 0 1 0 7 2a5 5 0 0 0 0 10zM11 11l3.5 3.5',
 } as const;
 
 export type GlyfNavn = keyof typeof glyfer;
@@ -77,4 +78,76 @@ export type GlyfNavn = keyof typeof glyfer;
 /** Små strektegn som chevron, pil og kryss. Tegnet i en 16 × 16-boks med øvre venstre hjørne i (x, y). */
 export function Glyf({ navn, x, y, farge = 'mørk' }: { navn: GlyfNavn; x: number; y: number; farge?: Farge }) {
     return <path className={styles[`glyf-${farge}`]} d={glyfer[navn]} transform={`translate(${x} ${y})`} />;
+}
+
+/** Spisser på hjelpetekster og popovere, og figurer i ikoner. Peker opp eller ned. */
+export function Trekant({
+    x,
+    y,
+    w,
+    h,
+    retning = 'opp',
+    fyll = 'mørk',
+}: {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    retning?: 'opp' | 'ned';
+    fyll?: Farge;
+}) {
+    const punkter =
+        retning === 'opp'
+            ? `${x},${y + h} ${x + w / 2},${y} ${x + w},${y + h}`
+            : `${x},${y} ${x + w / 2},${y + h} ${x + w},${y}`;
+    return <polygon className={klasser(fyll)} points={punkter} />;
+}
+
+/** En hel ring med valgfri tykkelse. */
+export function Ring({
+    cx,
+    cy,
+    r,
+    bredde = 8,
+    farge = 'lys',
+}: {
+    cx: number;
+    cy: number;
+    r: number;
+    bredde?: number;
+    farge?: Farge;
+}) {
+    return <circle className={styles[`strek-${farge}`]} style={{ strokeWidth: bredde }} cx={cx} cy={cy} r={r} />;
+}
+
+/** En del av en ring. Vinklene er grader med klokka, med 0 rett opp. */
+export function Bue({
+    cx,
+    cy,
+    r,
+    fra,
+    til,
+    bredde = 8,
+    farge = 'mørk',
+}: {
+    cx: number;
+    cy: number;
+    r: number;
+    fra: number;
+    til: number;
+    bredde?: number;
+    farge?: Farge;
+}) {
+    const punkt = (grader: number) => {
+        const v = (grader * Math.PI) / 180;
+        return `${cx + r * Math.sin(v)} ${cy - r * Math.cos(v)}`;
+    };
+    const stor = til - fra > 180 ? 1 : 0;
+    return (
+        <path
+            className={styles[`strek-${farge}`]}
+            style={{ strokeWidth: bredde }}
+            d={`M${punkt(fra)}A${r} ${r} 0 ${stor} 1 ${punkt(til)}`}
+        />
+    );
 }

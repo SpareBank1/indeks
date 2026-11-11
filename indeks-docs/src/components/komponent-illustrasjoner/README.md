@@ -6,8 +6,8 @@ komponenten. Derfor trenger den ikke endres når komponenten får ny radius,
 farge eller avstand.
 
 Denne fila er spesifikasjonen. Når du lager en ny illustrasjon, med eller uten
-hjelp fra en språkmodell, starter du her: les stilen, finn motivet i
-[Motiver](#motiver), og skriv koden med byggeklossene.
+hjelp fra en språkmodell, starter du her: les stilen, skriv motivet under
+[Motiver](#motiver), og tegn det med byggeklossene.
 
 ## Stil
 
@@ -36,19 +36,23 @@ hjelp fra en språkmodell, starter du her: les stilen, finn motivet i
 
 ## Byggeklosser
 
-Alt tegnes med disse fire fra `byggeklosser.tsx`. Ingen egne `<path>` eller
+Alt tegnes med byggeklossene i `byggeklosser.tsx`. Ingen egne `<path>` eller
 hex-farger. Mangler du et tegn, legg det til i `glyfer` og i lista under.
+Mangler du en form, lag en ny byggekloss og beskriv den her.
 
-| Byggekloss | Props                                       | Brukes til                        |
-| ---------- | ------------------------------------------- | --------------------------------- |
-| `Flate`    | `x y w h`, `fyll`, `kant`, `r` (standard 8) | felt, knapper, paneler, celler    |
-| `Tekst`    | `x y w`, `fyll` (standard `lys`)            | én linje tekst, alltid 8 høy      |
-| `Prikk`    | `cx cy`, `r` (standard 10), `fyll`, `kant`  | radio, statusikon, punkt, avatar  |
-| `Glyf`     | `navn x y`, `farge` (standard `mørk`)       | chevron, pil, kryss og andre tegn |
+| Byggekloss | Props                                             | Brukes til                               |
+| ---------- | ------------------------------------------------- | ---------------------------------------- |
+| `Flate`    | `x y w h`, `fyll`, `kant`, `r` (standard 8)       | felt, knapper, paneler, celler           |
+| `Tekst`    | `x y w`, `fyll` (standard `lys`)                  | én linje tekst, alltid 8 høy             |
+| `Prikk`    | `cx cy`, `r` (standard 10), `fyll`, `kant`        | radio, statusikon, punkt, avatar         |
+| `Glyf`     | `navn x y`, `farge` (standard `mørk`)             | chevron, pil, kryss og andre tegn        |
+| `Trekant`  | `x y w h`, `retning` (`opp`/`ned`), `fyll`        | spiss på hjelpetekst og popover          |
+| `Ring`     | `cx cy r`, `bredde` (standard 8), `farge` (`lys`) | ring rundt ikon, spor for spinner        |
+| `Bue`      | `cx cy r fra til`, `bredde`, `farge` (`mørk`)     | del av en ring; grader med klokka fra 12 |
 
 Glyfer, tegnet som strek i en 16 × 16-boks: `chevron-ned`, `chevron-opp`,
 `chevron-høyre`, `chevron-venstre`, `pil-høyre`, `pil-venstre`, `pil-opp`,
-`kryss`, `pluss` og `hake`.
+`kryss`, `pluss`, `hake` og `søk`.
 
 ## Mål
 
@@ -56,7 +60,7 @@ Glyfer, tegnet som strek i en 16 × 16-boks: `chevron-ned`, `chevron-opp`,
 | --------------- | ----------------------------------------------------------- |
 | Felt og knapp   | høyde 44, radius 8, bredde 136–160                          |
 | Panel           | `fyll="hvit"` med `kant="lys"`, eller `mørk` for det aktive |
-| Tekst           | bredde 32–152; overskrift `mørk`, brødtekst `lys`           |
+| Tekst           | bredde 20–160; overskrift `mørk`, brødtekst `lys`           |
 | Prikk           | radius 10–11; valgt-markør radius 5                         |
 | Avkrysningsboks | `Flate` 22 × 22, radius 4                                   |
 | Skillelinje     | `Flate` med høyde 2, `fyll="lys"`, `r={0}`                  |
@@ -77,15 +81,12 @@ tokens, så mørkt tema følger med. I høykontrast blir de `CanvasText`,
 
 ## Motiver
 
-Én linje per komponent i `src/data/komponenter.tsx`. **Ferdig** betyr at
-illustrasjonen finnes i `illustrasjoner.tsx`, og beskrivelsen er da fasit.
-**Forslag** er ikke tegnet ennå. Merket **ny byggekloss** trenger en form vi
-ikke har.
-
-### Ferdig
+Én linje per komponent i `src/data/komponenter.tsx`, i samme rekkefølge som
+`illustrasjoner.tsx`. Beskrivelsen er fasit: endrer du en illustrasjon, endrer
+du beskrivelsen også. Lager du en ny, skriver du beskrivelsen først.
 
 - **Accordion**: hvitt panel med lys kant, delt i tre rader med lyse
-  skillelinjer. Øverste rad åpen: `chevron-opp`, mørk tittel og en lys
+  skillelinjer. Øverste rad er åpen: `chevron-opp`, mørk tittel og en lys
   tekststrek under. To lukkede rader med `chevron-ned` og lys tittel.
 - **Button**: én mørk flate (136 × 44) midt i rammen med en hvit tekststrek
   sentrert i.
@@ -93,78 +94,73 @@ ikke har.
   mørk tittel og to lyse tekststreker.
 - **Checkbox**: én rad: mørk avkrysningsboks med hvit `hake` og en mørk
   tekststrek.
-- **CheckboxGroup**: to rader som Checkbox, den øverste avkrysset og mørk, den
-  nederste en hvit boks med mørk kant og lys tekststrek.
-- **Chip**: to piller på rad (høyde 40, radius 20). Den første mørk med hvit tekststrek,
-  den andre hvit med mørk kant og lys tekststrek.
-- **Grid**: to rader celler med radius 6. Øverst lys, mørk og lys; nederst en
-  bred lys og en mørk. Viser at celler kan ha ulik bredde.
-- **Message**: lys flate med mørk kant. Mørk prikk med lys strek oppe til
-  venstre (statusikonet), en mørk overskriftsstrek og to hvite tekststreker
-  ved siden av.
-- **RadioGroup**: to rader. Øverst en hvit prikk med mørk kant og mørk
-  valgt-markør, og en mørk tekststrek. Nederst en hvit prikk med lys kant og en
-  kortere lys tekststrek.
-- **Tabs**: tre fanetitler på rad, den første mørk og de andre lyse. Lys
-  skillelinje under, med en mørk indikator under den første. Tre lyse
-  tekststreker under.
-- **TextField**: mørk ledetekst, hvitt felt med mørk kant, lys verdi og en mørk
-  markør i feltet, og en lys hjelpetekst under.
-
-### Forslag
-
-- **Combobox**: hvitt felt med mørk kant med lys tekststrek og `chevron-ned`.
-  Under, et hvitt panel med lys kant med tre rader; den første har lys flate
-  bak og mørk tekststrek (markert treff).
+- **CheckboxGroup**: to rader som Checkbox. Den øverste er avkrysset og mørk,
+  den nederste er en hvit boks med mørk kant og en lys tekststrek.
+- **Chip**: to piller på rad (høyde 40, radius 20). Den første er mørk med hvit
+  tekststrek, den andre hvit med mørk kant og lys tekststrek.
+- **Combobox**: hvitt felt med mørk kant, med `søk` og en lys tekststrek. Under,
+  et hvitt panel med lys kant med tre rader. Den første har lys flate bak og
+  mørk tekststrek (markert treff).
 - **DateField**: hvitt panel med lys kant og mørk overskriftsstrek. Under, et
-  rutenett med 4 × 5 små lyse flater (radius 3), én av dem mørk.
+  rutenett med 4 × 5 små lyse flater (16 × 12, radius 3), én av dem mørk.
 - **Divider**: lys tekststrek, mørk skillelinje i full bredde, lys tekststrek.
 - **DropdownMenu**: hvit knapp med mørk kant, mørk tekststrek og `chevron-ned`.
   Under, et hvitt panel med lys kant og tre lyse tekststreker.
-- **Icon**: stor lys ring (lys `Prikk` radius 40 med en bakgrunnsfarget
-  `Prikk` radius 30 oppå) med en mørk trekant, en mørk prikk og en mørk firkant
-  inni. **Ny byggekloss**: trekant, og en `fyll` som er bakgrunnsfargen.
-- **InteractiveIcon**: lys prikk (radius 22) med en mørk glyf i midten, for
-  eksempel `pluss`.
-- **Label**: mørk tekststrek over et hvitt felt med lys kant. Det er
-  ledeteksten som er poenget, så feltet er lyst.
-- **Modal**: hele bakgrunnen dempet med en lys flate. Midt på et hvitt panel med
-  mørk tittel og `kryss` oppe til høyre, to lyse tekststreker, og nederst en
-  mørk og en hvit knapp med mørk kant.
-- **Pagination**: `chevron-venstre`, fire små kvadrater (32 × 32) der det andre
-  er mørkt og de andre hvite med lys kant, og `chevron-høyre`.
+- **Grid**: to rader celler med radius 6. Øverst lys, mørk og lys, nederst en
+  bred lys og en mørk. Viser at celler kan ha ulik bredde.
+- **Icon**: lys `Ring` (radius 44, bredde 10) med en mørk trekant, en mørk prikk
+  og en mørk firkant inni.
+- **InteractiveIcon**: lys prikk (radius 24) med en mørk `pluss` i midten.
+- **Label**: mørk tekststrek over et hvitt felt med lys kant. Ledeteksten er
+  poenget, så feltet er lyst.
+- **Message**: lys flate med mørk kant. Mørk prikk med lys strek oppe til
+  venstre (statusikonet), en mørk overskriftsstrek og to hvite tekststreker
+  ved siden av.
+- **Modal**: hele rammen er en lys flate (dempet bakgrunn). Midt på et hvitt
+  panel med mørk tittel og `kryss` oppe til høyre, to lyse tekststreker, og
+  nederst en mørk knapp og en hvit knapp med mørk kant.
+- **Pagination**: `chevron-venstre`, fire kvadrater (32 × 32, radius 6) der det
+  andre er mørkt og de andre hvite med lys kant, og `chevron-høyre`.
 - **PhoneNumberField**: mørk ledetekst over to felt på rad: et smalt hvitt felt
-  med lys tekststrek og `chevron-ned`, og et bredt hvitt felt med mørk kant og
-  lys tekststrek.
-- **Popover**: hvit knapp med mørk kant. Over den et hvitt panel med lys kant
-  og to lyse tekststreker. **Ny byggekloss**: pil fra panel til knapp.
+  med lys kant, kort tekststrek og `chevron-ned`, og et bredt hvitt felt med
+  mørk kant og lys tekststrek.
+- **Popover**: hvitt panel med lys kant, mørk tittel og lys tekststrek, med en
+  hvit `Trekant` som peker ned mot en hvit knapp med mørk kant og mørk
+  tekststrek.
 - **ProgressBar**: mørk ledetekst, en lys flate (høyde 12, radius 6) med en
   mørk del som dekker 60 %, og en kort lys tekststrek under.
-- **ReadMore**: `chevron-ned` og en mørk tekststrek med lys understrek-linje.
-  Under, to lyse tekststreker.
+- **RadioGroup**: to rader. Øverst en hvit prikk med mørk kant og mørk
+  valgt-markør, og en mørk tekststrek. Nederst en hvit prikk med lys kant og en
+  kortere lys tekststrek.
+- **ReadMore**: `chevron-ned` og en mørk tekststrek med mørk understrek. Under,
+  to lyse tekststreker.
 - **Select**: mørk ledetekst, hvitt felt med mørk kant med lys tekststrek og
   `chevron-ned`.
-- **Spinner**: lys ring (radius 28, ringbredde 8) med en mørk bue over en
-  firedel av ringen. **Ny byggekloss**: bue.
-- **Stack**: tre lyse flater (radius 6) i full bredde stablet med lik avstand,
-  den midterste mørk.
-- **Surface**: stort hvitt panel med lys kant, med mørk tittel og to lyse
-  tekststreker inni.
-- **Tag**: to små piller på rad (høyde 24, radius 12), lyse, med mørk
+- **Spinner**: lys `Ring` (radius 32) med en mørk `Bue` fra 0 til 100 grader.
+- **Stack**: tre flater (168 × 28, radius 6) stablet med lik avstand, den
+  midterste mørk og de andre lyse.
+- **Surface**: stort hvitt panel med lys kant (radius 12), med mørk tittel og
+  tre lyse tekststreker inni.
+- **Tabs**: tre fanetitler på rad, den første mørk og de andre lyse. Lys
+  skillelinje under, med en mørk indikator under den første. Tre lyse
+  tekststreker under.
+- **Tag**: to små lyse piller på rad (høyde 24, radius 12), med mørk
   tekststrek.
-- **TextArea**: mørk ledetekst over et høyt hvitt felt (høyde 72) med mørk kant
+- **TextArea**: mørk ledetekst over et høyt hvitt felt (høyde 80) med mørk kant
   og tre lyse tekststreker.
-- **Tooltip**: mørk flate med to hvite tekststreker. Under, en lys prikk med en
-  mørk strek i (info-knappen). **Ny byggekloss**: pil fra flate til prikk.
+- **TextField**: mørk ledetekst, hvitt felt med mørk kant, lys verdi og en mørk
+  markør i feltet, og en lys hjelpetekst under.
+- **Tooltip**: mørk flate med to hvite tekststreker og en mørk `Trekant` som
+  peker ned mot en lys prikk med mørk strek (info-knappen).
 - **Typografi**: mørk overskrift (`Flate` med høyde 16 og radius 8, det eneste
   unntaket fra 8-høy tekst), under tre lyse tekststreker med ulik lengde.
 - **ValidationMessage**: hvitt felt med mørk kant og lys tekststrek. Under, en
-  mørk prikk med hvit strek og en mørk tekststrek (feilmeldingen).
+  mørk prikk med hvitt utropstegn og en mørk tekststrek (feilmeldingen).
 
 ## Lage en ny
 
-1. Finn motivet over. Mangler det, skriv beskrivelsen først, i samme form som
-   de andre: hvilke byggeklosser, hvilken farge, og hva som er mørkt.
+1. Skriv beskrivelsen under [Motiver](#motiver) først, i samme form som de
+   andre: hvilke byggeklosser, hvilken farge, og hva som er mørkt.
 2. Skisser det i rammen, gjerne på rutepapir, og regn ut koordinatene.
 3. Legg til en eksport i `illustrasjoner.tsx`:
 
@@ -180,7 +176,7 @@ ikke har.
     ```
 
 4. Sett `illustrasjon: SelectIllustrasjon` på komponenten i
-   `src/data/komponenter.tsx`, og flytt motivet fra **Forslag** til **Ferdig**.
+   `src/data/komponenter.tsx`.
 5. Se på kortet i lyst og mørkt tema ved siden av de andre. Det skal se ut som
    samme familie.
 
@@ -192,4 +188,4 @@ illustrasjonene som eksempel, og be om én illustrasjon om gangen:
 > Lag `<Navn>Illustrasjon` i `illustrasjoner.tsx` etter motivet for `<Navn>` i
 > README.md. Bruk bare byggeklossene, hold deg innenfor rammen, og bruk målene
 > i tabellen. Gi tilbake koden og en kort beskrivelse av motivet i samme form
-> som under **Ferdig**.
+> som under **Motiver**.
