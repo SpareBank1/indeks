@@ -26,7 +26,7 @@
   "handled": [
     {
       "id": "1.3.1",
-      "notes": "Radene ligger i ul og li, og skjermlesere leser antallet. role=\"list\" står eksplisitt, fordi VoiceOver i Safari ellers fjerner liste-semantikken når list-style er none. Tittelen er en ekte overskrift, og React kobler den til lista med aria-labelledby."
+      "notes": "Radene ligger i ul og li, og skjermlesere leser antallet. role=\"list\" står eksplisitt, fordi VoiceOver i Safari ellers fjerner liste-semantikken når list-style er none. Tittelen er en ekte overskrift, og React kobler den til lista med aria-labelledby. I HTML setter du id på tittelen og aria-labelledby på lista selv."
     },
     {
       "id": "1.3.2",
@@ -54,11 +54,11 @@
     },
     {
       "id": "2.4.7",
-      "notes": "Row tegner fokusringen innenfor raden, så overflow: hidden på kortet klipper den ikke."
+      "notes": "Row tegner fokusringen innenfor raden, så den er synlig langs alle kanter selv om kortet har overflow: hidden. I de ytre hjørnene på første og siste rad klipper kortets avrunding ringen litt."
     },
     {
       "id": "2.4.11",
-      "notes": "Fokusringen ligger innenfor raden og dekkes verken av kortets kant eller av raden under."
+      "notes": "Fokusringen ligger innenfor raden og dekkes ikke av raden under."
     }
   ],
   "issues": [],
@@ -77,26 +77,25 @@
     { "id": "1.4.5", "reason": "Ingen bilder av tekst." },
     { "id": "1.4.11", "reason": "Kanten og skillelinjene er pynt. Radene kan skilles fra hverandre uten dem." },
     { "id": "1.4.13", "reason": "Ingen innhold som vises ved hover eller fokus." },
-    { "id": "2.1.1", "reason": "Ingen egne kontroller. Tastaturstøtten i radene dekkes av Row." },
-    { "id": "2.1.2", "reason": "Ingen egne kontroller." },
+    { "id": "2.1.1", "reason": "ListCard har ingen egne kontroller. Kontrollene ligger i radene og dekkes av Row." },
+    { "id": "2.1.2", "reason": "ListCard har ingen egne kontroller. Kontrollene ligger i radene og dekkes av Row." },
     { "id": "2.1.4", "reason": "Ingen hurtigtaster." },
     { "id": "2.2.1", "reason": "Ingen tidsfrister." },
     { "id": "2.2.2", "reason": "Ikke bevegelig eller automatisk oppdatert." },
     { "id": "2.3.1", "reason": "Ingen blinking." },
     { "id": "2.4.1", "reason": "Ingen blokker som må hoppes over." },
     { "id": "2.4.2", "reason": "Ikke en side-komponent." },
-    { "id": "2.4.4", "reason": "Ingen egne lenker. Lenketekstene i radene er konsumentens ansvar, se Row." },
     { "id": "2.4.5", "reason": "Ikke en navigasjonsstruktur for hele siden." },
     { "id": "2.5.1", "reason": "Ingen pekergester." },
-    { "id": "2.5.2", "reason": "Ingen egne kontroller." },
-    { "id": "2.5.3", "reason": "Ingen egne kontroller." },
+    { "id": "2.5.2", "reason": "ListCard har ingen egne kontroller. Kontrollene ligger i radene og dekkes av Row." },
+    { "id": "2.5.3", "reason": "ListCard har ingen egne kontroller. Kontrollene ligger i radene og dekkes av Row." },
     { "id": "2.5.4", "reason": "Ingen bevegelsesbasert aktivering." },
     { "id": "2.5.6", "reason": "Ingen begrensning på input-modalitet." },
     { "id": "2.5.7", "reason": "Ingen dra-funksjonalitet." },
-    { "id": "2.5.8", "reason": "Ingen egne kontroller. Raden er hele klikkflaten, se Row." },
+    { "id": "2.5.8", "reason": "ListCard har ingen egne kontroller. Hele raden er klikkflaten, og det dekkes av Row." },
     { "id": "3.1.1", "reason": "Ikke en side-komponent." },
     { "id": "3.1.2", "reason": "Ingen språkendringer i komponenten." },
-    { "id": "3.2.1", "reason": "Ingen egne kontroller." },
+    { "id": "3.2.1", "reason": "ListCard har ingen egne kontroller. Kontrollene ligger i radene og dekkes av Row." },
     { "id": "3.2.2", "reason": "Ingen input." },
     { "id": "3.2.3", "reason": "Ikke en navigasjonsstruktur som gjentas på tvers av sider." },
     { "id": "3.2.4", "reason": "Konsekvent identifisering er konsumentens ansvar når samme liste går igjen." },
@@ -107,7 +106,6 @@
     { "id": "3.3.4", "reason": "Ingen juridisk forpliktende handlinger i komponenten selv." },
     { "id": "3.3.7", "reason": "Ingen inndata." },
     { "id": "3.3.8", "reason": "Ingen autentisering." },
-    { "id": "4.1.2", "reason": "Ingen egne kontroller. Navn og rolle på radene dekkes av Row." },
     { "id": "4.1.3", "reason": "Ingen statusmeldinger." }
   ],
   "keyboard": [

@@ -59,6 +59,11 @@ describe('ListCard', () => {
         expect(screen.getByRole('list').hasAttribute('aria-labelledby')).toBe(false);
     });
 
+    it('rendrer ikke en tom liste uten rader', () => {
+        render(<ListCard title="Kontoer">{false}</ListCard>);
+        expect(screen.queryByRole('list')).toBeNull();
+    });
+
     it('sender className, native props og ref til roten', () => {
         const ref = createRef<HTMLDivElement>();
         const { container } = render(

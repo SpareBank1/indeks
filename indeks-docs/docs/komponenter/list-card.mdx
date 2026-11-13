@@ -270,7 +270,7 @@ så overskriften over kortet må si hva den er.
 
 - Radene ligger i en liste, og skjermlesere leser antallet når brukeren kommer inn i den. `role="list"` står eksplisitt, fordi VoiceOver i Safari ellers fjerner liste-semantikken.
 - I React kobles tittelen til lista med `aria-labelledby`. I HTML setter du `id` og `aria-labelledby` selv.
-- Fokusringen i radene klippes ikke av kortets avrundede hjørner.
+- Fokusringen i radene tegnes innenfor raden, så kortets kant dekker den ikke.
 
 <KeyboardAndScreenReader data={a11yData} />
 

@@ -11,7 +11,7 @@ export interface ListCardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'tit
     titleAs?: ListCardTitleElement;
     /** Tekst til høyre i headeren, f.eks. en sum. */
     trailing?: ReactNode;
-    /** Én `<Row>` per rad. Hvert barn legges i sin egen `<li>`. */
+    /** Én `<Row>` per rad. Hvert barn legges i sin egen `<li>`, og et fragment teller som ett barn. */
     children?: ReactNode;
 }
 
@@ -22,6 +22,7 @@ export const ListCard = forwardRef<HTMLDivElement, ListCardProps>(function ListC
 ): JSX.Element {
     const titleId = useId();
     const hasTitle = hasContent(title);
+    const rows = Children.toArray(children);
 
     return (
         <div ref={ref} className={cn('ix-list-card', className)} {...rest}>
@@ -36,11 +37,13 @@ export const ListCard = forwardRef<HTMLDivElement, ListCardProps>(function ListC
                 </div>
             )}
             {/* VoiceOver i Safari fjerner liste-semantikken når list-style er none, med mindre rollen står eksplisitt. */}
-            <ul role="list" aria-labelledby={hasTitle ? titleId : undefined}>
-                {Children.toArray(children).map((child, index) => (
-                    <li key={isValidElement(child) ? (child.key ?? index) : index}>{child}</li>
-                ))}
-            </ul>
+            {rows.length > 0 && (
+                <ul role="list" aria-labelledby={hasTitle ? titleId : undefined}>
+                    {rows.map((child, index) => (
+                        <li key={isValidElement(child) ? (child.key ?? index) : index}>{child}</li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 });
