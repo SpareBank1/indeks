@@ -1,0 +1,87 @@
+.illustrasjon {
+    --_mørk: var(--ix-color-fill-main-default);
+    --_lys: var(--ix-color-fill-main-subtle);
+    --_hvit: var(--ix-color-surface-main-default);
+
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.fyll-ingen {
+    fill: none;
+}
+
+.fyll-mørk {
+    fill: var(--_mørk);
+}
+
+.fyll-lys {
+    fill: var(--_lys);
+}
+
+.fyll-hvit {
+    fill: var(--_hvit);
+}
+
+.kant-mørk,
+.kant-lys,
+.kant-hvit,
+.glyf-mørk,
+.glyf-lys,
+.glyf-hvit {
+    stroke-width: 2;
+}
+
+.kant-mørk,
+.glyf-mørk {
+    stroke: var(--_mørk);
+}
+
+.kant-lys,
+.glyf-lys {
+    stroke: var(--_lys);
+}
+
+.kant-hvit,
+.glyf-hvit {
+    stroke: var(--_hvit);
+}
+
+.glyf-mørk,
+.glyf-lys,
+.glyf-hvit {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Ring og Bue setter strekbredden selv. */
+.strek-mørk,
+.strek-lys,
+.strek-hvit {
+    fill: none;
+    stroke-linecap: round;
+}
+
+.strek-mørk {
+    stroke: var(--_mørk);
+}
+
+.strek-lys {
+    stroke: var(--_lys);
+}
+
+.strek-hvit {
+    stroke: var(--_hvit);
+}
+
+/* Høykontrast tvinger ikke fill og stroke i SVG, så fargene byttes til systemfarger her. */
+@media (forced-colors: active) {
+    .illustrasjon {
+        --_mørk: CanvasText;
+        --_lys: GrayText;
+        --_hvit: Canvas;
+    }
+}
