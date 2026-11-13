@@ -16,6 +16,12 @@
  * fysisk inn i lista. Dette lar brukeren skrive og pil-navigere samtidig, og
  * er den enkeltbeslutningen hjemmelagde comboboxer oftest bommer på.
  *
+ * Det betyr også: listboxen har tabindex="-1" (en scrollbar boks er ellers et
+ * tab-stopp i Chrome/Firefox), mousedown i lista/toggle/chips har
+ * preventDefault (klikk og scroll flytter ikke fokus), og havner fokus likevel
+ * i lista, sendes det tilbake til inputen. Lista lukkes når fokus forlater
+ * komponenten.
+ *
  * ## Single vs. multi
  *
  * `multiple` (attributt på host) bytter oppførsel — ikke to komponenter:
@@ -93,6 +99,9 @@ export class IxCombobox extends HTMLElement {
     private _onInput: ((e: Event) => void) | null = null;
     private _onKeydown: ((e: KeyboardEvent) => void) | null = null;
     private _onFocusin: ((e: FocusEvent) => void) | null = null;
+    private _onFocusout: ((e: FocusEvent) => void) | null = null;
+    private _onMousedown: ((e: MouseEvent) => void) | null = null;
+    private _focusoutTimer: ReturnType<typeof setTimeout> | null = null;
     private _onClick: ((e: MouseEvent) => void) | null = null;
     private _onDocPointer: ((e: Event) => void) | null = null;
     private _onReposition: (() => void) | null = null;
@@ -124,6 +133,12 @@ export class IxCombobox extends HTMLElement {
         }
         if (this._onKeydown) this.removeEventListener('keydown', this._onKeydown);
         if (this._onFocusin) this.removeEventListener('focusin', this._onFocusin);
+        if (this._onFocusout) this.removeEventListener('focusout', this._onFocusout);
+        if (this._onMousedown) this.removeEventListener('mousedown', this._onMousedown);
+        if (this._focusoutTimer) {
+            clearTimeout(this._focusoutTimer);
+            this._focusoutTimer = null;
+        }
         if (this._onClick) this.removeEventListener('click', this._onClick);
         if (this._onDocPointer) document.removeEventListener('pointerdown', this._onDocPointer, true);
         this._removeRepositionListeners();
@@ -136,6 +151,8 @@ export class IxCombobox extends HTMLElement {
         this._onInput = null;
         this._onKeydown = null;
         this._onFocusin = null;
+        this._onFocusout = null;
+        this._onMousedown = null;
         this._onClick = null;
         this._onDocPointer = null;
         this._onReposition = null;
@@ -281,6 +298,9 @@ export class IxCombobox extends HTMLElement {
         if (!listbox.id) listbox.id = `ix-combobox-listbox-${this._instanceId}`;
         listbox.setAttribute('role', 'listbox');
         listbox.hidden = true;
+        // Ikke et tab-stopp: en scrollbar boks blir ellers fokuserbar med Tab i
+        // Chrome/Firefox, og da går tastaturet til lista i stedet for inputen.
+        listbox.tabIndex = -1;
         input.setAttribute('aria-controls', listbox.id);
 
         // ── options-ARIA ──
@@ -348,9 +368,31 @@ export class IxCombobox extends HTMLElement {
         this._onClick = (e: MouseEvent) => this._handleClick(e);
         this.addEventListener('click', this._onClick);
 
-        this._onFocusin = () => {
-            /* reservert for fremtidig bruk (åpne ved fokus) */
+        // Havner DOM-fokus likevel i lista (f.eks. programmatisk), send det
+        // tilbake til inputen så tastaturet virker (virtual focus).
+        this._onFocusin = (e: FocusEvent) => {
+            if (this._listbox?.contains(e.target as Node)) this._input?.focus();
         };
+        this.addEventListener('focusin', this._onFocusin);
+
+        // Fokus ut av komponenten lukker lista (f.eks. Tab videre).
+        this._onFocusout = (e: FocusEvent) => this._handleFocusout(e);
+        this.addEventListener('focusout', this._onFocusout);
+
+        // Klikk og scroll i lista, på toggle eller chips skal ikke flytte
+        // DOM-fokus fra inputen. Uten dette ville focusout over lukket lista før
+        // click rakk å velge, og listboxen (tabindex=-1) ville fått fokus.
+        this._onMousedown = (e: MouseEvent) => {
+            const target = e.target as Node;
+            if (
+                this._listbox?.contains(target) ||
+                this._toggle?.contains(target) ||
+                (this._chips?.contains(target) ?? false)
+            ) {
+                e.preventDefault();
+            }
+        };
+        this.addEventListener('mousedown', this._onMousedown);
 
         // Klikk utenfor lukker lista.
         this._onDocPointer = (e: Event) => {
@@ -421,6 +463,23 @@ export class IxCombobox extends HTMLElement {
     private _toggleOpen(): void {
         if (this._isOpen) this._close();
         else this._open();
+    }
+
+    // Lukk når fokus forlater komponenten. relatedTarget er null når fokus går
+    // til et ikke-fokuserbart sted eller ut av vinduet — da venter vi til fokus
+    // har landet og sjekker activeElement (bytte av fane lukker ikke lista).
+    private _handleFocusout(e: FocusEvent): void {
+        const next = e.relatedTarget as Node | null;
+        if (next) {
+            if (!this.contains(next)) this._close();
+            return;
+        }
+        if (this._focusoutTimer) clearTimeout(this._focusoutTimer);
+        this._focusoutTimer = setTimeout(() => {
+            this._focusoutTimer = null;
+            if (!this.isConnected) return;
+            if (!this.contains(document.activeElement)) this._close();
+        }, 0);
     }
 
     // ── Posisjonering (getBoundingClientRect + clamp, jf. tooltip.ts) ─────────
