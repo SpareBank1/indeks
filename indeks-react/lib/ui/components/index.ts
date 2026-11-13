@@ -55,6 +55,8 @@ export type { InteractiveIconProps, InteractiveIconStatus } from './interactive-
 export { ListElement } from './list-element/ListElement';
 export { ReadMore } from './read-more/ReadMore';
 export type { ReadMoreProps } from './read-more/ReadMore';
+export { ListCard } from './list-card/ListCard';
+export type { ListCardProps } from './list-card/ListCard';
 export { Row } from './row/Row';
 export type { RowProps } from './row/Row';
 export type { RowLeadingProps } from './row/RowLeading';
