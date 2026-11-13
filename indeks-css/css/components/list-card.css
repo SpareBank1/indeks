@@ -1,0 +1,51 @@
+/* overflow: hidden lar hover-flaten på første og siste rad følge hjørnene.
+   Row tegner fokusringen innenfor raden, så den klippes ikke. */
+.ix-list-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-md);
+    background-color: var(--ix-color-surface-main-default);
+    color: var(--ix-color-foreground-main-default);
+}
+
+/* Trailing legger seg under tittelen når det er for trangt, og
+   margin-inline-start: auto holder den til høyre også da. */
+.ix-list-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ix-spacing-xs) var(--ix-spacing-md);
+    padding: var(--ix-spacing-md);
+    border-block-end: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    font-size: var(--ix-font-size-md);
+    line-height: 1.2;
+    overflow-wrap: break-word;
+}
+
+/* Vertens h2–h6 skal ikke slå gjennom. */
+.ix-list-card__title {
+    min-width: 0;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: var(--ix-font-weight-medium);
+    line-height: inherit;
+    color: inherit;
+}
+
+.ix-list-card__trailing {
+    margin-inline-start: auto;
+    text-align: end;
+}
+
+.ix-list-card > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ix-list-card > ul > li + li {
+    border-block-start: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+}
