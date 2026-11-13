@@ -37,7 +37,7 @@
     gap: var(--ix-spacing-xs);
     width: 100%;
     min-height: 32px;
-    padding: 0 var(--ix-spacing-2xs);
+    padding: var(--ix-spacing-xs) var(--ix-spacing-2xs);
     font-size: var(--ix-font-size-md);
     color: var(--ix-color-foreground-main-default);
     text-align: start;
