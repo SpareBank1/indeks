@@ -10,9 +10,6 @@ const meta = {
         label: 'Mobilnummer',
         countryLabel: 'Landkode',
         numberLabel: 'Telefonnummer',
-        noHitsText: 'Ingen treff',
-        toggleLabel: 'Vis landkoder',
-        resultsText: '{n} alternativer',
         description: 'Norsk format: 123 45 678',
         defaultCountryCode: '47',
     },
@@ -35,10 +32,23 @@ export const MedVerdi: Story = {
     },
 };
 
-export const MedForhåndsvalgtLand: Story = {
+/**
+ * Landkoden vises, men kan ikke endres.
+ */
+export const LåstLandkode: Story = {
     args: {
-        defaultCountryCode: '46',
-        defaultValue: '701234567',
+        countryCodeReadOnly: true,
+    },
+};
+
+/**
+ * Bare nummerfeltet vises. Landkoden må settes i koden som tar imot verdien.
+ */
+export const UtenLandkode: Story = {
+    args: {
+        hideCountryCode: true,
+        countryLabel: undefined,
+        defaultCountryCode: undefined,
     },
 };
 
@@ -64,60 +74,31 @@ export const Deaktivert: Story = {
     },
 };
 
-export const EngelskLandliste: Story = {
-    args: {
-        locale: 'en',
-        label: 'Mobile number',
-        description: 'Format: 123 45 678',
-        countryLabel: 'Country code',
-        numberLabel: 'Phone number',
-        noHitsText: 'No matches',
-        toggleLabel: 'Show country codes',
-    },
-};
-
 /**
- * Rå HTML-anatomi: forfatteren skriver minimal markup — en **tom**
- * `<ix-combobox>` (input + chevron + tom `.ix-combobox__listbox`) og et bart
- * nummer-`<input>`. `<ix-phone-number-field>` fyller landlista fra `data-locale`,
- * setter forhåndsvalg via `data-default-country-code`, stamper nummer-feltets
- * standardattributter (`type=tel`, `inputmode`, `autocomplete`, `data-format=phone`),
- * og legger på gruppe-ARIA rundt de to feltene.
+ * Rå HTML-anatomi: landkoden og nummeret er hver sitt `<ix-field>` med
+ * `.ix-text-field`, og gruppen har én felles feilmelding. `<ix-phone-number-field>`
+ * stamper standardattributtene (`inputmode`, `autocomplete`, `type=tel`,
+ * `data-format=phone`), fjerner alt annet enn siffer fra landkoden og legger på
+ * gruppe-ARIA.
  */
 export const HTML: Story = {
     render: () => (
-        <ix-phone-number-field
-            class="ix-phone-number-field"
-            data-locale="nb"
-            data-default-country-code="47"
-        >
+        <ix-phone-number-field class="ix-phone-number-field">
             <span data-field="legend" id="tlf-html-legend">
                 Mobilnummer
             </span>
             <div data-field="items">
-                <div data-field="country">
-                    <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="landkode">
-                        <div className="ix-text-field">
-                            <input
-                                id="tlf-html-country"
-                                aria-label="Landkode"
-                            />
-                            <button type="button" className="ix-combobox__toggle" aria-label="Vis landkoder" />
-                        </div>
-                        <div className="ix-combobox__listbox" hidden />
-                    </ix-combobox>
-                </div>
-                <div data-field="number">
-                    <ix-field class="ix-field">
-                        <div className="ix-text-field">
-                            <input
-                                id="tlf-html-number"
-                                aria-label="Telefonnummer"
-                                name="tlf"
-                            />
-                        </div>
-                    </ix-field>
-                </div>
+                <ix-field data-field="country" class="ix-field">
+                    <div className="ix-text-field">
+                        <div data-field="prefix">+</div>
+                        <input id="tlf-html-country" aria-label="Landkode" name="landkode" defaultValue="47" />
+                    </div>
+                </ix-field>
+                <ix-field data-field="number" class="ix-field">
+                    <div className="ix-text-field">
+                        <input id="tlf-html-number" aria-label="Telefonnummer" name="tlf" />
+                    </div>
+                </ix-field>
             </div>
             <span data-field="error" />
         </ix-phone-number-field>
