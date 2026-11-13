@@ -1,0 +1,123 @@
+{
+  "component": "ListCard (ix-list-card)",
+  "lastReviewed": "2026-11-13",
+  "consumerResponsibilities": [
+    {
+      "summary": "Velg overskriftsnivå ut fra overskriften over kortet",
+      "details": "Tittelen er h3 som standard, fordi kortet som regel står i en seksjon med h2. Står kortet rett under sidens h1, bruk titleAs=\"h2\". Hopp ikke over nivåer, så skjermleserbrukere kan navigere etter overskriftene. I HTML velger du elementet selv.",
+      "wcag": ["1.3.1", "2.4.6"]
+    },
+    {
+      "summary": "Skriv en tittel som sier hva lista inneholder",
+      "details": "Tittelen blir også navnet på lista, og skjermlesere leser den når brukeren kommer inn i lista: «Kontoer, liste, 4 elementer». «Oversikt» sier lite, «Kontoer» sier nok. Uten tittel har lista ikke noe navn. Da må overskriften over kortet beskrive den.",
+      "wcag": ["2.4.6", "1.3.1"]
+    },
+    {
+      "summary": "Skriv trailing-teksten så den kan leses alene",
+      "details": "Teksten til høyre i headeren leses etter tittelen, uten noe som forklarer hva den er. «Totalt: 42 672 kr» kan leses alene. «42 672 kr» kan ikke det.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Følg reglene for Row i hver rad",
+      "details": "ListCard legger radene i en liste, men det interaktive ligger i Row. Gi hver rad ett interaktivt mål og en tittel som sier hvor den leder. Se universell utforming på siden for Row.",
+      "wcag": ["2.4.4", "4.1.2"]
+    }
+  ],
+  "handled": [
+    {
+      "id": "1.3.1",
+      "notes": "Radene ligger i ul og li, og skjermlesere leser antallet. role=\"list\" står eksplisitt, fordi VoiceOver i Safari ellers fjerner liste-semantikken når list-style er none. Tittelen er en ekte overskrift, og React kobler den til lista med aria-labelledby."
+    },
+    {
+      "id": "1.3.2",
+      "notes": "Leserekkefølgen følger DOM: tittel, trailing-tekst, så radene i rekkefølge."
+    },
+    {
+      "id": "1.4.3",
+      "notes": "Tekst i headeren bruker foreground-tokens som oppfyller kontrastkravet i lyst og mørkt tema."
+    },
+    {
+      "id": "1.4.4",
+      "notes": "Størrelser i rem og tokens. Teksten skalerer til 200 % uten tap av innhold."
+    },
+    {
+      "id": "1.4.10",
+      "notes": "Ingen fast bredde. Blir headeren for trang, legger trailing-teksten seg under tittelen. Ingen horisontal scroll ved 320 px."
+    },
+    {
+      "id": "1.4.12",
+      "notes": "Ingen fast høyde på header eller rader, så økt linje- og bokstavavstand gir ikke klippet tekst."
+    },
+    {
+      "id": "2.4.3",
+      "notes": "Fokusrekkefølgen følger radene i DOM. ListCard legger ikke til egne fokuserbare elementer."
+    },
+    {
+      "id": "2.4.7",
+      "notes": "Row tegner fokusringen innenfor raden, så overflow: hidden på kortet klipper den ikke."
+    },
+    {
+      "id": "2.4.11",
+      "notes": "Fokusringen ligger innenfor raden og dekkes verken av kortets kant eller av raden under."
+    }
+  ],
+  "issues": [],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Ingen bilder i ListCard selv. Alternativ tekst i radene dekkes av Row." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Ingen instruksjoner som viser til form eller plassering." },
+    { "id": "1.3.4", "reason": "Ingen orientasjonslåsing." },
+    { "id": "1.3.5", "reason": "Ikke et skjemafelt." },
+    { "id": "1.4.1", "reason": "Ingen informasjon som bæres av farge i ListCard selv." },
+    { "id": "1.4.2", "reason": "Ingen lyd." },
+    { "id": "1.4.5", "reason": "Ingen bilder av tekst." },
+    { "id": "1.4.11", "reason": "Kanten og skillelinjene er pynt. Radene kan skilles fra hverandre uten dem." },
+    { "id": "1.4.13", "reason": "Ingen innhold som vises ved hover eller fokus." },
+    { "id": "2.1.1", "reason": "Ingen egne kontroller. Tastaturstøtten i radene dekkes av Row." },
+    { "id": "2.1.2", "reason": "Ingen egne kontroller." },
+    { "id": "2.1.4", "reason": "Ingen hurtigtaster." },
+    { "id": "2.2.1", "reason": "Ingen tidsfrister." },
+    { "id": "2.2.2", "reason": "Ikke bevegelig eller automatisk oppdatert." },
+    { "id": "2.3.1", "reason": "Ingen blinking." },
+    { "id": "2.4.1", "reason": "Ingen blokker som må hoppes over." },
+    { "id": "2.4.2", "reason": "Ikke en side-komponent." },
+    { "id": "2.4.4", "reason": "Ingen egne lenker. Lenketekstene i radene er konsumentens ansvar, se Row." },
+    { "id": "2.4.5", "reason": "Ikke en navigasjonsstruktur for hele siden." },
+    { "id": "2.5.1", "reason": "Ingen pekergester." },
+    { "id": "2.5.2", "reason": "Ingen egne kontroller." },
+    { "id": "2.5.3", "reason": "Ingen egne kontroller." },
+    { "id": "2.5.4", "reason": "Ingen bevegelsesbasert aktivering." },
+    { "id": "2.5.6", "reason": "Ingen begrensning på input-modalitet." },
+    { "id": "2.5.7", "reason": "Ingen dra-funksjonalitet." },
+    { "id": "2.5.8", "reason": "Ingen egne kontroller. Raden er hele klikkflaten, se Row." },
+    { "id": "3.1.1", "reason": "Ikke en side-komponent." },
+    { "id": "3.1.2", "reason": "Ingen språkendringer i komponenten." },
+    { "id": "3.2.1", "reason": "Ingen egne kontroller." },
+    { "id": "3.2.2", "reason": "Ingen input." },
+    { "id": "3.2.3", "reason": "Ikke en navigasjonsstruktur som gjentas på tvers av sider." },
+    { "id": "3.2.4", "reason": "Konsekvent identifisering er konsumentens ansvar når samme liste går igjen." },
+    { "id": "3.2.6", "reason": "Ingen hjelpefunksjonalitet." },
+    { "id": "3.3.1", "reason": "Ingen skjemavalidering." },
+    { "id": "3.3.2", "reason": "Ingen skjemafelt." },
+    { "id": "3.3.3", "reason": "Ingen feilforslag." },
+    { "id": "3.3.4", "reason": "Ingen juridisk forpliktende handlinger i komponenten selv." },
+    { "id": "3.3.7", "reason": "Ingen inndata." },
+    { "id": "3.3.8", "reason": "Ingen autentisering." },
+    { "id": "4.1.2", "reason": "Ingen egne kontroller. Navn og rolle på radene dekkes av Row." },
+    { "id": "4.1.3", "reason": "Ingen statusmeldinger." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til neste rad i lista. ListCard har ingen egne fokuserbare elementer." },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige rad" }
+  ],
+  "screenReader": [
+    "Tittel: \"[tittel], overskrift nivå 3\"",
+    "Inn i lista: \"[tittel], liste, [antall] elementer\"",
+    "Uten tittel: \"liste, [antall] elementer\"",
+    "Hver rad leses som beskrevet for Row"
+  ]
+}

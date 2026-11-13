@@ -129,6 +129,7 @@ const sidebars: SidebarsConfig = {
                 },
                 'komponenter/interactive-icon',
                 'komponenter/skjema/label',
+                'komponenter/list-card',
                 'komponenter/message',
                 'komponenter/modal',
                 'komponenter/pagination',
