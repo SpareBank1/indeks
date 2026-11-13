@@ -575,6 +575,96 @@ describe('IxCombobox', () => {
         });
     });
 
+    describe('fokus (virtual focus)', () => {
+        function outsideButton(): HTMLButtonElement {
+            const btn = document.createElement('button');
+            btn.textContent = 'Neste';
+            document.body.appendChild(btn);
+            return btn;
+        }
+
+        it('listboxen er ikke et tab-stopp', () => {
+            const el = single();
+            expect(listbox(el).getAttribute('tabindex')).toBe('-1');
+        });
+
+        it('Tab videre etter å ha slettet verdien lukker lista', () => {
+            const el = single();
+            const next = outsideButton();
+            input(el).focus();
+            options(el)[0].click(); // velg Norge, lista lukkes
+            type(el, ''); // slett verdien → lista åpnes
+            expect(listbox(el).hidden).toBe(false);
+            next.focus(); // Tab videre
+            expect(listbox(el).hidden).toBe(true);
+            expect(input(el).getAttribute('aria-expanded')).toBe('false');
+        });
+
+        it('fokus til toggle eller chip inni komponenten holder lista åpen', () => {
+            const el = multi();
+            input(el).focus();
+            press(el, 'ArrowDown');
+            options(el)[0].click();
+            const chip = el.querySelector<HTMLElement>('data.ix-chip')!;
+            chip.focus();
+            expect(listbox(el).hidden).toBe(false);
+            el.querySelector<HTMLButtonElement>('.ix-combobox__toggle')!.focus();
+            expect(listbox(el).hidden).toBe(false);
+        });
+
+        it('focusout uten relatedTarget lukker bare om fokus ikke er i komponenten', () => {
+            vi.useFakeTimers();
+            try {
+                const el = single();
+                input(el).focus();
+                press(el, 'ArrowDown');
+                // Fokus blir i inputen (f.eks. bytte av fane): lista forblir åpen.
+                input(el).dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: null }));
+                vi.runAllTimers();
+                expect(listbox(el).hidden).toBe(false);
+                // Fokus til body (klikk på ikke-fokuserbart sted utenfor): lukk.
+                input(el).blur();
+                vi.runAllTimers();
+                expect(listbox(el).hidden).toBe(true);
+            } finally {
+                vi.useRealTimers();
+            }
+        });
+
+        it('mousedown i lista, på toggle og chips flytter ikke fokus fra inputen', () => {
+            const el = multi();
+            press(el, 'ArrowDown');
+            options(el)[0].click();
+            const targets = [
+                options(el)[1],
+                listbox(el),
+                el.querySelector<HTMLElement>('.ix-combobox__toggle')!,
+                el.querySelector<HTMLElement>('data.ix-chip')!,
+            ];
+            for (const target of targets) {
+                const ev = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+                target.dispatchEvent(ev);
+                expect(ev.defaultPrevented).toBe(true);
+            }
+            // Inputen selv skal fortsatt kunne få markør ved klikk.
+            const onInput = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+            input(el).dispatchEvent(onInput);
+            expect(onInput.defaultPrevented).toBe(false);
+        });
+
+        it('fokus i lista sendes tilbake til inputen, og Enter velger', () => {
+            const el = single();
+            press(el, 'ArrowDown');
+            listbox(el).focus();
+            expect(document.activeElement).toBe(input(el));
+            expect(listbox(el).hidden).toBe(false);
+            press(el, 'ArrowDown');
+            expect(input(el).getAttribute('aria-activedescendant')).toBe(options(el)[1].id);
+            press(el, 'Enter');
+            expect(input(el).value).toBe('Sverige');
+        });
+    });
+
     describe('opprydding', () => {
         it('fjerner document-lyttere ved disconnect', () => {
             const el = single();
@@ -582,6 +672,17 @@ describe('IxCombobox', () => {
             el.remove();
             // Etter fjerning skal pointerdown ikke kaste eller ha effekt.
             expect(() => document.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }))).not.toThrow();
+        });
+
+        it('fjerner fokus- og mousedown-lyttere ved disconnect', () => {
+            const el = single();
+            const inp = input(el);
+            const lb = listbox(el);
+            el.remove();
+            const ev = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+            lb.dispatchEvent(ev);
+            expect(ev.defaultPrevented).toBe(false);
+            expect(() => inp.dispatchEvent(new FocusEvent('focusout', { bubbles: true }))).not.toThrow();
         });
 
         it('remount fungerer uten dobbel-oppsett', () => {
