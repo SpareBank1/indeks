@@ -79,7 +79,7 @@
 .ix-combobox__listbox {
     position: fixed;
     margin: 0;
-    padding: var(--ix-spacing-2xs);
+    padding: var(--ix-spacing-xs);
     box-sizing: border-box;
     background-color: var(--ix-color-surface-main-default);
     border: var(--ix-border-width-default) solid var(--ix-color-border-main-emphasis);
@@ -152,6 +152,66 @@
     visibility: visible;
 }
 
+/* Flervalg viser en checkbox i stedet for hake, med samme farger som .ix-checkbox.
+   Boksen tegnes på spanen og haken på ::after, så masken over gjelder ikke her. */
+.ix-combobox__listbox[aria-multiselectable='true'] .ix-combobox__option-check {
+    position: relative;
+    box-sizing: border-box;
+    visibility: visible;
+    background-color: var(--ix-color-fill-interactive-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-emphasis);
+    border-radius: var(--ix-border-radius-xs);
+    transition:
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        border-color var(--ix-transition-duration) var(--ix-transition-animation);
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    mask-image: none;
+    -webkit-mask-image: none;
+    /* stylelint-enable plugin/no-unsupported-browser-features */
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        display: none;
+        background-color: var(--ix-color-foreground-inverse-default);
+        /* stylelint-disable plugin/no-unsupported-browser-features */
+        mask-size: contain;
+        -webkit-mask-size: contain;
+        mask-position: center;
+        -webkit-mask-position: center;
+        mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M13.5 4.5L6 12L2.5 8.5' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M13.5 4.5L6 12L2.5 8.5' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        /* stylelint-enable plugin/no-unsupported-browser-features */
+    }
+}
+
+.ix-combobox__listbox[aria-multiselectable='true'] .ix-combobox__option[aria-selected='true'] .ix-combobox__option-check {
+    background-color: var(--ix-color-fill-main-default);
+    border-color: transparent;
+
+    &::after {
+        display: block;
+    }
+}
+
+/* Raden er klikkflaten, så boksen følger radens hover og aktive tilstand, som .ix-checkbox følger labelen. */
+.ix-combobox__listbox[aria-multiselectable='true'] :is(.ix-combobox__option:hover, .ix-combobox__option[data-active]) .ix-combobox__option-check {
+    background-color: var(--ix-color-fill-interactive-hover);
+    border-color: var(--ix-color-border-main-emphasis-hover);
+}
+
+.ix-combobox__listbox[aria-multiselectable='true'] :is(.ix-combobox__option:hover, .ix-combobox__option[data-active])[aria-selected='true'] .ix-combobox__option-check {
+    background-color: var(--ix-color-fill-main-default-hover);
+    border-color: transparent;
+}
+
+.ix-combobox__listbox[aria-multiselectable='true'] .ix-combobox__option[aria-disabled='true'] .ix-combobox__option-check {
+    opacity: var(--ix-opacity-disabled);
+}
+
 /* Tyngre label, så valgt ikke hviler på farge alene. */
 .ix-combobox__option[aria-selected='true'] .ix-combobox__option-label {
     font-weight: var(--ix-font-weight-medium);
@@ -170,7 +230,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .ix-combobox__toggle::after {
+    .ix-combobox__toggle::after,
+    .ix-combobox__listbox[aria-multiselectable='true'] .ix-combobox__option-check {
         transition: none;
     }
 }
