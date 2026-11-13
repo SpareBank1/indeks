@@ -1,5 +1,18 @@
 # @sb1/indeks-css
 
+## 0.27.0
+
+### Minor Changes
+
+- d7c401b: Ny Row-komponent for informasjon, navigasjon og handlinger i lister. Raden har Leading, Content (tittel, subtitle og description), Trailing og navigasjonsikon, og alle unntatt tittelen kan utelates. Er raden for trang, legger Trailing seg under innholdet.
+  
+  Hele raden kan være én lenke eller knapp (`href` eller `onClick` i React, `.ix-row__action` i HTML), eller være passiv med én kontroll i `trailingControl` (`.ix-row__control`). React-typene hindrer at de to kombineres. Router-lenker settes med `linkAs` og `linkProps`, og `titleId` lar en kontroll vise til raden med `aria-describedby`. `Row.Leading` gir ikon, ikon på flate med valgfritt badge-ikon, illustrasjon eller bilde, og `Row.TrailingLabel` gir verdi med subtitle eller Tag.
+
+### Patch Changes
+
+- 38a6915: Combobox: i flervalg har hvert alternativ i lista en checkbox i stedet for en hake. Lista har også mer luft rundt alternativene, `--ix-spacing-xs` (8px) i stedet for `--ix-spacing-2xs` (4px).
+- 4f28f69: Message: lukkeknappen har like stor avstand til kanten til høyre som oppe.
+
 ## 0.26.0
 
 ### Minor Changes
