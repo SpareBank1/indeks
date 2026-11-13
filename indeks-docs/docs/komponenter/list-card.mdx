@@ -1,0 +1,351 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/list-card.json';
+
+# ListCard
+
+ListCard samler rader som hører sammen i ett kort, for eksempel kontoene til en kunde eller
+valgene du har på en konto. Kortet kan ha en header med tittel og en tekst til høyre, som en sum.
+
+## Egnet til
+
+- En liste med valg der hver rad leder videre, som innstillinger eller handlinger på en konto
+- En oversikt over flere ting av samme slag, som kontoer, kort eller faste betalinger
+- Detaljer om én ting, der hver rad er ett felt med en verdi
+
+## Uegnet til
+
+- Ett enkelt valg som skal stå for seg selv. Bruk heller [Card](./card)
+- Innhold som ikke er rader, som tekst, bilder eller skjema. Bruk heller [Surface](./surface)
+- Data som skal sammenlignes i kolonner
+
+## Bruk
+
+Legg én [Row](./row) i hver `<li>`. Tittelen i headeren gir også lista navn.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-list-card">
+  <div class="ix-list-card__header">
+    <h3 class="ix-list-card__title" id="bruk-kontoer">Kontoer</h3>
+    <span class="ix-list-card__trailing">Totalt: 25 153 kr</span>
+  </div>
+  <ul role="list" aria-labelledby="bruk-kontoer">
+    <li>
+      <div class="ix-row">
+        <span class="ix-row__leading" data-variant="icon-background">
+          <ix-icon name="account_balance" aria-hidden="true"></ix-icon>
+        </span>
+        <div class="ix-row__body">
+          <div class="ix-row__content">
+            <p class="ix-row__title"><a class="ix-row__action" href="#">Brukskonto fordelsprogram</a></p>
+            <p class="ix-row__subtitle">2030 08 44813</p>
+          </div>
+          <div class="ix-row__trailing">
+            <span class="ix-row__trailing-label">21 397 kr</span>
+          </div>
+        </div>
+        <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+      </div>
+    </li>
+    <li>
+      <div class="ix-row">
+        <span class="ix-row__leading" data-variant="icon-background">
+          <ix-icon name="account_balance" aria-hidden="true"></ix-icon>
+          <span class="ix-row__leading-badge">
+            <ix-icon name="group" aria-hidden="true"></ix-icon>
+          </span>
+        </span>
+        <div class="ix-row__body">
+          <div class="ix-row__content">
+            <p class="ix-row__title"><a class="ix-row__action" href="#">Margit Yousef Bach</a></p>
+            <p class="ix-row__subtitle">3705 44 46842</p>
+          </div>
+          <div class="ix-row__trailing">
+            <span class="ix-row__trailing-label">3 756 kr</span>
+          </div>
+        </div>
+        <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+      </div>
+    </li>
+  </ul>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ListCard title="Kontoer" trailing="Totalt: 25 153 kr">
+  <Row
+    title="Brukskonto fordelsprogram"
+    subtitle="2030 08 44813"
+    href="#"
+    navigation="internal"
+    leading={<Row.Leading variant="icon-background" icon="account_balance" />}
+    trailing={<Row.TrailingLabel label="21 397 kr" />}
+  />
+  <Row
+    title="Margit Yousef Bach"
+    subtitle="3705 44 46842"
+    href="#"
+    navigation="internal"
+    leading={<Row.Leading variant="icon-background" icon="account_balance" badgeIcon="group" />}
+    trailing={<Row.TrailingLabel label="3 756 kr" />}
+  />
+</ListCard>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Uten header
+
+Står kortet rett under en overskrift som sier hva lista er, trenger det ingen egen header.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-list-card">
+  <ul role="list">
+    <li>
+      <div class="ix-row">
+        <span class="ix-row__leading" data-variant="icon">
+          <ix-icon name="settings" aria-hidden="true"></ix-icon>
+        </span>
+        <div class="ix-row__body">
+          <div class="ix-row__content">
+            <p class="ix-row__title"><a class="ix-row__action" href="#">Betalingsinnstillinger</a></p>
+          </div>
+        </div>
+        <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+      </div>
+    </li>
+    <li>
+      <div class="ix-row">
+        <span class="ix-row__leading" data-variant="icon">
+          <ix-icon name="repeat" aria-hidden="true"></ix-icon>
+        </span>
+        <div class="ix-row__body">
+          <div class="ix-row__content">
+            <p class="ix-row__title"><a class="ix-row__action" href="#">Faste betalinger</a></p>
+          </div>
+        </div>
+        <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+      </div>
+    </li>
+    <li>
+      <div class="ix-row">
+        <span class="ix-row__leading" data-variant="icon">
+          <ix-icon name="group" aria-hidden="true"></ix-icon>
+        </span>
+        <div class="ix-row__body">
+          <div class="ix-row__content">
+            <p class="ix-row__title"><a class="ix-row__action" href="#">Mottakere</a></p>
+          </div>
+        </div>
+        <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+      </div>
+    </li>
+  </ul>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ListCard>
+  <Row
+    title="Betalingsinnstillinger"
+    href="#"
+    navigation="internal"
+    leading={<Row.Leading variant="icon" icon="settings" />}
+  />
+  <Row
+    title="Faste betalinger"
+    href="#"
+    navigation="internal"
+    leading={<Row.Leading variant="icon" icon="repeat" />}
+  />
+  <Row
+    title="Mottakere"
+    href="#"
+    navigation="internal"
+    leading={<Row.Leading variant="icon" icon="group" />}
+  />
+</ListCard>
+```
+
+</TabItem>
+</Tabs>
+
+### Bare tekst til høyre i headeren
+
+Headeren kan ha tekst til høyre uten tittel, for eksempel en sum. Da får lista ikke navn,
+så overskriften over kortet må si hva den er.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-list-card">
+  <div class="ix-list-card__header">
+    <span class="ix-list-card__trailing">Totalt: 17 519 kr</span>
+  </div>
+  <ul role="list">
+    <li>
+      <div class="ix-row">
+        <div class="ix-row__body">
+          <div class="ix-row__content">
+            <p class="ix-row__title"><a class="ix-row__action" href="#">Sparekonto</a></p>
+            <p class="ix-row__subtitle">2899 19 22853</p>
+          </div>
+          <div class="ix-row__trailing">
+            <span class="ix-row__trailing-label">15 019 kr</span>
+          </div>
+        </div>
+        <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+      </div>
+    </li>
+    <li>
+      <div class="ix-row">
+        <div class="ix-row__body">
+          <div class="ix-row__content">
+            <p class="ix-row__title"><a class="ix-row__action" href="#">Regningskonto</a></p>
+            <p class="ix-row__subtitle">3634 22 83271</p>
+          </div>
+          <div class="ix-row__trailing">
+            <span class="ix-row__trailing-label">2 500 kr</span>
+          </div>
+        </div>
+        <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+      </div>
+    </li>
+  </ul>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ListCard trailing="Totalt: 17 519 kr">
+  <Row
+    title="Sparekonto"
+    subtitle="2899 19 22853"
+    href="#"
+    navigation="internal"
+    trailing={<Row.TrailingLabel label="15 019 kr" />}
+  />
+  <Row
+    title="Regningskonto"
+    subtitle="3634 22 83271"
+    href="#"
+    navigation="internal"
+    trailing={<Row.TrailingLabel label="2 500 kr" />}
+  />
+</ListCard>
+```
+
+</TabItem>
+</Tabs>
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- Velg overskriftsnivå ut fra overskriften over kortet. Tittelen er `h3` som standard. Står kortet rett under sidens `h1`, bruk `h2`.
+- Skriv en tittel som sier hva lista inneholder. Den blir også navnet på lista.
+- Skriv teksten til høyre i headeren så den kan leses alene: «Totalt: 42 672 kr», ikke bare «42 672 kr».
+- Følg reglene for [Row](./row) i hver rad. Det interaktive ligger i raden, ikke i kortet.
+
+### Hva komponenten gjør automatisk
+
+- Radene ligger i en liste, og skjermlesere leser antallet når brukeren kommer inn i den. `role="list"` står eksplisitt, fordi VoiceOver i Safari ellers fjerner liste-semantikken.
+- I React kobles tittelen til lista med `aria-labelledby`. I HTML setter du `id` og `aria-labelledby` selv.
+- Fokusringen i radene tegnes innenfor raden, så kortets kant dekker den ikke.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+| Element | Beskrivelse |
+|---------|-------------|
+| `.ix-list-card` | Kortet. Påkrevd |
+| `.ix-list-card__header` | Headeren. Valgfri |
+| `.ix-list-card__title` | Tittelen i headeren, på en overskrift. Gi den en `id` |
+| `.ix-list-card__trailing` | Tekst til høyre i headeren |
+| `ul role="list"` | Lista med rader. Sett `aria-labelledby` til tittelens `id` |
+
+</TabItem>
+<TabItem value="react" label="React">
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `title` | `ReactNode` | | Tittel i headeren. Gir også lista navn |
+| `titleAs` | `'h2'`–`'h6' \| 'p' \| 'span'` | `'h3'` | Elementet tittelen rendres som |
+| `trailing` | `ReactNode` | | Tekst til høyre i headeren, f.eks. en sum |
+| `children` | `ReactNode` | | Én `<Row>` per rad. Hvert barn legges i sin egen `<li>` |
+
+Andre props, som `className` og `data-*`, sendes til rot-elementet.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Du kan bygge ListCard med klassene alene. React-komponenten setter de samme klassene og
+legger ikke til noe utover dem.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Kort | `.ix-list-card` |
+| Header | `.ix-list-card__header` |
+| Tittel | `.ix-list-card__title` |
+| Tekst til høyre | `.ix-list-card__trailing` |
+| Liste | `.ix-list-card > ul` |
+| Rad i lista | `.ix-list-card > ul > li` |
+
+### Eksempel: ren HTML
+
+```html
+<div class="ix-list-card">
+  <div class="ix-list-card__header">
+    <h3 class="ix-list-card__title" id="mine-kontoer">Kontoer</h3>
+  </div>
+  <ul role="list" aria-labelledby="mine-kontoer">
+    <li>
+      <div class="ix-row">
+        <div class="ix-row__body">
+          <div class="ix-row__content">
+            <p class="ix-row__title"><a class="ix-row__action" href="/konto/1">Brukskonto</a></p>
+          </div>
+        </div>
+        <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
+      </div>
+    </li>
+  </ul>
+</div>
+```
+
+## Relatert
+
+- [Row](./row) — raden som ligger i hver `<li>`
+- [Card](./card) — ett enkelt valg som en selvstendig klikkbar flate
+- [Surface](./surface) — en flate for innhold som ikke er rader
