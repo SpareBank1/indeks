@@ -73,8 +73,12 @@ const schema = v.object({
         v.string(),
         v.regex(/^\d{4}-\d{2}-\d{2}$/, 'Velg en gyldig dato')
     ),
-    // PhoneNumberField er to uavhengige felt: landkode + rå nummer (8 siffer).
-    landkode: v.pipe(v.string(), v.nonEmpty('Velg landkode')),
+    // PhoneNumberField er to uavhengige felt: landkode (1–3 siffer) + rå nummer (8 siffer).
+    landkode: v.pipe(
+        v.string(),
+        v.nonEmpty('Skriv inn landkode'),
+        v.regex(/^\d{1,3}$/, 'Landkoden er 1–3 siffer')
+    ),
     tlf: v.pipe(
         v.string(),
         v.regex(/^\d{8}$/, 'Telefonnummer må være 8 siffer')
@@ -99,7 +103,7 @@ const defaultValues: FormData = {
     tjenester: [],
     land: '',
     fodselsdato: '',
-    landkode: '',
+    landkode: '47',
     tlf: '',
     samtykke: false,
 };
@@ -235,19 +239,17 @@ export default function FormValidering() {
                     />
 
                     {/* To uavhengige RHF-felt: landkode + rå nummer. Hver binder via sin
-                        egen register-spread, og har sin egen feilmelding. */}
+                        egen register-spread. Gruppen har én feilmelding, så vi velger
+                        den viktigste: landkoden først. */}
                     <PhoneNumberField
                         label="Mobilnummer"
                         className="form-validering__narrow"
                         description="Format: 8 siffer, f.eks. 123 45 678"
                         countryLabel="Landkode"
                         numberLabel="Telefonnummer"
-                        noHitsText="Ingen treff"
-                        toggleLabel="Vis landkoder"
                         countryField={register('landkode')}
                         numberField={register('tlf')}
-                        errorMessage={errors.tlf?.message}
-                        countryErrorMessage={errors.landkode?.message}
+                        errorMessage={errors.landkode?.message ?? errors.tlf?.message}
                     />
 
                     <Checkbox

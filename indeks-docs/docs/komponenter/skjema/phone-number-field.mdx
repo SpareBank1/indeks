@@ -9,22 +9,21 @@ import a11yData from './accessibility/phone-number-field.json';
 
 # PhoneNumberField
 
-PhoneNumberField lar brukeren oppgi et telefonnummer med landkode. Komponenten setter sammen en søkbar **landvelger** (der brukeren velger _land_, ikke skriver tallkode) og et **nummerfelt** som formateres mens brukeren skriver, under én felles label. De to er uavhengige felt: hver kan ha sin egen feilmelding, og i React bindes de som to separate React Hook Form-felt.
+PhoneNumberField lar brukeren oppgi et telefonnummer med landkode. Komponenten består av to tekstfelt under én felles label: et **landkodefelt** med «+» foran, og et **nummerfelt** som formateres mens brukeren skriver. Det er to uavhengige felt, men gruppen har én felles feilmelding.
 
 :::info Sammensatt komponent
-PhoneNumberField reimplementerer ingenting selv: den grupperer en [Combobox](./combobox) (landkode) og et [TextField](./textfield) med [formatering](./textfield-formatering) (nummer). All filtrering, virtual focus, formatering og form-synk kommer uendret fra de to.
+PhoneNumberField grupperer to [TextField](./textfield). Nummerfeltet bruker [formatering](./textfield-formatering). Formatering, feltets ARIA og form-synk kommer uendret fra TextField.
 :::
 
 ## Egnet til
 
 - Skjemaer der brukeren skal oppgi telefonnummer med landkode
-- Tjenester som møter kunder fra flere land (velg land fremfor å kunne tallkoden)
-- Situasjoner der landkode-feltet ikke bør se like «tungt» ut som nummeret
+- Skjemaer der landkoden skal vises, men ikke kunne endres (låst landkode)
 
 ## Uegnet til
 
-- Rene norske nummer der landkode er unødvendig (bruk et vanlig [TextField](./textfield) med `format="phone"`)
-- Fri tekst / nummer som ikke skal valideres som telefon
+- Rene norske nummer der landkode er unødvendig. Bruk `hideCountryCode`, eller et vanlig [TextField](./textfield) med `format="phone"`
+- Situasjoner der brukeren skal velge land fra en liste. Komponenten har ingen landvelger
 
 ## Bruk
 
@@ -32,37 +31,31 @@ PhoneNumberField reimplementerer ingenting selv: den grupperer en [Combobox](./c
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-phone-number-field class="ix-phone-number-field" data-locale="nb" data-default-country-code="47">
+<ix-phone-number-field class="ix-phone-number-field">
   <span data-field="legend" id="tlf-html-legend">Mobilnummer</span>
   <div data-field="items">
-    <div data-field="country">
-      <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="landkode">
-        <div class="ix-text-field">
-          <input aria-label="Landkode" />
-          <button type="button" class="ix-combobox__toggle" aria-label="Vis landkoder"></button>
-        </div>
-        <div class="ix-combobox__listbox" hidden></div>
-      </ix-combobox>
-    </div>
-    <div data-field="number">
-      <ix-field class="ix-field">
-        <div class="ix-text-field">
-          <input aria-label="Telefonnummer" name="tlf" />
-        </div>
-      </ix-field>
-    </div>
+    <ix-field data-field="country" class="ix-field">
+      <div class="ix-text-field">
+        <div data-field="prefix">+</div>
+        <input aria-label="Landkode" name="landkode" value="47" />
+      </div>
+    </ix-field>
+    <ix-field data-field="number" class="ix-field">
+      <div class="ix-text-field">
+        <input aria-label="Telefonnummer" name="tlf" />
+      </div>
+    </ix-field>
   </div>
   <span data-field="error"></span>
 </ix-phone-number-field>
 ```
 
-Du skriver minimal markup: en **tom** `<ix-combobox>` (bare input + chevron + tom `.ix-combobox__listbox`) og et bart nummer-`<input>`. `<ix-phone-number-field>` gjør resten:
+Du skriver to `<ix-field>` med `.ix-text-field` og en felles feilmelding. `<ix-phone-number-field>` gjør resten:
 
-- **Fyller landlista** fra den innebygde, lokaliserbare lista (`data-locale`) eller fra din egen `data-countries`-JSON, og setter forhåndsvalg via `data-default-country-code`/`data-country-code`.
-- **Stamper nummer-feltet** med `type="tel"`, `inputmode="numeric"`, `autocomplete="tel-national"` og `data-format="phone"` når de mangler.
-- **Setter gruppe-ARIA:** `role="group"`, kobler `data-field="legend"` via `aria-labelledby`, `data-field="error"` via `aria-describedby` + `aria-live="polite"`, og propagerer `disabled`/`readonly`/`required` til begge kontrollene.
-
-Den rører aldri combobox-ens eller nummerfeltets egen indre ARIA, og fyller kun en `.ix-combobox__listbox` som er tom. Skriver du options selv, beholdes de.
+- **Stamper standardattributter** når de mangler. Landkoden får `inputmode="numeric"` og `autocomplete="tel-country-code"`. Nummeret får `type="tel"`, `inputmode="numeric"`, `autocomplete="tel-national"` og `data-format="phone"`.
+- **Renser landkoden:** bare sifre, maks tre. Autofyll gir «+47», og «+» og andre tegn fjernes.
+- **Setter gruppe-ARIA:** `role="group"`, `aria-labelledby` til `data-field="legend"`, og `aria-describedby` til beskrivelse og feilmelding.
+- **Propagerer** `disabled`, `readonly` og `required` til begge feltene.
 
 </TabItem>
 <TabItem value="react" label="React">
@@ -73,13 +66,10 @@ Den rører aldri combobox-ens eller nummerfeltets egen indre ARIA, og fyller kun
   description="Norsk format: 123 45 678"
   countryLabel="Landkode"
   numberLabel="Telefonnummer"
-  noHitsText="Ingen treff"
-  toggleLabel="Vis landkoder"
-  defaultCountryCode="47"
 />
 ```
 
-Landvelgeren bruker den innebygde landlista (Norge øverst, så Norden, så alfabetisk). Skriv i nummerfeltet: det formateres til `123 45 678` mens du skriver, men `onChange` og form-innsending gir alltid den **rå** verdien uten mellomrom.
+Landkoden starter på `47` (`defaultCountryCode`). Nummerfeltet formateres til `123 45 678` mens brukeren skriver, men `onChange` og form-innsending gir alltid den **rå** verdien uten mellomrom.
 
 </TabItem>
 </Tabs>
@@ -92,26 +82,21 @@ Landvelgeren bruker den innebygde landlista (Norge øverst, så Norden, så alfa
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-phone-number-field class="ix-phone-number-field" data-locale="nb" data-default-country-code="47">
+<ix-phone-number-field class="ix-phone-number-field">
   <span data-field="legend" id="tlf-desc-legend">Mobilnummer</span>
   <span data-field="description">Vi bruker nummeret kun til SMS-varsling. Format: 123 45 678</span>
   <div data-field="items">
-    <div data-field="country">
-      <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="landkode">
-        <div class="ix-text-field">
-          <input aria-label="Landkode" />
-          <button type="button" class="ix-combobox__toggle" aria-label="Vis landkoder"></button>
-        </div>
-        <div class="ix-combobox__listbox" hidden></div>
-      </ix-combobox>
-    </div>
-    <div data-field="number">
-      <ix-field class="ix-field">
-        <div class="ix-text-field">
-          <input aria-label="Telefonnummer" name="tlf" />
-        </div>
-      </ix-field>
-    </div>
+    <ix-field data-field="country" class="ix-field">
+      <div class="ix-text-field">
+        <div data-field="prefix">+</div>
+        <input aria-label="Landkode" name="landkode" value="47" />
+      </div>
+    </ix-field>
+    <ix-field data-field="number" class="ix-field">
+      <div class="ix-text-field">
+        <input aria-label="Telefonnummer" name="tlf" />
+      </div>
+    </ix-field>
   </div>
   <span data-field="error"></span>
 </ix-phone-number-field>
@@ -126,109 +111,112 @@ Landvelgeren bruker den innebygde landlista (Norge øverst, så Norden, så alfa
   description="Vi bruker nummeret kun til SMS-varsling. Format: 123 45 678"
   countryLabel="Landkode"
   numberLabel="Telefonnummer"
-  noHitsText="Ingen treff"
-  toggleLabel="Vis landkoder"
-  defaultCountryCode="47"
 />
 ```
 
 </TabItem>
 </Tabs>
 
-### To felt i React Hook Form
+### Låst landkode
 
-Komponenten er **to uavhengige felt**: landkode og nummer. I React binder du dem med hver sin registrering, `countryField` og `numberField`, som spres rett på delfeltene. Begge indre komponenter (Combobox og TextField) er register-kompatible, så `{...register()}` fungerer uten lim-kode:
-
-- **`countryField={register('landkode')}`:** `onChange` får landkoden (uten `+`) i `event.target.value`.
-- **`numberField={register('tlf')}`:** `onChange` får den **rå** nummer-verdien (uten separatorer) i `event.target.value`.
-
-Feilmeldinger er per felt: `errorMessage` vises under nummeret, `countryErrorMessage` under landvelgeren. `defaultCountryCode` gir et forhåndsvalgt land når registreringen ikke selv seeder verdien.
-
-```tsx
-function Skjema() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  return (
-    <Form onSubmit={handleSubmit(console.log)} noValidate>
-      <PhoneNumberField
-        label="Mobilnummer"
-        description="Norsk format: 123 45 678"
-        countryLabel="Landkode"
-        numberLabel="Telefonnummer"
-        noHitsText="Ingen treff"
-        toggleLabel="Vis landkoder"
-        countryField={register('landkode', { required: 'Velg landkode' })}
-        numberField={register('tlf', { pattern: { value: /^\d{8}$/, message: 'Åtte siffer' } })}
-        errorMessage={errors.tlf?.message}
-        countryErrorMessage={errors.landkode?.message}
-      />
-    </Form>
-  );
-}
-```
-
-Å bytte land reformaterer ikke nummeret. Formatet er uavhengig av valgt land. For kontrollert bruk uten RHF: bind hvert delfelt manuelt via `numberField`/`countryField` (`{ name, onChange, onBlur, ref }`), eller bruk `<Controller>`.
-
-### Egen landliste
-
-Utelates `countries` fyller web-komponenten inn den innebygde standardlista i språket fra `locale` (`nb` | `nn` | `en`). Send inn din egen `countries` for å begrense eller utvide: samme form som `Combobox`-options (`value` = landkode, `label` = kallekode `+kode` (vises som valgt verdi), `description` = landnavn). I ren HTML tilsvarer dette `data-countries` med en JSON-array av samme form.
-
-```tsx live
-<PhoneNumberField
-  label="Telefonnummer"
-  description="Norsk format: 123 45 678"
-  countryLabel="Landkode"
-  numberLabel="Telefonnummer"
-  noHitsText="Ingen treff"
-  toggleLabel="Vis landkoder"
-  defaultCountryCode="47"
-  countries={[
-    { value: '47', label: '+47', description: 'Norge' },
-    { value: '46', label: '+46', description: 'Sverige' },
-    { value: '45', label: '+45', description: 'Danmark' },
-  ]}
-/>
-```
-
-### Engelsk landliste
-
-```tsx live
-<PhoneNumberField
-  locale="en"
-  label="Mobile number"
-  description="Format: 123 45 678"
-  countryLabel="Country code"
-  numberLabel="Phone number"
-  noHitsText="No matches"
-  toggleLabel="Show country codes"
-  defaultCountryCode="47"
-/>
-```
-
-### Med feilmelding
+Landkoden vises, men kan ikke endres. Nummerfeltet er fortsatt redigerbart.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-phone-number-field class="ix-phone-number-field" data-locale="nb" data-default-country-code="47">
+<ix-phone-number-field class="ix-phone-number-field">
+  <span data-field="legend" id="tlf-locked-legend">Mobilnummer</span>
+  <div data-field="items">
+    <ix-field data-field="country" class="ix-field">
+      <div class="ix-text-field">
+        <div data-field="prefix">+</div>
+        <input aria-label="Landkode" name="landkode" value="47" readonly />
+      </div>
+    </ix-field>
+    <ix-field data-field="number" class="ix-field">
+      <div class="ix-text-field">
+        <input aria-label="Telefonnummer" name="tlf" />
+      </div>
+    </ix-field>
+  </div>
+  <span data-field="error"></span>
+</ix-phone-number-field>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<PhoneNumberField
+  label="Mobilnummer"
+  countryLabel="Landkode"
+  numberLabel="Telefonnummer"
+  defaultCountryCode="47"
+  countryCodeReadOnly
+/>
+```
+
+</TabItem>
+</Tabs>
+
+### Uten landkode
+
+Bare nummerfeltet vises. Landkoden må da settes i koden som tar imot verdien. Med `hideCountryCode` finnes ikke `countryLabel`, `countryField` eller `defaultCountryCode`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-phone-number-field class="ix-phone-number-field">
+  <span data-field="legend" id="tlf-hidden-legend">Mobilnummer</span>
+  <div data-field="items">
+    <ix-field data-field="number" class="ix-field">
+      <div class="ix-text-field">
+        <input aria-label="Telefonnummer" name="tlf" />
+      </div>
+    </ix-field>
+  </div>
+  <span data-field="error"></span>
+</ix-phone-number-field>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<PhoneNumberField
+  label="Mobilnummer"
+  numberLabel="Telefonnummer"
+  hideCountryCode
+/>
+```
+
+</TabItem>
+</Tabs>
+
+### Med feilmelding
+
+Gruppen har én feilmelding. Ikke-tomt innhold i `data-field="error"` setter `aria-invalid="true"` på gruppen og annonseres polite.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-phone-number-field class="ix-phone-number-field">
   <span data-field="legend" id="tlf-error-legend">Mobilnummer</span>
   <div data-field="items">
-    <div data-field="country">
-      <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="landkode">
-        <div class="ix-text-field">
-          <input aria-label="Landkode" />
-          <button type="button" class="ix-combobox__toggle" aria-label="Vis landkoder"></button>
-        </div>
-        <div class="ix-combobox__listbox" hidden></div>
-      </ix-combobox>
-    </div>
-    <div data-field="number">
-      <ix-field class="ix-field">
-        <div class="ix-text-field">
-          <input aria-label="Telefonnummer" name="tlf" aria-invalid="true" />
-        </div>
-      </ix-field>
-    </div>
+    <ix-field data-field="country" class="ix-field">
+      <div class="ix-text-field">
+        <div data-field="prefix">+</div>
+        <input aria-label="Landkode" name="landkode" value="47" />
+      </div>
+    </ix-field>
+    <ix-field data-field="number" class="ix-field">
+      <div class="ix-text-field">
+        <input aria-label="Telefonnummer" name="tlf" />
+      </div>
+    </ix-field>
   </div>
   <span data-field="error">
     <ix-icon data-badge data-status="danger" name="close" aria-hidden="true"></ix-icon>
@@ -237,28 +225,52 @@ Utelates `countries` fyller web-komponenten inn den innebygde standardlista i sp
 </ix-phone-number-field>
 ```
 
-Ikke-tomt innhold i `data-field="error"` setter automatisk `aria-invalid="true"` på host og annonseres polite.
-
 </TabItem>
 <TabItem value="react" label="React">
 
 ```tsx live
 <PhoneNumberField
   label="Mobilnummer"
-  description="Norsk format: 123 45 678"
-  errorMessage="Skriv inn et gyldig telefonnummer"
-  countryErrorMessage="Velg landkode"
   countryLabel="Landkode"
   numberLabel="Telefonnummer"
-  noHitsText="Ingen treff"
-  toggleLabel="Vis landkoder"
+  errorMessage="Skriv inn et gyldig telefonnummer"
 />
 ```
 
-Feilene er uavhengige: `errorMessage` vises under nummeret, `countryErrorMessage` under landvelgeren. Utelat den ene for å vise feil kun på det andre feltet.
-
 </TabItem>
 </Tabs>
+
+### To felt i React Hook Form
+
+Landkoden og nummeret er to uavhengige felt. I React binder du dem med hver sin registrering, `countryField` og `numberField`, som spres rett på delfeltene:
+
+- **`countryField={register('landkode')}`:** `event.target.value` er sifrene uten `+`, f.eks. `"47"`.
+- **`numberField={register('tlf')}`:** `event.target.value` er det **rå** nummeret, uten mellomrom.
+
+Gruppen har bare én feilmelding. Velg den viktigste med `??`:
+
+```tsx
+function Skjema() {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: { landkode: '47', tlf: '' },
+  });
+  return (
+    <Form onSubmit={handleSubmit(console.log)} noValidate>
+      <PhoneNumberField
+        label="Mobilnummer"
+        description="Norsk format: 123 45 678"
+        countryLabel="Landkode"
+        numberLabel="Telefonnummer"
+        countryField={register('landkode', { required: 'Skriv inn landkode' })}
+        numberField={register('tlf', { pattern: { value: /^\d{8}$/, message: 'Åtte siffer' } })}
+        errorMessage={errors.landkode?.message ?? errors.tlf?.message}
+      />
+    </Form>
+  );
+}
+```
+
+`defaultCountryCode` er start-landkoden når registreringen ikke selv seeder verdien. Sett den samme verdien i `defaultValues`, så skjemaet og feltet er i synk.
 
 ### Deaktivert
 
@@ -266,31 +278,26 @@ Feilene er uavhengige: `errorMessage` vises under nummeret, `countryErrorMessage
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-phone-number-field class="ix-phone-number-field" data-locale="nb" data-default-country-code="47" disabled>
+<ix-phone-number-field class="ix-phone-number-field" disabled>
   <span data-field="legend" id="tlf-disabled-legend">Mobilnummer</span>
   <div data-field="items">
-    <div data-field="country">
-      <ix-combobox class="ix-combobox" data-no-hits-text="Ingen treff" name="landkode">
-        <div class="ix-text-field">
-          <input aria-label="Landkode" />
-          <button type="button" class="ix-combobox__toggle" aria-label="Vis landkoder"></button>
-        </div>
-        <div class="ix-combobox__listbox" hidden></div>
-      </ix-combobox>
-    </div>
-    <div data-field="number">
-      <ix-field class="ix-field">
-        <div class="ix-text-field">
-          <input aria-label="Telefonnummer" name="tlf" value="123 45 678" />
-        </div>
-      </ix-field>
-    </div>
+    <ix-field data-field="country" class="ix-field">
+      <div class="ix-text-field">
+        <div data-field="prefix">+</div>
+        <input aria-label="Landkode" name="landkode" value="47" />
+      </div>
+    </ix-field>
+    <ix-field data-field="number" class="ix-field">
+      <div class="ix-text-field">
+        <input aria-label="Telefonnummer" name="tlf" value="123 45 678" />
+      </div>
+    </ix-field>
   </div>
   <span data-field="error"></span>
 </ix-phone-number-field>
 ```
 
-`disabled` på `<ix-phone-number-field>` propageres til både landvelgeren og nummerfeltet. Du trenger ikke sette det på hvert felt selv.
+`disabled` på `<ix-phone-number-field>` propageres til begge feltene. Du trenger ikke sette det på hvert felt.
 
 </TabItem>
 <TabItem value="react" label="React">
@@ -298,68 +305,55 @@ Feilene er uavhengige: `errorMessage` vises under nummeret, `countryErrorMessage
 ```tsx live
 <PhoneNumberField
   label="Mobilnummer"
-  description="Norsk format: 123 45 678"
   disabled
   countryLabel="Landkode"
   numberLabel="Telefonnummer"
-  noHitsText="Ingen treff"
-  toggleLabel="Vis landkoder"
-  defaultCountryCode="47"
   defaultValue="12345678"
 />
 ```
 
-`disabled` propageres til både landvelgeren og nummerfeltet.
+`disabled` propageres til begge feltene.
 
 </TabItem>
 </Tabs>
 
 ## Retningslinjer
 
-### La brukeren velge land, ikke skrive tallkode
+### Landkoden tar bare sifre
 
-Ingen skal måtte huske at Sverige er `+46`. I lista står kallekoden som primærtekst med
-landnavnet under, og brukeren kan søke på begge. Da blir verdien i det smale landfeltet
-kort og entydig (`+47`), mens landnavnet er der som kontekst i lista.
+- Maks tre sifre
+- «+» og andre tegn fjernes automatisk, så autofyll med «+47» gir `47`
+- Verdien er alltid sifrene uten «+»
 
-### Ikke bruk emoji-flagg
+### Gjør nummerfeltet bredere enn landkoden
 
-Windows viser dem som «NO» og «SE», skjermlesere leser dem ulikt, og i liten størrelse er
-Norge og Island samme flagg. Komponenten er derfor laget uten flagg: kallekode og landnavn
-som tekst oppfører seg likt i alle tjenester.
-
-### Gjør nummerfeltet bredere enn landvelgeren
-
-Er de to feltene like brede, ser de ut som to like felt, og brukeren begynner å skrive
-nummeret i det første. Bredden er det som viser hvilket felt som er hovedfeltet.
+Er de to feltene like brede, ser de ut som to like felt, og brukeren begynner å skrive nummeret i det første. Bredden viser hvilket felt som er hovedfeltet.
 
 ### Send eget format for andre land enn Norge
 
-Standarden er norsk 8-sifret (`123 45 678`) uansett hvilket land som er valgt. Andre
-nummerlengder krever at du sender inn `numberFormat`/`numberFormatPattern`. Formateringen er
-bare visuell: verdien som sendes, er alltid rå og uten mellomrom.
+Standarden er norsk 8-sifret (`123 45 678`) uansett landkode. Andre nummerlengder krever `numberFormat` eller `numberFormatPattern`. Formateringen er bare visuell: verdien som sendes, er alltid rå og uten mellomrom.
 
 ## Universell utforming
 
 ### Gruppe med felles navn
 
-`<ix-phone-number-field>` setter `role="group"` og kobler den felles labelen (`data-field="legend"`) via `aria-labelledby`. Skjermlesere annonserer de to feltene som én gruppe med et felles navn. De to kontrollene beholder sin egen rolle, navn og verdi. Combobox følger [ARIA APG combobox-mønsteret](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/), nummerfeltet er en native `input`.
+`<ix-phone-number-field>` setter `role="group"` og kobler den felles labelen (`data-field="legend"`) via `aria-labelledby`. Skjermlesere annonserer de to feltene som én gruppe med et felles navn. Begge feltene er vanlige tekstfelt med eget navn via `aria-label`.
 
 ### Feltets formål eksponeres (1.3.5)
 
-Web-komponenten stamper nummerfeltet med `type="tel"`, `inputmode="numeric"` og `autocomplete="tel-national"` (når de mangler) slik at mobilt tastatur viser tall, og nettleser/hjelpemidler kan autofylle telefonnummer.
+Landkoden får `autocomplete="tel-country-code"` og nummeret `autocomplete="tel-national"` (når de mangler). Mobilt tastatur viser tall, og nettleseren kan autofylle begge feltene.
 
-### Feilmelding per felt annonseres
+### Én feilmelding for gruppen
 
-Hvert felt eier sin egen feilmelding. I React setter `errorMessage` feil på nummerfeltet og `countryErrorMessage` på landvelgeren. Hvert indre `ix-field`/`ix-combobox` kobler meldingen via `aria-describedby`, setter `aria-invalid="true"` på sin egen input, og annonserer `polite` via `aria-live` (avbryter ikke brukeren). I ren HTML kan du fortsatt legge en felles gruppe-feil i `[data-field="error"]` direkte på host.
+Feilmeldingen ligger på gruppen. `aria-invalid="true"` settes på gruppen, og meldingen annonseres `polite` via `aria-live`. Med to RHF-felt velger du selv hvilken melding som vises (`errors.landkode?.message ?? errors.tlf?.message`).
 
 ### Fokusrekkefølge og tastatur
 
-Tab flytter fokus fra landvelger til nummerfelt (samme som leserekkefølgen). Landvelgeren er fullt tastaturopererbar (piltast/Enter/Escape), nummerfeltet er et vanlig tekstfelt.
+Tab flytter fokus fra landkode til nummerfelt, som er leserekkefølgen. Begge er vanlige tekstfelt.
 
 ### Send inn oversatt tekst (i18n)
 
-`label`, `countryLabel`, `numberLabel`, `noHitsText` (påkrevd), `toggleLabel` og `resultsText` må sendes inn på riktig språk (bokmål, nynorsk, engelsk). Det finnes ingen fallback. Den innebygde landlista lokaliseres med `locale` (`data-locale` i ren HTML), men er også fullt overstyrbar via `countries` (`data-countries`).
+`label`, `description`, `countryLabel`, `numberLabel` og feilmeldingen må sendes inn på riktig språk (bokmål, nynorsk, engelsk). Det finnes ingen fallback.
 
 <KeyboardAndScreenReader data={a11yData} />
 
@@ -376,13 +370,9 @@ Tab flytter fokus fra landvelger til nummerfelt (samme som leserekkefølgen). La
 
 | Attributt | Påkrevd | Beskrivelse |
 |-----------|---------|-------------|
-| `disabled` | Nei | Deaktiverer begge kontrollene |
-| `readonly` | Nei | Skrivebeskytter begge kontrollene |
-| `required` | Nei | Markerer begge de indre `<input>`-ene som påkrevd (propageres) |
-| `data-locale` | Nei | Språk for den innebygde landlista (`nb` \| `nn` \| `en`, standard `nb`) |
-| `data-countries` | Nei | JSON-array som overstyrer landlista (`{value,label,description}[]`) |
-| `data-country-code` | Nei | Kontrollert forhåndsvalgt landkode (uten `+`) |
-| `data-default-country-code` | Nei | Ukontrollert start-landkode (uten `+`) |
+| `disabled` | Nei | Deaktiverer begge feltene |
+| `readonly` | Nei | Skrivebeskytter begge feltene |
+| `required` | Nei | Markerer begge `<input>`-ene som påkrevd |
 
 ### Delelementer (light DOM)
 
@@ -390,10 +380,10 @@ Tab flytter fokus fra landvelger til nummerfelt (samme som leserekkefølgen). La
 |-----|---------|-------------|
 | `[data-field="legend"]` | Ja | Felles label. Kobles via `aria-labelledby` |
 | `[data-field="description"]` | Nei | Felles hjelpetekst. Kobles via `aria-describedby` |
-| `[data-field="items"]` | Ja | Wrapper for de to feltene (styrer side-ved-side-layout) |
-| `[data-field="country"] > ix-combobox` | Ja | Landvelgeren. Skriv den **tom** (input + chevron + tom `.ix-combobox__listbox`) — web-komponenten fyller lista. Gi input `aria-label` og et `name` (ikke egen `<label>`) |
-| `[data-field="number"] > ix-field` | Ja | Nummerfeltet. Et bart `<input>` holder — web-komponenten stamper `type="tel"`, `inputmode="numeric"`, `autocomplete="tel-national"` og `data-format="phone"`. Gi input `aria-label` |
-| `[data-field="error"]` | Nei | Felles feilmelding. Ikke-tomt innhold → `aria-invalid` på host + polite annonsering |
+| `[data-field="items"]` | Ja | Wrapper for feltene (side-ved-side-layout) |
+| `[data-field="country"]` | Nei | `<ix-field>` med `.ix-text-field`, `<div data-field="prefix">+</div>` og en `<input>` med `aria-label`. Utelat for å skjule landkoden. `readonly` på inputen låser den |
+| `[data-field="number"]` | Ja | `<ix-field>` med `.ix-text-field` og en `<input>` med `aria-label` |
+| `[data-field="error"]` | Nei | Felles feilmelding. Ikke-tomt innhold gir `aria-invalid` på gruppen og polite annonsering |
 
 </TabItem>
 <TabItem value="react" label="React">
@@ -402,54 +392,40 @@ Tab flytter fokus fra landvelger til nummerfelt (samme som leserekkefølgen). La
 
 | Prop | Type | Påkrevd | Standard | Beskrivelse |
 |------|------|---------|----------|-------------|
-| `label` | `string` | Ja | | Synlig felles label over begge feltene (legend) |
-| `countryLabel` | `string` | Ja | | aria-label på landvelgeren (i18n) |
+| `label` | `string` | Ja | | Synlig felles label over feltene (legend) |
 | `numberLabel` | `string` | Ja | | aria-label på nummerfeltet (i18n) |
-| `noHitsText` | `string` | Ja | | Tekst i landlista ved 0 treff (i18n) |
+| `countryLabel` | `string` | Ja, uten `hideCountryCode` | | aria-label på landkodefeltet (i18n) |
 | `description` | `string` | Nei | | Felles hjelpetekst under label |
-| `errorMessage` | `string` | Nei | | Feilmelding for **nummer**-feltet. Setter `aria-invalid` på nummer-inputen når den har innhold |
-| `countryErrorMessage` | `string` | Nei | | Feilmelding for **landkode**-feltet. Uavhengig av `errorMessage` |
-| `placeholder` | `string` | Nei | | **Frarådes** — placeholder er et a11y-antimønster. Bruk `description` for hjelpetekst/format-hint i stedet |
-| `toggleLabel` | `string` | Nei | | aria-label på landvelgerens chevron-knapp (i18n) |
-| `resultsText` | `string` | Nei | | Mal for annonsering av antall treff i landlista, `{n}` = antall (i18n) |
-| `countryField` | `FieldRegistration` | Nei | | RHF-registrering for landkode: `register('landkode')`. `{ name, onChange, onBlur, ref }` — spres på landvelgeren |
-| `defaultCountryCode` | `string` | Nei | | Forhåndsvalgt landkode (uten `+`) når `countryField` ikke eier verdien |
-| `numberField` | `FieldRegistration` | Nei | | RHF-registrering for nummer: `register('tlf')`. `{ name, onChange, onBlur, ref }` — spres på nummerfeltet |
-| `defaultValue` | `string` | Nei | | Ukontrollert start-nummer (rå verdi) når `numberField` ikke eier verdien |
-| `countries` | `CountryOption[]` | Nei | innebygd liste | Overstyr landlista |
-| `locale` | `'nb' \| 'nn' \| 'en'` | Nei | `'nb'` | Språk for den innebygde standardlista |
+| `errorMessage` | `string` | Nei | | Én feilmelding for hele gruppen. Tom gir ingen feil |
+| `placeholder` | `string` | Nei | | **Frarådes.** Bruk `description` for format-hint |
+| `countryField` | `FieldRegistration` | Nei | | RHF-registrering for landkoden: `register('landkode')` |
+| `defaultCountryCode` | `string` | Nei | `'47'` | Start-landkode (uten `+`) når `countryField` ikke eier verdien |
+| `countryCodeReadOnly` | `boolean` | Nei | | Viser landkoden, men låser den |
+| `hideCountryCode` | `boolean` | Nei | | Skjuler landkoden. Da finnes ikke `countryLabel`, `countryField`, `defaultCountryCode` og `countryCodeReadOnly` |
+| `numberField` | `FieldRegistration` | Nei | | RHF-registrering for nummer: `register('tlf')` |
+| `defaultValue` | `string` | Nei | | Start-nummer (rå verdi) når `numberField` ikke eier verdien |
 | `numberFormat` | `string \| FieldFormatter` | Nei | `'phone'` | Format for nummeret (norsk 8-sifret som standard) |
 | `numberFormatPattern` | `string` | Nei | | Pattern-streng (`0` = siffer). Alternativ til `numberFormat` |
 | `numberFormatLive` | `boolean` | Nei | | Overstyr formatterens live-modus |
 | `disabled` | `boolean` | Nei | | Deaktiverer begge feltene |
 | `readOnly` | `boolean` | Nei | | Skrivebeskytter begge feltene |
-| `required` | `boolean` | Nei | | Markerer både landvelger og nummerfelt som påkrevd |
+| `required` | `boolean` | Nei | | Markerer begge feltene som påkrevd |
 | `className` | `string` | Nei | | CSS-klasse på `<ix-phone-number-field>` |
 | `id` | `string` | Nei | | id på gruppen |
 | `ref` | `Ref<IxPhoneNumberField>` | Nei | | Ref videresendes til `<ix-phone-number-field>` |
 
-I tillegg støttes øvrige HTML-attributter (`aria-*`, `data-*`, `tabIndex`, osv.) som settes direkte på komponenten. De sendes videre til `<ix-phone-number-field>`-**host-elementet**, ikke de indre delfeltene.
+I tillegg støttes øvrige HTML-attributter (`aria-*`, `data-*`, `tabIndex`, osv.). De sendes til `<ix-phone-number-field>`-**host-elementet**, ikke delfeltene.
 
 ### FieldRegistration
 
-Struktur-typen `countryField`/`numberField` tar. Matcher det React Hook Form `register()` returnerer, men er en ren struktur-type. Pakka har ingen RHF-avhengighet, så egne handlers eller en `<Controller>`-kobling fungerer også.
+Struktur-typen `countryField` og `numberField` tar. Matcher det React Hook Form `register()` returnerer, men pakka har ingen RHF-avhengighet, så egne handlers eller `<Controller>` fungerer også.
 
 | Felt | Type | Beskrivelse |
 |------|------|-------------|
 | `name` | `string` | Feltnavn ved form-innsending |
 | `onChange` | `(event) => unknown` | Får et event der verdien ligger i `event.target.value` |
 | `onBlur` | `(event) => unknown` | Touched-state / `mode: 'onBlur'` |
-| `ref` | `Ref` | Videresendes til delfeltets host (landvelger / nummer-proxy) |
-
-### CountryOption
-
-Samme form som `ComboboxOption`. Utelates `countries` fyller web-komponenten inn sin innebygde standardliste (lokalisert med `locale`).
-
-| Felt | Type | Beskrivelse |
-|------|------|-------------|
-| `value` | `string` | Landkoden uten `+` (verdien landvelgeren sender) |
-| `label` | `string` | Kallekoden, f.eks. `+47` — vist som valgt verdi (primærtekst) |
-| `description` | `string` | Landnavnet (sekundær tekst i lista) |
+| `ref` | `Ref` | Videresendes til delfeltet |
 
 </TabItem>
 </Tabs>
@@ -460,11 +436,10 @@ Samme form som `ComboboxOption`. Utelates `countries` fyller web-komponenten inn
 |---------|----------|
 | Rot | `.ix-phone-number-field` (eller `ix-phone-number-field`) |
 | Felt-wrapper | `[data-field="items"]` |
-| Landvelger-kolonne | `[data-field="country"]` |
+| Landkode-kolonne | `[data-field="country"]` |
 | Nummer-kolonne | `[data-field="number"]` |
 
 ## Relatert
 
-- [Combobox](./combobox) — landvelgeren som gjenbrukes
-- [TextField](./textfield) og [formatering](./textfield-formatering) — nummerfeltet og `format="phone"`
-- [ValidationMessage](./validation-message) — feilmeldingens markup
+- [TextField](./textfield) og [formatering](./textfield-formatering): begge feltene og `format="phone"`
+- [ValidationMessage](./validation-message): feilmeldingens markup

@@ -27,8 +27,8 @@ test('tomt submit viser feilmeldinger per felt', async ({ page }) => {
     await expect(page.getByText('Velg minst én tjeneste')).toBeVisible();
     await expect(page.getByText('Velg et land')).toBeVisible();
     await expect(page.getByText('Velg en gyldig dato')).toBeVisible();
-    // PhoneNumberField er to uavhengige felt → én feilmelding per felt.
-    await expect(page.getByText('Velg landkode')).toBeVisible();
+    // PhoneNumberField har én feilmelding for gruppen. Landkoden starter på 47,
+    // så det er nummerets feil som vises.
     await expect(page.getByText('Telefonnummer må være 8 siffer')).toBeVisible();
     await expect(page.getByText('Du må godta vilkårene')).toBeVisible();
 
@@ -69,6 +69,15 @@ test('Combobox via register: tomt submit flytter fokus til søkefeltet', async (
     await expect(page.getByLabel('Land', { exact: true })).toBeFocused();
 });
 
+test('PhoneNumberField: tom landkode gir én melding, ikke to', async ({ page }) => {
+    await page.getByLabel('Landkode').fill('');
+    await page.getByRole('button', { name: 'Send inn' }).click();
+
+    await expect(page.getByText('Skriv inn landkode')).toBeVisible();
+    // Gruppen viser bare den viktigste feilen: landkoden går foran nummeret.
+    await expect(page.getByText('Telefonnummer må være 8 siffer')).toHaveCount(0);
+});
+
 test('korrekt utfylling sender inn RÅ verdier', async ({ page }) => {
     await page.getByLabel('Navn').fill('Kari Nordmann');
     await page.getByLabel('E-post').fill('kari@example.com');
@@ -104,11 +113,8 @@ test('korrekt utfylling sender inn RÅ verdier', async ({ page }) => {
     // innsendt/validert verdi er ISO (åååå-mm-dd).
     await page.getByLabel('Fødselsdato').fill('17.05.1990');
 
-    // PhoneNumberField — to felt: velg landkode og skriv nummeret. Det smale
-    // landfeltet har chevron-knappen liggende oppå inputen, så et klikk midt på
-    // inputen fanges av knappen — vi åpner lista via chevronen (naturlig interaksjon).
-    await page.getByRole('button', { name: 'Vis landkoder' }).click();
-    await page.getByRole('option', { name: '+47' }).click();
+    // PhoneNumberField — to felt: landkoden er et tekstfelt som starter på 47.
+    await expect(page.getByLabel('Landkode')).toHaveValue('47');
     // Nummerfeltet formateres visuelt («123 45 678»), men innsendt verdi er rå.
     await page.getByLabel('Telefonnummer').fill('12345678');
 

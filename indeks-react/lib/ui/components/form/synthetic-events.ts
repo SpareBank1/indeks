@@ -11,8 +11,7 @@
 // så alle variantene virker med RHF i dag. Men enhver annen konsument som rører
 // `currentTarget`, `nativeEvent`, `preventDefault()` e.l. i én delt handler så tidligere
 // ulik oppførsel per felt (Combobox manglet f.eks. `value` på blur). Denne helperen gir
-// samtlige felt samme form, og nye felt (f.eks. planlagt PhoneNumberField som komponerer
-// Combobox) arver den gratis.
+// samtlige felt samme form, og nye felt arver den gratis.
 //
 // VIKTIG: `target` har bevisst INGEN `type`-nøkkel. RHF sin `getEventValue` sjekker
 // `event.target.type === 'checkbox'/'radio'` — et target som ligner en native input-type

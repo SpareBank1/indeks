@@ -33,7 +33,7 @@
     margin-block-start: calc(var(--ix-spacing-2xs) - var(--ix-spacing-xs));
 }
 
-/* Alltid på én rad: landvelgeren viser bare kallekoden, så begge får plass på 320 px. */
+/* Alltid på én rad: landkoden er maks tre sifre, så begge får plass på 320 px. */
 :is(ix-phone-number-field, .ix-phone-number-field) [data-field='items'] {
     display: flex;
     align-items: flex-start;
@@ -43,8 +43,15 @@
 /* Fast basis, ellers arver kolonnen inputens bredde på ca. 20 tegn.
    min-width: 0 hindrer at inputen presser kolonnen bredere. */
 :is(ix-phone-number-field, .ix-phone-number-field) [data-field='country'] {
-    flex: 0 0 5.5rem;
+    flex: 0 0 6rem;
     min-width: 0;
+}
+
+/* Én feilmelding for gruppen, så begge feltene får feilfarge. */
+:is(ix-phone-number-field, .ix-phone-number-field)[data-state='error'] .ix-text-field > input {
+    color: var(--ix-color-foreground-danger-default);
+    border-color: var(--ix-color-border-danger-default);
+    box-shadow: inset 0 0 0 1px var(--ix-color-border-danger-default);
 }
 
 :is(ix-phone-number-field, .ix-phone-number-field) [data-field='number'] {
