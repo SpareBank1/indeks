@@ -46,6 +46,10 @@
     list-style: none;
 }
 
+.ix-list-card > ul > li {
+    margin: 0;
+}
+
 .ix-list-card > ul > li + li {
     border-block-start: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
 }
