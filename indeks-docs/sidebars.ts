@@ -156,6 +156,7 @@ const sidebars: SidebarsConfig = {
                     link: { type: 'doc', id: 'komponenter/skjema/textfield' },
                     items: ['komponenter/skjema/textfield-formatering'],
                 },
+                'komponenter/skjema/toggle-switch',
                 'komponenter/skjema/tooltip',
                 'komponenter/typografi',
                 'komponenter/skjema/validation-message',
