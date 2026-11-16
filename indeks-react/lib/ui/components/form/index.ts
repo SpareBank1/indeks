@@ -24,5 +24,7 @@ export { TextField } from './text-field/TextField';
 export type { TextFieldProps } from './text-field/TextField';
 export { TextArea } from './text-area/TextArea';
 export type { TextAreaProps } from './text-area/TextArea';
+export { ToggleSwitch } from './toggle-switch/ToggleSwitch';
+export type { ToggleSwitchProps } from './toggle-switch/ToggleSwitch';
 export { ValidationMessage } from './validation-message/ValidationMessage';
 export type { ValidationMessageProps } from './validation-message/ValidationMessage';
