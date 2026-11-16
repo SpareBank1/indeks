@@ -1,0 +1,159 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Mobil først
+
+Mesteparten av bruken skjer på mobil, i nettleseren eller i mobilbanken. Indeks er derfor bygget mobil først: grunnstilen er for den minste skjermen, og større skjermer får noe lagt til.
+
+Det betyr at du også designer slik. Start med én kolonne på en liten skjerm, én hånd ledig og et tastatur som tar mye av skjermen. Legg til når det blir plass. Ingenting brukeren trenger, skal bare finnes på en stor skjerm.
+
+Retningslinjene under er de samme som mobilmønstrene M1–M10 i designprinsippene, med det du gjør i Indeks.
+
+## Breakpoints
+
+Grunnstilen gjelder fra 0 px. Et breakpoint legger til fra og med bredden og oppover.
+
+| Breakpoint | Fra | Typisk |
+|---|---|---|
+| (ingen) | 0 px | Mobil |
+| `sm` | 768 px | Nettbrett, liggende mobil |
+| `md` | 1024 px | Liten desktop |
+| `lg` | 1280 px | Desktop |
+| `xl` | 1600 px | Stor desktop |
+
+- Klasser uten prefiks gjelder alle skjermer. Klasser med prefiks, som `ix-sm-flex-row`, gjelder fra breakpointet og opp. Se [Layout](../monstre-og-maler/layout).
+- Spacing `xl` til `5xl` blir større fra `sm` og `md`. `2xs` til `lg` er like på alle skjermer. Se [Spacing](../grunnleggende/tokens/spacing).
+- Skriftstørrelsen er den samme på alle skjermer.
+
+## M1 Start på den minste skjermen
+
+- Design for 320 px bredde først, med én kolonne.
+- Legg til fra `sm` og `md`: flere kolonner, sidepanel, mer på én skjerm.
+- Skjul ikke innhold på mobil for at det skal passe.
+- Bruk [Grid](../komponenter/primitives/grid) med `auto-fit` når kolonnene skal følge plassen, ikke skjermen.
+- Teksten skal tåle 200 % størrelse, nynorsk og engelsk uten å bli kuttet.
+- Ikke lås skjermen i stående eller liggende retning.
+
+**Sjekk:** Gjør vinduet 320 px bredt, og zoom til 200 %. Må du scrolle sidelengs, eller forsvinner noe?
+
+## M2 Innhold først
+
+- Det brukeren kom for, står i den første skjermhøyden.
+- Detaljer og forklaringer kan ligge i [ReadMore](../komponenter/read-more) eller [Accordion](../komponenter/accordion).
+- Pris, vilkår og annet kunden må vite før hen bestemmer seg, står synlig.
+- Lange skjemaer deles opp, med én oppgave per steg.
+- I mobilbanken viser appen sidetittelen. Skjul din egen overskrift på nivå 1 der. Se [Native i hybridapp](../grunnleggende/native).
+
+**Sjekk:** Åpne siden på en telefon. Ser du det du kom for uten å scrolle?
+
+## M3 Trykkflate og luft
+
+Det som teller, er om brukeren treffer det hen sikter på, og ikke naboen. Det avhenger både av hvor stor trykkflaten er og av hvor mye luft det er til neste mål.
+
+- Trykkflaten er minst 24 × 24 px, og 44 × 44 px anbefales.
+- Er flaten under 44 px, må luften til naboen gjøre resten.
+- Små mål kan få større trykkflate enn det som vises, med [`.ix-hitbox`](../utility-klasser/hitbox). To hitboxer skal ikke overlappe.
+- Legg det som brukes mest, midt på eller nederst i innholdet, ikke i hjørnene øverst.
+
+Slik er komponentene i dag:
+
+| Komponent | Høyde | Det du gjør |
+|---|---|---|
+| Tabs, Select, Accordion, Combobox, lukkeknappen i Modal | 44 px | Ingenting |
+| Button (`md`) | 36 px | Gi luft med `gap`, eller bruk `data-density="comfortable"`, som gir 44 px |
+| InteractiveIcon | 26 px | Gi luft til naboen, eller bruk `.ix-hitbox` |
+| Pagination | 36 px, med 4 px mellom | Ingenting du kan endre selv |
+| DropdownMenu, element | 32 px, kant i kant | Ingenting du kan endre selv |
+
+**Sjekk:** Prøv med tommelen, med én hånd og med to. Treffer du feil?
+
+## M4 Ikke stol på hover
+
+- En berøringsskjerm har ingen musepeker. Det som bare vises ved hover, ser de fleste aldri.
+- [Tooltip](../komponenter/skjema/tooltip) og [Popover](../komponenter/popover) er tillegg. Det brukeren må vite, står i `description` på feltet eller synlig på siden.
+- Handlinger på en rad vises alltid, ikke bare når pekeren står over.
+
+**Sjekk:** Bruk siden på en telefon. Mangler det noe du så med mus?
+
+## M5 Riktig tastatur og autofyll
+
+- Tall, beløp og kontonummer får `inputMode="numeric"`. Bruk ikke `type="number"`, som fjerner nuller foran og kan endre verdien når brukeren scroller. Se [TextField](../komponenter/skjema/textfield).
+- Bruk [formateringen i TextField](../komponenter/skjema/textfield-formatering) for konto, beløp, telefon og fødselsnummer.
+- Sett `autoComplete` på felt telefonen kan fylle inn, som navn, adresse og e-post.
+- [PhoneNumberField](../komponenter/skjema/phone-number-field) setter tastatur og autofyll selv.
+- Slå av autokorrektur på navn, adresser og e-post med `autoCorrect="off"` og `spellCheck={false}`.
+
+**Sjekk:** Fyll ut skjemaet på en telefon. Får du riktig tastatur i hvert felt, og tilbyr telefonen å fylle inn?
+
+## M6 Skjermen er kort, og tastaturet tar mye av den
+
+- Vær forsiktig med faste felt øverst og nederst på siden. Hvert av dem tar høyde fra det brukeren skriver i.
+- En fast knapp nederst passer i korte flyter uten tastatur, ikke over et skjema.
+- Bruk `dvh` i stedet for `vh` når noe skal fylle skjermhøyden. `100vh` er høyere enn det som vises på en telefon.
+- Feilmeldingen står ved feltet, med [ValidationMessage](../komponenter/skjema/validation-message).
+
+**Sjekk:** Fyll ut det nederste feltet på en liten telefon. Ser du feltet og det du skriver?
+
+## M7 Tål avbrudd
+
+- Det brukeren har fylt inn, beholdes når hen går tilbake, bytter app eller låser skjermen.
+- Hold stegene korte, så et avbrudd ikke koster mye.
+- Si fra før økten går ut, og la brukeren forlenge den.
+
+**Sjekk:** Start en flyt, bytt til en annen app i et minutt, og kom tilbake. Er alt der?
+
+## M8 Bruk plattformen
+
+- [Select](../komponenter/skjema/select) åpner telefonens egen velger på mobil.
+- [DateField](../komponenter/skjema/date-field) kan bruke telefonens datovelger med `nativePickerOnMobile`. Bruk den ikke til fødselsdato, der det går raskere å skrive.
+- I mobilbanken bruker du appens toppfelt, tilbakeknapp, ark og dialoger, ikke [Modal](../komponenter/modal) og egen tilbakeknapp. Se [Native i hybridapp](../grunnleggende/native).
+
+## M9 Alternativ til bevegelser
+
+- Alt som kan gjøres med sveip eller dra, kan også gjøres med ett trykk.
+- Sveip for å slette har også en synlig knapp. Dra for å sortere har også knapper for opp og ned.
+
+**Sjekk:** Kan du gjøre alt med bare enkle trykk?
+
+## M10 Knappene stables på mobil, i samme rekkefølge
+
+Hovedknappen kommer først i koden. På mobil stables knappene i full bredde, med hovedknappen øverst. På større skjermer står de på rad, med hovedknappen først, rett etter det siste feltet.
+
+Eksempelet stables når vinduet er smalere enn 768 px.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-flex ix-flex-col ix-sm-flex-row ix-gap-sm">
+  <button class="ix-button ix-w-full ix-sm-w-fit" data-variant="primary" type="button">Send søknad</button>
+  <button class="ix-button ix-w-full ix-sm-w-fit" data-variant="tertiary" type="button">Avbryt</button>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<div className="ix-flex ix-flex-col ix-sm-flex-row ix-gap-sm">
+  <Button className="ix-w-full ix-sm-w-fit">Send søknad</Button>
+  <Button variant="tertiary" className="ix-w-full ix-sm-w-fit">Avbryt</Button>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+- Bytt ikke rekkefølgen med `order` eller `flex-direction: row-reverse`. Da stemmer ikke det brukeren ser, med fokusrekkefølgen og det skjermleseren leser.
+- Legg ikke hovedknappen nede til høyre. Det passer bare for høyrehendte, og hjørnene er der folk oftest trykker feil.
+- «Forrige» og «Neste» kan stå på rad også på mobil, fordi de følger retningen brukeren går i.
+- Tar kunden et reelt valg, som ja eller nei til et produkt, er ingen av knappene hovedknappen. Bruk to sekundærknapper, eller en [RadioGroup](../komponenter/skjema/radio-group) og én «Fortsett».
+
+**Sjekk:** Tab gjennom knappene på desktop, og se på dem på mobil. Er rekkefølgen den samme?
+
+## Slik tester du
+
+- Nettleserens mobilvisning, på 320 px og 375 px bredde.
+- Zoom til 200 %, og skru opp skriftstørrelsen i telefonens innstillinger.
+- En ekte telefon, med én hånd. Både iPhone og Android hvis du kan.
+- I mobilbanken, hvis løsningen skal vises der.

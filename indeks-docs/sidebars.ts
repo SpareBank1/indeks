@@ -71,6 +71,7 @@ const sidebars: SidebarsConfig = {
                 { type: 'doc', id: 'grunnleggende/typografi', label: 'Typografi og fonter' },
                 { type: 'doc', id: 'retningslinjer/farger/farger', label: 'Fargebruk' },
                 'retningslinjer/farger/fargemodus',
+                { type: 'doc', id: 'retningslinjer/mobil-forst', label: 'Mobil først' },
                 { type: 'doc', id: 'grunnleggende/native', label: 'Native i hybridapp' },
             ],
         },
