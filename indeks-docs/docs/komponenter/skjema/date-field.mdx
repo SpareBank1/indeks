@@ -328,6 +328,13 @@ Trenger du et intervall, bruk to separate datofelter med hver sin label («Fra»
 
 Denne versjonen støtter `min`/`max`, men ikke sperring av enkeltdager eller helger, og bruker enhetens innebygde kalender. En egen kalendervelger for desktop med fler-års-navigasjon er planlagt i en senere fase. På desktop åpner kalenderknappen velgeren via `showPicker()`; på de eldste nettleserne i baselinen vår (Safari 15.4, Firefox 100) uten `showPicker()` kan desktop-brukeren i stedet navigere med tastatur og taste datoen direkte.
 
+## På mobil
+
+- Kalenderknappen er minst 44 × 44 px. ([M3](../../retningslinjer/mobil-forst#m3-trykkflate-og-luft))
+- Feltet har `inputMode="numeric"`, så mobilen viser talltastatur når brukeren skriver datoen. HTML-bruk må sette `inputmode="numeric"` selv. ([M5](../../retningslinjer/mobil-forst#m5-riktig-tastatur-og-autofyll))
+- Med `nativePickerOnMobile` (HTML: `data-native-picker-mobile`) åpner et trykk hvor som helst i feltet telefonens egen datovelger. Det gjelder bare på iPhone, iPad og Android. Se [Mobilvelger på tapp](#mobilvelger-på-tapp). ([M8](../../retningslinjer/mobil-forst#m8-bruk-plattformen))
+- Bruk ikke telefonens datovelger til fødselsdato, der det går raskere å skrive. ([M8](../../retningslinjer/mobil-forst#m8-bruk-plattformen))
+
 ## Universell utforming
 
 ### Hva du selv må sørge for

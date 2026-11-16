@@ -463,6 +463,13 @@ passer verdien blir et hint om at noe er feil.
 Prefix og suffix er visuell kontekst, og skjermlesere leser dem ikke nødvendigvis opp. Et
 felt med "kr" foran skal ha labelen "Beløp i kroner", ikke bare "Beløp".
 
+## På mobil
+
+- Tall, beløp og kontonummer får `inputMode="numeric"` (`"decimal"` for beløp med desimaler). Bruk ikke `type="number"`. ([M5](../../retningslinjer/mobil-forst#m5-riktig-tastatur-og-autofyll))
+- Sett `autoComplete` på felt telefonen kan fylle inn, som `name`, `email` og `tel`. ([M5](../../retningslinjer/mobil-forst#m5-riktig-tastatur-og-autofyll))
+- Alle HTML-attributter på komponenten sendes videre til `<input>`, også `autoCorrect` og `spellCheck`. Slå av autokorrektur på navn, adresser og e-post. ([M5](../../retningslinjer/mobil-forst#m5-riktig-tastatur-og-autofyll))
+- `format` gir formatering av konto, beløp og telefon mens brukeren skriver. Se [Formatering i TextField](./textfield-formatering). ([M5](../../retningslinjer/mobil-forst#m5-riktig-tastatur-og-autofyll))
+
 ## Universell utforming
 
 ### Hva du selv må sørge for
