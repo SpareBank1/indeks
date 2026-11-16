@@ -81,9 +81,9 @@ function moveOpeningFocus(dialog: HTMLDialogElement): void {
 /* Be om å lukke dialogen, slik at lukking ved klikk utenfor oppfører seg som
  * Escape: `cancel` fyres synkront, og preventDefault() stopper lukkingen.
  *
- * requestClose() (Chrome 134, Safari 18.4, Firefox 139) gjør nettopp dette, men
- * nettleser-gulvet vårt (Safari 15.4, Chrome 100) mangler det. Da gjør vi det
- * samme for hånd: send `cancel` og lukk bare hvis ingen avbrøt. */
+ * requestClose() gjør nettopp dette, men den er nyere enn nettleser-gulvet vårt
+ * (Safari 15.4, Chrome 100). Der den mangler, gjør vi det samme for hånd: send
+ * `cancel` og lukk bare hvis ingen avbrøt. */
 function requestDialogClose(dialog: HTMLDialogElement): void {
     if (typeof dialog.requestClose === 'function') {
         dialog.requestClose();
