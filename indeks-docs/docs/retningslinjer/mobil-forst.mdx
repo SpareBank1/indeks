@@ -50,20 +50,20 @@ Grunnstilen gjelder fra 0 px. Et breakpoint legger til fra og med bredden og opp
 
 Det som teller, er om brukeren treffer det hen sikter på, og ikke naboen. Det avhenger både av hvor stor trykkflaten er og av hvor mye luft det er til neste mål.
 
-- Trykkflaten er minst 24 × 24 px, og 44 × 44 px anbefales.
-- Er flaten under 44 px, må luften til naboen gjøre resten.
-- Små mål kan få større trykkflate enn det som vises, med [`.ix-hitbox`](../utility-klasser/hitbox). To hitboxer skal ikke overlappe.
+- Gi trykkflaten minst 24 × 24 px, og helst 44 × 44 px.
+- Er flaten under 44 px, gi luft til naboen.
+- Gi små mål større trykkflate enn det som vises, med [`.ix-hitbox`](../utility-klasser/hitbox). To hitboxer skal ikke overlappe.
 - Legg det som brukes mest, midt på eller nederst i innholdet, ikke i hjørnene øverst.
 
-Slik er komponentene i dag:
+Slik gjør du det per komponent:
 
-| Komponent | Høyde | Det du gjør |
-|---|---|---|
-| Tabs, Select, Accordion, Combobox, lukkeknappen i Modal | 44 px | Ingenting |
-| Button (`md`) | 36 px | Gi luft med `gap`, eller bruk `data-density="comfortable"`, som gir 44 px |
-| InteractiveIcon | 26 px | Gi luft til naboen, eller bruk `.ix-hitbox` |
-| Pagination | 36 px, med 4 px mellom | Ingenting du kan endre selv |
-| DropdownMenu, element | 32 px, kant i kant | Ingenting du kan endre selv |
+| Komponent | Det du gjør |
+|---|---|
+| Tabs, Select, Accordion, Combobox, lukkeknappen i Modal | Ingenting |
+| Button (`md`) | Gi luft med `gap`, eller bruk `data-density="comfortable"` |
+| InteractiveIcon | Gi luft til naboen, eller bruk `.ix-hitbox` |
+| Pagination | Ingenting du kan endre selv |
+| DropdownMenu | Ingenting du kan endre selv |
 
 **Sjekk:** Prøv med tommelen, med én hånd og med to. Treffer du feil?
 
@@ -80,7 +80,7 @@ Slik er komponentene i dag:
 - Tall, beløp og kontonummer får `inputMode="numeric"`. Bruk ikke `type="number"`, som fjerner nuller foran og kan endre verdien når brukeren scroller. Se [TextField](../komponenter/skjema/textfield).
 - Bruk [formateringen i TextField](../komponenter/skjema/textfield-formatering) for konto, beløp, telefon og fødselsnummer.
 - Sett `autoComplete` på felt telefonen kan fylle inn, som navn, adresse og e-post.
-- [PhoneNumberField](../komponenter/skjema/phone-number-field) setter tastatur og autofyll selv.
+- Bruk [PhoneNumberField](../komponenter/skjema/phone-number-field) til telefonnummer. Du trenger ikke sette tastatur og autofyll selv.
 - Slå av autokorrektur på navn, adresser og e-post med `autoCorrect="off"` og `spellCheck={false}`.
 
 **Sjekk:** Fyll ut skjemaet på en telefon. Får du riktig tastatur i hvert felt, og tilbyr telefonen å fylle inn?
@@ -104,8 +104,8 @@ Slik er komponentene i dag:
 
 ## M8 Bruk plattformen
 
-- [Select](../komponenter/skjema/select) åpner telefonens egen velger på mobil.
-- [DateField](../komponenter/skjema/date-field) kan bruke telefonens datovelger med `nativePickerOnMobile`. Bruk den ikke til fødselsdato, der det går raskere å skrive.
+- Bruk [Select](../komponenter/skjema/select) til korte lister, og ikke bygg en egen nedtrekksliste. Telefonen viser sin egen velger.
+- Sett `nativePickerOnMobile` på [DateField](../komponenter/skjema/date-field) for å bruke telefonens datovelger. Sett den ikke på fødselsdato, der det går raskere å skrive.
 - I mobilbanken bruker du appens toppfelt, tilbakeknapp, ark og dialoger, ikke [Modal](../komponenter/modal) og egen tilbakeknapp. Se [Native i hybridapp](../grunnleggende/native).
 
 ## M9 Alternativ til bevegelser
