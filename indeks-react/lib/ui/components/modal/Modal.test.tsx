@@ -163,6 +163,45 @@ describe('Modal', () => {
         expect(onOpenChange).toHaveBeenCalledWith(false);
     });
 
+    it('stopper nettleserens lukking på `cancel` og ber konsumenten lukke', () => {
+        // Escape fyrer `cancel` synkront før dialogen lukkes. Wrapperen avbryter og
+        // overlater lukkingen til `open`-propen, så open og dialogen ikke kommer ut av takt.
+        const { container, onOpenChange } = renderModal();
+        const dialog = container.querySelector('dialog')!;
+        const cancel = new Event('cancel', { cancelable: true });
+
+        dialog.dispatchEvent(cancel);
+
+        expect(cancel.defaultPrevented).toBe(true);
+        expect(onOpenChange).toHaveBeenCalledTimes(1);
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+        expect(dialog.open).toBe(true); // open-prop er fortsatt true
+    });
+
+    it('lukker dialogen når konsumenten svarer på `cancel` med open=false', () => {
+        const { container, rerender } = renderModal();
+        const dialog = container.querySelector('dialog')!;
+        dialog.dispatchEvent(new Event('cancel', { cancelable: true }));
+
+        rerender(
+            <Modal open={false} onOpenChange={vi.fn()}>
+                <Modal.Body>tom</Modal.Body>
+            </Modal>,
+        );
+
+        expect(dialog.open).toBe(false);
+    });
+
+    it('varsler ikke to ganger når `close` følger etter en uavbrytbar `cancel`', () => {
+        const { container, onOpenChange } = renderModal();
+        const dialog = container.querySelector('dialog')!;
+
+        dialog.dispatchEvent(new Event('cancel', { cancelable: false }));
+        dialog.close(); // nettleseren lukker uansett, og `close` følger
+
+        expect(onOpenChange).toHaveBeenCalledTimes(1);
+    });
+
     it('lukker dialogen før den fjernes når Modal unmountes mens den er åpen', () => {
         // close() mens dialogen fortsatt er i DOM-en gir native fokus-retur og lar
         // web-modulet slippe scroll-låsen.

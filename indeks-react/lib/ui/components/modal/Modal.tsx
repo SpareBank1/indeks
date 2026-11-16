@@ -30,6 +30,10 @@ export type ModalProps = {
      * eller backdrop-klikk. I kontrollert modus setter konsumenten `open` som
      * respons; i ukontrollert modus oppdaterer `Modal` sin egen tilstand, og
      * dette er da kun en observatør.
+     *
+     * Escape og backdrop-klikk lukker ikke dialogen selv i kontrollert modus:
+     * `Modal` stopper nettleserens lukking og venter på at konsumenten setter
+     * `open` til `false`. Setter du ikke `open={false}` her, blir modalen stående.
      */
     onOpenChange?: (open: boolean) => void;
     /** Bredde på dialogen. @default "medium" */
@@ -70,7 +74,14 @@ const SIZE_ATTR: Record<ModalSize, string | undefined> = {
  * Escape-lukking, top-layer-rendering og fokus-retur til triggeren kommer gratis
  * fra nettleseren. Denne wrapperen er bevisst TYNN: den rendrer bare
  * `<dialog class="ix-modal">`, speiler `open`-propen til `showModal()`/`close()`,
- * og synker `onClose` tilbake til `onOpenChange`.
+ * og sender lukke-forespørsler tilbake til `onOpenChange`.
+ *
+ * Lukke-forespørsler fra nettleseren (Escape, backdrop-klikk) kommer som en
+ * `cancel`-hendelse, som fyres synkront FØR dialogen lukkes. `onCancel` stopper
+ * den native lukkingen og kaller `onOpenChange(false)`; det er `open`-propen som
+ * så lukker dialogen. Dermed er `open` og dialogen aldri ute av takt, og en
+ * `setOpen(true)` rett etter Escape virker. `close`-hendelsen er bare en reserve
+ * for lukkinger uten `cancel`, og for lukkinger nettleseren ikke lar oss stoppe.
  *
  * Scroll-lås, åpningsfokus (på dialogen, ikke lukk-knappen) og backdrop-klikk
  * eies av atferds-modulet i `@sb1/indeks-web` — det observerer enhver
@@ -145,6 +156,9 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
     // cleanup kjører før <dialog> tas ut av DOM-en, så close() gir native fokus-retur
     // til triggeren og web-modulet slipper scroll-låsen på vanlig måte.
     const ownCloseRef = useRef(false);
+    // Satt når `cancel` ikke kunne avbrytes (nettleseren lukker uansett). Konsumenten
+    // er da allerede varslet, og den påfølgende `close`-hendelsen skal ikke varsle på nytt.
+    const notifiedByCancelRef = useRef(false);
     useLayoutEffect(() => {
         const dialog = dialogRef.current;
         if (!dialog || !open) return;
@@ -203,16 +217,38 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
             data-no-close-on-backdrop={closeOnBackdropClick ? undefined : ''}
             aria-labelledby={titleId ?? undefined}
             aria-describedby={descriptionId ?? undefined}
-            // Eneste tilstands-synk: <dialog> fyrer `close` på ALLE lukke-veier —
-            // Escape (native), CloseButton (.close() via web-modulet) og backdrop-
-            // klikk (web-modulet). `close` bobler ikke, men React-syntetiske onClose
-            // fanger det på elementet selv. Vi speiler tilbake til `open`-state.
+            // Escape og backdrop-klikk (web-modulet kaller requestClose / sender `cancel`)
+            // fyrer `cancel` synkront FØR dialogen lukkes. Vi stopper den native
+            // lukkingen og ber konsumenten om å lukke; effekten over lukker dialogen
+            // når `open` blir false. Da er `open` og dialogen aldri ute av takt, og en
+            // `setOpen(true)` rett etter Escape virker (det gjorde den ikke når vi
+            // ventet på `close`, som fyres i en senere oppgave).
+            onCancel={(e) => {
+                if (!open) return;
+                if (e.cancelable) {
+                    e.preventDefault();
+                } else {
+                    // Nettleseren lukker uansett (Chromium gjør `cancel` uavbrytbar fra
+                    // tredje Escape på rad når de forrige ble avbrutt). `close` kommer,
+                    // men konsumenten er allerede varslet.
+                    notifiedByCancelRef.current = true;
+                }
+                handleOpenChange(false);
+            }}
+            // Reserve for lukkinger som ikke går via `cancel`, f.eks. data-modal-close
+            // (web-modulet kaller close() direkte). `close` bobler ikke, men React-
+            // syntetiske onClose fanger det på elementet selv.
             onClose={() => {
                 // Vår egen .close() i cleanup er ikke en lukke-forespørsel: enten er
                 // open=false allerede, Modal er på vei ut, eller StrictMode åpner
                 // dialogen igjen rett etterpå. Varsle bare om lukkinger utenfra.
                 if (ownCloseRef.current) {
                     ownCloseRef.current = false;
+                    return;
+                }
+                // Konsumenten ble varslet av `cancel` som ikke lot seg avbryte.
+                if (notifiedByCancelRef.current) {
+                    notifiedByCancelRef.current = false;
                     return;
                 }
                 if (open) handleOpenChange(false);

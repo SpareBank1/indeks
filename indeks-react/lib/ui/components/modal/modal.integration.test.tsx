@@ -38,6 +38,70 @@ afterEach(() => {
  * observeren (scroll-lås/fokus) har kjørt før vi asserter. */
 const flush = () => act(async () => { await Promise.resolve(); });
 
+/* Etterlign nettleserens <dialog> nærmere enn stubbene over: close() fyrer `close`
+ * i en SENERE oppgave (ikke synkront), og Escape fyrer `cancel` synkront og lukker
+ * bare hvis ingen kalte preventDefault(). Uten dette kan ikke racen mellom lukking
+ * og `close`-hendelsen gjenskapes. `requestClose` og `cancelable` styres av testen. */
+function makeNativeLike(dialog: HTMLDialogElement, opts: { requestClose?: boolean } = {}) {
+    dialog.close = function close() {
+        if (!this.open) return;
+        this.open = false;
+        setTimeout(() => this.dispatchEvent(new Event('close')), 0);
+    };
+    if (opts.requestClose) {
+        dialog.requestClose = function requestClose() {
+            if (this.dispatchEvent(new Event('cancel', { cancelable: true }))) this.close();
+        };
+    }
+}
+
+function pressEscape(dialog: HTMLDialogElement, cancelable = true) {
+    const notPrevented = dialog.dispatchEvent(new Event('cancel', { cancelable }));
+    if (notPrevented && dialog.open) dialog.close();
+}
+
+const nextTask = () => act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+
+function Controlled({ onChange }: { onChange?: (open: boolean) => void }) {
+    const [open, setOpen] = useState(true);
+    return (
+        <>
+            <button onClick={() => setOpen(true)}>Åpne</button>
+            <Modal
+                open={open}
+                onOpenChange={(next) => {
+                    onChange?.(next);
+                    setOpen(next);
+                }}
+            >
+                <Modal.Header>
+                    <Modal.Title>Tittel</Modal.Title>
+                    <Modal.CloseButton label="Lukk" />
+                </Modal.Header>
+                <Modal.Body>x</Modal.Body>
+            </Modal>
+        </>
+    );
+}
+
+/* Konsument som svarer på lukke-forespørselen med setOpen(true) i stedet for false,
+ * f.eks. «du har ikke lagret»-vakt. Verdien er true hele tiden, så React rendrer
+ * ikke på nytt, og dialogen må derfor ikke ha blitt lukket av nettleseren. */
+function Refusing({ onChange }: { onChange: (open: boolean) => void }) {
+    const [open, setOpen] = useState(true);
+    return (
+        <Modal
+            open={open}
+            onOpenChange={(next) => {
+                onChange(next);
+                setOpen(true);
+            }}
+        >
+            <Modal.Body>x</Modal.Body>
+        </Modal>
+    );
+}
+
 describe('Modal + @sb1/indeks-web (integrasjon)', () => {
     it('web-modulet fyrer onOpenChange nøyaktig én gang ved backdrop-klikk (regresjon #1)', async () => {
         const onOpenChange = vi.fn();
@@ -150,5 +214,150 @@ describe('Modal + @sb1/indeks-web (integrasjon)', () => {
         );
         await flush();
         expect(document.activeElement).not.toBe(document.querySelector('dialog'));
+    });
+
+    describe('lukking via cancel', () => {
+        it('Escape og så setOpen(true) før `close` kommer: modalen er åpen (regresjon)', async () => {
+            const { container } = render(<Refusing onChange={vi.fn()} />);
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog);
+
+            pressEscape(dialog);
+            await nextTask(); // `close` ville kommet her om dialogen ble lukket
+
+            expect(dialog.open).toBe(true);
+        });
+
+        it('klikk utenfor og så setOpen(true) før `close` kommer: modalen er åpen (regresjon)', async () => {
+            const { container } = render(<Refusing onChange={vi.fn()} />);
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog);
+
+            fireEvent.click(dialog);
+            await nextTask();
+
+            expect(dialog.open).toBe(true);
+        });
+
+        it('klikk utenfor virker likt med requestClose() i nettleseren', async () => {
+            const { container } = render(<Refusing onChange={vi.fn()} />);
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog, { requestClose: true });
+
+            fireEvent.click(dialog);
+            await nextTask();
+
+            expect(dialog.open).toBe(true);
+        });
+
+        it('lukker modalen når konsumenten svarer med open=false (Escape)', async () => {
+            const onChange = vi.fn();
+            const { container } = render(<Controlled onChange={onChange} />);
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog);
+
+            pressEscape(dialog);
+            await nextTask();
+
+            expect(dialog.open).toBe(false);
+            expect(onChange).toHaveBeenCalledTimes(1);
+            expect(onChange).toHaveBeenCalledWith(false);
+        });
+
+        it('onOpenChange(false) kalles nøyaktig én gang ved klikk utenfor', async () => {
+            const onChange = vi.fn();
+            const { container } = render(<Controlled onChange={onChange} />);
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog);
+
+            fireEvent.click(dialog);
+            await nextTask();
+
+            expect(dialog.open).toBe(false);
+            expect(onChange).toHaveBeenCalledTimes(1);
+        });
+
+        it('onOpenChange(false) kalles nøyaktig én gang ved klikk utenfor med requestClose()', async () => {
+            const onChange = vi.fn();
+            const { container } = render(<Controlled onChange={onChange} />);
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog, { requestClose: true });
+
+            fireEvent.click(dialog);
+            await nextTask();
+
+            expect(dialog.open).toBe(false);
+            expect(onChange).toHaveBeenCalledTimes(1);
+        });
+
+        it('onOpenChange(false) kalles nøyaktig én gang ved Modal.CloseButton', async () => {
+            const onChange = vi.fn();
+            const { container } = render(<Controlled onChange={onChange} />);
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog);
+
+            fireEvent.click(screen.getByRole('button', { name: 'Lukk' }));
+            await nextTask();
+
+            expect(dialog.open).toBe(false);
+            expect(onChange).toHaveBeenCalledTimes(1);
+        });
+
+        it('onOpenChange(false) kalles nøyaktig én gang når cancel ikke kan avbrytes', async () => {
+            // Chromium gjør `cancel` uavbrytbar fra tredje Escape på rad. Nettleseren
+            // lukker da uansett, og `close` følger etter `cancel`.
+            const onChange = vi.fn();
+            const { container } = render(<Controlled onChange={onChange} />);
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog);
+
+            pressEscape(dialog, false);
+            await nextTask();
+
+            expect(dialog.open).toBe(false);
+            expect(onChange).toHaveBeenCalledTimes(1);
+            expect(onChange).toHaveBeenCalledWith(false);
+        });
+
+        it('varsler fortsatt via `close` når dialogen lukkes uten `cancel` (reserve)', async () => {
+            const onChange = vi.fn();
+            const { container } = render(<Controlled onChange={onChange} />);
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog);
+
+            dialog.close(); // som data-modal-close
+            await nextTask();
+
+            expect(onChange).toHaveBeenCalledTimes(1);
+            expect(onChange).toHaveBeenCalledWith(false);
+            expect(dialog.open).toBe(false);
+        });
+
+        it('lukker seg selv ukontrollert ved Escape, med ett varsel', async () => {
+            const onChange = vi.fn();
+            const { container } = render(
+                <Modal defaultOpen onOpenChange={onChange}>
+                    <Modal.Body>x</Modal.Body>
+                </Modal>,
+            );
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog);
+
+            pressEscape(dialog);
+            await nextTask();
+
+            expect(dialog.open).toBe(false);
+            expect(onChange).toHaveBeenCalledTimes(1);
+        });
     });
 });
