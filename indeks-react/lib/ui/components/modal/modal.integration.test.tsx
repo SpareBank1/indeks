@@ -327,6 +327,37 @@ describe('Modal + @sb1/indeks-web (integrasjon)', () => {
             expect(onChange).toHaveBeenCalledWith(false);
         });
 
+        it('varsler om neste lukking når React lukket dialogen før nettleseren etter en uavbrytbar `cancel`', async () => {
+            // Mikrooppgaver kjører mellom `cancel`-lytteren og nettleserens egen lukking.
+            // React kan derfor rendre open=false og lukke dialogen i cleanup først. Da
+            // gjelder begge flaggene den samme `close`-hendelsen, og ingen av dem må bli
+            // hengende og svelge varselet ved neste lukking.
+            const onChange = vi.fn();
+            const { container } = render(<Controlled onChange={onChange} />);
+            await flush();
+            const dialog = container.querySelector('dialog')!;
+            makeNativeLike(dialog);
+
+            // act() rendrer open=false før «nettleseren» rekker å lukke.
+            act(() => {
+                dialog.dispatchEvent(new Event('cancel', { cancelable: false }));
+            });
+            if (dialog.open) dialog.close();
+            await nextTask();
+            expect(dialog.open).toBe(false);
+            expect(onChange).toHaveBeenCalledTimes(1);
+
+            fireEvent.click(screen.getByRole('button', { name: 'Åpne', hidden: true }));
+            await flush();
+            expect(dialog.open).toBe(true);
+
+            dialog.close(); // lukking uten `cancel`, som data-modal-close
+            await nextTask();
+
+            expect(onChange).toHaveBeenCalledTimes(2);
+            expect(onChange).toHaveBeenLastCalledWith(false);
+        });
+
         it('varsler fortsatt via `close` når dialogen lukkes uten `cancel` (reserve)', async () => {
             const onChange = vi.fn();
             const { container } = render(<Controlled onChange={onChange} />);

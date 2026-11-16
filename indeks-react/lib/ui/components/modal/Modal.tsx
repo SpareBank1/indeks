@@ -239,18 +239,19 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
             // (web-modulet kaller close() direkte). `close` bobler ikke, men React-
             // syntetiske onClose fanger det på elementet selv.
             onClose={() => {
+                // Begge flaggene gjelder bare denne lukkingen, så de nullstilles samlet.
+                // Ellers kan ett av dem bli hengende og svelge varselet ved neste lukking:
+                // React kan lukke dialogen i cleanup (ownCloseRef) før nettleseren lukker
+                // etter en uavbrytbar `cancel` (notifiedByCancelRef).
+                const ownClose = ownCloseRef.current;
+                const notifiedByCancel = notifiedByCancelRef.current;
+                ownCloseRef.current = false;
+                notifiedByCancelRef.current = false;
                 // Vår egen .close() i cleanup er ikke en lukke-forespørsel: enten er
                 // open=false allerede, Modal er på vei ut, eller StrictMode åpner
-                // dialogen igjen rett etterpå. Varsle bare om lukkinger utenfra.
-                if (ownCloseRef.current) {
-                    ownCloseRef.current = false;
-                    return;
-                }
-                // Konsumenten ble varslet av `cancel` som ikke lot seg avbryte.
-                if (notifiedByCancelRef.current) {
-                    notifiedByCancelRef.current = false;
-                    return;
-                }
+                // dialogen igjen rett etterpå. Etter en uavbrytbar `cancel` er
+                // konsumenten allerede varslet. Varsle bare om andre lukkinger utenfra.
+                if (ownClose || notifiedByCancel) return;
                 if (open) handleOpenChange(false);
             }}
         >
