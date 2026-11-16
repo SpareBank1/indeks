@@ -330,10 +330,9 @@ Denne versjonen støtter `min`/`max`, men ikke sperring av enkeltdager eller hel
 
 ## På mobil
 
-- Kalenderknappen er minst 44 × 44 px. ([M3](../../retningslinjer/mobil-forst#m3-trykkflate-og-luft))
-- Feltet har `inputMode="numeric"`, så mobilen viser talltastatur når brukeren skriver datoen. HTML-bruk må sette `inputmode="numeric"` selv. ([M5](../../retningslinjer/mobil-forst#m5-riktig-tastatur-og-autofyll))
-- Med `nativePickerOnMobile` (HTML: `data-native-picker-mobile`) åpner et trykk hvor som helst i feltet telefonens egen datovelger. Det gjelder bare på iPhone, iPad og Android. Se [Mobilvelger på tapp](#mobilvelger-på-tapp). ([M8](../../retningslinjer/mobil-forst#m8-bruk-plattformen))
-- Bruk ikke telefonens datovelger til fødselsdato, der det går raskere å skrive. ([M8](../../retningslinjer/mobil-forst#m8-bruk-plattformen))
+- Sett `nativePickerOnMobile` (HTML: `data-native-picker-mobile`) når brukeren velger en dato nær i tid. Se [Mobilvelger på tapp](#mobilvelger-på-tapp). ([M8](../../retningslinjer/mobil-forst#m8-bruk-plattformen))
+- Sett ikke `nativePickerOnMobile` på fødselsdato. Det går raskere å skrive. ([M8](../../retningslinjer/mobil-forst#m8-bruk-plattformen))
+- Sett `inputmode="numeric"` på input i HTML, så får brukeren talltastatur. I React gjør komponenten det. ([M5](../../retningslinjer/mobil-forst#m5-riktig-tastatur-og-autofyll))
 
 ## Universell utforming
 
