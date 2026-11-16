@@ -380,6 +380,13 @@ aktiv, eller skjul handlingen til den er relevant.
 Knapper følger teksten sin. Full bredde er nyttig i mobile skjemaer og modaler, men brukt
 overalt gjør det at alle handlinger ser like viktige ut.
 
+## På mobil
+
+- Gi minst `sm`-luft (`ix-gap-sm`) mellom knapper som står ved siden av hverandre. En `md`-knapp er 36 px høy, så luften gir treffsikkerhet mot naboen. Bruk `data-density="comfortable"` (44 px) der knappen er det viktigste målet. ([M3](../retningslinjer/mobil-forst#m3-trykkflate-og-luft))
+- Stable knapper i full bredde på mobil, og legg dem på rad fra `sm`: `ix-flex ix-flex-col ix-sm-flex-row` på raden og `ix-w-full ix-sm-w-fit` på knappene. Se [eksempelet i Mobil først](../retningslinjer/mobil-forst#m10-knappene-stables-på-mobil-i-samme-rekkefølge). ([M10](../retningslinjer/mobil-forst#m10-knappene-stables-på-mobil-i-samme-rekkefølge))
+- Legg hovedknappen først i koden. Bytt ikke rekkefølgen med `order` eller `flex-direction: row-reverse`. ([M10](../retningslinjer/mobil-forst#m10-knappene-stables-på-mobil-i-samme-rekkefølge))
+- Legg ikke hovedknappen nede til høyre. ([M10](../retningslinjer/mobil-forst#m10-knappene-stables-på-mobil-i-samme-rekkefølge))
+
 ## Universell utforming
 
 ### Hva du selv må sørge for
