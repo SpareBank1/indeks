@@ -8,7 +8,8 @@
  *     modal fjernes fra DOM-en)
  *   • åpningsfokus på selve dialogen (ikke lukk-knappen — se moveOpeningFocus)
  *   • deklarativ åpne/lukke-trigger (data-modal-open / data-modal-close)
- *   • backdrop-klikk-lukking (opt-out via data-no-close-on-backdrop)
+ *   • backdrop-klikk-lukking (opt-out via data-no-close-on-backdrop). Går via
+ *     `cancel`-hendelsen, på samme måte som Escape (se requestDialogClose)
  *
  * Scroll-lås og fokus drives av dialogens `open`-TILSTAND (via en MutationObserver
  * på `open`-attributtet), ikke av åpne-klikket. Dermed treffer det både HTML-en
@@ -26,6 +27,13 @@
  * Backdrop-klikk lukker dialogen som standard. Sett `data-no-close-on-backdrop`
  * på <dialog> for å slå det av (trygt for skjema og destruktive handlinger der
  * utilsiktet lukking gir datatap).
+ *
+ * Backdrop-klikk lukker ikke dialogen direkte, men ber om det: `cancel` fyres
+ * synkront først, akkurat som ved Escape. Kaller en lytter preventDefault() på
+ * `cancel`, blir dialogen stående. Slik kan både ren HTML og React-wrapperen
+ * (som eier `open`-tilstanden og svarer på `cancel`) stoppe eller overta lukkingen
+ * før dialogen faktisk lukkes. `data-modal-close` er en eksplisitt lukk-knapp og
+ * kaller close() direkte, uten `cancel`.
  */
 
 const ATTR_OPEN = 'data-modal-open';
@@ -70,6 +78,21 @@ function moveOpeningFocus(dialog: HTMLDialogElement): void {
     dialog.focus();
 }
 
+/* Be om å lukke dialogen, slik at lukking ved klikk utenfor oppfører seg som
+ * Escape: `cancel` fyres synkront, og preventDefault() stopper lukkingen.
+ *
+ * requestClose() (Chrome 134, Safari 18.4, Firefox 139) gjør nettopp dette, men
+ * nettleser-gulvet vårt (Safari 15.4, Chrome 100) mangler det. Da gjør vi det
+ * samme for hånd: send `cancel` og lukk bare hvis ingen avbrøt. */
+function requestDialogClose(dialog: HTMLDialogElement): void {
+    if (typeof dialog.requestClose === 'function') {
+        dialog.requestClose();
+        return;
+    }
+    const notCancelled = dialog.dispatchEvent(new Event('cancel', { cancelable: true }));
+    if (notCancelled && dialog.open) dialog.close();
+}
+
 function handleClick(e: Event): void {
     const target = e.target as Element;
     if (!target?.closest) return;
@@ -99,18 +122,20 @@ function handleClick(e: Event): void {
     // Backdrop-klikk: native ::backdrop er ikke en egen node, så et klikk på den
     // treffer selve <dialog>-elementet (e.target === dialogen). Klikk på innhold
     // treffer et barn og matcher ikke. Lukker som standard; opt-out via attributt.
+    // Via `cancel` (requestDialogClose) så lukkingen kan avbrytes eller overtas.
     if (
         target instanceof HTMLDialogElement &&
         target.classList.contains('ix-modal') &&
         !target.hasAttribute(ATTR_NO_BACKDROP)
     ) {
-        target.close();
+        requestDialogClose(target);
     }
 }
 
 /* close-eventet fra <dialog> bobler ikke → lytt i capture-fasen. Dekker alle
- * lukke-veier synkront: Escape (native), lukke-knapp, backdrop-klikk og React som
- * kaller .close() når `open` går til false. */
+ * lukke-veier: Escape (native), lukke-knapp, backdrop-klikk og React som kaller
+ * .close() når `open` går til false. `close` fyres i en senere oppgave, så scroll-
+ * låsen slippes også av observeren på `open`-attributtet, som er raskere. */
 function handleClose(e: Event): void {
     const target = e.target;
     if (target instanceof HTMLDialogElement && target.classList.contains('ix-modal')) {

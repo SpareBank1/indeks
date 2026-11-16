@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 // Import side-effect — registrerer event listeners
 import './modal';
@@ -129,6 +129,66 @@ describe('modal atferds-modul', () => {
             dialog.querySelector('p')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
             expect(dialog.open).toBe(true);
+        });
+    });
+
+    describe('backdrop-klikk via cancel', () => {
+        function backdropClick(dialog: HTMLDialogElement): void {
+            dialog.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        }
+
+        it('sender `cancel` (avbrytbar) synkront før dialogen lukkes', () => {
+            const dialog = createModal({ id: 'm1' });
+            createOpener('m1').click();
+            const seen: Array<{ cancelable: boolean; openAtCancel: boolean }> = [];
+            dialog.addEventListener('cancel', (e) =>
+                seen.push({ cancelable: e.cancelable, openAtCancel: dialog.open }),
+            );
+
+            backdropClick(dialog);
+
+            expect(seen).toEqual([{ cancelable: true, openAtCancel: true }]);
+            expect(dialog.open).toBe(false);
+        });
+
+        it('lukker IKKE når en lytter kaller preventDefault() på `cancel`', () => {
+            const dialog = createModal({ id: 'm1' });
+            createOpener('m1').click();
+            dialog.addEventListener('cancel', (e) => e.preventDefault());
+
+            backdropClick(dialog);
+
+            expect(dialog.open).toBe(true);
+            expect(document.body.style.overflow).toBe('hidden');
+        });
+
+        it('bruker requestClose() når nettleseren har den', () => {
+            const dialog = createModal({ id: 'm1' });
+            createOpener('m1').click();
+            const requestClose = vi.fn(() => {
+                // Native requestClose: cancel først, så close hvis ikke avbrutt.
+                if (dialog.dispatchEvent(new Event('cancel', { cancelable: true }))) dialog.close();
+            });
+            dialog.requestClose = requestClose;
+            const close = vi.spyOn(dialog, 'close');
+
+            backdropClick(dialog);
+
+            expect(requestClose).toHaveBeenCalledTimes(1);
+            expect(close).toHaveBeenCalledTimes(1);
+            expect(dialog.open).toBe(false);
+        });
+
+        it('data-modal-close lukker direkte uten `cancel`', () => {
+            const dialog = createModal({ id: 'm1' });
+            createOpener('m1').click();
+            const onCancel = vi.fn();
+            dialog.addEventListener('cancel', onCancel);
+
+            dialog.querySelector<HTMLButtonElement>('[data-modal-close]')!.click();
+
+            expect(onCancel).not.toHaveBeenCalled();
+            expect(dialog.open).toBe(false);
         });
     });
 
