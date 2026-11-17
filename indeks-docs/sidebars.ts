@@ -88,6 +88,7 @@ const sidebars: SidebarsConfig = {
         {
             type: 'category',
             label: 'Komponenter',
+            link: { type: 'doc', id: 'komponenter/index' },
             collapsed: true,
             items: [
                 'komponenter/accordion',
