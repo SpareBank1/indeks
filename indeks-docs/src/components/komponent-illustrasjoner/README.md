@@ -75,8 +75,7 @@ Glyfer, tegnet som strek i en 16 × 16-boks: `chevron-ned`, `chevron-opp`,
 | `lys`  | `--ix-color-fill-main-subtle`     |
 | `hvit` | `--ix-color-surface-main-default` |
 
-Bakgrunnen bak illustrasjonen er mediaflaten i Card,
-`--ix-color-fill-neutral-subtle`. Fargene er
+Bakgrunnen bak illustrasjonen er `--ix-color-background-tinted`. Fargene er
 tokens, så mørkt tema følger med. I høykontrast blir de `CanvasText`,
 `GrayText` og `Canvas`.
 
