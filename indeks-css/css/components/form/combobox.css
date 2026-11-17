@@ -95,9 +95,9 @@
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    column-gap: var(--ix-spacing-sm);
+    column-gap: var(--ix-spacing-xs);
     min-height: 44px;
-    padding: var(--ix-spacing-sm);
+    padding: var(--ix-spacing-xs) var(--ix-spacing-2xs);
     border-radius: var(--ix-border-radius-xs);
     color: var(--ix-color-foreground-main-default);
     /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
@@ -135,7 +135,7 @@
     width: 1.25em;
     height: 1.25em;
     visibility: hidden;
-    background-color: var(--ix-color-foreground-success-default);
+    background-color: var(--ix-color-foreground-main-default);
     /* stylelint-disable plugin/no-unsupported-browser-features */
     mask-size: contain;
     -webkit-mask-size: contain;
