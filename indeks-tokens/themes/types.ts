@@ -1,6 +1,6 @@
 export type OriginColor = `#${string}` | `rgb(${string})` | `rgba(${string})` | `hsl(${string})` | `hsla(${string})`;
 
-export type OriginScaleNames = 'brand' | 'neutral' | 'success' | 'danger' | 'warning' | 'info' | 'gray';
+export type OriginScaleNames = 'brand' | 'brand-himmel' | 'neutral' | 'success' | 'danger' | 'warning' | 'info' | 'gray';
 
 export type ThemeableProperties = {
     'font-family'?: {

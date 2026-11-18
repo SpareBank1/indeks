@@ -2,7 +2,7 @@ import Term from '@site/src/components/Term';
 
 # Fargeskalaer
 
-Et theme defineres med sju **basisfarger**: `brand`, `success`, `info`, `danger`, `warning`, `gray` og `neutral`. Ved build utvides hver av disse til en **20-trinns fargeskala** (0–950), som blir til primitivene (`--ii-primitive-*`) de semantiske fargene peker på.
+Et theme defineres med sju **basisfarger**: `brand`, `success`, `info`, `danger`, `warning`, `gray` og `neutral`. SpareBank 1-temaet har i tillegg `brand-himmel`, som er valgfri i egne temaer. Ved build utvides hver av disse til en **20-trinns fargeskala** (0–950), som blir til primitivene (`--ii-primitive-*`) de semantiske fargene peker på.
 
 Skalaene genereres i <Term>OKLCH</Term>, et <Term>perseptuelt uniform</Term>t fargerom. Det betyr at samme trinn gir samme opplevde lysstyrke på tvers av fargetoner, slik at de semantiske mappingene (hvilke trinn som brukes til tekst, bakgrunn osv.) fungerer likt for alle basisfarger.
 
@@ -26,7 +26,7 @@ Ett unntak: `gray-0` tvinges alltid til `#FFFFFF`, uavhengig av `gray`-basisfarg
 
 ## Se skalaene
 
-Alle sju skalaene med alle 20 trinn vises i eksempelappen, der trinn 600 er markert som nøkkelfargen:
+Alle skalaene med alle 20 trinn vises i eksempelappen, der trinn 600 er markert som nøkkelfargen:
 
 **[Fargeskalaer i eksempelappen →](https://design.sparebank1.no/eksempel/#/internTesting/fargeskalaer-eksempler)**
 
