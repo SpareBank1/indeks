@@ -37,7 +37,7 @@ describe('buildTheme', () => {
         for (const scale of originScales) {
             const stepsRecord = result.colors[scale as keyof typeof result.colors];
             expect(stepsRecord).toBeTruthy();
-            const stepKeys = Object.keys(stepsRecord).map((k) => Number(k));
+            const stepKeys = Object.keys(stepsRecord!).map((k) => Number(k));
             expect(stepKeys).toHaveLength(DEFAULT_STEPS.length);
             expect(stepKeys).toEqual(DEFAULT_STEPS.map((n) => Number(n)));
         }
@@ -67,7 +67,7 @@ describe('buildTheme', () => {
         };
         for (const [scale, originColor] of Object.entries(sampleTheme.colors)) {
             const stepsRecord = result.colors[scale as keyof typeof result.colors];
-            const value = stepsRecord[600];
+            const value = stepsRecord![600];
             expect(value).toBe(values[scale as keyof typeof values]);
         }
     });
@@ -85,7 +85,7 @@ describe('buildTheme', () => {
         };
         for (const [scale, originColor] of Object.entries(sampleTheme.colors)) {
             const stepsRecord = result.colors[scale as keyof typeof result.colors];
-            const value = stepsRecord[200];
+            const value = stepsRecord![200];
             expect(value).toBe(values[scale as keyof typeof values]);
         }
         console.log('theme', JSON.stringify(result, null, 2));
@@ -150,6 +150,16 @@ describe('buildColorScales', () => {
         const a = buildColorScales(sampleTheme.colors);
         const b = buildColorScales(sampleTheme.colors);
         expect(b).toEqual(a);
+    });
+
+    it('bygger ikke valgfrie skalaer temaet utelater', () => {
+        const built = buildColorScales(sampleTheme.colors);
+        expect(built['brand-himmel']).toBeUndefined();
+    });
+
+    it('bygger valgfrie skalaer når temaet har dem', () => {
+        const built = buildColorScales({ ...sampleTheme.colors, 'brand-himmel': '#6C97A8' });
+        expect(built['brand-himmel']).toEqual(buildColorScale('#6C97A8'));
     });
 
     it('does not mutate the input colors object', () => {

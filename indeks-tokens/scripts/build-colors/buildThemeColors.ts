@@ -69,7 +69,9 @@ export function buildColorScales(colors: ThemeColors): BuiltThemeColors {
     const builtColors: BuiltThemeColors = {} as BuiltThemeColors;
 
     (Object.keys(colors) as OriginScaleNames[]).forEach((scaleName) => {
-        builtColors[scaleName] = buildColorScale(colors[scaleName]);
+        const originColor = colors[scaleName];
+        // Valgfrie skalaer kan mangle i temaet.
+        if (originColor) builtColors[scaleName] = buildColorScale(originColor);
     });
 
     builtColors['gray'][0] = '#FFFFFF'; // Overskriver gray 0 til å alltid være hvit

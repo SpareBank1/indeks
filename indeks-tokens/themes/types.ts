@@ -1,6 +1,10 @@
 export type OriginColor = `#${string}` | `rgb(${string})` | `rgba(${string})` | `hsl(${string})` | `hsla(${string})`;
 
-export type OriginScaleNames = 'brand' | 'brand-himmel' | 'neutral' | 'success' | 'danger' | 'warning' | 'info' | 'gray';
+/** Skalaene alle temaer må ha. */
+export type RequiredScaleNames = 'brand' | 'neutral' | 'success' | 'danger' | 'warning' | 'info' | 'gray';
+/** Skalaene et tema kan utelate. Ingen semantiske tokens peker på dem. */
+export type OptionalScaleNames = 'brand-himmel';
+export type OriginScaleNames = RequiredScaleNames | OptionalScaleNames;
 
 export type ThemeableProperties = {
     'font-family'?: {
@@ -27,9 +31,10 @@ export type ThemeableProperties = {
     };
 };
 
-export type ThemeColors = Record<OriginScaleNames, OriginColor>;
+export type ThemeColors = Record<RequiredScaleNames, OriginColor> & Partial<Record<OptionalScaleNames, OriginColor>>;
 export type ThemeColorScale = Record<(typeof DEFAULT_STEPS)[number], OriginColor>;
-export type BuiltThemeColors = Record<OriginScaleNames, ThemeColorScale>;
+export type BuiltThemeColors = Record<RequiredScaleNames, ThemeColorScale> &
+    Partial<Record<OptionalScaleNames, ThemeColorScale>>;
 
 export type Theme = {
     name: string;
