@@ -210,8 +210,10 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
             aria-describedby={descriptionId ?? undefined}
             // `cancel` kommer synkront, `close` først i en senere oppgave. Vi stopper
             // lukkingen og lar `open` lukke, så `setOpen(true)` rett etter virker.
+            // `cancel` og `close` bobler ikke i DOM, men React sender dem opp
+            // komponenttreet. Ignorer hendelser fra en Modal inni denne.
             onCancel={(e) => {
-                if (!open) return;
+                if (e.target !== e.currentTarget || !open) return;
                 if (e.cancelable) {
                     e.preventDefault();
                 } else {
@@ -221,7 +223,8 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal(
                 handleOpenChange(false);
             }}
             // Reserve for lukkinger uten `cancel`, f.eks. data-modal-close.
-            onClose={() => {
+            onClose={(e) => {
+                if (e.target !== e.currentTarget) return;
                 // Nullstill begge: etter en uavbrytbar `cancel` kan cleanup lukke først,
                 // og da gjelder begge flaggene samme `close`.
                 const ownClose = ownCloseRef.current;
