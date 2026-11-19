@@ -1,5 +1,6 @@
 /* overflow: hidden lar hover-flaten på første og siste rad følge hjørnene.
-   Row tegner fokusringen innenfor raden, så den klippes ikke. */
+   Første og siste rad gir radiusen videre til Row (--ix-row-border-radius),
+   så hover-flaten og fokusringen runder hjørnene og ringen ikke klippes av kortet. */
 .ix-list-card {
     display: flex;
     flex-direction: column;
@@ -52,4 +53,28 @@
 
 .ix-list-card__item + .ix-list-card__item {
     border-block-start: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+}
+
+.ix-list-card__item:first-child {
+    --ix-row-border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
+        calc(var(--ix-border-radius-md) - var(--ix-border-width-default)) 0 0;
+}
+
+.ix-list-card__item:last-child {
+    --ix-row-border-radius: 0 0 calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
+        calc(var(--ix-border-radius-md) - var(--ix-border-width-default));
+}
+
+.ix-list-card__item:only-child {
+    --ix-row-border-radius: calc(var(--ix-border-radius-md) - var(--ix-border-width-default));
+}
+
+/* Under en header møter første rad en rett kant, ikke kortets hjørner. */
+.ix-list-card__header + .ix-list-card__list > .ix-list-card__item:first-child {
+    --ix-row-border-radius: 0;
+}
+
+.ix-list-card__header + .ix-list-card__list > .ix-list-card__item:only-child {
+    --ix-row-border-radius: 0 0 calc(var(--ix-border-radius-md) - var(--ix-border-width-default))
+        calc(var(--ix-border-radius-md) - var(--ix-border-width-default));
 }
