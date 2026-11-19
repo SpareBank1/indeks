@@ -1,5 +1,12 @@
 # @sb1/indeks-web
 
+## 0.27.0
+
+### Patch Changes
+
+- affe715: Combobox: lista lukkes når fokus forlater feltet, også når verdien er slettet før Tab. Lista er ikke lenger et eget tab-stopp, og klikk eller scroll i lista flytter ikke fokus fra feltet, så piltaster og Enter virker hele tiden.
+- 41ac1ae: Combobox: `ix-combobox` har fått `value`, så React Hook Form leser den valgte verdien (`47`) og ikke etiketten i søkefeltet (`+47`). Feilen traff felt med forhåndsvalg som brukeren ikke rørte, blant annet landkoden i PhoneNumberField, fra react-hook-form 7.89. Etiketten vises også riktig etter remontering.
+
 ## 0.26.0
 
 ### Minor Changes
