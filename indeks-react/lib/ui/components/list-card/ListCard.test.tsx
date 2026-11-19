@@ -59,6 +59,16 @@ describe('ListCard', () => {
         expect(screen.getByRole('list').hasAttribute('aria-labelledby')).toBe(false);
     });
 
+    it('setter klasser på lista og radene', () => {
+        render(
+            <ListCard>
+                <Row title="Brukskonto" />
+            </ListCard>
+        );
+        expect(screen.getByRole('list').className).toBe('ix-list-card__list');
+        expect(screen.getByRole('listitem').className).toBe('ix-list-card__item');
+    });
+
     it('rendrer ikke en tom liste uten rader', () => {
         render(<ListCard title="Kontoer">{false}</ListCard>);
         expect(screen.queryByRole('list')).toBeNull();

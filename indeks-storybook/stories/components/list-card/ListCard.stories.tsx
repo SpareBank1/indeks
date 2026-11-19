@@ -92,8 +92,8 @@ export const HTML: Story = {
                 </h3>
                 <span className="ix-list-card__trailing">Totalt: 25 153 kr</span>
             </div>
-            <ul role="list" aria-labelledby="html-kontoer">
-                <li>
+            <ul className="ix-list-card__list" role="list" aria-labelledby="html-kontoer">
+                <li className="ix-list-card__item">
                     <div className="ix-row">
                         <span className="ix-row__leading" data-variant="icon-background">
                             <ix-icon name="account_balance" aria-hidden="true"></ix-icon>
@@ -114,7 +114,7 @@ export const HTML: Story = {
                         <ix-icon class="ix-row__nav-icon" name="keyboard_arrow_right" aria-hidden="true"></ix-icon>
                     </div>
                 </li>
-                <li>
+                <li className="ix-list-card__item">
                     <div className="ix-row">
                         <span className="ix-row__leading" data-variant="icon-background">
                             <ix-icon name="account_balance" aria-hidden="true"></ix-icon>

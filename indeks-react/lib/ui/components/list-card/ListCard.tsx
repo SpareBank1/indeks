@@ -38,9 +38,9 @@ export const ListCard = forwardRef<HTMLDivElement, ListCardProps>(function ListC
             )}
             {/* VoiceOver i Safari fjerner liste-semantikken når list-style er none, med mindre rollen står eksplisitt. */}
             {rows.length > 0 && (
-                <ul role="list" aria-labelledby={hasTitle ? titleId : undefined}>
+                <ul className="ix-list-card__list" role="list" aria-labelledby={hasTitle ? titleId : undefined}>
                     {rows.map((child, index) => (
-                        <li key={isValidElement(child) ? (child.key ?? index) : index}>{child}</li>
+                        <li className="ix-list-card__item" key={isValidElement(child) ? (child.key ?? index) : index}>{child}</li>
                     ))}
                 </ul>
             )}
