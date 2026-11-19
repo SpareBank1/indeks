@@ -3,6 +3,7 @@ import { Heading, Text, VStack } from '@sb1/indeks-react';
 export default function FargeskalaerEksempler() {
     const colorScales = [
         { name: 'brand', label: 'Brand' },
+        { name: 'brand-himmel', label: 'Brand Himmel' },
         { name: 'success', label: 'Success' },
         { name: 'info', label: 'Info' },
         { name: 'warning', label: 'Warning' },
