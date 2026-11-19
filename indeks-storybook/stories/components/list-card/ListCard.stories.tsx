@@ -37,6 +37,7 @@ const meta = {
     component: ListCard,
     tags: ['autodocs'],
     args: {
+        title: 'Kontoer',
         trailing: 'Totalt: 40 172 kr',
         children: kontoer,
     },
@@ -47,15 +48,16 @@ type Story = StoryObj<typeof meta>;
 
 export const Standard: Story = {};
 
-export const MedTittel: Story = {
-    name: 'Med tittel',
+export const UtenTittel: Story = {
+    name: 'Uten tittel',
     args: {
-        title: 'Kontoer',
+        title: undefined,
     },
 };
 
 export const Navigasjon: Story = {
     args: {
+        title: undefined,
         trailing: undefined,
         children: [
             <Row
