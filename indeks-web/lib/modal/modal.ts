@@ -8,7 +8,8 @@
  *     modal fjernes fra DOM-en)
  *   • åpningsfokus på selve dialogen (ikke lukk-knappen — se moveOpeningFocus)
  *   • deklarativ åpne/lukke-trigger (data-modal-open / data-modal-close)
- *   • backdrop-klikk-lukking (opt-out via data-no-close-on-backdrop)
+ *   • backdrop-klikk-lukking (opt-out via data-no-close-on-backdrop), via `cancel`
+ *     som Escape
  *
  * Scroll-lås og fokus drives av dialogens `open`-TILSTAND (via en MutationObserver
  * på `open`-attributtet), ikke av åpne-klikket. Dermed treffer det både HTML-en
@@ -70,6 +71,17 @@ function moveOpeningFocus(dialog: HTMLDialogElement): void {
     dialog.focus();
 }
 
+/* Som Escape: `cancel` først, så lytteren kan avbryte. requestClose() er nyere
+ * enn nettleser-gulvet vårt, så uten den gjør vi det samme for hånd. */
+function requestDialogClose(dialog: HTMLDialogElement): void {
+    if (typeof dialog.requestClose === 'function') {
+        dialog.requestClose();
+        return;
+    }
+    const notCancelled = dialog.dispatchEvent(new Event('cancel', { cancelable: true }));
+    if (notCancelled && dialog.open) dialog.close();
+}
+
 function handleClick(e: Event): void {
     const target = e.target as Element;
     if (!target?.closest) return;
@@ -104,13 +116,14 @@ function handleClick(e: Event): void {
         target.classList.contains('ix-modal') &&
         !target.hasAttribute(ATTR_NO_BACKDROP)
     ) {
-        target.close();
+        requestDialogClose(target);
     }
 }
 
 /* close-eventet fra <dialog> bobler ikke → lytt i capture-fasen. Dekker alle
- * lukke-veier synkront: Escape (native), lukke-knapp, backdrop-klikk og React som
- * kaller .close() når `open` går til false. */
+ * lukke-veier: Escape (native), lukke-knapp, backdrop-klikk og React som kaller
+ * .close() når `open` går til false. `close` kommer i en senere oppgave, så
+ * observeren slipper låsen først. */
 function handleClose(e: Event): void {
     const target = e.target;
     if (target instanceof HTMLDialogElement && target.classList.contains('ix-modal')) {

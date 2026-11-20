@@ -179,6 +179,8 @@ Skal en trigger-knapp åpne dialogen uten at du holder state, er ren HTML riktig
 
 Klikk på bakgrunnen lukker dialogen som standard. For skjemaer med ulagrede data og destruktive handlinger vil du slå det av, så et utilsiktet klikk ikke gir datatap. I React setter du `closeOnBackdropClick={false}`; i ren HTML legger du `data-no-close-on-backdrop` på `<dialog>`.
 
+Klikk på bakgrunnen sender først en `cancel`-hendelse, på samme måte som Escape. I ren HTML kan du lytte etter `cancel` og kalle `preventDefault()` for å stoppe lukkingen.
+
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 

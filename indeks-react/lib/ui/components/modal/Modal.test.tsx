@@ -163,6 +163,45 @@ describe('Modal', () => {
         expect(onOpenChange).toHaveBeenCalledWith(false);
     });
 
+    it('stopper nettleserens lukking på `cancel` og ber konsumenten lukke', () => {
+        // Escape fyrer `cancel` synkront før dialogen lukkes. Wrapperen avbryter og
+        // overlater lukkingen til `open`-propen, så open og dialogen ikke kommer ut av takt.
+        const { container, onOpenChange } = renderModal();
+        const dialog = container.querySelector('dialog')!;
+        const cancel = new Event('cancel', { cancelable: true });
+
+        dialog.dispatchEvent(cancel);
+
+        expect(cancel.defaultPrevented).toBe(true);
+        expect(onOpenChange).toHaveBeenCalledTimes(1);
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+        expect(dialog.open).toBe(true); // open-prop er fortsatt true
+    });
+
+    it('lukker dialogen når konsumenten svarer på `cancel` med open=false', () => {
+        const { container, rerender } = renderModal();
+        const dialog = container.querySelector('dialog')!;
+        dialog.dispatchEvent(new Event('cancel', { cancelable: true }));
+
+        rerender(
+            <Modal open={false} onOpenChange={vi.fn()}>
+                <Modal.Body>tom</Modal.Body>
+            </Modal>,
+        );
+
+        expect(dialog.open).toBe(false);
+    });
+
+    it('varsler ikke to ganger når `close` følger etter en uavbrytbar `cancel`', () => {
+        const { container, onOpenChange } = renderModal();
+        const dialog = container.querySelector('dialog')!;
+
+        dialog.dispatchEvent(new Event('cancel', { cancelable: false }));
+        dialog.close(); // nettleseren lukker uansett, og `close` følger
+
+        expect(onOpenChange).toHaveBeenCalledTimes(1);
+    });
+
     it('lukker dialogen før den fjernes når Modal unmountes mens den er åpen', () => {
         // close() mens dialogen fortsatt er i DOM-en gir native fokus-retur og lar
         // web-modulet slippe scroll-låsen.
@@ -309,5 +348,39 @@ describe('Modal', () => {
         const btn = screen.getByRole('button', { name: 'Lukk' });
         const icon = btn.querySelector('ix-icon');
         expect(icon?.getAttribute('name')).toBe('close');
+    });
+
+    describe('nestet Modal', () => {
+        function renderNested() {
+            const onOuter = vi.fn();
+            const onInner = vi.fn();
+            render(
+                <Modal open onOpenChange={onOuter}>
+                    <Modal.Body>
+                        <Modal open onOpenChange={onInner}>
+                            <Modal.Body data-testid="indre">Indre</Modal.Body>
+                        </Modal>
+                    </Modal.Body>
+                </Modal>,
+            );
+            const inner = screen.getByTestId('indre').closest('dialog')!;
+            return { onOuter, onInner, inner };
+        }
+
+        it('`cancel` på den indre varsler bare den indre', () => {
+            const { onOuter, onInner, inner } = renderNested();
+            inner.dispatchEvent(new Event('cancel', { cancelable: true }));
+            expect(onInner).toHaveBeenCalledTimes(1);
+            expect(onInner).toHaveBeenCalledWith(false);
+            expect(onOuter).not.toHaveBeenCalled();
+        });
+
+        it('`close` på den indre varsler bare den indre', () => {
+            const { onOuter, onInner, inner } = renderNested();
+            inner.dispatchEvent(new Event('close'));
+            expect(onInner).toHaveBeenCalledTimes(1);
+            expect(onInner).toHaveBeenCalledWith(false);
+            expect(onOuter).not.toHaveBeenCalled();
+        });
     });
 });
