@@ -5,7 +5,7 @@ import './border-block.css';
 
 interface BorderSingleBlockProps {
     variant: 'default' | 'emphasis';
-    className?: 'main' | 'focus';
+    className: 'main' | 'focus';
 }
 
 export const BorderSingleBlock: React.FC<BorderSingleBlockProps> = ({ variant, className }) => {

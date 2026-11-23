@@ -49,7 +49,9 @@ function CopyableName({ mdNavn }: { mdNavn: string }) {
                     Kopiert!
                 </span>
             ) : (
-                <Icon name="content_copy" size="sm" aria-hidden style={{ opacity: 0.5 }} />
+                <span style={{ display: 'inline-flex', opacity: 0.5 }}>
+                    <Icon name="content_copy" size="sm" />
+                </span>
             )}
         </button>
     );

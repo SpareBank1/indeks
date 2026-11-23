@@ -16,7 +16,7 @@ export const ForegroundBlock: React.FC<ForegroundBlockProps> = ({ variant, contr
                 <HStack
                     className={clsx(
                         'ix-p-xs',
-                        { [className]: className },
+                        className,
                         { ['ix-color-fill-main-default']: contrast }
                     )}
                     style={{

@@ -1,4 +1,5 @@
 import Footer from '@theme-original/DocItem/Footer';
+import type { ReactNode } from 'react';
 import { useDoc } from '@docusaurus/plugin-content-docs/client';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import type { WrapperProps } from '@docusaurus/types';
@@ -38,7 +39,7 @@ function ReportLink() {
     );
 }
 
-export default function FooterWrapper(props: Props): JSX.Element {
+export default function FooterWrapper(props: Props): ReactNode {
     return (
         <>
             <Footer {...props} />
