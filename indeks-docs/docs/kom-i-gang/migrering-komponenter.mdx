@@ -1,9 +1,14 @@
 # Komponenter fra FFE til Indeks
 
-Oversikten viser hva hver FFE-komponent blir i Indeks.
+Oversikten viser hva hver FFE-komponent blir i Indeks. FFE-navnene lenker til pakken i FFE-repoet.
 
 * **Ingen komponent er drop-in.** Selv der navnet er det samme, har props eller markup endret seg, så du må skrive om koden. «Hva endres» viser de viktigste forskjellene. Les komponentsiden før du bytter.
-* **Står det «Mangler»**, har ikke Indeks komponenten. Der det går, står det hva du kan sette den sammen av.
+* Finnes ikke komponenten i Indeks, står ett av disse begrepene i stedet:
+  * **Erstattes av:** Indeks har ikke komponenten, men noe annet dekker behovet.
+  * **Jobbes med:** komponenten lages nå.
+  * **Skal jobbes med:** komponenten kommer, men arbeidet har ikke startet.
+  * **Fases ut:** komponenten blir ikke med videre. Finn en annen løsning når du migrerer.
+  * **Uavklart:** det er ikke bestemt om Indeks skal ha komponenten.
 
 ## Dette gjelder alle skjemafelt
 
@@ -15,104 +20,105 @@ Oversikten viser hva hver FFE-komponent blir i Indeks.
 
 | FFE | Indeks | Hva endres |
 |---|---|---|
-| `PrimaryButton`, `SecondaryButton`, `TertiaryButton` | [`Button`](../komponenter/button) | Én komponent med `variant="primary"`, `"secondary"` eller `"tertiary"`. `isLoading` blir `loading`, og da er `loadingLabel` påkrevd. `isDisabled` blir `disabled`. `leftIcon` og `rightIcon` finnes ikke: legg `Icon` i children. |
-| `ActionButton` | **Mangler** | Det finnes ingen action-variant. |
-| `BackButton` | **Mangler** | Sett sammen av `Button variant="tertiary"` og `Icon`. |
-| `ShortcutButton`, `TaskButton` | **Mangler** | |
-| `ExpandButton`, `InlineExpandButton` | **Mangler** | Bruk [`ReadMore`](../komponenter/read-more) eller [`Accordion`](../komponenter/accordion) for innhold som vises og skjules. |
-| `ButtonGroup` | **Mangler** | Bruk [`HStack`](../komponenter/primitives/stack). |
+| [`PrimaryButton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-buttons-react), [`SecondaryButton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-buttons-react), [`TertiaryButton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-buttons-react) | [`Button`](../komponenter/button) | Én komponent med `variant="primary"`, `"secondary"` eller `"tertiary"`. `isLoading` blir `loading`, og da er `loadingLabel` påkrevd. `isDisabled` blir `disabled`. `leftIcon` og `rightIcon` finnes ikke: legg `Icon` i children. |
+| [`ActionButton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-buttons-react) | **Fases ut** | Bruk `Button`. |
+| [`BackButton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-buttons-react) | **Erstattes av** [`Button`](../komponenter/button) og [`Icon`](../komponenter/icon) | Bruk `variant="tertiary"` med `Icon` i children. |
+| [`ShortcutButton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-buttons-react), [`TaskButton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-buttons-react) | **Uavklart** | |
+| [`ExpandButton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-buttons-react), [`InlineExpandButton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-buttons-react) | **Erstattes av** [`ReadMore`](../komponenter/read-more) eller [`Accordion`](../komponenter/accordion) | For innhold som vises og skjules. |
+| [`ButtonGroup`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-buttons-react) | **Erstattes av** [`HStack`](../komponenter/primitives/stack) | |
 
 ## Skjema
 
 | FFE | Indeks | Hva endres |
 |---|---|---|
-| `Input`, `TextField` | [`TextField`](../komponenter/skjema/textfield) | Ledetekst, beskrivelse, feilmelding og tooltip er props. `inline` og `textRightAlign` finnes ikke. Se også [formatering](../komponenter/skjema/textfield-formatering). |
-| `InputGroup` | `Field` | Trengs bare rundt egne felt. `inputId` er påkrevd. |
-| `Label` | [`Label`](../komponenter/skjema/label) | Bruk heller `label` på feltet. |
-| `ErrorFieldMessage`, `SuccessFieldMessage` | [`ValidationMessage`](../komponenter/skjema/validation-message) | `status="danger"` eller `"success"`. På et felt bruker du `errorMessage`. |
-| `InfoFieldMessage` | **Mangler** | Bruk `description` på feltet. |
-| `TextArea` | [`TextArea`](../komponenter/skjema/textarea) | Samme mønster som `TextField`. |
-| `Checkbox` | [`Checkbox`](../komponenter/skjema/checkbox) | Ledeteksten er `label`, ikke children. `hiddenLabel`, `inline` og `noMargins` finnes ikke. |
-| `RadioButton`, `RadioButtonInputGroup` | [`RadioGroup`](../komponenter/skjema/radio-group) og `RadioButton` | Gruppen eier `legend`, `value`, `onChange` og `errorMessage`. Valgene gis som `options` eller children. |
-| `RadioBlock`, `RadioSwitch` | **Mangler** | |
-| `ToggleSwitch` | **Mangler** | |
-| `Dropdown` | [`Select`](../komponenter/skjema/select) | Valgene gis som `options`, flate eller i grupper. |
-| `SearchableDropdown`, `SearchableDropdownMultiSelect` | [`Combobox`](../komponenter/skjema/combobox) | `multiple` for flervalg, og da er verdien `string[]`. `noHitsText` er påkrevd. |
-| `Datepicker`, `DateInput` | [`DateField`](../komponenter/skjema/date-field) | Verdien er en ISO-dato som streng. `openLabel` er påkrevd. |
-| `Calendar` | **Mangler** | |
-| `PhoneNumber` | [`PhoneNumberField`](../komponenter/skjema/phone-number-field) | Landkode og nummer er to felt med hver sin ledetekst. |
-| `Tooltip` | [Tooltip](../komponenter/skjema/tooltip) | Ikke en React-komponent. På skjemafelt bruker du `tooltip`. På andre elementer setter du `data-tooltip`. Bare ren tekst: bruk [`Popover`](../komponenter/popover) for rikere innhold. |
-| `FileUpload` | **Mangler** | |
-| `AccountSelector`, `AccountSelectorMulti` | **Mangler** | |
+| [`Input`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react), [`TextField`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | [`TextField`](../komponenter/skjema/textfield) | Ledetekst, beskrivelse, feilmelding og tooltip er props. `inline` og `textRightAlign` finnes ikke. Se også [formatering](../komponenter/skjema/textfield-formatering). |
+| [`InputGroup`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | `Field` | Trengs bare rundt egne felt. `inputId` er påkrevd. |
+| [`Label`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | [`Label`](../komponenter/skjema/label) | Bruk heller `label` på feltet. |
+| [`ErrorFieldMessage`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react), [`SuccessFieldMessage`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | [`ValidationMessage`](../komponenter/skjema/validation-message) | `status="danger"` eller `"success"`. På et felt bruker du `errorMessage`. |
+| [`InfoFieldMessage`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | **Erstattes av** `description` | Propen finnes på alle skjemafelt. |
+| [`TextArea`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | [`TextArea`](../komponenter/skjema/textarea) | Samme mønster som `TextField`. |
+| [`Checkbox`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | [`Checkbox`](../komponenter/skjema/checkbox) | Ledeteksten er `label`, ikke children. `hiddenLabel`, `inline` og `noMargins` finnes ikke. |
+| [`RadioButton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react), [`RadioButtonInputGroup`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | [`RadioGroup`](../komponenter/skjema/radio-group) og `RadioButton` | Gruppen eier `legend`, `value`, `onChange` og `errorMessage`. Valgene gis som `options` eller children. |
+| [`RadioBlock`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | **Uavklart** | |
+| [`RadioSwitch`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | **Erstattes av** `ToggleSwitch` | `ToggleSwitch` jobbes med. |
+| [`ToggleSwitch`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | **Jobbes med** | |
+| [`Dropdown`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-dropdown-react) | [`Select`](../komponenter/skjema/select) | Valgene gis som `options`, flate eller i grupper. |
+| [`SearchableDropdown`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-searchable-dropdown-react), [`SearchableDropdownMultiSelect`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-searchable-dropdown-react) | [`Combobox`](../komponenter/skjema/combobox) | `multiple` for flervalg, og da er verdien `string[]`. `noHitsText` er påkrevd. |
+| [`DateInput`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-datepicker-react) | [`DateField`](../komponenter/skjema/date-field) | Verdien er en ISO-dato som streng. `openLabel` er påkrevd. |
+| [`Datepicker`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-datepicker-react), [`Calendar`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-datepicker-react) | **Skal jobbes med** | Til da: `DateField` bruker nettleserens egen datovelger. |
+| [`PhoneNumber`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | [`PhoneNumberField`](../komponenter/skjema/phone-number-field) | Landkode og nummer er to felt med hver sin ledetekst. |
+| [`Tooltip`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-form-react) | [Tooltip](../komponenter/skjema/tooltip) | Ikke en React-komponent. På skjemafelt bruker du `tooltip`. På andre elementer setter du `data-tooltip`. Bare ren tekst: bruk [`Popover`](../komponenter/popover) for rikere innhold. |
+| [`FileUpload`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-file-upload-react) | **Uavklart** | |
+| [`AccountSelector`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-account-selector-react), [`AccountSelectorMulti`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-account-selector-react) | **Uavklart** | |
 
 ## Innhold og layout
 
 | FFE | Indeks | Hva endres |
 |---|---|---|
-| `TextCard`, `IconCard`, `IllustrationCard`, `ImageCard`, `StippledCard` | [`Card`](../komponenter/card) | Hele kortet er en lenke: `href` og `title` er påkrevd. `variant` velger utforming, og `appearance="dashed"` erstatter `StippledCard`. |
-| `CardBase` | [`Surface`](../komponenter/surface) | Bruk `Surface` når du lager et eget kort. |
-| `GroupCard` med deler | **Mangler** | |
-| `Accordion`, `AccordionItem` | [`Accordion`](../komponenter/accordion) | Delene er `Accordion.Item`, `.Header` og `.Content`. `defaultOpen` erstatter `isOpen`. |
-| `Collapse` | **Mangler** | Bruk [`ReadMore`](../komponenter/read-more) eller [`Accordion`](../komponenter/accordion). |
-| `Modal` | [`Modal`](../komponenter/modal) | Styres med `open` og `onOpenChange`, ikke med `open()` og `close()` på en ref. `Modal.Title` kobler `aria-labelledby` for deg. |
-| `ModalBlock` | `Modal.Body` | Bruk delene `Modal.Header`, `.Body` og `.Footer`. |
-| `Grid`, `GridRow`, `GridCol` | [`Grid`](../komponenter/primitives/grid), [`HStack` og `VStack`](../komponenter/primitives/stack) | CSS grid med `cols`, ikke rader og kolonner som komponenter. |
-| `BulletList`, `CheckList`, `NumberedList`, `StylizedNumberedList` | **Mangler** | Bruk `<ul>` og `<ol>`. |
-| `DescriptionList`, `DetailListCard` | **Mangler** | |
-| `DividerLine` | [`Divider`](../komponenter/divider) | |
-| `Wave` | **Mangler** | |
+| [`TextCard`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-cards-react), [`IconCard`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-cards-react), [`IllustrationCard`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-cards-react), [`ImageCard`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-cards-react), [`StippledCard`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-cards-react) | [`Card`](../komponenter/card) | Hele kortet er en lenke: `href` og `title` er påkrevd. `variant` velger utforming, og `appearance="dashed"` erstatter `StippledCard`. |
+| [`CardBase`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-cards-react) | [`Surface`](../komponenter/surface) | Bruk `Surface` når du lager et eget kort. |
+| [`GroupCard`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-cards-react) med deler | **Erstattes av** `ListCard` | `ListCard` jobbes med. |
+| [`Accordion`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-accordion-react), [`AccordionItem`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-accordion-react) | [`Accordion`](../komponenter/accordion) | Delene er `Accordion.Item`, `.Header` og `.Content`. `defaultOpen` erstatter `isOpen`. |
+| [`Collapse`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-collapse-react) | **Erstattes av** [`ReadMore`](../komponenter/read-more) eller [`Accordion`](../komponenter/accordion) | |
+| [`Modal`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-modals-react) | [`Modal`](../komponenter/modal) | Styres med `open` og `onOpenChange`, ikke med `open()` og `close()` på en ref. `Modal.Title` kobler `aria-labelledby` for deg. |
+| [`ModalBlock`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-modals-react) | `Modal.Body` | Bruk delene `Modal.Header`, `.Body` og `.Footer`. |
+| [`Grid`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-grid-react), [`GridRow`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-grid-react), [`GridCol`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-grid-react) | [`Grid`](../komponenter/primitives/grid), [`HStack` og `VStack`](../komponenter/primitives/stack) | CSS grid med `cols`, ikke rader og kolonner som komponenter. |
+| [`BulletList`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-lists-react), [`CheckList`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-lists-react), [`NumberedList`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-lists-react), [`StylizedNumberedList`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-lists-react) | **Erstattes av** `<ul>` og `<ol>` | |
+| [`DescriptionList`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-lists-react), [`DetailListCard`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-lists-react) | **Uavklart** | |
+| [`DividerLine`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react) | [`Divider`](../komponenter/divider) | |
+| [`Wave`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-shapes-react) | **Fases ut** | |
 
 ## Meldinger
 
 | FFE | Indeks | Hva endres |
 |---|---|---|
-| `InfoMessage`, `SuccessMessage`, `ErrorMessage`, `ContextInfoMessage` og de andre kontekstmeldingene | [`Message`](../komponenter/message) | Én komponent med `status="info"`, `"success"`, `"warning"` eller `"danger"`. `header` blir `title`. Lukkeknappen vises når du setter `closeLabel`. Legg meldingene i en `MessageRegion`, så skjermlesere leser dem opp. |
-| `TipsMessage`, `ContextTipsMessage` | **Mangler** | Indeks har ikke tips-status. |
-| `SystemInfoMessage` og de andre systemmeldingene | **Mangler** | |
-| `Feedback` | **Mangler** | |
+| [`InfoMessage`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-message-box-react), [`SuccessMessage`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-message-box-react), [`ErrorMessage`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-message-box-react), [`ContextInfoMessage`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-context-message-react) og de andre kontekstmeldingene | [`Message`](../komponenter/message) | Én komponent med `status="info"`, `"success"`, `"warning"` eller `"danger"`. `header` blir `title`. Lukkeknappen vises når du setter `closeLabel`. Legg meldingene i en `MessageRegion`, så skjermlesere leser dem opp. |
+| [`TipsMessage`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-message-box-react), [`ContextTipsMessage`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-context-message-react) | **Fases ut** | Bruk `Message` med en annen `status`. |
+| [`SystemInfoMessage`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-system-message-react) og de andre systemmeldingene | **Uavklart** | |
+| [`Feedback`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-feedback-react) | **Uavklart** | |
 
 ## Navigasjon
 
 | FFE | Indeks | Hva endres |
 |---|---|---|
-| `TabGroup`, `Tab` | [`Tabs`](../komponenter/tabs) | Delene er `Tabs.List`, `.Tab` og `.Panel`, og Indeks kobler fane og panel for deg. `onChange` gir verdien som streng. |
-| `Pagination`, `usePagination` | [`Pagination`](../komponenter/pagination) | Styres med `page`, `count` og `onPageChange`. Tekstene er påkrevde props. Valg av antall rader per side finnes ikke. |
-| `LinkText` | [`LinkText`](../komponenter/typografi) | |
-| `LinkIcon` | **Mangler** | |
-| `ffe-header` | **Mangler** | |
+| [`TabGroup`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-tabs-react), [`Tab`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-tabs-react) | [`Tabs`](../komponenter/tabs) | Delene er `Tabs.List`, `.Tab` og `.Panel`, og Indeks kobler fane og panel for deg. `onChange` gir verdien som streng. |
+| [`Pagination`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-pagination-react), [`usePagination`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-pagination-react) | [`Pagination`](../komponenter/pagination) | Styres med `page`, `count` og `onPageChange`. Tekstene er påkrevde props. Valg av antall rader per side finnes ikke. |
+| [`LinkText`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react) | [`LinkText`](../komponenter/typografi) | |
+| [`LinkIcon`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react) | **Uavklart** | |
+| [`ffe-header`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-header) | **Uavklart** | |
 
 ## Data
 
 | FFE | Indeks | Hva endres |
 |---|---|---|
-| `Table` med deler | **Mangler** | React-`Table` er ikke klar til bruk. |
-| `Progressbar` | [`ProgressBar`](../komponenter/progress-bar) | Stor B i navnet. `state` er `"active"`, `"success"` eller `"error"`, og ledetekst gis med `label`. |
-| `ChartDonut` | **Mangler** | |
-| `ffe-formatters` | **Mangler** | For input-felt, se [formatering i TextField](../komponenter/skjema/textfield-formatering). |
+| [`Table`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-tables-react) med deler | **Jobbes med** | |
+| [`Progressbar`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-progressbar-react) | [`ProgressBar`](../komponenter/progress-bar) | Stor B i navnet. `state` er `"active"`, `"success"` eller `"error"`, og ledetekst gis med `label`. |
+| [`ChartDonut`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-chart-donut-react) | **Uavklart** | |
+| [`ffe-formatters`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-formatters) | **Uavklart** | For input-felt, se [formatering i TextField](../komponenter/skjema/textfield-formatering). |
 
 ## Typografi
 
 | FFE | Indeks | Hva endres |
 |---|---|---|
-| `Heading1`–`Heading6` | [`Heading`](../komponenter/typografi) | `as="h1"` til `"h6"` er påkrevd. `lookLike` blir `size`. Avstand er av som standard: slå den på med `addRecommendedSpacing`. |
-| `BodyText`, `Paragraph`, `SmallText`, `MicroText` | [`Text`](../komponenter/typografi) | Én komponent med `size`. Standard element er `p`. |
-| `StrongText`, `EmphasizedText`, `PreformattedText` | **Mangler** | Bruk `<strong>`, `<em>` og `<pre>`. |
+| [`Heading1`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react)–[`Heading6`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react) | [`Heading`](../komponenter/typografi) | `as="h1"` til `"h6"` er påkrevd. `lookLike` blir `size`. Avstand er av som standard: slå den på med `addRecommendedSpacing`. |
+| [`BodyText`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react), [`Paragraph`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react), [`SmallText`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react), [`MicroText`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react) | [`Text`](../komponenter/typografi) | Én komponent med `size`. Standard element er `p`. |
+| [`StrongText`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react), [`EmphasizedText`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react), [`PreformattedText`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-core-react) | **Erstattes av** `<strong>`, `<em>` og `<pre>` | |
 
 ## Ikoner og annet
 
 | FFE | Indeks | Hva endres |
 |---|---|---|
-| `Icon`, `Symbol` | [`Icon`](../komponenter/icon) | Ikonet velges med `name`, ikke `fileUrl` eller `icon`. `fill` og `weight` finnes ikke. |
-| `Spinner` | [`Spinner`](../komponenter/spinner) | `large` blir `size="lg"`, og `loadingText` blir `label`. `immediate` og `locale` finnes ikke. |
-| `Tag` | [`Tag`](../komponenter/tag) | `variant="critical"` blir `"danger"`. `tip` finnes ikke. |
-| `Chip` | [`Chip`](../komponenter/chip) | `size` er `"sm"` eller `"md"`. `leftIcon` og `rightIcon` finnes ikke. |
-| `ChipRemovable` | [`RemovableChip`](../komponenter/chip/removable) | `removeLabel` er påkrevd. |
-| `ChipSelectable` | [`CheckboxGroup`](../komponenter/chip/checkbox) eller [`RadioGroup`](../komponenter/chip/radio) | Bruk `variant="chip"` på gruppen. |
-| `Badge` | **Mangler** | |
-| `Skeleton`, `SkeletonCircle` | **Mangler** | |
+| [`Icon`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-icons-react), [`Symbol`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-symbols-react) | [`Icon`](../komponenter/icon) | Ikonet velges med `name`, ikke `fileUrl` eller `icon`. `fill` og `weight` finnes ikke. |
+| [`Spinner`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-spinner-react) | [`Spinner`](../komponenter/spinner) | `large` blir `size="lg"`, og `loadingText` blir `label`. `immediate` og `locale` finnes ikke. |
+| [`Tag`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-tags-react) | [`Tag`](../komponenter/tag) | `variant="critical"` blir `"danger"`. `tip` finnes ikke. |
+| [`Chip`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-chips-react) | [`Chip`](../komponenter/chip) | `size` er `"sm"` eller `"md"`. `leftIcon` og `rightIcon` finnes ikke. |
+| [`ChipRemovable`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-chips-react) | [`RemovableChip`](../komponenter/chip/removable) | `removeLabel` er påkrevd. |
+| [`ChipSelectable`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-chips-react) | [`CheckboxGroup`](../komponenter/chip/checkbox) eller [`RadioGroup`](../komponenter/chip/radio) | Bruk `variant="chip"` på gruppen. |
+| [`Badge`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-badge-react) | **Uavklart** | |
+| [`Skeleton`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-skeleton-react), [`SkeletonCircle`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-skeleton-react) | **Uavklart** | |
 
 ## Nytt i Indeks
 
 Disse har ingen FFE-forgjenger: [`DropdownMenu`](../komponenter/dropdown-menu), [`Popover`](../komponenter/popover), [`ReadMore`](../komponenter/read-more), [`Row`](../komponenter/row), [`InteractiveIcon`](../komponenter/interactive-icon), [`Surface`](../komponenter/surface), [`CheckboxGroup`](../komponenter/skjema/checkbox-group) og [`HStack` og `VStack`](../komponenter/primitives/stack).
 
-Mangler du en komponent du trenger, [ta kontakt](./kontakt).
+Trenger du en komponent som er uavklart, [ta kontakt](./kontakt). Det hjelper oss å prioritere.
