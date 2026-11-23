@@ -25,7 +25,12 @@ const sidebars: SidebarsConfig = {
                 'kom-i-gang/utvikler',
                 'kom-i-gang/testing',
                 'kom-i-gang/nettleserstotte',
-                'kom-i-gang/migrering',
+                {
+                    type: 'category',
+                    label: 'Migrering fra FFE',
+                    link: { type: 'doc', id: 'kom-i-gang/migrering' },
+                    items: ['kom-i-gang/migrering-komponenter'],
+                },
                 {
                     type: 'category',
                     label: 'Endringslogg',

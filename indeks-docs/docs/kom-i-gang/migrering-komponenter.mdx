@@ -1,0 +1,118 @@
+# Komponenter fra FFE til Indeks
+
+Oversikten viser hva hver FFE-komponent blir i Indeks.
+
+* **Ingen komponent er drop-in.** Selv der navnet er det samme, har props eller markup endret seg, så du må skrive om koden. «Hva endres» viser de viktigste forskjellene. Les komponentsiden før du bytter.
+* **Står det «Mangler»**, har ikke Indeks komponenten. Der det går, står det hva du kan sette den sammen av.
+
+## Dette gjelder alle skjemafelt
+
+* Ledetekst og feilmelding er props på feltet: `label`, `description` og `errorMessage`. Du trenger ikke `InputGroup`, `Label` eller `ErrorFieldMessage` rundt feltet.
+* `onChange` gir et event, ikke en verdi. Les verdien fra `event.target.value`.
+* Grupper av radioknapper og avkrysningsbokser har `legend`, som er påkrevd.
+
+## Knapper
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| `PrimaryButton`, `SecondaryButton`, `TertiaryButton` | [`Button`](../komponenter/button) | Én komponent med `variant="primary"`, `"secondary"` eller `"tertiary"`. `isLoading` blir `loading`, og da er `loadingLabel` påkrevd. `isDisabled` blir `disabled`. `leftIcon` og `rightIcon` finnes ikke: legg `Icon` i children. |
+| `ActionButton` | **Mangler** | Det finnes ingen action-variant. |
+| `BackButton` | **Mangler** | Sett sammen av `Button variant="tertiary"` og `Icon`. |
+| `ShortcutButton`, `TaskButton` | **Mangler** | |
+| `ExpandButton`, `InlineExpandButton` | **Mangler** | Bruk [`ReadMore`](../komponenter/read-more) eller [`Accordion`](../komponenter/accordion) for innhold som vises og skjules. |
+| `ButtonGroup` | **Mangler** | Bruk [`HStack`](../komponenter/primitives/stack). |
+
+## Skjema
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| `Input`, `TextField` | [`TextField`](../komponenter/skjema/textfield) | Ledetekst, beskrivelse, feilmelding og tooltip er props. `inline` og `textRightAlign` finnes ikke. Se også [formatering](../komponenter/skjema/textfield-formatering). |
+| `InputGroup` | `Field` | Trengs bare rundt egne felt. `inputId` er påkrevd. |
+| `Label` | [`Label`](../komponenter/skjema/label) | Bruk heller `label` på feltet. |
+| `ErrorFieldMessage`, `SuccessFieldMessage` | [`ValidationMessage`](../komponenter/skjema/validation-message) | `status="danger"` eller `"success"`. På et felt bruker du `errorMessage`. |
+| `InfoFieldMessage` | **Mangler** | Bruk `description` på feltet. |
+| `TextArea` | [`TextArea`](../komponenter/skjema/textarea) | Samme mønster som `TextField`. |
+| `Checkbox` | [`Checkbox`](../komponenter/skjema/checkbox) | Ledeteksten er `label`, ikke children. `hiddenLabel`, `inline` og `noMargins` finnes ikke. |
+| `RadioButton`, `RadioButtonInputGroup` | [`RadioGroup`](../komponenter/skjema/radio-group) og `RadioButton` | Gruppen eier `legend`, `value`, `onChange` og `errorMessage`. Valgene gis som `options` eller children. |
+| `RadioBlock`, `RadioSwitch` | **Mangler** | |
+| `ToggleSwitch` | **Mangler** | |
+| `Dropdown` | [`Select`](../komponenter/skjema/select) | Valgene gis som `options`, flate eller i grupper. |
+| `SearchableDropdown`, `SearchableDropdownMultiSelect` | [`Combobox`](../komponenter/skjema/combobox) | `multiple` for flervalg, og da er verdien `string[]`. `noHitsText` er påkrevd. |
+| `Datepicker`, `DateInput` | [`DateField`](../komponenter/skjema/date-field) | Verdien er en ISO-dato som streng. `openLabel` er påkrevd. |
+| `Calendar` | **Mangler** | |
+| `PhoneNumber` | [`PhoneNumberField`](../komponenter/skjema/phone-number-field) | Landkode og nummer er to felt med hver sin ledetekst. |
+| `Tooltip` | [Tooltip](../komponenter/skjema/tooltip) | Ikke en React-komponent. På skjemafelt bruker du `tooltip`. På andre elementer setter du `data-tooltip`. Bare ren tekst: bruk [`Popover`](../komponenter/popover) for rikere innhold. |
+| `FileUpload` | **Mangler** | |
+| `AccountSelector`, `AccountSelectorMulti` | **Mangler** | |
+
+## Innhold og layout
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| `TextCard`, `IconCard`, `IllustrationCard`, `ImageCard`, `StippledCard` | [`Card`](../komponenter/card) | Hele kortet er en lenke: `href` og `title` er påkrevd. `variant` velger utforming, og `appearance="dashed"` erstatter `StippledCard`. |
+| `CardBase` | [`Surface`](../komponenter/surface) | Bruk `Surface` når du lager et eget kort. |
+| `GroupCard` med deler | **Mangler** | |
+| `Accordion`, `AccordionItem` | [`Accordion`](../komponenter/accordion) | Delene er `Accordion.Item`, `.Header` og `.Content`. `defaultOpen` erstatter `isOpen`. |
+| `Collapse` | **Mangler** | Bruk [`ReadMore`](../komponenter/read-more) eller [`Accordion`](../komponenter/accordion). |
+| `Modal` | [`Modal`](../komponenter/modal) | Styres med `open` og `onOpenChange`, ikke med `open()` og `close()` på en ref. `Modal.Title` kobler `aria-labelledby` for deg. |
+| `ModalBlock` | `Modal.Body` | Bruk delene `Modal.Header`, `.Body` og `.Footer`. |
+| `Grid`, `GridRow`, `GridCol` | [`Grid`](../komponenter/primitives/grid), [`HStack` og `VStack`](../komponenter/primitives/stack) | CSS grid med `cols`, ikke rader og kolonner som komponenter. |
+| `BulletList`, `CheckList`, `NumberedList`, `StylizedNumberedList` | **Mangler** | Bruk `<ul>` og `<ol>`. |
+| `DescriptionList`, `DetailListCard` | **Mangler** | |
+| `DividerLine` | [`Divider`](../komponenter/divider) | |
+| `Wave` | **Mangler** | |
+
+## Meldinger
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| `InfoMessage`, `SuccessMessage`, `ErrorMessage`, `ContextInfoMessage` og de andre kontekstmeldingene | [`Message`](../komponenter/message) | Én komponent med `status="info"`, `"success"`, `"warning"` eller `"danger"`. `header` blir `title`. Lukkeknappen vises når du setter `closeLabel`. Legg meldingene i en `MessageRegion`, så skjermlesere leser dem opp. |
+| `TipsMessage`, `ContextTipsMessage` | **Mangler** | Indeks har ikke tips-status. |
+| `SystemInfoMessage` og de andre systemmeldingene | **Mangler** | |
+| `Feedback` | **Mangler** | |
+
+## Navigasjon
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| `TabGroup`, `Tab` | [`Tabs`](../komponenter/tabs) | Delene er `Tabs.List`, `.Tab` og `.Panel`, og Indeks kobler fane og panel for deg. `onChange` gir verdien som streng. |
+| `Pagination`, `usePagination` | [`Pagination`](../komponenter/pagination) | Styres med `page`, `count` og `onPageChange`. Tekstene er påkrevde props. Valg av antall rader per side finnes ikke. |
+| `LinkText` | [`LinkText`](../komponenter/typografi) | |
+| `LinkIcon` | **Mangler** | |
+| `ffe-header` | **Mangler** | |
+
+## Data
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| `Table` med deler | **Mangler** | React-`Table` er ikke klar til bruk. |
+| `Progressbar` | [`ProgressBar`](../komponenter/progress-bar) | Stor B i navnet. `state` er `"active"`, `"success"` eller `"error"`, og ledetekst gis med `label`. |
+| `ChartDonut` | **Mangler** | |
+| `ffe-formatters` | **Mangler** | For input-felt, se [formatering i TextField](../komponenter/skjema/textfield-formatering). |
+
+## Typografi
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| `Heading1`–`Heading6` | [`Heading`](../komponenter/typografi) | `as="h1"` til `"h6"` er påkrevd. `lookLike` blir `size`. Avstand er av som standard: slå den på med `addRecommendedSpacing`. |
+| `BodyText`, `Paragraph`, `SmallText`, `MicroText` | [`Text`](../komponenter/typografi) | Én komponent med `size`. Standard element er `p`. |
+| `StrongText`, `EmphasizedText`, `PreformattedText` | **Mangler** | Bruk `<strong>`, `<em>` og `<pre>`. |
+
+## Ikoner og annet
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| `Icon`, `Symbol` | [`Icon`](../komponenter/icon) | Ikonet velges med `name`, ikke `fileUrl` eller `icon`. `fill` og `weight` finnes ikke. |
+| `Spinner` | [`Spinner`](../komponenter/spinner) | `large` blir `size="lg"`, og `loadingText` blir `label`. `immediate` og `locale` finnes ikke. |
+| `Tag` | [`Tag`](../komponenter/tag) | `variant="critical"` blir `"danger"`. `tip` finnes ikke. |
+| `Chip` | [`Chip`](../komponenter/chip) | `size` er `"sm"` eller `"md"`. `leftIcon` og `rightIcon` finnes ikke. |
+| `ChipRemovable` | [`RemovableChip`](../komponenter/chip/removable) | `removeLabel` er påkrevd. |
+| `ChipSelectable` | [`CheckboxGroup`](../komponenter/chip/checkbox) eller [`RadioGroup`](../komponenter/chip/radio) | Bruk `variant="chip"` på gruppen. |
+| `Badge` | **Mangler** | |
+| `Skeleton`, `SkeletonCircle` | **Mangler** | |
+
+## Nytt i Indeks
+
+Disse har ingen FFE-forgjenger: [`DropdownMenu`](../komponenter/dropdown-menu), [`Popover`](../komponenter/popover), [`ReadMore`](../komponenter/read-more), [`Row`](../komponenter/row), [`InteractiveIcon`](../komponenter/interactive-icon), [`Surface`](../komponenter/surface), [`CheckboxGroup`](../komponenter/skjema/checkbox-group) og [`HStack` og `VStack`](../komponenter/primitives/stack).
+
+Mangler du en komponent du trenger, [ta kontakt](./kontakt).
