@@ -1,0 +1,1196 @@
+[
+    {
+        "ffe": "--ffe-color-background-default",
+        "ix": "--ix-color-background-default",
+        "ffeLys": "#ffffff",
+        "ffeMork": "#020a0a",
+        "ixLys": "#fefbf9",
+        "ixMork": "#0f0f11",
+        "avvikLys": 0.011,
+        "avvikMork": 0.039
+    },
+    {
+        "ffe": "--ffe-color-background-subtle",
+        "ix": null,
+        "ffeLys": "#fdf8f5",
+        "ffeMork": "#121212"
+    },
+    {
+        "ffe": "--ffe-color-surface-primary-default",
+        "ix": "--ix-color-surface-main-default",
+        "ffeLys": "#ffffff",
+        "ffeMork": "#262626",
+        "ixLys": "#fff",
+        "ixMork": "#171d25",
+        "avvikLys": 0,
+        "avvikMork": 0.044
+    },
+    {
+        "ffe": "--ffe-color-surface-primary-default-hover",
+        "ix": "--ix-color-surface-main-hover",
+        "ffeLys": "#e7f1f9",
+        "ffeMork": "#333333",
+        "ixLys": "#e2f0ff",
+        "ixMork": "#1e2632",
+        "avvikLys": 0.011,
+        "avvikMork": 0.06
+    },
+    {
+        "ffe": "--ffe-color-surface-primary-default-pressed",
+        "ix": "--ix-color-surface-main-active",
+        "ffeLys": "#d7e7f4",
+        "ffeMork": "#3d3d3d",
+        "ixLys": "#d3e9ff",
+        "ixMork": "#262f3d",
+        "avvikLys": 0.015,
+        "avvikMork": 0.064
+    },
+    {
+        "ffe": "--ffe-color-surface-secondary-default",
+        "ix": null,
+        "ffeLys": "#e5f0f5",
+        "ffeMork": "#0c2232"
+    },
+    {
+        "ffe": "--ffe-color-surface-secondary-default-hover",
+        "ix": null,
+        "ffeLys": "#dceaef",
+        "ffeMork": "#102d43"
+    },
+    {
+        "ffe": "--ffe-color-surface-secondary-default-pressed",
+        "ix": null,
+        "ffeLys": "#cbe2eb",
+        "ffeMork": "#163853"
+    },
+    {
+        "ffe": "--ffe-color-surface-tertiary-default",
+        "ix": null,
+        "ffeLys": "#eaeaf6",
+        "ffeMork": "#1d192f"
+    },
+    {
+        "ffe": "--ffe-color-surface-tertiary-default-hover",
+        "ix": null,
+        "ffeLys": "#e6e6f4",
+        "ffeMork": "#27223a"
+    },
+    {
+        "ffe": "--ffe-color-surface-tertiary-default-pressed",
+        "ix": null,
+        "ffeLys": "#dcdcef",
+        "ffeMork": "#312c44"
+    },
+    {
+        "ffe": "--ffe-color-surface-neutral-default",
+        "ix": null,
+        "ffeLys": "#f0f0f0",
+        "ffeMork": "#333333"
+    },
+    {
+        "ffe": "--ffe-color-surface-neutral-default-hover",
+        "ix": null,
+        "ffeLys": "#e5e5e5",
+        "ffeMork": "#3d3d3d"
+    },
+    {
+        "ffe": "--ffe-color-surface-neutral-default-pressed",
+        "ix": null,
+        "ffeLys": "#dbdbdb",
+        "ffeMork": "#474747"
+    },
+    {
+        "ffe": "--ffe-color-surface-feedback-info",
+        "ix": "--ix-color-surface-info-default",
+        "ffeLys": "#e5f0f5",
+        "ffeMork": "#163853",
+        "ixLys": "#dbe9f4",
+        "ixMork": "#002847",
+        "avvikLys": 0.023,
+        "avvikMork": 0.061
+    },
+    {
+        "ffe": "--ffe-color-surface-feedback-success",
+        "ix": "--ix-color-surface-success-default",
+        "ffeLys": "#dff6eb",
+        "ffeMork": "#0a4330",
+        "ixLys": "#d6ede0",
+        "ixMork": "#003117",
+        "avvikLys": 0.028,
+        "avvikMork": 0.069
+    },
+    {
+        "ffe": "--ffe-color-surface-feedback-warning",
+        "ix": "--ix-color-surface-warning-default",
+        "ffeLys": "#fdeed3",
+        "ffeMork": "#491c00",
+        "ixLys": "#f7e2d1",
+        "ixMork": "#3f1900",
+        "avvikLys": 0.032,
+        "avvikMork": 0.025
+    },
+    {
+        "ffe": "--ffe-color-surface-feedback-critical",
+        "ix": "--ix-color-surface-danger-default",
+        "ffeLys": "#ffe3e0",
+        "ffeMork": "#640e10",
+        "ixLys": "#ffddda",
+        "ixMork": "#530003",
+        "avvikLys": 0.015,
+        "avvikMork": 0.049
+    },
+    {
+        "ffe": "--ffe-color-surface-feedback-tip",
+        "ix": null,
+        "ffeLys": "#eaeaf6",
+        "ffeMork": "#312c44"
+    },
+    {
+        "ffe": "--ffe-color-fill-primary-default",
+        "ix": "--ix-color-fill-main-default",
+        "ffeLys": "#9ec2e5",
+        "ffeMork": "#55709b",
+        "ixLys": "#0d6cbf",
+        "ixMork": "#3597f9",
+        "avvikLys": 0.287,
+        "avvikMork": 0.159
+    },
+    {
+        "ffe": "--ffe-color-fill-primary-default-hover",
+        "ix": "--ix-color-fill-main-default-hover",
+        "ffeLys": "#7dabd9",
+        "ffeMork": "#748db4",
+        "ixLys": "#0058a6",
+        "ixMork": "#55adff",
+        "avvikLys": 0.271,
+        "avvikMork": 0.123
+    },
+    {
+        "ffe": "--ffe-color-fill-primary-default-pressed",
+        "ix": "--ix-color-fill-main-default-active",
+        "ffeLys": "#5494d4",
+        "ffeMork": "#90a9d0",
+        "ixLys": "#004697",
+        "ixMork": "#7fc2ff",
+        "avvikLys": 0.245,
+        "avvikMork": 0.081
+    },
+    {
+        "ffe": "--ffe-color-fill-primary-selected-default",
+        "ix": "--ix-color-fill-main-default",
+        "ffeLys": "#005aa4",
+        "ffeMork": "#f7fafd",
+        "ixLys": "#0d6cbf",
+        "ixMork": "#3597f9",
+        "avvikLys": 0.063,
+        "avvikMork": 0.356
+    },
+    {
+        "ffe": "--ffe-color-fill-primary-selected-hover",
+        "ix": "--ix-color-fill-main-default-hover",
+        "ffeLys": "#073f83",
+        "ffeMork": "#d7e7f4",
+        "ixLys": "#0058a6",
+        "ixMork": "#55adff",
+        "avvikLys": 0.087,
+        "avvikMork": 0.226
+    },
+    {
+        "ffe": "--ffe-color-fill-primary-selected-pressed",
+        "ix": "--ix-color-fill-main-default-active",
+        "ffeLys": "#082868",
+        "ffeMork": "#c3d9ef",
+        "ixLys": "#004697",
+        "ixMork": "#7fc2ff",
+        "avvikLys": 0.112,
+        "avvikMork": 0.11
+    },
+    {
+        "ffe": "--ffe-color-fill-primary-subtle",
+        "ix": "--ix-color-fill-main-subtle",
+        "ffeLys": "#d7e7f4",
+        "ffeMork": "#374b6c",
+        "ixLys": "#bae0ff",
+        "ixMork": "#004697",
+        "avvikLys": 0.045,
+        "avvikMork": 0.086
+    },
+    {
+        "ffe": "--ffe-color-fill-primary-subtle-hover",
+        "ix": "--ix-color-fill-main-subtle-hover",
+        "ffeLys": "#c3d9ef",
+        "ffeMork": "#3e5579",
+        "ixLys": "#7fc2ff",
+        "ixMork": "#0058a6",
+        "avvikLys": 0.11,
+        "avvikMork": 0.08
+    },
+    {
+        "ffe": "--ffe-color-fill-primary-subtle-pressed",
+        "ix": "--ix-color-fill-main-subtle-active",
+        "ffeLys": "#b6d1ec",
+        "ffeMork": "#47618a",
+        "ixLys": "#55adff",
+        "ixMork": "#0d6cbf",
+        "avvikLys": 0.156,
+        "avvikMork": 0.088
+    },
+    {
+        "ffe": "--ffe-color-fill-primary-invisible",
+        "ix": null,
+        "ffeLys": "#ffffff00",
+        "ffeMork": "#ffffff00"
+    },
+    {
+        "ffe": "--ffe-color-fill-secondary-default",
+        "ix": null,
+        "ffeLys": "#a6cee2",
+        "ffeMork": "#457aa1"
+    },
+    {
+        "ffe": "--ffe-color-fill-secondary-default-hover",
+        "ix": null,
+        "ffeLys": "#7eb5d2",
+        "ffeMork": "#6096bd"
+    },
+    {
+        "ffe": "--ffe-color-fill-secondary-default-pressed",
+        "ix": null,
+        "ffeLys": "#6096bd",
+        "ffeMork": "#7eb5d2"
+    },
+    {
+        "ffe": "--ffe-color-fill-secondary-subtle",
+        "ix": null,
+        "ffeLys": "#cbe2eb",
+        "ffeMork": "#2b5a7c"
+    },
+    {
+        "ffe": "--ffe-color-fill-secondary-subtle-hover",
+        "ix": null,
+        "ffeLys": "#c3dfea",
+        "ffeMork": "#356488"
+    },
+    {
+        "ffe": "--ffe-color-fill-secondary-subtle-pressed",
+        "ix": null,
+        "ffeLys": "#b6d7e7",
+        "ffeMork": "#3b6f96"
+    },
+    {
+        "ffe": "--ffe-color-fill-tertiary-default",
+        "ix": null,
+        "ffeLys": "#c1c1dc",
+        "ffeMork": "#7b718e"
+    },
+    {
+        "ffe": "--ffe-color-fill-tertiary-default-hover",
+        "ix": null,
+        "ffeLys": "#b4aecb",
+        "ffeMork": "#a39db9"
+    },
+    {
+        "ffe": "--ffe-color-fill-tertiary-default-pressed",
+        "ix": null,
+        "ffeLys": "#a39db9",
+        "ffeMork": "#b4aecb"
+    },
+    {
+        "ffe": "--ffe-color-fill-tertiary-subtle",
+        "ix": null,
+        "ffeLys": "#dcdcef",
+        "ffeMork": "#4e4a64"
+    },
+    {
+        "ffe": "--ffe-color-fill-tertiary-subtle-hover",
+        "ix": null,
+        "ffeLys": "#d3d3ea",
+        "ffeMork": "#5a5671"
+    },
+    {
+        "ffe": "--ffe-color-fill-tertiary-subtle-pressed",
+        "ix": null,
+        "ffeLys": "#cacae3",
+        "ffeMork": "#665d79"
+    },
+    {
+        "ffe": "--ffe-color-fill-neutral-default",
+        "ix": "--ix-color-fill-neutral-default",
+        "ffeLys": "#020a0a33",
+        "ffeMork": "#ffffff33",
+        "ixLys": "#626c7a",
+        "ixMork": "#8a95a6",
+        "avvikLys": 0.323,
+        "avvikMork": 0.321
+    },
+    {
+        "ffe": "--ffe-color-fill-neutral-default-hover",
+        "ix": "--ix-color-fill-neutral-default-hover",
+        "ffeLys": "#020a0a40",
+        "ffeMork": "#ffffff40",
+        "ixLys": "#505966",
+        "ixMork": "#a0abbb",
+        "avvikLys": 0.351,
+        "avvikMork": 0.344
+    },
+    {
+        "ffe": "--ffe-color-fill-neutral-default-pressed",
+        "ix": "--ix-color-fill-neutral-default-active",
+        "ffeLys": "#020a0a4d",
+        "ffeMork": "#ffffff4d",
+        "ixLys": "#404956",
+        "ixMork": "#b5becc",
+        "avvikLys": 0.37,
+        "avvikMork": 0.359
+    },
+    {
+        "ffe": "--ffe-color-fill-neutral-subtle",
+        "ix": "--ix-color-fill-neutral-subtle",
+        "ffeLys": "#020a0a13",
+        "ffeMork": "#ffffff13",
+        "ixLys": "#d7dce4",
+        "ixMork": "#323b49",
+        "avvikLys": 0.053,
+        "avvikMork": 0.132
+    },
+    {
+        "ffe": "--ffe-color-fill-neutral-subtle-hover",
+        "ix": "--ix-color-fill-neutral-subtle-hover",
+        "ffeLys": "#020a0a1a",
+        "ffeMork": "#ffffff1a",
+        "ixLys": "#b5becc",
+        "ixMork": "#404956",
+        "avvikLys": 0.127,
+        "avvikMork": 0.155
+    },
+    {
+        "ffe": "--ffe-color-fill-neutral-subtle-pressed",
+        "ix": "--ix-color-fill-neutral-subtle-active",
+        "ffeLys": "#020a0a26",
+        "ffeMork": "#ffffff26",
+        "ixLys": "#a0abbb",
+        "ixMork": "#505966",
+        "avvikLys": 0.153,
+        "avvikMork": 0.166
+    },
+    {
+        "ffe": "--ffe-color-fill-neutral-extra-subtle",
+        "ix": null,
+        "ffeLys": "#020a0a06",
+        "ffeMork": "#ffffff06"
+    },
+    {
+        "ffe": "--ffe-color-fill-neutral-extra-subtle-hover",
+        "ix": null,
+        "ffeLys": "#020a0a0d",
+        "ffeMork": "#ffffff0d"
+    },
+    {
+        "ffe": "--ffe-color-fill-neutral-extra-subtle-pressed",
+        "ix": null,
+        "ffeLys": "#020a0a13",
+        "ffeMork": "#ffffff13"
+    },
+    {
+        "ffe": "--ffe-color-fill-feedback-info",
+        "ix": "--ix-color-fill-info-default",
+        "ffeLys": "#457aa1",
+        "ffeMork": "#7eb5d2",
+        "ixLys": "#417093",
+        "ixMork": "#649bc4",
+        "avvikLys": 0.034,
+        "avvikMork": 0.08
+    },
+    {
+        "ffe": "--ffe-color-fill-feedback-info-subtle",
+        "ix": "--ix-color-fill-info-subtle",
+        "ffeLys": "#cbe2eb",
+        "ffeMork": "#234f71",
+        "ixLys": "#b1d3ee",
+        "ixMork": "#023e61",
+        "avvikLys": 0.055,
+        "avvikMork": 0.065
+    },
+    {
+        "ffe": "--ffe-color-fill-feedback-success",
+        "ix": "--ix-color-fill-success-default",
+        "ffeLys": "#2a7e5b",
+        "ffeMork": "#6abe97",
+        "ixLys": "#177e56",
+        "ixMork": "#3eab7c",
+        "avvikLys": 0.013,
+        "avvikMork": 0.074
+    },
+    {
+        "ffe": "--ffe-color-fill-feedback-success-subtle",
+        "ix": "--ix-color-fill-success-subtle",
+        "ffeLys": "#bbedd5",
+        "ffeMork": "#09583b",
+        "ixLys": "#a2debe",
+        "ixMork": "#004a28",
+        "avvikLys": 0.056,
+        "avvikMork": 0.05
+    },
+    {
+        "ffe": "--ffe-color-fill-feedback-warning",
+        "ix": "--ix-color-fill-warning-default",
+        "ffeLys": "#a95704",
+        "ffeMork": "#ea910b",
+        "ixLys": "#995907",
+        "ixMork": "#cc8030",
+        "avvikLys": 0.03,
+        "avvikMork": 0.072
+    },
+    {
+        "ffe": "--ffe-color-fill-feedback-warning-subtle",
+        "ix": "--ix-color-fill-warning-subtle",
+        "ffeLys": "#ffd394",
+        "ffeMork": "#682c00",
+        "ixLys": "#f5c397",
+        "ixMork": "#5e2b00",
+        "avvikLys": 0.046,
+        "avvikMork": 0.022
+    },
+    {
+        "ffe": "--ffe-color-fill-feedback-critical",
+        "ix": "--ix-color-fill-danger-default",
+        "ffeLys": "#c62a2f",
+        "ffeMork": "#ff5e5c",
+        "ixLys": "#ad4243",
+        "ixMork": "#e56766",
+        "avvikLys": 0.054,
+        "avvikMork": 0.047
+    },
+    {
+        "ffe": "--ffe-color-fill-feedback-critical-subtle",
+        "ix": "--ix-color-fill-danger-subtle",
+        "ffeLys": "#ffbeb8",
+        "ffeMork": "#7c1214",
+        "ixLys": "#ffb5b1",
+        "ixMork": "#76000e",
+        "avvikLys": 0.021,
+        "avvikMork": 0.024
+    },
+    {
+        "ffe": "--ffe-color-fill-feedback-tip",
+        "ix": null,
+        "ffeLys": "#5a5671",
+        "ffeMork": "#c1c1dc"
+    },
+    {
+        "ffe": "--ffe-color-fill-feedback-tip-subtle",
+        "ix": null,
+        "ffeLys": "#dcdcef",
+        "ffeMork": "#45415a"
+    },
+    {
+        "ffe": "--ffe-color-foreground-default",
+        "ix": "--ix-color-foreground-main-default",
+        "ffeLys": "#1a1a1a",
+        "ffeMork": "#ffffff",
+        "ixLys": "#131619",
+        "ixMork": "#fff",
+        "avvikLys": 0.021,
+        "avvikMork": 0
+    },
+    {
+        "ffe": "--ffe-color-foreground-subtle",
+        "ix": "--ix-color-foreground-main-subtle",
+        "ffeLys": "#525252",
+        "ffeMork": "#c2c2c2",
+        "ixLys": "#505966",
+        "ixMork": "#c7cfd9",
+        "avvikLys": 0.033,
+        "avvikMork": 0.041
+    },
+    {
+        "ffe": "--ffe-color-foreground-emphasis",
+        "ix": "--ix-color-foreground-main-emphasis",
+        "ffeLys": "#08235e",
+        "ffeMork": "#d7e7f4",
+        "ixLys": "#003782",
+        "ixMork": "#d3e9ff",
+        "avvikLys": 0.082,
+        "avvikMork": 0.015
+    },
+    {
+        "ffe": "--ffe-color-foreground-inverse",
+        "ix": "--ix-color-foreground-inverse-default",
+        "ffeLys": "#ffffff",
+        "ffeMork": "#020a0a",
+        "ixLys": "#f8f9fa",
+        "ixMork": "#131619",
+        "avvikLys": 0.018,
+        "avvikMork": 0.066
+    },
+    {
+        "ffe": "--ffe-color-foreground-interactive-link",
+        "ix": "--ix-color-foreground-link-default",
+        "ffeLys": "#005aa4",
+        "ffeMork": "#c3d9ef",
+        "ixLys": "#004697",
+        "ixMork": "#7fc2ff",
+        "avvikLys": 0.058,
+        "avvikMork": 0.11
+    },
+    {
+        "ffe": "--ffe-color-foreground-interactive-link-hover",
+        "ix": "--ix-color-foreground-link-hover",
+        "ffeLys": "#073f83",
+        "ffeMork": "#b6d1ec",
+        "ixLys": "#00225d",
+        "ixMork": "#d3e9ff",
+        "avvikLys": 0.105,
+        "avvikMork": 0.076
+    },
+    {
+        "ffe": "--ffe-color-foreground-interactive-link-pressed",
+        "ix": "--ix-color-foreground-link-active",
+        "ffeLys": "#082868",
+        "ffeMork": "#9ec2e5",
+        "ixLys": "#02162c",
+        "ixMork": "#edf6ff",
+        "avvikLys": 0.124,
+        "avvikMork": 0.176
+    },
+    {
+        "ffe": "--ffe-color-foreground-interactive-link-active",
+        "ix": "--ix-color-foreground-link-active",
+        "ffeLys": "#005aa4",
+        "ffeMork": "#f7fafd",
+        "ixLys": "#02162c",
+        "ixMork": "#edf6ff",
+        "avvikLys": 0.282,
+        "avvikMork": 0.018
+    },
+    {
+        "ffe": "--ffe-color-foreground-interactive-disabled",
+        "ix": "--ix-color-foreground-main-disabled",
+        "ffeLys": "#a4a4a4",
+        "ffeMork": "#8f8f8f",
+        "ixLys": "#505966",
+        "ixMork": "#a0abbb",
+        "avvikLys": 0.259,
+        "avvikMork": 0.091
+    },
+    {
+        "ffe": "--ffe-color-foreground-feedback-info",
+        "ix": "--ix-color-foreground-info-default",
+        "ffeLys": "#234f71",
+        "ffeMork": "#c3dfea",
+        "ixLys": "#315d7d",
+        "ixMork": "#7db0d8",
+        "avvikLys": 0.048,
+        "avvikMork": 0.158
+    },
+    {
+        "ffe": "--ffe-color-foreground-feedback-success",
+        "ix": "--ix-color-foreground-success-default",
+        "ffeLys": "#0a4d37",
+        "ffeMork": "#b2e6cd",
+        "ixLys": "#006a45",
+        "ixMork": "#5ec092",
+        "avvikLys": 0.093,
+        "avvikMork": 0.155
+    },
+    {
+        "ffe": "--ffe-color-foreground-feedback-warning",
+        "ix": "--ix-color-foreground-warning-default",
+        "ffeLys": "#682c00",
+        "ffeMork": "#ffc675",
+        "ixLys": "#834800",
+        "ixMork": "#e19750",
+        "avvikLys": 0.095,
+        "avvikMork": 0.127
+    },
+    {
+        "ffe": "--ffe-color-foreground-feedback-critical",
+        "ix": "--ix-color-foreground-danger-default",
+        "ffeLys": "#7c1214",
+        "ffeMork": "#ffaea8",
+        "ixLys": "#943234",
+        "ixMork": "#f9807d",
+        "avvikLys": 0.082,
+        "avvikMork": 0.105
+    },
+    {
+        "ffe": "--ffe-color-foreground-feedback-tip",
+        "ix": null,
+        "ffeLys": "#45415a",
+        "ffeMork": "#d3d3ea"
+    },
+    {
+        "ffe": "--ffe-color-border-primary-default",
+        "ix": "--ix-color-border-main-emphasis",
+        "ffeLys": "#020a0a33",
+        "ffeMork": "#ffffff33",
+        "ixLys": "#758090",
+        "ixMork": "#758090",
+        "avvikLys": 0.255,
+        "avvikMork": 0.251
+    },
+    {
+        "ffe": "--ffe-color-border-primary-default-hover",
+        "ix": "--ix-color-border-main-emphasis-hover",
+        "ffeLys": "#020a0a40",
+        "ffeMork": "#ffffff40",
+        "ixLys": "#626c7a",
+        "ixMork": "#8a95a6",
+        "avvikLys": 0.284,
+        "avvikMork": 0.274
+    },
+    {
+        "ffe": "--ffe-color-border-primary-default-pressed",
+        "ix": "--ix-color-border-main-emphasis-active",
+        "ffeLys": "#020a0a4d",
+        "ffeMork": "#ffffff4d",
+        "ixLys": "#505966",
+        "ixMork": "#a0abbb",
+        "avvikLys": 0.311,
+        "avvikMork": 0.298
+    },
+    {
+        "ffe": "--ffe-color-border-primary-subtle",
+        "ix": "--ix-color-border-main-default",
+        "ffeLys": "#020a0a13",
+        "ffeMork": "#ffffff13",
+        "ixLys": "#d7dce4",
+        "ixMork": "#262f3d",
+        "avvikLys": 0.053,
+        "avvikMork": 0.087
+    },
+    {
+        "ffe": "--ffe-color-border-primary-subtle-hover",
+        "ix": "--ix-color-border-main-default-hover",
+        "ffeLys": "#020a0a1a",
+        "ffeMork": "#ffffff1a",
+        "ixLys": "#c7cfd9",
+        "ixMork": "#323b49",
+        "avvikLys": 0.075,
+        "avvikMork": 0.104
+    },
+    {
+        "ffe": "--ffe-color-border-primary-subtle-pressed",
+        "ix": "--ix-color-border-main-default-active",
+        "ffeLys": "#020a0a26",
+        "ffeMork": "#ffffff26",
+        "ixLys": "#b5becc",
+        "ixMork": "#404956",
+        "avvikLys": 0.093,
+        "avvikMork": 0.108
+    },
+    {
+        "ffe": "--ffe-color-border-primary-emphasis",
+        "ix": null,
+        "ffeLys": "#084f91",
+        "ffeMork": "#9ec2e5"
+    },
+    {
+        "ffe": "--ffe-color-border-feedback-info",
+        "ix": "--ix-color-border-info-default",
+        "ffeLys": "#6096bd",
+        "ffeMork": "#6096bd",
+        "ixLys": "#7db0d8",
+        "ixMork": "#5285ac",
+        "avvikLys": 0.085,
+        "avvikMork": 0.054
+    },
+    {
+        "ffe": "--ffe-color-border-feedback-success",
+        "ix": "--ix-color-border-success-default",
+        "ffeLys": "#48a781",
+        "ffeMork": "#48a781",
+        "ixLys": "#5ec092",
+        "ixMork": "#299568",
+        "avvikLys": 0.076,
+        "avvikMork": 0.064
+    },
+    {
+        "ffe": "--ffe-color-border-feedback-warning",
+        "ix": "--ix-color-border-warning-default",
+        "ffeLys": "#cc7205",
+        "ffeMork": "#cc7205",
+        "ixLys": "#e19750",
+        "ixMork": "#b36c1a",
+        "avvikLys": 0.1,
+        "avvikMork": 0.049
+    },
+    {
+        "ffe": "--ffe-color-border-feedback-critical",
+        "ix": "--ix-color-border-danger-default",
+        "ffeLys": "#e44244",
+        "ffeMork": "#e44244",
+        "ixLys": "#f9807d",
+        "ixMork": "#ca5454",
+        "avvikLys": 0.13,
+        "avvikMork": 0.051
+    },
+    {
+        "ffe": "--ffe-color-border-feedback-tip",
+        "ix": null,
+        "ffeLys": "#a39db9",
+        "ffeMork": "#a39db9"
+    },
+    {
+        "ffe": "--ffe-color-border-interactive-focus",
+        "ix": "--ix-color-border-focus-default",
+        "ffeLys": "#dc8000",
+        "ffeMork": "#ea910b",
+        "ixLys": "#003782",
+        "ixMork": "#bae0ff",
+        "avvikLys": 0.438,
+        "avvikMork": 0.269
+    },
+    {
+        "ffe": "--ffe-color-border-interactive-selected",
+        "ix": null,
+        "ffeLys": "#084f91",
+        "ffeMork": "#9ec2e5"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-foreground-default",
+        "ix": null,
+        "ffeLys": "#1a1a1a",
+        "ffeMork": "#ffffff"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-foreground-subtle",
+        "ix": null,
+        "ffeLys": "#525252",
+        "ffeMork": "#c2c2c2"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-foreground-placeholder",
+        "ix": null,
+        "ffeLys": "#8f8f8f",
+        "ffeMork": "#adadad"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-foreground-disabled",
+        "ix": null,
+        "ffeLys": "#8f8f8f",
+        "ffeMork": "#adadad"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-foreground-read-only",
+        "ix": null,
+        "ffeLys": "#525252",
+        "ffeMork": "#c2c2c2"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-foreground-error",
+        "ix": null,
+        "ffeLys": "#7c1214",
+        "ffeMork": "#ffaea8"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-border-active",
+        "ix": null,
+        "ffeLys": "#08235e",
+        "ffeMork": "#d7e7f4"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-fill-default",
+        "ix": null,
+        "ffeLys": "#ffffff",
+        "ffeMork": "#262626"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-fill-default-hover",
+        "ix": null,
+        "ffeLys": "#e7f1f9",
+        "ffeMork": "#333333"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-fill-default-pressed",
+        "ix": null,
+        "ffeLys": "#d7e7f4",
+        "ffeMork": "#3d3d3d"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-fill-disabled",
+        "ix": null,
+        "ffeLys": "#d6d6d6",
+        "ffeMork": "#5c5c5c"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-fill-read-only",
+        "ix": null,
+        "ffeLys": "#f0f0f0",
+        "ffeMork": "#262626"
+    },
+    {
+        "ffe": "--ffe-color-component-form-input-fill-error",
+        "ix": null,
+        "ffeLys": "#ffe3e0",
+        "ffeMork": "#640e10"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-handle-default",
+        "ix": null,
+        "ffeLys": "#ffffff",
+        "ffeMork": "#ffffff"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-handle-disabled",
+        "ix": null,
+        "ffeLys": "#a4a4a4",
+        "ffeMork": "#a4a4a4"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-default",
+        "ix": null,
+        "ffeLys": "#c2c2c2",
+        "ffeMork": "#7a7a7a"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-default-hover",
+        "ix": null,
+        "ffeLys": "#a4a4a4",
+        "ffeMork": "#8f8f8f"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-default-pressed",
+        "ix": null,
+        "ffeLys": "#8f8f8f",
+        "ffeMork": "#adadad"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-selected",
+        "ix": null,
+        "ffeLys": "#48a781",
+        "ffeMork": "#48a781"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-selected-hover",
+        "ix": null,
+        "ffeLys": "#2a7e5b",
+        "ffeMork": "#6abe97"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-selected-pressed",
+        "ix": null,
+        "ffeLys": "#0d6346",
+        "ffeMork": "#8fd1b1"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-selected-disabled",
+        "ix": null,
+        "ffeLys": "#9edbbe",
+        "ffeMork": "#00754e"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-selected-read-only",
+        "ix": null,
+        "ffeLys": "#dff6eb",
+        "ffeMork": "#0a4330"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-critical",
+        "ix": null,
+        "ffeLys": "#e44244",
+        "ffeMork": "#e44244"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-disabled",
+        "ix": null,
+        "ffeLys": "#d6d6d6",
+        "ffeMork": "#5c5c5c"
+    },
+    {
+        "ffe": "--ffe-color-component-form-toggleswitch-fill-read-only",
+        "ix": null,
+        "ffeLys": "#f0f0f0",
+        "ffeMork": "#262626"
+    },
+    {
+        "ffe": "--ffe-color-component-button-action-border-default",
+        "ix": null,
+        "ffeLys": "#2a7e5b",
+        "ffeMork": "#00754e"
+    },
+    {
+        "ffe": "--ffe-color-component-button-action-border-hover",
+        "ix": null,
+        "ffeLys": "#0d6346",
+        "ffeMork": "#2a7e5b"
+    },
+    {
+        "ffe": "--ffe-color-component-button-action-border-pressed",
+        "ix": null,
+        "ffeLys": "#0a4d37",
+        "ffeMork": "#409674"
+    },
+    {
+        "ffe": "--ffe-color-component-button-action-fill-default",
+        "ix": null,
+        "ffeLys": "#2a7e5b",
+        "ffeMork": "#00754e"
+    },
+    {
+        "ffe": "--ffe-color-component-button-action-fill-hover",
+        "ix": null,
+        "ffeLys": "#0d6346",
+        "ffeMork": "#2a7e5b"
+    },
+    {
+        "ffe": "--ffe-color-component-button-action-fill-pressed",
+        "ix": null,
+        "ffeLys": "#0a4d37",
+        "ffeMork": "#409674"
+    },
+    {
+        "ffe": "--ffe-color-component-button-action-foreground-default",
+        "ix": null,
+        "ffeLys": "#ffffff",
+        "ffeMork": "#ffffff"
+    },
+    {
+        "ffe": "--ffe-color-component-button-action-foreground-hover",
+        "ix": null,
+        "ffeLys": "#ffffff",
+        "ffeMork": "#ffffff"
+    },
+    {
+        "ffe": "--ffe-color-component-button-primary-border-default",
+        "ix": "--ix-color-component-button-primary-border-default",
+        "ffeLys": "#084f91",
+        "ffeMork": "#9ec2e5",
+        "ixLys": "#3597f9",
+        "ixMork": "#0d6cbf",
+        "avvikLys": 0.246,
+        "avvikMork": 0.287
+    },
+    {
+        "ffe": "--ffe-color-component-button-primary-border-hover",
+        "ix": "--ix-color-component-button-primary-border-default-hover",
+        "ffeLys": "#04347c",
+        "ffeMork": "#c3d9ef",
+        "ixLys": "#0d6cbf",
+        "ixMork": "#3597f9",
+        "avvikLys": 0.184,
+        "avvikMork": 0.246
+    },
+    {
+        "ffe": "--ffe-color-component-button-primary-border-pressed",
+        "ix": "--ix-color-component-button-primary-border-default-active",
+        "ffeLys": "#08235e",
+        "ffeMork": "#d7e7f4",
+        "ixLys": "#0058a6",
+        "ixMork": "#55adff",
+        "avvikLys": 0.187,
+        "avvikMork": 0.226
+    },
+    {
+        "ffe": "--ffe-color-component-button-primary-fill-default",
+        "ix": "--ix-color-component-button-primary-fill-default",
+        "ffeLys": "#084f91",
+        "ffeMork": "#005aa4",
+        "ixLys": "#0058a6",
+        "ixMork": "#004697",
+        "avvikLys": 0.04,
+        "avvikMork": 0.058
+    },
+    {
+        "ffe": "--ffe-color-component-button-primary-fill-hover",
+        "ix": "--ix-color-component-button-primary-fill-default-hover",
+        "ffeLys": "#073f83",
+        "ffeMork": "#1566b2",
+        "ixLys": "#003782",
+        "ixMork": "#002b6e",
+        "avvikLys": 0.024,
+        "avvikMork": 0.196
+    },
+    {
+        "ffe": "--ffe-color-component-button-primary-fill-pressed",
+        "ix": "--ix-color-component-button-primary-fill-default-active",
+        "ffeLys": "#082868",
+        "ffeMork": "#2975c2",
+        "ixLys": "#002b6e",
+        "ixMork": "#00225d",
+        "avvikLys": 0.013,
+        "avvikMork": 0.284
+    },
+    {
+        "ffe": "--ffe-color-component-button-primary-foreground-default",
+        "ix": "--ix-color-component-button-primary-foreground-default",
+        "ffeLys": "#ffffff",
+        "ffeMork": "#ffffff",
+        "ixLys": "#fafdfb",
+        "ixMork": "#fafdfb",
+        "avvikLys": 0.01,
+        "avvikMork": 0.01
+    },
+    {
+        "ffe": "--ffe-color-component-button-primary-foreground-hover",
+        "ix": "--ix-color-component-button-primary-foreground-default",
+        "ffeLys": "#ffffff",
+        "ffeMork": "#ffffff",
+        "ixLys": "#fafdfb",
+        "ixMork": "#fafdfb",
+        "avvikLys": 0.01,
+        "avvikMork": 0.01
+    },
+    {
+        "ffe": "--ffe-color-component-button-secondary-border-default",
+        "ix": "--ix-color-component-button-secondary-border-default",
+        "ffeLys": "#08235e",
+        "ffeMork": "#f7fafd",
+        "ixLys": "#004697",
+        "ixMork": "#55adff",
+        "avvikLys": 0.135,
+        "avvikMork": 0.291
+    },
+    {
+        "ffe": "--ffe-color-component-button-secondary-border-hover",
+        "ix": "--ix-color-component-button-secondary-border-default-hover",
+        "ffeLys": "#08235e",
+        "ffeMork": "#f7fafd",
+        "ixLys": "#003782",
+        "ixMork": "#7fc2ff",
+        "avvikLys": 0.082,
+        "avvikMork": 0.218
+    },
+    {
+        "ffe": "--ffe-color-component-button-secondary-border-pressed",
+        "ix": "--ix-color-component-button-secondary-border-default-active",
+        "ffeLys": "#08235e",
+        "ffeMork": "#f7fafd",
+        "ixLys": "#003782",
+        "ixMork": "#9fd2ff",
+        "avvikLys": 0.082,
+        "avvikMork": 0.16
+    },
+    {
+        "ffe": "--ffe-color-component-button-secondary-fill-default",
+        "ix": null,
+        "ffeLys": "#ffffff00",
+        "ffeMork": "#ffffff00"
+    },
+    {
+        "ffe": "--ffe-color-component-button-secondary-fill-hover",
+        "ix": "--ix-color-component-button-secondary-fill-default-hover",
+        "ffeLys": "#d7e7f4",
+        "ffeMork": "#333333",
+        "ixLys": "#edf6ff",
+        "ixMork": "#00194d",
+        "avvikLys": 0.05,
+        "avvikMork": 0.132
+    },
+    {
+        "ffe": "--ffe-color-component-button-secondary-fill-pressed",
+        "ix": "--ix-color-component-button-secondary-fill-default-active",
+        "ffeLys": "#c3d9ef",
+        "ffeMork": "#3d3d3d",
+        "ixLys": "#e2f0ff",
+        "ixMork": "#00225d",
+        "avvikLys": 0.075,
+        "avvikMork": 0.142
+    },
+    {
+        "ffe": "--ffe-color-component-button-secondary-foreground-default",
+        "ix": "--ix-color-component-button-secondary-foreground-default",
+        "ffeLys": "#08235e",
+        "ffeMork": "#ffffff",
+        "ixLys": "#00225d",
+        "ixMork": "#9fd2ff",
+        "avvikLys": 0.008,
+        "avvikMork": 0.176
+    },
+    {
+        "ffe": "--ffe-color-component-button-secondary-foreground-hover",
+        "ix": "--ix-color-component-button-secondary-foreground-default",
+        "ffeLys": "#08235e",
+        "ffeMork": "#ffffff",
+        "ixLys": "#00225d",
+        "ixMork": "#9fd2ff",
+        "avvikLys": 0.008,
+        "avvikMork": 0.176
+    },
+    {
+        "ffe": "--ffe-color-component-button-tertiary-fill-default",
+        "ix": null,
+        "ffeLys": "#ffffff00",
+        "ffeMork": "#ffffff00"
+    },
+    {
+        "ffe": "--ffe-color-component-button-tertiary-fill-hover",
+        "ix": "--ix-color-component-button-tertiary-fill-default-hover",
+        "ffeLys": "#d7e7f4",
+        "ffeMork": "#333333",
+        "ixLys": "#e2f0ff",
+        "ixMork": "#00194d",
+        "avvikLys": 0.029,
+        "avvikMork": 0.132
+    },
+    {
+        "ffe": "--ffe-color-component-button-tertiary-fill-pressed",
+        "ix": "--ix-color-component-button-tertiary-fill-default-active",
+        "ffeLys": "#c3d9ef",
+        "ffeMork": "#3d3d3d",
+        "ixLys": "#d3e9ff",
+        "ixMork": "#00225d",
+        "avvikLys": 0.049,
+        "avvikMork": 0.142
+    },
+    {
+        "ffe": "--ffe-color-component-button-tertiary-foreground-default",
+        "ix": "--ix-color-component-button-tertiary-foreground-default",
+        "ffeLys": "#08235e",
+        "ffeMork": "#f7fafd",
+        "ixLys": "#00225d",
+        "ixMork": "#9fd2ff",
+        "avvikLys": 0.008,
+        "avvikMork": 0.16
+    },
+    {
+        "ffe": "--ffe-color-component-button-tertiary-foreground-hover",
+        "ix": "--ix-color-component-button-tertiary-foreground-default",
+        "ffeLys": "#08235e",
+        "ffeMork": "#f7fafd",
+        "ixLys": "#00225d",
+        "ixMork": "#9fd2ff",
+        "avvikLys": 0.008,
+        "avvikMork": 0.16
+    },
+    {
+        "ffe": "--ffe-color-component-logo-name",
+        "ix": "--ix-color-component-logo-name",
+        "ffeLys": "#082868",
+        "ffeMork": "#ffffff",
+        "ixLys": "#082868",
+        "ixMork": "#fff",
+        "avvikLys": 0,
+        "avvikMork": 0
+    },
+    {
+        "ffe": "--ffe-color-component-logo-number1",
+        "ix": "--ix-color-component-logo-number1",
+        "ffeLys": "#ffffff",
+        "ffeMork": "#ffffff",
+        "ixLys": "#fff",
+        "ixMork": "#fff",
+        "avvikLys": 0,
+        "avvikMork": 0
+    },
+    {
+        "ffe": "--ffe-color-component-logo-circle-dark-red",
+        "ix": "--ix-color-component-logo-circle-dark-red",
+        "ffeLys": "#af0000",
+        "ffeMork": "#af0000",
+        "ixLys": "#af0000",
+        "ixMork": "#af0000",
+        "avvikLys": 0,
+        "avvikMork": 0
+    },
+    {
+        "ffe": "--ffe-color-component-logo-circle-light-red",
+        "ix": "--ix-color-component-logo-circle-light-red",
+        "ffeLys": "#e60000",
+        "ffeMork": "#e60000",
+        "ixLys": "#e60000",
+        "ixMork": "#e60000",
+        "avvikLys": 0,
+        "avvikMork": 0
+    }
+]
