@@ -27,6 +27,11 @@ import { TableToolbar } from './TableToolbar';
 
 type TableTitleElement = 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
 
+/** Samme regel som web componenten: raden selv er skjult, ikke en forelder. */
+function isRowVisible(row: HTMLTableRowElement | null): boolean {
+    return !!row && !row.hidden && getComputedStyle(row).display !== 'none';
+}
+
 export type TableProps = {
     /** Overskrift over tabellen. Gir også tabellen navn. */
     title?: ReactNode;
@@ -164,8 +169,10 @@ export const Table = forwardRef<HTMLElement, TableProps>(function Table(
     //
     // Utvalget gjelder bare radene som vises. En nøkkel uten rad (filtrert bort,
     // en annen side) fjernes og meldes med onSelectionChange. Ikke mens tabellen
-    // laster, så et forhåndsvalg overlever innlastingen. Rader som skjules med
-    // hidden, tar web componenten seg av.
+    // laster, så et forhåndsvalg overlever innlastingen. En nøkkel på en rad som er
+    // skjult, regnes også som borte. Krysset React av en skjult rad, ville web
+    // componenten fjernet krysset og meldt fra, og en kontrollert konsument som
+    // ikke endrer staten, ville gitt en ny render og samme kryss igjen, i en løkke.
     //
     // Effekten må kjøre ved hver render, så web componenten synker det React
     // nettopp har skrevet (radtilstand, telling, ikoner i nye overskrifter).
@@ -179,8 +186,9 @@ export const Table = forwardRef<HTMLElement, TableProps>(function Table(
         inputs.forEach((input) => {
             // Uten value hører kontrollen ikke til noen nøkkel. Web componenten advarer.
             if (!input.hasAttribute('value')) return;
-            present.add(input.value);
-            const checked = selectedSet.has(input.value);
+            const visible = isRowVisible(input.closest('tr'));
+            if (visible) present.add(input.value);
+            const checked = visible && selectedSet.has(input.value);
             if (input.checked !== checked) input.checked = checked;
         });
         host.refresh?.();

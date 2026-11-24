@@ -165,8 +165,10 @@ export class IxTable extends HTMLElement {
     private _originalOrder = new WeakMap<HTMLTableRowElement, number>();
     /** Sorteringen komponenten selv har gjort, så nye rader kan sorteres inn. */
     private _activeSort: { column: number; direction: IxTableSortDirection } | null = null;
-    private _autoColspan = new WeakSet<HTMLTableCellElement>();
-    private _autoAlign = new WeakSet<HTMLTableCellElement>();
+    // Verdiene komponenten selv har skrevet. Har attributtet fått en annen verdi,
+    // er det konsumentens, og komponenten gir slipp på cellen.
+    private _autoColspan = new WeakMap<HTMLTableCellElement, number>();
+    private _autoAlign = new WeakMap<HTMLTableCellElement, string>();
     private _warned = new WeakSet<Element>();
     // Attributtene vi satte på rulleområdet, så vi bare fjerner våre egne.
     private _warnedSticky: string | null = null;
@@ -260,6 +262,7 @@ export class IxTable extends HTMLElement {
             this._orderCounter = rows.length;
         } else if (rows.some((row) => !this._originalOrder.has(row))) {
             // Nye rader mens tabellen er sortert, sorteres inn. De kom sist.
+            this._linkExpanded(table);
             rows.forEach((row) => {
                 if (!this._originalOrder.has(row)) this._originalOrder.set(row, this._orderCounter++);
             });
@@ -346,10 +349,13 @@ export class IxTable extends HTMLElement {
         table.querySelectorAll<HTMLTableRowElement>(FULL_WIDTH_ROW).forEach((row) => {
             const cell = row.cells[0];
             if (row.cells.length !== 1 || !columns) return;
-            if (!cell.hasAttribute('colspan') || this._autoColspan.has(cell)) {
-                cell.colSpan = columns;
-                this._autoColspan.add(cell);
+            const auto = this._autoColspan.get(cell);
+            if (cell.hasAttribute('colspan') && cell.colSpan !== auto) {
+                this._autoColspan.delete(cell);
+                return;
             }
+            if (cell.colSpan !== columns) cell.colSpan = columns;
+            this._autoColspan.set(cell, columns);
         });
 
         // Justeringen står på kolonnens th, så konsumenten slipper å gjenta den
@@ -362,16 +368,24 @@ export class IxTable extends HTMLElement {
         });
         rows.forEach((row) => {
             Array.from(row.cells).forEach((cell) => {
-                if (cell.hasAttribute('data-align') && !this._autoAlign.has(cell)) return;
+                const auto = this._autoAlign.get(cell);
+                const current = cell.getAttribute('data-align');
+                if (current !== null && current !== auto) {
+                    this._autoAlign.delete(cell);
+                    return;
+                }
                 const value = align[columnOf(cell)];
                 if (value) {
-                    cell.setAttribute('data-align', value);
-                    this._autoAlign.add(cell);
-                } else if (this._autoAlign.has(cell)) {
+                    if (current !== value) cell.setAttribute('data-align', value);
+                    this._autoAlign.set(cell, value);
+                } else if (auto !== undefined) {
                     cell.removeAttribute('data-align');
+                    this._autoAlign.delete(cell);
                 }
             });
-            const interactive = !!(this._rowControl(row) || this._expandButton(row));
+            // En deaktivert kontroll kan ikke aktiveres med klikk på raden.
+            const control = this._rowControl(row);
+            const interactive = !!((control && !control.disabled) || this._expandButton(row));
             row.toggleAttribute('data-interactive', interactive);
         });
     }
@@ -458,28 +472,40 @@ export class IxTable extends HTMLElement {
         return target ? [target] : [];
     }
 
+    /**
+     * aria-controls kan utelates når innholdet står rett etter raden. Koblingen må
+     * finnes før radene flyttes, ellers blir innholdet liggende igjen der det sto.
+     */
+    private _linkExpanded(table: HTMLTableElement): void {
+        this._dataRows(table).forEach((row) => {
+            const button = this._expandButton(row);
+            if (!button || button.hasAttribute('aria-controls')) return;
+            const next = row.nextElementSibling;
+            if (next instanceof HTMLTableRowElement && next.matches('.ix-table__expanded')) {
+                if (!next.id) next.id = `ix-table-${this._instanceId}-expanded-${++expandedCounter}`;
+                button.setAttribute('aria-controls', next.id);
+            }
+        });
+    }
+
     private _syncExpanded(table: HTMLTableElement): void {
+        this._linkExpanded(table);
         const opened: HTMLTableRowElement[] = [];
         this._dataRows(table).forEach((row) => {
             const button = this._expandButton(row);
             if (!button) return;
-            // aria-controls kan utelates når innholdet står rett etter raden.
-            if (!button.hasAttribute('aria-controls')) {
-                const next = row.nextElementSibling;
-                if (next instanceof HTMLTableRowElement && next.matches('.ix-table__expanded')) {
-                    if (!next.id) next.id = `ix-table-${this._instanceId}-expanded-${++expandedCounter}`;
-                    button.setAttribute('aria-controls', next.id);
-                }
-            }
             if (!button.hasAttribute('aria-expanded')) button.setAttribute('aria-expanded', 'false');
             const expanded = button.getAttribute('aria-expanded') === 'true';
+            // Filtreres raden bort, skjules innholdet også. aria-expanded står, så
+            // innholdet kommer tilbake sammen med raden.
+            const shown = expanded && this._isRowVisible(row);
             const target = this._rowById(table, button.getAttribute('aria-controls'));
-            if (target && target.hidden === expanded) {
-                if (expanded) {
+            if (target && target.hidden === shown) {
+                if (shown) {
                     target.setAttribute('data-animate', '');
                     opened.push(target);
                 }
-                target.hidden = !expanded;
+                target.hidden = !shown;
             }
             row.toggleAttribute('data-expanded', expanded);
         });

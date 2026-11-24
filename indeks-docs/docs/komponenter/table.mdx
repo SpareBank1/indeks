@@ -414,6 +414,9 @@ function Godkjenning() {
 Knappen i første kolonne åpner og lukker innholdet rett under raden. Klikk på raden gjør det
 samme. Innholdet kan ha tekst, Tag, lenker og knapper.
 
+Skjuler du en rad med `hidden`, for eksempel med et filter, skjules innholdet under den også, og
+det kommer tilbake åpent når raden vises igjen.
+
 I HTML legger du innholdet i `.ix-table__expanded-content` inne i cellen. Det er den som vokser
 fram når raden åpnes. Uten den åpnes og lukkes raden uten overgang. Overgangen krever
 `interpolate-size`, som Chrome og Edge har. I andre nettlesere hopper raden åpen og lukket.

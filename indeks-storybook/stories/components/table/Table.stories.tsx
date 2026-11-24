@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 
 import { Button, InteractiveIcon, LinkText, Pagination, Select, Table, Tag, TextField } from '@sb1/indeks-react';
 import type { TableSort } from '@sb1/indeks-react';
@@ -12,9 +13,27 @@ type Regning = {
 };
 
 const regninger: Regning[] = [
-    { id: 'fjordkraft', mottaker: 'Fjordkraft AS', status: { tekst: 'Betalt', variant: 'success' }, forfall: '12.10.2026', belop: '1 249,00' },
-    { id: 'gjensidige', mottaker: 'Gjensidige', status: { tekst: 'Forfaller snart', variant: 'warning' }, forfall: '18.11.2026', belop: '849,00' },
-    { id: 'telenor', mottaker: 'Telenor Norge', status: { tekst: 'Til behandling', variant: 'info' }, forfall: '25.11.2026', belop: '599,00' },
+    {
+        id: 'fjordkraft',
+        mottaker: 'Fjordkraft AS',
+        status: { tekst: 'Betalt', variant: 'success' },
+        forfall: '12.10.2026',
+        belop: '1 249,00',
+    },
+    {
+        id: 'gjensidige',
+        mottaker: 'Gjensidige',
+        status: { tekst: 'Forfaller snart', variant: 'warning' },
+        forfall: '18.11.2026',
+        belop: '849,00',
+    },
+    {
+        id: 'telenor',
+        mottaker: 'Telenor Norge',
+        status: { tekst: 'Til behandling', variant: 'info' },
+        forfall: '25.11.2026',
+        belop: '599,00',
+    },
 ];
 
 function RegningRader({ rader = regninger, handling = true }: { rader?: Regning[]; handling?: boolean }) {
@@ -97,34 +116,41 @@ function sorter(rader: Transaksjon[], sort: TableSort | undefined): Transaksjon[
     });
 }
 
+/**
+ * Kontrollert via args: onSortChange oppdaterer sort, og radene sorteres ut fra
+ * den. Første render er alltid sort fra args, så snapshotet er stabilt.
+ */
 export const Sortable: Story = {
     name: 'Sorterbar',
     args: {
         title: 'Transaksjoner',
         sort: { key: 'dato', direction: 'ascending' },
     },
-    render: (args) => (
-        <Table {...args}>
-            <Table.Header>
-                <Table.HeaderCell sortKey="dato">Dato</Table.HeaderCell>
-                <Table.HeaderCell sortKey="mottaker">Mottaker</Table.HeaderCell>
-                <Table.HeaderCell>Type</Table.HeaderCell>
-                <Table.HeaderCell sortKey="belop" align="end">
-                    Beløp
-                </Table.HeaderCell>
-            </Table.Header>
-            <Table.Body>
-                {sorter(transaksjoner, args.sort).map((t) => (
-                    <Table.Row key={t.id}>
-                        <Table.Cell>{t.dato}</Table.Cell>
-                        <Table.Cell>{t.mottaker}</Table.Cell>
-                        <Table.Cell>{t.type}</Table.Cell>
-                        <Table.Cell>{kroner.format(t.belop)}</Table.Cell>
-                    </Table.Row>
-                ))}
-            </Table.Body>
-        </Table>
-    ),
+    render: function Render(args) {
+        const [, updateArgs] = useArgs();
+        return (
+            <Table {...args} onSortChange={(sort) => updateArgs({ sort })}>
+                <Table.Header>
+                    <Table.HeaderCell sortKey="dato">Dato</Table.HeaderCell>
+                    <Table.HeaderCell sortKey="mottaker">Mottaker</Table.HeaderCell>
+                    <Table.HeaderCell>Type</Table.HeaderCell>
+                    <Table.HeaderCell sortKey="belop" align="end">
+                        Beløp
+                    </Table.HeaderCell>
+                </Table.Header>
+                <Table.Body>
+                    {sorter(transaksjoner, args.sort).map((t) => (
+                        <Table.Row key={t.id}>
+                            <Table.Cell>{t.dato}</Table.Cell>
+                            <Table.Cell>{t.mottaker}</Table.Cell>
+                            <Table.Cell>{t.type}</Table.Cell>
+                            <Table.Cell>{kroner.format(t.belop)}</Table.Cell>
+                        </Table.Row>
+                    ))}
+                </Table.Body>
+            </Table>
+        );
+    },
 };
 
 const kontoer = [
@@ -301,7 +327,9 @@ export const IngenTreff: Story = {
     render: (args) => (
         <Table {...args}>
             <RegningHeader handling={false} />
-            <Table.Body empty={<Table.Empty title="Ingen treff">Prøv et annet søk eller endre filtrene.</Table.Empty>} />
+            <Table.Body
+                empty={<Table.Empty title="Ingen treff">Prøv et annet søk eller endre filtrene.</Table.Empty>}
+            />
         </Table>
     ),
 };
@@ -332,7 +360,12 @@ export const Tetthet: Story = {
     render: (args) => (
         <div className="ix-flex ix-flex-col ix-gap-xl">
             {(['compact', undefined, 'comfortable'] as const).map((density) => (
-                <Table key={density ?? 'default'} {...args} title={`Tetthet: ${density ?? 'default'}`} density={density}>
+                <Table
+                    key={density ?? 'default'}
+                    {...args}
+                    title={`Tetthet: ${density ?? 'default'}`}
+                    density={density}
+                >
                     <RegningHeader />
                     <Table.Body>
                         <RegningRader />
@@ -378,7 +411,12 @@ export const HTML: Story = {
                                 Godkjenn
                             </button>
                         </div>
-                        <button type="button" className="ix-interactive-icon" data-size="sm" aria-label="Flere handlinger">
+                        <button
+                            type="button"
+                            className="ix-interactive-icon"
+                            data-size="sm"
+                            aria-label="Flere handlinger"
+                        >
                             <ix-icon name="more_vert" data-size="sm" aria-hidden="true"></ix-icon>
                         </button>
                     </div>

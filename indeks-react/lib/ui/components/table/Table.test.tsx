@@ -77,6 +77,30 @@ describe('Table', () => {
         expect(container.querySelector('tbody tr td:last-child')!.getAttribute('data-align')).toBe('end');
     });
 
+    it('beholder align som settes på en celle etter mount, og arver igjen når den fjernes', () => {
+        function T({ align }: { align?: 'start' | 'end' }) {
+            return (
+                <Table ariaLabel="T">
+                    <Table.Header>
+                        <Table.HeaderCell align="end">Beløp</Table.HeaderCell>
+                    </Table.Header>
+                    <Table.Body>
+                        <Table.Row>
+                            <Table.Cell align={align}>100</Table.Cell>
+                        </Table.Row>
+                    </Table.Body>
+                </Table>
+            );
+        }
+        const { container, rerender } = render(<T />);
+        const cell = () => container.querySelector('tbody td')!;
+        expect(cell().getAttribute('data-align')).toBe('end');
+        rerender(<T align="start" />);
+        expect(cell().getAttribute('data-align')).toBe('start');
+        rerender(<T />);
+        expect(cell().getAttribute('data-align')).toBe('end');
+    });
+
     it('rendrer footer og paginering bare når de er gitt', () => {
         const { container, rerender } = render(<Regninger />);
         expect(container.querySelector('.ix-table__footer')).toBeNull();
@@ -357,6 +381,33 @@ describe('Table valg', () => {
 
         rerender(<Regninger variant="multi-select" selectAllLabel="Velg alle" />);
         expect((screen.getAllByRole('checkbox') as HTMLInputElement[]).every((c) => c.name === '')).toBe(true);
+    });
+
+    it('melder en kontrollert nøkkel på en skjult rad én gang, uten løkke', () => {
+        const onSelectionChange = vi.fn();
+        render(
+            <Table
+                ariaLabel="T"
+                variant="multi-select"
+                selectAllLabel="Velg alle"
+                selectedKeys={['a', 'b']}
+                onSelectionChange={onSelectionChange}
+            >
+                <Table.Body>
+                    <Table.Row value="a" selectLabel="Velg A" hidden>
+                        <Table.Cell>A</Table.Cell>
+                    </Table.Row>
+                    <Table.Row value="b" selectLabel="Velg B">
+                        <Table.Cell>B</Table.Cell>
+                    </Table.Row>
+                </Table.Body>
+            </Table>
+        );
+        expect(onSelectionChange).toHaveBeenCalledTimes(1);
+        expect(onSelectionChange).toHaveBeenLastCalledWith(['b']);
+        const a = document.querySelector<HTMLInputElement>('input[value="a"]')!;
+        expect(a.checked).toBe(false);
+        expect(a.closest('tr')!.hasAttribute('data-selected')).toBe(false);
     });
 
     it('holder kontrollene i takt med selectedKeys når konsumenten avviser et valg', () => {

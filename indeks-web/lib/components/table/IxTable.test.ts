@@ -297,6 +297,31 @@ describe('IxTable sortering', () => {
         expect(firstRow.children[2].getAttribute('data-align')).toBe('end');
     });
 
+    it('tar med innholdet til en ekspanderbar rad som legges til mens kolonnen er sortert', async () => {
+        const el = mount(EXPANDABLE);
+        const sort = el.querySelector<HTMLButtonElement>('.ix-table__sort')!;
+        sort.click();
+        el.querySelector('tbody')!.insertAdjacentHTML(
+            'beforeend',
+            '<tr><td class="ix-table__control"><button type="button" class="ix-table__expand" aria-label="Vis detaljer for Annet lån"></button></td><td>Annet lån</td><td>6,10 %</td></tr>' +
+                '<tr class="ix-table__expanded"><td>Annet-detaljer</td></tr>'
+        );
+        await flush();
+        const rows = Array.from(el.querySelectorAll<HTMLTableRowElement>('tbody tr')).map((r) =>
+            (r.matches('.ix-table__expanded') ? r.cells[0] : r.cells[1]).textContent!.trim()
+        );
+        expect(rows).toEqual([
+            'Annet lån',
+            'Annet-detaljer',
+            'Billån',
+            'Billån-detaljer',
+            'Boliglån',
+            'Boliglån-detaljer',
+        ]);
+        const button = el.querySelector<HTMLButtonElement>('[aria-label="Vis detaljer for Annet lån"]')!;
+        expect(button.getAttribute('aria-controls')).toBe(el.querySelectorAll('.ix-table__expanded')[0].id);
+    });
+
     it('tar det ekspanderte innholdet med når radene sorteres', () => {
         const el = mount(EXPANDABLE);
         el.querySelector<HTMLButtonElement>('.ix-table__sort')!.click();
@@ -516,6 +541,24 @@ describe('IxTable ekspandering', () => {
         expect(spies.every((spy) => spy.mock.calls.length === 0)).toBe(true);
     });
 
+    it('skjuler innholdet når raden filtreres bort, og viser det igjen når raden kommer tilbake', async () => {
+        const el = mount(EXPANDABLE);
+        const button = el.querySelector<HTMLButtonElement>('.ix-table__expand')!;
+        const row = button.closest('tr')!;
+        const content = el.querySelector<HTMLTableRowElement>('.ix-table__expanded')!;
+        button.click();
+        expect(content.hidden).toBe(false);
+
+        row.hidden = true;
+        await flush();
+        expect(content.hidden).toBe(true);
+        expect(button.getAttribute('aria-expanded')).toBe('true');
+
+        row.hidden = false;
+        await flush();
+        expect(content.hidden).toBe(false);
+    });
+
     it('respekterer aria-controls og id som er satt', () => {
         const el = mount(`
             <ix-table><table aria-label="Lån"><tbody>
@@ -664,6 +707,37 @@ describe('IxTable loading', () => {
         const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
         mount('<ix-table><table aria-label="T" aria-busy="true"><tbody></tbody></table></ix-table>');
         expect(warn).toHaveBeenCalledWith(expect.stringContaining('loading-label'));
+    });
+});
+
+describe('IxTable justering og colspan', () => {
+    it('gir slipp på en celle når konsumenten setter egen data-align senere', () => {
+        const el = mount(SORTABLE);
+        const cell = el.querySelector('tbody tr')!.children[2];
+        expect(cell.getAttribute('data-align')).toBe('end');
+
+        cell.setAttribute('data-align', 'start');
+        el.refresh();
+        expect(cell.getAttribute('data-align')).toBe('start');
+
+        cell.removeAttribute('data-align');
+        el.refresh();
+        expect(cell.getAttribute('data-align')).toBe('end');
+    });
+
+    it('gir slipp på colspan som konsumenten endrer senere', () => {
+        const el = mount(EXPANDABLE);
+        const cell = el.querySelector<HTMLTableRowElement>('.ix-table__expanded')!.cells[0];
+        expect(cell.colSpan).toBe(3);
+        cell.colSpan = 2;
+        el.refresh();
+        expect(cell.colSpan).toBe(2);
+    });
+
+    it('gjør ikke en rad med deaktivert kontroll interaktiv', () => {
+        const el = mount(MULTI.replace('id="b" value="b"', 'id="b" value="b" disabled'));
+        expect(el.querySelector('#b')!.closest('tr')!.hasAttribute('data-interactive')).toBe(false);
+        expect(el.querySelector('#a')!.closest('tr')!.hasAttribute('data-interactive')).toBe(true);
     });
 });
 
