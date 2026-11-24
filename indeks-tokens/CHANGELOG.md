@@ -1,5 +1,15 @@
 # @sb1/indeks-tokens
 
+## 0.12.0
+
+### Minor Changes
+
+- 3da249b: `buildColorScaleVariables` tar nå valgfrie `options` som justerer lysstyrke per trinn, topp-chroma og chroma-faktor per trinn. `@sb1/indeks-tokens/generate` eksporterer også `DEFAULT_LIGHTNESS`, `DEFAULT_CHROMA`, `DEFAULT_STEPS` og `getOriginChroma`. Uten options blir skalaen som før.
+
+### Patch Changes
+
+- 1767e7c: `brand-himmel` genereres nå fra `#4D9ABC` i stedet for `#6C97A8`. Skalaen blir blåere og mer mettet, og trinn 200 blir `#D8EAF3`. Ingen semantiske tokens bruker skalaen ennå.
+
 ## 0.11.0
 
 ### Minor Changes
