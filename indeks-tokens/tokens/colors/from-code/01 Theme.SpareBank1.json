@@ -85,83 +85,83 @@
     "brand-himmel": {
       "0": {
         "$type": "color",
-        "$value": "#fbfcfd"
+        "$value": "#fafcfd"
       },
       "50": {
         "$type": "color",
-        "$value": "#f7fafb"
+        "$value": "#f5fafc"
       },
       "100": {
         "$type": "color",
-        "$value": "#f1f6f7"
+        "$value": "#eff6fa"
       },
       "150": {
         "$type": "color",
-        "$value": "#e9f0f3"
+        "$value": "#e6f1f7"
       },
       "200": {
         "$type": "color",
-        "$value": "#dee9ed"
+        "$value": "#d8eaf3"
       },
       "250": {
         "$type": "color",
-        "$value": "#cde0e7"
+        "$value": "#c3e2f1"
       },
       "300": {
         "$type": "color",
-        "$value": "#b8d3de"
+        "$value": "#a9d6ec"
       },
       "350": {
         "$type": "color",
-        "$value": "#a1c4d2"
+        "$value": "#8cc7e3"
       },
       "400": {
         "$type": "color",
-        "$value": "#88b1c1"
+        "$value": "#6db4d5"
       },
       "450": {
         "$type": "color",
-        "$value": "#719cad"
+        "$value": "#529fc1"
       },
       "500": {
         "$type": "color",
-        "$value": "#5e8696"
+        "$value": "#3f89a9"
       },
       "550": {
         "$type": "color",
-        "$value": "#4c717f"
+        "$value": "#307390"
       },
       "600": {
         "$type": "color",
-        "$value": "#3c5e6b"
+        "$value": "#1f607b"
       },
       "650": {
         "$type": "color",
-        "$value": "#2a4e5c"
+        "$value": "#00506b"
       },
       "700": {
         "$type": "color",
-        "$value": "#17404f"
+        "$value": "#00425f"
       },
       "750": {
         "$type": "color",
-        "$value": "#063443"
+        "$value": "#003550"
       },
       "800": {
         "$type": "color",
-        "$value": "#022a37"
+        "$value": "#002b42"
       },
       "850": {
         "$type": "color",
-        "$value": "#082028"
+        "$value": "#002132"
       },
       "900": {
         "$type": "color",
-        "$value": "#0d171b"
+        "$value": "#061820"
       },
       "950": {
         "$type": "color",
-        "$value": "#0d1011"
+        "$value": "#0c1012"
       }
     },
     "success": {

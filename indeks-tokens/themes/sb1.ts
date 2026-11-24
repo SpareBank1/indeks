@@ -6,7 +6,7 @@ export const sb1: Theme = {
     identityColor: '#005aa4',
     colors: {
         brand: '#0078D8',
-        'brand-himmel': '#6C97A8',
+        'brand-himmel': '#4D9ABC',
         success: '#00885B',
         info: '#467CA4',
         danger: '#C94E4F',
