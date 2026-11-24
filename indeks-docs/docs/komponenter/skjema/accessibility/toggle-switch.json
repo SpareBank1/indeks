@@ -1,0 +1,98 @@
+{
+  "component": "ToggleSwitch",
+  "lastReviewed": "2026-11-16",
+  "consumerResponsibilities": [
+    {
+      "summary": "Skriv labelen som tilstanden som slås av eller på",
+      "details": "«Motta varsler» sier hva som gjelder når switchen er på. «Aktiver varsler» beskriver en handling, og da blir det uklart hva «på» betyr. Labelteksten skal være den samme i begge tilstander. Ikke bytt den til «På» eller «Av», skjermleseren leser tilstanden selv.",
+      "wcag": ["2.4.6", "3.3.2"]
+    },
+    {
+      "summary": "Gi switchen et tilgjengelig navn når labelen ikke vises",
+      "details": "Uten synlig label må du sette aria-label (ariaLabel i React). Teksten sendes inn av deg på brukerens språk, komponenten har ingen standardtekst.",
+      "wcag": ["1.3.1", "4.1.2"]
+    },
+    {
+      "summary": "La endringen skje med en gang",
+      "details": "Brukeren forventer at innstillingen gjelder idet switchen flyttes. Krever endringen at brukeren lagrer eller bekrefter, bruk Checkbox i stedet. Har endringen store konsekvenser eller er vanskelig å angre, trenger den en tydeligere handling enn en switch.",
+      "wcag": ["3.2.2"]
+    },
+    {
+      "summary": "Forklar hvorfor en switch er deaktivert",
+      "details": "En deaktivert switch sier ikke hvorfor den ikke kan brukes, og den har lav kontrast. Forklar årsaken i hjelpeteksten, eller vurder å skjule switchen eller vise verdien som tekst.",
+      "wcag": ["3.3.2"]
+    },
+    {
+      "summary": "Si fra når endringen påvirker noe brukeren ikke ser",
+      "details": "Lastes data på nytt eller endres innhold et annet sted på siden når switchen slås av eller på, må du formidle resultatet, for eksempel med en statusmelding.",
+      "wcag": ["4.1.3"]
+    }
+  ],
+  "issues": [],
+  "handled": [
+    { "id": "1.3.1", "notes": "Label kobles til input med for/id. Med <ix-field> kobles hjelpeteksten til via aria-describedby." },
+    { "id": "1.3.2", "notes": "Input, label og hjelpetekst står i lesrekkefølge i DOM, uansett om labelen vises til venstre eller høyre." },
+    { "id": "1.3.3", "notes": "Tilstanden vises med knottens posisjon i tillegg til farge, og formidles med checked-tilstanden og rollen switch." },
+    { "id": "1.4.1", "notes": "Av og på skiller seg på knottens posisjon og på fylt eller tom track, ikke bare på farge." },
+    { "id": "1.4.3", "notes": "Labelen bruker foreground-main-default og hjelpeteksten foreground-main-subtle, begge med minst 4.5:1 mot bakgrunnen." },
+    { "id": "1.4.4", "notes": "Tekst og klikkflate følger font-size-tokenet og tåler 200 % zoom." },
+    { "id": "1.4.10", "notes": "Labelen brytes over flere linjer, og switchen står ved første linje. Ingen horisontal scroll ved 320 px." },
+    { "id": "1.4.11", "notes": "Kanten på tracken og knotten har minst 3:1 mot bakgrunnen i av-tilstand. I på-tilstand har den fylte tracken minst 3:1 mot bakgrunnen og knotten mot tracken. Fokusringen bruker border-focus-default." },
+    { "id": "1.4.12", "notes": "Labelen har ingen fast høyde og vokser med økt linje- og bokstavavstand." },
+    { "id": "2.1.1", "notes": "Native checkbox: Tab gir fokus og Space slår av og på." },
+    { "id": "2.1.2", "notes": "Ingen fokusfelle. Tab flytter fokus videre." },
+    { "id": "2.4.3", "notes": "Fokusrekkefølgen følger DOM-rekkefølgen." },
+    { "id": "2.4.7", "notes": "Fokusringen vises rundt label og switch ved tastaturfokus (:focus-visible)." },
+    { "id": "2.5.3", "notes": "Det tilgjengelige navnet er labelteksten." },
+    { "id": "2.5.8", "notes": "Labelen er klikkflaten og er minst 44 px høy, også uten synlig tekst." },
+    { "id": "3.2.1", "notes": "Fokus endrer ikke kontekst." },
+    { "id": "4.1.2", "notes": "Rollen er switch (role=\"switch\" på native checkbox), tilstanden er checked, og navnet kommer fra label eller aria-label." }
+  ],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Track og knott er dekorative. Tilstanden formidles med checked og rollen switch." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.4" },
+    { "id": "1.3.5", "reason": "En switch samler ikke inn personopplysninger." },
+    { "id": "1.4.2" },
+    { "id": "1.4.5" },
+    { "id": "1.4.13" },
+    { "id": "2.1.4" },
+    { "id": "2.2.1" },
+    { "id": "2.2.2", "reason": "Knotten glir i 0,2 sekunder. Med redusert bevegelse hopper den." },
+    { "id": "2.3.1" },
+    { "id": "2.4.1" },
+    { "id": "2.4.2" },
+    { "id": "2.4.4", "reason": "Ingen lenker i komponenten." },
+    { "id": "2.4.5" },
+    { "id": "2.4.11" },
+    { "id": "2.5.1" },
+    { "id": "2.5.2", "reason": "Native checkbox. Endringen skjer når pekeren slippes." },
+    { "id": "2.5.4" },
+    { "id": "2.5.7", "reason": "Switchen slås av og på med klikk, ikke med dra." },
+    { "id": "3.1.1" },
+    { "id": "3.1.2" },
+    { "id": "3.2.3" },
+    { "id": "3.2.4" },
+    { "id": "3.2.6" },
+    { "id": "3.3.1", "reason": "Switchen har ingen feiltilstand. Et binært valg som skjer med en gang kan ikke være ugyldig." },
+    { "id": "3.3.3" },
+    { "id": "3.3.4" },
+    { "id": "3.3.7" },
+    { "id": "3.3.8" }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til switchen" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige fokuserbare element" },
+    { "key": "Space", "action": "Slår av eller på" }
+  ],
+  "screenReader": [
+    "Ved fokus: \"[label], bryter, av\" (ordlyden varierer mellom skjermlesere, f.eks. \"switch\" eller \"av/på-knapp\")",
+    "Når slått på: \"[label], bryter, på\"",
+    "Med hjelpetekst: \"[label], bryter, [tilstand], [hjelpetekst]\"",
+    "Deaktivert: \"[label], bryter, [tilstand], nedtonet\""
+  ]
+}

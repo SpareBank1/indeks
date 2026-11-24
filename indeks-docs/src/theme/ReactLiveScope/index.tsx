@@ -43,6 +43,7 @@ import {
     Text,
     TextArea,
     TextField,
+    ToggleSwitch,
     ValidationMessage,
     VStack,
 } from '@sb1/indeks-react';
@@ -98,6 +99,7 @@ const ReactLiveScope = {
     Text,
     TextArea,
     TextField,
+    ToggleSwitch,
     ValidationMessage,
     VStack,
 };

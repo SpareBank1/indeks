@@ -1,0 +1,347 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/toggle-switch.json';
+
+# ToggleSwitch
+
+ToggleSwitch lar brukeren slå en innstilling av eller på. Endringen gjelder med en gang, uten at brukeren må lagre.
+
+## Egnet til
+
+- Innstillinger som kan slås av og på
+- Endringer som skal gjelde med en gang
+- Enkle valg mellom av og på
+- Preferanser brukeren endrer ofte
+
+## Uegnet til
+
+- Valg som skal sendes inn eller bekreftes etterpå. Bruk heller [Checkbox](./checkbox)
+- Valg mellom flere enn to alternativer. Bruk heller [RadioGroup](./radio-group)
+- Handlinger som er vanskelige å angre eller har store konsekvenser
+
+## Bruk
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-toggle-switch">
+  <input type="checkbox" role="switch" id="varsler-html" name="varsler" />
+  <label for="varsler-html">Motta varsler</label>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ToggleSwitch label="Motta varsler" name="varsler" />
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Slått på
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-toggle-switch">
+  <input type="checkbox" role="switch" id="paa-html" name="varsler" checked />
+  <label for="paa-html">Motta varsler</label>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ToggleSwitch label="Motta varsler" name="varsler" defaultChecked />
+```
+
+</TabItem>
+</Tabs>
+
+### Label til høyre
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-toggle-switch" data-label-placement="right">
+  <input type="checkbox" role="switch" id="hoyre-html" name="sms" />
+  <label for="hoyre-html">Kvittering på SMS</label>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ToggleSwitch label="Kvittering på SMS" name="sms" labelPlacement="right" />
+```
+
+</TabItem>
+</Tabs>
+
+### Med hjelpetekst
+
+Hjelpeteksten står under labelen. I HTML legger du switchen i `<ix-field>`, så kobles hjelpeteksten til med `aria-describedby`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <div class="ix-toggle-switch">
+    <input type="checkbox" role="switch" id="saldo-html" name="saldo" />
+    <label for="saldo-html">Vis saldo på innloggingssiden</label>
+    <span data-field="description">Saldoen vises før du logger inn med BankID</span>
+  </div>
+</ix-field>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ToggleSwitch
+  label="Vis saldo på innloggingssiden"
+  description="Saldoen vises før du logger inn med BankID"
+  name="saldo"
+/>
+```
+
+</TabItem>
+</Tabs>
+
+### Uten synlig label
+
+I tette oppsett, der det er tydelig fra sammenhengen hva switchen styrer, kan du droppe den synlige labelen. Da må switchen ha `aria-label`. Labelen står igjen tom, fordi den er klikkflaten.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div class="ix-toggle-switch">
+  <input type="checkbox" role="switch" id="kort-html" aria-label="Kortet er aktivt" checked />
+  <label for="kort-html"></label>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ToggleSwitch ariaLabel="Kortet er aktivt" defaultChecked />
+```
+
+</TabItem>
+</Tabs>
+
+### Full bredde
+
+Gir du switchen full bredde, står labelen til venstre og switchen helt til høyre. Det gjør en liste med innstillinger lettere å skumme.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div>
+  <div class="ix-toggle-switch ix-w-full">
+    <input type="checkbox" role="switch" id="varsel-betaling-html" checked />
+    <label for="varsel-betaling-html">Varsel om betalinger</label>
+  </div>
+  <div class="ix-toggle-switch ix-w-full">
+    <input type="checkbox" role="switch" id="varsel-lonn-html" />
+    <label for="varsel-lonn-html">Varsel når lønna kommer</label>
+  </div>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<VStack>
+  <ToggleSwitch label="Varsel om betalinger" className="ix-w-full" defaultChecked />
+  <ToggleSwitch label="Varsel når lønna kommer" className="ix-w-full" />
+</VStack>
+```
+
+</TabItem>
+</Tabs>
+
+### Deaktivert
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-field>
+  <div class="ix-toggle-switch">
+    <input type="checkbox" role="switch" id="deaktivert-html" disabled />
+    <label for="deaktivert-html">Varsel om kortbruk i utlandet</label>
+    <span data-field="description">Bestill et nytt kort for å slå på varselet</span>
+  </div>
+</ix-field>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<ToggleSwitch
+  label="Varsel om kortbruk i utlandet"
+  description="Bestill et nytt kort for å slå på varselet"
+  disabled
+/>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Bruk switch når endringen skjer med en gang
+
+En switch lover at innstillingen gjelder idet brukeren flytter den. Må brukeren trykke «Lagre» eller bekrefte etterpå, brytes det løftet. Bruk da [Checkbox](./checkbox).
+
+### Beskriv tilstanden i labelen
+
+Skriv det som gjelder når switchen er på. «Motta varsler» er tydeligere enn «Aktiver varsler», fordi brukeren ser med en gang hva av og på betyr. La labelen være den samme i begge tilstander.
+
+### Velg én labelplassering og hold deg til den
+
+Labelen kan stå til venstre eller til høyre for switchen. Bruk samme plassering i hele løsningen, så brukeren vet hvor hen skal se.
+
+### Høyrejuster switchen i lister og tabeller
+
+Står flere switcher under hverandre, for eksempel i en liste med innstillinger, kan du gi dem full bredde. Da står switchene på linje, og det blir lettere å sammenligne radene.
+
+### Bruk tydeligere handlinger når noe er vanskelig å angre
+
+Det er lett å slå en switch av og på ved et uhell. Kan endringen få store konsekvenser, som å sperre et kort eller avslutte en avtale, trenger brukeren en knapp og en bekreftelse.
+
+### Grupper innstillingene når det blir mange
+
+Mange switcher i samme visning blir fort uoversiktlig. Del dem i grupper med overskrifter, eller vurder om noen hører hjemme på en egen side.
+
+### Tenk deg om før du deaktiverer
+
+En deaktivert switch sier ikke hvorfor brukeren ikke kan endre den. Forklar årsaken i hjelpeteksten, skjul switchen, eller vis verdien som vanlig tekst.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- Skriv en label som beskriver tilstanden, ikke handlingen. Ikke bytt labelteksten til «På» eller «Av», skjermleseren leser tilstanden selv.
+- Uten synlig label må switchen ha `aria-label` (`ariaLabel` i React) på brukerens språk.
+- Bruk switch bare når endringen gjelder med en gang.
+- Endrer switchen innhold et annet sted på siden, må du si fra om resultatet, for eksempel med en statusmelding.
+- Forklar hvorfor en switch er deaktivert.
+
+### Hva komponenten gjør automatisk
+
+- Native `<input type="checkbox">` med `role="switch"`. Skjermleseren sier at det er en bryter og om den er av eller på.
+- Labelen er klikkflaten og er minst 44 px høy, også uten synlig tekst.
+- Av og på skiller seg på knottens posisjon, ikke bare på farge.
+- Fokusringen vises rundt label og switch når du bruker tastaturet.
+- I `<ix-field>` kobles hjelpeteksten til med `aria-describedby`.
+- Med redusert bevegelse hopper knotten i stedet for å gli.
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+### Struktur
+
+```html
+<ix-field>
+  <div class="ix-toggle-switch" data-label-placement="right">
+    <input type="checkbox" role="switch" id="varsler" name="varsler" />
+    <label for="varsler">Motta varsler</label>
+    <span data-field="description">Vi sender varsel på SMS</span>
+  </div>
+</ix-field>
+```
+
+| Del | Påkrevd | Beskrivelse |
+|-----|---------|-------------|
+| `<ix-field>` | Nei | Kobler `aria-describedby` fra input til hjelpeteksten. Trengs bare når du har hjelpetekst |
+| `<div class="ix-toggle-switch">` | Ja | Wrapper. Holder input, label og hjelpetekst |
+| `<input type="checkbox" role="switch">` | Ja | Selve switchen. Visuelt skjult, men i DOM for tastatur og skjermleser |
+| `<label>` | Ja | Labeltekst og klikkflate, rett etter input. Kobles med `for`/`id`. Står tom når switchen bare har `aria-label` |
+| `<span data-field="description">` | Nei | Hjelpetekst under labelen |
+
+### Attributter
+
+| Attributt | Plassering | Effekt |
+|-----------|------------|--------|
+| `checked` | `<input>` | Slått på |
+| `disabled` | `<input>` | Deaktivert. Label og hjelpetekst tones ned |
+| `aria-label` | `<input>` | Tilgjengelig navn når labelen ikke vises |
+| `data-label-placement="right"` | `.ix-toggle-switch` | Labelen til høyre for switchen. Uten attributtet står den til venstre |
+
+</TabItem>
+<TabItem value="react" label="React">
+
+### ToggleSwitchProps
+
+| Prop | Type | Påkrevd | Standard | Beskrivelse |
+|------|------|---------|----------|-------------|
+| `label` | `ReactNode` | Ja, eller `ariaLabel` | | Synlig labeltekst |
+| `ariaLabel` | `string` | Ja, uten `label` | | Tilgjengelig navn når labelen ikke vises |
+| `description` | `string` | Nei | | Hjelpetekst under labelen. Pakker switchen i `<ix-field>` |
+| `labelPlacement` | `'left' \| 'right'` | Nei | `'left'` | Hvilken side av switchen labelen står på |
+| `checked` | `boolean` | Nei | | Kontrollert tilstand. Bruk sammen med `onChange` |
+| `defaultChecked` | `boolean` | Nei | | Starttilstand når du ikke kontrollerer den selv |
+| `onChange` | `ChangeEventHandler<HTMLInputElement>` | Nei | | Kalles med det native eventet. Les `event.target.checked` |
+| `disabled` | `boolean` | Nei | | Deaktivert |
+| `className` | `string` | Nei | | Klasse på rotelementet (`<ix-field>` når `description` er satt) |
+
+Andre attributter, som `name`, `value`, `id` og `ref`, går rett til `<input>`. Det gjør at switchen virker i et vanlig `<form>` og med `register()` fra React Hook Form.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Bygger du switchen i egen HTML, holder det med klassen på wrapperen. Track og knott tegnes av labelen, så du trenger ingen ekstra elementer.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Wrapper | `.ix-toggle-switch` |
+| Input | `.ix-toggle-switch input` |
+| Label, track og knott | `.ix-toggle-switch label`, `::before` (track), `::after` (knott) |
+| Slått på | `.ix-toggle-switch input:checked + label` |
+| Label til høyre | `.ix-toggle-switch[data-label-placement='right']` |
+| Hjelpetekst | `.ix-toggle-switch [data-field='description']` |
+
+### Eksempel: ren HTML
+
+```html
+<div class="ix-toggle-switch ix-w-full">
+  <input type="checkbox" role="switch" id="wifi" name="wifi" checked />
+  <label for="wifi">Wifi</label>
+</div>
+```
+
+## Relatert
+
+- [Checkbox](./checkbox): når valget skal sendes inn eller bekreftes
+- [CheckboxGroup](./checkbox-group): når brukeren velger flere ting fra en liste
+- [RadioGroup](./radio-group): når brukeren velger ett av flere alternativer
