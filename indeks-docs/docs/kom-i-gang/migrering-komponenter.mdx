@@ -4,7 +4,7 @@ Oversikten viser hva hver FFE-komponent blir i Indeks. FFE-navnene lenker til ko
 
 * **Ingen komponent er drop-in.** Selv der navnet er det samme, har props eller markup endret seg, så du må skrive om koden. «Hva endres» viser de viktigste forskjellene. Les komponentsiden før du bytter.
 * Finnes ikke komponenten i Indeks, står ett av disse begrepene i stedet:
-  * **Erstattes av:** Indeks har ikke komponenten, men noe annet dekker behovet.
+  * **Erstattes av:** Indeks har ikke komponenten, men noe annet dekker behovet. Finnes ikke erstatningen ennå, står statusen dens i parentes.
   * **Nå:** komponenten lages nå.
   * **Neste:** komponenten lages når det vi jobber med nå, er ferdig.
   * **Etterhvert:** komponenten kommer, men ikke med det første.
@@ -59,7 +59,7 @@ Oversikten viser hva hver FFE-komponent blir i Indeks. FFE-navnene lenker til ko
 |---|---|---|
 | [`TextCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-textcard--docs), [`IconCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-iconcard--docs), [`IllustrationCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-illustrationcard--docs), [`ImageCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-imagecard--docs), [`StippledCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-stippledcard--docs) | [`Card`](../komponenter/card) | Hele kortet er en lenke: `href` og `title` er påkrevd. `variant` velger utforming, og `appearance="dashed"` erstatter `StippledCard`. |
 | [`CardBase`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-cardbase--docs) | [`Surface`](../komponenter/surface) | Bruk `Surface` når du lager et eget kort. |
-| [`GroupCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-groupcard--docs) med deler | **Erstattes av** `ListCard` | `ListCard` lages nå. |
+| [`GroupCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-groupcard--docs) med deler | **Erstattes av** `ListCard` (**Nå**) | |
 | [`Accordion`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-accordion--docs), [`AccordionItem`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-accordion--docs) | [`Accordion`](../komponenter/accordion) | Delene er `Accordion.Item`, `.Header` og `.Content`. `defaultOpen` erstatter `isOpen`. |
 | [`Collapse`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-collapse-collapse--docs) | **Erstattes av** [`ReadMore`](../komponenter/read-more) eller [`Accordion`](../komponenter/accordion) | |
 | [`Modal`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-modals-modal--docs) | [`Modal`](../komponenter/modal) | Styres med `open` og `onOpenChange`, ikke med `open()` og `close()` på en ref. `Modal.Title` kobler `aria-labelledby` for deg. |
@@ -84,7 +84,7 @@ Oversikten viser hva hver FFE-komponent blir i Indeks. FFE-navnene lenker til ko
 
 | FFE | Indeks | Hva endres |
 |---|---|---|
-| [`TabGroup`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-tabs--docs), [`Tab`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-tabs--docs) | **Erstattes av** `ToggleGroup` | `ToggleGroup` finnes ikke ennå. [`Tabs`](../komponenter/tabs) i Indeks er klassiske faner, der hver fane viser sitt eget panel. Bruk den når innholdet under skal byttes. Delene er `Tabs.List`, `.Tab` og `.Panel`, og `onChange` gir verdien som streng. |
+| [`TabGroup`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-tabs--docs), [`Tab`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-tabs--docs) | **Erstattes av** `ToggleGroup` (**Etterhvert**) | [`Tabs`](../komponenter/tabs) i Indeks er klassiske faner, der hver fane viser sitt eget panel. Bruk den når innholdet under skal byttes. Delene er `Tabs.List`, `.Tab` og `.Panel`, og `onChange` gir verdien som streng. |
 | [`Pagination`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-pagination-pagination--docs), [`usePagination`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-pagination-pagination--docs) | [`Pagination`](../komponenter/pagination) | Styres med `page`, `count` og `onPageChange`. Tekstene er påkrevde props. Valg av antall rader per side finnes ikke. |
 | [`LinkText`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-linktext--docs) | [`LinkText`](../komponenter/typografi) | |
 | [`LinkIcon`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-linkicon--docs) | **Erstattes av** [`LinkText`](../komponenter/typografi) eller [`InteractiveIcon`](../komponenter/interactive-icon) | Legg `Icon` i children på `LinkText`, eller bruk `InteractiveIcon` når lenken bare er et ikon. |
