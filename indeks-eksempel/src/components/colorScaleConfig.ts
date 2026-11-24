@@ -15,7 +15,7 @@ export const colorScales: { name: OriginScaleNames; label: string }[] = [
 /** Standard basisfarge per skala, brukt som utgangspunkt i fargevelgeren. */
 export const defaultColors: Record<OriginScaleNames, string> = {
     brand: '#0078d8',
-    'brand-himmel': '#6c97a8',
+    'brand-himmel': '#4d9abc',
     success: '#00885b',
     info: '#467ca4',
     warning: '#af6500',
