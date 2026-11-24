@@ -1,8 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
+import Color from 'colorjs.io';
 import {
     buildColorScaleVariables,
     applyColorScaleVariables,
     colorScaleVariablesToCss,
+    getOriginChroma,
 } from '../generate';
 import { DEFAULT_STEPS } from '../../../themes/types';
 
@@ -20,6 +22,56 @@ describe('buildColorScaleVariables', () => {
     it('tvinger gray-0 til hvit (samme unntak som ved statisk bygg)', () => {
         const vars = buildColorScaleVariables('gray', '#6D7888');
         expect(vars['--ii-primitive-gray-0']).toBe('#FFFFFF');
+    });
+
+    it('tvinger gray-0 til hvit også med justeringer', () => {
+        const vars = buildColorScaleVariables('gray', '#6D7888', { lightness: { 0: 0.5 }, chroma: 0.2 });
+        expect(vars['--ii-primitive-gray-0']).toBe('#FFFFFF');
+    });
+});
+
+describe('buildColorScaleVariables med justeringer', () => {
+    const oklch = (hex: string) => new Color(hex).to('oklch');
+
+    it('gir samme skala som uten options når options er tomme', () => {
+        expect(buildColorScaleVariables('brand', '#0078D8', {})).toEqual(
+            buildColorScaleVariables('brand', '#0078D8')
+        );
+    });
+
+    it('overstyrer lysstyrken bare på angitt trinn', () => {
+        const base = buildColorScaleVariables('brand', '#0078D8');
+        const vars = buildColorScaleVariables('brand', '#0078D8', { lightness: { 600: 0.6 } });
+
+        expect(oklch(vars['--ii-primitive-brand-600']).l).toBeCloseTo(0.6, 2);
+        expect(vars['--ii-primitive-brand-500']).toBe(base['--ii-primitive-brand-500']);
+    });
+
+    it('bruker chroma i stedet for basisfargens chroma', () => {
+        const low = buildColorScaleVariables('brand-himmel', '#6C97A8', { chroma: 0.02 });
+        const high = buildColorScaleVariables('brand-himmel', '#6C97A8', { chroma: 0.1 });
+
+        expect(oklch(high['--ii-primitive-brand-himmel-600']).c).toBeGreaterThan(
+            oklch(low['--ii-primitive-brand-himmel-600']).c
+        );
+    });
+
+    it('ganger inn chromaFactor bare på angitt trinn', () => {
+        const base = buildColorScaleVariables('brand', '#0078D8');
+        const vars = buildColorScaleVariables('brand', '#0078D8', { chromaFactor: { 300: 0 } });
+
+        expect(oklch(vars['--ii-primitive-brand-300']).c).toBeCloseTo(0, 2);
+        expect(vars['--ii-primitive-brand-400']).toBe(base['--ii-primitive-brand-400']);
+    });
+});
+
+describe('getOriginChroma', () => {
+    it('gir OKLCH-chroma for basisfargen', () => {
+        expect(getOriginChroma('#0078D8')).toBeCloseTo(new Color('#0078D8').to('oklch').c, 6);
+    });
+
+    it('gir 0 for en grå uten chroma', () => {
+        expect(getOriginChroma('#808080')).toBeCloseTo(0, 6);
     });
 });
 

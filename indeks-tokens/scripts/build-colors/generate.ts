@@ -1,10 +1,13 @@
-import { buildColorScale } from './buildThemeColors';
+import { buildColorScale, type ColorScaleOptions } from './buildThemeColors';
 import { DEFAULT_STEPS } from '../../themes/types';
 import type { OriginColor, OriginScaleNames } from '../../themes/types';
 
 // Re-eksporterer typene konsumenter trenger for å type sine egne kall, så de slipper
 // å grave i interne stier. Del av det offentlige `@sb1/indeks-tokens/generate`-API-et.
 export type { OriginColor, OriginScaleNames } from '../../themes/types';
+export type { ColorScaleOptions } from './buildThemeColors';
+export { DEFAULT_CHROMA, DEFAULT_LIGHTNESS, getOriginChroma } from './buildThemeColors';
+export { DEFAULT_STEPS } from '../../themes/types';
 
 /**
  * Runtime-API for å generere fargeskalaer «on-the-fly» — i en Node-backend eller
@@ -33,9 +36,15 @@ const PRIMITIVE_PREFIX = '--ii-primitive';
  * @example
  * buildColorScaleVariables('brand', '#0078D8')
  * // → { '--ii-primitive-brand-0': '#...', ..., '--ii-primitive-brand-950': '#...' }
+ *
+ * `options` justerer lysstyrke og chroma, for å prøve ut nye skalaer.
  */
-export function buildColorScaleVariables(name: OriginScaleNames, color: OriginColor): ColorScaleVariables {
-    const scale = buildColorScale(color);
+export function buildColorScaleVariables(
+    name: OriginScaleNames,
+    color: OriginColor,
+    options?: ColorScaleOptions
+): ColorScaleVariables {
+    const scale = buildColorScale(color, options);
     const variables: ColorScaleVariables = {};
 
     for (const step of DEFAULT_STEPS) {

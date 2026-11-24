@@ -33,7 +33,7 @@ export const DEFAULT_CHROMA = {
     950: 0.03,
 };
 
-const lightnessValues = {
+export const DEFAULT_LIGHTNESS = {
     '0': 0.99,
     '50': 0.9820951504625667,
     '100': 0.9693508410453796,
@@ -78,19 +78,37 @@ export function buildColorScales(colors: ThemeColors): BuiltThemeColors {
 
     return builtColors;
 }
-export function buildColorScale(originColor: OriginColor): ThemeColorScale {
+type Step = (typeof DEFAULT_STEPS)[number];
+
+/** Valgfrie justeringer av en skala. Uten dem bygges skalaen som i temaet. */
+export type ColorScaleOptions = {
+    /** Overstyrer lysstyrken (OKLCH L, 0–1) per trinn. */
+    lightness?: Partial<Record<Step, number>>;
+    /** Erstatter basisfargens chroma som toppverdi for hele kurven. */
+    chroma?: number;
+    /** Faktor som ganges inn i chroma per trinn. Standard 1. */
+    chromaFactor?: Partial<Record<Step, number>>;
+};
+
+/** Chroma (OKLCH C) for en basisfarge, altså startverdien for `ColorScaleOptions.chroma`. */
+export function getOriginChroma(originColor: OriginColor): number {
+    return new Color(originColor).to('oklch').get('c') || 0;
+}
+
+export function buildColorScale(originColor: OriginColor, options: ColorScaleOptions = {}): ThemeColorScale {
     const colorScale: ThemeColorScale = {} as ThemeColorScale;
     DEFAULT_STEPS.forEach((step) => {
         const chromaModifier = DEFAULT_CHROMA[step];
         const color = new Color(originColor);
         const oklch = color.to('oklch');
-        const lightness = lightnessValues[step];
+        const lightness = options.lightness?.[step] ?? DEFAULT_LIGHTNESS[step];
+        const factor = options.chromaFactor?.[step] ?? 1;
         oklch.set({
             // override the origin (l)ightness to control the scale
             l: lightness,
 
             // modify the (c)hroma
-            c: (c) => Math.sin(chromaModifier * Math.PI) * c,
+            c: (c) => Math.sin(chromaModifier * Math.PI) * (options.chroma ?? c) * factor,
 
             // (h)ue remains the same, no need to modify
         });
