@@ -4,9 +4,7 @@ import {
     DEFAULT_CHROMA,
     DEFAULT_LIGHTNESS,
     DEFAULT_STEPS,
-    buildColorScaleVariables,
     getOriginChroma,
-    type ColorScaleOptions,
     type OriginColor,
 } from '@sb1/indeks-tokens/generate';
 import { colorScales, defaultColors } from '../../components/colorScaleConfig';
@@ -26,23 +24,9 @@ const VERTICAL_SLIDER: CSSProperties = {
 
 const SMALL: CSSProperties = { fontSize: '12px', fontFamily: 'monospace', textAlign: 'center' };
 
-type Proposal = { label: string; color: OriginColor; options?: ColorScaleOptions };
-
-// Kandidater for at Brand Himmel 200 skal bli ca. #D8EAF3.
-const HIMMEL_PROPOSALS: Proposal[] = [
-    { label: 'I dag', color: '#6C97A8' },
-    { label: 'B: #4D9ABC', color: '#4D9ABC' },
-    {
-        label: 'C: chroma 200',
-        color: '#6C97A8',
-        options: { chromaFactor: { 150: 1.4, 200: 1.72, 250: 1.4 } },
-    },
-];
-
 export default function FargeskalaerEksempler() {
     const {
         colorOverrides,
-        setColorOverride,
         lightness,
         setLightness,
         chroma,
@@ -63,14 +47,6 @@ export default function FargeskalaerEksempler() {
         };
         await navigator.clipboard.writeText(JSON.stringify(values, null, 2));
         setCopied(true);
-    };
-
-    const applyProposal = ({ color, options }: Proposal) => {
-        resetColors();
-        setColorOverride('brand-himmel', color);
-        for (const [step, factor] of Object.entries(options?.chromaFactor ?? {})) {
-            setChromaFactor('brand-himmel', Number(step) as (typeof DEFAULT_STEPS)[number], factor);
-        }
     };
 
     return (
@@ -217,60 +193,6 @@ export default function FargeskalaerEksempler() {
                                         </div>
                                     </details>
                                     <div />
-                                </div>
-                            </div>
-                        );
-                    })}
-                </VStack>
-
-                <VStack gap="sm">
-                    <div>
-                        <Heading as="h2" size="lg">
-                            Forslag for Brand Himmel
-                        </Heading>
-                        <Text className="ix-mt-xs">
-                            Målet er at trinn 200 blir ca. #D8EAF3. B bytter basisfarge, og hele skalaen blir mer
-                            mettet. C beholder basisfargen og øker chroma bare på 150–250. «Bruk i appen» nullstiller
-                            andre justeringer.
-                        </Text>
-                    </div>
-                    {HIMMEL_PROPOSALS.map((proposal) => {
-                        const vars = buildColorScaleVariables('brand-himmel', proposal.color, proposal.options);
-
-                        return (
-                            <div key={proposal.label} className="ix-grid" style={ROW}>
-                                <Text>{proposal.label}</Text>
-                                <div className="ix-grid" style={STEPS_GRID}>
-                                    {DEFAULT_STEPS.map((step) => {
-                                        const hex = vars[`--ii-primitive-brand-himmel-${step}`];
-                                        return (
-                                            <div
-                                                key={step}
-                                                title={`brand-himmel-${step}: ${hex}`}
-                                                style={{
-                                                    backgroundColor: hex,
-                                                    color: DEFAULT_LIGHTNESS[step] > 0.6 ? '#000' : '#fff',
-                                                    outline: step === 200 ? '3px solid black' : 'none',
-                                                    outlineOffset: '-3px',
-                                                    padding: '8px 0',
-                                                    ...SMALL,
-                                                    fontSize: '10px',
-                                                }}
-                                            >
-                                                <div style={{ fontWeight: 'bold' }}>{step}</div>
-                                                {hex}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                                <div>
-                                    <Button
-                                        variant="secondary"
-                                        aria-label={`Bruk i appen: ${proposal.label}`}
-                                        onClick={() => applyProposal(proposal)}
-                                    >
-                                        Bruk i appen
-                                    </Button>
                                 </div>
                             </div>
                         );
