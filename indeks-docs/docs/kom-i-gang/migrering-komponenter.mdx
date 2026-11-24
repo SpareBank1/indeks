@@ -1,0 +1,126 @@
+# Komponenter fra FFE til Indeks
+
+Oversikten viser hva hver FFE-komponent blir i Indeks. FFE-navnene lenker til komponenten i FFE-Storybooken.
+
+* **Ingen komponent er drop-in.** Selv der navnet er det samme, har props eller markup endret seg, så du må skrive om koden. «Hva endres» viser de viktigste forskjellene. Les komponentsiden før du bytter.
+* Finnes ikke komponenten i Indeks, står ett av disse begrepene i stedet:
+  * **Erstattes av:** Indeks har ikke komponenten, men noe annet dekker behovet. Finnes ikke erstatningen ennå, står statusen dens i parentes.
+  * **Nå:** komponenten lages nå.
+  * **Neste:** komponenten lages når det vi jobber med nå, er ferdig.
+  * **Etterhvert:** komponenten kommer, men ikke med det første.
+  * **Fases ut:** komponenten blir ikke med videre. Finn en annen løsning når du migrerer.
+
+## Dette gjelder alle skjemafelt
+
+* Ledetekst og feilmelding er props på feltet: `label`, `description` og `errorMessage`. Du trenger ikke `InputGroup`, `Label` eller `ErrorFieldMessage` rundt feltet.
+* `onChange` gir et event, ikke en verdi. Les verdien fra `event.target.value`.
+* Grupper av radioknapper og avkrysningsbokser har `legend`, som er påkrevd.
+
+## Knapper
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| [`PrimaryButton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-buttons-primarybutton--docs), [`SecondaryButton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-buttons-secondarybutton--docs), [`TertiaryButton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-buttons-tertiarybutton--docs) | [`Button`](../komponenter/button) | Én komponent med `variant="primary"`, `"secondary"` eller `"tertiary"`. `isLoading` blir `loading`, og da er `loadingLabel` påkrevd. `isDisabled` blir `disabled`. `leftIcon` og `rightIcon` finnes ikke: legg `Icon` i children. |
+| [`ActionButton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-buttons-actionbutton--docs) | **Fases ut** | Bruk `Button`. |
+| [`BackButton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-buttons-backbutton--docs) | **Erstattes av** [`Button`](../komponenter/button) og [`Icon`](../komponenter/icon) | Bruk `variant="tertiary"` med `Icon` i children. |
+| [`TaskButton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-buttons-taskbutton--docs) | **Erstattes av** [`Button`](../komponenter/button) og [`Icon`](../komponenter/icon) | Bruk `variant="tertiary"` med `Icon` foran teksten. |
+| [`ShortcutButton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-buttons-shortcutbutton--docs) | **Erstattes av** [`Button`](../komponenter/button) og [`Icon`](../komponenter/icon) | Bruk `variant="tertiary"` med `Icon` etter teksten. Animasjonen av ikonet finnes ikke ennå ([#397](https://github.com/SpareBank1/indeks/issues/397)). |
+| [`ExpandButton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-buttons-expandbutton--docs), [`InlineExpandButton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-buttons-inlineexpandbutton--docs) | **Erstattes av** [`ReadMore`](../komponenter/read-more) eller [`Accordion`](../komponenter/accordion) | For innhold som vises og skjules. |
+| [`ButtonGroup`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-buttons-buttongroup--docs) | **Erstattes av** [`HStack`](../komponenter/primitives/stack) | |
+
+## Skjema
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| [`Input`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-input--docs), [`TextField`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-textfield--docs) | [`TextField`](../komponenter/skjema/textfield) | Ledetekst, beskrivelse, feilmelding og tooltip er props. `inline` og `textRightAlign` finnes ikke. Se også [formatering](../komponenter/skjema/textfield-formatering). |
+| [`InputGroup`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-inputgroup--docs) | `Field` | Trengs bare rundt egne felt. `inputId` er påkrevd. |
+| [`Label`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-label--docs) | [`Label`](../komponenter/skjema/label) | Bruk heller `label` på feltet. |
+| [`ErrorFieldMessage`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-errorfieldmessage--docs), [`SuccessFieldMessage`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-successfieldmessage--docs) | [`ValidationMessage`](../komponenter/skjema/validation-message) | `status="danger"` eller `"success"`. På et felt bruker du `errorMessage`. |
+| [`InfoFieldMessage`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-infofieldmessage--docs) | **Erstattes av** `description` | Propen finnes på alle skjemafelt. |
+| [`TextArea`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-textarea--docs) | [`TextArea`](../komponenter/skjema/textarea) | Samme mønster som `TextField`. |
+| [`Checkbox`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-checkbox--docs) | [`Checkbox`](../komponenter/skjema/checkbox) | Ledeteksten er `label`, ikke children. `hiddenLabel`, `inline` og `noMargins` finnes ikke. |
+| [`RadioButton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-radiobutton--docs), [`RadioButtonInputGroup`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-radiobuttoninputgroup--docs) | [`RadioGroup`](../komponenter/skjema/radio-group) og `RadioButton` | Gruppen eier `legend`, `value`, `onChange` og `errorMessage`. Valgene gis som `options` eller children. |
+| [`RadioBlock`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-radioblock--docs) | **Etterhvert** | |
+| [`RadioSwitch`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-radioswitch--docs) | **Erstattes av** [`RadioGroup`](../komponenter/chip/radio) med `variant="chip"` | Sett sammen to eller flere valg selv. |
+| [`ToggleSwitch`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-toggleswitch--docs) | **Nå** | |
+| [`Dropdown`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-dropdown-dropdown--docs) | [`Select`](../komponenter/skjema/select) | Valgene gis som `options`, flate eller i grupper. |
+| [`SearchableDropdown`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-searchable-dropdown-searchabledropdown--docs), [`SearchableDropdownMultiSelect`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-searchable-dropdown-searchabledropdownmultiselect--docs) | [`Combobox`](../komponenter/skjema/combobox) | `multiple` for flervalg, og da er verdien `string[]`. `noHitsText` er påkrevd. |
+| [`DateInput`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-datepicker-datepicker--docs) | [`DateField`](../komponenter/skjema/date-field) | Verdien er en ISO-dato som streng. `openLabel` er påkrevd. |
+| [`Datepicker`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-datepicker-datepicker--docs), [`Calendar`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-datepicker-calendar--docs) | **Etterhvert** | Til da: `DateField` bruker nettleserens egen datovelger. |
+| [`PhoneNumber`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-phonenumber--docs) | [`PhoneNumberField`](../komponenter/skjema/phone-number-field) | Landkode og nummer er to felt med hver sin ledetekst. |
+| [`Tooltip`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-form-tooltip--docs) | [Tooltip](../komponenter/skjema/tooltip) | Ikke en React-komponent. På skjemafelt bruker du `tooltip`. På andre elementer setter du `data-tooltip`. Bare ren tekst: bruk [`Popover`](../komponenter/popover) for rikere innhold. |
+| [`FileUpload`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-file-upload-fileupload--docs) | **Etterhvert** | |
+| [`AccountSelector`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-account-selector-accountselector--docs), [`AccountSelectorMulti`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-account-selector-accountselectormulti--docs) | **Etterhvert** | |
+
+## Innhold og layout
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| [`TextCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-textcard--docs), [`IconCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-iconcard--docs), [`IllustrationCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-illustrationcard--docs), [`ImageCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-imagecard--docs), [`StippledCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-stippledcard--docs) | [`Card`](../komponenter/card) | Hele kortet er en lenke: `href` og `title` er påkrevd. `variant` velger utforming, og `appearance="dashed"` erstatter `StippledCard`. |
+| [`CardBase`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-cardbase--docs) | [`Surface`](../komponenter/surface) | Bruk `Surface` når du lager et eget kort. |
+| [`GroupCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-cards-groupcard--docs) med deler | **Erstattes av** `ListCard` (**Nå**) | |
+| [`Accordion`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-accordion--docs), [`AccordionItem`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-accordion--docs) | [`Accordion`](../komponenter/accordion) | Delene er `Accordion.Item`, `.Header` og `.Content`. `defaultOpen` erstatter `isOpen`. |
+| [`Collapse`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-collapse-collapse--docs) | **Erstattes av** [`ReadMore`](../komponenter/read-more) eller [`Accordion`](../komponenter/accordion) | |
+| [`Modal`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-modals-modal--docs) | [`Modal`](../komponenter/modal) | Styres med `open` og `onOpenChange`, ikke med `open()` og `close()` på en ref. `Modal.Title` kobler `aria-labelledby` for deg. |
+| [`ModalBlock`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-modals-modal--docs) | `Modal.Body` | Bruk delene `Modal.Header`, `.Body` og `.Footer`. |
+| [`Grid`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-grid--docs), [`GridRow`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-grid-gridrow--docs), [`GridCol`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-grid-gridcol--docs) | [`Grid`](../komponenter/primitives/grid), [`HStack` og `VStack`](../komponenter/primitives/stack) | CSS grid med `cols`, ikke rader og kolonner som komponenter. |
+| [`BulletList`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-lists-bulletlist--docs), [`CheckList`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-lists-checklist--docs), [`NumberedList`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-lists-numberedlist--docs), [`StylizedNumberedList`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-lists--docs) | **Etterhvert** | Lister kommer som én samlet komponent. Til da: bruk `<ul>` og `<ol>`. |
+| [`DescriptionList`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-lists-descriptionlist--docs) | **Etterhvert** | Kommer som egen komponent. |
+| [`DetailListCard`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-lists-detaillistcard--docs) | **Etterhvert** | Kommer i den samlede listekomponenten. |
+| [`DividerLine`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-dividerline--docs) | [`Divider`](../komponenter/divider) | |
+| [`Wave`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-shapes-wave--docs) | **Fases ut** | |
+
+## Meldinger
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| [`InfoMessage`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-messages-messagebox--docs), [`SuccessMessage`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-messages-messagebox--docs), [`ErrorMessage`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-messages-messagebox--docs), [`ContextInfoMessage`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-messages-contextmessage--docs) og de andre kontekstmeldingene | [`Message`](../komponenter/message) | Én komponent med `status="info"`, `"success"`, `"warning"` eller `"danger"`. `header` blir `title`. Lukkeknappen vises når du setter `closeLabel`. Legg meldingene i en `MessageRegion`, så skjermlesere leser dem opp. |
+| [`TipsMessage`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-messages-messagebox--docs), [`ContextTipsMessage`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-messages-contextmessage--docs) | **Fases ut** | Bruk `Message` med en annen `status`. |
+| [`SystemInfoMessage`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-messages-systemmessage--docs) og de andre systemmeldingene | [`Message`](../komponenter/message) | Bruk `fullWidth` og `closeLabel`. `news` finnes ikke, så bruk `status="info"`. |
+| [`Feedback`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-feedback-feedback--docs) | **Etterhvert** | |
+
+## Navigasjon
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| [`TabGroup`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-tabs--docs), [`Tab`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-tabs--docs) | **Erstattes av** `ToggleGroup` (**Etterhvert**) | [`Tabs`](../komponenter/tabs) i Indeks er klassiske faner, der hver fane viser sitt eget panel. Bruk den når innholdet under skal byttes. Delene er `Tabs.List`, `.Tab` og `.Panel`, og `onChange` gir verdien som streng. |
+| [`Pagination`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-pagination-pagination--docs), [`usePagination`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-pagination-pagination--docs) | [`Pagination`](../komponenter/pagination) | Styres med `page`, `count` og `onPageChange`. Tekstene er påkrevde props. Valg av antall rader per side finnes ikke. |
+| [`LinkText`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-linktext--docs) | [`LinkText`](../komponenter/typografi) | |
+| [`LinkIcon`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-linkicon--docs) | **Erstattes av** [`LinkText`](../komponenter/typografi) eller [`InteractiveIcon`](../komponenter/interactive-icon) | Legg `Icon` i children på `LinkText`, eller bruk `InteractiveIcon` når lenken bare er et ikon. |
+| [`ffe-header`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-header-header--docs) | **Fases ut** | |
+
+## Data
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| [`Table`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-table-table--docs) med deler | **Nå** | |
+| [`Progressbar`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-progressbar-progressbar--docs) | [`ProgressBar`](../komponenter/progress-bar) | Stor B i navnet. `state` er `"active"`, `"success"` eller `"error"`, og ledetekst gis med `label`. |
+| [`ChartDonut`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-chart-donut-chartdonut--docs) | **Fases ut** | Visualisering av data kan bli utforsket senere, kanskje som egne pakker. |
+| [`ffe-formatters`](https://sparebank1.github.io/designsystem/?path=/docs/utils-formatters--docs) | **Erstattes av** [`TextField`](../komponenter/skjema/textfield) | Formateringen er bygget inn i feltet med `format`. Se [formatering i TextField](../komponenter/skjema/textfield-formatering). Noen formatere fra FFE finnes ikke ennå. Vi tar dem inn når noen trenger dem, så [si fra](./kontakt) hvis du mangler en. |
+
+## Typografi
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| [`Heading1`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-heading1--docs)–[`Heading6`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-heading6--docs) | [`Heading`](../komponenter/typografi) | `as="h1"` til `"h6"` er påkrevd. `lookLike` blir `size`. Avstand er av som standard: slå den på med `addRecommendedSpacing`. |
+| [`BodyText`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-bodytext--docs), [`Paragraph`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-paragraph--docs), [`SmallText`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-smalltext--docs), [`MicroText`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-microtext--docs) | [`Text`](../komponenter/typografi) | Én komponent med `size`. Standard element er `p`. |
+| [`StrongText`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-strongtext--docs), [`EmphasizedText`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-emphasizedtext--docs), [`PreformattedText`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-core-preformattedtext--docs) | **Erstattes av** `<strong>`, `<em>` og `<pre>` | Skal hele teksten utheves, bruk `Text as="strong"` eller `as="em"`. Se [typografi](../komponenter/typografi). |
+
+## Ikoner og annet
+
+| FFE | Indeks | Hva endres |
+|---|---|---|
+| [`Icon`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-icons-icon--docs), [`Symbol`](https://github.com/SpareBank1/designsystem/tree/develop/packages/ffe-symbols-react) | [`Icon`](../komponenter/icon) | Ikonet velges med `name`, ikke `fileUrl` eller `icon`. `fill` og `weight` finnes ikke. |
+| [`Spinner`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-spinner-spinner--docs) | [`Spinner`](../komponenter/spinner) | `large` blir `size="lg"`, og `loadingText` blir `label`. `immediate` og `locale` finnes ikke. |
+| [`Tag`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-tags-tag--docs) | [`Tag`](../komponenter/tag) | `variant="critical"` blir `"danger"`. `tip` finnes ikke. |
+| [`Chip`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-chips--docs) | [`Chip`](../komponenter/chip) | `size` er `"sm"` eller `"md"`. `leftIcon` og `rightIcon` finnes ikke. |
+| [`ChipRemovable`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-chips--docs) | [`RemovableChip`](../komponenter/chip/removable) | `removeLabel` er påkrevd. |
+| [`ChipSelectable`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-chips--docs) | [`CheckboxGroup`](../komponenter/chip/checkbox) eller [`RadioGroup`](../komponenter/chip/radio) | Bruk `variant="chip"` på gruppen. |
+| [`Badge`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-badge-badge--docs) | **Neste** | |
+| [`Skeleton`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-skeleton--docs), [`SkeletonCircle`](https://sparebank1.github.io/designsystem/?path=/docs/komponenter-skeleton--docs) | **Neste** | |
+
+## Nytt i Indeks
+
+Disse har ingen FFE-forgjenger: [`DropdownMenu`](../komponenter/dropdown-menu), [`Popover`](../komponenter/popover), [`ReadMore`](../komponenter/read-more), [`Row`](../komponenter/row), [`InteractiveIcon`](../komponenter/interactive-icon), [`Surface`](../komponenter/surface), [`CheckboxGroup`](../komponenter/skjema/checkbox-group) og [`HStack` og `VStack`](../komponenter/primitives/stack).
+
+Trenger du en komponent som ikke finnes ennå, [ta kontakt](./kontakt). Det hjelper oss å prioritere.
