@@ -168,6 +168,9 @@
     content: '';
     position: absolute;
     inset: 0;
+    /* Containere som runder hjørnene (f.eks. ListCard) setter radiusen, så
+       hover-flaten og fokusringen følger hjørnet i stedet for å bli klippet. */
+    border-radius: var(--ix-row-border-radius, 0);
 }
 
 .ix-row__action::before {
