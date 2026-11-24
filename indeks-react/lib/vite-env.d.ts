@@ -11,6 +11,7 @@ import type {
     IxPopover,
     IxProgressBar,
     IxRadioGroup,
+    IxTable,
     IxTabs,
     IxTabList,
     IxTab,
@@ -102,6 +103,12 @@ declare module 'react' {
                 'data-support-text'?: string;
                 'data-show-value'?: boolean | '';
                 'data-value-text'?: string;
+            };
+            'ix-table': React.DetailedHTMLProps<React.HTMLAttributes<IxTable>, IxTable> & {
+                class?: string;
+                'data-sticky'?: 'first' | 'last';
+                'data-density'?: 'compact' | 'comfortable';
+                'loading-label'?: string;
             };
             'ix-tabs': React.DetailedHTMLProps<React.HTMLAttributes<IxTabs>, IxTabs> & {
                 class?: string;

@@ -1,0 +1,1114 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import AccessibilityTable, { KeyboardAndScreenReader } from '@site/src/components/AccessibilityTable';
+import a11yData from './accessibility/table.json';
+
+# Table
+
+Table viser data i rader og kolonner, så brukeren kan finne, sammenligne og forstå
+informasjon. Tabellen kan sorteres, rader kan velges eller ekspanderes, og over tabellen kan
+du ha søk, filtre og handlinger.
+
+## Egnet til
+
+- Informasjon med en tydelig struktur av rader og kolonner
+- Verdier brukeren skal sammenligne på tvers av flere elementer, som beløp, datoer og status
+- Større mengder informasjon som brukeren skal skanne
+- Data der brukeren trenger sortering, søk, filtrering eller valg av rader
+
+## Uegnet til
+
+- Få og enkle opplysninger som ikke skal sammenlignes. Bruk heller [Row](./row)
+- Innhold uten sammenheng mellom rader og kolonner
+- Elementer med mye ulik informasjon eller en visuell presentasjon. Bruk heller [Card](./card)
+- Å finne og åpne ett element på en liten flate, når kolonnene ikke skal sammenlignes. Bruk heller en liste med [Row](./row)
+
+## Bruk
+
+Tabellen står i et kort med valgfri tittel over. Tittelen gir også tabellen navn. Høyrejuster
+kolonner med tall som skal sammenlignes, så justeres overskriften og cellene i kolonnen likt.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-table class="ix-table">
+  <h3 class="ix-table__heading" id="bruk-regninger">Regninger</h3>
+  <div class="ix-table__frame">
+    <div class="ix-table__scroll">
+      <table aria-labelledby="bruk-regninger">
+        <thead>
+          <tr>
+            <th scope="col">Mottaker</th>
+            <th scope="col">Status</th>
+            <th scope="col">Forfallsdato</th>
+            <th scope="col" data-align="end">Beløp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Fjordkraft AS</td>
+            <td><span class="ix-tag" data-status="success" data-variant="subtle" data-size="sm">Betalt</span></td>
+            <td>12.10.2026</td>
+            <td>1 249,00</td>
+          </tr>
+          <tr>
+            <td>Gjensidige</td>
+            <td><span class="ix-tag" data-status="warning" data-variant="subtle" data-size="sm">Forfaller snart</span></td>
+            <td>18.11.2026</td>
+            <td>849,00</td>
+          </tr>
+          <tr>
+            <td>Telenor Norge</td>
+            <td><span class="ix-tag" data-status="info" data-variant="subtle" data-size="sm">Til behandling</span></td>
+            <td>25.11.2026</td>
+            <td>599,00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ix-table>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table title="Regninger">
+  <Table.Header>
+    <Table.HeaderCell>Mottaker</Table.HeaderCell>
+    <Table.HeaderCell>Status</Table.HeaderCell>
+    <Table.HeaderCell>Forfallsdato</Table.HeaderCell>
+    <Table.HeaderCell align="end">Beløp</Table.HeaderCell>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Fjordkraft AS</Table.Cell>
+      <Table.Cell><Tag variant="success" type="subtle" size="sm">Betalt</Tag></Table.Cell>
+      <Table.Cell>12.10.2026</Table.Cell>
+      <Table.Cell>1 249,00</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Gjensidige</Table.Cell>
+      <Table.Cell><Tag variant="warning" type="subtle" size="sm">Forfaller snart</Tag></Table.Cell>
+      <Table.Cell>18.11.2026</Table.Cell>
+      <Table.Cell>849,00</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Telenor Norge</Table.Cell>
+      <Table.Cell><Tag variant="info" type="subtle" size="sm">Til behandling</Tag></Table.Cell>
+      <Table.Cell>25.11.2026</Table.Cell>
+      <Table.Cell>599,00</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+## Eksempler
+
+### Sortering
+
+En sorterbar kolonne har en knapp i overskriften. Første klikk sorterer stigende, neste
+synkende, og det tredje fjerner sorteringen. Den sorterte kolonnen har `aria-sort`.
+
+I HTML sorterer tabellen radene selv, etter celleteksten eller `data-sort-value`. Beløp med
+mellomrom, komma, fortegn og valuta (`kr`, `NOK`, `,-`) sorteres som tall, og det samme gjør datoer
+på formen dd.mm.åååå, med eller uten klokkeslett. Tall står før tekst, og tomme celler står sist.
+Alt annet sorteres som tekst, så bruk `data-sort-value` når celleteksten ikke sier nok, for
+eksempel «I går».
+
+Henter du data fra en tjeneste, kaller du `preventDefault()` på `sort-change` og sorterer selv.
+Da setter tabellen heller ikke `aria-sort`, så du setter `aria-sort` på kolonnen du sorterte og
+fjerner det fra de andre. I React sorterer du alltid dataene selv: tabellen sier fra om neste
+sortering med `onSortChange`, og `sort` gir `aria-sort`.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-table class="ix-table">
+  <h3 class="ix-table__heading" id="sort-transaksjoner">Transaksjoner</h3>
+  <div class="ix-table__frame">
+    <div class="ix-table__scroll">
+      <table aria-labelledby="sort-transaksjoner">
+        <thead>
+          <tr>
+            <th scope="col" aria-sort="descending"><button type="button" class="ix-table__sort">Dato</button></th>
+            <th scope="col"><button type="button" class="ix-table__sort">Mottaker</button></th>
+            <th scope="col">Type</th>
+            <th scope="col" data-align="end"><button type="button" class="ix-table__sort">Beløp</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>06.11.2026</td><td>Matbutikken</td><td>Kortkjøp</td><td>-684,50</td></tr>
+          <tr><td>05.11.2026</td><td>Strømleverandør</td><td>AvtaleGiro</td><td>-1 245,00</td></tr>
+          <tr><td>04.11.2026</td><td>Kafé Torget</td><td>Kortkjøp</td><td>-89,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ix-table>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+function Transaksjoner() {
+  const [sort, setSort] = useState({ key: 'dato', direction: 'descending' });
+  const rader = [
+    { id: 't1', dato: '2026-11-06', mottaker: 'Matbutikken', type: 'Kortkjøp', belop: -684.5 },
+    { id: 't2', dato: '2026-11-05', mottaker: 'Strømleverandør', type: 'AvtaleGiro', belop: -1245 },
+    { id: 't3', dato: '2026-11-04', mottaker: 'Kafé Torget', type: 'Kortkjøp', belop: -89 },
+  ];
+  const sortert = sort
+    ? [...rader].sort((a, b) => {
+        const retning = sort.direction === 'ascending' ? 1 : -1;
+        if (sort.key === 'belop') return (a.belop - b.belop) * retning;
+        return String(a[sort.key]).localeCompare(String(b[sort.key]), 'nb') * retning;
+      })
+    : rader;
+  const kroner = new Intl.NumberFormat('nb-NO', { minimumFractionDigits: 2 });
+
+  return (
+    <Table title="Transaksjoner" sort={sort} onSortChange={setSort}>
+      <Table.Header>
+        <Table.HeaderCell sortKey="dato">Dato</Table.HeaderCell>
+        <Table.HeaderCell sortKey="mottaker">Mottaker</Table.HeaderCell>
+        <Table.HeaderCell>Type</Table.HeaderCell>
+        <Table.HeaderCell sortKey="belop" align="end">Beløp</Table.HeaderCell>
+      </Table.Header>
+      <Table.Body>
+        {sortert.map((t) => (
+          <Table.Row key={t.id}>
+            <Table.Cell>{t.dato.split('-').reverse().join('.')}</Table.Cell>
+            <Table.Cell>{t.mottaker}</Table.Cell>
+            <Table.Cell>{t.type}</Table.Cell>
+            <Table.Cell>{kroner.format(t.belop)}</Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  );
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Single select
+
+Radioen står i første kolonne, og klikk på raden velger den. Gi radioene en `name` når valget
+skal sendes med et skjema.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-table class="ix-table">
+  <h3 class="ix-table__heading" id="single-konto">Velg konto</h3>
+  <div class="ix-table__frame">
+    <div class="ix-table__scroll">
+      <table aria-labelledby="single-konto">
+        <thead>
+          <tr>
+            <td class="ix-table__control"></td>
+            <th scope="col">Konto</th>
+            <th scope="col" data-align="end">Saldo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ix-table__control">
+              <div class="ix-radio">
+                <input type="radio" id="single-bruk" name="konto" value="bruk" checked />
+                <label for="single-bruk"><span class="ix-sr-only">Velg Brukskonto</span></label>
+              </div>
+            </td>
+            <td>Brukskonto<span class="ix-table__description">•••• •• 12345</span></td>
+            <td>24 850,00</td>
+          </tr>
+          <tr>
+            <td class="ix-table__control">
+              <div class="ix-radio">
+                <input type="radio" id="single-spare" name="konto" value="spare" />
+                <label for="single-spare"><span class="ix-sr-only">Velg Sparekonto</span></label>
+              </div>
+            </td>
+            <td>Sparekonto<span class="ix-table__description">•••• •• 67890</span></td>
+            <td>156 200,00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ix-table>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table title="Velg konto" variant="single-select" name="valgt-konto" defaultSelectedKeys={['bruk']}>
+  <Table.Header>
+    <Table.HeaderCell>Konto</Table.HeaderCell>
+    <Table.HeaderCell align="end">Saldo</Table.HeaderCell>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row value="bruk" selectLabel="Velg Brukskonto">
+      <Table.Cell description="•••• •• 12345">Brukskonto</Table.Cell>
+      <Table.Cell>24 850,00</Table.Cell>
+    </Table.Row>
+    <Table.Row value="spare" selectLabel="Velg Sparekonto">
+      <Table.Cell description="•••• •• 67890">Sparekonto</Table.Cell>
+      <Table.Cell>156 200,00</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+### Multi select med toolbar
+
+Checkboxen i headeren velger eller opphever alle rader, og viser delvis valgt når bare noen er
+valgt. Når noe er valgt, viser toolbaren antallet og handlingene for utvalget. Søk og filter
+står der hele tiden. Teksten i `data-field="selected-label"` leses opp etter hvert valg, så
+skjermleserbrukere også får vite hvor mange rader som er valgt.
+
+Utvalget gjelder bare radene som vises. «Velg alle» og antallet hopper over skjulte rader, og en
+valgt rad som filtreres bort eller havner på en annen side, er ikke lenger valgt. I HTML skjuler
+du rader med `hidden`, så merker tabellen det selv. I React fjerner du radene fra dataene, og
+`onSelectionChange` får det nye utvalget.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-table class="ix-table">
+  <h3 class="ix-table__heading" id="multi-regninger">Regninger til godkjenning</h3>
+  <div class="ix-table__frame">
+    <div class="ix-table__toolbar">
+      <div class="ix-table__filters">
+        <div class="ix-text-field"><input type="search" aria-label="Søk i regninger" /></div>
+      </div>
+      <div class="ix-table__actions">
+        <div class="ix-table__selection" hidden>
+          <span data-field="selected-label"><span data-selected-count></span> valgt</span>
+          <button type="button" class="ix-button" data-variant="tertiary" data-size="sm">Godkjenn</button>
+          <button type="button" class="ix-button" data-variant="tertiary" data-size="sm">Avvis</button>
+        </div>
+      </div>
+    </div>
+    <div class="ix-table__scroll">
+      <table aria-labelledby="multi-regninger">
+        <thead>
+          <tr>
+            <th scope="col" class="ix-table__control">
+              <div class="ix-checkbox">
+                <input type="checkbox" id="multi-alle" />
+                <label for="multi-alle"><span class="ix-sr-only">Velg alle regninger</span></label>
+              </div>
+            </th>
+            <th scope="col">Mottaker</th>
+            <th scope="col" data-align="end">Beløp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ix-table__control">
+              <div class="ix-checkbox">
+                <input type="checkbox" id="multi-strom" value="strom" />
+                <label for="multi-strom"><span class="ix-sr-only">Velg Strømleverandør</span></label>
+              </div>
+            </td>
+            <td>Strømleverandør</td>
+            <td>1 245,00</td>
+          </tr>
+          <tr>
+            <td class="ix-table__control">
+              <div class="ix-checkbox">
+                <input type="checkbox" id="multi-mobil" value="mobil" checked />
+                <label for="multi-mobil"><span class="ix-sr-only">Velg Mobiloperatør</span></label>
+              </div>
+            </td>
+            <td>Mobiloperatør</td>
+            <td>399,00</td>
+          </tr>
+          <tr>
+            <td class="ix-table__control">
+              <div class="ix-checkbox">
+                <input type="checkbox" id="multi-borett" value="borett" />
+                <label for="multi-borett"><span class="ix-sr-only">Velg Borettslaget</span></label>
+              </div>
+            </td>
+            <td>Borettslaget</td>
+            <td>4 850,00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ix-table>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+function Godkjenning() {
+  const [valgt, setValgt] = useState(['mobil']);
+  const regninger = [
+    { id: 'strom', mottaker: 'Strømleverandør', belop: '1 245,00' },
+    { id: 'mobil', mottaker: 'Mobiloperatør', belop: '399,00' },
+    { id: 'borett', mottaker: 'Borettslaget', belop: '4 850,00' },
+  ];
+
+  return (
+    <Table
+      title="Regninger til godkjenning"
+      variant="multi-select"
+      selectAllLabel="Velg alle regninger"
+      selectedKeys={valgt}
+      onSelectionChange={setValgt}
+      toolbar={
+        <Table.Toolbar
+          filters={<TextField ariaLabel="Søk i regninger" type="search" />}
+          selectedLabel={(n) => `${n} valgt`}
+          selectionActions={
+            <>
+              <Button variant="tertiary" size="sm">Godkjenn</Button>
+              <Button variant="tertiary" size="sm">Avvis</Button>
+            </>
+          }
+        />
+      }
+    >
+      <Table.Header>
+        <Table.HeaderCell>Mottaker</Table.HeaderCell>
+        <Table.HeaderCell align="end">Beløp</Table.HeaderCell>
+      </Table.Header>
+      <Table.Body>
+        {regninger.map((r) => (
+          <Table.Row key={r.id} value={r.id} selectLabel={`Velg ${r.mottaker}`}>
+            <Table.Cell>{r.mottaker}</Table.Cell>
+            <Table.Cell>{r.belop}</Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  );
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Ekspanderbare rader
+
+Knappen i første kolonne åpner og lukker innholdet rett under raden. Klikk på raden gjør det
+samme. Innholdet kan ha tekst, Tag, lenker og knapper.
+
+I HTML legger du innholdet i `.ix-table__expanded-content` inne i cellen. Det er den som vokser
+fram når raden åpnes. Uten den åpnes og lukkes raden uten overgang. Overgangen krever
+`interpolate-size`, som Chrome og Edge har. I andre nettlesere hopper raden åpen og lukket.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-table class="ix-table">
+  <h3 class="ix-table__heading" id="exp-lan">Lån</h3>
+  <div class="ix-table__frame">
+    <div class="ix-table__scroll">
+      <table aria-labelledby="exp-lan">
+        <thead>
+          <tr>
+            <td class="ix-table__control"></td>
+            <th scope="col">Lån</th>
+            <th scope="col" data-align="end">Restgjeld</th>
+            <th scope="col" data-align="end">Rente</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ix-table__control">
+              <button type="button" class="ix-table__expand" aria-expanded="true" aria-label="Vis detaljer for Boliglån">
+                <ix-icon name="keyboard_arrow_down" data-size="sm"></ix-icon>
+              </button>
+            </td>
+            <td>Boliglån</td>
+            <td>2 450 000,00</td>
+            <td>5,49 %</td>
+          </tr>
+          <tr class="ix-table__expanded">
+            <td>
+              <div class="ix-table__expanded-content">
+                <p>Neste forfall: 15. desember 2026</p>
+                <a class="ix-link-text" href="/lan/renter">Slik fungerer renter og avdrag</a>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="ix-table__control">
+              <button type="button" class="ix-table__expand" aria-expanded="false" aria-label="Vis detaljer for Billån">
+                <ix-icon name="keyboard_arrow_down" data-size="sm"></ix-icon>
+              </button>
+            </td>
+            <td>Billån</td>
+            <td>185 000,00</td>
+            <td>7,25 %</td>
+          </tr>
+          <tr class="ix-table__expanded" hidden>
+            <td>
+              <div class="ix-table__expanded-content">
+                <p>Neste forfall: 20. desember 2026</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ix-table>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table title="Lån" variant="expandable">
+  <Table.Header>
+    <Table.HeaderCell>Lån</Table.HeaderCell>
+    <Table.HeaderCell align="end">Restgjeld</Table.HeaderCell>
+    <Table.HeaderCell align="end">Rente</Table.HeaderCell>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row
+      expandLabel="Vis detaljer for Boliglån"
+      defaultExpanded
+      expandedContent={
+        <VStack gap="sm" align="start">
+          <span>Neste forfall: 15. desember 2026</span>
+          <Button size="sm">Endre forfallsdato</Button>
+          <LinkText href="/lan/renter">Slik fungerer renter og avdrag</LinkText>
+        </VStack>
+      }
+    >
+      <Table.Cell>Boliglån</Table.Cell>
+      <Table.Cell>2 450 000,00</Table.Cell>
+      <Table.Cell>5,49 %</Table.Cell>
+    </Table.Row>
+    <Table.Row expandLabel="Vis detaljer for Billån" expandedContent={<span>Neste forfall: 20. desember 2026</span>}>
+      <Table.Cell>Billån</Table.Cell>
+      <Table.Cell>185 000,00</Table.Cell>
+      <Table.Cell>7,25 %</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+### Footer og paginering
+
+Footeren har plass til en tekst til venstre og en til høyre, for eksempel en sum. Pagineringen
+står nederst i kortet. Begge kan brukes alene.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-table class="ix-table">
+  <h3 class="ix-table__heading" id="foot-regninger">Regninger</h3>
+  <div class="ix-table__frame">
+    <div class="ix-table__scroll">
+      <table aria-labelledby="foot-regninger">
+        <thead>
+          <tr><th scope="col">Mottaker</th><th scope="col" data-align="end">Beløp</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Fjordkraft AS</td><td>1 249,00</td></tr>
+          <tr><td>Gjensidige</td><td>849,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ix-table__footer"><span>Totalt</span><span>2 098,00</span></div>
+    <div class="ix-table__pagination">
+      <nav class="ix-pagination" aria-label="Sider med regninger">
+        <ul class="ix-pagination__list">
+          <li>
+            <button type="button" class="ix-pagination__button" data-type="prev" disabled aria-label="Forrige side">
+              <ix-icon name="chevron_left" aria-hidden="true"></ix-icon>
+            </button>
+          </li>
+          <li><button type="button" class="ix-pagination__button" aria-current="page" aria-label="Side 1">1</button></li>
+          <li><button type="button" class="ix-pagination__button" aria-label="Side 2">2</button></li>
+          <li><button type="button" class="ix-pagination__button" aria-label="Side 3">3</button></li>
+          <li>
+            <button type="button" class="ix-pagination__button" data-type="next" aria-label="Neste side">
+              <ix-icon name="chevron_right" aria-hidden="true"></ix-icon>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</ix-table>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+function MedPaginering() {
+  const [side, setSide] = useState(1);
+  return (
+    <Table
+      title="Regninger"
+      footer={<><span>Totalt</span><span>2 098,00</span></>}
+      pagination={
+        <Pagination
+          page={side}
+          count={3}
+          onPageChange={setSide}
+          ariaLabel="Sider med regninger"
+          previousLabel="Forrige side"
+          nextLabel="Neste side"
+          pageLabel={(p) => `Side ${p}`}
+        />
+      }
+    >
+      <Table.Header>
+        <Table.HeaderCell>Mottaker</Table.HeaderCell>
+        <Table.HeaderCell align="end">Beløp</Table.HeaderCell>
+      </Table.Header>
+      <Table.Body>
+        <Table.Row>
+          <Table.Cell>Fjordkraft AS</Table.Cell>
+          <Table.Cell>1 249,00</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Gjensidige</Table.Cell>
+          <Table.Cell>849,00</Table.Cell>
+        </Table.Row>
+      </Table.Body>
+    </Table>
+  );
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Ingen treff
+
+Raden for ingen treff spenner over alle kolonnene. Søket, filtrene og kolonneoverskriftene står
+igjen, så brukeren kan endre kriteriene med en gang.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-table class="ix-table">
+  <h3 class="ix-table__heading" id="tom-regninger">Regninger</h3>
+  <div class="ix-table__frame">
+    <div class="ix-table__scroll">
+      <table aria-labelledby="tom-regninger">
+        <thead>
+          <tr><th scope="col">Mottaker</th><th scope="col">Status</th><th scope="col" data-align="end">Beløp</th></tr>
+        </thead>
+        <tbody>
+          <tr class="ix-table__empty">
+            <td>
+              <p>Ingen treff</p>
+              <p>Prøv et annet søk eller endre filtrene.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ix-table>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table title="Regninger">
+  <Table.Header>
+    <Table.HeaderCell>Mottaker</Table.HeaderCell>
+    <Table.HeaderCell>Status</Table.HeaderCell>
+    <Table.HeaderCell align="end">Beløp</Table.HeaderCell>
+  </Table.Header>
+  <Table.Body empty={<Table.Empty title="Ingen treff">Prøv et annet søk eller endre filtrene.</Table.Empty>} />
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+### Loading
+
+Mens nye rader lastes, står kolonneoverskriftene, toolbaren, footeren og pagineringen igjen.
+Radområdet beholder høyden det hadde, så innholdet under ikke hopper. Teksten i
+`loading-label` leses opp én gang.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-table class="ix-table" loading-label="Laster regninger">
+  <h3 class="ix-table__heading" id="last-regninger">Regninger</h3>
+  <div class="ix-table__frame">
+    <div class="ix-table__scroll">
+      <table aria-labelledby="last-regninger" aria-busy="true">
+        <thead>
+          <tr><th scope="col">Mottaker</th><th scope="col">Status</th><th scope="col" data-align="end">Beløp</th></tr>
+        </thead>
+        <tbody>
+          <tr class="ix-table__loading">
+            <td><div class="ix-spinner" aria-hidden="true">Laster</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ix-table>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table title="Regninger" loading loadingLabel="Laster regninger">
+  <Table.Header>
+    <Table.HeaderCell>Mottaker</Table.HeaderCell>
+    <Table.HeaderCell>Status</Table.HeaderCell>
+    <Table.HeaderCell align="end">Beløp</Table.HeaderCell>
+  </Table.Header>
+  <Table.Body />
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+### Skeleton
+
+Når hele tabellen lastes og kolonnene ikke er kjent ennå, viser skeleton omtrent hvordan
+tabellen vil se ut. Raden er skjult for skjermlesere, og innlastingen leses opp fra
+`loading-label` som over.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-table class="ix-table" loading-label="Laster regninger">
+  <h3 class="ix-table__heading" id="skel-regninger">Regninger</h3>
+  <div class="ix-table__frame">
+    <div class="ix-table__scroll">
+      <table aria-labelledby="skel-regninger" aria-busy="true">
+        <thead>
+          <tr class="ix-table__skeleton" aria-hidden="true"><th></th><th></th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr class="ix-table__skeleton" aria-hidden="true"><td></td><td></td><td></td></tr>
+          <tr class="ix-table__skeleton" aria-hidden="true"><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ix-table>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table title="Regninger" loading loadingLabel="Laster regninger">
+  <Table.Skeleton columns={3} rows={2} header />
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+### Fast første kolonne
+
+Med `data-sticky="first"` står første kolonne fast når tabellen ruller vannrett. Har tabellen
+valg eller ekspandering, står både kontrollkolonnen og kolonnen etter den fast. Skyggen viser
+at det finnes mer innhold. `data-sticky="last"` holder handlingskolonnen synlig i stedet.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<div style={{"maxWidth": "20rem"}}>
+  <ix-table class="ix-table" data-sticky="first">
+    <h3 class="ix-table__heading" id="fast-regninger">Regninger</h3>
+    <div class="ix-table__frame">
+      <div class="ix-table__scroll">
+        <table aria-labelledby="fast-regninger">
+          <thead>
+            <tr><th scope="col">Mottaker</th><th scope="col">Status</th><th scope="col">Forfallsdato</th><th scope="col" data-align="end">Beløp</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Fjordkraft AS</td><td>Betalt</td><td>12.10.2026</td><td>1 249,00</td></tr>
+            <tr><td>Gjensidige</td><td>Forfaller snart</td><td>18.11.2026</td><td>849,00</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ix-table>
+</div>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<div style={{ maxWidth: '20rem' }}>
+  <Table title="Regninger" sticky="first">
+    <Table.Header>
+      <Table.HeaderCell>Mottaker</Table.HeaderCell>
+      <Table.HeaderCell>Status</Table.HeaderCell>
+      <Table.HeaderCell>Forfallsdato</Table.HeaderCell>
+      <Table.HeaderCell align="end">Beløp</Table.HeaderCell>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell>Fjordkraft AS</Table.Cell>
+        <Table.Cell>Betalt</Table.Cell>
+        <Table.Cell>12.10.2026</Table.Cell>
+        <Table.Cell>1 249,00</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>Gjensidige</Table.Cell>
+        <Table.Cell>Forfaller snart</Table.Cell>
+        <Table.Cell>18.11.2026</Table.Cell>
+        <Table.Cell>849,00</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+### Tetthet
+
+Default passer de fleste tabeller. Velg `compact` når det er viktig å vise mye informasjon
+samtidig, og `comfortable` når tabellen har lite innhold og kan få mer luft mellom radene.
+Tettheten skalerer avstandene i hele tabellen, også i toolbaren.
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+```jsx live
+<ix-table class="ix-table" data-density="compact">
+  <h3 class="ix-table__heading" id="tett-regninger">Regninger</h3>
+  <div class="ix-table__frame">
+    <div class="ix-table__scroll">
+      <table aria-labelledby="tett-regninger">
+        <thead>
+          <tr><th scope="col">Mottaker</th><th scope="col" data-align="end">Beløp</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Fjordkraft AS</td><td>1 249,00</td></tr>
+          <tr><td>Gjensidige</td><td>849,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ix-table>
+```
+
+</TabItem>
+<TabItem value="react" label="React">
+
+```tsx live
+<Table title="Regninger" density="compact">
+  <Table.Header>
+    <Table.HeaderCell>Mottaker</Table.HeaderCell>
+    <Table.HeaderCell align="end">Beløp</Table.HeaderCell>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Fjordkraft AS</Table.Cell>
+      <Table.Cell>1 249,00</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Gjensidige</Table.Cell>
+      <Table.Cell>849,00</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table>
+```
+
+</TabItem>
+</Tabs>
+
+## Retningslinjer
+
+### Velg variant ut fra hva brukeren skal gjøre med dataene
+
+| Variant | Bruk når |
+|---------|----------|
+| Basic | Tabellen skal vise informasjon, uten valg eller utvidelse av rader |
+| Sortable | Sortering hjelper brukeren med å finne eller sammenligne. Kan kombineres med alle de andre |
+| Single select | Brukeren skal velge én rad blant flere alternativer |
+| Multi select | Brukeren skal velge flere rader og gjøre noe med utvalget |
+| Expandable | En rad har tilleggsinformasjon som er nyttig ved behov, men ikke trenger å ta plass hele tiden |
+
+Ikke legg informasjon som brukeren trenger for å sammenligne radene i den ekspanderte delen.
+Den hører hjemme i en kolonne.
+
+### Gjør bare kolonner som hjelper brukeren sorterbare
+
+Sorter på dato, beløp eller navn når det hjelper brukeren å finne noe. En kolonne med status
+eller fritekst blir sjelden lettere å bruke av å kunne sorteres. Er data sortert fra
+tjenesten, sett `aria-sort` på kolonnen fra start, så brukeren ser hvilken rekkefølge radene
+har.
+
+### Hold cellene enkle å skanne
+
+En celle kan inneholde tekst, tekst med beskrivende tekst, [Tag](./tag), lenke,
+[Button](./button) eller [InteractiveIcon](./interactive-icon). Hold strukturen lik nedover i
+hver kolonne. Trenger en rad flere handlinger eller mye tekst, flytt det til en ekspandert rad
+eller en egen visning. Kuttes tekst og hele teksten er viktig, må den kunne nås uten pekeren.
+Tooltip kan vise den, men skal ikke være eneste vei.
+
+### Høyrejuster tall som skal sammenlignes
+
+Venstrejuster tekst. Høyrejuster beløp, antall og prosent, så sifrene står under hverandre.
+Overskriften følger justeringen i kolonnen. Handlinger i en egen kolonne kan også
+høyrejusteres, så de står på samme sted i hver rad.
+
+### Vis bare funksjonene tabellen trenger
+
+Toolbaren kan ha søk, filtre og handlinger, men en tabell trenger sjelden alle tre. Vis de
+viktigste handlingene direkte, og samle resten under én knapp for flere handlinger, særlig når
+plassen er liten. En toolbar med bare handlinger for utvalget står tom når ingenting er valgt,
+så ha minst én ting som alltid vises.
+
+### Vis antallet og handlingene når rader er valgt
+
+Når brukeren har valgt rader, vis hvor mange som er valgt og handlingene som gjelder dem. Søk
+og filtre skal fortsatt kunne brukes, så brukeren kan finne flere rader å velge.
+
+### Behold søk og filtre når det ikke blir treff
+
+Vis meldingen i radområdet og la søket, de aktive filtrene og kolonneoverskriftene stå. Si hva
+som skjedde og hvordan brukeren kommer videre: «Ingen treff. Prøv et annet søk eller endre
+filtrene.»
+
+### Velg loading etter hvor mye av tabellen som er kjent
+
+Er kolonnene kjent, som ved søk, filtrering, sortering, paginering og oppdatering, behold
+overskriftene og vis loading i radområdet. Lastes hele tabellen og kolonnene er ukjente, bruk
+skeleton. La skeleton ligne tabellen som kommer, uten å se ut som ekte data.
+
+### La tabellen rulle på små flater
+
+Behold kolonnene når brukeren trenger å sammenligne på tvers av rader, og la tabellen rulle
+vannrett. Ikke skjul kolonner bare fordi plassen blir mindre. Skal noen kolonner bort på små
+flater, må det være et bevisst valg ut fra innholdet. Fest første kolonne når den trengs for å
+vite hvilken rad brukeren ser på, eller handlingskolonnen når handlingene må være tilgjengelige
+hele tiden, men ikke begge. Skal brukeren mest finne og åpne ett element, er en liste med
+[Row](./row) ofte bedre enn en tabell som ruller.
+
+### Designvalg
+
+Checkbox, radio og ekspanderingsknappen er 24 px, som ellers i Indeks, ikke 18 px som i
+Figma. Med 18 px ville «velg alle» i headeren stått så nær sorteringsknappen ved siden av at
+den ikke når målstørrelsen i WCAG 2.2 (2.5.8). Det er ikke et krav hos oss, men vi følger det
+der det er enkelt.
+
+En valgt rad har samme farge ved hover og active som en rad som ikke er valgt, slik Figma
+viser. Det avviker fra akseptansekriteriet om at hover, active og valgt skal kunne skilles når
+de gjelder samtidig. Hvilken rad som er valgt, vises likevel av checkboxen eller radioen, så
+det formidles ikke med farge alene.
+
+Tettheten bruker `data-density`, som skalerer spacing-tokenene i hele systemet. Table har ingen
+egne regler for tetthet.
+
+## Universell utforming
+
+### Hva du selv må sørge for
+
+- Gi tabellen et navn med tittelen, eller `aria-label` når den ikke har tittel. Velg
+  overskriftsnivå ut fra overskriften over tabellen.
+- Skriv en overskrift i hver kolonne. En kolonne med bare ikoner får skjult tekst, for
+  eksempel «Handlinger».
+- Gi hver kontroll et navn som sier hvilken rad den gjelder: «Velg Strømleverandør», «Vis
+  detaljer for Boliglån», «Flere valg for Fjordkraft AS».
+- Gi søk og filtre i toolbaren et navn som sier hva de søker i eller filtrerer på. Placeholder
+  er ingen ledetekst.
+- Fortell skjermleserbrukere hva søk, filter og sortering endret, med en statusmelding som
+  «12 treff».
+- Sorterer du selv i HTML med `preventDefault()`, setter du `aria-sort` på kolonnen selv.
+- Send inn alle tekster på brukerens språk. Tabellen har ingen standardtekster.
+
+### Hva komponenten gjør automatisk
+
+- Kolonneoverskriftene har `scope="col"`, så hver celle leses med sin overskrift.
+- Den sorterte kolonnen har `aria-sort`, og sorteringsknappen har overskriften som navn.
+- Valgt rad kan identifiseres via checkboxen eller radioen. «Velg alle» viser delvis valgt.
+- Ekspanderingsknappen har `aria-expanded` og peker på innholdet med `aria-controls`.
+- Ruller tabellen, kan rulleområdet få fokus og har navn fra tittelen.
+- Med fast kolonne havner ikke et element som får fokus, skjult under den.
+- Mens tabellen laster, leses `loading-label` opp én gang.
+- Etter et valg leses teksten om utvalget opp, for eksempel «3 valgt».
+
+<KeyboardAndScreenReader data={a11yData} />
+
+### WCAG-kriterier
+
+<AccessibilityTable data={a11yData} />
+
+## Props / API
+
+<Tabs groupId="variant">
+<TabItem value="html" label="HTML">
+
+| Attributt | På | Beskrivelse |
+|-----------|----|-------------|
+| `data-sticky` | `ix-table` | `first` eller `last`. Fester første kolonne eller handlingskolonnen |
+| `data-density` | `ix-table` | `compact` eller `comfortable`. Utelatt gir default |
+| `loading-label` | `ix-table` | Teksten som leses opp mens tabellen har `aria-busy="true"` |
+| `aria-labelledby` | `table` | Id-en til tittelen, så tabellen får navn |
+| `aria-busy` | `table` | `true` mens rader lastes |
+| `aria-sort` | `th` | `ascending` eller `descending` på kolonnen som er sortert |
+| `data-sort-key` | `th` | Nøkkel som kommer tilbake i `sort-change` |
+| `data-align` | `th`, `td` | `end` høyrejusterer. På `th` gjelder det hele kolonnen |
+| `data-sort-value` | `td` | Verdien kolonnen sorteres etter, i stedet for celleteksten |
+
+| Hendelse | Detail | Når |
+|----------|--------|-----|
+| `sort-change` | `{ column, key, direction }` | Før sorteringen endres. `preventDefault()` lar deg sortere selv, og da setter du `aria-sort` selv. `direction` kan være `'none'`, og `key` er `null` uten `data-sort-key` |
+| `selection-change` | `{ selected }` | Etter at utvalget er endret, også når en valgt rad skjules. `selected` er `value` på de valgte kontrollene |
+| `expand-change` | `{ row, expanded }` | Etter at en rad er åpnet eller lukket |
+
+Setter du `checked` på kontrollene med JavaScript, eller skjuler rader med en klasse i stedet
+for `hidden`, kaller du `refresh()` på `ix-table` etterpå, så radene, telleren og «velg alle»
+oppdateres.
+
+</TabItem>
+<TabItem value="react" label="React">
+
+**Table**
+
+| Prop | Type | Standard | Beskrivelse |
+|------|------|----------|-------------|
+| `title` | `ReactNode` | | Tittel over tabellen. Gir også tabellen navn |
+| `titleAs` | `'h2'`–`'h6' \| 'p' \| 'span'` | `'h3'` | Elementet tittelen rendres som |
+| `ariaLabel` | `string` | | Navn på tabellen når den ikke har tittel |
+| `variant` | `'single-select' \| 'multi-select' \| 'expandable'` | | Valg eller ekspandering. Utelatt gir Basic |
+| `sticky` | `'first' \| 'last'` | | Fester første kolonne eller handlingskolonnen |
+| `density` | `'compact' \| 'comfortable'` | | Tetthet |
+| `selectAllLabel` | `string` | | Navn på «velg alle». Påkrevd med `multi-select` |
+| `name` | `string` | | `name` på checkboxene eller radioene |
+| `selectedKeys` / `defaultSelectedKeys` | `string[]` | | Kontrollert eller ukontrollert utvalg |
+| `onSelectionChange` | `(keys: string[]) => void` | | Kalles med de valgte nøklene |
+| `sort` / `defaultSort` | `{ key, direction } \| null` | | Kontrollert eller ukontrollert sortering |
+| `onSortChange` | `(sort) => void` | | Kalles med neste sortering. Tabellen sorterer ikke radene |
+| `loading` | `boolean` | `false` | Viser loading i radområdet |
+| `loadingLabel` | `string` | | Teksten som vises og leses opp mens tabellen laster |
+| `toolbar` | `ReactNode` | | Vanligvis `<Table.Toolbar>` |
+| `footer` | `ReactNode` | | Innhold i footeren |
+| `pagination` | `ReactNode` | | Vanligvis `<Pagination>` |
+
+**Table.HeaderCell**: `sortKey` gjør kolonnen sorterbar, og `align` (`'start' | 'end'`) gjelder hele kolonnen.
+
+**Table.Row**: `value` og `selectLabel` ved valg. `expandedContent`, `expandLabel` og `defaultExpanded` ved ekspandering.
+
+**Table.Cell**: `description` gir beskrivende tekst under innholdet, `align` overstyrer kolonnen, og `rowHeader` gjør cellen til overskrift for raden.
+
+**Table.Body**: `empty` vises når det ikke er rader. **Table.Empty**: `title` og hjelpetekst som barn.
+
+**Table.Toolbar**: `filters`, `actions`, `selectionActions` og `selectedLabel` (`(count) => ReactNode`). Antallet og handlingene for utvalget vises bare når noe er valgt, og `selectedLabel` virker også uten `selectionActions`.
+
+**Table.Skeleton**: `columns`, `rows` (standard 3) og `header`.
+
+Andre props, som `className` og `data-*`, sendes til `ix-table`.
+
+</TabItem>
+</Tabs>
+
+## Tilpasning med CSS
+
+Klassene under er de samme React-komponenten setter, så du kan bygge tabellen i egen markup og
+få samme utseende og atferd så lenge `ix-table` er lastet.
+
+### Tilgjengelige klasser og selektorer
+
+| Element | Selektor |
+|---------|----------|
+| Tabell (rot) | `ix-table`, `.ix-table` |
+| Tittel | `.ix-table__heading` |
+| Kort | `.ix-table__frame` |
+| Toolbar | `.ix-table__toolbar` |
+| Søk og filtre | `.ix-table__filters` |
+| Handlinger | `.ix-table__actions` |
+| Handlinger for utvalget | `.ix-table__selection` |
+| Antall valgte | `[data-selected-count]` |
+| Teksten om utvalget, leses opp | `[data-field="selected-label"]` |
+| Rulleområde | `.ix-table__scroll` |
+| Innhold utenfor synsfeltet | `.ix-table__scroll[data-overflow-start]`, `[data-overflow-end]` |
+| Celler | `.ix-table th`, `.ix-table td` |
+| Høyrejustert kolonne | `[data-align="end"]` |
+| Sorteringsknapp | `.ix-table__sort` |
+| Sorteringsikon (lagt inn av web componenten) | `.ix-table__sort-icon`, `[data-sort-icon]` |
+| Sortert kolonne | `th[aria-sort]` |
+| Kontrollkolonne | `.ix-table__control` |
+| Ekspanderingsknapp | `.ix-table__expand` |
+| Valgt rad | `tr[data-selected]` |
+| Interaktiv rad | `tr[data-interactive]` |
+| Ekspandert rad | `.ix-table__expanded` |
+| Innhold i ekspandert rad | `.ix-table__expanded-content` |
+| Beskrivende tekst | `.ix-table__description` |
+| Ingen treff | `.ix-table__empty` |
+| Loading | `.ix-table__loading` |
+| Skeleton | `.ix-table__skeleton` |
+| Footer | `.ix-table__footer` |
+| Paginering | `.ix-table__pagination` |
+
+### Eksempel: ren HTML
+
+```html
+<ix-table class="ix-table" loading-label="Laster regninger">
+  <h2 class="ix-table__heading" id="mine-regninger">Mine regninger</h2>
+  <div class="ix-table__frame">
+    <div class="ix-table__scroll">
+      <table aria-labelledby="mine-regninger">
+        <thead>
+          <tr>
+            <th scope="col"><button type="button" class="ix-table__sort">Mottaker</button></th>
+            <th scope="col" data-align="end">Beløp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Fjordkraft AS</td><td>1 249,00</td></tr>
+          <tr><td>Gjensidige</td><td>849,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ix-table__footer"><span>Totalt</span><span>2 098,00</span></div>
+  </div>
+</ix-table>
+```
+
+## Relatert
+
+- [Row](./row): én rad med informasjon eller navigasjon, også i lister på små flater
+- [Card](./card): ett element som en selvstendig klikkbar flate
+- [Pagination](./pagination): sidevisning under tabellen

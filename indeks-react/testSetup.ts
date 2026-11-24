@@ -7,6 +7,7 @@ import {
     IxPhoneNumberField,
     IxProgressBar,
     IxRadioGroup,
+    IxTable,
     IxTabs,
     IxTabList,
     IxTab,
@@ -33,6 +34,9 @@ if (!customElements.get('ix-phone-number-field')) {
 }
 if (!customElements.get('ix-progress-bar')) {
     customElements.define('ix-progress-bar', IxProgressBar);
+}
+if (!customElements.get('ix-table')) {
+    customElements.define('ix-table', IxTable);
 }
 if (!customElements.get('ix-tabs')) {
     customElements.define('ix-tabs', IxTabs);

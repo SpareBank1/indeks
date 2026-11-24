@@ -9,6 +9,7 @@ import { IxPhoneNumberField } from './lib/components/phone-number-field/IxPhoneN
 import { IxPopover } from './lib/components/popover/IxPopover.js';
 import { IxProgressBar } from './lib/components/progress-bar/IxProgressBar.js';
 import { IxRadioGroup } from './lib/components/radio-group/IxRadioGroup.js';
+import { IxTable } from './lib/components/table/IxTable.js';
 import { IxTabs, IxTabList, IxTab, IxTabPanel } from './lib/components/tabs/IxTabs.js';
 import { cn } from './lib/utils/cn.js';
 import './lib/modal/modal.js';
@@ -24,6 +25,7 @@ customElements.define('ix-dropdown', IxDropdown);
 customElements.define('ix-phone-number-field', IxPhoneNumberField);
 customElements.define('ix-popover', IxPopover);
 customElements.define('ix-progress-bar', IxProgressBar);
+customElements.define('ix-table', IxTable);
 customElements.define('ix-tabs', IxTabs);
 customElements.define('ix-tab-list', IxTabList);
 customElements.define('ix-tab', IxTab);
@@ -44,6 +46,13 @@ export { IxPhoneNumberField };
 export { IxPopover };
 export { IxProgressBar };
 export type { ProgressBarState } from './lib/components/progress-bar/IxProgressBar.js';
+export { IxTable };
+export type {
+    IxTableSortDirection,
+    IxTableSortChangeDetail,
+    IxTableSelectionChangeDetail,
+    IxTableExpandChangeDetail,
+} from './lib/components/table/IxTable.js';
 export { IxTabs, IxTabList, IxTab, IxTabPanel };
 export { COMMON_ICON_NAMES } from './lib/components/icon/IxIcon.js';
 export type { IconName, CommonIconName } from './lib/components/icon/IxIcon.js';
@@ -70,6 +79,7 @@ declare global {
         'ix-phone-number-field': IxPhoneNumberField;
         'ix-popover': IxPopover;
         'ix-progress-bar': IxProgressBar;
+        'ix-table': IxTable;
         'ix-tabs': IxTabs;
         'ix-tab-list': IxTabList;
         'ix-tab': IxTab;
@@ -164,6 +174,13 @@ declare global {
                 'data-value-text'?: string;
                 class?: string;
                 style?: string | Record<string, string>;
+            };
+            'ix-table': {
+                [key: string]: unknown;
+                class?: string;
+                'data-sticky'?: 'first' | 'last';
+                'data-density'?: 'compact' | 'comfortable';
+                children?: unknown;
             };
             'ix-tabs': { [key: string]: unknown; class?: string; children?: unknown };
             'ix-tab-list': { [key: string]: unknown; class?: string; children?: unknown };

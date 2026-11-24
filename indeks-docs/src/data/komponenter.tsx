@@ -26,6 +26,7 @@ import {
     SpinnerIllustrasjon,
     StackIllustrasjon,
     SurfaceIllustrasjon,
+    TableIllustrasjon,
     TabsIllustrasjon,
     TagIllustrasjon,
     TextAreaIllustrasjon,
@@ -231,6 +232,13 @@ export const komponenter: KomponentOppføring[] = [
         kategori: 'Layout',
         beskrivelse: 'En flate som samler beslektede elementer og skiller dem fra resten av siden.',
         illustrasjon: SurfaceIllustrasjon,
+    },
+    {
+        navn: 'Table',
+        href: '/docs/komponenter/table',
+        kategori: 'Innhold',
+        beskrivelse: 'Viser strukturerte data i rader og kolonner, så brukeren kan sammenligne og finne verdier.',
+        illustrasjon: TableIllustrasjon,
     },
     {
         navn: 'Tabs',

@@ -17,6 +17,16 @@
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
+/* Ikonet er en maske over bakgrunnsfargen. Når fargene tvinges, blir bakgrunnen
+   Canvas og ikonet usynlig. Systemfargen for tekst holder det synlig i både
+   lyse og mørke kontrasttemaer. */
+@media (forced-colors: active) {
+    :is(ix-icon, .ix-icon):not([data-badge]) {
+        forced-color-adjust: none;
+        background-color: CanvasText;
+    }
+}
+
 :is(ix-icon, .ix-icon)[data-size='sm'] {
     width: 18px;
     height: 18px;

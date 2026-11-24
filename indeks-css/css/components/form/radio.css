@@ -1,0 +1,164 @@
+/* Radio-indikatoren, delt av frittstående .ix-radio (f.eks. valgkolonnen i Table)
+ * og ix-radio-group. Naken input + label som søsken. Ringen er label::after og
+ * prikken label::before. Det som bare gjelder gruppen (layout, legend, chip,
+ * read-only og feil på gruppen), står i radio-group.css, som importeres etter. */
+
+.ix-radio {
+    display: flex;
+    align-items: center;
+    gap: var(--ix-spacing-2xs);
+}
+
+/* Fyll raden, så klikkflaten er like bred som i en gruppe. min-height holder
+   labelen like høy som ringen når teksten er skjult (ix-sr-only), slik som i
+   valgkolonnen i Table. Ellers faller den sammen til 0 px, ringen havner under
+   midten og fokusringen omslutter ingenting. */
+.ix-radio label {
+    flex: 1 1 auto;
+    min-height: var(--ii-radio-size);
+}
+
+:is(.ix-radio, ix-radio-group, .ix-radio-group) input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
+:is(.ix-radio, ix-radio-group, .ix-radio-group) label {
+    --ii-radio-size: 24px;
+
+    /* Prikken avledes av et innrykk i hele piksler. En halv piksel mellom ring og
+       prikk gjør at Firefox tegner prikken skjevt. Faste px, som ringen. */
+    --ii-radio-dot-inset: 6px;
+    --ii-radio-dot-size: calc(var(--ii-radio-size) - 2 * var(--ii-radio-dot-inset));
+    /* Ringen står ved første linje når labelen brytes. */
+    --ii-radio-indicator-y: calc(var(--ii-radio-size) / 2);
+    --ii-radio-outer-color: var(--ix-color-border-main-emphasis);
+    --ii-radio-inner-color: transparent;
+    --ii-radio-bg: var(--ix-color-surface-main-default);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ix-spacing-xs);
+    padding-left: calc(var(--ii-radio-size) + var(--ix-spacing-xs));
+    cursor: pointer;
+    font-size: var(--ix-font-size-md);
+    border-radius: var(--ix-border-radius-xs);
+    /* En lengde lik ringen, så første linje står midt på ringen. Et forholdstall
+       gir brøkdeler med den flytende font-skalaen. */
+    line-height: var(--ii-radio-size);
+    color: var(--ix-color-foreground-main-default);
+    user-select: none;
+    transition:
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        border-color var(--ix-transition-duration) var(--ix-transition-animation),
+        box-shadow var(--ix-transition-duration) var(--ix-transition-animation),
+        color var(--ix-transition-duration) var(--ix-transition-animation),
+        outline-color var(--ix-transition-duration) var(--ix-transition-animation);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
+}
+
+:is(.ix-radio, ix-radio-group, .ix-radio-group) label::before,
+:is(.ix-radio, ix-radio-group, .ix-radio-group) label::after {
+    content: '';
+    position: absolute;
+    top: var(--ii-radio-indicator-y);
+    box-sizing: border-box;
+    border-radius: 50%;
+    pointer-events: none;
+    transition:
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        border-color var(--ix-transition-duration) var(--ix-transition-animation),
+        transform var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+:is(.ix-radio, ix-radio-group, .ix-radio-group) label::after {
+    width: var(--ii-radio-size);
+    height: var(--ii-radio-size);
+    left: 0;
+    transform: translateY(-50%);
+    background-color: var(--ii-radio-bg);
+    border: var(--ix-border-width-default) solid var(--ii-radio-outer-color);
+}
+
+:is(.ix-radio, ix-radio-group, .ix-radio-group) label::before {
+    width: var(--ii-radio-dot-size);
+    height: var(--ii-radio-dot-size);
+    /* Ankret i ringens senter, så ring og prikk deler utgangspunkt. */
+    left: calc(var(--ii-radio-size) / 2);
+    z-index: 1;
+    background-color: var(--ii-radio-inner-color);
+    transform: translate(-50%, -50%) scale(0);
+}
+
+/* Gjelder også valgt radio: den får hover-ringen, og prikken står. */
+:is(.ix-radio, ix-radio-group, .ix-radio-group) input:not(:disabled):not([aria-disabled='true']) + label:hover {
+    --ii-radio-outer-color: var(--ix-color-border-main-emphasis-hover);
+    --ii-radio-bg: var(--ix-color-fill-interactive-hover);
+}
+
+:is(.ix-radio, ix-radio-group, .ix-radio-group) input:not(:disabled):not([aria-disabled='true']) + label:active {
+    --ii-radio-bg: var(--ix-color-fill-interactive-active);
+}
+
+:is(.ix-radio, ix-radio-group, .ix-radio-group) input:focus-visible + label {
+    outline-color: var(--ix-color-border-focus-default);
+}
+
+:is(.ix-radio, ix-radio-group, .ix-radio-group) input:checked + label {
+    --ii-radio-outer-color: var(--ix-color-fill-main-default);
+    --ii-radio-inner-color: var(--ix-color-fill-main-default);
+}
+
+:is(.ix-radio, ix-radio-group, .ix-radio-group) input:checked + label::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+:is(.ix-radio, ix-radio-group, .ix-radio-group) input:disabled + label {
+    opacity: var(--ix-opacity-disabled);
+    pointer-events: none;
+    cursor: default;
+}
+
+/* Frittstående radio har feilen på input. I gruppen står den på gruppen. */
+.ix-radio input[aria-invalid='true'] + label {
+    --ii-radio-outer-color: var(--ix-color-fill-danger-default);
+    --ii-radio-bg: var(--ix-color-fill-danger-subtle);
+}
+
+.ix-radio input[aria-invalid='true']:checked + label {
+    --ii-radio-inner-color: var(--ix-color-fill-danger-default);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :is(.ix-radio, ix-radio-group, .ix-radio-group) label,
+    :is(.ix-radio, ix-radio-group, .ix-radio-group) label::before,
+    :is(.ix-radio, ix-radio-group, .ix-radio-group) label::after {
+        transition: none;
+    }
+}
+
+/* Ring og prikk er bakgrunnsfarger, som forced-colors fjerner. */
+@media (forced-colors: active) {
+    :is(.ix-radio, ix-radio-group, .ix-radio-group) label::after {
+        border-color: CanvasText;
+        background-color: Canvas;
+    }
+
+    :is(.ix-radio, ix-radio-group, .ix-radio-group) input:checked + label::after {
+        border-color: Highlight;
+    }
+
+    :is(.ix-radio, ix-radio-group, .ix-radio-group) input:checked + label::before {
+        background-color: Highlight;
+    }
+
+    :is(.ix-radio, ix-radio-group, .ix-radio-group) input:focus-visible + label {
+        outline-color: Highlight;
+    }
+}

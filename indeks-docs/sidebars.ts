@@ -148,6 +148,7 @@ const sidebars: SidebarsConfig = {
                 'komponenter/spinner',
                 'komponenter/primitives/stack',
                 'komponenter/surface',
+                'komponenter/table',
                 'komponenter/tabs',
                 'komponenter/tag',
                 'komponenter/skjema/textarea',
