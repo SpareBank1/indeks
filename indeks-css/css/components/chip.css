@@ -22,7 +22,7 @@
    hver tilstand (:checked, :hover, [data-state]) legger til ett ledd. Flere
    betingelser vinner, og ved likt antall avgjør KILDEREKKEFØLGEN: passiv →
    hover → active → selected → selected hover/active → read-only → error.
-   Grunnformen ligger over base-label-reglene i radio-group.css og checkbox.css,
+   Grunnformen ligger over base-label-reglene i radio.css og checkbox.css,
    som cascader senere (chip.css importeres først i components/index.css).
 
    Det holder bare så lenge tilstandsreglene setter KUN --ii-chip-*-variabler og
@@ -250,7 +250,7 @@
 }
 
 /* Radio/checkbox chips får outline fra focus-regelen i sin egen fil, men den
-   setter border-radius-xs på labelen. radio-group.css har (0,2,2) på input-
+   setter border-radius-xs på labelen. radio.css har (0,2,2) på input-
    selektoren, så vi må matche det for å vinne. Variabelen holder radien lik
    den passive: pill for radio chip, sm for checkbox chip. */
 :is(ix-radio-group, .ix-radio-group)[data-variant='chip'] input:focus-visible + label,
@@ -303,7 +303,7 @@
 }
 
 /* Kun button chip: gruppene setter cursor og pointer-events selv i sine filer,
-   og på (0,2,0) her ville cursor tapt mot radio-group.css' base-label uansett. */
+   og på (0,2,0) her ville cursor tapt mot base-labelen i radio.css uansett. */
 .ix-chip[data-state='readonly'],
 :is(ix-combobox, .ix-combobox)[data-state='readonly'] .ix-chip {
     --ii-chip-opacity: 1;

@@ -2,7 +2,7 @@
  * Naken input + label (søsken) inni .ix-checkbox. Indikatoren tegnes med
  * label::before (boksen) + label::after (hake/strek via mask-image) og toggles
  * av nabo-kombinatoren input:checked / input:indeterminate + label. Ingen
- * dekorative spans — samme modell som radio-group.css.
+ * dekorative spans — samme modell som radio.css.
  *
  * input og label er entydige inni .ix-checkbox, så de styles direkte og har
  * ingen egne klasser. Hver tilstand legger til ett ledd i selektoren, så

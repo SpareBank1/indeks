@@ -294,6 +294,27 @@ export const SurfaceIllustrasjon = () => (
     </Illustrasjon>
 );
 
+export const TableIllustrasjon = () => (
+    <Illustrasjon>
+        <Flate x={60} y={24} w={160} h={112} fyll="hvit" kant="lys" />
+        <Tekst x={72} y={34} w={40} fyll="mørk" />
+        <Tekst x={128} y={34} w={32} fyll="mørk" />
+        <Tekst x={180} y={34} w={28} fyll="mørk" />
+        <Flate x={61} y={52} w={158} h={2} fyll="lys" r={0} />
+        <Tekst x={72} y={63} w={44} />
+        <Tekst x={128} y={63} w={28} />
+        <Tekst x={184} y={63} w={24} />
+        <Flate x={61} y={80} w={158} h={28} fyll="lys" r={0} />
+        <Tekst x={72} y={90} w={36} fyll="mørk" />
+        <Tekst x={128} y={90} w={36} fyll="hvit" />
+        <Tekst x={176} y={90} w={32} fyll="hvit" />
+        <Flate x={61} y={108} w={158} h={2} fyll="lys" r={0} />
+        <Tekst x={72} y={118} w={48} />
+        <Tekst x={128} y={118} w={24} />
+        <Tekst x={188} y={118} w={20} />
+    </Illustrasjon>
+);
+
 export const TagIllustrasjon = () => (
     <Illustrasjon>
         <Flate x={76} y={68} w={60} h={24} fyll="lys" r={12} />

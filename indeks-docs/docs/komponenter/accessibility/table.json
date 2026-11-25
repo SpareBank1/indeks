@@ -1,0 +1,136 @@
+{
+  "component": "Table (ix-table)",
+  "lastReviewed": "2026-11-24",
+  "consumerResponsibilities": [
+    {
+      "summary": "Bruk tabellen bare til tabulære data",
+      "details": "Skjermlesere leser tabellen med rader, kolonner og overskrifter. Brukes den til layout, får brukeren en struktur som ikke finnes. Har innholdet ingen sammenheng mellom rader og kolonner, bruk en liste eller kort i stedet.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Gi tabellen et navn og velg riktig overskriftsnivå",
+      "details": "Tittelen er h3 som standard og blir også tabellens navn. Står tabellen rett under sidens h1, bruk titleAs=\"h2\". Uten tittel, gi tabellen navn med ariaLabel i React eller aria-label på table i HTML. I HTML kobler du tittelen til tabellen med aria-labelledby selv.",
+      "wcag": ["1.3.1", "2.4.6"]
+    },
+    {
+      "summary": "Skriv overskrift i hver kolonne, også handlingskolonnen",
+      "details": "Hver celle leses sammen med kolonneoverskriften. En kolonne med bare ikoner trenger en overskrift med skjult tekst, f.eks. «Handlinger» i ix-sr-only.",
+      "wcag": ["1.3.1"]
+    },
+    {
+      "summary": "Gi hver kontroll et navn som sier hvilken rad den gjelder",
+      "details": "Checkbox, radio og ekspanderingsknapp får navnet fra selectLabel, expandLabel og selectAllLabel i React, og fra labelen eller aria-label i HTML. «Velg Strømleverandør» og «Vis detaljer for Boliglån» kan forstås alene, «Velg» kan ikke det. Det samme gjelder InteractiveIcon og knapper i cellene: «Flere valg for Fjordkraft AS», ikke bare «Flere valg». Komponenten har ingen standardtekster, så du sender inn teksten på brukerens språk (bokmål, nynorsk eller engelsk).",
+      "wcag": ["4.1.2", "2.4.6", "2.5.3"]
+    },
+    {
+      "summary": "Gi søk og filtre i toolbaren et navn",
+      "details": "Søkefelt og filtre i toolbaren trenger et navn som sier hva de søker i eller filtrerer på, for eksempel «Søk i regninger». Bruk ikke placeholder som ledetekst. Filtre som Select viser valgt verdi, men trenger også et navn som sier hva de filtrerer.",
+      "wcag": ["3.3.2", "2.4.6", "1.3.1"]
+    },
+    {
+      "summary": "Si hva utvalget gjelder, og la brukeren bekrefte handlinger på det",
+      "details": "Utvalget gjelder på tvers av filtre og sider, så «Godkjenn» kan treffe rader brukeren ikke ser akkurat nå. Skriv i teksten om utvalget når noe er valgt utenfor visningen, for eksempel «5 valgt, 2 på andre sider». Handlinger med økonomiske eller juridiske følger, som å godkjenne regninger, må kunne angres, sjekkes eller bekreftes før de gjennomføres.",
+      "wcag": ["3.3.4", "3.3.2"]
+    },
+    {
+      "summary": "Fortell skjermleserbrukere hva søk, filter og sortering endret",
+      "details": "Når radene endres, ser seende brukere det med en gang. Legg en kort statusmelding i et role=\"status\"-element, f.eks. «12 treff» etter søk eller «Sortert etter forfallsdato, stigende». Tabellen leser selv opp loadingLabel mens den laster, men vet ikke hva resultatet betyr. Teksten om utvalget («3 valgt») leser tabellen opp selv når den står i data-field=\"selected-label\", som Table.Toolbar gjør med selectedLabel.",
+      "wcag": ["4.1.3"]
+    },
+    {
+      "summary": "Sett aria-sort selv når du sorterer selv",
+      "details": "Med data-sort-controlled i HTML, for å sortere fra en tjeneste, setter tabellen verken aria-sort eller pil. Sett aria-sort=\"ascending\" eller \"descending\" på kolonnen du sorterte, og fjern det fra de andre. I React gir sort-propen aria-sort.",
+      "wcag": ["1.3.1", "4.1.2"]
+    },
+    {
+      "summary": "Skriv tekstene for loading, sortering og ingen treff",
+      "details": "loadingLabel (loading-label i HTML) leses opp mens tabellen laster. sortLabels leses opp når sorteringen endres, med {column} der kolonnens navn skal stå, f.eks. «Sortert etter {column}, synkende» og «Sortering fjernet». Teksten for ingen treff skal si hva som skjedde og hvordan brukeren kommer videre: «Ingen treff. Prøv et annet søk eller endre filtrene.»",
+      "wcag": ["4.1.3", "3.3.1"]
+    },
+    {
+      "summary": "La forkortet tekst være tilgjengelig uten pekeren",
+      "details": "Kutter du tekst med ellipse og hele teksten er viktig, må den kunne nås med tastatur og skjermleser. Tooltip kan vise den, men skal ikke være eneste vei. Bruk heller ekspandert rad eller en egen visning når teksten er lang.",
+      "wcag": ["1.3.1", "1.4.13"]
+    },
+    {
+      "summary": "Fest bare én kolonne, og vurder liste på små flater",
+      "details": "Fester du både første kolonne og handlingskolonnen, blir det for lite plass til resten ved 320 px. Skal brukeren mest finne og åpne ett element, er en liste eller kort ofte lettere å bruke enn en tabell som ruller.",
+      "wcag": ["1.4.10"]
+    }
+  ],
+  "handled": [
+    { "id": "1.3.1", "notes": "Native table med th scope=\"col\" i headeren, så hver celle leses med sin kolonneoverskrift. Med rowHeader blir en celle th scope=\"row\". Sortert kolonne har aria-sort. Valgt rad kan identifiseres programmatisk via checked på checkboxen eller radioen. Ekspanderingsknappen har aria-expanded og aria-controls til raden med innholdet, som står rett under." },
+    { "id": "1.3.2", "notes": "Leserekkefølgen følger DOM: tittel, toolbar, kolonneoverskrifter, rader, footer og paginering. Ekspandert innhold står rett etter raden det hører til." },
+    { "id": "1.4.1", "notes": "Valgt rad vises med checkbox eller radio, ikke bare bakgrunnsfarge. Sortering vises med pil i overskriften og aria-sort. Ekspandert rad vises med pilen som snus og aria-expanded. Sorterbare kolonner har et eget ikon også i hvile." },
+    { "id": "1.4.3", "notes": "Tekst, beskrivelsestekst og overskrifter bruker foreground-tokens som oppfyller kontrastkravet mot flatene i lyst og mørkt tema, også på hover, active og valgt rad." },
+    { "id": "1.4.4", "notes": "Størrelser i rem og tokens. Teksten skalerer til 200 % uten tap av innhold, og tabellen ruller vannrett når kolonnene blir bredere enn flaten." },
+    { "id": "1.4.10", "notes": "Kortet, toolbaren, footeren og pagineringen tilpasser seg 320 px. Datatabeller er unntatt kravet om å unngå vannrett rulling, så tabellen ruller inne i kortet i stedet for å skjule kolonner. Skygge ved kanten viser at det finnes mer innhold." },
+    { "id": "1.4.11", "notes": "Checkbox, radio og fokusringen har kontrast mot flaten. Skillelinjer og skeleton er pynt og bærer ikke informasjon." },
+    { "id": "1.4.12", "notes": "Ingen fast høyde på rader eller celler, så økt linje- og bokstavavstand gir ikke klippet tekst." },
+    { "id": "2.1.1", "notes": "Sortering er en native knapp i overskriften. Valg og ekspandering bruker native checkbox, radio og knapp. Klikk på raden er bare en snarvei for pekeren. Ruller tabellen, blir rulleområdet fokuserbart med navn fra tittelen, så det kan rulles med piltastene." },
+    { "id": "2.1.2", "notes": "Ingen fokusfeller. Tab går gjennom kontrollene i DOM-rekkefølge og ut av tabellen." },
+    { "id": "2.2.2", "notes": "Skeleton og spinneren er lasteindikatorer som bare vises mens innholdet lastes, og pulsen i skeleton stopper med redusert bevegelse. Det er unntaket for bevegelse som er en nødvendig del av en aktivitet." },
+    { "id": "2.4.3", "notes": "Fokusrekkefølgen følger kolonnene og radene. Sortering flytter radene, men fokus blir stående på sorteringsknappen." },
+    { "id": "2.4.7", "notes": "Sorteringsknapp, ekspanderingsknapp, checkbox, radio og rulleområdet har synlig fokusring. I overskriften og rulleområdet tegnes ringen innenfor elementet, så kortets kant ikke klipper den." },
+    { "id": "2.4.11", "notes": "WCAG 2.2, ikke krav hos oss. Med fast kolonne har rulleområdet scroll-padding lik bredden på den faste kolonnen, så et element som får fokus ikke havner skjult under den." },
+    { "id": "2.5.3", "notes": "Sorteringsknappens tilgjengelige navn er overskriftsteksten, og ikonet er skjult for skjermlesere." },
+    { "id": "2.5.8", "notes": "WCAG 2.2, ikke krav hos oss. Checkbox, radio og ekspanderingsknappen er 24 × 24 px. I rader med valg eller ekspandering er hele raden klikkflate, og sorteringsknappen fyller hele overskriftscellen." },
+    { "id": "3.2.1", "notes": "Fokus på en kontroll endrer ingenting. Sortering, valg og ekspandering skjer først når brukeren aktiverer kontrollen." },
+    { "id": "3.2.2", "notes": "Valg av en rad endrer ikke konteksten. Handlinger for utvalget vises i toolbaren, men utføres først når brukeren velger en av dem." },
+    { "id": "3.3.2", "notes": "Kontrollene i tabellen får ledeteksten fra raden og kolonnen de står i, og navnet fra selectLabel, selectAllLabel eller expandLabel. Felt i toolbaren er egne skjemakomponenter, se konsumentansvaret." },
+    { "id": "4.1.2", "notes": "Alle kontroller er native elementer med riktig rolle og tilstand: knapp med aria-sort på kolonnen, checkbox med checked og indeterminate for «velg alle», radio, og knapp med aria-expanded. Tabellen advarer i utvikling når en kontroll eller tabellen mangler navn." },
+    { "id": "4.1.3", "notes": "Mens tabellen laster, leses loadingLabel opp fra ett role=\"status\"-element som alltid finnes. Det gir én annonsering per innlasting, ikke én per rad eller per spinner. Spinneren i radområdet er skjult for skjermlesere. Etter et valg leses teksten i data-field=\"selected-label\" opp fra samme element, f.eks. «3 valgt», også når «velg alle» endrer mange rader på én gang. Når sorteringen endres, leses sortLabels (sort-ascending-label, sort-descending-label og sort-none-label i HTML) opp fra samme element, etter at aria-sort er satt." }
+  ],
+  "issues": [],
+  "notRelevant": [
+    { "id": "1.1.1", "reason": "Ingen bilder i Table selv. Ikoner er pynt og skjult for skjermlesere. Bilder i cellene er konsumentens ansvar." },
+    { "id": "1.2.1" },
+    { "id": "1.2.2" },
+    { "id": "1.2.3" },
+    { "id": "1.2.4" },
+    { "id": "1.2.5" },
+    { "id": "1.3.3", "reason": "Ingen instruksjoner som viser til form eller plassering." },
+    { "id": "1.3.4", "reason": "Ingen orientasjonslåsing." },
+    { "id": "1.3.5", "reason": "Kontrollene i tabellen samler ikke inn personopplysninger." },
+    { "id": "1.4.2", "reason": "Ingen lyd." },
+    { "id": "1.4.5", "reason": "Ingen bilder av tekst." },
+    { "id": "1.4.13", "reason": "Table viser ikke innhold ved hover eller fokus selv. Tooltip i cellene dekkes av Tooltip." },
+    { "id": "2.1.4", "reason": "Ingen hurtigtaster med enkelttegn." },
+    { "id": "2.2.1", "reason": "Ingen tidsfrister." },
+    { "id": "2.3.1", "reason": "Ingen blinking." },
+    { "id": "2.4.1", "reason": "Ikke en blokk som gjentas på tvers av sider." },
+    { "id": "2.4.2", "reason": "Ikke en side-komponent." },
+    { "id": "2.4.4", "reason": "Lenker i cellene er konsumentens innhold. Navngiving dekkes av ansvaret for kontroller over." },
+    { "id": "2.4.5", "reason": "Ikke en navigasjonsstruktur for hele siden." },
+    { "id": "2.5.1", "reason": "Ingen pekergester." },
+    { "id": "2.5.2", "reason": "Kontrollene aktiveres ved slipp, som native knapper og checkboxer." },
+    { "id": "2.5.4", "reason": "Ingen bevegelsesbasert aktivering." },
+    { "id": "2.5.6", "reason": "Ingen begrensning på input-modalitet." },
+    { "id": "2.5.7", "reason": "Ingen dra-funksjonalitet. Vannrett rulling kan også gjøres med tastatur og rullefelt." },
+    { "id": "3.1.1", "reason": "Ikke en side-komponent." },
+    { "id": "3.1.2", "reason": "Ingen språkendringer i komponenten." },
+    { "id": "3.2.3", "reason": "Ikke en navigasjonsstruktur som gjentas på tvers av sider." },
+    { "id": "3.2.4", "reason": "Konsekvent navngiving av samme tabell på tvers av sider er konsumentens ansvar." },
+    { "id": "3.2.6", "reason": "Ingen hjelpefunksjonalitet." },
+    { "id": "3.3.3", "reason": "Ingen skjemavalidering i Table." },
+    { "id": "3.3.7", "reason": "Ingen inndata som må gjentas." },
+    { "id": "3.3.8", "reason": "Ingen autentisering." }
+  ],
+  "keyboard": [
+    { "key": "Tab", "action": "Flytter fokus til neste kontroll: sorteringsknapper, valgte radio, checkboxer, ekspanderingsknapper og elementer i cellene. Ruller tabellen, får også rulleområdet fokus" },
+    { "key": "Shift+Tab", "action": "Flytter fokus til forrige kontroll" },
+    { "key": "Enter / Space", "action": "På sorteringsknapp: neste sortering (ingen → stigende → synkende → ingen). På ekspanderingsknapp: åpner eller lukker raden" },
+    { "key": "Space", "action": "På checkbox: velger eller opphever raden. På «velg alle»: velger eller opphever alle rader som kan velges" },
+    { "key": "Piltaster", "action": "Mellom radioene i Single select: flytter og velger. I rulleområdet: ruller tabellen vannrett" }
+  ],
+  "screenReader": [
+    "Inn i tabellen: \"[tittel], tabell, [antall] kolonner, [antall] rader\"",
+    "Sorterbar kolonne: \"[overskrift], knapp\", og \"sortert stigende\" eller \"sortert synkende\" når kolonnen er sortert",
+    "Celle: \"[kolonneoverskrift], [innhold]\" når brukeren går mellom kolonner",
+    "Valg: \"[selectLabel], avmerkingsboks, avmerket\" eller \"[selectLabel], alternativknapp, valgt\"",
+    "Velg alle: \"[selectAllLabel], avmerkingsboks, delvis avmerket\" når noen, men ikke alle, er valgt",
+    "Ekspandering: \"[expandLabel], knapp, skjult\" eller \"utvidet\"",
+    "Under innlasting: \"[loadingLabel]\", én gang",
+    "Etter valg: \"[tekst om utvalget]\", f.eks. \"3 valgt\""
+  ]
+}

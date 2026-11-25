@@ -1,23 +1,642 @@
+/* Tabell i et kort, med valgfri overskrift over kortet. Bakgrunn og skillelinje
+   ligger på cellene, ikke på tr, så faste kolonner dekker det som ruller under dem
+   og følger radens tilstand. Tettheten kommer fra data-density, som skalerer
+   spacing-tokenene. */
+
+ix-table,
 .ix-table {
-    border-collapse: collapse;
-    border-radius: var(--ix-border-radius-sm);
-    font-size: var(--ix-font-size-md);
+    --ii-table-row-bg: var(--ix-color-surface-main-default);
+    --ii-table-row-border: var(--ix-color-border-main-default);
+    /* Skyggene peker inn fra kanten der innhold er skjult. Gradientene er fysiske,
+       så retningen byttes i RTL. */
+    --ii-table-shadow-from-start: to right;
+    --ii-table-shadow-from-end: to left;
+    --ii-table-shadow-start-side: left;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--ix-spacing-xs);
+    min-width: 0;
+    color: var(--ix-color-foreground-main-default);
 }
 
-.ix-table[data-size='sm'] .ix-table__cell {
+:is([dir='rtl'] :is(ix-table, .ix-table), :is(ix-table, .ix-table)[dir='rtl']) {
+    --ii-table-shadow-from-start: to left;
+    --ii-table-shadow-from-end: to right;
+    --ii-table-shadow-start-side: right;
+}
+
+.ix-table__heading {
+    margin: 0;
+    font-family: var(--ix-font-family-heading);
+    font-size: var(--ix-font-size-lg);
+    font-weight: var(--ix-font-weight-medium);
+    line-height: 1.2;
+    color: var(--ix-color-foreground-main-emphasis);
+}
+
+.ix-table__frame {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    background-color: var(--ix-color-surface-main-default);
+    border: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+    border-radius: var(--ix-border-radius-sm);
+}
+
+/* ── Toolbar ─────────────────────────────────────────────────────────────── */
+
+/* Blir det trangt, legger handlingene seg på egen rad, fortsatt til høyre. */
+.ix-table__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ix-spacing-md);
+    padding: var(--ix-spacing-md);
+    border-block-end: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+}
+
+.ix-table__filters {
+    display: flex;
+    flex: 1 1 15rem;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ix-spacing-sm);
+}
+
+/* Søkefelt og filtre er korte. Uten tak ville søkefeltet fylt hele raden. Tabellen
+   står i selektoren for å slå feltenes egen bredde, som Select nullstiller med all: unset. */
+:is(ix-table, .ix-table) .ix-table__filters > * {
+    flex: 1 1 10rem;
+    min-width: 0;
+    max-width: 15rem;
+}
+
+.ix-table__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--ix-spacing-sm);
+    margin-inline-start: auto;
+}
+
+.ix-table__selection {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ix-spacing-sm);
     font-size: var(--ix-font-size-sm);
 }
 
-.ix-table[data-size='lg'] .ix-table__cell {
-    font-size: var(--ix-font-size-lg);
+/* display: flex over slår ellers resetens [hidden]. */
+.ix-table__selection[hidden] {
+    display: none;
 }
 
-.ix-table__row {
-    font-size: inherit;
-    border-top: 1px solid var(--ix-color-border-main-default);
+/* ── Rulleområde ─────────────────────────────────────────────────────────── */
+
+.ix-table__scroll {
+    display: flex;
+    overflow-x: auto;
+    /* Holder z-indexen på faste kolonner, skygger og fokusringen inne i tabellen,
+       så de ikke males over en sticky header på siden. */
+    isolation: isolate;
+    /* Fokus som scrolles fram, havner ikke under en fast kolonne. */
+    scroll-padding-inline: var(--ii-table-sticky-start, 0) var(--ii-table-sticky-end, 0);
+    /* Fokusringen tegnes av ::before, se under. */
+    outline: none;
 }
 
-.ix-table__cell {
-    text-align: left;
-    padding: var(--ix-spacing-xs) var(--ix-spacing-md);
+/* Skygge der innhold er skjult. Sticky med negativ marg, så de står i ro mens
+   tabellen ruller under dem, uten å ta plass. */
+.ix-table__scroll::before,
+.ix-table__scroll::after {
+    content: '';
+    position: sticky;
+    z-index: 3;
+    flex: none;
+    pointer-events: none;
+}
+
+/* ::before er et gjennomsiktig lag over hele den synlige delen, med skyggen ved
+   start og fokusringen til rulleområdet. Rulleområdets egen outline ville blitt
+   malt under de faste kolonnene. Skyggen vises med background-size, fordi
+   opacity også ville skjult ringen. */
+.ix-table__scroll::before {
+    inset-inline-start: 0;
+    inline-size: 100%;
+    margin-inline-end: -100%;
+    border-radius: calc(var(--ix-border-radius-sm) - var(--ix-border-width-default));
+    background-image: linear-gradient(
+        var(--ii-table-shadow-from-start),
+        var(--ix-color-border-main-default-active),
+        transparent
+    );
+    background-position: var(--ii-table-shadow-start-side);
+    background-repeat: no-repeat;
+    background-size: 0 100%;
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: calc(-1 * var(--ix-outline-width-default));
+    transition:
+        background-size var(--ix-transition-duration) var(--ix-transition-animation),
+        outline-color var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+.ix-table__scroll::after {
+    inset-inline-end: 0;
+    inline-size: var(--ix-spacing-xs);
+    margin-inline-start: calc(-1 * var(--ix-spacing-xs));
+    background-image: linear-gradient(var(--ii-table-shadow-from-end), var(--ix-color-border-main-default-active), transparent);
+    opacity: 0;
+    transition: opacity var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+.ix-table__scroll[data-overflow-start]::before {
+    background-size: var(--ix-spacing-xs) 100%;
+}
+
+.ix-table__scroll[data-overflow-end]::after {
+    opacity: 1;
+}
+
+.ix-table__scroll:focus-visible::before {
+    outline-color: var(--ix-color-border-focus-default);
+}
+
+/* ── Tabell og celler ────────────────────────────────────────────────────── */
+
+/* display, margin og border nullstilles fordi verten ofte styler table direkte
+   (Infima gjør table til en blokk med egen rulling og kanter på cellene). */
+:is(ix-table, .ix-table) table {
+    display: table;
+    flex: 1 0 auto;
+    min-width: 100%;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--ix-font-size-md);
+    line-height: 1.2;
+    /* Tall i samme kolonne står under hverandre. */
+    font-variant-numeric: tabular-nums;
+}
+
+/* Skillelinjen står over raden, ikke under. Da får siste synlige rad ingen
+   linje mot kortets kant, også når en lukket ekspandert rad står sist. */
+:is(ix-table, .ix-table) :is(th, td) {
+    padding: var(--ix-spacing-md);
+    border: 0;
+    font-weight: var(--ix-font-weight-regular);
+    text-align: start;
+    vertical-align: middle;
+    background-color: var(--ii-table-row-bg);
+    transition:
+        background-color var(--ix-transition-duration) var(--ix-transition-animation),
+        border-color var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+/* En tom kontrollcelle i headeren er td, ikke th, så skjermlesere ikke får en
+   tom kolonneoverskrift. */
+:is(ix-table, .ix-table) thead :is(th, td) {
+    font-weight: var(--ix-font-weight-medium);
+    border-block-end: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+}
+
+:is(ix-table, .ix-table) tbody tr + tr > * {
+    border-block-start: var(--ix-border-width-default) solid var(--ii-table-row-border);
+}
+
+/* Justeringen arves fra kolonnens th som data-column-align, som web componenten
+   skriver. Cellens egen data-align står etter, så den vinner. */
+:is(ix-table, .ix-table) :is(th, td)[data-column-align='end'] {
+    text-align: end;
+}
+
+:is(ix-table, .ix-table) :is(th, td)[data-align='end'] {
+    text-align: end;
+}
+
+:is(ix-table, .ix-table) :is(th, td)[data-align='start'] {
+    text-align: start;
+}
+
+.ix-table__description {
+    display: block;
+    margin-block-start: var(--ix-spacing-2xs);
+    font-size: var(--ix-font-size-sm);
+    color: var(--ix-color-foreground-main-subtle);
+}
+
+/* ── Sortering ───────────────────────────────────────────────────────────── */
+
+/* Knappen fyller hele cellen med negativ marg, så hele cellen er klikkflate og
+   får hover. Fokusringen er ::after, så den kan ha radius mens flaten er firkantet. */
+.ix-table__sort {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--ix-spacing-2xs);
+    box-sizing: border-box;
+    /* En knapp blir ikke bredere enn innholdet av seg selv, heller ikke med
+       display: flex. */
+    width: calc(100% + 2 * var(--ix-spacing-md));
+    margin: calc(-1 * var(--ix-spacing-md));
+    padding: var(--ix-spacing-md);
+    border: 0;
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    cursor: pointer;
+    /* Fokusringen tegnes av ::after. Nettleserens egen ring ville ligget utenfor
+       cellen, og rulleområdet klipper den øverst og ved første kolonne. */
+    outline: none;
+    transition: background-color var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+/* Ringen følger cellekanten og dekker skillelinjen under headeren, som i Figma. */
+.ix-table__sort::after {
+    content: '';
+    position: absolute;
+    inset: 0 0 calc(-1 * var(--ix-border-width-default));
+    border-radius: var(--ix-border-radius-xs);
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: calc(-1 * var(--ix-outline-width-default));
+    pointer-events: none;
+    transition: outline-color var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+.ix-table__sort:hover {
+    background-color: var(--ix-color-surface-main-hover);
+}
+
+.ix-table__sort:active {
+    background-color: var(--ix-color-surface-main-active);
+}
+
+.ix-table__sort:focus-visible::after {
+    outline-color: var(--ix-color-border-focus-default);
+}
+
+/* Står headeren øverst i kortet, får ringen kortets indre radius i hjørnene.
+   Ellers skjærer kortets avrunding av ringen. Med toolbar over er
+   rulleområdet ikke første barn, og hjørnene er vanlige. */
+.ix-table__frame > .ix-table__scroll:first-child thead tr:first-child > th:first-child .ix-table__sort::after {
+    border-start-start-radius: calc(var(--ix-border-radius-sm) - var(--ix-border-width-default));
+}
+
+.ix-table__frame > .ix-table__scroll:first-child thead tr:first-child > th:last-child .ix-table__sort::after {
+    border-start-end-radius: calc(var(--ix-border-radius-sm) - var(--ix-border-width-default));
+}
+
+/* Alle tre sorteringsikonene står i samme rute, og bare det som hører til
+   aria-sort vises. visibility og ikke display, så de skjulte også er lastet når
+   sorteringen endres. Dempet i hvile, så en sorterbar kolonne skiller seg fra
+   en vanlig. */
+.ix-table__sort-icon {
+    display: inline-grid;
+    flex: none;
+    color: var(--ix-color-foreground-main-subtle);
+    transition: color var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+.ix-table__sort-icon > ix-icon {
+    grid-area: 1 / 1;
+    visibility: hidden;
+}
+
+:is(ix-table, .ix-table) th:not([aria-sort='ascending'], [aria-sort='descending']) .ix-table__sort-icon > [data-sort-icon='none'],
+:is(ix-table, .ix-table) th[aria-sort='ascending'] .ix-table__sort-icon > [data-sort-icon='ascending'],
+:is(ix-table, .ix-table) th[aria-sort='descending'] .ix-table__sort-icon > [data-sort-icon='descending'] {
+    visibility: visible;
+}
+
+:is(ix-table, .ix-table) th:is([aria-sort='ascending'], [aria-sort='descending']) .ix-table__sort-icon {
+    color: inherit;
+}
+
+/* Høyrejustert: ikonet før teksten, så teksten står kant i kant med tallene. */
+:is(ix-table, .ix-table) th[data-align='end'] .ix-table__sort {
+    flex-direction: row-reverse;
+}
+
+/* ── Kontrollkolonnen (checkbox, radio, ekspandering) ────────────────────── */
+
+:is(ix-table, .ix-table) .ix-table__control {
+    width: 0;
+    padding-inline-end: 0;
+}
+
+/* Labelen har bare skjult tekst. Uten mellomrommet til teksten blir kolonnen
+   like smal som kontrollen. */
+:is(ix-table, .ix-table) .ix-table__control label {
+    padding-inline-start: var(--ii-checkbox-size, var(--ii-radio-size));
+}
+
+/* Labelen er like stor som ringen, så fokusringen følger radioens form. */
+:is(ix-table, .ix-table) .ix-table__control .ix-radio label {
+    border-radius: var(--ix-border-radius-circle);
+}
+
+/* Samme størrelse som checkbox og radio, så kolonnen er like bred i alle variantene. */
+.ix-table__expand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--ix-border-radius-xs);
+    background-color: transparent;
+    color: inherit;
+    cursor: pointer;
+    outline: var(--ix-outline-width-default) solid transparent;
+    outline-offset: var(--ix-outline-offset-default);
+    transition: outline-color var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+.ix-table__expand:focus-visible {
+    outline-color: var(--ix-color-border-focus-default);
+}
+
+.ix-table__expand ix-icon {
+    transition: transform var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+.ix-table__expand[aria-expanded='true'] ix-icon {
+    transform: rotate(180deg);
+}
+
+/* Innholdet vokser nedover når raden åpnes, og krymper når den lukkes. En
+ * tabellrad kan ikke bli lavere enn innholdet sitt, så høyden animeres på
+ * .ix-table__expanded-content, og cellens padding følger med.
+ *
+ * hidden er fortsatt tilstanden. Ved lukking venter display til overgangen er
+ * ferdig (allow-discrete). Ved åpning går raden fra display: none, og
+ * @starting-style gir utgangspunktet. Den gjelder bare med data-animate, som
+ * web componenten setter et øyeblikk når en rad åpnes. Ellers ville åpne rader
+ * animert på nytt hver gang de flyttes, f.eks. ved sortering.
+ *
+ * Progressiv enhancement som i accordion: uten interpolate-size (Chrome/Edge
+ * 129+) hopper raden åpen og lukket. */
+/* stylelint-disable plugin/no-unsupported-browser-features */
+@supports (interpolate-size: allow-keywords) {
+    :is(ix-table, .ix-table) .ix-table__expanded {
+        transition: display var(--ix-transition-duration) allow-discrete;
+    }
+
+    :is(ix-table, .ix-table) .ix-table__expanded > td {
+        transition:
+            background-color var(--ix-transition-duration) var(--ix-transition-animation),
+            border-color var(--ix-transition-duration) var(--ix-transition-animation),
+            padding-block var(--ix-transition-duration) var(--ix-transition-animation);
+    }
+
+    .ix-table__expanded-content {
+        interpolate-size: allow-keywords;
+        block-size: auto;
+        /* clip og ikke hidden: margen gir plass til fokusringen på knapper og
+           lenker helt ytterst i innholdet. 5px er --ix-outline-width-default
+           (2px) pluss --ix-outline-offset-default (3px). Chrome godtar ikke
+           calc() i overflow-clip-margin, og med var() blir margen 0. */
+        overflow: clip;
+        overflow-clip-margin: 5px;
+        transition: block-size var(--ix-transition-duration) var(--ix-transition-animation);
+    }
+
+    :is(ix-table, .ix-table) .ix-table__expanded[hidden] > td {
+        padding-block: 0;
+    }
+
+    :is(ix-table, .ix-table) .ix-table__expanded[hidden] .ix-table__expanded-content {
+        block-size: 0;
+    }
+
+    @starting-style {
+        :is(ix-table, .ix-table) .ix-table__expanded[data-animate] > td {
+            padding-block: 0;
+        }
+
+        :is(ix-table, .ix-table) .ix-table__expanded[data-animate] .ix-table__expanded-content {
+            block-size: 0;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        :is(ix-table, .ix-table) .ix-table__expanded,
+        :is(ix-table, .ix-table) .ix-table__expanded > td,
+        .ix-table__expanded-content {
+            transition: none;
+        }
+    }
+}
+/* stylelint-enable plugin/no-unsupported-browser-features */
+
+/* ── Radtilstander ───────────────────────────────────────────────────────── */
+
+/* Valgt er svakere enn hover og active, så valgt rad får samme hover og active
+   som andre rader (som i Figma). Ekspandert innhold følger raden det hører til. */
+:is(ix-table, .ix-table) tbody tr[data-selected] {
+    --ii-table-row-bg: var(--ix-color-surface-main-active);
+    --ii-table-row-border: var(--ix-color-border-main-default-active);
+}
+
+:is(ix-table, .ix-table) tbody tr[data-interactive] {
+    cursor: pointer;
+}
+
+:is(ix-table, .ix-table) tbody tr[data-interactive]:hover,
+:is(ix-table, .ix-table) tbody tr[data-interactive]:hover + .ix-table__expanded {
+    --ii-table-row-bg: var(--ix-color-surface-main-hover);
+    --ii-table-row-border: var(--ix-color-border-main-default-hover);
+}
+
+:is(ix-table, .ix-table) tbody tr[data-interactive]:active,
+:is(ix-table, .ix-table) tbody tr[data-interactive]:active + .ix-table__expanded {
+    --ii-table-row-bg: var(--ix-color-surface-main-active);
+    --ii-table-row-border: var(--ix-color-border-main-default-active);
+}
+
+/* ── Ingen treff, loading og skeleton ────────────────────────────────────── */
+
+:is(ix-table, .ix-table) .ix-table__empty > td {
+    padding-block: var(--ix-spacing-lg);
+    text-align: center;
+}
+
+:is(ix-table, .ix-table) .ix-table__empty p {
+    margin: 0;
+}
+
+:is(ix-table, .ix-table) .ix-table__empty p + p {
+    margin-block-start: var(--ix-spacing-xs);
+}
+
+/* Høyden på radområdet før innlastingen settes av web componenten, så innholdet
+   under ikke hopper mens radene lastes. */
+:is(ix-table, .ix-table) .ix-table__loading > td {
+    box-sizing: border-box;
+    height: var(--ii-table-body-height, auto);
+    padding-block: var(--ix-spacing-xl);
+    text-align: center;
+}
+
+/* Rader som spenner hele tabellen, har én celle like bred som tabellen. Når
+ * tabellen ruller, holdes innholdet innenfor den synlige delen
+ * (--ii-table-scroll-width fra web componenten) og står i ro mens tabellen
+ * ruller under. Uten variabelen er max-inline-size ugyldig og blir none, og
+ * innholdet fyller cellen som før. */
+:is(ix-table, .ix-table) :is(.ix-table__expanded, .ix-table__empty, .ix-table__loading) > td > * {
+    position: sticky;
+    inset-inline-start: var(--ix-spacing-md);
+    box-sizing: border-box;
+    max-inline-size: calc(var(--ii-table-scroll-width) - 2 * var(--ix-spacing-md));
+}
+
+/* Blokknivå, så spinneren blir like bred som det som synes og står midt i det. */
+:is(ix-table, .ix-table) .ix-table__loading > td > :is(ix-spinner, .ix-spinner) {
+    display: flex;
+}
+
+:is(ix-table, .ix-table) .ix-table__skeleton > *::before {
+    content: '';
+    display: block;
+    max-width: 10rem;
+    height: 1.2em;
+    border-radius: var(--ix-border-radius-xs);
+    background-color: var(--ix-color-fill-neutral-subtle);
+    animation: ix-table-skeleton 1.5s ease-in-out infinite;
+}
+
+@keyframes ix-table-skeleton {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :is(ix-table, .ix-table) .ix-table__skeleton > *::before {
+        animation: none;
+    }
+}
+
+/* ── Faste kolonner ──────────────────────────────────────────────────────── */
+
+/* Med kontrollkolonne er det den og neste kolonne som står fast. Bredden på
+   kontrollkolonnen måles av web componenten. Rader med colspan (ekspandert,
+   tom, loading) spenner over hele bredden og står aldri fast. */
+:is(ix-table, .ix-table)[data-sticky='first'] tr > :first-child:not([colspan]),
+:is(ix-table, .ix-table)[data-sticky='first'] tr > .ix-table__control + :not([colspan]) {
+    position: sticky;
+    z-index: 1;
+    inset-inline-start: 0;
+}
+
+:is(ix-table, .ix-table)[data-sticky='first'] tr > .ix-table__control + :not([colspan]) {
+    inset-inline-start: var(--ii-table-control-width, 0);
+}
+
+/* Fokusringen på kontrollen stikker inn i nabocellen, som også står fast og
+   ellers males over den. */
+:is(ix-table, .ix-table)[data-sticky='first'] tr > .ix-table__control:first-child {
+    z-index: 2;
+}
+
+:is(ix-table, .ix-table)[data-sticky='last'] tr > :last-child:not([colspan]) {
+    position: sticky;
+    z-index: 1;
+    inset-inline-end: 0;
+}
+
+/* Skyggen flytter fra rulleområdets kant til kanten av den faste kolonnen. */
+/* ::before bærer også fokusringen, så bare skyggen fjernes der. */
+:is(ix-table, .ix-table)[data-sticky='first'] .ix-table__scroll::before {
+    background-image: none;
+}
+
+:is(ix-table, .ix-table)[data-sticky='last'] .ix-table__scroll::after {
+    display: none;
+}
+
+:is(ix-table, .ix-table)[data-sticky='first'] tr > :first-child:not(.ix-table__control, [colspan])::after,
+:is(ix-table, .ix-table)[data-sticky='first'] tr > .ix-table__control + :not([colspan])::after,
+:is(ix-table, .ix-table)[data-sticky='last'] tr > :last-child:not([colspan])::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    width: var(--ix-spacing-xs);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--ix-transition-duration) var(--ix-transition-animation);
+}
+
+:is(ix-table, .ix-table)[data-sticky='first'] tr > :first-child:not(.ix-table__control, [colspan])::after,
+:is(ix-table, .ix-table)[data-sticky='first'] tr > .ix-table__control + :not([colspan])::after {
+    inset-inline-start: 100%;
+    background-image: linear-gradient(
+        var(--ii-table-shadow-from-start),
+        var(--ix-color-border-main-default-active),
+        transparent
+    );
+}
+
+:is(ix-table, .ix-table)[data-sticky='last'] tr > :last-child:not([colspan])::after {
+    inset-inline-end: 100%;
+    background-image: linear-gradient(var(--ii-table-shadow-from-end), var(--ix-color-border-main-default-active), transparent);
+}
+
+:is(ix-table, .ix-table)[data-sticky='first'] .ix-table__scroll[data-overflow-start] tr > :first-child:not(.ix-table__control, [colspan])::after,
+:is(ix-table, .ix-table)[data-sticky='first'] .ix-table__scroll[data-overflow-start] tr > .ix-table__control + :not([colspan])::after,
+:is(ix-table, .ix-table)[data-sticky='last'] .ix-table__scroll[data-overflow-end] tr > :last-child:not([colspan])::after {
+    opacity: 1;
+}
+
+/* ── Footer og paginering ────────────────────────────────────────────────── */
+
+.ix-table__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--ix-spacing-md);
+    padding: var(--ix-spacing-md);
+    font-weight: var(--ix-font-weight-medium);
+    line-height: 1.2;
+    border-block-start: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+}
+
+.ix-table__pagination {
+    display: flex;
+    justify-content: center;
+    /* Minst like mye som fokusringen stikker ut, så kortets overflow ikke klipper
+       den. Med compact er spacing-xs bare 4 px. */
+    padding: max(var(--ix-spacing-xs), calc(var(--ix-outline-width-default) + var(--ix-outline-offset-default)))
+        var(--ix-spacing-md);
+    border-block-start: var(--ix-border-width-default) solid var(--ix-color-border-main-default);
+}
+
+/* ── Forced colors ───────────────────────────────────────────────────────── */
+
+/* Den gjennomsiktige ringen i hvile blir synlig når fargene tvinges, så alle
+   ringene ville stått synlige hele tiden. Samme mønster som Row og Card. */
+@media (forced-colors: active) {
+    .ix-table__scroll::before,
+    .ix-table__sort::after,
+    .ix-table__expand {
+        outline-style: none;
+    }
+
+    .ix-table__scroll:focus-visible::before,
+    .ix-table__sort:focus-visible::after,
+    .ix-table__expand:focus-visible {
+        outline-style: solid;
+        outline-color: Highlight;
+    }
+
+    /* Stolpene er en bakgrunnsfarge, som ellers byttes til Canvas og forsvinner. */
+    :is(ix-table, .ix-table) .ix-table__skeleton > *::before {
+        forced-color-adjust: none;
+        background-color: GrayText;
+    }
 }

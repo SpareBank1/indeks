@@ -141,6 +141,11 @@ du beskrivelsen også. Lager du en ny, skriver du beskrivelsen først.
   midterste mørk og de andre lyse.
 - **Surface**: stort hvitt panel med lys kant (radius 12), med mørk tittel og
   tre lyse tekststreker inni.
+- **Table**: hvitt panel med lys kant. Øverst en header med tre mørke
+  tekststreker over en lys skillelinje. Under, tre rader med lyse tekststreker
+  delt av lyse skillelinjer. Den midterste raden er valgt: lys flate bak, mørk
+  tekststrek i første kolonne og hvite streker i resten. Siste kolonne står
+  høyrejustert, som tall.
 - **Tabs**: tre fanetitler på rad, den første mørk og de andre lyse. Lys
   skillelinje under, med en mørk indikator under den første. Tre lyse
   tekststreker under.
