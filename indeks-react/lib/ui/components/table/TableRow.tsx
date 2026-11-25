@@ -2,20 +2,33 @@ import { useId, type HTMLAttributes, type JSX, type ReactNode, type TdHTMLAttrib
 import { Icon } from '../../icons/Icon';
 import { useTableContext } from './TableContext';
 
-export type TableRowProps = {
-    /** Radens nøkkel i `selectedKeys`. Påkrevd med valg. */
-    value?: string;
-    /** Tilgjengelig navn på valgkontrollen, f.eks. «Velg Strømleverandør». Påkrevd med valg. */
-    selectLabel?: string;
-    /** Innholdet som vises når raden ekspanderes. */
-    expandedContent?: ReactNode;
-    /** Tilgjengelig navn på ekspanderingsknappen, f.eks. «Vis detaljer for Boliglån». */
-    expandLabel?: string;
-    /** Åpen ved start. Web componenten eier tilstanden etterpå. */
-    defaultExpanded?: boolean;
-    /** `Table.Cell` per kolonne. */
-    children: ReactNode;
-} & Omit<HTMLAttributes<HTMLTableRowElement>, 'children'>;
+/** `value` og `selectLabel` hører sammen: en rad som kan velges, må ha et navn. */
+type TableRowSelectProps =
+    | {
+          /** Radens nøkkel i utvalget. Påkrevd med valg. */
+          value: string;
+          /** Tilgjengelig navn på valgkontrollen, f.eks. «Velg Strømleverandør». */
+          selectLabel: string;
+      }
+    | { value?: undefined; selectLabel?: undefined };
+
+/** `expandedContent` og `expandLabel` hører sammen: knappen som åpner, må ha et navn. */
+type TableRowExpandProps =
+    | {
+          /** Innholdet som vises når raden ekspanderes. */
+          expandedContent: ReactNode;
+          /** Tilgjengelig navn på ekspanderingsknappen, f.eks. «Vis detaljer for Boliglån». */
+          expandLabel: string;
+          /** Åpen ved start. Web componenten eier tilstanden etterpå. */
+          defaultExpanded?: boolean;
+      }
+    | { expandedContent?: undefined; expandLabel?: undefined; defaultExpanded?: undefined };
+
+export type TableRowProps = TableRowSelectProps &
+    TableRowExpandProps & {
+        /** `Table.Cell` per kolonne. */
+        children: ReactNode;
+    } & Omit<HTMLAttributes<HTMLTableRowElement>, 'children'>;
 
 /**
  * En rad. Med valg eller ekspandering får den kontrollen i første kolonne, og
@@ -41,7 +54,7 @@ export function TableRow({
                 {selectable && (
                     <td className="ix-table__control">
                         <div className={variant === 'multi-select' ? 'ix-checkbox' : 'ix-radio'}>
-                            {/* Ukontrollert: Table speiler utvalget inn, og web componenten kan endre det. */}
+                            {/* Startverdi. Web componenten eier checked etterpå, også når raden rendres på nytt. */}
                             <input
                                 type={variant === 'multi-select' ? 'checkbox' : 'radio'}
                                 id={controlId}

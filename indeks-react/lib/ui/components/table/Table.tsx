@@ -4,7 +4,6 @@ import {
     useId,
     useLayoutEffect,
     useMemo,
-    useReducer,
     useRef,
     useState,
     type ForwardRefExoticComponent,
@@ -17,6 +16,7 @@ import {
     type TableSelectionChangeDetail,
     type TableSort,
     type TableSortChangeDetail,
+    type TableSortLabels,
     type TableVariant,
 } from './TableContext';
 import { TableBody, TableEmpty } from './TableBody';
@@ -27,37 +27,55 @@ import { TableToolbar } from './TableToolbar';
 
 type TableTitleElement = 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
 
-/** Samme regel som web componenten: raden selv er skjult, ikke en forelder. */
-function isRowVisible(row: HTMLTableRowElement | null): boolean {
-    return !!row && !row.hidden && getComputedStyle(row).display !== 'none';
-}
+/**
+ * Teksten for «velg alle» hører til multi-select. Typen gjør den påkrevd der og
+ * ugyldig ellers, så den ikke glemmes og ikke står igjen etter et variantbytte.
+ */
+type TableVariantProps =
+    | {
+          /** Valg eller ekspandering av rader. Utelatt gir en vanlig tabell. Sortering er uavhengig av variant. */
+          variant?: Exclude<TableVariant, 'multi-select'>;
+          selectAllLabel?: never;
+      }
+    | {
+          variant: 'multi-select';
+          /** Tilgjengelig navn på checkboxen som velger alle, f.eks. «Velg alle regninger». */
+          selectAllLabel: string;
+      };
 
-export type TableProps = {
+type TableBaseProps = {
     /** Overskrift over tabellen. Gir også tabellen navn. */
     title?: ReactNode;
     /** Elementet tittelen rendres som. Velg nivå etter overskriften over tabellen. @default "h3" */
     titleAs?: TableTitleElement;
     /** Navn på tabellen når den ikke har `title`. */
     ariaLabel?: string;
-    /** Valg eller ekspandering av rader. Utelatt gir en vanlig tabell. Sortering er uavhengig av variant. */
-    variant?: TableVariant;
     /** Fest første kolonne eller handlingskolonnen ved vannrett rulling. */
     sticky?: 'first' | 'last';
     density?: 'compact' | 'comfortable';
-    /** Tilgjengelig navn på checkboxen som velger alle. Påkrevd med `variant="multi-select"`. */
-    selectAllLabel?: string;
     /** `name` på checkboxene eller radioene, så valget sendes med et vanlig skjema. */
     name?: string;
-    /** Kontrollert utvalg: `value` på de valgte radene. */
+    /**
+     * Utvalget, `value` på de valgte radene. Når verdien endres, settes den inn i
+     * tabellen, for eksempel for å tømme utvalget etter en handling. Brukerens
+     * egne valg meldes med `onSelectionChange` og kan ikke avvises.
+     */
     selectedKeys?: string[];
-    /** Ukontrollert utvalg ved start. */
+    /** Utvalget ved start. Nøkler til rader som ikke vises ennå, telles med. */
     defaultSelectedKeys?: string[];
+    /** Hele utvalget etter at brukeren har endret det, også rader som ikke vises. */
     onSelectionChange?: (keys: string[]) => void;
     /** Kontrollert sortering. `null` er ingen sortering. Tabellen sorterer ikke radene selv. */
     sort?: TableSort;
     defaultSort?: TableSort;
     /** Kalles med neste sortering i syklusen ingen → stigende → synkende → ingen. */
     onSortChange?: (sort: TableSort) => void;
+    /**
+     * Det som leses opp når sorteringen endres. `{column}` byttes ut med kolonnens
+     * navn, f.eks. `{ ascending: 'Sortert etter {column}, stigende', descending:
+     * 'Sortert etter {column}, synkende', none: 'Sortering fjernet' }`.
+     */
+    sortLabels?: TableSortLabels;
     /** Viser loading i radområdet og beholder overskrifter, toolbar, footer og paginering. */
     loading?: boolean;
     /** Teksten som vises og leses opp mens tabellen laster, f.eks. «Laster». */
@@ -73,15 +91,20 @@ export type TableProps = {
     className?: string;
 } & Omit<HTMLAttributes<HTMLElement>, 'title' | 'children' | 'className'>;
 
-type IxTableElement = HTMLElement & { refresh?: () => void };
+export type TableProps = TableBaseProps & TableVariantProps;
+
+type IxTableElement = HTMLElement & { setSelection?: (keys: string[]) => void };
 
 /**
  * Tabell for strukturerte data i rader og kolonner.
  *
- * Tynn wrapper over `<ix-table>`. Web componenten eier atferden (sorteringsikon,
- * velg alle, telling, radklikk, ekspandering, justering og rulling). React eier
- * props-API-et, tilstanden for sortering og valg, og leser endringer fra
- * `sort-change` og `selection-change`. Radene sorteres og filtreres av konsumenten.
+ * Tynn wrapper over `<ix-table>`. Hver tilstand har én skriver:
+ * - Web componenten eier utvalg og ekspandering. React rendrer startverdiene,
+ *   setter `selectedKeys` inn med `setSelection()` og leser `selection-change`.
+ * - React eier sorteringen (`data-sort-controlled`): den rendrer `aria-sort`, og
+ *   konsumenten sorterer dataene. Web componenten sender bare `sort-request`.
+ * - React rendrer sorteringsikonene og statuselementet selv, så web componenten
+ *   ikke setter inn noder i elementer React eier.
  */
 export const Table = forwardRef<HTMLElement, TableProps>(function Table(
     {
@@ -99,6 +122,7 @@ export const Table = forwardRef<HTMLElement, TableProps>(function Table(
         sort: sortProp,
         defaultSort = null,
         onSortChange,
+        sortLabels,
         loading = false,
         loadingLabel,
         toolbar,
@@ -123,27 +147,20 @@ export const Table = forwardRef<HTMLElement, TableProps>(function Table(
     const sortControlled = sortProp !== undefined;
     const sort = sortControlled ? sortProp : internalSort;
 
-    const [internalKeys, setInternalKeys] = useState<string[]>(defaultSelectedKeys ?? []);
-    const selectionControlled = selectedKeys !== undefined;
-    const keys = selectionControlled ? selectedKeys : internalKeys;
-    const selectedSet = useMemo(() => new Set(keys), [keys]);
-    // Kontrollert: en ny render speiler selectedKeys inn igjen, også når
-    // konsumenten avviser endringen og ikke oppdaterer staten.
-    const [, rerender] = useReducer((n: number) => n + 1, 0);
+    // Utvalget slik web componenten sist meldte det. Brukes bare til å rendre
+    // antallet og startverdier for rader som rendres senere, aldri til å skrive
+    // checked. Det gjør web componenten.
+    const [selection, setSelectionState] = useState<string[]>(selectedKeys ?? defaultSelectedKeys ?? []);
+    const selectedSet = useMemo(() => new Set(selection), [selection]);
 
     // Siste callbacks i ref, så lytterne under ikke må festes på nytt ved hver render.
     const callbacks = useRef({ onSortChange, onSelectionChange });
     callbacks.current = { onSortChange, onSelectionChange };
 
-    // Layout-effekt, og før speilingen under: web componenten kan sende
-    // selection-change allerede i første refresh().
     useLayoutEffect(() => {
         const host = hostRef.current;
         if (!host) return;
-        // React eier rekkefølgen på radene, så web componenten skal verken sette
-        // aria-sort eller flytte rader. Vi rapporterer bare neste sortering.
         const handleSort = (e: Event): void => {
-            e.preventDefault();
             const { key, direction } = (e as CustomEvent<TableSortChangeDetail>).detail;
             const next: TableSort = key && direction !== 'none' ? { key, direction } : null;
             if (!sortControlled) setInternalSort(next);
@@ -151,57 +168,28 @@ export const Table = forwardRef<HTMLElement, TableProps>(function Table(
         };
         const handleSelection = (e: Event): void => {
             const { selected } = (e as CustomEvent<TableSelectionChangeDetail>).detail;
-            if (selectionControlled) rerender();
-            else setInternalKeys(selected);
+            setSelectionState(selected);
             callbacks.current.onSelectionChange?.(selected);
         };
-        host.addEventListener('sort-change', handleSort);
+        host.addEventListener('sort-request', handleSort);
         host.addEventListener('selection-change', handleSelection);
         return () => {
-            host.removeEventListener('sort-change', handleSort);
+            host.removeEventListener('sort-request', handleSort);
             host.removeEventListener('selection-change', handleSelection);
         };
-    }, [sortControlled, selectionControlled]);
+    }, [sortControlled]);
 
-    // Kontrollene er ukontrollerte i React, så web componenten kan endre dem (velg
-    // alle). Utvalget speiles inn etter hver render, og web componenten synker
-    // radtilstand, telling og indeterminate fra det.
-    //
-    // Utvalget gjelder bare radene som vises. En nøkkel uten rad (filtrert bort,
-    // en annen side) fjernes og meldes med onSelectionChange. Ikke mens tabellen
-    // laster, så et forhåndsvalg overlever innlastingen. En nøkkel på en rad som er
-    // skjult, regnes også som borte. Krysset React av en skjult rad, ville web
-    // componenten fjernet krysset og meldt fra, og en kontrollert konsument som
-    // ikke endrer staten, ville gitt en ny render og samme kryss igjen, i en løkke.
-    //
-    // Effekten må kjøre ved hver render, så web componenten synker det React
-    // nettopp har skrevet (radtilstand, telling, ikoner i nye overskrifter).
-    const reportedStale = useRef<string | null>(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- må kjøre ved hver render (se over). reportedStale melder samme utvalg bare én gang, så setState gir ingen løkke.
+    // Utvalget ved start og hver gang selectedKeys får nye verdier, settes inn i
+    // web componenten. Den eier checked, også for rader som ikke er rendret ennå.
+    const keysSignature = JSON.stringify(selectedKeys ?? null);
+    const startKeys = useRef(defaultSelectedKeys);
     useLayoutEffect(() => {
-        const host = hostRef.current;
-        if (!host) return;
-        const inputs = host.querySelectorAll<HTMLInputElement>('tbody .ix-table__control input');
-        const present = new Set<string>();
-        inputs.forEach((input) => {
-            // Uten value hører kontrollen ikke til noen nøkkel. Web componenten advarer.
-            if (!input.hasAttribute('value')) return;
-            const visible = isRowVisible(input.closest('tr'));
-            if (visible) present.add(input.value);
-            const checked = visible && selectedSet.has(input.value);
-            if (input.checked !== checked) input.checked = checked;
-        });
-        host.refresh?.();
-
-        const stale = loading ? [] : keys.filter((key) => !present.has(key));
-        const signature = stale.length ? JSON.stringify(keys) : null;
-        if (signature && signature !== reportedStale.current) {
-            const next = keys.filter((key) => present.has(key));
-            if (!selectionControlled) setInternalKeys(next);
-            callbacks.current.onSelectionChange?.(next);
-        }
-        reportedStale.current = signature;
-    });
+        const keys = selectedKeys ?? startKeys.current;
+        if (!keys) return;
+        hostRef.current?.setSelection?.(keys);
+        setSelectionState(keys);
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- selectedKeys sammenlignes på verdi, ikke identitet.
+    }, [keysSignature]);
 
     const context = useMemo(
         () => ({ variant, sort, selectedKeys: selectedSet, selectAllLabel, name: groupName, loading, loadingLabel }),
@@ -219,6 +207,11 @@ export const Table = forwardRef<HTMLElement, TableProps>(function Table(
                 class={cn('ix-table', className)}
                 data-sticky={sticky}
                 data-density={density}
+                // React sorterer dataene. Web componenten ser bare om attributtet finnes.
+                data-sort-controlled="true"
+                sort-ascending-label={sortLabels?.ascending}
+                sort-descending-label={sortLabels?.descending}
+                sort-none-label={sortLabels?.none}
                 loading-label={loadingLabel}
                 {...rest}
             >
@@ -241,6 +234,8 @@ export const Table = forwardRef<HTMLElement, TableProps>(function Table(
                     {footer != null && <div className="ix-table__footer">{footer}</div>}
                     {pagination != null && <div className="ix-table__pagination">{pagination}</div>}
                 </div>
+                {/* Web componenten skriver loading og utvalget hit. Det må finnes før teksten settes. */}
+                <span className="ix-sr-only" role="status" data-field="status" />
             </ix-table>
         </TableContext.Provider>
     );

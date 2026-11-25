@@ -10,9 +10,11 @@ const rows = [
     { id: 'borett', mottaker: 'Borettslaget', belop: '4 850,00' },
 ];
 
+// Testene bytter variant og props fritt. Typen krever selectAllLabel med multi-select,
+// og testene som bruker multi-select, sender den.
 function Regninger(props: Partial<TableProps>) {
     return (
-        <Table title="Regninger" {...props}>
+        <Table title="Regninger" {...(props as TableProps)}>
             <Table.Header>
                 <Table.HeaderCell sortKey="mottaker">Mottaker</Table.HeaderCell>
                 <Table.HeaderCell align="end">Beløp</Table.HeaderCell>
@@ -74,10 +76,11 @@ describe('Table', () => {
         const headers = screen.getAllByRole('columnheader');
         expect(headers.every((th) => th.getAttribute('scope') === 'col')).toBe(true);
         expect(headers[1].getAttribute('data-align')).toBe('end');
-        expect(container.querySelector('tbody tr td:last-child')!.getAttribute('data-align')).toBe('end');
+        const cell = container.querySelector('tbody tr td:last-child')!;
+        expect(cell.getAttribute('data-column-align')).toBe('end');
+        expect(cell.hasAttribute('data-align')).toBe(false);
     });
-
-    it('beholder align som settes på en celle etter mount, og arver igjen når den fjernes', () => {
+    it('lar celler med egen align beholde den, også når den settes etter mount', () => {
         function T({ align }: { align?: 'start' | 'end' }) {
             return (
                 <Table ariaLabel="T">
@@ -94,13 +97,13 @@ describe('Table', () => {
         }
         const { container, rerender } = render(<T />);
         const cell = () => container.querySelector('tbody td')!;
-        expect(cell().getAttribute('data-align')).toBe('end');
+        expect(cell().getAttribute('data-column-align')).toBe('end');
         rerender(<T align="start" />);
         expect(cell().getAttribute('data-align')).toBe('start');
         rerender(<T />);
-        expect(cell().getAttribute('data-align')).toBe('end');
+        expect(cell().hasAttribute('data-align')).toBe(false);
+        expect(cell().getAttribute('data-column-align')).toBe('end');
     });
-
     it('rendrer footer og paginering bare når de er gitt', () => {
         const { container, rerender } = render(<Regninger />);
         expect(container.querySelector('.ix-table__footer')).toBeNull();
@@ -151,6 +154,24 @@ describe('Table sortering', () => {
         fireEvent.click(button);
         expect(onSortChange).toHaveBeenLastCalledWith(null);
         expect(button.closest('th')!.hasAttribute('aria-sort')).toBe(false);
+    });
+
+    it('leser opp sorteringen etter at React har satt aria-sort', async () => {
+        render(
+            <Regninger
+                sortLabels={{
+                    ascending: 'Sortert etter {column}, stigende',
+                    descending: 'Sortert etter {column}, synkende',
+                    none: 'Sortering fjernet',
+                }}
+            />
+        );
+        fireEvent.click(screen.getByRole('button', { name: 'Mottaker' }));
+        // Observeren ser aria-sort i neste runde, og meldingen skrives runden etter.
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 20));
+        });
+        expect(screen.getByRole('status').textContent).toBe('Sortert etter Mottaker, stigende');
     });
 
     it('speiler kontrollert sort som aria-sort og ikon', async () => {
@@ -240,7 +261,7 @@ describe('Table valg', () => {
         expect(screen.getByRole('status').textContent).toBe('3 valgt');
     });
 
-    it('fjerner valg for rader som ikke lenger vises, og sier fra', () => {
+    it('husker valg for rader som filtreres bort, og teller dem med', async () => {
         const onSelectionChange = vi.fn();
         function Filtrert({ skjul }: { skjul?: string }) {
             return (
@@ -270,21 +291,16 @@ describe('Table valg', () => {
             );
         }
         const { container, rerender } = render(<Filtrert />);
-        expect(onSelectionChange).not.toHaveBeenCalled();
-
         rerender(<Filtrert skjul="strom" />);
-        expect(onSelectionChange).toHaveBeenCalledTimes(1);
-        expect(onSelectionChange).toHaveBeenLastCalledWith(['mobil']);
-        expect(container.querySelector('.ix-table__selection')!.textContent).toContain('1 valgt');
+        await act(async () => {});
+        expect(onSelectionChange).not.toHaveBeenCalled();
+        expect(container.querySelector('.ix-table__selection')!.textContent).toContain('2 valgt');
 
         rerender(<Filtrert />);
-        expect((screen.getByRole('checkbox', { name: 'Velg Strømleverandør' }) as HTMLInputElement).checked).toBe(
-            false
-        );
+        await act(async () => {});
+        expect((screen.getByRole('checkbox', { name: 'Velg Strømleverandør' }) as HTMLInputElement).checked).toBe(true);
         expect((screen.getByRole('checkbox', { name: 'Velg Mobiloperatør' }) as HTMLInputElement).checked).toBe(true);
-        expect(onSelectionChange).toHaveBeenCalledTimes(1);
     });
-
     it('beholder forhåndsvalget mens tabellen laster', () => {
         const onSelectionChange = vi.fn();
         const { rerender } = render(
@@ -310,28 +326,18 @@ describe('Table valg', () => {
         expect((screen.getByRole('checkbox', { name: 'Velg Borettslaget' }) as HTMLInputElement).checked).toBe(true);
     });
 
-    it('melder en nøkkel uten rad én gang, også når kontrollert state ikke oppdateres', () => {
-        const onSelectionChange = vi.fn();
-        const { rerender } = render(
+    it('teller med nøkler til rader som ikke er rendret, som på en annen side', () => {
+        const { container } = render(
             <Regninger
                 variant="multi-select"
                 selectAllLabel="Velg alle"
-                selectedKeys={['mobil', 'finnes-ikke']}
-                onSelectionChange={onSelectionChange}
+                selectedKeys={['mobil', 'side-2']}
+                toolbar={<Table.Toolbar selectedLabel={(n) => `${n} valgt`} />}
             />
         );
-        rerender(
-            <Regninger
-                variant="multi-select"
-                selectAllLabel="Velg alle"
-                selectedKeys={['mobil', 'finnes-ikke']}
-                onSelectionChange={onSelectionChange}
-            />
-        );
-        expect(onSelectionChange).toHaveBeenCalledTimes(1);
-        expect(onSelectionChange).toHaveBeenLastCalledWith(['mobil']);
+        expect(container.querySelector('.ix-table__selection')!.textContent).toBe('2 valgt');
+        expect((screen.getByRole('checkbox', { name: 'Velg Mobiloperatør' }) as HTMLInputElement).checked).toBe(true);
     });
-
     it('tåler native selectionchange fra søkefeltet i toolbaren', () => {
         const onSelectionChange = vi.fn();
         render(
@@ -383,7 +389,7 @@ describe('Table valg', () => {
         expect((screen.getAllByRole('checkbox') as HTMLInputElement[]).every((c) => c.name === '')).toBe(true);
     });
 
-    it('melder en kontrollert nøkkel på en skjult rad én gang, uten løkke', () => {
+    it('holder en kontrollert nøkkel på en skjult rad uten løkke', () => {
         const onSelectionChange = vi.fn();
         render(
             <Table
@@ -403,40 +409,57 @@ describe('Table valg', () => {
                 </Table.Body>
             </Table>
         );
-        expect(onSelectionChange).toHaveBeenCalledTimes(1);
-        expect(onSelectionChange).toHaveBeenLastCalledWith(['b']);
-        const a = document.querySelector<HTMLInputElement>('input[value="a"]')!;
-        expect(a.checked).toBe(false);
-        expect(a.closest('tr')!.hasAttribute('data-selected')).toBe(false);
+        expect(onSelectionChange).not.toHaveBeenCalled();
+        expect(document.querySelector<HTMLInputElement>('input[value="a"]')!.checked).toBe(true);
     });
-
-    it('holder kontrollene i takt med selectedKeys når konsumenten avviser et valg', () => {
+    it('setter selectedKeys inn når verdien endres, men lar brukerens valg stå', () => {
         const onSelectionChange = vi.fn();
-        render(
-            <Regninger
-                variant="multi-select"
-                selectAllLabel="Velg alle"
-                selectedKeys={[]}
-                onSelectionChange={onSelectionChange}
-            />
-        );
+        function Godkjenning({ keys }: { keys: string[] }) {
+            return (
+                <Regninger
+                    variant="multi-select"
+                    selectAllLabel="Velg alle"
+                    selectedKeys={keys}
+                    onSelectionChange={onSelectionChange}
+                />
+            );
+        }
+        const { rerender } = render(<Godkjenning keys={['strom']} />);
         const strom = screen.getByRole('checkbox', { name: 'Velg Strømleverandør' }) as HTMLInputElement;
-        fireEvent.click(strom);
-        expect(onSelectionChange).toHaveBeenLastCalledWith(['strom']);
-        expect(strom.checked).toBe(false);
-        expect(strom.closest('tr')!.hasAttribute('data-selected')).toBe(false);
+        const mobil = screen.getByRole('checkbox', { name: 'Velg Mobiloperatør' }) as HTMLInputElement;
 
-        fireEvent.click(screen.getByRole('checkbox', { name: 'Velg alle' }));
-        expect(screen.getAllByRole('checkbox').every((c) => !(c as HTMLInputElement).checked)).toBe(true);
+        // Brukeren velger Mobil. Konsumenten oppdaterer ikke staten, men valget står.
+        fireEvent.click(mobil);
+        expect(onSelectionChange).toHaveBeenLastCalledWith(['strom', 'mobil']);
+        rerender(<Godkjenning keys={['strom']} />);
+        expect(mobil.checked).toBe(true);
+
+        // Etter «Godkjenn» tømmer konsumenten utvalget.
+        rerender(<Godkjenning keys={[]} />);
+        expect(strom.checked).toBe(false);
+        expect(mobil.checked).toBe(false);
+        expect(onSelectionChange).toHaveBeenCalledTimes(1);
     });
 
+    it('rendrer sorteringsikonene og statuselementet selv, så web componenten ikke legger inn noder', () => {
+        const { container } = render(<Regninger loading loadingLabel="Laster" />);
+        const sortButton = screen.getByRole('button', { name: 'Mottaker' });
+        expect(sortButton.querySelectorAll('.ix-table__sort-icon')).toHaveLength(1);
+        expect(Array.from(sortButton.querySelectorAll('ix-icon')).map((i) => i.getAttribute('data-sort-icon'))).toEqual(
+            ['none', 'ascending', 'descending']
+        );
+        expect(container.querySelectorAll('ix-table > [data-field="status"]')).toHaveLength(1);
+        expect(container.querySelector('ix-table')!.hasAttribute('data-sort-controlled')).toBe(true);
+    });
     it('krysser ikke av andre rader uten value når én av dem velges', () => {
         render(
             <Table ariaLabel="T" variant="multi-select" selectAllLabel="Velg alle">
                 <Table.Body>
+                    {/* @ts-expect-error -- typen krever value med selectLabel. Testen sjekker at det tåles likevel. */}
                     <Table.Row selectLabel="Velg A">
                         <Table.Cell>A</Table.Cell>
                     </Table.Row>
+                    {/* @ts-expect-error -- som over. */}
                     <Table.Row selectLabel="Velg B">
                         <Table.Cell>B</Table.Cell>
                     </Table.Row>

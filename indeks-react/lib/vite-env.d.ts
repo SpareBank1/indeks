@@ -108,6 +108,10 @@ declare module 'react' {
                 class?: string;
                 'data-sticky'?: 'first' | 'last';
                 'data-density'?: 'compact' | 'comfortable';
+                'data-sort-controlled'?: boolean | '' | 'true';
+                'sort-ascending-label'?: string;
+                'sort-descending-label'?: string;
+                'sort-none-label'?: string;
                 'loading-label'?: string;
             };
             'ix-tabs': React.DetailedHTMLProps<React.HTMLAttributes<IxTabs>, IxTabs> & {

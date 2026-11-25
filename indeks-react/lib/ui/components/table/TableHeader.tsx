@@ -1,5 +1,6 @@
 import { useId, type JSX, type ReactNode, type ThHTMLAttributes } from 'react';
-import { useTableContext } from './TableContext';
+import { Icon } from '../../icons/Icon';
+import { TABLE_SORT_ICONS, useTableContext } from './TableContext';
 
 export type TableHeaderProps = {
     /** `Table.HeaderCell` per kolonne. Kontrollkolonnen for valg og ekspandering legges til av seg selv. */
@@ -17,7 +18,7 @@ export function TableHeader({ children }: TableHeaderProps): JSX.Element {
                 {variant === 'multi-select' && (
                     <th scope="col" className="ix-table__control">
                         <div className="ix-checkbox">
-                            {/* Ukontrollert: web componenten setter checked og indeterminate. */}
+                            {/* Web componenten eier checked og indeterminate. */}
                             <input type="checkbox" id={selectAllId} />
                             <label htmlFor={selectAllId}>
                                 <span className="ix-sr-only">{selectAllLabel}</span>
@@ -56,6 +57,17 @@ export function TableHeaderCell({ sortKey, align, children, ...rest }: TableHead
             {sortKey ? (
                 <button type="button" className="ix-table__sort">
                     {children}
+                    {/* Alle tre er lastet, og CSS viser det som hører til aria-sort. */}
+                    <span className="ix-table__sort-icon" aria-hidden="true">
+                        {(Object.keys(TABLE_SORT_ICONS) as (keyof typeof TABLE_SORT_ICONS)[]).map((direction) => (
+                            <Icon
+                                key={direction}
+                                name={TABLE_SORT_ICONS[direction]}
+                                size="sm"
+                                data-sort-icon={direction}
+                            />
+                        ))}
+                    </span>
                 </button>
             ) : (
                 children

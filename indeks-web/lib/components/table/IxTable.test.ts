@@ -76,11 +76,14 @@ afterEach(() => {
 });
 
 describe('IxTable struktur', () => {
-    it('kopierer data-align fra kolonnens th til cellene', () => {
+    it('arver data-align fra kolonnens th som data-column-align', () => {
         const el = mount(SORTABLE);
         const cells = Array.from(el.querySelectorAll('tbody tr')).map((r) => (r as HTMLTableRowElement).cells[2]);
-        expect(cells.every((c) => c.getAttribute('data-align') === 'end')).toBe(true);
-        expect((el.querySelector('tbody tr') as HTMLTableRowElement).cells[0].hasAttribute('data-align')).toBe(false);
+        expect(cells.every((c) => c.getAttribute('data-column-align') === 'end')).toBe(true);
+        expect(cells.every((c) => !c.hasAttribute('data-align'))).toBe(true);
+        expect((el.querySelector('tbody tr') as HTMLTableRowElement).cells[0].hasAttribute('data-column-align')).toBe(
+            false
+        );
     });
 
     it('beholder data-align som cellen har satt selv', () => {
@@ -183,12 +186,80 @@ describe('IxTable sortering', () => {
         expect(handler.mock.calls[0][0].detail).toEqual({ column: 1, key: 'dato', direction: 'ascending' });
     });
 
-    it('lar konsumenten overta med preventDefault()', () => {
+    it('leser opp sorteringen etter at den har endret seg', async () => {
+        const el = mount(
+            SORTABLE.replace(
+                '<ix-table class="ix-table">',
+                '<ix-table class="ix-table" sort-ascending-label="Sortert etter {column}, stigende" sort-descending-label="Sortert etter {column}, synkende" sort-none-label="Sortering fjernet">'
+            )
+        );
+        const button = el.querySelector<HTMLButtonElement>('.ix-table__sort')!;
+        const status = () => el.querySelector('[data-field="status"]')!.textContent;
+        button.click();
+        await flush();
+        expect(status()).toBe('Sortert etter Mottaker, stigende');
+        button.click();
+        await flush();
+        expect(status()).toBe('Sortert etter Mottaker, synkende');
+        button.click();
+        await flush();
+        expect(status()).toBe('Sortering fjernet');
+    });
+
+    it('venter med opplesningen til eieren har satt aria-sort med data-sort-controlled', async () => {
+        const el = mount(
+            SORTABLE.replace(
+                '<ix-table class="ix-table">',
+                '<ix-table class="ix-table" data-sort-controlled sort-ascending-label="Sortert etter {column}, stigende" sort-none-label="Sortering fjernet">'
+            )
+        );
+        const th = el.querySelectorAll('th')[1];
+        th.querySelector<HTMLButtonElement>('.ix-table__sort')!.click();
+        await flush();
+        expect(el.querySelector('[data-field="status"]')?.textContent ?? '').toBe('');
+
+        th.setAttribute('aria-sort', 'ascending');
+        await flush();
+        await flush();
+        expect(el.querySelector('[data-field="status"]')!.textContent).toBe('Sortert etter Dato, stigende');
+    });
+
+    it('advarer når sorterbare kolonner mangler tekstene for opplesning', () => {
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        mount(SORTABLE);
+        expect(warn.mock.calls.filter(([m]) => String(m).includes('sort-ascending-label'))).toHaveLength(1);
+    });
+
+    it('sender sort-change etter at den har sortert selv', () => {
         const el = mount(SORTABLE);
-        el.addEventListener('sort-change', (e) => e.preventDefault());
-        el.querySelectorAll<HTMLButtonElement>('.ix-table__sort')[2].click();
-        expect(el.querySelectorAll('th')[2].hasAttribute('aria-sort')).toBe(false);
+        const handler = vi.fn();
+        el.addEventListener('sort-change', (e) => handler((e as CustomEvent).detail, bodyTexts(el)));
+        el.querySelector<HTMLButtonElement>('.ix-table__sort')!.click();
+        expect(handler).toHaveBeenCalledWith({ column: 0, key: null, direction: 'ascending' }, [
+            'Kafé Torget',
+            'Matbutikken',
+            'Strømleverandør',
+        ]);
+    });
+
+    it('sender bare sort-request med data-sort-controlled, uten å røre aria-sort eller radene', () => {
+        const el = mount(
+            SORTABLE.replace('<ix-table class="ix-table">', '<ix-table class="ix-table" data-sort-controlled>')
+        );
+        const request = vi.fn();
+        const change = vi.fn();
+        el.addEventListener('sort-request', (e) => request((e as CustomEvent).detail));
+        el.addEventListener('sort-change', change);
+        el.querySelectorAll<HTMLButtonElement>('.ix-table__sort')[1].click();
+        expect(request).toHaveBeenCalledWith({ column: 1, key: 'dato', direction: 'ascending' });
+        expect(change).not.toHaveBeenCalled();
+        expect(el.querySelectorAll('th')[1].hasAttribute('aria-sort')).toBe(false);
         expect(bodyTexts(el)).toEqual(['Kafé Torget', 'Matbutikken', 'Strømleverandør']);
+
+        // Eieren setter aria-sort, og neste klikk ber om neste retning.
+        el.querySelectorAll('th')[1].setAttribute('aria-sort', 'ascending');
+        el.querySelectorAll<HTMLButtonElement>('.ix-table__sort')[1].click();
+        expect(request).toHaveBeenLastCalledWith({ column: 1, key: 'dato', direction: 'descending' });
     });
 
     it('følger aria-sort som settes utenfra (kontrollert)', async () => {
@@ -240,7 +311,40 @@ describe('IxTable sortering', () => {
         button.click();
         expect(bodyTexts(el)).toEqual(['3', '20', 'Avtale', 'Ukjent', '']);
         button.click();
-        expect(bodyTexts(el)).toEqual(['Ukjent', 'Avtale', '20', '3', '']);
+        expect(bodyTexts(el)).toEqual(['20', '3', 'Ukjent', 'Avtale', '']);
+    });
+
+    it('regner «–» som tom celle, sist i begge retninger', () => {
+        const el = mount(`
+            <ix-table><table aria-label="T">
+                <thead><tr><th><button type="button" class="ix-table__sort">Beløp</button></th></tr></thead>
+                <tbody>${['–', '200', '—', '50'].map((v) => `<tr><td>${v}</td></tr>`).join('')}</tbody>
+            </table></ix-table>
+        `);
+        const button = el.querySelector<HTMLButtonElement>('.ix-table__sort')!;
+        button.click();
+        expect(bodyTexts(el)).toEqual(['50', '200', '–', '—']);
+        button.click();
+        expect(bodyTexts(el)).toEqual(['200', '50', '–', '—']);
+    });
+
+    it('leser punktum som tusenskille når det står foran grupper på tre sifre', () => {
+        expect(sortedColumn(['1.250', '999', '1.250,50', '1.5', '12.000.000'])).toEqual([
+            '1.5',
+            '999',
+            '1.250',
+            '1.250,50',
+            '12.000.000',
+        ]);
+    });
+
+    it('sorterer ISO-datoer som datoer, også blandet med norske', () => {
+        expect(sortedColumn(['2026-11-25', '01.11.2026', '2026-11-25T08:00', '2026-10-03'])).toEqual([
+            '2026-10-03',
+            '01.11.2026',
+            '2026-11-25',
+            '2026-11-25T08:00',
+        ]);
     });
 
     it('regner en rad som er lagt til uten sortering, med i den opprinnelige rekkefølgen', async () => {
@@ -293,8 +397,8 @@ describe('IxTable sortering', () => {
         expect(handler.mock.calls[0][0].detail.column).toBe(2);
         expect(bodyTexts(el, 2)).toEqual(['4', '30', '100']);
         const firstRow = el.querySelector('tbody tr')!;
-        expect(firstRow.children[1].hasAttribute('data-align')).toBe(false);
-        expect(firstRow.children[2].getAttribute('data-align')).toBe('end');
+        expect(firstRow.children[1].hasAttribute('data-column-align')).toBe(false);
+        expect(firstRow.children[2].getAttribute('data-column-align')).toBe('end');
     });
 
     it('tar med innholdet til en ekspanderbar rad som legges til mens kolonnen er sortert', async () => {
@@ -348,28 +452,66 @@ describe('IxTable valg', () => {
         expect(handler.mock.calls.at(-1)![0].detail).toEqual({ selected: ['a', 'c'] });
     });
 
-    it('fjerner valget når en valgt rad skjules, og sier fra', async () => {
+    it('beholder valget når en valgt rad skjules, og teller den med', async () => {
         const el = mount(MULTI);
         const handler = vi.fn();
         el.addEventListener('selection-change', handler);
         const a = el.querySelector<HTMLInputElement>('#a')!;
-        const c = el.querySelector<HTMLInputElement>('#c')!;
         a.click();
-        c.click();
+        el.querySelector<HTMLInputElement>('#c')!.click();
         handler.mockClear();
 
         a.closest('tr')!.hidden = true;
         await flush();
-        expect(a.checked).toBe(false);
-        expect(a.closest('tr')!.hasAttribute('data-selected')).toBe(false);
-        expect(el.querySelector('[data-selected-count]')!.textContent).toBe('1');
-        expect(handler).toHaveBeenCalledTimes(1);
-        expect(handler.mock.calls[0][0].detail).toEqual({ selected: ['c'] });
+        expect(a.checked).toBe(true);
+        expect(el.querySelector('[data-selected-count]')!.textContent).toBe('2');
+        expect(handler).not.toHaveBeenCalled();
+        // «Velg alle» gjelder radene som vises: C er valgt, B ikke.
+        expect(el.querySelector<HTMLInputElement>('#all')!.indeterminate).toBe(true);
+    });
 
-        a.closest('tr')!.hidden = false;
+    it('husker valget for en rad som fjernes og kommer tilbake, som ved bytte av side', async () => {
+        const el = mount(MULTI);
+        const tbody = el.querySelector('tbody')!;
+        el.querySelector<HTMLInputElement>('#b')!.click();
+        const row = el.querySelector('#b')!.closest('tr')!;
+        row.remove();
         await flush();
-        expect(a.checked).toBe(false);
-        expect(handler).toHaveBeenCalledTimes(1);
+        expect(el.selection).toEqual(['b']);
+        expect(el.querySelector('[data-selected-count]')!.textContent).toBe('1');
+
+        // Samme rad rendres på nytt, uten avkrysning i markupen.
+        tbody.insertAdjacentHTML(
+            'beforeend',
+            '<tr><td class="ix-table__control"><div class="ix-checkbox"><input type="checkbox" id="b2" value="b"><label for="b2">Velg B</label></div></td><td>B</td></tr>'
+        );
+        await flush();
+        expect(el.querySelector<HTMLInputElement>('#b2')!.checked).toBe(true);
+    });
+
+    it('setter og tømmer utvalget fra koden uten selection-change', () => {
+        const el = mount(MULTI);
+        const handler = vi.fn();
+        el.addEventListener('selection-change', handler);
+        el.setSelection(['a', 'c', 'finnes-ikke']);
+        expect(el.querySelector<HTMLInputElement>('#a')!.checked).toBe(true);
+        expect(el.querySelector<HTMLInputElement>('#b')!.checked).toBe(false);
+        expect(el.querySelector('[data-selected-count]')!.textContent).toBe('3');
+        expect(el.selection).toEqual(['a', 'c', 'finnes-ikke']);
+
+        el.clearSelection();
+        expect(el.querySelectorAll('tbody input:checked')).toHaveLength(0);
+        expect(el.querySelector<HTMLElement>('.ix-table__selection')!.hidden).toBe(true);
+        expect(handler).not.toHaveBeenCalled();
+    });
+
+    it('lar «velg alle» stå for rader som ikke vises', () => {
+        const el = mount(MULTI);
+        el.setSelection(['x']);
+        el.querySelector<HTMLInputElement>('#all')!.click();
+        expect(el.selection).toEqual(['x', 'a', 'b', 'c']);
+        el.querySelector<HTMLInputElement>('#all')!.click();
+        expect(el.selection).toEqual(['x']);
     });
 
     it('sender ikke selection-change når en rad uten valg skjules', async () => {
@@ -447,12 +589,26 @@ describe('IxTable valg', () => {
         expect(named.querySelector<HTMLInputElement>('input')!.name).toBe('konto');
     });
 
-    it('følger checked som settes utenfra når refresh() kalles', () => {
-        const el = mount(MULTI);
-        el.querySelector<HTMLInputElement>('#a')!.checked = true;
-        el.refresh();
+    it('tar med rader som er avkrysset i markupen når de dukker opp', () => {
+        const el = mount(MULTI.replace('id="a" value="a"', 'id="a" value="a" checked'));
+        expect(el.selection).toEqual(['a']);
         expect(el.querySelectorAll('tbody tr')[0].hasAttribute('data-selected')).toBe(true);
         expect(el.querySelector<HTMLInputElement>('#all')!.indeterminate).toBe(true);
+    });
+
+    it('lar én radio erstatte den andre, også fra koden', () => {
+        const el = mount(`
+            <ix-table><table aria-label="Konto"><tbody>
+                <tr><td class="ix-table__control"><input type="radio" id="r1" value="bruk" aria-label="Velg bruk"></td><td>Bruk</td></tr>
+                <tr><td class="ix-table__control"><input type="radio" id="r2" value="spare" aria-label="Velg spare"></td><td>Spare</td></tr>
+            </tbody></table></ix-table>
+        `);
+        el.querySelector<HTMLInputElement>('#r1')!.click();
+        el.querySelector<HTMLInputElement>('#r2')!.click();
+        expect(el.selection).toEqual(['spare']);
+        el.setSelection(['bruk', 'spare']);
+        expect(el.selection).toEqual(['bruk']);
+        expect(el.querySelector<HTMLInputElement>('#r1')!.checked).toBe(true);
     });
 });
 
@@ -494,7 +650,7 @@ describe('IxTable ekspandering', () => {
         expect((content.cells[0] as HTMLTableCellElement).colSpan).toBe(3);
     });
 
-    it('veksler aria-expanded, hidden og data-expanded, og sender expand-change', () => {
+    it('veksler aria-expanded og hidden, og sender expand-change', () => {
         const el = mount(EXPANDABLE);
         const handler = vi.fn();
         el.addEventListener('expand-change', handler);
@@ -505,12 +661,10 @@ describe('IxTable ekspandering', () => {
         button.click();
         expect(button.getAttribute('aria-expanded')).toBe('true');
         expect(content.hidden).toBe(false);
-        expect(row.hasAttribute('data-expanded')).toBe(true);
         expect(handler.mock.calls[0][0].detail).toEqual({ row, expanded: true });
 
         button.click();
         expect(content.hidden).toBe(true);
-        expect(row.hasAttribute('data-expanded')).toBe(false);
     });
 
     it('setter data-animate bare mens en rad åpnes, etter at stilen er beregnet', () => {
@@ -711,18 +865,24 @@ describe('IxTable loading', () => {
 });
 
 describe('IxTable justering og colspan', () => {
-    it('gir slipp på en celle når konsumenten setter egen data-align senere', () => {
+    it('rører aldri data-align som konsumenten setter på cellen', () => {
         const el = mount(SORTABLE);
         const cell = el.querySelector('tbody tr')!.children[2];
-        expect(cell.getAttribute('data-align')).toBe('end');
-
         cell.setAttribute('data-align', 'start');
         el.refresh();
         expect(cell.getAttribute('data-align')).toBe('start');
+        expect(cell.getAttribute('data-column-align')).toBe('end');
 
         cell.removeAttribute('data-align');
         el.refresh();
-        expect(cell.getAttribute('data-align')).toBe('end');
+        expect(cell.hasAttribute('data-align')).toBe(false);
+    });
+
+    it('følger justering som endres på kolonnens th', async () => {
+        const el = mount(SORTABLE);
+        el.querySelectorAll('th')[2].removeAttribute('data-align');
+        await flush();
+        expect(el.querySelector('tbody tr')!.children[2].hasAttribute('data-column-align')).toBe(false);
     });
 
     it('gir slipp på colspan som konsumenten endrer senere', () => {
@@ -803,7 +963,7 @@ describe('IxTable livssyklus', () => {
         const el = mount(MULTI);
         const row = document.createElement('tr');
         row.innerHTML =
-            '<td class="ix-table__control"><input type="checkbox" aria-label="Velg D" checked></td><td>D</td>';
+            '<td class="ix-table__control"><input type="checkbox" value="d" aria-label="Velg D" checked></td><td>D</td>';
         el.querySelector('tbody')!.append(row);
         await flush();
         expect(row.hasAttribute('data-interactive')).toBe(true);

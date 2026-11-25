@@ -28,18 +28,23 @@
       "wcag": ["3.3.2", "2.4.6", "1.3.1"]
     },
     {
+      "summary": "Si hva utvalget gjelder, og la brukeren bekrefte handlinger på det",
+      "details": "Utvalget gjelder på tvers av filtre og sider, så «Godkjenn» kan treffe rader brukeren ikke ser akkurat nå. Skriv i teksten om utvalget når noe er valgt utenfor visningen, for eksempel «5 valgt, 2 på andre sider». Handlinger med økonomiske eller juridiske følger, som å godkjenne regninger, må kunne angres, sjekkes eller bekreftes før de gjennomføres.",
+      "wcag": ["3.3.4", "3.3.2"]
+    },
+    {
       "summary": "Fortell skjermleserbrukere hva søk, filter og sortering endret",
       "details": "Når radene endres, ser seende brukere det med en gang. Legg en kort statusmelding i et role=\"status\"-element, f.eks. «12 treff» etter søk eller «Sortert etter forfallsdato, stigende». Tabellen leser selv opp loadingLabel mens den laster, men vet ikke hva resultatet betyr. Teksten om utvalget («3 valgt») leser tabellen opp selv når den står i data-field=\"selected-label\", som Table.Toolbar gjør med selectedLabel.",
       "wcag": ["4.1.3"]
     },
     {
       "summary": "Sett aria-sort selv når du sorterer selv",
-      "details": "Kaller du preventDefault() på sort-change i HTML for å sortere fra en tjeneste, setter tabellen verken aria-sort eller pil. Sett aria-sort=\"ascending\" eller \"descending\" på kolonnen du sorterte, og fjern det fra de andre. I React gir sort-propen aria-sort.",
+      "details": "Med data-sort-controlled i HTML, for å sortere fra en tjeneste, setter tabellen verken aria-sort eller pil. Sett aria-sort=\"ascending\" eller \"descending\" på kolonnen du sorterte, og fjern det fra de andre. I React gir sort-propen aria-sort.",
       "wcag": ["1.3.1", "4.1.2"]
     },
     {
-      "summary": "Skriv teksten for loading og ingen treff",
-      "details": "loadingLabel (loading-label i HTML) leses opp mens tabellen laster. Teksten for ingen treff skal si hva som skjedde og hvordan brukeren kommer videre: «Ingen treff. Prøv et annet søk eller endre filtrene.»",
+      "summary": "Skriv tekstene for loading, sortering og ingen treff",
+      "details": "loadingLabel (loading-label i HTML) leses opp mens tabellen laster. sortLabels leses opp når sorteringen endres, med {column} der kolonnens navn skal stå, f.eks. «Sortert etter {column}, synkende» og «Sortering fjernet». Teksten for ingen treff skal si hva som skjedde og hvordan brukeren kommer videre: «Ingen treff. Prøv et annet søk eller endre filtrene.»",
       "wcag": ["4.1.3", "3.3.1"]
     },
     {
@@ -64,6 +69,7 @@
     { "id": "1.4.12", "notes": "Ingen fast høyde på rader eller celler, så økt linje- og bokstavavstand gir ikke klippet tekst." },
     { "id": "2.1.1", "notes": "Sortering er en native knapp i overskriften. Valg og ekspandering bruker native checkbox, radio og knapp. Klikk på raden er bare en snarvei for pekeren. Ruller tabellen, blir rulleområdet fokuserbart med navn fra tittelen, så det kan rulles med piltastene." },
     { "id": "2.1.2", "notes": "Ingen fokusfeller. Tab går gjennom kontrollene i DOM-rekkefølge og ut av tabellen." },
+    { "id": "2.2.2", "notes": "Skeleton og spinneren er lasteindikatorer som bare vises mens innholdet lastes, og pulsen i skeleton stopper med redusert bevegelse. Det er unntaket for bevegelse som er en nødvendig del av en aktivitet." },
     { "id": "2.4.3", "notes": "Fokusrekkefølgen følger kolonnene og radene. Sortering flytter radene, men fokus blir stående på sorteringsknappen." },
     { "id": "2.4.7", "notes": "Sorteringsknapp, ekspanderingsknapp, checkbox, radio og rulleområdet har synlig fokusring. I overskriften og rulleområdet tegnes ringen innenfor elementet, så kortets kant ikke klipper den." },
     { "id": "2.4.11", "notes": "WCAG 2.2, ikke krav hos oss. Med fast kolonne har rulleområdet scroll-padding lik bredden på den faste kolonnen, så et element som får fokus ikke havner skjult under den." },
@@ -73,7 +79,7 @@
     { "id": "3.2.2", "notes": "Valg av en rad endrer ikke konteksten. Handlinger for utvalget vises i toolbaren, men utføres først når brukeren velger en av dem." },
     { "id": "3.3.2", "notes": "Kontrollene i tabellen får ledeteksten fra raden og kolonnen de står i, og navnet fra selectLabel, selectAllLabel eller expandLabel. Felt i toolbaren er egne skjemakomponenter, se konsumentansvaret." },
     { "id": "4.1.2", "notes": "Alle kontroller er native elementer med riktig rolle og tilstand: knapp med aria-sort på kolonnen, checkbox med checked og indeterminate for «velg alle», radio, og knapp med aria-expanded. Tabellen advarer i utvikling når en kontroll eller tabellen mangler navn." },
-    { "id": "4.1.3", "notes": "Mens tabellen laster, leses loadingLabel opp fra ett role=\"status\"-element som alltid finnes. Det gir én annonsering per innlasting, ikke én per rad eller per spinner. Spinneren i radområdet er skjult for skjermlesere. Etter et valg leses teksten i data-field=\"selected-label\" opp fra samme element, f.eks. «3 valgt», også når «velg alle» endrer mange rader på én gang." }
+    { "id": "4.1.3", "notes": "Mens tabellen laster, leses loadingLabel opp fra ett role=\"status\"-element som alltid finnes. Det gir én annonsering per innlasting, ikke én per rad eller per spinner. Spinneren i radområdet er skjult for skjermlesere. Etter et valg leses teksten i data-field=\"selected-label\" opp fra samme element, f.eks. «3 valgt», også når «velg alle» endrer mange rader på én gang. Når sorteringen endres, leses sortLabels (sort-ascending-label, sort-descending-label og sort-none-label i HTML) opp fra samme element, etter at aria-sort er satt." }
   ],
   "issues": [],
   "notRelevant": [
@@ -91,7 +97,6 @@
     { "id": "1.4.13", "reason": "Table viser ikke innhold ved hover eller fokus selv. Tooltip i cellene dekkes av Tooltip." },
     { "id": "2.1.4", "reason": "Ingen hurtigtaster med enkelttegn." },
     { "id": "2.2.1", "reason": "Ingen tidsfrister." },
-    { "id": "2.2.2", "reason": "Skeleton pulserer, men stopper med redusert bevegelse og vises bare til innholdet er lastet." },
     { "id": "2.3.1", "reason": "Ingen blinking." },
     { "id": "2.4.1", "reason": "Ikke en blokk som gjentas på tvers av sider." },
     { "id": "2.4.2", "reason": "Ikke en side-komponent." },
@@ -108,7 +113,6 @@
     { "id": "3.2.4", "reason": "Konsekvent navngiving av samme tabell på tvers av sider er konsumentens ansvar." },
     { "id": "3.2.6", "reason": "Ingen hjelpefunksjonalitet." },
     { "id": "3.3.3", "reason": "Ingen skjemavalidering i Table." },
-    { "id": "3.3.4", "reason": "Handlinger på utvalget er konsumentens knapper. Bekreftelse av destruktive handlinger hører til dem." },
     { "id": "3.3.7", "reason": "Ingen inndata som må gjentas." },
     { "id": "3.3.8", "reason": "Ingen autentisering." }
   ],

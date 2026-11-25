@@ -4,16 +4,20 @@
  * <ix-table> kobler dem sammen og holder tilstanden i attributter CSS leser.
  *
  * - Sortering: `.ix-table__sort` i en `th` går ingen → stigende → synkende →
- *   ingen. `aria-sort` står bare på den sorterte kolonnen. Sender avbrytbar
- *   `sort-change`. Uten `preventDefault()` sorterer komponenten radene selv.
- * - Valg: checkbox eller radio i `.ix-table__control` speiles som
- *   `data-selected` på raden. Checkbox i headeren velger alle og blir
- *   indeterminate. Antallet skrives i `[data-selected-count]`, og
+ *   ingen. Som standard setter komponenten `aria-sort`, sorterer radene og
+ *   sender `sort-change`. Med `data-sort-controlled` sender den bare
+ *   `sort-request`, og den som eier radene setter `aria-sort` og rekkefølgen.
+ *   Når `aria-sort` har endret seg etter et klikk, leses `sort-ascending-label`,
+ *   `sort-descending-label` eller `sort-none-label` opp, med `{column}` byttet
+ *   ut med kolonnens navn.
+ * - Valg: komponenten eier utvalget, en mengde av `value` på radkontrollene.
+ *   Utvalget gjelder også rader som er skjult eller ikke finnes i DOM-en (en
+ *   annen side). Checkbox i headeren velger radene som vises og blir
+ *   indeterminate. Antallet, alle valgte, skrives i `[data-selected-count]`, og
  *   `.ix-table__selection` vises når noe er valgt. Etter et valg leses teksten i
- *   `[data-field="selected-label"]` opp, f.eks. «3 valgt». Sender `selection-change`.
- *   Utvalget gjelder bare radene som vises: «velg alle» og antallet hopper over
- *   skjulte rader, og en valgt rad som skjules (`hidden` eller `display: none`)
- *   mister valget, med `selection-change`.
+ *   `[data-field="selected-label"]` opp, f.eks. «3 valgt». Sender
+ *   `selection-change` når brukeren endrer valget. Endres det fra koden, med
+ *   `setSelection()` eller `clearSelection()`, sendes ingen hendelse.
  * - Ekspandering: `.ix-table__expand` veksler `aria-expanded` og `hidden` på
  *   raden den styrer. Sender `expand-change`.
  * - Klikk på en rad med kontroll aktiverer kontrollen, med mindre klikket kom
@@ -24,8 +28,10 @@
  *   skjult `role="status"`-element. Elementet finnes hele tiden, så teksten
  *   annonseres én gang per innlasting.
  *
- * All tilstand leses fra DOM-en ved hver synk, så kontrollert React kan sette
- * `aria-sort`, `aria-expanded` og `checked` selv og kalle `refresh()`.
+ * Hver tilstand har én skriver. Komponenten eier utvalg og ekspandering, og
+ * React rendrer bare startverdiene. Med `data-sort-controlled` eier den som
+ * rendrer radene sorteringen. Justering arves som `data-column-align`, så
+ * cellens egen `data-align` aldri overskrives.
  *
  * @example
  * <ix-table class="ix-table">
@@ -40,6 +46,7 @@
 
 export type IxTableSortDirection = 'ascending' | 'descending' | 'none';
 
+/** Detaljene i både `sort-request` og `sort-change`. */
 export type IxTableSortChangeDetail = {
     /** Kolonnens indeks i headerraden. */
     column: number;
@@ -49,7 +56,7 @@ export type IxTableSortChangeDetail = {
 };
 
 export type IxTableSelectionChangeDetail = {
-    /** `value` på de valgte kontrollene, i radrekkefølge. */
+    /** Hele utvalget, også rader som ikke vises, i den rekkefølgen de ble valgt. */
     selected: string[];
 };
 
@@ -67,7 +74,8 @@ const NEXT_SORT: Record<IxTableSortDirection, IxTableSortDirection> = {
     descending: 'none',
 };
 
-const SORT_ICON: Record<IxTableSortDirection, string> = {
+/** Ikonet for hver retning. React rendrer de samme (se table-icons.sync.test.ts). */
+export const IX_TABLE_SORT_ICONS: Record<IxTableSortDirection, string> = {
     none: 'swap_vert',
     ascending: 'arrow_upward',
     descending: 'arrow_downward',
@@ -89,30 +97,40 @@ const LIVE_REGION_DELAY = 100;
 
 // dd.mm.åååå, eventuelt med klokkeslett: «12.10.2026 14:30» eller «12.10.2026, kl. 14.30».
 const NORWEGIAN_DATE = /^(\d{1,2})\.(\d{1,2})\.(\d{4})(?:,?\s+(?:kl\.?\s*)?(\d{1,2})[:.](\d{2}))?$/;
+// åååå-mm-dd, eventuelt med klokkeslett: «2026-11-25» eller «2026-11-25T14:30».
+const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})(?:[T\s](\d{2}):(\d{2}))?/;
 // Valuta foran eller bak beløpet: «kr 500», «500 kr», «1 249 NOK», «500,-».
 const CURRENCY = /^(?:kr\.?|nok)\s*|\s*(?:kr\.?|nok|,-)$/gi;
 // \s dekker også hardt og smalt hardt mellomrom, som skiller tusener i norske tall.
-const NUMBER = /^[+−-]?\s*\d[\d\s]*([.,]\d+)?\s*%?$/;
+// Punktum kan også skille tusener: «1.250» og «1.250,50».
+const NUMBER = /^[+−-]?\s*\d[\d\s.]*(,\d+)?\s*%?$/;
+// Bare punktum foran grupper på tre sifre er tusenskille. «1.5» er et desimaltall.
+const DOT_THOUSANDS = /^\d{1,3}(\.\d{3})+$/;
+// Plassholdere for en tom verdi.
+const EMPTY = /^[–—-]?$/;
 const collator = new Intl.Collator('nb', { numeric: true, sensitivity: 'base' });
 
-/** Tall og datoer (dd.mm.åååå) sammenlignes som tall, resten som tekst. */
+function dateValue(y: string, m: string, d: string, h = '0', min = '0'): number {
+    return Number(y) * 1e8 + Number(m) * 1e6 + Number(d) * 1e4 + Number(h) * 100 + Number(min);
+}
+
+/** Tall og datoer sammenlignes som tall, resten som tekst. Tom celle eller «–» gir ''. */
 function sortValue(cell: HTMLTableCellElement | undefined): number | string {
     if (!cell) return '';
     const raw = (cell.dataset.sortValue ?? cell.textContent ?? '').trim();
+    if (EMPTY.test(raw)) return '';
     const date = NORWEGIAN_DATE.exec(raw);
-    if (date) {
-        const [, d, m, y, h = '0', min = '0'] = date;
-        return Number(y) * 1e8 + Number(m) * 1e6 + Number(d) * 1e4 + Number(h) * 100 + Number(min);
-    }
+    if (date) return dateValue(date[3], date[2], date[1], date[4], date[5]);
+    const iso = ISO_DATE.exec(raw);
+    if (iso) return dateValue(iso[1], iso[2], iso[3], iso[4], iso[5]);
     const amount = raw.replace(CURRENCY, '').trim();
     if (NUMBER.test(amount)) {
-        const n = Number(
-            amount
-                .replace(/[\s%+]/g, '')
-                .replace('−', '-')
-                .replace(',', '.')
-        );
-        if (!Number.isNaN(n)) return n;
+        const sign = amount.startsWith('−') || amount.startsWith('-') ? -1 : 1;
+        let digits = amount.replace(/^[+−-]/, '').replace(/[\s%]/g, '');
+        if (digits.includes(',')) digits = digits.replace(/\./g, '').replace(',', '.');
+        else if (DOT_THOUSANDS.test(digits)) digits = digits.replace(/\./g, '');
+        const n = Number(digits);
+        if (!Number.isNaN(n)) return sign * n;
     }
     return raw;
 }
@@ -136,12 +154,16 @@ function cellAt(row: HTMLTableRowElement, column: number): HTMLTableCellElement 
     return undefined;
 }
 
-/** Tall før tekst, så en kolonne som blander dem, sorteres likt hver gang. */
+/** Sammenligner to verdier av samme type. */
 function compareValues(a: number | string, b: number | string): number {
     if (typeof a === 'number' && typeof b === 'number') return a - b;
-    if (typeof a === 'number') return -1;
-    if (typeof b === 'number') return 1;
-    return collator.compare(a, b);
+    return collator.compare(String(a), String(b));
+}
+
+/** Tall før tekst og tomme sist, i begge retninger. */
+function typeRank(value: number | string): number {
+    if (value === '') return 2;
+    return typeof value === 'number' ? 0 : 1;
 }
 
 function hasAccessibleName(el: Element): boolean {
@@ -165,10 +187,13 @@ export class IxTable extends HTMLElement {
     private _originalOrder = new WeakMap<HTMLTableRowElement, number>();
     /** Sorteringen komponenten selv har gjort, så nye rader kan sorteres inn. */
     private _activeSort: { column: number; direction: IxTableSortDirection } | null = null;
-    // Verdiene komponenten selv har skrevet. Har attributtet fått en annen verdi,
+    // colspan komponenten selv har skrevet. Har attributtet fått en annen verdi,
     // er det konsumentens, og komponenten gir slipp på cellen.
     private _autoColspan = new WeakMap<HTMLTableCellElement, number>();
-    private _autoAlign = new WeakMap<HTMLTableCellElement, string>();
+    /** Utvalget: value på de valgte radkontrollene, også rader som ikke vises. */
+    private _selection = new Set<string>();
+    /** Kontroller komponenten har sett, så en ny rad som er avkrysset i markupen blir lagt til. */
+    private _knownControls = new WeakSet<HTMLInputElement>();
     private _warned = new WeakSet<Element>();
     // Attributtene vi satte på rulleområdet, så vi bare fjerner våre egne.
     private _warnedSticky: string | null = null;
@@ -176,6 +201,11 @@ export class IxTable extends HTMLElement {
     private _lastBusy: boolean | null = null;
     private _announceTimer: ReturnType<typeof setTimeout> | null = null;
     private _loadingTimer: ReturnType<typeof setTimeout> | null = null;
+    /** Statuselementer komponenten har sett, laget av den selv eller rendret av React. */
+    private _seenStatus = new WeakSet<HTMLElement>();
+    /** Kolonnen brukeren nettopp valgte, og aria-sort før klikket. Leses opp når den endres. */
+    private _pendingSort: { th: HTMLTableCellElement; before: string | null } | null = null;
+    private _warnedSortLabels = false;
 
     static get observedAttributes(): string[] {
         return ['data-sticky', 'loading-label'];
@@ -189,10 +219,11 @@ export class IxTable extends HTMLElement {
         this.addEventListener('click', this._clickListener);
         this.addEventListener('change', this._changeListener);
 
-        // hidden er med, så en rad som filtreres bort i HTML mister valget. Ellers
-        // står våre egne skrivinger (data-*, colspan, ikonnavn) ikke i filteret.
-        // Synken er idempotent og skriver hidden bare når verdien endres, så
-        // endringer vi likevel ser gir én ekstra runde uten nye endringer.
+        // hidden er med, så «velg alle» og ekspandert innhold følger rader som
+        // filtreres bort. data-align og disabled skriver komponenten aldri selv.
+        // Ellers står våre egne skrivinger (data-column-align, colspan, ikoner)
+        // ikke i filteret. Synken er idempotent og skriver hidden bare når verdien
+        // endres, så endringer vi likevel ser gir én ekstra runde uten nye endringer.
         this._mutationObserver = new MutationObserver((records) => {
             if (records.some((record) => this._affectsTable(record))) this.refresh();
         });
@@ -200,7 +231,7 @@ export class IxTable extends HTMLElement {
             childList: true,
             subtree: true,
             attributes: true,
-            attributeFilter: ['aria-sort', 'aria-expanded', 'aria-busy', 'hidden'],
+            attributeFilter: ['aria-sort', 'aria-expanded', 'aria-busy', 'hidden', 'data-align', 'disabled'],
         });
 
         if (typeof ResizeObserver !== 'undefined') {
@@ -243,6 +274,27 @@ export class IxTable extends HTMLElement {
         if (name === 'loading-label') this.refresh();
     }
 
+    /** Hele utvalget, også rader som ikke vises. */
+    get selection(): string[] {
+        return [...this._selection];
+    }
+
+    /**
+     * Setter utvalget fra koden, for eksempel etter at de valgte regningene er
+     * godkjent. Sender ingen selection-change. Med radio gjelder bare den første.
+     */
+    setSelection(keys: Iterable<string>): void {
+        const table = this._table();
+        const list = [...keys];
+        const single = !!table && this._dataRows(table).some((row) => this._rowControl(row)?.type === 'radio');
+        this._selection = new Set(single ? list.slice(0, 1) : list);
+        if (table) this._syncSelection(table, this._dataRows(table));
+    }
+
+    clearSelection(): void {
+        this.setSelection([]);
+    }
+
     /** Synker all avledet tilstand fra DOM-en. Trygt å kalle så ofte man vil. */
     refresh(): void {
         const table = this._table();
@@ -273,8 +325,9 @@ export class IxTable extends HTMLElement {
         this._syncStructure(table, rows);
         this._syncSortIcons(table);
         this._syncExpanded(table);
-        if (this._syncSelection(table, rows)) this._dispatchSelection(table);
+        this._syncSelection(table, rows);
         this._syncStatus(table);
+        this._announcePendingSort();
         this._wireScroll();
         this._measure();
         if (import.meta.env.DEV) {
@@ -358,9 +411,11 @@ export class IxTable extends HTMLElement {
             this._autoColspan.set(cell, columns);
         });
 
-        // Justeringen står på kolonnens th, så konsumenten slipper å gjenta den
-        // i hver celle. En celle med egen data-align beholder den.
-        // Kolonnen regnes med colspan, så en overskrift over to kolonner gjelder begge.
+        // Justeringen står på kolonnens th, så konsumenten slipper å gjenta den i
+        // hver celle. Den arves som data-column-align, et attributt bare
+        // komponenten skriver, så cellens egen data-align vinner i CSS og aldri
+        // blir overskrevet. Kolonnen regnes med colspan, så en overskrift over to
+        // kolonner gjelder begge.
         const align: (string | null)[] = [];
         this._headerCells(table).forEach((th) => {
             const start = columnOf(th);
@@ -368,19 +423,11 @@ export class IxTable extends HTMLElement {
         });
         rows.forEach((row) => {
             Array.from(row.cells).forEach((cell) => {
-                const auto = this._autoAlign.get(cell);
-                const current = cell.getAttribute('data-align');
-                if (current !== null && current !== auto) {
-                    this._autoAlign.delete(cell);
-                    return;
-                }
                 const value = align[columnOf(cell)];
                 if (value) {
-                    if (current !== value) cell.setAttribute('data-align', value);
-                    this._autoAlign.set(cell, value);
-                } else if (auto !== undefined) {
-                    cell.removeAttribute('data-align');
-                    this._autoAlign.delete(cell);
+                    if (cell.getAttribute('data-column-align') !== value) cell.setAttribute('data-column-align', value);
+                } else if (cell.hasAttribute('data-column-align')) {
+                    cell.removeAttribute('data-column-align');
                 }
             });
             // En deaktivert kontroll kan ikke aktiveres med klikk på raden.
@@ -402,9 +449,9 @@ export class IxTable extends HTMLElement {
             const wrapper = document.createElement('span');
             wrapper.className = 'ix-table__sort-icon';
             wrapper.setAttribute('aria-hidden', 'true');
-            (Object.keys(SORT_ICON) as IxTableSortDirection[]).forEach((direction) => {
+            (Object.keys(IX_TABLE_SORT_ICONS) as IxTableSortDirection[]).forEach((direction) => {
                 const icon = document.createElement('ix-icon');
-                icon.setAttribute('name', SORT_ICON[direction]);
+                icon.setAttribute('name', IX_TABLE_SORT_ICONS[direction]);
                 icon.setAttribute('data-size', 'sm');
                 icon.setAttribute('data-sort-icon', direction);
                 wrapper.append(icon);
@@ -420,12 +467,16 @@ export class IxTable extends HTMLElement {
         const direction = NEXT_SORT[current] ?? 'ascending';
         const column = columnOf(th);
 
-        const event = new CustomEvent<IxTableSortChangeDetail>('sort-change', {
-            bubbles: true,
-            cancelable: true,
-            detail: { column, key: th.getAttribute('data-sort-key'), direction },
-        });
-        if (!this.dispatchEvent(event)) return;
+        const detail: IxTableSortChangeDetail = { column, key: th.getAttribute('data-sort-key'), direction };
+        this._pendingSort = { th, before: th.getAttribute('aria-sort') };
+
+        // Kontrollert: den som eier radene, setter aria-sort og rekkefølgen.
+        // Valget står i markupen, så det gjelder også før en React-app har festet
+        // lyttere, og komponenten flytter aldri rader React eier.
+        if (this.hasAttribute('data-sort-controlled')) {
+            this.dispatchEvent(new CustomEvent<IxTableSortChangeDetail>('sort-request', { bubbles: true, detail }));
+            return;
+        }
 
         table.tHead?.querySelectorAll('th').forEach((cell) => {
             if (cell !== th) cell.removeAttribute('aria-sort');
@@ -436,6 +487,30 @@ export class IxTable extends HTMLElement {
         this._sortRows(table, column, direction);
         this._activeSort = direction === 'none' ? null : { column, direction };
         this._syncSortIcons(table);
+        this._announcePendingSort();
+        this.dispatchEvent(new CustomEvent<IxTableSortChangeDetail>('sort-change', { bubbles: true, detail }));
+    }
+
+    /**
+     * Rekkefølgen endres uten at fokus flytter seg, så endringen leses opp
+     * (WCAG 4.1.3). Med data-sort-controlled venter vi til eieren faktisk har satt
+     * aria-sort, så meldingen stemmer med det som vises.
+     */
+    private _announcePendingSort(): void {
+        const pending = this._pendingSort;
+        if (!pending) return;
+        const now = pending.th.getAttribute('aria-sort');
+        if (now === pending.before) return;
+        this._pendingSort = null;
+        const direction = (now as IxTableSortDirection | null) ?? 'none';
+        const template = this.getAttribute(`sort-${direction}-label`);
+        if (!template) return;
+        const column = (
+            pending.th.querySelector('.ix-table__sort')?.textContent ??
+            pending.th.textContent ??
+            ''
+        ).trim();
+        this._announce(template.replaceAll('{column}', column));
     }
 
     /** Flytter radene, med ekspandert innhold, i ny rekkefølge innenfor hver tbody. */
@@ -453,8 +528,9 @@ export class IxTable extends HTMLElement {
             const factor = direction === 'descending' ? -1 : 1;
             groups.sort((a, b) => {
                 if (direction === 'none') return a.order - b.order;
-                // Tomme celler står sist i begge retninger.
-                if ((a.value === '') !== (b.value === '')) return a.value === '' ? 1 : -1;
+                // Typen avgjør først og snus ikke: tall, så tekst, så tomme celler.
+                const rank = typeRank(a.value) - typeRank(b.value);
+                if (rank !== 0) return rank;
                 return compareValues(a.value, b.value) * factor || a.order - b.order;
             });
             // Rader som ikke er data (tom, loading) blir stående sist.
@@ -507,7 +583,6 @@ export class IxTable extends HTMLElement {
                 }
                 target.hidden = !shown;
             }
-            row.toggleAttribute('data-expanded', expanded);
         });
 
         // data-animate slår på @starting-style i CSS-en, så raden vokser fram når
@@ -538,21 +613,14 @@ export class IxTable extends HTMLElement {
     }
 
     /**
-     * Utvalget gjelder bare radene som vises. En valgt rad som skjules, mister
-     * valget, og «velg alle» og telleren regner bare med synlige rader. Returnerer
-     * true når synken fjernet et valg, så refresh() kan sende selection-change.
+     * Speiler utvalget ut i kontrollene. En kontroll komponenten ikke har sett før,
+     * og som er avkrysset i markupen (eller med defaultChecked i React), legges til.
+     * Ellers er det utvalget som bestemmer, så en rad som kommer tilbake fra en
+     * annen side, er valgt igjen. «Velg alle» og tilstanden i headeren gjelder
+     * radene som vises. Antallet er hele utvalget.
      */
-    private _syncSelection(table: HTMLTableElement, rows: HTMLTableRowElement[]): boolean {
+    private _syncSelection(table: HTMLTableElement, rows: HTMLTableRowElement[]): void {
         const controls = rows.map((row) => this._rowControl(row));
-        const visible = rows.map((row) => this._isRowVisible(row));
-
-        let deselected = false;
-        controls.forEach((control, i) => {
-            if (control?.checked && !visible[i]) {
-                control.checked = false;
-                deselected = true;
-            }
-        });
 
         // Radioene må dele name for at bare én kan være valgt.
         const radios = controls.filter((c): c is HTMLInputElement => c?.type === 'radio');
@@ -561,17 +629,32 @@ export class IxTable extends HTMLElement {
             if (!radio.name) radio.name = name;
         });
 
+        controls.forEach((control) => {
+            // Uten value hører kontrollen ikke til noen nøkkel. Den advares om.
+            if (!control || !control.hasAttribute('value')) return;
+            if (!this._knownControls.has(control)) {
+                this._knownControls.add(control);
+                if (control.checked) this._select(control);
+            }
+            const checked = this._selection.has(control.value);
+            if (control.checked !== checked) control.checked = checked;
+        });
+
         rows.forEach((row, i) => row.toggleAttribute('data-selected', !!controls[i]?.checked));
 
-        const enabled = controls.filter((c, i): c is HTMLInputElement => !!c && !c.disabled && visible[i]);
-        const checked = enabled.filter((c) => c.checked).length;
+        // Synligheten leses bare når det finnes en «velg alle». Den koster en
+        // stilberegning per rad.
         const selectAll = this._selectAll(table);
         if (selectAll) {
+            const enabled = controls.filter(
+                (c, i): c is HTMLInputElement => !!c && !c.disabled && this._isRowVisible(rows[i])
+            );
+            const checked = enabled.filter((c) => c.checked).length;
             selectAll.checked = enabled.length > 0 && checked === enabled.length;
             selectAll.indeterminate = checked > 0 && checked < enabled.length;
         }
 
-        const selectedCount = controls.filter((c) => c?.checked).length;
+        const selectedCount = this._selection.size;
         this.querySelectorAll('[data-selected-count]').forEach((el) => {
             if (el.textContent !== String(selectedCount)) el.textContent = String(selectedCount);
         });
@@ -579,16 +662,20 @@ export class IxTable extends HTMLElement {
         this.querySelectorAll<HTMLElement>('.ix-table__selection').forEach((el) => {
             if (el.hidden !== (selectedCount === 0)) el.hidden = selectedCount === 0;
         });
-        return deselected;
     }
 
-    private _dispatchSelection(table: HTMLTableElement): void {
-        const selected = this._dataRows(table)
-            .map((row) => this._rowControl(row))
-            .filter((c): c is HTMLInputElement => !!c?.checked)
-            .map((c) => c.value);
+    /** Legger kontrollens value i utvalget. En radio erstatter det som var valgt. */
+    private _select(control: HTMLInputElement): void {
+        if (control.type === 'radio') this._selection.clear();
+        this._selection.add(control.value);
+    }
+
+    private _dispatchSelection(): void {
         this.dispatchEvent(
-            new CustomEvent<IxTableSelectionChangeDetail>('selection-change', { bubbles: true, detail: { selected } })
+            new CustomEvent<IxTableSelectionChangeDetail>('selection-change', {
+                bubbles: true,
+                detail: { selected: [...this._selection] },
+            })
         );
     }
 
@@ -599,13 +686,22 @@ export class IxTable extends HTMLElement {
         if (!target.closest('.ix-table__control')) return;
 
         if (target === this._selectAll(table)) {
+            // Velg alle gjelder radene som vises. Valg på andre sider eller i rader
+            // som er filtrert bort, står.
             this._dataRows(table).forEach((row) => {
                 const control = this._rowControl(row);
-                if (control && !control.disabled && this._isRowVisible(row)) control.checked = target.checked;
+                if (!control || control.disabled || !this._isRowVisible(row) || !control.hasAttribute('value')) return;
+                this._knownControls.add(control);
+                if (target.checked) this._selection.add(control.value);
+                else this._selection.delete(control.value);
             });
+        } else if (target.hasAttribute('value')) {
+            this._knownControls.add(target);
+            if (target.checked) this._select(target);
+            else this._selection.delete(target.value);
         }
         this._syncSelection(table, this._dataRows(table));
-        this._dispatchSelection(table);
+        this._dispatchSelection();
         this._announceSelection();
     }
 
@@ -616,11 +712,30 @@ export class IxTable extends HTMLElement {
      */
     private _announceSelection(): void {
         if (!this.querySelector('[data-field="selected-label"]')) return;
+        this._announce(() => this.querySelector('[data-field="selected-label"]')?.textContent?.trim() ?? '');
+    }
+
+    /**
+     * Skriver en melding i statuselementet etter én runde, så React rekker å
+     * rendre det nye. Er teksten lik den forrige, tømmes elementet først, ellers
+     * leses den ikke opp på nytt.
+     */
+    private _announce(text: string | (() => string)): void {
+        const status = this._statusElement();
         if (this._announceTimer) clearTimeout(this._announceTimer);
         this._announceTimer = setTimeout(() => {
             this._announceTimer = null;
-            const text = this.querySelector('[data-field="selected-label"]')?.textContent?.trim();
-            if (text) this._statusElement().textContent = text;
+            const message = typeof text === 'function' ? text() : text;
+            if (!message) return;
+            if (status.textContent === message) {
+                status.textContent = '';
+                this._announceTimer = setTimeout(() => {
+                    this._announceTimer = null;
+                    status.textContent = message;
+                }, LIVE_REGION_DELAY);
+            } else {
+                status.textContent = message;
+            }
         }, 0);
     }
 
@@ -673,8 +788,10 @@ export class IxTable extends HTMLElement {
         const label = this.getAttribute('loading-label');
         const busy = table.getAttribute('aria-busy') === 'true';
         const hasCandidates = label || busy || this.querySelector('[data-field="selected-label"]');
-        const created = !!hasCandidates && !this.querySelector(':scope > [data-field="status"]');
         const status = hasCandidates ? this._statusElement() : null;
+        // Nytt for komponenten, enten det ble laget nå eller rendret av React i samme runde.
+        const created = !!status && !this._seenStatus.has(status);
+        if (status) this._seenStatus.add(status);
         // Teksten skrives bare når loading starter eller slutter. Ellers ville hver
         // synk visket ut meldingen om utvalget.
         if (status && busy !== this._lastBusy) {
@@ -816,6 +933,14 @@ export class IxTable extends HTMLElement {
 
         if (!table.getAttribute('aria-labelledby') && !table.getAttribute('aria-label') && !table.caption) {
             warnOnce(table, 'Tabellen mangler navn. Sett aria-labelledby til overskriften, eller aria-label.');
+        }
+        const sortable = !!table.tHead?.querySelector('.ix-table__sort');
+        const hasSortLabels = ['ascending', 'descending', 'none'].some((d) => this.hasAttribute(`sort-${d}-label`));
+        if (sortable && !hasSortLabels && !this._warnedSortLabels) {
+            this._warnedSortLabels = true;
+            console.warn(
+                '[ix-table] Sorterbare kolonner uten sort-ascending-label, sort-descending-label og sort-none-label. Skjermlesere får ikke vite at rekkefølgen endret seg.'
+            );
         }
         const selectAll = this._selectAll(table);
         if (selectAll && !hasAccessibleName(selectAll)) {

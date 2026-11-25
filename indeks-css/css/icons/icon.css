@@ -18,12 +18,23 @@
 }
 
 /* Ikonet er en maske over bakgrunnsfargen. Når fargene tvinges, blir bakgrunnen
-   Canvas og ikonet usynlig. Systemfargen for tekst holder det synlig i både
-   lyse og mørke kontrasttemaer. */
+   Canvas og ikonet usynlig. preserve-parent-color slår av tvangen på ikonet, men
+   lar color arve systemfargen forelderen har fått (tekst, lenke, knapp eller
+   deaktivert), og currentColor følger den. Uten støtte for preserve-parent-color
+   brukes tekstfargen, som er synlig i både lyse og mørke kontrasttemaer. */
 @media (forced-colors: active) {
     :is(ix-icon, .ix-icon):not([data-badge]) {
         forced-color-adjust: none;
         background-color: CanvasText;
+    }
+
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    @supports (forced-color-adjust: preserve-parent-color) {
+        :is(ix-icon, .ix-icon):not([data-badge]) {
+            /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+            forced-color-adjust: preserve-parent-color;
+            background-color: currentColor;
+        }
     }
 }
 

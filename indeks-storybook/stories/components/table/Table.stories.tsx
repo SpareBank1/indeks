@@ -125,6 +125,11 @@ export const Sortable: Story = {
     args: {
         title: 'Transaksjoner',
         sort: { key: 'dato', direction: 'ascending' },
+        sortLabels: {
+            ascending: 'Sortert etter {column}, stigende',
+            descending: 'Sortert etter {column}, synkende',
+            none: 'Sortering fjernet',
+        },
     },
     render: function Render(args) {
         const [, updateArgs] = useArgs();
@@ -396,7 +401,13 @@ export const FastKolonne: Story = {
 
 export const HTML: Story = {
     render: () => (
-        <ix-table class="ix-table" loading-label="Laster">
+        <ix-table
+            class="ix-table"
+            loading-label="Laster"
+            sort-ascending-label="Sortert etter {column}, stigende"
+            sort-descending-label="Sortert etter {column}, synkende"
+            sort-none-label="Sortering fjernet"
+        >
             <h2 className="ix-table__heading" id="html-regninger">
                 Regninger
             </h2>

@@ -47,6 +47,7 @@ export { IxPopover };
 export { IxProgressBar };
 export type { ProgressBarState } from './lib/components/progress-bar/IxProgressBar.js';
 export { IxTable };
+export { IX_TABLE_SORT_ICONS } from './lib/components/table/IxTable.js';
 export type {
     IxTableSortDirection,
     IxTableSortChangeDetail,
@@ -180,6 +181,11 @@ declare global {
                 class?: string;
                 'data-sticky'?: 'first' | 'last';
                 'data-density'?: 'compact' | 'comfortable';
+                'data-sort-controlled'?: boolean | '' | 'true';
+                'sort-ascending-label'?: string;
+                'sort-descending-label'?: string;
+                'sort-none-label'?: string;
+                'loading-label'?: string;
                 children?: unknown;
             };
             'ix-tabs': { [key: string]: unknown; class?: string; children?: unknown };

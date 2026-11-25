@@ -64,7 +64,7 @@ export { ProgressBar } from './progress-bar/ProgressBar';
 export type { ProgressBarProps, ProgressBarState } from './progress-bar/ProgressBar';
 export { Table } from './table/Table';
 export type { TableProps } from './table/Table';
-export type { TableSort, TableVariant } from './table/TableContext';
+export type { TableSort, TableSortLabels, TableVariant } from './table/TableContext';
 export type { TableHeaderProps, TableHeaderCellProps } from './table/TableHeader';
 export type { TableBodyProps, TableEmptyProps } from './table/TableBody';
 export type { TableRowProps, TableCellProps } from './table/TableRow';

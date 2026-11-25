@@ -116,21 +116,31 @@ En sorterbar kolonne har en knapp i overskriften. Første klikk sorterer stigend
 synkende, og det tredje fjerner sorteringen. Den sorterte kolonnen har `aria-sort`.
 
 I HTML sorterer tabellen radene selv, etter celleteksten eller `data-sort-value`. Beløp med
-mellomrom, komma, fortegn og valuta (`kr`, `NOK`, `,-`) sorteres som tall, og det samme gjør datoer
-på formen dd.mm.åååå, med eller uten klokkeslett. Tall står før tekst, og tomme celler står sist.
+mellomrom eller punktum som tusenskille, komma, fortegn og valuta (`kr`, `NOK`, `,-`) sorteres som
+tall, og det samme gjør datoer på formen dd.mm.åååå og åååå-mm-dd, med eller uten klokkeslett. Tall
+står før tekst, og tomme celler og «–» står sist, i begge retninger.
 Alt annet sorteres som tekst, så bruk `data-sort-value` når celleteksten ikke sier nok, for
 eksempel «I går».
 
-Henter du data fra en tjeneste, kaller du `preventDefault()` på `sort-change` og sorterer selv.
-Da setter tabellen heller ikke `aria-sort`, så du setter `aria-sort` på kolonnen du sorterte og
-fjerner det fra de andre. I React sorterer du alltid dataene selv: tabellen sier fra om neste
-sortering med `onSortChange`, og `sort` gir `aria-sort`.
+Henter du data fra en tjeneste, setter du `data-sort-controlled` på `ix-table`. Da sorterer ikke
+tabellen selv, men sender `sort-request` med neste sortering. Du sorterer, setter `aria-sort` på
+kolonnen du sorterte og fjerner det fra de andre. I React er tabellen alltid styrt slik: du
+sorterer dataene ut fra `onSortChange`, og `sort` gir `aria-sort`.
+
+Rekkefølgen endres uten at fokus flytter seg, så tabellen leser opp hva som skjedde, for eksempel
+«Sortert etter Beløp, synkende» og «Sortering fjernet». Du skriver tekstene, med `{column}` der
+kolonnens navn skal stå.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
 
 ```jsx live
-<ix-table class="ix-table">
+<ix-table
+  class="ix-table"
+  sort-ascending-label="Sortert etter {column}, stigende"
+  sort-descending-label="Sortert etter {column}, synkende"
+  sort-none-label="Sortering fjernet"
+>
   <h3 class="ix-table__heading" id="sort-transaksjoner">Transaksjoner</h3>
   <div class="ix-table__frame">
     <div class="ix-table__scroll">
@@ -175,7 +185,16 @@ function Transaksjoner() {
   const kroner = new Intl.NumberFormat('nb-NO', { minimumFractionDigits: 2 });
 
   return (
-    <Table title="Transaksjoner" sort={sort} onSortChange={setSort}>
+    <Table
+      title="Transaksjoner"
+      sort={sort}
+      onSortChange={setSort}
+      sortLabels={{
+        ascending: 'Sortert etter {column}, stigende',
+        descending: 'Sortert etter {column}, synkende',
+        none: 'Sortering fjernet',
+      }}
+    >
       <Table.Header>
         <Table.HeaderCell sortKey="dato">Dato</Table.HeaderCell>
         <Table.HeaderCell sortKey="mottaker">Mottaker</Table.HeaderCell>
@@ -281,10 +300,11 @@ valgt. Når noe er valgt, viser toolbaren antallet og handlingene for utvalget. 
 står der hele tiden. Teksten i `data-field="selected-label"` leses opp etter hvert valg, så
 skjermleserbrukere også får vite hvor mange rader som er valgt.
 
-Utvalget gjelder bare radene som vises. «Velg alle» og antallet hopper over skjulte rader, og en
-valgt rad som filtreres bort eller havner på en annen side, er ikke lenger valgt. I HTML skjuler
-du rader med `hidden`, så merker tabellen det selv. I React fjerner du radene fra dataene, og
-`onSelectionChange` får det nye utvalget.
+Utvalget gjelder på tvers av søk, filtre og sider. En valgt rad som filtreres bort eller havner
+på en annen side, er fortsatt valgt, og den er valgt igjen når den vises. Antallet teller alle som
+er valgt. «Velg alle» velger radene som vises, og valg utenfor står. Vil du tømme utvalget, for
+eksempel etter «Godkjenn», bruker du `clearSelection()` i HTML og setter `selectedKeys` til `[]`
+i React.
 
 <Tabs groupId="variant">
 <TabItem value="html" label="HTML">
@@ -906,7 +926,9 @@ så ha minst én ting som alltid vises.
 ### Vis antallet og handlingene når rader er valgt
 
 Når brukeren har valgt rader, vis hvor mange som er valgt og handlingene som gjelder dem. Søk
-og filtre skal fortsatt kunne brukes, så brukeren kan finne flere rader å velge.
+og filtre skal fortsatt kunne brukes, så brukeren kan finne flere rader å velge. Antallet teller
+også valgte rader som ikke vises nå. Skriv det i teksten når det kan overraske, for eksempel
+«5 valgt, 2 på andre sider», så brukeren vet hva en handling gjelder.
 
 ### Behold søk og filtre når det ikke blir treff
 
@@ -958,8 +980,9 @@ egne regler for tetthet.
   er ingen ledetekst.
 - Fortell skjermleserbrukere hva søk, filter og sortering endret, med en statusmelding som
   «12 treff».
-- Sorterer du selv i HTML med `preventDefault()`, setter du `aria-sort` på kolonnen selv.
-- Send inn alle tekster på brukerens språk. Tabellen har ingen standardtekster.
+- Sorterer du selv i HTML med `data-sort-controlled`, setter du `aria-sort` på kolonnen selv.
+- Send inn alle tekster på brukerens språk, også tekstene som leses opp når sorteringen endres.
+  Tabellen har ingen standardtekster.
 
 ### Hva komponenten gjør automatisk
 
@@ -987,23 +1010,32 @@ egne regler for tetthet.
 |-----------|----|-------------|
 | `data-sticky` | `ix-table` | `first` eller `last`. Fester første kolonne eller handlingskolonnen |
 | `data-density` | `ix-table` | `compact` eller `comfortable`. Utelatt gir default |
+| `data-sort-controlled` | `ix-table` | Du sorterer selv. Tabellen sender `sort-request` og rører verken radene eller `aria-sort` |
 | `loading-label` | `ix-table` | Teksten som leses opp mens tabellen har `aria-busy="true"` |
+| `sort-ascending-label`, `sort-descending-label`, `sort-none-label` | `ix-table` | Det som leses opp når sorteringen endres. `{column}` byttes ut med kolonnens navn |
 | `aria-labelledby` | `table` | Id-en til tittelen, så tabellen får navn |
 | `aria-busy` | `table` | `true` mens rader lastes |
 | `aria-sort` | `th` | `ascending` eller `descending` på kolonnen som er sortert |
-| `data-sort-key` | `th` | Nøkkel som kommer tilbake i `sort-change` |
-| `data-align` | `th`, `td` | `end` høyrejusterer. På `th` gjelder det hele kolonnen |
+| `data-sort-key` | `th` | Nøkkel som kommer tilbake i `sort-request` og `sort-change` |
+| `data-align` | `th`, `td` | `start` eller `end`. På `th` gjelder det hele kolonnen, og en celle med egen `data-align` beholder den |
 | `data-sort-value` | `td` | Verdien kolonnen sorteres etter, i stedet for celleteksten |
 
 | Hendelse | Detail | Når |
 |----------|--------|-----|
-| `sort-change` | `{ column, key, direction }` | Før sorteringen endres. `preventDefault()` lar deg sortere selv, og da setter du `aria-sort` selv. `direction` kan være `'none'`, og `key` er `null` uten `data-sort-key` |
-| `selection-change` | `{ selected }` | Etter at utvalget er endret, også når en valgt rad skjules. `selected` er `value` på de valgte kontrollene |
+| `sort-request` | `{ column, key, direction }` | Med `data-sort-controlled`, når brukeren velger en sorterbar kolonne. `direction` er neste i syklusen og kan være `'none'`, og `key` er `null` uten `data-sort-key` |
+| `sort-change` | `{ column, key, direction }` | Uten `data-sort-controlled`, etter at tabellen har sortert radene |
+| `selection-change` | `{ selected }` | Etter at brukeren har endret utvalget. `selected` er hele utvalget, også rader som ikke vises |
 | `expand-change` | `{ row, expanded }` | Etter at en rad er åpnet eller lukket |
 
-Setter du `checked` på kontrollene med JavaScript, eller skjuler rader med en klasse i stedet
-for `hidden`, kaller du `refresh()` på `ix-table` etterpå, så radene, telleren og «velg alle»
-oppdateres.
+| Metode | Beskrivelse |
+|--------|-------------|
+| `setSelection(keys)` | Setter utvalget, også nøkler til rader som ikke vises. Sender ingen `selection-change` |
+| `clearSelection()` | Tømmer utvalget |
+| `selection` | Hele utvalget som en liste |
+| `refresh()` | Synker tabellen etter endringer den ikke ser selv, for eksempel rader som skjules med en klasse i stedet for `hidden` |
+
+Tabellen eier utvalget. Endre det med `setSelection()`, ikke ved å sette `checked` på kontrollene.
+En rad som er avkrysset i markupen når den dukker opp, legges til.
 
 </TabItem>
 <TabItem value="react" label="React">
@@ -1020,10 +1052,12 @@ oppdateres.
 | `density` | `'compact' \| 'comfortable'` | | Tetthet |
 | `selectAllLabel` | `string` | | Navn på «velg alle». Påkrevd med `multi-select` |
 | `name` | `string` | | `name` på checkboxene eller radioene |
-| `selectedKeys` / `defaultSelectedKeys` | `string[]` | | Kontrollert eller ukontrollert utvalg |
-| `onSelectionChange` | `(keys: string[]) => void` | | Kalles med de valgte nøklene |
+| `selectedKeys` | `string[]` | | Utvalget. Når verdien endres, settes den inn i tabellen, for eksempel `[]` etter en handling. Brukerens egne valg kan ikke avvises |
+| `defaultSelectedKeys` | `string[]` | | Utvalget ved start, også nøkler til rader som ikke vises ennå |
+| `onSelectionChange` | `(keys: string[]) => void` | | Kalles med hele utvalget når brukeren endrer det |
 | `sort` / `defaultSort` | `{ key, direction } \| null` | | Kontrollert eller ukontrollert sortering |
 | `onSortChange` | `(sort) => void` | | Kalles med neste sortering. Tabellen sorterer ikke radene |
+| `sortLabels` | `{ ascending, descending, none }` | | Det som leses opp når sorteringen endres. `{column}` byttes ut med kolonnens navn |
 | `loading` | `boolean` | `false` | Viser loading i radområdet |
 | `loadingLabel` | `string` | | Teksten som vises og leses opp mens tabellen laster |
 | `toolbar` | `ReactNode` | | Vanligvis `<Table.Toolbar>` |
@@ -1032,7 +1066,7 @@ oppdateres.
 
 **Table.HeaderCell**: `sortKey` gjør kolonnen sorterbar, og `align` (`'start' | 'end'`) gjelder hele kolonnen.
 
-**Table.Row**: `value` og `selectLabel` ved valg. `expandedContent`, `expandLabel` og `defaultExpanded` ved ekspandering.
+**Table.Row**: `value` og `selectLabel` ved valg, og `expandedContent`, `expandLabel` og `defaultExpanded` ved ekspandering. Typen krever navnet sammen med verdien eller innholdet, så en kontroll aldri står uten navn.
 
 **Table.Cell**: `description` gir beskrivende tekst under innholdet, `align` overstyrer kolonnen, og `rowHeader` gjør cellen til overskrift for raden.
 
@@ -1068,9 +1102,11 @@ få samme utseende og atferd så lenge `ix-table` er lastet.
 | Rulleområde | `.ix-table__scroll` |
 | Innhold utenfor synsfeltet | `.ix-table__scroll[data-overflow-start]`, `[data-overflow-end]` |
 | Celler | `.ix-table th`, `.ix-table td` |
-| Høyrejustert kolonne | `[data-align="end"]` |
+| Justering arvet fra kolonnen | `[data-column-align="end"]` |
+| Justering satt på cellen | `[data-align]` |
 | Sorteringsknapp | `.ix-table__sort` |
-| Sorteringsikon (lagt inn av web componenten) | `.ix-table__sort-icon`, `[data-sort-icon]` |
+| Sorteringsikon, de tre retningene | `.ix-table__sort-icon` |
+| Ikon for én retning | `[data-sort-icon="none" \| "ascending" \| "descending"]` |
 | Sortert kolonne | `th[aria-sort]` |
 | Kontrollkolonne | `.ix-table__control` |
 | Ekspanderingsknapp | `.ix-table__expand` |
